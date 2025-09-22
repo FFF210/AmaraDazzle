@@ -1,0 +1,77 @@
+@charset "UTF-8";
+
+.pagination {
+	display: flex;
+	gap: 8px;
+	align-items: center;
+	font-family: inherit;
+}
+
+/* 공통 버튼 */
+.page-btn {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-width: 32px;
+	height: 32px;
+	padding: 0 6px;
+	border-radius: 5px;
+	color: #60656E;
+	font-size: 14px;
+	font-weight: 500;
+	text-decoration: none;
+	box-sizing: border-box;
+	cursor: pointer;
+	background: none;
+	border: none;
+}
+
+/* 숫자 버튼 hover */
+.page-btn:hover:not(.active):not(.disabled) {
+	color: #0C8CE9;
+	background: none; /* 배경 없음 */
+}
+
+/* 선택된 페이지 */
+.page-btn.active {
+	border: 1px solid #0C8CE9;
+	color: #0C8CE9;
+	background: #F1F9FF;
+	font-weight: 700;
+}
+
+/* 비활성화 */
+.page-btn.disabled {
+	color: #bbb;
+	cursor: not-allowed;
+}
+
+/* 이전/다음 버튼 - 항상 배경/테두리 없음 */
+.page-btn.prev, .page-btn.next {
+	background: none !important;
+	border: none !important;
+	font-weight: 500;
+	min-width: auto;
+	padding: 0;
+}
+
+/* 이전/다음 버튼 - 아이콘과 글자 정렬 */
+.page-btn.prev i, .page-btn.next i {
+	font-size: 14px;
+	vertical-align: middle;
+}
+
+.page-btn.prev {
+	gap: 4px; /* 아이콘과 텍스트 간격 */
+}
+
+.page-btn.next {
+	gap: 4px;
+}
+
+/* 점 표시 */
+.dots {
+	color: #60656E;
+	font-size: 14px;
+	padding: 0 6px;
+}

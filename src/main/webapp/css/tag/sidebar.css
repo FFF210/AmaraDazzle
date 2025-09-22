@@ -1,0 +1,238 @@
+@charset "UTF-8";
+
+/* =============================
+   사이드바 전체
+============================= */
+.sidebar {
+	width: 245px;
+	padding: 8px;
+	transition: width 0.3s;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	border-right: 1px solid rgba(0, 0, 0, 0.10);
+	background: #FFF;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	overflow-y: auto;
+	scrollbar-width: none;
+}
+
+.sidebar::-webkit-scrollbar {
+	display: none;
+}
+
+/* =============================
+   사이드바 접힘
+============================= */
+.sidebar.collapsed {
+	width: 60px; /* 아이콘만 보이는 폭 */
+}
+
+/* 접힘 상태에서는 텍스트, 서브메뉴 전부 숨김 */
+.sidebar.collapsed .menu-text, .sidebar.collapsed .submenu {
+	display: none !important;
+}
+
+/* 접힘 상태에서는 화살표 아이콘 숨김 */
+.sidebar.collapsed .submenu-icon {
+	display: none !important;
+}
+
+/* =============================
+   헤더
+============================= */
+.sidebar-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 40px;
+	box-sizing: border-box;
+	margin: 0 0 24px 0;
+}
+
+.logo {
+	width: 40px;
+	height: 40px;
+}
+
+#pinBtn {
+	background: none;
+	border: none;
+	color: #4B4B4B;
+	cursor: pointer;
+}
+
+#pinBtn.pinned {
+	color: #0C8CE9;
+}
+
+/* =============================
+   메뉴 아이템
+============================= */
+.menu {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	flex: 1;
+}
+
+.menu-item {
+	display: flex;
+	flex-direction: column;
+	border-radius: 8px;
+	box-sizing: border-box;
+	overflow: hidden;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: 100%;
+}
+
+.menu-link {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 16px;
+	color: #4B4B4B;
+	text-decoration: none;
+	cursor: pointer;
+	box-sizing: border-box;
+	border-radius: 8px;
+	background: transparent;
+	border: none;
+	width: 100%;
+	height: 50px;
+	transition: background 0.2s, color 0.2s;
+}
+
+.menu-link:hover {
+	background: #F4F9FD;
+	color: #0C8CE9;
+	font-weight: 600;
+}
+
+/* 접힘 상태 - 글자 숨김을 opacity/visibility로 */
+.sidebar.collapsed .menu-text {
+	opacity: 0;
+	visibility: hidden;
+	width: 0;
+	transition: opacity 0.2s ease, width 0.2s ease;
+}
+
+/* 기본 상태 - 글자 보임 */
+.menu-text {
+	opacity: 1;
+	visibility: visible;
+	white-space: nowrap;
+	transition: opacity 0.2s ease, width 0.2s ease;
+}
+
+.submenu-icon {
+	margin-left: auto;
+	color: rgba(75, 75, 75, 0.40);
+	transition: transform 0.3s ease;
+}
+
+/* 열릴 때 아이콘 회전 */
+.menu-item.open>.menu-link .submenu-icon {
+	transform: rotate(180deg);
+}
+
+/* =============================
+   서브메뉴
+============================= */
+.submenu {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: none;
+	flex-direction: column;
+	width: 100%;
+}
+
+.menu-item.open .submenu {
+	display: flex;
+}
+
+.submenu li {
+	display: block;
+	width: 100%;
+}
+
+.submenu li a {
+	display: flex;
+	align-items: center;
+	padding: 0 20px 0 36px;
+	color: #4B4B4B;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 100%;
+	text-decoration: none;
+	background: #fff;
+	transition: background 0.2s, color 0.2s;
+	width: 100%;
+	height: 50px;
+	box-sizing: border-box;
+	opacity: 1;
+	visibility: visible;
+	white-space: nowrap;
+	transition: opacity 0.2s ease, width 0.2s ease;
+}
+
+/* 사이드바 닫힘 상태에서는 글자 숨김 */
+.sidebar.collapsed .submenu li a {
+	opacity: 0;
+	visibility: hidden;
+	width: 0;
+	transition: opacity 0.2s ease, width 0.2s ease;
+}
+
+.submenu li a:hover {
+	background: #F4F9FD;
+	color: #0C8CE9;
+	font-weight: 600;
+}
+
+/* =============================
+   서브메뉴 닫힘 상태 (아이콘 정렬)
+============================= */
+.menu-item.has-submenu:not(.open) .submenu-icon {
+	margin-left: auto;
+	color: #999;
+	transition: transform 0.2s;
+}
+
+/* =============================
+   활성 상태
+============================= */
+.menu-item.active>.menu-link {
+	color: #0C8CE9;
+	font-weight: 600;
+	background: #F4F9FD;
+}
+
+.menu-item.active .submenu li a.active {
+	background: #F4F9FD;
+	color: #0C8CE9;
+	font-weight: 600;
+}
+
+/* =============================
+   푸터
+============================= */
+.sidebar-footer {
+	padding: 12px;
+	font-size: 12px;
+	text-align: center;
+	color: #999;
+	opacity: 1;
+	visibility: visible;
+	transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .sidebar-footer {
+	opacity: 0;
+	visibility: hidden;
+}

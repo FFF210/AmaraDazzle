@@ -1,0 +1,134 @@
+@charset "UTF-8";
+
+/* ================================
+   Button 스타일 가이드
+   
+   사용법 예시:
+   <!-- Primary -->
+   <button class="btn btn-primary btn-xl">저장</button>
+   <button class="btn btn-primary btn-lg">저장</button>
+   <button class="btn btn-primary btn-md">저장</button>
+   <button class="btn btn-primary btn-sm">저장</button>
+
+   <!-- Outline -->
+   <button class="btn btn-outline btn-xl">취소</button>
+   <button class="btn btn-outline btn-lg">취소</button>
+   <button class="btn btn-outline btn-md">취소</button>
+   <button class="btn btn-outline btn-sm">취소</button>
+
+   <!-- Danger -->
+   <button class="btn btn-danger btn-sm">삭제</button>
+
+   <!-- Text -->
+   <button class="btn btn-text btn-md">더보기</button>
+   <button class="btn btn-text btn-sm">더보기</button>
+================================ */
+
+/* 공통 스타일 */
+.btn {
+	cursor: pointer;
+	transition: all 0.2s ease;
+	box-sizing: border-box;
+	font-style: normal; 
+	font-weight : 600; 
+	line-height : 150%;
+	letter-spacing : 0.091px;
+	border: none;
+	border-radius: 10px;
+	font-weight: 600;
+	line-height: 150%;
+	letter-spacing: 0.091px;
+}
+
+/* 크기 */
+.btn-xl {
+	height: 56px;
+	padding: 12px 28px;
+	font-size: 16px;
+}
+
+.btn-lg {
+	height: 48px;
+	padding: 12px 28px;
+	font-size: 16px;
+}
+
+.btn-md {
+	height: 40px;
+	padding: 9px 20px;
+	font-size: 15px;
+}
+
+.btn-sm {
+	height: 32px;
+	padding: 7px 14px;
+	font-size: 13px;
+}
+
+/* 스타일 타입 */
+
+/* Primary (Solid) */
+.btn-primary {
+	background: #0C8CE9;
+	color: #fff;
+}
+
+.btn-primary:hover {
+	background: #0080DD;
+}
+
+.btn-primary:disabled {
+	background: #F4F4F5;
+	color: rgba(55, 56, 60, 0.28);
+	cursor: not-allowed;
+}
+
+/* Outline */
+.btn-outline {
+	border: 1px solid #0C8CE9;
+	background: #fff;
+	color: #0C8CE9;
+}
+
+.btn-outline:hover {
+	background: #E9F2FF;
+}
+
+.btn-outline:disabled {
+	border-color: rgba(112, 115, 124, 0.22);
+	color: rgba(55, 56, 60, 0.16);
+	cursor: not-allowed;
+}
+
+/* Danger */
+.btn-danger {
+	border: 1px solid #DDE1EB;
+	background: #fff;
+	color: #E64F4F;
+}
+
+.btn-danger:hover {
+	background: #FFF1F1;
+}
+
+.btn-danger:disabled {
+	border-color: rgba(112, 115, 124, 0.22);
+	color: rgba(55, 56, 60, 0.16);
+	cursor: not-allowed;
+}
+
+/* Text Button */
+.btn-text {
+	background: transparent;
+	color: #0C8CE9;
+	padding: 0;
+}
+
+.btn-text:hover {
+	text-decoration: underline;
+}
+
+.btn-text:disabled {
+	color: rgba(55, 56, 60, 0.16);
+	cursor: not-allowed;
+}

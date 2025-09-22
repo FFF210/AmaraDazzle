@@ -1,0 +1,106 @@
+@charset "UTF-8";
+
+/* ================================
+   Checkbox, Radio 스타일 가이드
+   
+   사용법 예시:
+   <input type="checkbox" class="form-check" />
+   <input type="checkbox" class="form-check" checked />
+   <input type="checkbox" class="form-check" disabled />
+   <input type="checkbox" class="form-check" checked disabled />
+
+   <input type="radio" name="gender" class="form-radio" />
+   <input type="radio" name="gender" class="form-radio" checked />
+   <input type="radio" name="gender" class="form-radio" disabled />
+   <input type="radio" name="gender" class="form-radio" checked disabled />
+================================ */
+
+/* 공통 스타일 초기화 */
+input[type="checkbox"].form-check, input[type="radio"].form-radio {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	margin: 0;
+	cursor: pointer;
+	outline: none;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+/* =====================
+   체크박스 (사각형)
+===================== */
+input[type="checkbox"].form-check {
+	width: 18px;
+	height: 18px;
+	border: 1.5px solid rgba(112, 115, 124, 0.22);
+	border-radius: 3px;
+	background-color: #fff;
+	transition: all 0.2s ease;
+	position: relative;
+}
+
+input[type="checkbox"].form-check:checked {
+	background-color: #06F;
+	border-color: #06F;
+}
+
+input[type="checkbox"].form-check:checked::after {
+	content: "";
+	position: absolute;
+	left: 5px;
+	width: 5px;
+	height: 10px;
+	border: solid #fff;
+	border-width: 0 2.5px 2.5px 0;
+	transform: rotate(45deg);
+}
+
+/* Disabled 상태 */
+input[type="checkbox"].form-check:disabled {
+	opacity: 0.43;
+	cursor: not-allowed;
+}
+
+input[type="checkbox"].form-check:checked:disabled {
+	opacity: 0.43;
+}
+
+/* =====================
+   라디오 버튼 (원형)
+===================== */
+input[type="radio"].form-radio {
+	width: 20px;
+	height: 20px;
+	border: 1.5px solid rgba(112, 115, 124, 0.22);
+	border-radius: 50%;
+	background-color: #fff;
+	transition: all 0.2s ease;
+	position: relative;
+}
+
+input[type="radio"].form-radio:checked {
+	background-color: #06F;
+	border-color: #06F;
+}
+
+input[type="radio"].form-radio:checked::after {
+	content: "";
+	position: absolute;
+	top: 4.5px;
+	left: 4.5px;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: #fff;
+}
+
+/* Disabled 상태 */
+input[type="radio"].form-radio:disabled {
+	opacity: 0.43;
+	cursor: not-allowed;
+}
+
+input[type="radio"].form-radio:checked:disabled {
+	opacity: 0.43;
+}

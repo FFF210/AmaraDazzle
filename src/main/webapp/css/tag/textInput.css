@@ -1,0 +1,115 @@
+@charset "UTF-8";
+
+.text-input-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: inherit;
+}
+
+/* 기본 입력 필드 */
+.text-input {
+  width: 100%;
+  border: 1px solid #DDE1EB;
+  border-radius: 8px;
+  color: #333539;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background-color: #fff;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  box-sizing: border-box;
+}
+
+.text-input::placeholder {
+  color: #B2BAC6;
+}
+
+/* 상태값 */
+.text-input-wrapper.state--default .text-input {
+  border-color: #DDE1EB;
+}
+
+.text-input:focus {
+  border: 1px solid #1EAE69 !important; 
+  box-shadow: 0 0 0 4px rgba(20, 184, 145, 0.25);
+  outline: none;
+}
+
+.text-input-wrapper.state--error .text-input {
+  border: 1px solid #DC3545 !important;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.25);
+}
+
+.text-input-wrapper.state--error .text-input-error {
+  margin-top: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #DC3545;
+}
+
+/* 사이즈 */
+.text-input-wrapper.size--lg .text-input {
+  height: 56px;
+  padding: 0 16px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.text-input-wrapper.size--sm .text-input {
+  height: 40px;
+  padding: 0 16px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* 아이콘 영역 */
+.text-input-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.text-input-inner .text-input {
+  flex: 1;
+  padding-right: 40px; /* 오른쪽 아이콘 자리 */
+}
+
+/* 비밀번호 아이콘 */
+.text-input-inner .toggle-visibility {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #666;
+}
+.text-input-inner .toggle-visibility:hover {
+  color: #000;
+}
+
+/* 검색 아이콘 (왼쪽 배치) */
+.text-input-inner.search .text-input {
+  padding-left: 42px;
+  padding-right: 12px;
+}
+
+.text-input-inner .search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #60656E;
+  pointer-events: none;
+}
+
+/* 읽기 전용 */
+.text-input[readonly] {
+  background-color: #f7f7f7;
+  color: #999;
+  cursor: not-allowed;
+}

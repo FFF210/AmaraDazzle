@@ -1,0 +1,52 @@
+@charset "UTF-8";
+
+.event-card {
+	display: flex;
+	width: 320px;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 16px;
+	font-family: "Noto Sans KR", sans-serif;
+}
+
+/* 이미지 영역 */
+.event-card .event-image img {
+	width: 100%;
+	height: auto;
+	display: block;
+}
+
+/* 정보 영역 */
+.event-card .event-info {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	align-self: stretch;
+}
+
+/* 이벤트 제목 */
+.event-card .event-title {
+	color: #333;
+	text-align: center;
+	font-size: 21px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: 120%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* 이벤트 날짜 */
+.event-card .event-date {
+	color: #666;
+	text-align: center;
+	font-family: Roboto;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: 120%;
+}

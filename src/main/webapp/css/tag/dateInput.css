@@ -1,0 +1,85 @@
+@charset "UTF-8";
+
+/* Input 타입 */
+.date-input .input-wrapper {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	width: 159px;
+	flex-shrink: 0;
+}
+
+.date-input .date-text {
+	height: 36px;
+	padding: 0 0 0 8px;
+	color: #555E67;
+	font-size: 12px;
+	font-weight: 500;
+	border-radius: 8px;
+	border: 1px solid #ECEDF0;
+	background: #FFF;
+	cursor: pointer;
+	box-sizing: border-box;
+}
+
+.date-input .date-text:focus {
+	border-color: #0C8CE9;
+	box-shadow: 0 0 0 4px rgba(2, 149, 254, 0.25);
+	outline: none;
+}
+
+.date-input .calendar-icon-wrapper {
+	position: absolute;
+	top: 50%;
+	right: 4px;
+	transform: translateY(-50%);
+	width: 34px;
+	height: 34px;
+	padding: 0;
+	background: #EFEFEF;
+	border: none;
+	border-radius: 7px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+}
+
+.date-input .calendar-icon {
+	font-size: 14px;
+	color: #555E67;
+}
+
+/* Preset 버튼 */
+.preset-buttons {
+	display: inline-flex;
+	gap: 8px;
+}
+
+.preset-btn {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	align-self: stretch;
+	width: 80px;
+	height: 36px;
+	border-radius: 8px;
+	border: 1px solid #DDE1EB;
+	color: #555E67;
+	font-size: 12px;
+	font-weight: 500;
+	background: #fff;
+	cursor: pointer;
+}
+
+.preset-btn:hover {
+	background: #f7f7f9;
+}
+
+.preset-btn.active {
+	background: #F1F9FF;
+	border-color: #2684FF;
+	color: #2684FF;
+}

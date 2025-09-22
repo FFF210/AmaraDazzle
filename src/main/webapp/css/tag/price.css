@@ -1,0 +1,48 @@
+@charset "UTF-8";
+.price {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  font-weight: 700;
+}
+
+/* -------- 사이즈 -------- */
+.price.sm {
+  font-size: 20px;
+  line-height: 120%;
+}
+
+.price.md {
+  display: flex;
+  flex-direction: column; /* origin은 위에, 나머지는 아래 */
+  font-size: 28px;
+  line-height: 120%;
+}
+
+/* -------- 원래 가격 (할인 전) -------- */
+.price .origin {
+  font-size: 16px;
+  font-weight: 500;
+  color: #8A8A8A;
+  text-decoration: line-through;
+  line-height: 120%;
+}
+
+/* -------- 세일 퍼센트 -------- */
+.price .sale-rate {
+  color: #f31110;
+  font-weight: 700;
+  margin: 0 8px 0 0;
+}
+
+/* -------- 최종 가격 -------- */
+.price .final {
+  color: #111;
+}
+
+/* -------- md 사이즈일 때 sale-rate + finalPrice 묶음 -------- */
+.price.md .sale-row {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}

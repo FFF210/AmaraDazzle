@@ -1,0 +1,67 @@
+@charset "UTF-8";
+
+.product-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 16px;
+	font-family: "Noto Sans KR", sans-serif;
+}
+
+/* 썸네일 */
+.product-item .thumbnail img {
+	display: block;
+	object-fit: cover;
+}
+
+/* 정보 영역 */
+.product-item .info {
+	max-width: 240px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	flex: 1;
+	gap: 8px;
+}
+
+/* 상품명 */
+.product-item .product-title {
+	font-size: 15px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 120%;
+	color: #000;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+
+/* -------- size = md -------- */
+.product-item.md {
+	width: 376px;
+}
+
+.product-item.md .thumbnail img {
+	width: 120px;
+	height: 120px;
+}
+
+.product-item.md .tags {
+	display: flex;
+	gap: 2px;
+}
+
+/* -------- size = sm -------- */
+.product-item.sm .thumbnail img {
+	width: 80px;
+	height: 80px;
+}
+
+.product-item.sm .info {
+	gap: 4px;
+}
+
+.product-item.sm .tags {
+	display: none;
+}

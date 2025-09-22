@@ -1,0 +1,102 @@
+@charset "UTF-8";
+
+.table-filter {
+	width: 100%; 
+	border : 1px solid #DDE1EB;
+	background: #fff;
+	border-radius: 8px;
+	padding: 16px 32px;
+	box-sizing: border-box;
+}
+
+/* 한 줄 기본 스타일 */
+.table-filter .filter-row {
+	display: flex;
+	align-items: center;
+	margin-bottom: 16px;
+	flex-wrap: wrap;
+}
+
+/* 날짜 한 줄 */
+.date-row span {
+	margin: 0 8px;
+}
+
+.date-row .margin {
+	width: 16px;
+}
+
+/* 검색창 한 줄 */
+.table-filter .search-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: nowrap; /* 줄바꿈 방지 */
+}
+
+/* selectbox는 고정 폭 */
+.table-filter .search-row .custom-select {
+	flex: 0 0 160px;
+}
+
+/* textInput은 남은 공간 다 차지 */
+.table-filter .search-row .text-input-wrapper {
+	flex: 1;
+}
+
+/* 라벨 */
+.table-filter .filter-row label {
+	width: 94px;
+	color: #000;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+}
+
+/* 버튼 그룹 */
+.filter-btn-group {
+	display: inline-flex;
+	border: 1px solid #DDE1EB;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+/* 개별 버튼 */
+.filter-btn-group .filter-btn {
+	border: none;
+	border-right: 1px solid #DDE1EB;
+	background: #fff;
+	padding: 0 20px;
+	height: 40px;
+	font-size: 14px;
+	font-weight: 500;
+	color: #333;
+	cursor: pointer;
+}
+
+/* 마지막 버튼은 구분선 제거 */
+.filter-btn-group .filter-btn:last-child {
+	border-right: none;
+}
+
+.filter-btn-group .filter-btn:hover {
+	background: #f7f7f9;
+}
+
+.filter-btn-group .filter-btn.active {
+	background: #F1F9FF;
+	color: #2684FF;
+	font-weight: 600;
+}
+
+/* 하단 버튼 섹션 */
+.table-filter .filter-actions {
+	display: flex;
+	justify-content: center;
+	gap: 12px;
+}
+
+.btn.tableFilter {
+	width: 114px;
+}
