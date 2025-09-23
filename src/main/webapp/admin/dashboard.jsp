@@ -8,7 +8,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp" %>
 <title>홈</title>
-<link rel="stylesheet" href="../css/admin/dashboard.css?v=1" />
+<link rel="stylesheet" href="../css/admin/dashboard.css" />
 
 <!-- Chartjs cdn -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

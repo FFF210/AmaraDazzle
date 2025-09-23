@@ -7,16 +7,16 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>메인배너 리스트</title>
-<link rel="stylesheet" href="./css/banner.css" />
+<title>Users 사업자회원</title>
+<link rel="stylesheet" href="../css/admin/user_seller.css" />
 <!-- 헤드부분 -->
 
 <body>
 
 	<!-- 레이아웃 + 메인컨텐츠 -->
-	<my:adminLayout>
-		<%@ include file="./main_content/promotion_banner_content.jsp"%>
-	</my:adminLayout>
+	<my:layout>
+		<%@ include file="./main_content/users_seller_content.jsp"%>
+	</my:layout>
 	<!-- 레이아웃 + 메인컨텐츠 end -->
 
 

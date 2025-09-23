@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 
 
 <!-- 메인부분 -->
@@ -161,26 +162,7 @@
 
 		<!-- 페이지네이션 -->
 		<div class="pagination_wrap" id="paginationWrap">
-			<!-- Prev button -->
-			<button class="pg_nav" id="btnPrev">
-				<i class="bi bi-chevron-left"></i>&nbsp;Prev&nbsp;
-			</button>
-
-			<!-- Pages container -->
-			<div class="pages" id="pages">
-				<button type="button" class="page_item active">1</button>
-				<button type="button" class="page_item">2</button>
-				<button type="button" class="page_item">12</button>
-				<button type="button" class="page_item">13</button>
-				<button type="button" class="page_item">111</button>
-				<button type="button" class="page_item">158</button>
-				<button type="button" class="page_item">1589</button>
-			</div>
-
-			<!-- Next button -->
-			<button class="pg_nav" id="btnNext">
-				&nbsp;Next&nbsp;<i class="bi bi-chevron-right"></i>
-			</button>
+			<my:adminPagination currentPage="1" totalPages="10" baseUrl="/products?page=" />
 		</div>
 		<!-- 페이지네이션 end -->
 	</div>

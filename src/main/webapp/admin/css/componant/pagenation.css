@@ -8,14 +8,7 @@
     --font-sz: 14px;
 }
 
-.pagination_wrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    user-select: none;
-    margin: 20px 0;
-}
+
 
 .pg_nav {
     display: inline-flex;
