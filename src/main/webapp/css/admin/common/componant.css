@@ -1,0 +1,158 @@
+@font-face {
+    font-family: "Pretendard";
+    src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff") format("woff");
+    font-weight: 100;
+    font-display: swap;
+}
+
+:root {
+    --primary: #007bff;
+    --clicked: #0c63c2;
+    --indigo: #6610f2;
+    --purple: #6f42c1;
+    --pink: #e83e8c;
+    --red: #dc3545;
+    --orange: #fd7e14;
+    --yellow: #ffc107;
+    --green: #28a745;
+    --teal: #20c997;
+    --cyan: #17a2b8;
+    --white: #fff;
+    --disabled: #acb3b9; /*slategray*/
+    --gray-dark: #343a40;
+    --secondary: #e6e6e6;
+    --success: #28a745;
+    --info: #17a2b8;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --light: #f8f9fa;
+    --dark: #343a40;
+    --innerbox: #e3e3e3;
+    --outerbox: #d9d9d9;
+}
+
+select {
+    /* width: 100px; */
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid var(--innerbox);
+    border-radius: 5px;
+    text-align: center;
+    margin: 0;
+    outline: none;
+}
+
+label {
+    display: flex;
+    align-items: center;
+}
+input {
+    outline: none;
+    margin: 0;
+    padding: 0;
+    height: 30px;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    accent-color: var(--primary);
+    margin-right: 5px;
+}
+
+input[type="text"] {
+    padding: 5px;
+    border: 1px solid var(--innerbox);
+    border-radius: 5px;
+}
+
+input[type="text"].text_readonly {
+    cursor: default;
+    color: gray;
+}
+
+textarea {
+    resize: none;
+    padding: 5px;
+    outline: none;
+}
+
+span.reqired_write {
+    color: red;
+}
+
+hr {
+    width: 100%; /* 또는 원하는 px */
+    height: 1px; /* 두께 */
+    border: none; /* 기본 border 제거 */
+    background: var(--innerbox); /* 선 색상 */
+}
+/* **************************** */
+/* 버튼 기본 스타일              */
+/* **************************** */
+button {
+    font-family: "Pretendard";
+    font-size: 14px;
+}
+
+.btn {
+    width: 100px;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid var(--innerbox);
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.btn.first_btn {
+    border: 1px solid var(--primary);
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn.first_btn:active {
+    border: 1px solid var(--clicked);
+    background-color: var(--clicked);
+}
+
+.btn.second_btn {
+    border: 1px solid var(--primary);
+    background-color: white;
+    color: var(--primary);
+}
+
+.btn.second_btn:active {
+    background-color: var(--secondary);
+}
+
+.button_box {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.button_wrap {
+    width: 95%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 10px auto 0;
+}
+
+.action_btn {
+    height: 40px;
+    padding: 5px 20px;
+}
+
+.search_btn {
+    width: 80px;
+}
+
+/* ********************* */
+/*        */
+/* ********************* */
+.title_font {
+    font-size: 16px !important;
+}

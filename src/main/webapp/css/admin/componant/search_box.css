@@ -1,0 +1,168 @@
+.search_form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.search_container {
+    border: 1px solid var(--outerbox);
+    border-radius: 10px;
+    /* width: 700px; */
+    width: 93%;
+    /* height: 300px; */
+    background-color: white;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    margin: 15px;
+}
+
+.period_box,
+.answer_box,
+.questionType_box,
+.category_box,
+.check_box,
+.totalSearch_box {
+    height: 40px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    /* margin-bottom: 10px; */
+}
+
+.filtering_title {
+    min-width: 100px;
+}
+.searchbox_title {
+    font-size: 14px;
+}
+
+/* 기간 */
+.period_body {
+    display: flex;
+    align-items: center;
+}
+
+.period_body span {
+    margin: 0 5px;
+    text-align: center;
+}
+
+.period_body input[type="date"]:first-child {
+    margin-left: 0;
+}
+
+.period_body input[type="date"]:last-child {
+    margin-right: 15px;
+}
+.p_choice > input[type="button"] {
+    width: 70px;
+    height: 100%;
+    background-color: white;
+    margin: 1px;
+    cursor: pointer;
+}
+
+/* 클릭시 파란불 */
+.p_choice > input[type="button"].active {
+    background-color: var(--primary);
+}
+
+.p_choice > input[type="button"].active {
+    color: white;
+}
+
+.p_choice > input[type="button"]:hover,
+.choice:hover {
+    background-color: var(--primary);
+}
+
+/* 답변상태 */
+.answer_body {
+    display: flex;
+    border: 1px solid var(--innerbox);
+    border-radius: 5px;
+    height: 30px;
+    /* padding: 5px; */
+    align-items: center;
+}
+.choice {
+    min-width: 70px;
+    height: 100%;
+    text-align: center;
+    /* vertical-align: middle; */
+}
+.choice:first-child {
+    border-radius: 3px 0 0 3px;
+}
+
+.choice:last-child {
+    border-radius: 0 3px 3px 0;
+}
+
+.ch {
+    border-right: 1px solid var(--innerbox);
+}
+
+.choice > input[type="button"] {
+    width: 100%;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    padding: 5px;
+    margin: 0;
+}
+
+/* 클릭시 파란불 */
+.choice.active {
+    background-color: var(--primary);
+}
+.choice.active input[type="button"] {
+    color: white;
+}
+
+/* 체크박스 */
+.check_box > div:nth-child(2) {
+    display: flex;
+}
+
+.check_box > div:nth-child(2) > label {
+    margin-right: 15px;
+}
+
+/* 통합검색 */
+.totalSearch_box {
+    gap: 5px;
+    /* width: 100%; */
+}
+
+.totalSearch_box > .searchType > select {
+    width: 150px;
+}
+.totalSearch_box > .searchKeyword {
+    width: 90%;
+    height: 27px;
+    border: 1px solid var(--innerbox);
+    border-radius: 5px;
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
+}
+.searchKeyword > input {
+    width: 100%;
+    /* height: 100%; */
+    outline: none;
+    border: none;
+    padding: 0 15px;
+}
+
+/* 버튼 */
+.btn_box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}

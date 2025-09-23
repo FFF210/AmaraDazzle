@@ -1,0 +1,57 @@
+@charset "UTF-8";
+
+/* 모달 기본 */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+.modal.show {
+  display: block;
+}
+
+.modal-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
+
+.modal-content {
+  position: relative;
+  max-width: 400px;
+  margin: 100px auto;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.modal-body {
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.modal-message {
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+@keyframes fadeIn {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

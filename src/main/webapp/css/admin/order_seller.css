@@ -1,0 +1,23 @@
+.content .seller_info_header {
+    width: 95%;
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    margin-top: 15px;
+}
+
+.content .seller_info_header .seller_info_img {
+    width: 55px;
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--outerbox);
+    border-radius: 10px;
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+.seller_info_img img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain; /* 비율 유지하며 div 채우기 */
+    display: block; /* 여백 제거 */
+}

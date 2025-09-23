@@ -1,0 +1,11 @@
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content section.main_content {
+    width: 80%;
+    display: grid;
+    gap: 15px;
+}

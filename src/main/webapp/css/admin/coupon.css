@@ -1,0 +1,28 @@
+div.part_section .part_content {
+    display: flex;
+    align-items: center;
+}
+
+section.board_write div.part_section.name_part .part_content input[name="coupon_amount"],
+section.board_write div.part_section.name_part .part_content input[name="coupon_user2"] {
+    width: 30%;
+}
+section.board_write div.part_section.name_part .part_content input[name="coupon_name"],
+section.board_write div.part_section.condition_part .part_content input[name="coupon_condition"],
+section.board_write div.part_section.name_part .part_content input[name="coupon_user"],
+section.board_write div.part_section.condition_part .part_content input[name="coupon_quantity"] {
+    width: 50%;
+    margin-right: 5px;
+}
+
+div.part_section.writer_part {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 15px;
+}
+
+div.part_section.writer_part .writer_part input[type="text"] {
+    height: 30px;
+}

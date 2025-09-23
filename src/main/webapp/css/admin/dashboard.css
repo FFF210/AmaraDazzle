@@ -1,0 +1,148 @@
+@charset "UTF-8";
+
+.content > section.part1 {
+    width: 75%;
+    padding-right: 15px;
+    float: left;
+}
+
+/* **************************** */
+/* 카드섹션                      */
+/* **************************** */
+.card_section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.stats_card {
+    width: 25%;
+    height: 70px;
+    margin: 0 10px;
+    padding: 10px 15px;
+    border: 1px solid var(--outerbox);
+    border-radius: 15px;
+    background-image: linear-gradient(to top right, black, var(--outerbox));
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+}
+
+.stats_card > .card_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stats_card > .card_header > .card_updouwn {
+    cursor: pointer;
+}
+
+.stats_card > .card_value {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 8px;
+}
+
+.stats_card > .card_value > .stats_number {
+    font-size: 20px;
+    /* text-align: center; */
+}
+
+.stats_card > .card_value > .stats_updouwn {
+    font-size: 14px;
+}
+
+/* **************************** */
+/* 라인차트섹션                   */
+/* **************************** */
+.chart_section {
+    /* width: 95%; */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.chart_section > div > #lineChart {
+    width: 100%;
+    /* width: 1370px; */
+    max-height: 500px;
+}
+
+/* **************************** */
+/* 테이블차트섹션                 */
+/* **************************** */
+.table_section {
+    width: 100%;
+    /* float: left; */
+    display: flex;
+    justify-content: center;
+    /* padding: 15px 0; */
+}
+
+div.bestSeller,
+div.bestBrand {
+    width: 47%;
+    background-color: rgba(127, 197, 255, 0.374);
+    border-radius: 10px;
+    margin: 10px;
+    padding: 5px 0 15px 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.bestSeller .table_title,
+div.bestBrand .table_title {
+    text-align: left;
+    margin: 10px;
+    padding-left: 25px;
+    font-size: 20px;
+    font-weight: 600;
+}
+div.bestSeller .table_wrap,
+div.bestBrand .table_wrap {
+    display: flex;
+    justify-content: center;
+}
+div.bestSeller .table_wrap table,
+div.bestBrand .table_wrap table {
+    table-layout: fixed; /* 열 너비를 colgroup에 맞게 강제 */
+    width: 95%;
+    border-collapse: collapse;
+}
+
+table th,
+table td {
+    border-right: none;
+    padding: 12px 14px;
+}
+
+/* **************************** */
+/* 옆구리 차트                */
+/* **************************** */
+.content > section.part2 {
+    width: 20%;
+    /* height: 100vh; */
+    /* background-color: black; */
+    padding-left: 15px;
+    border-left: 1px solid var(--outerbox);
+    float: left;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.content section.part2 div {
+    display: flex;
+    justify-content: center;
+    /* margin: 20px 0; */
+}
+
+.content section.part2 div #pieChart,
+.content section.part2 div #radarChart {
+    margin-top: 20px;
+    /* margin: 10px 0; */
+}

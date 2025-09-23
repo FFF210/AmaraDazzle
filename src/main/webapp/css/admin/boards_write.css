@@ -1,0 +1,42 @@
+section.board_write {
+    width: 750px; /* 50% */
+    border: 1px solid var(--outerbox);
+    border-radius: 10px;
+    background: white;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+    padding: 30px;
+    display: grid;
+    gap: 15px;
+}
+
+section.board_write div.part_section {
+    width: 100%;
+    /* height: 45px; */
+    display: flex;
+    align-items: center;
+}
+
+section.board_write div.part_content {
+    width: 580px;
+}
+
+section.board_write div.part_section .part_title {
+    /* font-size: 16px; */
+    width: 170px;
+}
+
+section.board_write div.part_section .part_content input[type="text"] {
+    width: 100%;
+}
+
+section.board_write div.part_section .part_content .content_part {
+    border: 1px solid var(--outerbox);
+    border-radius: 5px;
+    width: 100%;
+    height: 500px;
+}
+
+section.board_write div.part_section.bottom_part .part_content {
+    display: flex;
+    justify-content: space-between;
+}

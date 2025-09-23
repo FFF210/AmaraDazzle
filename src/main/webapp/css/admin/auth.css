@@ -1,0 +1,189 @@
+@charset "UTF-8";
+
+body.login-page {
+	min-height: 100vh;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+body.signup-page {
+	min-height: 100vh;
+	margin: 80px 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+
+/* 공통 컨테이너 */
+.auth-container {
+	max-width: 380px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+/* 로고 */
+.login-logo {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 0 0 30px 0;
+}
+.login-logo img {
+	width: 68px;
+	height: 68px;
+}
+.login-logo .brand-name {
+	font-size: 20px;
+	font-weight: 600;
+}
+
+.signup-logo {
+	display: flex;
+	gap: 2px;
+	align-items: center;
+}
+.signup-logo img {
+	width: 40px;
+	height: 40px;
+}
+.signup-logo .brand-name {
+	font-size: 20px;
+	font-weight: 600;
+	margin-left: 6px;
+}
+
+/* 제목 */
+.auth-title {
+	margin: 20px 0 40px 0;
+	text-align: left;
+	color: #000;
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 140%;
+}
+
+/* 폼 */
+.auth-form .input-group {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 20px;
+	align-self: stretch;
+}
+
+.auth-form .form-group {
+	width: 380px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 4px;
+	align-self: stretch;
+}
+
+.auth-form label {
+	color: #000;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 150%;
+	letter-spacing: 0.091px;
+}
+
+/* 옵션 영역 */
+.form-options {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 16px 0 0 0;
+	color: #464646;
+	text-align: center;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 150%;
+	letter-spacing: 0.08px;
+	color: #464646;
+}
+
+.form-options p {
+	display: flex;
+	align-items: flex-start;
+	gap: 4px;
+}
+
+.form-options .link {
+	color: #464646;
+	text-align: center;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 150%;
+	letter-spacing: 0.08px;
+	text-decoration: none;
+}
+
+.form-options .link:hover {
+	text-decoration: underline;
+}
+
+.btn.login {
+	width: 100%;
+	margin: 56px 0 36px 0;
+}
+.btn.signup {
+	width: 100%;
+	margin: 0;
+}
+
+/* 가입 링크 */
+.auth-footer {
+	color: #464646;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 150%;
+	letter-spacing: 0.08px;
+}
+
+.auth-footer .link {
+	color: #0C8CE9;
+}
+
+/* 약관 */
+.form-agree {
+	margin: 48px 0;
+	text-align: left;
+}
+
+.form-agree label.agreeAll {
+	color: #000;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: 140%;
+}
+
+.form-agree .checkbox-wrpper {
+	display: flex;
+	margin: 11px 0 0 35px; flex-direction : column;
+	align-items: flex-start;
+	gap: 8px;
+	flex-direction: column;
+}
+
+.form-agree label {
+	display: block;
+	cursor: pointer;
+	color: #000;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 140%;
+}
+
+.form-agree span {
+	color: #0C8CE9;
+}

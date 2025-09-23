@@ -1,0 +1,70 @@
+.content .seller_info_header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+    margin-top: 15px;
+}
+
+.content .seller_info_header .seller_info_img {
+    width: 55px;
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--outerbox);
+    border-radius: 10px;
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+.seller_info_img img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: contain; /* 비율 유지하며 div 채우기 */
+    display: block; /* 여백 제거 */
+}
+
+.content .calc_info {
+    display: flex;
+    align-items: center;
+}
+
+.calc_info .calc_mon {
+    margin: 0 5px;
+}
+.calc_info .calc_mon input[type="text"] {
+    height: 40px;
+    padding-left: 10px;
+    line-height: 40px;
+    font-size: 20px;
+}
+.description {
+    border-radius: 5px;
+    background-color: var(--outerbox);
+}
+.description > div {
+    width: 100%;
+    display: flex;
+    /* align-items: center; */
+
+    margin: 30px;
+}
+
+.description .desc {
+    padding: 30px 40px;
+}
+
+/* ********************
+
+********************** */
+
+.summary {
+    width: 94%;
+    border: 1px solid var(--outerbox);
+    border-radius: 5px;
+    margin-top: 15px;
+    padding: 15px;
+}
+
+.summary table tr td {
+    text-align: left;
+    font-size: 16px;
+}

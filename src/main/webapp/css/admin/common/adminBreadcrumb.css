@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+/* ==================================== */
+/*	breadcrumb                          */
+/* ==================================== */
+.breadcrumb {
+	margin-left: 15px;
+}
+
+.breadcrumb ul {
+	display: inline-flex;
+	gap: 4px;
+	margin: 0;
+	padding: 0;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 150%;
+	color: #1E2124;
+	list-style: none;
+	align-items: center;
+}
+
+.breadcrumb li {
+	display: flex;
+	align-items: center;
+}
+
+.breadcrumb .breadcrumb-home {
+	margin: 0 4px 0 0;
+	font-size: 14px;
+	color: rgba(51, 54, 61, 1);
+}
+
+.breadcrumb .breadcrumb-separator {
+	margin: 0 2px 0 8px;
+	font-size: 12px;
+	color: rgba(51, 54, 61, 1);
+}
+
+.breadcrumb a {
+	text-decoration-line: underline;
+	color: #1E2124;
+}

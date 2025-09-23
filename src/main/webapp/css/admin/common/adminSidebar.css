@@ -1,0 +1,217 @@
+@charset "UTF-8";
+
+/* ==================================== */
+/*	 사이드바                             */
+/* ==================================== */
+.sidebar {
+    width: 250px;
+    background-color: #333;
+    color: white;
+    transition: width 0.5s;
+    /* transition: all 0.3s ease; */
+    overflow: hidden;
+    box-sizing: border-box;
+    /* padding-top: 20px; */
+    /* position: relative; */
+    position: sticky;
+    top: 0;
+    align-self: flex-start; /* flex 컨테이너에서 sticky가 먹히게 */
+    height: 100vh; /* 필요 시 지정 */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* 사이드바 접힌 상태 */
+.sidebar.collapsed {
+    width: 60px;
+}
+.sidebar.collapsed .menu-item.active {
+    /* 전체 박스 색 제거 */
+    background-color: transparent;
+}
+/* 사이드바가 접힌 상태일 때 서브메뉴, 메뉴명 아예 숨기기 */
+.sidebar.collapsed .menu-item:hover .submenu {
+    transform: scaleY(0) !important; /* scaleY 사용 시 */
+    height: 0 !important; /* height 사용 시 */
+    background-color: #333;
+}
+.sidebar.collapsed .menu-text {
+    width: 0;
+    opacity: 0;
+}
+.sidebar.collapsed .menu-item.active .menu-link {
+    background-color: #444; /* 아이콘 영역 색상 */
+    border-radius: 10px;
+    width: 90%; /* 아이콘 박스 폭 고정 */
+    justify-content: flex-end; /* 가운데 정렬 (필요 시) */
+    padding: 10px 0; /* 좌우 패딩 없애기 */
+    margin-left: 2px;
+}
+.sidebar.collapsed .menu-item.open .submenu {
+    max-height: 0;
+    background-color: transparent;
+}
+
+/* ==================================== 
+	사이드바  아이템                    
+==================================== */
+.sidebar_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+}
+.logo {
+    margin: 0;
+    width: 85%;
+    z-index: 999;
+}
+.logo > .logo_img {
+    transition: none !important;
+    /* 부모가 줄어도 같이 안 줄도록 */
+    flex-shrink: 0;
+
+    height: 55px;
+    background-size: 95%;
+    background-repeat: no-repeat;
+    margin-left: 5px;
+}
+.logo > .logo_collapsed {
+    aspect-ratio: 1 / 1;
+    background-image: url("../../image/logo_white.svg");
+}
+
+.logo > .logo_expanded {
+    background-image: url("../../image/logo_white_sidelower.svg");
+}
+
+.logo_collapsed,
+.logo_expanded {
+    background-size: contain;
+}
+/* .logo > img {
+    height: 40px;
+} */
+
+/* 토글 버튼 */
+#toggleBtn {
+    /* position: absolute; */
+    /* top: 10px; */
+    /* left: 10px; */
+    z-index: 100;
+    padding: 10px;
+    cursor: pointer;
+    background-color: #333;
+    color: white;
+    border: none;
+    font-size: 18px;
+}
+
+/* ******* 메뉴 아이템 ******* */
+.menus {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 87%;
+}
+.menu-item {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    width: 90%;
+    margin: 3px;
+}
+.menu-link {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    transition: background 0.3s;
+    width: 100%;
+}
+
+.menu-icon {
+    font-size: 20px;
+    margin-right: 10px;
+    width: 30px;
+    text-align: center;
+}
+.menu-text {
+    white-space: nowrap;
+    overflow: hidden;
+    transition: width 0.3s, opacity 0.3s;
+    /* width: 140px; */
+    width: 100%;
+    opacity: 1;
+}
+.menu-text a {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    color: white;
+}
+
+/* ******* 서브메뉴 ******* */
+.menu-item .submenu {
+    max-height: 0;
+    overflow: hidden;
+    /* background-color: #444; */
+    transition: max-height 0.3s;
+    transform: scaleY(0);
+    transform-origin: top;
+    margin-left: 40px;
+    border-radius: 10px;
+}
+
+.menu-item .submenu a {
+    display: block;
+    padding: 10px 15px;
+    transition: background 0.3s;
+    text-decoration: none;
+    color: white;
+}
+
+/* 서브메뉴 펼침 */
+.menu-item.open .submenu {
+    transform: scaleY(1);
+    max-height: 500px;
+}
+
+/* 메뉴, 서브메뉴 hover */
+.menu-item:hover,
+.menu-item.active {
+    background-color: #444;
+    border-radius: 10px;
+}
+
+/* 아이콘/글자색 */
+.menu-item:hover > .menu-link,
+.menu-item > .menu-link a:hover,
+.menu-item > .menu-link a.active,
+.menu-item.active > .menu-link a,
+.menu-item .submenu a:hover,
+.menu-item .submenu a.active,
+.menu-item.hover > .menu-link,
+.menu-item.hover > .menu-link i,
+.menu-item.hover > .menu-link .menu-text,
+.menu-item.active > .menu-link,
+.menu-item.active > .menu-link i,
+.menu-item.active > .menu-link .menu-text {
+    color: pink;
+}
+
+/* ==================================== 
+	푸터                   
+==================================== */
+.copyRight {
+    text-align: center;
+    color: #d9d9d93f;
+    position: absolute;
+    bottom: 15px;
+}
+
+.copyRight.expanded {
+    position: relative;
+    text-align: center;
+    /* bottom: 5px; */
+}

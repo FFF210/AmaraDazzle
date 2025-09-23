@@ -1,0 +1,276 @@
+/* **************************** */
+/* 테이블 기본 스타일              */
+/* **************************** */
+
+.whole_table {
+    width: 100%;
+    display: block;
+}
+
+.whole_table > .table_title {
+    width: 95%;
+    /* text-align: left; */
+    margin: 5px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.table_title {
+    /* padding-right: 15px; */
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.table_title span.list_count {
+    /* padding-right: 15px; */
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.whole_table .table_wrap {
+    width: 95%;
+    overflow-x: auto;
+    margin: 0 auto;
+}
+
+.whole_table table {
+    width: 100%; /* 실제 콘텐츠 크기에 맞춤 */
+    min-width: 1400px;
+    table-layout: fixed;
+    /* 외부 테두리  */
+    border: 1px solid var(--outerbox);
+    border-right: none;
+    border-left: none;
+    border-collapse: collapse;
+    background: #fff;
+    white-space: nowrap;
+}
+
+/* colgroup 비율 유지 */
+.whole_table table col {
+    width: auto;
+}
+
+/* 각 행 높이 고정 */
+table tr {
+    height: 44px;
+}
+
+/* 행에 마우스 hover시 색변환 */
+.whole_table table tbody tr:hover td {
+    background-color: var(--innerbox);
+}
+
+table th,
+table td {
+    padding: 8px 10px;
+    font-size: 14px;
+    /* 세로 구분선 */
+    border-right: 1px solid #eee;
+    /* 가로 구분선 */
+    border-bottom: 1px solid #eee;
+    text-align: center;
+    /* 셀 안에 텍스트 내용 길어질 경우 말줄임표 처리*/
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+table th {
+    background: #fafafa;
+    font-size: 16px;
+}
+
+/* 마지막 열의 오른쪽 선 제거 */
+table th:last-child,
+table td:last-child {
+    border-right: none;
+}
+
+/* 마지막 행의 아래 선 제거 */
+table tr:last-child td {
+    border-bottom: none;
+}
+
+/* 첫 칸(제목칸) 스타일  */
+table td.title_cell {
+    text-align: left;
+}
+
+/* 썸네일 표시 칸 */
+table td.img_cell {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+table tr td.img_cell img {
+    width: 44px;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    display: block;
+}
+
+/* 가격 표시 칸 */
+table td.price_cell {
+    text-align: right;
+}
+
+/* 상세보기 칸 */
+table td.detail_cell {
+    color: var(--dark);
+    cursor: pointer;
+}
+
+/* ****************************** */
+/* 문의게시판 > 테이블 문의내용확인   */
+/* ****************************** */
+tr.question_detail > td.detail_icon,
+tr.reply_detail > td.reply_icon,
+tr.reply_detail > td.reply_body,
+tr.question_reply > td.reply_icon,
+tr.question_reply > td.reply_body,
+tr.report_action > td.reply_icon {
+    border-right: none;
+}
+
+/* 문의 내용 보기 */
+tr.question_detail td:last-child,
+tr.reply_detail td:last-child,
+tr.question_reply td:last-child {
+    cursor: default;
+}
+
+tr.question_detail .pd_info {
+    width: 95%;
+    max-height: 100px;
+    border: 1px solid var(--innerbox);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 15px;
+}
+tr.question_detail .detail_body .pd_info .pd_img {
+    height: 60px;
+    /* background-color: aliceblue; */
+    border: 1px solid var(--innerbox);
+    aspect-ratio: 1 / 1;
+    margin-right: 15px;
+}
+
+/* 답글 내용보기 */
+tr.reply_detail > td.reply_icon {
+    /* color: var(--gray-dark); */
+    color: red;
+}
+
+tr.reply_detail > td.reply_body {
+    /* color: var(--gray-dark); */
+    color: red;
+}
+
+tr.question_detail > td.detail_body,
+tr.reply_detail > td.reply_body {
+    text-align: left;
+}
+
+tr.reply_detail > td.replyed_date {
+    color: var(--disabled);
+    font-size: 10px;
+    text-align: right;
+}
+
+tr.reply_detail > td.replyed_date > div:last-child {
+    padding-right: 35px;
+}
+
+/* 답글 달기 */
+tr.question_reply td.reply_body {
+    text-align: left;
+    padding: 0;
+    height: 80px;
+}
+
+tr.report_action td.reply_body {
+    text-align: left;
+    padding: 0;
+}
+
+tr.question_reply td.reply_body div.reply_panel,
+tr.report_action td.reply_body div.reply_panel {
+    display: flex;
+    height: 100%;
+}
+
+tr.question_reply td.reply_body div.reply_panel textarea,
+tr.report_action td.reply_body div.reply_panel textarea {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+tr.question_reply td.reply_send {
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    padding: 0;
+}
+
+tr.question_reply td.reply_send button {
+    border: 1px solid var(--primary);
+    background-color: var(--primary);
+    color: white;
+}
+tr.question_reply td.reply_send button:active {
+    border: 1px solid var(--clicked);
+    background-color: var(--clicked);
+}
+
+.whole_table table tbody tr.question_reply:hover td,
+.whole_table table tbody tr.report_action:hover td {
+    background-color: transparent;
+}
+
+/* 반응형: 좁아지면 글자 크기 약간 조정 */
+/* @media (max-width: 480px) {
+    table th,
+    table td {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+} */
+
+/* ****************************** */
+/* 인포테이블                       */
+/* ****************************** */
+.info_table {
+    width: 100%;
+}
+
+.info_table .unit_info {
+    width: 100%;
+    text-align: right;
+}
+
+.info_table table {
+    width: 100%;
+    table-layout: fixed;
+    /* 외부 테두리  */
+    border: 1px solid var(--outerbox);
+    border-right: none;
+    border-left: none;
+    border-collapse: collapse;
+    background: #fff;
+    white-space: nowrap;
+}
+
+.info_table table tr:last-child th {
+    border-bottom: 1px solid var(--outerbox);
+}
+
+.info_table table tr th {
+    width: 20%;
+}

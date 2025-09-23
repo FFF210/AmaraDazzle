@@ -1,0 +1,39 @@
+.content > .profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.content > .profile > .info_table {
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.info_table > #seller_info {
+    height: 100%;
+    width: 100%;
+}
+
+#seller_info tr th {
+    width: 20%;
+    border-right: none;
+}
+
+#seller_info tr td {
+    width: 30%;
+}
+
+div.info_table > table#seller_info tr:hover td {
+    background-color: transparent;
+}
+
+#conRvTbl > tr[data-main="true"] > td {
+    border-bottom: none;
+}
+.question_detail > td {
+    border-top: 1px solid #eee;
+}
