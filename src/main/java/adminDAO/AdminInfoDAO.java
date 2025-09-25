@@ -1,5 +1,5 @@
 package adminDAO;
 
-public class Test {
+public class AdminInfoDAO {
 
 }
