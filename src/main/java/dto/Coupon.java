@@ -13,7 +13,7 @@ public class Coupon {
     private String amountCondition; // 조건 (금액)
     private String reason;          // 지급 사유
     private String provision;       // 지급 대상 유형 (모든회원, VIP, GOLD, SILVER, 일반, 개별지급)
-    private String limit;           // 발급 제한 수량
+    private String couponLimit;           // 발급 제한 수량
     private String writerType;      // 쿠폰 발행자 타입 (ADMIN, BRAND_ADMIN)
     private Long writerId;          // 쿠폰 발행자 ID (FK → brand.brand_id / admin_info.admin_info_id)
     private Timestamp createdAt;    // 발행일자
@@ -91,11 +91,11 @@ public class Coupon {
         this.provision = provision;
     }
 
-    public String getLimit() {
-        return limit;
+    public String getCouponLimit() {
+        return couponLimit;
     }
-    public void setLimit(String limit) {
-        this.limit = limit;
+    public void setCouponLimit(String limit) {
+        this.couponLimit = limit;
     }
 
     public String getWriterType() {
@@ -125,7 +125,7 @@ public class Coupon {
                 ", startDate=" + startDate + ", endDate=" + endDate +
                 ", amount=" + amount + ", pCode=" + pCode + ", cCode=" + cCode +
                 ", amountCondition=" + amountCondition + ", reason=" + reason +
-                ", provision=" + provision + ", limit=" + limit +
+                ", provision=" + provision + ", couponLimit=" + couponLimit +
                 ", writerType=" + writerType + ", writerId=" + writerId +
                 ", createdAt=" + createdAt + "]";
     }
