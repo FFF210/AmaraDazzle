@@ -22,7 +22,7 @@ public interface MemberService {
      * @param member 가입할 회원 정보
      * @throws Exception 데이터베이스 오류 또는 비즈니스 규칙 위반 시
      */
-    void register(Member member) throws Exception;
+    void join(Member member) throws Exception;
     
     
     /**

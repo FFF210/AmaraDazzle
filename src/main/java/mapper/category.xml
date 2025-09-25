@@ -101,21 +101,6 @@
         ORDER BY p.sort_order ASC, c.sort_order ASC
     </select>
 
-    <!-- 상품 개수와 함께 카테고리 조회 (카테고리 페이지용) -->
-    <select id="selectCategoriesWithProductCount" resultType="map">
-        SELECT 
-            c.category_id as categoryId,
-            c.name,
-            c.description,
-            c.sort_order as sortOrder,
-            COUNT(p.product_id) as productCount
-        FROM category c
-        LEFT JOIN product p ON c.category_id = p.category_id AND p.is_visible = 1
-        WHERE c.parent_id IS NULL 
-        AND c.is_visible = 1
-        GROUP BY c.category_id, c.name, c.description, c.sort_order
-        ORDER BY c.sort_order ASC
-    </select>
 
     <!-- 카테고리별 인기 상품과 함께 조회 (메인페이지용) -->
     <select id="selectCategoriesWithPopularProducts" resultType="map">
@@ -150,74 +135,4 @@
         ORDER BY level ASC, sort_order ASC
         LIMIT 10
     </select>
-
-    <!-- 카테고리의 전체 상품 개수 조회 (하위 카테고리 포함) -->
-    <select id="countProductsInCategory" parameterType="long" resultType="int">
-        WITH RECURSIVE category_tree AS (
-            -- 시작 카테고리
-            SELECT category_id FROM category WHERE category_id = #{categoryId}
-            
-            UNION ALL
-            
-            -- 하위 카테고리들을 재귀적으로 찾기
-            SELECT c.category_id
-            FROM category c
-            JOIN category_tree ct ON c.parent_id = ct.category_id
-        )
-        SELECT COUNT(*)
-        FROM product p
-        JOIN category_tree ct ON p.category_id = ct.category_id
-        WHERE p.is_visible = 1
-    </select>
-
-    <!-- 사이드바 네비게이션용 - 현재 카테고리 기준 관련 카테고리들 -->
-    <select id="selectNavigationCategories" parameterType="long" resultType="map">
-        SELECT 
-            'parent' as type,
-            category_id as categoryId,
-            name,
-            level
-        FROM category 
-        WHERE category_id = (
-            SELECT parent_id FROM category WHERE category_id = #{categoryId}
-        )
-        
-        UNION ALL
-        
-        SELECT 
-            'current' as type,
-            category_id as categoryId,
-            name,
-            level
-        FROM category 
-        WHERE category_id = #{categoryId}
-        
-        UNION ALL
-        
-        SELECT 
-            'sibling' as type,
-            category_id as categoryId,
-            name,
-            level
-        FROM category 
-        WHERE parent_id = (
-            SELECT parent_id FROM category WHERE category_id = #{categoryId}
-        )
-        AND category_id != #{categoryId}
-        AND is_visible = 1
-        
-        UNION ALL
-        
-        SELECT 
-            'child' as type,
-            category_id as categoryId,
-            name,
-            level
-        FROM category 
-        WHERE parent_id = #{categoryId}
-        AND is_visible = 1
-        
-        ORDER BY type, name
-    </select>
-
 </mapper>

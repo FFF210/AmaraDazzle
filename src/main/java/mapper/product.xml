@@ -113,7 +113,6 @@
         LIMIT #{offset}, #{limit}
     </select>
 
-
     <!-- 상품 재고 확인 -->
     <select id="selectStockQty" parameterType="long" resultType="int">
         SELECT 
@@ -162,51 +161,11 @@
         WHERE is_visible = 1
     </select>
 
-    <!-- 카테고리별 상품 총 개수 -->
-    <select id="countByCategory" parameterType="long" resultType="int">
-        SELECT COUNT(*) FROM product 
-        WHERE category_id = #{categoryId} 
-        AND is_visible = 1
-    </select>
-
-
     <!-- 검색 결과 총 개수 -->
     <select id="countSearchResults" parameterType="string" resultType="int">
         SELECT COUNT(*) FROM product 
         WHERE name LIKE CONCAT('%', #{keyword}, '%') 
         AND is_visible = 1
-    </select>
-
-    <!-- 메인페이지용 - 간단한 상품 정보만 조회 -->
-    <select id="selectSimpleProductList" parameterType="map" resultType="map">
-        SELECT 
-            product_id as productId,
-            name,
-            price,
-            thumbnail_file_id as thumbnailFileId,
-            discount_type as discountType,
-            discount_value as discountValue,
-            CASE 
-                WHEN discount_type = 'RATE' AND 
-                     (start_date IS NULL OR start_date &lt;= NOW()) AND 
-                     (end_date IS NULL OR end_date >= NOW())
-                THEN ROUND(price * (1 - discount_value / 100), 0)
-                WHEN discount_type = 'AMOUNT' AND 
-                     (start_date IS NULL OR start_date &lt;= NOW()) AND 
-                     (end_date IS NULL OR end_date >= NOW())
-                THEN price - discount_value
-                ELSE price
-            END as finalPrice
-        FROM product 
-        WHERE is_visible = 1 
-        <if test="categoryId != null">
-            AND category_id = #{categoryId}
-        </if>
-        <if test="brandId != null">
-            AND brand_id = #{brandId}
-        </if>
-        ORDER BY created_at DESC
-        LIMIT #{offset}, #{limit}
     </select>
 
     <!-- 장바구니/주문용 - 상품 기본 정보 조회 -->
