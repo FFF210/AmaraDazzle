@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 public class Member {
     private Long memberId;          // 외부 노출용 코드 아이디 (PK, AUTO_INCREMENT)
     private String email;           // 로그인 아이디 (이메일, UNIQUE)
-    private String password;    // 비밀번호 해시값
+    private String password;        // 비밀번호
     private String name;            // 이름
     private String nickname;        // 닉네임 (UNIQUE)
     private String phone;           // 휴대폰 번호 (UNIQUE)

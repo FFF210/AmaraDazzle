@@ -4,7 +4,7 @@ public class MembershipPlan {
     private String membershipPlanId; // 요금제 ID (PK, UNIQUE)
     private Integer planPeriod;      // 기간(개월 단위, CHECK > 0)
     private Integer amount;          // 요금제 금액 (원, CHECK >= 0, DEFAULT 0)
-    private String explain;          // 설명
+    private String membershipExplain;          // 설명
 
     public MembershipPlan() {
     }
@@ -30,17 +30,17 @@ public class MembershipPlan {
         this.amount = amount;
     }
 
-    public String getExplain() {
-        return explain;
+    public String getMembershipExplain() {
+        return membershipExplain;
     }
-    public void setExplain(String explain) {
-        this.explain = explain;
+    public void setMembershipExplain(String membershipExplain) {
+        this.membershipExplain = membershipExplain;
     }
 
     @Override
     public String toString() {
         return "MembershipPlan [membershipPlanId=" + membershipPlanId +
                 ", planPeriod=" + planPeriod + ", amount=" + amount +
-                ", explain=" + explain + "]";
+                ", membershipExplain=" + membershipExplain + "]";
     }
 }

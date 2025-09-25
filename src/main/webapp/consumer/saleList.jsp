@@ -22,7 +22,7 @@
 <body>
 
 	<!-- 상단 헤더 -->
-	<%@ include file="header.jsp"%>
+	<%@ include file="/consumer/header.jsp"%>
 
 	<%-- 선택된 카테고리 파라미터 처리 --%>
 	<c:set var="selectedCategory"
@@ -89,7 +89,7 @@
 	</div>
 
 	<!-- 하단 푸터 -->
-	<%@ include file="/footer.jsp"%>
+	<%@ include file="/consumer/footer.jsp"%>
 
 	<script>
     // 카테고리 버튼 클릭 시 → 새로고침 (파라미터 전달)

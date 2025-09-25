@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class Brand {
     private Long brandId;           // 고유 식별자 (PK, AUTO_INCREMENT)
     private String email;           // 이메일 (UNIQUE)
-    private String password;    // 비밀번호 해시값
+    private String password;        // 비밀번호
     private String brn;             // 사업자등록번호 (UNIQUE)
     private String brandName;       // 브랜드명 (UNIQUE)
     private String managerName;     // 담당자명
