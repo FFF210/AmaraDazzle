@@ -1,0 +1,84 @@
+@charset "UTF-8";
+
+.recent-modal {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 2000;
+}
+
+.recent-modal.hidden {
+	display: none;
+}
+
+.recent-overlay {
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.recent-content {
+	position: relative;
+	width: 1072px;
+	height: 524px;
+	background: #fff;
+	padding: 20px;
+	z-index: 2100;
+	display: flex;
+	flex-direction: column;
+	gap: 28px;
+}
+
+/* 헤더 */
+.recent-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: #777;
+	font-size: 13px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: 138.5%;
+	letter-spacing: 0.252px;
+}
+
+.recent-clear {
+	border: none;
+	background: transparent;
+	font-weight: 500;
+	cursor: pointer;
+}
+
+.recent-clear:hover {
+	text-decoration: underline;
+}
+
+/* 상품 4개 한 줄 */
+.product-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 24px;
+}
+
+/* 페이지네이션 */
+.recent-pagination {
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+}
+
+.page-btn {
+	border: none;
+	background: transparent;
+	padding: 4px 8px;
+	cursor: pointer;
+	color: #666;
+}
+
+.page-btn.active {
+	border: 1px solid #007bff;
+	border-radius: 4px;
+	color: #007bff;
+}

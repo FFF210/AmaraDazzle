@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+.page-header-wrapper {
+	background: #F2EBF1;
+}
+
+.page-header-wrapper>* {
+	width: 1020px;
+	margin: 0 auto;
+}
+
+/* 이벤트 목록 컨테이너 */
+.event-list-container {
+	width: 1020px;
+	margin: 0 auto;
+	padding: 20px 0 40px 0;
+}
+
+/* 이벤트 카드 3열 x 여러 줄 */
+.event-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	column-gap: 24px;
+	row-gap: 60px;
+}
