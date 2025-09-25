@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	display: flex;
+	gap: 30px;
+	padding: 30px 20px;
+	align-items: flex-start;
+}
+
+/* Sidebar */
+.sidebar {
+	width: 200px;
+	background: white;
+	padding: 20px;
+	height: fit-content;
+	flex-shrink: 0;
+}
+
+/* Main Content Area */
+.main-content {
+	flex: 1;
+	width: 824px;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
+.middle-devider {
+	display: flex;
+	width: 888px;
+	padding: 16px 4px;
+	justify-content: flex-end;
+	align-items: center;
+	gap: 40px;
+	border-top: 1px solid rgba(0, 0, 0, 0.30);
+}
+
+#coupon-zone {
+	display: flex;
+	width: 167px;
+	height: 56px;
+	padding: 12px 28px;
+	flex-direction: column;
+	justify-content: center;
+	flex-shrink: 0;
+}

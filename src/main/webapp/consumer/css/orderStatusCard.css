@@ -1,0 +1,108 @@
+@charset "UTF-8";
+
+/* -------- 주문/배송 조회 카드 -------- */
+.order-status-card {
+  /* width: 520px; */
+  height: 171px;
+  background-color: #fff;
+  font-family: "Noto Sans KR", sans-serif;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* -------- 헤더 영역 -------- */
+.order-status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  align-self: stretch;
+}
+
+.order-status-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #000;
+  margin: 0;
+}
+
+.more-btn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #999;
+  font-size: 15px;
+  cursor: pointer;
+  padding: 0;
+  justify-content: space-between;
+  align-self: stretch;
+}
+
+.more-btn:hover {
+  color: #666;
+}
+
+.more-icon {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* -------- 상태별 카운트 박스 영역 -------- */
+.order-status-box {
+  display: flex;
+  background-color: #F1F1F1;
+  border-radius: 4px;
+  /* width:520px; */
+  height: 88px;
+  padding: 20px 40px;
+  gap: 10px;
+  justify-content: center;
+  align-self: stretch;
+}
+
+.status-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  gap: 8px;
+  position: relative;
+}
+
+.status-item:not(:last-child)::after {
+  display: none;
+}
+
+/* -------- 카운트 숫자 -------- */
+.status-count {
+  font-size: 30px;
+  font-weight: 700;
+  color: #666;
+  line-height: 1;
+}
+
+/* -------- 상태 라벨 -------- */
+.status-label {
+  font-size: 13px;
+  color: #999;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* -------- 활성 상태 (보라색) -------- */
+.status-item.active .status-count {
+  color: #9C2EF5;
+}
+
+
+/* -------- 추가 콘텐츠 영역 -------- */
+.order-status-body {
+  padding: 0;
+}

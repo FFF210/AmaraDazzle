@@ -1,0 +1,108 @@
+@charset "UTF-8";
+
+/* 루트 래퍼 */
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 2px;
+  background: #fff;
+
+  /* 강조 색 커스텀 가능 */
+  --ui-accent: #9C2EF5;
+  --ui-accent-weak: rgba(156, 46, 245, 0.10);
+  --ui-text-strong: #000;
+  --ui-text: #333;
+}
+
+/* 상단(연보라 영역) */
+.user-info__top {
+  display: flex;
+  padding: 16px 20px;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+  background: var(--ui-accent-weak);
+  justify-content: space-between;
+}
+
+.user-info .greeting {
+  margin: 0;
+  color: var(--ui-text-strong);
+  font: 700 16px/1.4 "Noto Sans KR", sans-serif;
+  letter-spacing: -0.2px;
+}
+
+.user-info .greeting .name {
+  color: var(--ui-text-strong);
+}
+
+/* 벨 아이콘 */
+.user-info .bell {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.user-info .bell__icon {
+  fill: #000;
+  display: block;
+}
+
+/* 알림 뱃지 */
+.user-info .bel__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--ui-accent);
+  color: #fff;
+  font: 700 10px/16px "Inter", "Noto Sans KR", sans-serif;
+  text-align: center;
+  box-shadow: 0 0 0 1px #fff;
+}
+
+/* 하단(통계 영역) */
+.user-info__bottom {
+  display: flex;
+  padding: 8px 120px;
+  justify-content: space-between;
+  align-items: center;
+  align-self: stretch;
+  border-top: 1px solid rgba(0, 0, 0, 0.10);
+  gap: 24px;
+}
+
+.user-info .stat {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.user-info .stat .label {
+  color: #666;
+  font: 600 14px/1.4 "Noto Sans KR", sans-serif;
+  letter-spacing: -0.1px;
+}
+
+.user-info .stat .value {
+  color: #333;
+  font: 600 14px/1.4 "Noto Sans KR", sans-serif;
+}
+
+.user-info .stat .value .em {
+  color: var(--ui-accent);
+  font-weight: 800;
+}

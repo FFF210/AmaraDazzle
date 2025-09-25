@@ -1,0 +1,110 @@
+/* Q&A 아이템 */
+.qna-item {
+	display: flex;
+	align-items: center;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+	cursor: pointer;
+	width: 1000px;
+	box-sizing: border-box;
+}
+
+.qna-tag {
+	display: flex;
+	padding: 24px 20px;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 10px;
+	width: 120px;
+	box-sizing: border-box;
+}
+
+.qna-title {
+	display: flex;
+	padding: 24px 20px;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	width: 680px;
+	box-sizing: border-box;
+}
+
+.qna-title p {
+	overflow: hidden;
+	color: #666;
+	text-align: center;
+	text-overflow: ellipsis;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 18px; /* 112.5% */
+}
+
+.qna-nickname {
+	display: flex;
+	padding: 24px 20px;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	width: 80px;
+	box-sizing: border-box;
+}
+
+.qna-nickname p {
+	color: #999;
+	text-align: center;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 18px; /* 128.571% */
+}
+
+.qna-date {
+	display: flex;
+	padding: 24px 20px;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	width: 120px;
+	box-sizing: border-box;
+}
+
+.qna-date p {
+	color: #999;
+	text-align: center;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 18px; /* 128.571% */
+}
+
+/* 질문/답변 상세 공통 */
+.qna-detail {
+	display: flex;
+	width: 1000px;
+	gap: 40px;
+	padding: 20px 100px;
+	background: #F6F6F6;
+}
+
+.qna-detail .label {
+	font-size: 32px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 150%; /* 48px */
+}
+
+.qna-question .label {
+	color: #888;
+}
+
+.qna-answer .label {
+	color: rgba(156, 46, 245, 0.40);
+}
+
+.qna-detail .text {
+	color: #666;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 18px; /* 112.5% */
+}
