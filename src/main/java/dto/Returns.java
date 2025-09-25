@@ -3,8 +3,8 @@ package dto;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class Return {
-    private Long returnId;           // 반품 ID (PK, AUTO_INCREMENT)
+public class Returns {
+    private Long returnsId;           // 반품 ID (PK, AUTO_INCREMENT)
     private Long memberId;           // 회원 ID (FK → member.member_id)
     private Long ordersItemId;       // 주문 상품 ID (FK → order_item.order_item_id)
     private String reason;           // 반품 사유
@@ -14,14 +14,14 @@ public class Return {
     private String returnTrackingNo;  // 회송 운송장 번호
     private Timestamp updatedAt;      // 반품 요청/완료 시각 (DEFAULT CURRENT_TIMESTAMP)
 
-    public Return() {
+    public Returns() {
     }
 
-    public Long getReturnId() {
-        return returnId;
+    public Long getReturnsId() {
+        return returnsId;
     }
-    public void setReturnId(Long returnId) {
-        this.returnId = returnId;
+    public void setReturnsId(Long returnsId) {
+        this.returnsId = returnsId;
     }
 
     public Long getMemberId() {
@@ -82,7 +82,7 @@ public class Return {
 
     @Override
     public String toString() {
-        return "Return [returnId=" + returnId + ", memberId=" + memberId +
+        return "Returns [returnsId=" + returnsId + ", memberId=" + memberId +
                 ", ordersItemId=" + ordersItemId + ", reason=" + reason +
                 ", shippingCost=" + shippingCost + ", shippingCostPayer=" + shippingCostPayer +
                 ", returnCarrierName=" + returnCarrierName +
