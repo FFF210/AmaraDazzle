@@ -9,3 +9,7 @@
     display: grid;
     gap: 15px;
 }
+
+input[type="text"]{
+	height : 30px;
+}

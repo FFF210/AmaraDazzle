@@ -12,12 +12,13 @@
 			쿠폰명 <span class="reqired_write">*</span>
 		</div>
 		<div class="part_content">
-			<button type="buton" class="btn action_btn first_btn search_btn"
-				id="cName_searchBtn">검색</button>
+			<div class="content_btn">
+			<button type="buton" class="btn action_btn first_btn search_btn" id="cName_searchBtn">검색</button>
+			</div>
 			<input type="text" name="coupon_name" placeholder="쿠폰명"
 				style="cursor: default" readonly /> <input type="text"
 				name="coupon_amount" placeholder="쿠폰금액" style="cursor: default"
-				readonly /> &nbsp;원
+				readonly /> &nbsp;&nbsp;원
 		</div>
 	</div>
 

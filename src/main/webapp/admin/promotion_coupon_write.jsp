@@ -8,8 +8,11 @@
 <%@ include file="./common/config.jsp"%>
 
 <title>쿠폰 생성</title>
+<link rel="stylesheet" href="./css/myApplications.css?v=2" />
 <link rel="stylesheet" href="./css/boards_write.css?v=1" />
-<link rel="stylesheet" href="./css/coupon.css?v=1" />
+<link rel="stylesheet" href="./css/coupon.css?v=2" />
+
+
 <!-- 헤드부분 -->
 
 <body>
@@ -22,7 +25,7 @@
 
 
 	<!-- 정보수정 & 로그아웃 팝업 -->
-	<%@ include file="../modals/login_popup.jsp"%>
+	<%@ include file="./modals/login_popup.jsp"%>
 	<!-- 정보수정 & 로그아웃 팝업 end -->
 
 

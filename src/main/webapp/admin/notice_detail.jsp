@@ -8,6 +8,7 @@
 <%@ include file="./common/config.jsp"%>
 
 <title>공지 내용보기</title>
+<link rel="stylesheet" href="./css/myApplications.css" />
 <link rel="stylesheet" href="./css/boards_detailview.css" />
 <!-- 헤드부분 -->
 
@@ -21,7 +22,7 @@
 
 
 	<!-- 정보수정 & 로그아웃 팝업 -->
-	<%@ include file="../modals/login_popup.jsp"%>
+	<%@ include file="./modals/login_popup.jsp"%>
 	<!-- 정보수정 & 로그아웃 팝업 end -->
 
 

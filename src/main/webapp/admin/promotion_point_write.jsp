@@ -22,7 +22,7 @@
 
 
 	<!-- 정보수정 & 로그아웃 팝업 -->
-	<%@ include file="../modals/login_popup.jsp"%>
+	<%@ include file="./modals/login_popup.jsp"%>
 	<!-- 정보수정 & 로그아웃 팝업 end -->
 
 

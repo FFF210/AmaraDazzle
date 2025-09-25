@@ -5,6 +5,23 @@
     font-weight: 100;
     font-display: swap;
 }
+
+:root {
+    --sidebar: #040303;	/* 사이드바 색상 : 검은색 */
+    --base: #FFFFFF;	/* 메뉴 폰트 색상 : 흰색 */
+    --hovermenu: #F4F9FD;	/* hover 메뉴 색상 : 연하늘 */
+    --subfont: #040303;		/* 서브메뉴 폰트 색상 : 검은색 */
+    --hoversubfont :#0C8CE9; /* hover 서브메뉴 폰트 색상 : 파란색 */
+    --footer: #999;	/* 푸터 폰트 색상 : 진한 회색 */
+    
+    --primary : #0C8CE9;
+    --clicked: #0c63c2;
+     
+    --innerbox: #e3e3e3;
+    --outerbox: #d9d9d9;
+}
+
+
 body {
     margin: 0;
     padding: 0;
@@ -23,7 +40,7 @@ body {
 /* ==================================== */
 .main {
     flex: 1;
-    background-color: #f0f0f0;
+    background-color: var(--base);
     transition: all 0.3s;
 }
 

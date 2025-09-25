@@ -8,8 +8,8 @@
 <%@ include file="./common/config.jsp"%>
 <title>정산내역 상세보기</title>
 
-<link rel="stylesheet" href="../css/admin/myApplications.css" />
-<link rel="stylesheet" href="../css/admin/accounts.css" />
+<link rel="stylesheet" href="./css/myApplications.css" />
+<link rel="stylesheet" href="./css/accounts.css" />
 <!-- 헤드부분 end -->
 
 <body>
@@ -22,7 +22,7 @@
 
 
 	<!-- 정보수정 & 로그아웃 팝업 -->
-	<%@ include file="../modals/login_popup.jsp"%>
+	<%@ include file="./modals/login_popup.jsp"%>
 	<!-- 정보수정 & 로그아웃 팝업 end -->
 
 

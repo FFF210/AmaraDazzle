@@ -2,6 +2,8 @@
 <%@ tag body-content="scriptless"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <%-- ================================
      Layout 커스텀 태그
 

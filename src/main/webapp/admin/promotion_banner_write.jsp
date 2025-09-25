@@ -7,7 +7,8 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>메인배너 신청건 상세보기</title>
+<title>메인배너 작성</title>
+<link rel="stylesheet" href="./css/myApplications.css" />
 <link rel="stylesheet" href="./css/boards_write.css" />
 <link rel="stylesheet" href="./css/banner.css?v=1" />
 <!-- 헤드부분 -->
@@ -22,7 +23,7 @@
 
 
 	<!-- 정보수정 & 로그아웃 팝업 -->
-	<%@ include file="../modals/login_popup.jsp"%>
+	<%@ include file="./modals/login_popup.jsp"%>
 	<!-- 정보수정 & 로그아웃 팝업 end -->
 
 

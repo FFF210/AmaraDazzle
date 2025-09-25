@@ -8,7 +8,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp" %>
 <title>홈</title>
-<link rel="stylesheet" href="../css/admin/dashboard.css" />
+<link rel="stylesheet" href="./css/dashboard.css" />
 
 <!-- Chartjs cdn -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -24,7 +24,7 @@
 
 
 	<!-- 정보수정 & 로그아웃 팝업 -->
-	<%@ include file="../modals/login_popup.jsp"%>
+	<%@ include file="./modals/login_popup.jsp"%>
 	<!-- 정보수정 & 로그아웃 팝업 end -->
 
 
