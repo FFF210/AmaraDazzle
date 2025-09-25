@@ -4,7 +4,7 @@
 	
 <mapper namespace="mapper.banner">
 	<insert id = "insertBanner" parameterType="banner">
-		insert into banner (banner_id, brand_id) values(#{banner_id},#{brand_id})
+		insert into banner (banner_id, brand_id, manager_name, manager_tel, start_date, end_date, banner_name, status) values(#{banner_id},#{brand_id}, #{manager_name}, #{start_date}, #{end_date}, #{banner_name}, #{status}, #{}, #{} )
 	</insert>
 
 </mapper>
