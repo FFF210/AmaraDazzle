@@ -1,0 +1,238 @@
+@charset "UTF-8";
+
+/* 전체 페이지 배경 */
+body {
+    background-color: #F8F9FA;
+}
+
+/* 페이지 헤더 고정 */
+.page-header {
+    width: 100%;
+    position: relative;
+}
+
+.page-header .header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* 메인 컨텐츠 */
+.main-content {
+   display: flex;
+padding: 40px 210px;
+flex-direction: column;
+align-items: center;
+gap: 30px;
+align-self: stretch;
+}
+
+/* ================================
+   탭 컨테이너 고정 크기
+================================ */
+.tab-container {
+    width: 1020px;
+    height: 50px;
+    margin: 0 auto 20px auto;
+    display: flex;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.tab-container .tab-item {
+    flex: 1;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ================================
+   탭 컨텐츠 공통
+================================ */
+.tab-content {
+    display: none;
+    margin-top: 20px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+
+/* ================================
+   테이블 텍스트 정렬
+================================ */
+.table .text-left {
+    text-align: left !important;
+    cursor: pointer;
+}
+
+.table .text-left:hover {
+    color: #2563EB;
+}
+
+/* ================================
+   필터 섹션 (1:1 문의 탭)
+================================ */
+.filter-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 20px 24px;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.filter-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #111827;
+    white-space: nowrap;
+}
+
+/* 기간 선택 버튼 */
+.period-buttons {
+    display: flex;
+    gap: 4px;
+}
+
+.period-btn {
+    padding: 8px 14px;
+    border: 1px solid #D1D5DB;
+    background: #FFFFFF;
+    color: #6B7280;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.period-btn:hover {
+    border-color: #3B82F6;
+    color: #3B82F6;
+}
+
+.period-btn.active {
+    background: #3B82F6;
+    border-color: #3B82F6;
+    color: #FFFFFF;
+}
+
+/* 날짜 범위 그룹 */
+.date-range-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.date-input-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.date-select {
+    padding: 8px 10px;
+    border: 1px solid #D1D5DB;
+    border-radius: 4px;
+    background: #FFFFFF;
+    color: #111827;
+    font-size: 13px;
+    cursor: pointer;
+    min-width: 55px;
+}
+
+.date-select:focus {
+    outline: none;
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3);
+}
+
+.date-separator {
+    font-size: 13px;
+    color: #6B7280;
+    margin: 0 2px;
+}
+
+.date-range-separator {
+    font-size: 14px;
+    color: #6B7280;
+    margin: 0 6px;
+}
+
+/* 조회 버튼 */
+.search-btn {
+    padding: 8px 20px;
+    background: #3B82F6;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    white-space: nowrap;
+    height: 36px;
+}
+
+.search-btn:hover {
+    background: #2563EB;
+}
+
+/* ================================
+   1:1 문의하기 버튼 섹션
+================================ */
+.inquiry-button-section {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+    padding-top: 24px;
+}
+
+.inquiry-btn {
+    padding: 12px 28px;
+    background: #3B82F6;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.inquiry-btn:hover {
+    background: #2563EB;
+}
+
+/* ================================
+   헤더 버튼 스타일
+================================ */
+.header-btn {
+    padding: 8px 16px;
+    background: #3B82F6;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.header-btn:hover {
+    background: #2563EB;
+}

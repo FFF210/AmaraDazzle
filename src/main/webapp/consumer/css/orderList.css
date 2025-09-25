@@ -1,0 +1,49 @@
+@charset "UTF-8";
+
+.container {
+	display: flex;
+	padding: 40px 210px;
+	justify-content: center;
+	align-items: flex-start;
+	gap: 30px;
+	align-self: stretch;
+}
+
+.page-contents {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 30px;
+	flex: 1 0 0;
+}
+
+.user-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	align-self: stretch;
+}
+
+.box-wrapper {
+	display: flex;
+	justify-content: flex-end;
+	align-items: flex-end;
+	gap: 4px;
+	align-self: stretch;
+	width: 824px;
+	height: 209px;
+}
+
+.order-number-cell {
+	display: flex;
+	width: 150px;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 1px;
+	align-self: stretch;
+}
+
+.status-button {
+	
+}

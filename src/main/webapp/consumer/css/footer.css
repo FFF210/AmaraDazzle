@@ -1,0 +1,99 @@
+@charset "UTF-8";
+
+.site-footer {
+	border-top: 2px solid rgba(0, 0, 0, 0.20);
+	background: rgba(235, 237, 239, 0.30);
+	font-family: "Noto Sans KR", sans-serif;
+}
+
+.site-footer a {
+	color: #777;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 800;
+	line-height: 24px;
+	letter-spacing: 0.15px;
+	text-decoration: none;
+}
+
+.site-footer a:hover {
+	text-decoration: underline;
+}
+
+.footer-inner {
+	width: 100%;
+	margin: 0 auto;
+	padding: 30px 120px 40px 120px;
+	display: grid;
+	grid-template-columns: 0.5fr 2fr;
+	align-items: flex-start;
+}
+
+.footer-brand {
+	display: flex;
+	height: 100%;
+	align-items: center;
+}
+
+.footer-logo img {
+	height: 40px;
+	width: auto;
+	display: block;
+}
+
+.footer-brand-name {
+	color: #000;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: 140%;
+}
+
+.footer-container {
+	display: flex;
+	gap: 100px;
+}
+.ft-title {
+	color: #000;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: 24px;
+	letter-spacing: 0.15px;
+	margin: 0 0 12px 0;
+}
+
+.ft-title.links {
+	margin: 0 0 2px 0;
+}
+
+.company-list, .link-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	color: #777;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 300;
+	line-height: 24px;
+	letter-spacing: 0.15px;
+}
+
+.company-list li {
+	margin: 0 0 5px 0;
+}
+
+.link-list li {
+	margin: 0 0 2px 0;
+}
+
+.footer-notice {
+	max-width: 900px;
+	margin: 78px 0 0 0;
+	color: #777;
+	font-size: 10px;
+	font-style: normal;
+	font-weight: 300;
+	line-height: 24px;
+	letter-spacing: 0.15px;
+}

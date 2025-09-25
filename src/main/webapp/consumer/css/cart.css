@@ -1,0 +1,76 @@
+@charset "UTF-8";
+
+
+/* 상품명 열은 왼쪽 정렬 */
+.table .product-name {
+	text-align: left;
+}
+
+
+/* 총 결제 예상금액 스타일 */
+.cart-summary {
+	margin: 40px 0;
+	text-align: right;
+	background: #FAFAFA;
+	display: flex;
+    height: 94px;
+    padding: 10px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    align-self: stretch;
+	
+}
+
+.total-amount {
+	font-size: 28px;
+	font-weight: 600;
+	color: #000;
+    line-height: 150%; /* 42px */
+    letter-spacing: 0.16px;
+}
+
+/* 버튼 컨테이너 */
+.button-container {
+	display: flex;
+	gap: 11px;
+	justify-content: center;
+	margin: 40px 0;
+}
+
+/* 액션 버튼들 */
+.action-buttons {
+	display: flex;
+	gap: 8px;
+}
+
+/* 수량 입력 */
+.quantity-input {
+	width: 60px;
+	height: 32px;
+	border: 1px solid #E5E7EB;
+	border-radius: 4px;
+	text-align: center;
+	font-size: 14px;
+}
+
+/* 선택 박스 스타일 */
+.select-all-container {
+	display: flex;
+	gap: 16px;
+	margin-bottom: 20px;
+}
+
+.select-all-container button {
+	background: #F9FAFB;
+	border: 1px solid #E5E7EB;
+	border-radius: 6px;
+	padding: 8px 16px;
+	font-size: 14px;
+	color: #667085;
+	cursor: pointer;
+}
+
+.select-all-container button:hover {
+	background: #F3F4F6;
+}

@@ -1,0 +1,68 @@
+@charset "UTF-8";
+
+
+.main-container {
+	display: flex;
+flex-direction: column;
+align-items: center;
+gap: 45px;
+align-self: stretch;
+}
+
+.brand-header {
+	display: flex;
+width: 229px;
+height: 68px;
+padding: 5px 28px 5px 27px;
+justify-content: center;
+align-items: center;
+	
+}
+
+h1 {
+	color: var(--sds-color-text-default-secondary);
+    text-align: center;
+    font-family: "Noto Sans";
+    font-size: 48px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 120%; /* 57.6px */
+    letter-spacing: -0.96px;
+}
+
+.brand-favorite {
+	
+}
+
+.brand-promotion {
+	display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 163px;
+}
+
+.coupon-download {
+	display: flex;
+width: 243.16px;
+flex-direction: column;
+align-items: flex-end;
+gap: 4px;
+}
+
+/* 상품 카드 그리드 (3개씩) */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.product-section {
+	display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 37px;
+    align-self: stretch;
+}
+
+
