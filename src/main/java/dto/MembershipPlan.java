@@ -33,8 +33,8 @@ public class MembershipPlan {
     public String getMembershipExplain() {
         return membershipExplain;
     }
-    public void setMembershipExplain(String explain) {
-        this.membershipExplain = explain;
+    public void setMembershipExplain(String membershipExplain) {
+        this.membershipExplain = membershipExplain;
     }
 
     @Override

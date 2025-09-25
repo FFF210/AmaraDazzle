@@ -94,8 +94,8 @@ public class Coupon {
     public String getCouponLimit() {
         return couponLimit;
     }
-    public void setCouponLimit(String limit) {
-        this.couponLimit = limit;
+    public void setCouponLimit(String couponLimit) {
+        this.couponLimit = couponLimit;
     }
 
     public String getWriterType() {
