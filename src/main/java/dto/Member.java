@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 public class Member {
     private Long memberId;          // 외부 노출용 코드 아이디 (PK, AUTO_INCREMENT)
     private String email;           // 로그인 아이디 (이메일, UNIQUE)
-    private String passwordHash;    // 비밀번호 해시값
+    private String password;    // 비밀번호 해시값
     private String name;            // 이름
     private String nickname;        // 닉네임 (UNIQUE)
     private String phone;           // 휴대폰 번호 (UNIQUE)
@@ -42,11 +42,11 @@ public class Member {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
@@ -171,7 +171,7 @@ public class Member {
     @Override
     public String toString() {
         return "Member [memberId=" + memberId + ", email=" + email +
-                ", passwordHash=" + passwordHash + ", name=" + name +
+                ", password=" + password + ", name=" + name +
                 ", nickname=" + nickname + ", phone=" + phone +
                 ", postcode=" + postcode + ", line1=" + line1 +
                 ", line2=" + line2 + ", birthDate=" + birthDate +

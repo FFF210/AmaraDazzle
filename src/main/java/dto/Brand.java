@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class Brand {
     private Long brandId;           // 고유 식별자 (PK, AUTO_INCREMENT)
     private String email;           // 이메일 (UNIQUE)
-    private String passwordHash;    // 비밀번호 해시값
+    private String password;    // 비밀번호 해시값
     private String brn;             // 사업자등록번호 (UNIQUE)
     private String brandName;       // 브랜드명 (UNIQUE)
     private String managerName;     // 담당자명
@@ -38,11 +38,11 @@ public class Brand {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getBrn() {
@@ -146,7 +146,7 @@ public class Brand {
     @Override
     public String toString() {
         return "Brand [brandId=" + brandId + ", email=" + email +
-                ", passwordHash=" + passwordHash + ", brn=" + brn +
+                ", password=" + password + ", brn=" + brn +
                 ", brandName=" + brandName + ", managerName=" + managerName +
                 ", phone=" + phone + ", brandStatus=" + brandStatus +
                 ", logoFileId=" + logoFileId + ", heroFileId=" + heroFileId +
