@@ -2,7 +2,7 @@
 <%@ tag body-content="empty"%>
 
 <%-- ================================
-     Header 커스텀 태그
+     BrandHeader 커스텀 태그
 ================================ --%>
 
 <div class="admin-header">

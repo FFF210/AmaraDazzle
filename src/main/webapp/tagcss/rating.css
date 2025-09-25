@@ -1,0 +1,38 @@
+@charset "UTF-8";
+
+/* 별점 컨테이너 */
+.rating-container {
+  display: inline-flex;
+  height: 30px;
+  padding: 0 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  background-color: #FFF0BB;
+  border-radius: 6px;
+}
+
+/* 배경 없는 버전 */
+.rating-container.no-background {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* 별 아이콘 기본 */
+.rating-container .star {
+  font-size: 16px;
+  color: #FFAC33;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+/* 읽기 전용 */
+.rating-container.readonly .star {
+  cursor: default;
+}
+
+/* hover 효과 (읽기전용 아닐 때만) */
+.rating-container:not(.readonly) .star:hover {
+  color: #FFA500;
+}

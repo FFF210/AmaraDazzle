@@ -1,7 +1,7 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
-<%@ tag body-content="scriptless" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ tag body-content="scriptless"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <%-- ================================
     Selectbox 커스텀 태그
@@ -9,12 +9,14 @@
     속성(Props)
     • size  : sm | md | lg (기본값 md)
     • items : 쉼표(,)로 구분된 항목 목록 (예: "item1,item2,item3")
+    • initial : 초기에 보여줄 값 (선택 안하면 itemList[0])
 
     사용법 예시
     <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
     <my:selectbox 
       size="lg" 
-      items="추천순,인기순,최신순,낮은가격순,높은가격순" />
+      items="추천순,인기순,최신순,낮은가격순,높은가격순"
+      initial="정렬" />
 
     <script>
       document.addEventListener("selectChanged", (e) => {
@@ -24,24 +26,29 @@
     </script>
 ================================ --%>
 
-<%@ attribute name="size" required="false" %>
-<%@ attribute name="items" required="false" %>
+<%@ attribute name="size" required="false"%>
+<%@ attribute name="items" required="false"%>
+<%@ attribute name="initial" required="false"%>
 
 <%-- 기본값 처리 --%>
 <c:set var="size" value="${empty size ? 'md' : size}" />
 <c:set var="items" value="${empty items ? 'item1,item2,item3' : items}" />
 <c:set var="itemList" value="${fn:split(items, ',')}" />
+<c:set var="selectedValue"
+	value="${empty initial ? itemList[0] : initial}" />
+
 
 <div class="custom-select ${size}" tabindex="0">
-  <div class="select-header">
-    <span class="select-label">${itemList[0]}</span> <%-- 기본값: 첫번째 항목 --%>
-    <i class="bi bi-chevron-down"></i>
-  </div>
-  <ul class="select-list">
-    <c:forEach var="it" items="${itemList}">
-      <li class="select-item" data-value="${it}">${it}</li>
-    </c:forEach>
-  </ul>
+	<div class="select-header">
+		<span class="select-label">${selectedValue}</span> <i
+			class="bi bi-chevron-down"></i>
+	</div>
+	<ul class="select-list">
+		<c:forEach var="it" items="${itemList}">
+			<li class="select-item ${it eq selectedValue ? 'active' : ''}"
+				data-value="${it}">${it}</li>
+		</c:forEach>
+	</ul>
 </div>
 
 <script>
@@ -64,6 +71,11 @@
 
           // 라벨 변경
           label.textContent = text;
+
+          // 선택 표시
+          list.querySelectorAll(".select-item").forEach(i => i.classList.remove("active"));
+          item.classList.add("active");
+
           select.classList.remove("open");
 
           // 부모로 이벤트 전달
@@ -81,3 +93,4 @@
     });
   });
 </script>
+

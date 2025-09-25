@@ -1,0 +1,74 @@
+@charset "UTF-8";
+
+.inquiry-detail {
+	border: 1px solid #E5E7EB;
+	border-radius: 6px;
+	margin: 8px 24px;
+	padding: 20px 50px;
+	background: #fff;
+	display: flex;
+	flex-direction: column;
+}
+
+.qa-block {
+	display: flex;
+	padding: 20px 0;
+	gap: 40px;
+	align-items: flex-start;
+}
+
+.qa-label {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 32px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 150%;
+}
+
+.qa-label.q {
+	color: #888;
+}
+
+.qa-label.a {
+	color: rgba(156, 46, 245, 0.40);
+}
+
+.qa-content {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	align-items: flex-start;
+	gap: 16px;
+}
+
+.qa-left {
+	display: flex;
+	flex-direction: column; 
+	gap: 8px;
+	flex: 1;
+	overflow: hidden; 
+}
+
+.qa-left p {
+	color: #666;
+	font-size: 15px;
+	font-weight: 500;
+	line-height: 22px;
+	margin: 0;
+	display: -webkit-box;
+	-webkit-line-clamp: 5; 
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.qa-date {
+	font-size: 12px;
+	color: #999;
+	flex-shrink: 0;
+	margin-left: auto;
+	white-space: nowrap;
+}

@@ -9,7 +9,7 @@
      <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
      <link rel="stylesheet" href="./css/reset.css" />
 	 <link rel="stylesheet" href="./css/sidebar.css" />
-	 <link rel="stylesheet" href="./css/header.css" />
+	 <link rel="stylesheet" href="./css/brandHeader.css" />
 	 <link rel="stylesheet" href="./css/layout.css" />
 	 <link rel="stylesheet" href="./css/button.css" />
 	 <link rel="stylesheet"
@@ -34,7 +34,7 @@
 
 		<!-- 상단 헤더 -->
 		<header class="layout-header">
-			<my:header />
+			<my:brandHeader />
 		</header>
 
 		<!-- 본문 -->

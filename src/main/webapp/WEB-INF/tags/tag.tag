@@ -1,6 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
-<%@ tag body-content="empty"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ tag body-content="empty" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%-- ================================
      Tag 커스텀 태그
@@ -18,12 +18,14 @@
        text="세일" />
 ================================ --%>
 
-<%@ attribute name="color" required="false"%>
-<%@ attribute name="size" required="false"%>
-<%@ attribute name="text" required="false"%>
+<%@ attribute name="color" required="false" %>
+<%@ attribute name="size" required="false" %>
+<%@ attribute name="text" required="false" %>
 
 <c:set var="color" value="${empty color ? 'green' : color}" />
 <c:set var="size" value="${empty size ? 'md' : size}" />
 <c:set var="text" value="${empty text ? 'label' : text}" />
 
-<span class="tag ${color} ${size}"> ${text} </span>
+<span class="tag ${color} ${size}">
+  ${text}
+</span>

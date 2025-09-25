@@ -1,0 +1,153 @@
+.page-breadcrumb {
+	display: flex;
+	padding: 8px 24px;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+/* 전체 레이아웃 */
+.content-detail-container {
+	display: grid;
+	grid-template-columns: 2fr 1.3fr;
+	gap: 24px;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 12px 24px;
+	height: 80vh;
+}
+
+/* 좌측 */
+.content-left {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	background: #fff;
+	border: 1px solid #eee;
+	border-radius: 8px;
+	padding: 20px;
+}
+
+.content-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.content-row.tag,
+.content-row.rating {
+	margin: 10px 0;
+	text-align: left;
+}
+
+.content-row.textArea-wrapper {
+	height: 100%;
+}
+
+.content-label {
+	display: inline-block;
+	width: 80px; /* label 고정 너비 */
+	font-size: 14px;
+	font-weight: 600;
+	color: #333;
+	flex-shrink: 0;
+}
+
+.content-images {
+	display: flex;
+	gap: 12px;
+}
+
+.content-review {
+	flex: 1; /* 남는 공간 차지 */
+	display: flex;
+}
+
+.content-report {
+	text-align: right;
+	font-size: 13px;
+}
+
+.content-report a {
+	color: #999;
+	text-decoration: underline;
+}
+
+/* 우측 */
+.content-right {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+}
+
+/* 상품 카드 */
+.product-card {
+	display: flex;
+	padding: 16px 20px;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 12px;
+	align-self: stretch;
+	box-sizing: border-box;
+	background: #fff;
+	border-radius: 8px;
+	border: 1px solid #eee;
+}
+
+.product-info {
+	display: flex;
+	    flex-direction: column;
+	    gap: 8px;
+	justify-content: center;
+}
+
+.product-name {
+	color: #000;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
+}
+
+/* 판매자 답변 */
+.content-reply {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	background: #fff;
+	border: 1px solid #eee;
+	border-radius: 8px;
+	padding: 16px;
+	height: 100%;
+}
+
+.content-reply my\:textArea {
+	flex: 1;
+	width: 100%;
+	height: 100%;
+}
+
+.reply-title {
+	font-size: 15px;
+	font-weight: 600;
+	color: #444;
+}
+
+
+.chip {
+	display: inline-block;
+	width: fit-content;
+	padding: 2px 8px;
+	background: #F1F9FF;
+	color: #2264E5;
+	font-size: 14px;
+	font-weight: 500;
+	border-radius: 4px;
+	white-space: nowrap;
+}
+
+.form-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	width: 100%;
+}
