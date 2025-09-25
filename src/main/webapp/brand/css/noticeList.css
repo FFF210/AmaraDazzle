@@ -1,0 +1,75 @@
+@charset "UTF-8";
+
+.notice-detail-container {
+	margin: 8px 24px;
+	padding: 20px;
+	border: 1px solid #E5E7EB;
+	border-radius: 6px;
+	background: #fff;
+}
+
+.notice-detail-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.notice-title {
+	flex: 1;
+	margin: 0 12px;
+	color: #555;
+	font-size: 18px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 150%;
+	letter-spacing: 0.114px;
+}
+
+.notice-date {
+	color: #777;
+	font-size: 13px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 150%;
+	letter-spacing: 0.08px;
+}
+
+.notice-detail-body {
+	margin: 20px 4px;
+	color: #666;
+	font-size: 15px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 18px;
+	color: #666;
+}
+
+/* 첨부파일 */
+.notice-attachments {
+	margin: 0 4px;
+}
+
+.notice-attachments ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.notice-attachments li {
+	margin-bottom: 6px;
+}
+
+.notice-attachments a {
+	text-decoration: underline;
+	color: #000;
+	font-size: 13px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: 150%;
+	letter-spacing: 0.091px;
+	cursor: pointer;
+}
+
+.notice-attachments a:hover {
+	color: #005bb5;
+}

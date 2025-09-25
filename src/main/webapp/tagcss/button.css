@@ -28,11 +28,12 @@
 .btn {
 	cursor: pointer;
 	transition: all 0.2s ease;
+	text-align: center;
 	box-sizing: border-box;
-	font-style: normal; 
-	font-weight : 600; 
-	line-height : 150%;
-	letter-spacing : 0.091px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: 150%;
+	letter-spacing: 0.091px;
 	border: none;
 	border-radius: 10px;
 	font-weight: 600;

@@ -1,0 +1,28 @@
+@charset "UTF-8";
+.main-container {
+  width: 1020px;
+  margin: 0 auto;
+  padding: 0 0 40px 0;
+}
+
+/* 상품 카드 그리드 (4개씩) */
+.product-grid {
+  display: grid;
+  width: 1020px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* 이벤트 카드 그리드 (3개씩) */
+.event-grid {
+  display: grid;
+  width: 1020px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+/* 공통 */
+.product-grid .product-card,
+.event-grid .event-card {
+  background: #fff;
+}

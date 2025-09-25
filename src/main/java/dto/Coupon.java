@@ -1,0 +1,132 @@
+package dto;
+
+import java.sql.Timestamp;
+
+public class Coupon {
+    private Long couponId;          // 쿠폰 ID (PK, AUTO_INCREMENT)
+    private String cname;           // 쿠폰명
+    private Timestamp startDate;    // 유효기간 시작일자
+    private Timestamp endDate;      // 유효기간 종료일자
+    private Integer amount;         // 할인액
+    private Long pCode;             // 피부 고민/피부타입/퍼스널컬러 (FK → code_detail.code_detail_id)
+    private Long cCode;             // 카테고리 (FK → category.category_id)
+    private String amountCondition; // 조건 (금액)
+    private String reason;          // 지급 사유
+    private String provision;       // 지급 대상 유형 (모든회원, VIP, GOLD, SILVER, 일반, 개별지급)
+    private String limit;           // 발급 제한 수량
+    private String writerType;      // 쿠폰 발행자 타입 (ADMIN, BRAND_ADMIN)
+    private Long writerId;          // 쿠폰 발행자 ID (FK → brand.brand_id / admin_info.admin_info_id)
+    private Timestamp createdAt;    // 발행일자
+
+    public Coupon() {
+    }
+
+    public Long getCouponId() {
+        return couponId;
+    }
+    public void setCouponId(Long couponId) {
+        this.couponId = couponId;
+    }
+
+    public String getCname() {
+        return cname;
+    }
+    public void setCname(String cname) {
+        this.cname = cname;
+    }
+
+    public Timestamp getStartDate() {
+        return startDate;
+    }
+    public void setStartDate(Timestamp startDate) {
+        this.startDate = startDate;
+    }
+
+    public Timestamp getEndDate() {
+        return endDate;
+    }
+    public void setEndDate(Timestamp endDate) {
+        this.endDate = endDate;
+    }
+
+    public Integer getAmount() {
+        return amount;
+    }
+    public void setAmount(Integer amount) {
+        this.amount = amount;
+    }
+
+    public Long getPCode() {
+        return pCode;
+    }
+    public void setPCode(Long pCode) {
+        this.pCode = pCode;
+    }
+
+    public Long getCCode() {
+        return cCode;
+    }
+    public void setCCode(Long cCode) {
+        this.cCode = cCode;
+    }
+
+    public String getAmountCondition() {
+        return amountCondition;
+    }
+    public void setAmountCondition(String amountCondition) {
+        this.amountCondition = amountCondition;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public String getProvision() {
+        return provision;
+    }
+    public void setProvision(String provision) {
+        this.provision = provision;
+    }
+
+    public String getLimit() {
+        return limit;
+    }
+    public void setLimit(String limit) {
+        this.limit = limit;
+    }
+
+    public String getWriterType() {
+        return writerType;
+    }
+    public void setWriterType(String writerType) {
+        this.writerType = writerType;
+    }
+
+    public Long getWriterId() {
+        return writerId;
+    }
+    public void setWriterId(Long writerId) {
+        this.writerId = writerId;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Coupon [couponId=" + couponId + ", cname=" + cname +
+                ", startDate=" + startDate + ", endDate=" + endDate +
+                ", amount=" + amount + ", pCode=" + pCode + ", cCode=" + cCode +
+                ", amountCondition=" + amountCondition + ", reason=" + reason +
+                ", provision=" + provision + ", limit=" + limit +
+                ", writerType=" + writerType + ", writerId=" + writerId +
+                ", createdAt=" + createdAt + "]";
+    }
+}
