@@ -106,7 +106,7 @@
                 <ul class="sub-nav">
                     <li><a href="<c:url value='/productList?ranking=true'/>">랭킹</a></li>
                     <li><a href="<c:url value='/productList?sale=true'/>">세일</a></li>
-                    <li><a href="<c:url value='/store/'/>">기획</a></li>
+                    <li><a href="<c:url value='/store//productList?plan=true'/>">기획</a></li>
                     <li><a href="<c:url value='/store/event'/>">이벤트</a></li>
                     <li><a href="<c:url value='/store/coupon'/>">쿠폰</a></li>
                 </ul>

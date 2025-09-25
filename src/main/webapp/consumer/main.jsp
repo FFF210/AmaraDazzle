@@ -19,7 +19,7 @@
 </head>
 <body>
 	<!-- 상단 헤더 -->
-	<%@ include file="/header.jsp"%>
+	<%@ include file="/consumer/header.jsp"%>
 
 	<!-- 메인 배너 (가로 전체 꽉차게) -->
 	<my:mainBanner />
@@ -101,6 +101,6 @@
 	</div>
 	
 	<!-- 하단 푸터 -->
-	<%@ include file="/footer.jsp"%>
+	<%@ include file="/consumer/footer.jsp"%>
 </body>
 </html>

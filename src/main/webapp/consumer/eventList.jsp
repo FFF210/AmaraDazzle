@@ -16,7 +16,7 @@
 <body>
 
 	<!-- 상단 헤더 -->
-	<%@ include file="header.jsp"%>
+	<%@ include file="/consumer/header.jsp"%>
 
 	<!-- 페이지 헤더 -->
 	<div class="page-header-wrapper">
@@ -36,7 +36,7 @@
 	</div>
 
 	<!-- 하단 푸터 -->
-	<%@ include file="/footer.jsp"%>
+	<%@ include file="/consumer/footer.jsp"%>
 
 
 </body>
