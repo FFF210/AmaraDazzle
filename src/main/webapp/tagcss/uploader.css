@@ -1,0 +1,55 @@
+@charset "UTF-8";
+:root {
+  --primary: #4831D4;        /* 메인 색 */
+  --muted: #595F6A;          /* 보조 텍스트 */
+  --bg: #FFFFFF;             /* 기본 배경 */
+  --line: #B6BCC9;           /* 기본 외곽선 */
+  --hover-bg: #F4F2FD;       /* hover 배경 */
+}
+
+.uploader {
+  border: 2px dashed var(--line);
+  border-radius: 12px;
+  padding: 22px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  background: var(--bg);
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+.uploader:hover,
+.uploader:focus,
+.uploader.drag {
+  border-color: var(--primary);
+  background: var(--hover-bg);
+}
+
+.uploader-title {
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--primary);
+}
+
+.uploader-muted {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 크기별 */
+.uploader-lg { width: 600px; height: 100px; }
+.uploader-md { width: 500px;  height: 100px; }
+.uploader-sm { width: 250px;  height: 50px; }

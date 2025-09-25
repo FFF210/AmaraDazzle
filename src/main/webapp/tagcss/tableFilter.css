@@ -99,4 +99,5 @@
 
 .btn.tableFilter {
 	width: 114px;
+	white-space: nowrap; /* 09/25 추가 */
 }

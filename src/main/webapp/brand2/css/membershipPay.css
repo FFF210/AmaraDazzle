@@ -1,0 +1,110 @@
+@charset "UTF-8";
+
+.breadcrumb {
+	margin-top: 8px;
+	margin-left: 24px;
+}
+
+/* membershipPay*/
+.membershipPayContainer {
+	display: flex;
+	width: 897px;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 17px;
+	align-items: center; /* 세로 가운데 정렬 */
+	margin: 0 auto;
+}
+
+.notice {
+	background: #fff3cd;
+	border: 1px solid #ffeeba;
+	color: #856404;
+	padding: 10px 15px;
+	border-radius: 6px;
+	font-size: 14px;
+	margin: 20px;
+}
+
+.plan {
+	display: flex;
+	width: 850px;
+	height: 94px;
+	padding: 17px 20px;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	transition: border-color 0.2s;
+}
+
+.plan {
+	border-radius: 8px;
+	border: 1px solid rgba(0, 0, 0, 0.10);
+	background: #FFF;
+}
+
+.plan:hover {
+	border-radius: 8px;
+	border: 1px solid rgba(0, 0, 0, 0.10);
+	background: #F6F6F6;
+}
+
+.plan input[type="radio"] {
+	margin-right: 15px;
+}
+
+.plan-info {
+	flex: 1;
+}
+
+.plan-title {
+	font-size: 16px;
+	font-weight: bold;
+	margin-bottom: 8px;
+}
+
+.plan-price {
+	font-size: 18px;
+	font-weight: bold;
+	color: #e53935;
+}
+
+.plan-desc {
+	font-size: 13px;
+	color: #555;
+	margin-top: 5px;
+}
+
+.pay-box {
+	margin-left: auto;
+	margin-top: 30px;
+}
+
+.pay-button {
+	display: inline-flex;
+	/* 이미지 크기에 맞춤 */
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	/* 기본 패딩 제거 */
+	border: none;
+	background: none;
+	/* 배경 제거 */
+	cursor: pointer;
+}
+
+.pay-button:disabled {
+	opacity: 0.5;
+	/* 비활성화 시 흐리게 */
+	cursor: not-allowed;
+}
+
+.toss-logo {
+	height: 136px;
+	/* 원하는 높이 지정 */
+	width: auto;
+	/* 비율 유지 */
+	border-radius: 16px;
+	border: 1.5px solid #DADADA;
+	background: #FFF;
+}
