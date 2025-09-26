@@ -6,8 +6,8 @@
 
 	<insert id="insertUploadFile" parameterType="uploadFile">
 		insert into UploadFile
-		(uploadFileId, fileName, fileRename, storagePath, createdAt) 
-		values(0, #{fileName},#{fileRename}, #{storagePath}, #{createdAt} )
+		(fileName, fileRename, storagePath) 
+		values(#{fileName},#{fileRename}, #{storagePath})
 	</insert>
 	
 	<update id="updateUploadFile" parameterType="uploadFile">
