@@ -235,9 +235,11 @@
 		p.stockQty,
 		p.isVisible,
 		CASE
-		WHEN p.discountType = 'RATE'
+		WHEN p.discountType
+		= 'RATE'
 		THEN p.price - (p.price * p.discountValue / 100)
-		WHEN p.discountType = 'AMOUNT'
+		WHEN
+		p.discountType = 'AMOUNT'
 		THEN p.price - p.discountValue
 		ELSE p.price
 		END AS salePrice,
@@ -264,11 +266,6 @@
 		ON p.productId =
 		r.productId
 		<where>
-			<!-- 기간 필터 -->
-			<if test="startDate != null and endDate != null">
-				AND created_at BETWEEN #{startDate} AND #{endDate}
-			</if>
-
 			<!-- 판매 상태 필터 -->
 			<if test="status != null and status != ''">
 				<choose>
@@ -315,8 +312,8 @@
 			</if>
 		</where>
 		GROUP BY p.productId, p.name, c1.name, c2.name, c3.name,
-         p.price, p.discountType, p.discountValue,
-         p.stockQty, p.isVisible
+		p.price, p.discountType, p.discountValue,
+		p.stockQty, p.isVisible
 		ORDER BY p.productId DESC
 		LIMIT #{limit} OFFSET
 		#{offset}
@@ -325,14 +322,16 @@
 	<!--======================= [브랜드 어드민] 상품 개수 조회 ======================= -->
 	<select id="selectProductCountForBrand" parameterType="map"
 		resultType="Integer">
-		select count(*)
-		from product p
+		SELECT COUNT(*)
+		FROM (
+		SELECT p.productId
+		FROM product p
+		LEFT JOIN category c1 ON p.category1Id = c1.categoryId
+		LEFT JOIN category c2 ON p.category2Id = c2.categoryId
+		LEFT JOIN category c3 ON p.category3Id = c3.categoryId
+		LEFT JOIN order_item oi ON p.productId = oi.productId
+		LEFT JOIN review r ON p.productId = r.productId
 		<where>
-			<!-- 기간 필터 -->
-			<if test="startDate != null and endDate != null">
-				AND created_at BETWEEN #{startDate} AND #{endDate}
-			</if>
-
 			<!-- 판매 상태 필터 -->
 			<if test="status != null and status != ''">
 				<choose>
@@ -357,20 +356,16 @@
 					</when>
 					<when test="searchType == 'CATEGORY'">
 						AND (
-						p.category1_id IN (
-						SELECT categoryId FROM
-						category
-						WHERE name LIKE CONCAT('%', #{searchKeyword}, '%')
+						p.category1Id IN (
+						SELECT categoryId FROM category WHERE name LIKE CONCAT('%',
+						#{searchKeyword}, '%')
 						)
-						OR
-						p.category2_id IN (
-						SELECT categoryId FROM category WHERE name LIKE
-						CONCAT('%', #{searchKeyword}, '%')
+						OR p.category2Id IN (
+						SELECT categoryId FROM category WHERE name LIKE CONCAT('%',
+						#{searchKeyword}, '%')
 						)
-						OR p.category3_id IN (
-						SELECT
-						categoryId
-						FROM category WHERE name LIKE CONCAT('%',
+						OR p.category3Id IN (
+						SELECT categoryId FROM category WHERE name LIKE CONCAT('%',
 						#{searchKeyword}, '%')
 						)
 						)
@@ -378,6 +373,9 @@
 				</choose>
 			</if>
 		</where>
-		ORDER BY created_at DESC
+		GROUP BY p.productId, p.name, c1.name, c2.name, c3.name,
+		p.price, p.discountType, p.discountValue,
+		p.stockQty, p.isVisible
+		) AS countTable
 	</select>
 </mapper>
