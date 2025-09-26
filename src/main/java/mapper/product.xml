@@ -223,32 +223,46 @@
 		AND is_visible = 1
 	</select>
 
-	<!-- [브랜드 어드민] 상품 목록 조회 -->
+	<!--======================= [브랜드 어드민] 상품 목록 조회 ======================= -->
 	<select id="selectProductListForBrand" parameterType="map"
-		resultType="product">
+		resultType="ProductList">
 		SELECT
 		p.productId,
 		p.name,
-		CONCAT_WS(' > ', c1.name, c2.name, c3.name) AS categoryPath,
+		CONCAT_WS(' > ', c1.name, c2.name, c3.name)
+		AS categoryPath,
 		p.price,
 		p.stockQty,
 		p.isVisible,
-		COALESCE(SUM(oi.quantity), 0) AS salesCount,
-		COALESCE(COUNT(r.id), 0) AS reviewCount
+		CASE
+		WHEN p.discountType = 'RATE'
+		THEN p.price - (p.price * p.discountValue / 100)
+		WHEN p.discountType = 'AMOUNT'
+		THEN p.price - p.discountValue
+		ELSE p.price
+		END AS salePrice,
+		COALESCE(SUM(oi.quantity), 0) AS salesQty,
+		COALESCE(COUNT(r.id), 0)
+		AS reviewCount
 		FROM product p
 		LEFT JOIN
-		category c1
-		ON p.category1Id = c1.categoryId
+		category
+		c1
+		ON p.category1Id =
+		c1.categoryId
 		LEFT JOIN
 		category c2
-		ON p.category2Id = c2.categoryId
-		LEFT JOIN
+		ON p.category2Id
+		= c2.categoryId
+		LEFT
+		JOIN
 		category c3
 		ON p.category3Id = c3.categoryId
 		LEFT JOIN order_item oi
 		ON p.productId = oi.productId
 		LEFT JOIN review r
-		ON p.productId = r.productId
+		ON p.productId =
+		r.productId
 		<where>
 			<!-- 기간 필터 -->
 			<if test="startDate != null and endDate != null">
@@ -301,14 +315,16 @@
 			</if>
 		</where>
 		GROUP BY p.productId, p.name, c1.name, c2.name, c3.name,
-         p.price, p.stockQty, p.isVisible
+         p.price, p.discountType, p.discountValue,
+         p.stockQty, p.isVisible
 		ORDER BY p.productId DESC
-		LIMIT #{limit} OFFSET #{offset}
+		LIMIT #{limit} OFFSET
+		#{offset}
 	</select>
 
-	<!-- [브랜드 어드민] 상품 개수 조회 -->
+	<!--======================= [브랜드 어드민] 상품 개수 조회 ======================= -->
 	<select id="selectProductCountForBrand" parameterType="map"
-		resultType="product">
+		resultType="Integer">
 		select count(*)
 		from product p
 		<where>

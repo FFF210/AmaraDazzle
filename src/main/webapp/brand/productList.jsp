@@ -90,15 +90,15 @@
 											<p>${product.name}</p>
 										</div>
 									</td>
-									<td>${product.category1_id}</td>
+									<td>${product.categoryPath}</td>
 									<td>${product.price}</td>
-									<td>${product.price}- ${product.discountValue}</td>
+									<td>${product.salePrice}</td>
 									<td><my:tag
 											color="${product.status == 'SALE' ? 'green' : (product.status == 'SOLD_OUT' ? 'red' : 'gray')}"
 											size="sm" text="${product.status.getDescription()}" /></td>
 									<td>${product.stockQty}</td>
-									<td>${product.stockQty}</td>
-									<td>${product.stockQty}</td>
+									<td>${product.salesQty}</td>
+									<td>${product.reviewCount}</td>
 									<td>
 										<div class="actions">
 											<button type="button" class="btn btn-outline btn-sm">재고

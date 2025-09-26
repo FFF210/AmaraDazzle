@@ -6,13 +6,13 @@ import java.sql.Timestamp;
 public class ProductList {
 	private Long productId;          // 상품 PK
     private String name;             // 상품명
-    private String categoryPath;     // "대분류 > 중분류 > 소분류"
+    private String categoryPath;     // 카테고리 "대분류 > 중분류 > 소분류"
     private BigDecimal price;        // 판매가
     private BigDecimal salePrice;    // 할인가
-    private Integer stockQty;        // 재고 수
-    private String status;			 // 판매 상태 
+    private String status;			 // 판매상태 
     private Integer isVisible;       // 공개 여부
-    private Integer salesCount;      // 누적 주문 수 (JOIN/집계)
+    private Integer stockQty;        // 재고 수
+    private Integer salesQty;        // 누적 판매 수 (JOIN/집계)
     private Integer reviewCount;     // 리뷰 수 (JOIN/집계)
     private Timestamp createdAt;     // 등록일
     
@@ -40,11 +40,11 @@ public class ProductList {
 	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
-	public Integer getStockQty() {
-		return stockQty;
+	public BigDecimal getSalePrice() {
+		return salePrice;
 	}
-	public void setStockQty(Integer stockQty) {
-		this.stockQty = stockQty;
+	public void setSalePrice(BigDecimal salePrice) {
+		this.salePrice = salePrice;
 	}
 	public String getStatus() {
 		return status;
@@ -58,11 +58,17 @@ public class ProductList {
 	public void setIsVisible(Integer isVisible) {
 		this.isVisible = isVisible;
 	}
-	public Integer getSalesCount() {
-		return salesCount;
+	public Integer getStockQty() {
+		return stockQty;
 	}
-	public void setSalesCount(Integer salesCount) {
-		this.salesCount = salesCount;
+	public void setStockQty(Integer stockQty) {
+		this.stockQty = stockQty;
+	}
+	public Integer getSalesQty() {
+		return salesQty;
+	}
+	public void setSalesQty(Integer salesQty) {
+		this.salesQty = salesQty;
 	}
 	public Integer getReviewCount() {
 		return reviewCount;
@@ -79,7 +85,8 @@ public class ProductList {
 	@Override
 	public String toString() {
 		return "ProductList [productId=" + productId + ", name=" + name + ", categoryPath=" + categoryPath + ", price="
-				+ price + ", stockQty=" + stockQty + ", status=" + status + ", isVisible=" + isVisible + ", salesCount="
-				+ salesCount + ", reviewCount=" + reviewCount + ", createdAt=" + createdAt + "]";
+				+ price + ", salePrice=" + salePrice + ", status=" + status + ", isVisible=" + isVisible + ", stockQty="
+				+ stockQty + ", salesQty=" + salesQty + ", reviewCount=" + reviewCount + ", createdAt=" + createdAt
+				+ "]";
 	}
 }
