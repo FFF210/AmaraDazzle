@@ -56,8 +56,8 @@
 				<div class="filter-btn-group">
 					<c:forEach var="opt" items="${options}">
 						<c:set var="optParts" value="${fn:split(opt, '=')}" />
-          				<c:set var="optValue" value="${optParts[0]}" />
-          				<c:set var="optLabel" value="${optParts[1]}" />
+						<c:set var="optValue" value="${optParts[0]}" />
+						<c:set var="optLabel" value="${optParts[1]}" />
 						<button type="button" class="filter-btn" data-filter="${label}"
 							data-value="${optValue}">${optLabel}</button>
 					</c:forEach>
@@ -69,7 +69,7 @@
 	<!-- 검색 영역 -->
 	<c:if test="${hasSearch eq 'true'}">
 		<div class="filter-row search-row">
-			<my:selectbox size="md" items="${searchItems}" />
+			<my:selectbox size="md" items="${searchItems}" initial="검색조건" />
 			<my:textInput type="search" name="keyword" placeholder="검색어 입력"
 				size="sm" />
 		</div>
@@ -78,14 +78,20 @@
 	<!-- 버튼 (button.css 파일 import 필수) -->
 	<div class="filter-actions">
 		<button type="button" class="btn btn-primary btn-md filter-submit">검색</button>
-		<button type="button" class="btn btn-outline btn-md filter-reset">설정 초기화</button>
+		<button type="button" class="btn btn-outline btn-md filter-reset">설정
+			초기화</button>
 	</div>
 
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const container = document.currentScript.closest(".table-filter");
+(function(){
+	const container = document.currentScript.previousElementSibling;
+	
+	if (!container) {
+	    console.error("table-filter 컨테이너를 찾을 수 없음");
+	    return;
+	  }
 
   const state = {
     dateStart: "",
@@ -95,8 +101,14 @@ document.addEventListener("DOMContentLoaded", () => {
     searchField: "",
     searchKeyword: ""
   };
+  
+//한글 → 서버 파라미터 매핑 (필요한 값 추가 가능)
+  const searchMap = {
+    "상품명": "NAME",
+    "카테고리": "CATEGORY",
+  };
 
-  // 날짜 빠른 선택 (있을 때만)
+  // 날짜 빠른 선택
   container.querySelectorAll(".date-quick")?.forEach(btn => {
     btn.addEventListener("click", () => {
       const range = btn.dataset.range;
@@ -125,20 +137,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // 필터 버튼
+//필터 버튼
   container.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      const key = btn.dataset.filter; // data-filter 속성값 → 예: "판매상태"
-      const value = btn.dataset.value; // data-value 속성값 → 예: "SALE"
+      // 공백 제거
+      const key = btn.dataset.filter.trim();
+      const value = btn.dataset.value;
 
-      container.querySelectorAll(`[data-filter='${key}']`)
-               .forEach(b => b.classList.remove("active"));
+      // 같은 그룹 버튼들 active 제거 (공백 제거해서 비교)
+      container.querySelectorAll(".filter-btn").forEach(b => {
+        if (b.dataset.filter.trim() === key) {
+          b.classList.remove("active");
+        }
+      });
 
+      // 클릭한 버튼에 active 추가
       btn.classList.add("active");
+
+      // 상태 업데이트
       state.filters[key] = value;
+
       dispatch();
     });
   });
+
 
   // 검색 input
   const searchInput = container.querySelector(".search-input");
@@ -150,11 +172,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // selectbox 이벤트
   document.addEventListener("selectChanged", (e) => {
-    state.searchField = e.detail.value;
+    const label = e.detail.value; // "상품명"
+    state.searchField = searchMap[label] || label; // "NAME"
   });
 
   // 검색 버튼
   container.querySelector(".filter-submit")?.addEventListener("click", () => {
+	  console.log("검색 버튼 클릭됨");
     dispatch(true);
   });
 
@@ -177,7 +201,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const event = new CustomEvent("filterChanged", {
       detail: {...state, submit}
     });
+    console.log("dispatch 실행됨:", event.detail);
     document.dispatchEvent(event);
   }
-});
+})();
 </script>

@@ -135,7 +135,6 @@
     	  params.append("status", value);
     	}
 
-
     if (searchField) params.append("searchType", searchField);
     if (searchKeyword) params.append("searchKeyword", searchKeyword);
 

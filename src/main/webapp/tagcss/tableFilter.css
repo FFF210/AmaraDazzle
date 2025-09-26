@@ -71,7 +71,7 @@
 	height: 40px;
 	font-size: 14px;
 	font-weight: 500;
-	color: #333;
+	color: #000;
 	cursor: pointer;
 }
 
@@ -85,9 +85,8 @@
 }
 
 .filter-btn-group .filter-btn.active {
-	background: #F1F9FF !important;
-	color: #2684FF !important;
-	font-weight: 600 !important;
+	background: #F1F9FF;
+	font-weight: 700;
 }
 
 /* 하단 버튼 섹션 */
