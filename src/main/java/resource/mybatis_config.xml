@@ -51,6 +51,7 @@
 		<typeAlias type="dto.Ticket" alias="ticket" />
 		<typeAlias type="dto.UploadFile" alias="uploadFile" />
 		<typeAlias type="dto.Wishlist" alias="wishlist" />
+		<typeAlias type="dto.brand.ProductList" alias="productList" />
 		<!-- type="" : 패키지명.클래스명, alias="" : 별칭 -->
 	</typeAliases>
 
