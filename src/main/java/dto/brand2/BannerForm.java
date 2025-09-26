@@ -2,6 +2,8 @@ package dto.brand2;
 
 import java.sql.Timestamp;
 
+import dto.UploadFile;
+
 public class BannerForm {
 	private Long bannerId; // 배너 광고 신청 ID (PK, AUTO_INCREMENT)
 	private Long brandId; // 브랜드 관리자 ID (FK → brand.brand_id)
@@ -132,5 +134,6 @@ public class BannerForm {
 				+ bannerName + ", bannerMessage=" + bannerMessage + ", status=" + status + ", createdAt=" + createdAt
 				+ ", brandUrl=" + brandUrl + ", uploadFileId=" + uploadFileId + ", paymentId=" + paymentId + "]";
 	}
+
 
 }

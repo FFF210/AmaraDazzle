@@ -5,13 +5,13 @@
 <mapper namespace="mapper.uploadFile">
 
 	<insert id="insertUploadFile" parameterType="uploadFile">
-		insert into UploadFile
-		(fileName, fileRename, storagePath) 
+		insert into upload_file
+		(file_name, fil_rename, storage_path) 
 		values(#{fileName},#{fileRename}, #{storagePath})
 	</insert>
 	
 	<update id="updateUploadFile" parameterType="uploadFile">
-		update UploadFile 
+		update upload_file 
 		set fileName = #{fileName}, fileRename = #{fileRename}, storagePath = #{storagePath}, createdAt = #{createdAt}
     	WHERE upload_file_id = #{uploadFileId}
 	</update>

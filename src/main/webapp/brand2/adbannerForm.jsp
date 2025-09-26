@@ -1,13 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
+
 <title>광고배너 신청</title>
 
-<link rel="stylesheet" href="./css/formLayout.css" />
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/brand2/css/formLayout.css" />
 
 <link rel="stylesheet" href="../tagcss/selectbox.css" />
 <link rel="stylesheet" href="../tagcss/textArea.css" />
@@ -16,7 +19,7 @@
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/dateInput.css" />
 <link rel="stylesheet" href="../tagcss/form-controls.css" />
-<link rel="stylesheet" href="../tagcss/header.css" />
+<link rel="stylesheet" href="../tagcss/brandHeader.css" />
 <link rel="stylesheet" href="../tagcss/layout.css" />
 <link rel="stylesheet" href="../tagcss/reset.css" />
 <link rel="stylesheet" href="../tagcss/selectbox.css" />
@@ -92,6 +95,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
+<!-- 토스페이먼츠 결제위젯 SDK -->
+<script src="https://js.tosspayments.com/v2/standard"></script>
 </head>
 <body>
 	<my:layout>
@@ -103,36 +108,37 @@
 			<div class="grid">
 				<div class="label req">배너 광고명</div>
 				<div>
-					<my:textInput id="ownerName" name="ownerName"
+					<my:textInput id="bannerName" name="bannerName"
 						placeholder="광고명을 입력하세요." type="default" size="sm" state="default" />
 				</div>
 				<div class="label req">광고 담당자</div>
 				<div>
-					<my:textInput id="ownerName" name="ownerName"
+					<my:textInput id="managerName" name="managerName"
 						placeholder="담당자 성함을 입력하세요." type="default" size="sm"
 						state="default" />
 				</div>
 
 				<div class="label req">담당 연락처</div>
 				<div>
-					<my:textInput id="ownerTel" name="ownerTel"
+					<my:textInput id="managerTel" name="managerTel"
 						placeholder="담당연락처를 입력하세요." type="default" size="sm"
 						state="default" />
 				</div>
 
 				<div class="label req">배너 등록 기간</div>
 				<div class="inline date-row">
-					<input id="couponFrom" class="date-start" type="date"> <span>~</span>
-					<input id="couponTo" class="date-end" type="date">
+					<input id="startDate" class="startDate" type="date"> <span>~</span>
+					<input id="endDate" class="endDate" type="date">
 				</div>
 
 				<div class="label">관리자 전달사항</div>
 				<div>
-					<my:textArea id="note" name="desc" placeholder="관리자에게 문의&참고할 사항 전달" />
+					<my:textArea id="bannerMessage" name="bannerMessage"
+						placeholder="관리자에게 문의&참고할 사항 전달" />
 				</div>
 				<div class="label">파일 업로드</div>
 				<div class="upload">
-					<my:uploader size="lg" id="fileInput1" label="Click to upload"
+					<my:uploader size="lg" id="uploadFileId" label="Click to upload" multiple="false"
 						desc="또는 파일을 이 영역으로 드래그하세요" />
 				</div>
 			</div>
@@ -144,10 +150,18 @@
 						</span> <span>1일 ₩140,000</span> <span>예상 결제 금액 <strong
 							id="totalPrice" class="highlight">₩0</strong></span>
 					</div>
-					<button class="pay-button" id="payBtn" disabled>
-						<img src="./images/TossPay_Logo_Primary.png" width="280px"
-							alt="토스페이">
-					</button>
+					<%-- <button class="pay-button" id="payBtn" disabled>
+						<img src="${pageContext.request.contextPath}/brand2/images/TossPay_Logo_Primary.png" width="280px"
+							alt="토스페이결제하기">
+					</button> --%>
+
+					<!-- 결제 UI -->
+					<div id="payment-method"></div>
+					<!-- 이용약관 UI -->
+					<div id="agreement"></div>
+					<!-- 결제하기 버튼 -->
+					<button class="button" id="payment-button" style="margin-top: 30px">결제하기</button>
+
 				</div>
 			</div>
 		</my:brand2formLayout>
@@ -157,12 +171,68 @@
 	<!-- Toast -->
 	<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-	<script src="./js/eventForm.js"></script>
 	<script>
-      document.addEventListener("selectChanged", (e) => {
-        console.log("선택된 값:", e.detail.value); // 실제 값
-        console.log("선택된 텍스트:", e.detail.text); // 표시되는 텍스트
-      });
+	main();
+	async function main() {
+        const button = document.getElementById("payment-button");
+        const coupon = document.getElementById("coupon-box");
+        // ------  결제위젯 초기화 ------
+        const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+        const tossPayments = TossPayments(clientKey);
+        // 회원 결제
+        const customerKey = "RgyFwnE6adH-nqMZLcsyN";
+        const widgets = tossPayments.widgets({
+          customerKey,
+        });
+     // ------ 주문의 결제 금액 설정 ------
+        await widgets.setAmount({
+          currency: "KRW",
+          value: 50000,
+        });
+
+        await Promise.all([
+          // ------  결제 UI 렌더링 ------
+          widgets.renderPaymentMethods({
+            selector: "#payment-method",
+            variantKey: "DEFAULT",
+          }),
+          // ------  이용약관 UI 렌더링 ------
+          widgets.renderAgreement({ selector: "#agreement", variantKey: "AGREEMENT" }),
+        ]);
+
+        // ------  주문서의 결제 금액이 변경되었을 경우 결제 금액 업데이트 ------
+        coupon.addEventListener("change", async function () {
+          if (coupon.checked) {
+            await widgets.setAmount({
+              currency: "KRW",
+              value: 50000 - 5000,
+            });
+
+            return;
+          }
+
+          await widgets.setAmount({
+            currency: "KRW",
+            value: 50000,
+          });
+        });
+
+        // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
+        button.addEventListener("click", async function () {
+        	event.preventDefault(); // 기본 submit 막기
+        	const form = decument.getElementById();
+        	
+          await widgets.requestPayment({
+            orderId: "f1y9Agw17SQJE-civPqXp",
+            orderName: "토스 티셔츠 외 2건",
+            successUrl: window.location.origin + "/success.html",
+            failUrl: window.location.origin + "/fail.html",
+            customerEmail: "customer123@gmail.com",
+            customerName: "김토스",
+            customerMobilePhone: "01012341234",
+          });
+        });
+      }
     </script>
 </body>
 </html>
