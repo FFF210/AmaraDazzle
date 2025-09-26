@@ -1,1 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="mapper.banner">
+
+<!-- 결제 성공 후 배너 신청 -->
+	<insert id = "insertAdminPay" parameterType="adminPayment">
+		insert into AdminPayment (paymentId, paymentType, paymentKey, brandId, amount, planId, bannerId, payDate, lastAutopayDate) 
+		values(0, #{paymentId},#{paymentType}, #{paymentKey}, #{brandId}, #{amount}, #{planId}, #{bannerId}, #{payDate}, #{lastAutopayDate} )
+	</insert>
+	
+	
+	
+	
+</mapper>

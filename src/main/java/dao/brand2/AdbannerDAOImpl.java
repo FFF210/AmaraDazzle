@@ -9,7 +9,7 @@ public class AdbannerDAOImpl implements AdbannerDAO {
 	SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
 	
 	@Override
-	public void insertEmployee(Banner bn) throws Exception {
+	public void insertBannerForm(Banner bn) throws Exception {
 		sqlSession.insert("mapper.banner.insert", bn);
 		sqlSession.commit();
 

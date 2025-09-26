@@ -3,4 +3,17 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.uploadFile">
+
+	<insert id="insertUploadFile" parameterType="uploadFile">
+		insert into UploadFile
+		(uploadFileId, fileName, fileRename, storagePath, createdAt) 
+		values(0, #{fileName},#{fileRename}, #{storagePath}, #{createdAt} )
+	</insert>
+	
+	<update id="updateUploadFile" parameterType="uploadFile">
+		update UploadFile 
+		set fileName = #{fileName}, fileRename = #{fileRename}, storagePath = #{storagePath}, createdAt = #{createdAt}
+    	WHERE upload_file_id = #{uploadFileId}
+	</update>
+	
 </mapper>
