@@ -20,19 +20,5 @@
 
 
 
-<script>
-const logInfo = document.querySelector("header .icon-btn .bi-person");
-const modal = document.querySelector(".modal.loginInfo");
 
-// 마우스 올리면 펼치기
-logInfo.addEventListener("click", () => {
-    if (modal.style.display === "flex") {
-        modal.style.display = "none";
-        return;
-    }
-    modal.style.display = "flex";
-    modal.style.position = "fixed";
-});
-
-</script>
 

@@ -106,7 +106,7 @@
 	padding: 10px;
 	cursor: pointer;
 	background-color: transparent;
-	color: var(--initfont);
+	color: var(--base);
 	border: none;
 	font-size: 18px;
 }
@@ -142,7 +142,7 @@
 	align-items: center;
 	gap: 8px;
 	padding: 8px 18px;
-	color: var(--initfont);
+	color: var(--base);
 	text-decoration: none;
 	cursor: pointer;
 	box-sizing: border-box;
@@ -244,7 +244,7 @@
 	color: var(--footer);
 	opacity: 1;
 	visibility: visible;
-	transition: opacity 0.3s ease;
+	transition: opacity 0.5s ease;
 }
 
 

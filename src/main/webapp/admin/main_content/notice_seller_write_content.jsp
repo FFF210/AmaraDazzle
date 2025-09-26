@@ -3,6 +3,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<style>
+	.uploader {padding: 5px;}
+	.uploader-md { width: 95%; }
+</style>
+
+
 
 <!-- *********************************메인부분********************************* -->
 <section class="board_write">
@@ -11,11 +17,11 @@
 			카테고리 <span class="reqired_write">*</span>
 		</div>
 		<div class="part_content">
-			<select class="cate_sb">
-				<option>공지 카테고리를 선택하세요</option>
-				<option>카테1</option>
-				<option>카테2</option>
-				<option>카테3</option>
+			<select class="cate_sb" id="noticeCate">
+				<option value="">공지 카테고리를 선택하세요</option>
+				<option value="SYSTEM">시스템</option>
+				<option value="EVENT">이벤트</option>
+				<option value="ETC">기타</option>
 			</select>
 		</div>
 	</div>
@@ -25,13 +31,16 @@
 			제목 <span class="reqired_write">*</span>
 		</div>
 		<div class="part_content">
-			<input type="text" />
+			<input type="text" id="noticeTitle" placeholder="제목을 입력하세요"/>
 		</div>
 	</div>
 
 	<div class="part_section">
 		<div class="part_title">첨부파일</div>
-		<div class="part_content">컴포넌트 있으면 삽입</div>
+		<div class="part_content">
+			<my:uploader size="md" id="fileAttach" 
+					label="Click to upload" desc="또는 파일을 이 영역으로 드래그하세요" />
+		</div>
 	</div>
 
 	<div class="part_section content_part">
@@ -39,7 +48,7 @@
 			내용 <span class="reqired_write">*</span>
 		</div>
 		<div class="part_content">
-			<textarea>토스트에디터삽입</textarea>
+			<div id="editContent"></div>
 		</div>
 	</div>
 
@@ -49,14 +58,28 @@
 		</div>
 		<div class="part_content">
 			<div class="writer_part">
-				<input type="text" class="text_readonly" value="로그인된 관리자 이름"
-					readonly />
+				<input type="text" class="text_readonly" id="noticeWriter" readonly />
 			</div>
 			<div class="btn_part">
-				<button type="button" class="btn second_btn action_btn">미리보기</button>
-				<button type="button" class="btn first_btn action_btn">등록</button>
+				<button type="button" class="btn second_btn action_btn" id="previewBtn">미리보기</button>
+				<button type="button" class="btn first_btn action_btn" id="writeBtn">등록</button>
 			</div>
 		</div>
 	</div>
 </section>
 <!-- *********************************메인부분 end********************************* -->
+
+
+<!-- JS부분 -->
+<script>
+const editor = new toastui.Editor({
+	el : document.querySelector('#editContent'), 
+	height : '500px', 
+	initialEditType : 'wysiwyg', 
+});
+</script>
+
+<script src="./js/boardNotice.js"></script>
+
+
+<!-- JS부분 end -->
