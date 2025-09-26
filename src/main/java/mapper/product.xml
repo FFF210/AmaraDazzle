@@ -240,6 +240,14 @@
 		THEN p.price - p.discount_value
 		ELSE p.price
 		END AS sale_price,
+		CASE 
+        WHEN p.is_visible = 0 
+        THEN 'STOP_SALE'
+        WHEN p.stock_qty > 0 
+        THEN 'SALE'
+        WHEN p.stock_qty = 0 
+        THEN 'SOLD_OUT'
+    	END AS status
 		COALESCE(SUM(oi.quantity), 0) AS sales_qty,
 		COALESCE(COUNT(r.product_id), 0) AS review_count
 		FROM product p

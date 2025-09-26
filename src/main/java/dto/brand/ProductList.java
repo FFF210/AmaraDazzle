@@ -3,13 +3,15 @@ package dto.brand;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
+import enums.ProductListStatus;
+
 public class ProductList {
 	private Long productId;          // 상품 PK
     private String name;             // 상품명
     private String categoryPath;     // 카테고리 "대분류 > 중분류 > 소분류"
     private BigDecimal price;        // 판매가
     private BigDecimal salePrice;    // 할인가
-    private String status;			 // 판매상태 
+    private ProductListStatus status;			 // 판매상태 
     private Integer isVisible;       // 공개 여부
     private Integer stockQty;        // 재고 수
     private Integer salesQty;        // 누적 판매 수 (JOIN/집계)
@@ -46,11 +48,11 @@ public class ProductList {
 	public void setSalePrice(BigDecimal salePrice) {
 		this.salePrice = salePrice;
 	}
-	public String getStatus() {
+	public ProductListStatus getStatus() {
 		return status;
 	}
 	public void setStatus(String status) {
-		this.status = status;
+		this.status = ProductListStatus.valueOf(status); // enum 변환
 	}
 	public Integer getIsVisible() {
 		return isVisible;

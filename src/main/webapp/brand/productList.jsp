@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -90,8 +91,8 @@
 										</div>
 									</td>
 									<td>${product.categoryPath}</td>
-									<td>${product.price}</td>
-									<td>${product.salePrice}</td>
+									<td><fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0" groupingUsed="true"/></td>
+									<td><fmt:formatNumber value="${product.salePrice}" type="number" maxFractionDigits="0" groupingUsed="true"/></td>
 									<td><my:tag
 											color="${product.status == 'SALE' ? 'green' : (product.status == 'SOLD_OUT' ? 'red' : 'gray')}"
 											size="sm" text="${product.status.getDescription()}" /></td>
