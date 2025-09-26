@@ -85,9 +85,9 @@
 }
 
 .filter-btn-group .filter-btn.active {
-	background: #F1F9FF;
-	color: #2684FF;
-	font-weight: 600;
+	background: #F1F9FF !important;
+	color: #2684FF !important;
+	font-weight: 600 !important;
 }
 
 /* 하단 버튼 섹션 */

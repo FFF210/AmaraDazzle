@@ -46,9 +46,8 @@
 			<!-- 테이블 필터 -->
 			<div class="page-tableFilter">
 				<my:tableFilter
-					filters="결제 상태:결제 대기|결제 완료|결제 실패|취소 요청|결제 취소,
-	           				 배송 상태:배송 준비중|배송중|배송 완료|반품 요청|반품 완료"
-					searchItems="상품코드,상품명,카테고리" />
+					filters="판매상태:ALL=전체|SALE=판매중|SOLD_OUT=품절|STOP_SALE=판매중지"
+					hasDate="false" searchItems="상품명,카테고리" />
 			</div>
 
 			<!-- 총 건수 -->
@@ -116,20 +115,37 @@
 
 			<!-- 페이징 -->
 			<div class="page-pagination">
-				<my:pagination currentPage="${currentPage}" totalPages="${totalPages}"
-					baseUrl="/brand/products?page=" />
+				<my:pagination currentPage="${currentPage}"
+					totalPages="${totalPages}" baseUrl="/brand/products?page=" />
 			</div>
 		</div>
 	</my:layout>
 
 	<script>
-  // 부모에서 필터 이벤트 수신
+  // tableFilter 이벤트
   document.addEventListener("filterChanged", (e) => {
-    console.log("필터 상태:", e.detail);
-    if(e.detail.submit){
-      // TODO: Ajax 호출 or form submit
-    }
-  });
+  console.log("필터 상태:", e.detail);
+
+  if (e.detail.submit) {
+    const { filters, searchField, searchKeyword } = e.detail;
+    const params = new URLSearchParams();
+
+    // 판매상태
+    for (const [key, value] of Object.entries(filters)) {
+    	  params.append("status", value);
+    	}
+
+
+    if (searchField) params.append("searchType", searchField);
+    if (searchKeyword) params.append("searchKeyword", searchKeyword);
+
+    // 페이지는 1부터 시작
+    params.append("page", 1);
+
+    // 최종 URL로 이동 (GET 요청)
+    window.location.href = "/brand/productList?" + params.toString();
+  }
+});
 
   // "세일 등록" 버튼 클릭 → 다이얼로그 열기
   document.getElementById("openSaleDialog").addEventListener("click", () => {

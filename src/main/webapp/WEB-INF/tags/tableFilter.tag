@@ -8,22 +8,20 @@
     TableFilter 커스텀 태그
 
     속성(Props)
-    • filters : 
-      예) "결제 상태:결제 대기|결제 완료|결제 실패|취소 요청|결제 취소,
-           배송 상태:배송 준비중|배송중|배송 완료|반품 요청|반품 완료"
-      (쉼표로 줄 구분, label:옵션1|옵션2|옵션3)
-    • hasSearch   : true | false (기본 true)
+    • filters : 예) "판매상태:ALL=전체|SALE=판매중|SOLD_OUT=품절|STOP_SALE=판매중지" (쉼표로 줄 구분)
+    • hasDate   : true | false (기본 true) 날짜 필터 여부
+    • hasSearch   : true | false (기본 true) 검색 영역 여부
     • searchItems : "상품코드,상품명,카테고리"
     
     사용법 예시
     <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
     <my:tableFilter
-			filters="결제 상태:결제 대기|결제 완료|결제 실패|취소 요청|결제 취소,
-           			 배송 상태:배송 준비중|배송중|배송 완료|반품 요청|반품 완료"
+			filters="판매상태:ALL=전체|SALE=판매중|SOLD_OUT=품절|STOP_SALE=판매중지"
 			searchItems="상품코드,상품명,카테고리" />
 ================================ --%>
 
 <%@ attribute name="filters" required="false"%>
+<%@ attribute name="hasDate" required="false"%>
 <%@ attribute name="hasSearch" required="false"%>
 <%@ attribute name="searchItems" required="false"%>
 
@@ -34,14 +32,16 @@
 <div class="table-filter">
 
 	<!-- 날짜 필터 -->
-	<div class="filter-row date-row">
-		<label>기간:</label>
-		<my:dateInput type="input" name="startDate" value="2025-09-02" />
-		<span>~</span>
-		<my:dateInput type="input" name="endDate" value="2025-09-02" />
-		<div class="margin"></div>
-		<my:dateInput type="preset" presets="오늘,어제,최근 7일,최근 30일" />
-	</div>
+	<c:if test="${hasDate eq 'true'}">
+		<div class="filter-row date-row">
+			<label>기간:</label>
+			<my:dateInput type="input" name="startDate" value="2025-09-02" />
+			<span>~</span>
+			<my:dateInput type="input" name="endDate" value="2025-09-02" />
+			<div class="margin"></div>
+			<my:dateInput type="preset" presets="오늘,어제,최근 7일,최근 30일" />
+		</div>
+	</c:if>
 
 	<!-- 중간 필터 -->
 	<c:if test="${not empty filters}">
@@ -55,8 +55,11 @@
 				<label>${label}:</label>
 				<div class="filter-btn-group">
 					<c:forEach var="opt" items="${options}">
+						<c:set var="optParts" value="${fn:split(opt, '=')}" />
+          				<c:set var="optValue" value="${optParts[0]}" />
+          				<c:set var="optLabel" value="${optParts[1]}" />
 						<button type="button" class="filter-btn" data-filter="${label}"
-							data-value="${opt}">${opt}</button>
+							data-value="${optValue}">${optLabel}</button>
 					</c:forEach>
 				</div>
 			</div>
@@ -74,10 +77,10 @@
 
 	<!-- 버튼 (button.css 파일 import 필수) -->
 	<div class="filter-actions">
-		<button type="button" class="btn btn-primary btn-md tableFilter">검색</button>
-		<button type="button" class="btn btn-outline btn-md tableFilter">설정
-			초기화</button>
+		<button type="button" class="btn btn-primary btn-md filter-submit">검색</button>
+		<button type="button" class="btn btn-outline btn-md filter-reset">설정 초기화</button>
 	</div>
+
 </div>
 
 <script>
@@ -88,13 +91,13 @@ document.addEventListener("DOMContentLoaded", () => {
     dateStart: "",
     dateEnd: "",
     quickRange: "",
-    filters: {},  // {결제 상태: "결제 대기", 배송 상태: "배송중"}
+    filters: {},
     searchField: "",
     searchKeyword: ""
   };
 
-  // 날짜 빠른 선택
-  container.querySelectorAll(".date-quick").forEach(btn => {
+  // 날짜 빠른 선택 (있을 때만)
+  container.querySelectorAll(".date-quick")?.forEach(btn => {
     btn.addEventListener("click", () => {
       const range = btn.dataset.range;
       const today = new Date();
@@ -112,19 +115,21 @@ document.addEventListener("DOMContentLoaded", () => {
       state.dateStart = start.toISOString().slice(0,10);
       state.dateEnd = end.toISOString().slice(0,10);
 
-      container.querySelector(".date-start").value = state.dateStart;
-      container.querySelector(".date-end").value = state.dateEnd;
+      const startInput = container.querySelector(".date-start");
+      const endInput = container.querySelector(".date-end");
+      if(startInput) startInput.value = state.dateStart;
+      if(endInput) endInput.value = state.dateEnd;
 
       state.quickRange = range;
       dispatch();
     });
   });
 
-  // 필터 버튼 (toggle)
+  // 필터 버튼
   container.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      const key = btn.dataset.filter;
-      const value = btn.dataset.value;
+      const key = btn.dataset.filter; // data-filter 속성값 → 예: "판매상태"
+      const value = btn.dataset.value; // data-value 속성값 → 예: "SALE"
 
       container.querySelectorAll(`[data-filter='${key}']`)
                .forEach(b => b.classList.remove("active"));
@@ -143,18 +148,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // selectbox 이벤트 수신
+  // selectbox 이벤트
   document.addEventListener("selectChanged", (e) => {
     state.searchField = e.detail.value;
   });
 
   // 검색 버튼
-  container.querySelector(".filter-submit").addEventListener("click", () => {
-    dispatch(true); // submit 이벤트
+  container.querySelector(".filter-submit")?.addEventListener("click", () => {
+    dispatch(true);
   });
 
   // 초기화 버튼
-  container.querySelector(".filter-reset").addEventListener("click", () => {
+  container.querySelector(".filter-reset")?.addEventListener("click", () => {
     container.querySelectorAll("input, .active").forEach(el => {
       if(el.tagName === "INPUT") el.value = "";
       el.classList.remove("active");
@@ -168,7 +173,6 @@ document.addEventListener("DOMContentLoaded", () => {
     dispatch();
   });
 
-  // 부모로 이벤트 전달
   function dispatch(submit=false){
     const event = new CustomEvent("filterChanged", {
       detail: {...state, submit}
