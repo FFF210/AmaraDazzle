@@ -15,7 +15,7 @@ public class Banner {
     private Timestamp createdAt;   // 신청일 (DEFAULT CURRENT_TIMESTAMP)
     private Timestamp updatedAt;   // 수정일
     private Integer isExposed;     // 노출여부 (tinyint, DEFAULT 1)
-    private Long categoryId;       // 상품 카테고리 (FK → category.category_id)
+    private String brandUrl;       // 브랜드페이지 URL
     private String stateChange;    // 배너 게시 상태 (POSTING / OFF)
     private Long adminId;          // 승인 관리자 ID (FK → admin_info.admin_info_id)
 
@@ -106,11 +106,11 @@ public class Banner {
         this.isExposed = isExposed;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public String getBrandUrl() {
+        return brandUrl;
     }
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setBrandUrl(String brandUrl) {
+        this.brandUrl = brandUrl;
     }
 
     public String getStateChange() {
@@ -134,7 +134,7 @@ public class Banner {
                 ", startDate=" + startDate + ", endDate=" + endDate +
                 ", bannerName=" + bannerName + ", bannerMessage=" + bannerMessage +
                 ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt +
-                ", isExposed=" + isExposed + ", categoryId=" + categoryId +
+                ", isExposed=" + isExposed + ", brandUrl=" + brandUrl +
                 ", stateChange=" + stateChange + ", adminId=" + adminId + "]";
     }
 }
