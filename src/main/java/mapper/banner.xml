@@ -9,13 +9,13 @@
 
 <!-- 결제 성공 후 배너 신청 -->
 	<insert id = "insertBannerForm" parameterType="banner">
-		insert into Banner (brandId, managerName, managerTel, startDate, endDate, bannerName, bannerMessage, status, categoryId) 
-		values(#{brandId}, #{managerName}, #{managerTel}, #{startDate}, #{endDate}, #{bannerName}, #{bannerMessage}, 'PENDING', #{categoryId} )
+		insert into Banner (brand_id, manager_name, manager_tel, start_date, end_date, banner_name, banner_message, status, brand_url) 
+		values(#{brandId}, #{managerName}, #{managerTel}, #{startDate}, #{endDate}, #{bannerName}, #{bannerMessage}, 'PENDING', #{brandUrl} )
 	</insert>
 	
 	<update id = "updateBannerForm" parameterType="banner">
-		update Banner (managerName, managerTel, updatedAt, endDate, bannerName, bannerMessage, status, categoryId) 
-		values(#{managerName}, #{managerTel}, #{updatedAt}, #{endDate}, #{bannerName}, #{bannerMessage}, 'PENDING', #{categoryId} )
+		update Banner (managerName, managerTel, updatedAt, endDate, bannerName, bannerMessage, status, brandUrl) 
+		values(#{managerName}, #{managerTel}, #{updatedAt}, #{endDate}, #{bannerName}, #{bannerMessage}, 'PENDING', #{brandUrl} )
 	</update>
 	
 </mapper>
