@@ -26,7 +26,7 @@ section.board_write div.part_section .part_title {
 }
 
 section.board_write div.part_section .part_content input[type="text"] {
-    width: 100%;
+    width: 95%;
 }
 
 section.board_write div.part_section .part_content .content_part {

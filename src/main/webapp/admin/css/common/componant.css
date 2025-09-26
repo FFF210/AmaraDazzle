@@ -8,7 +8,8 @@
 
 
 select {
-    /* width: 100px; */
+    width: 300px;
+    height : 30px;
     padding: 5px;
     margin: 5px;
     border: 1px solid var(--innerbox);
@@ -31,7 +32,7 @@ input {
 
 input[type="checkbox"],
 input[type="radio"] {
-    accent-color: var(--primary);
+    accent-color: var(--mainColor);
     margin-right: 5px;
 }
 
@@ -47,7 +48,8 @@ input[type="text"]:read-only {
 }
 
 
-input[type="text"]:focus { 
+input[type="text"]:focus,
+select:focus { 
 	outline: none !important; 
 	border: 1px solid #1EAE69 !important;
 	box-shadow: 0 0 0 4px rgba(20, 184, 145, 0.25); 
@@ -95,8 +97,8 @@ button {
 }
 
 .btn.first_btn {
-    border: 1px solid var(--primary);
-    background-color: var(--primary);
+    border: 1px solid var(--mainColor);
+    background-color: var(--mainColor);
     color: white;
 }
 
@@ -106,13 +108,13 @@ button {
 }
 
 .btn.second_btn {
-    border: 1px solid var(--primary);
+    border: 1px solid var(--mainColor);
     background-color: white;
-    color: var(--primary);
+    color: var(--mainColor);
 }
 
 .btn.second_btn:active {
-    background-color: var(--secondary);
+    background-color: var(--subColor);
 }
 
 .button_box {

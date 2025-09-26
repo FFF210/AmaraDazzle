@@ -86,7 +86,8 @@
 div.bestSeller,
 div.bestBrand {
     width: 47%;
-    background-color: rgba(127, 197, 255, 0.374);
+/*     background-color: rgba(127, 197, 255, 0.374); */
+    background-color: var(--hovermenu);
     border-radius: 10px;
     margin: 10px;
     padding: 5px 0 15px 0;
