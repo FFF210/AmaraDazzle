@@ -92,39 +92,47 @@
 	    console.error("table-filter 컨테이너를 찾을 수 없음");
 	    return;
 	  }
+	
 	window.addEventListener("DOMContentLoaded", () => {
 	    const params = new URLSearchParams(window.location.search);
 
 	    // tableFilter.tag 로드 시 URL 파라미터 반영
 	    params.forEach((value, key) => {
-	      // 필터 버튼 선택
-	      const btn = container.querySelector(`.filter-btn[data-filter='${key}'][data-value='${value}']`);
-	      if (btn) btn.classList.add("active");
+	    	  // 필터 버튼 선택
+	    	  const btn = container.querySelector(`.filter-btn[data-filter='${key}'][data-value='${value}']`);
+	    	  if (btn) {
+	    	    btn.classList.add("active");
+	    	    state.filters[key] = value; // 상태 반영
+	    	  }
 
-	      // 검색창
-	      if (key === "searchKeyword") {
-	        const searchInput = container.querySelector(".search-input");
-	        if (searchInput) searchInput.value = value;
-	      }
+	    	  // 검색창
+	    	  if (key === "searchKeyword") {
+	    	    const searchInput = container.querySelector(".search-input");
+	    	    if (searchInput) searchInput.value = value;
+	    	    state.searchKeyword = value;
+	    	  }
 
-	      // 검색 필드 (selectbox 초기화용 이벤트)
-	      if (key === "searchType") {
-	        setTimeout(() => {   // selectbox 초기화 후 적용
-	          const selectEvent = new CustomEvent("selectInit", { detail: { value }});
-	          document.dispatchEvent(selectEvent);
-	        }, 0);
-	      }
+	    	  // 검색 필드 (selectbox 초기화)
+	    	  if (key === "searchType") {
+	    	    window.addEventListener("load", () => {
+	    	      const selectEvent = new CustomEvent("selectInit", { detail: { value }});
+	    	      document.dispatchEvent(selectEvent);
+	    	    });
+	    	    state.searchField = value;
+	    	  }
 
-	      // 날짜
-	      if (key === "startDate") {
-	        const start = container.querySelector(".date-start");
-	        if (start) start.value = value;
-	      }
-	      if (key === "endDate") {
-	        const end = container.querySelector(".date-end");
-	        if (end) end.value = value;
-	      }
-	    });
+	    	  // 날짜
+	    	  if (key === "startDate") {
+	    	    const start = container.querySelector(".date-start");
+	    	    if (start) start.value = value;
+	    	    state.dateStart = value;
+	    	  }
+	    	  if (key === "endDate") {
+	    	    const end = container.querySelector(".date-end");
+	    	    if (end) end.value = value;
+	    	    state.dateEnd = value;
+	    	  }
+	    	});
 	  });
 
   const state = {

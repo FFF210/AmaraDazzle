@@ -16,6 +16,7 @@ public class ProductList {
     private Integer stockQty;        // 재고 수
     private Integer salesQty;        // 누적 판매 수 (JOIN/집계)
     private Integer reviewCount;     // 리뷰 수 (JOIN/집계)
+    private Boolean hasWishlist;     // 상품에 등록된 찜 여부 0 = false, 1 = true
     private Timestamp createdAt;     // 등록일
     
 	public Long getProductId() {
@@ -78,17 +79,28 @@ public class ProductList {
 	public void setReviewCount(Integer reviewCount) {
 		this.reviewCount = reviewCount;
 	}
+	
+	public Boolean getHasWishlist() {
+		return hasWishlist;
+	}
+	public void setHasWishlist(Boolean hasWishlist) {
+		this.hasWishlist = hasWishlist;
+	}
+	public void setStatus(ProductListStatus status) {
+		this.status = status;
+	}
 	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
+	
 	@Override
 	public String toString() {
 		return "ProductList [productId=" + productId + ", name=" + name + ", categoryPath=" + categoryPath + ", price="
 				+ price + ", salePrice=" + salePrice + ", status=" + status + ", isVisible=" + isVisible + ", stockQty="
-				+ stockQty + ", salesQty=" + salesQty + ", reviewCount=" + reviewCount + ", createdAt=" + createdAt
-				+ "]";
+				+ stockQty + ", salesQty=" + salesQty + ", reviewCount=" + reviewCount + ", hasWishlist=" + hasWishlist
+				+ ", createdAt=" + createdAt + "]";
 	}
 }

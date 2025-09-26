@@ -250,6 +250,9 @@
 		WHEN p.stock_qty = 0 THEN
 		'SOLD_OUT'
 		END AS status,
+		CASE WHEN EXISTS (SELECT 1 FROM wishlist w
+		WHERE w.product_id = p.product_id)
+		THEN 0 ELSE 1 END AS hasWishlist,
 		IFNULL(oi.sales_qty, 0) AS sales_qty,
 		IFNULL(r.review_count, 0) AS review_count
 		FROM product p
@@ -361,12 +364,16 @@
 					</when>
 					<when test="searchType == 'CATEGORY'">
 						AND (
-						p.category1_id IN (SELECT category_id FROM category WHERE name LIKE CONCAT('%',
+						p.category1_id IN (SELECT category_id FROM
+						category WHERE name LIKE CONCAT('%',
 						#{searchKeyword}, '%'))
-						OR p.category2_id IN (SELECT category_id FROM category WHERE name
+						OR
+						p.category2_id IN (SELECT category_id FROM category WHERE name
 						LIKE CONCAT('%', #{searchKeyword}, '%'))
-						OR p.category3_id IN (SELECT category_id FROM category WHERE name
-						LIKE CONCAT('%', #{searchKeyword}, '%'))
+						OR p.category3_id IN
+						(SELECT category_id FROM category WHERE name
+						LIKE CONCAT('%',
+						#{searchKeyword}, '%'))
 						)
 					</when>
 				</choose>
