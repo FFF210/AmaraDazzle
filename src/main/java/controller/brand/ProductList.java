@@ -16,7 +16,7 @@ import service.brand.ProductServiceImpl;
 /**
  * Servlet implementation class ProductList
  */
-@WebServlet("/productList")
+@WebServlet("/brand/productList")
 public class ProductList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -42,8 +42,6 @@ public class ProductList extends HttpServlet {
 		int offset = (page - 1) * limit;
 
 		Map<String, Object> params = new HashMap<>();
-		params.put("startDate", request.getParameter("startDate"));
-		params.put("endDate", request.getParameter("endDate"));
 		params.put("status", request.getParameter("status")); // SALE, SOLD_OUT, STOP_SALE
 		params.put("searchType", request.getParameter("searchType")); // NAME or CATEGORY
 		params.put("searchKeyword", request.getParameter("searchKeyword"));
