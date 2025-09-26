@@ -34,27 +34,27 @@
 }
 
 .header .icon-btn:hover i {
-	color: #0C8CE9;
+	color: var(--primary);
 }
 
 .header_button > button {
     padding: 5px;
-    border: 1px solid #0C8CE9;
+    border: 1px solid var(--primary);
     border-radius: 5px;
     background : #FFFFFF;
-    color: #0C8CE9;
+    color: var(--primary);
     margin-left: 10px;
     cursor: pointer;
 }
 
 .header_button > button:hover {
-    background : #0C8CE9;
-    color: #FFFFFF;
+    background : var(--primary);
+    color: var(--base);
 }
 
 .header_button > button:active {
-    background : #0c63c2;
-    border : 1px solid #0c63c2;
-    color: #FFFFFF;
+    background : var(--clicked);
+    border : 1px solid var(--clicked);
+    color: var(--base);
 }
 

@@ -2,7 +2,7 @@
 <%@ tag body-content="scriptless"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
 <%-- ================================
      Layout 커스텀 태그
@@ -23,9 +23,8 @@
      	<p>본문을 layout 태그로 감싸주세요!</p>
    	 </my:layout>
 ================================ --%>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div class="container">
-
 	<!-- 사이드바 -->
 	<my:adminSidebar />
 	<!-- 사이드바 end -->
@@ -50,7 +49,68 @@
 </div>
 
 
+<!-- 정보수정 & 로그아웃 팝업 -->
+<div class="modal hidden loginInfo">
+	<div class="info">
+		<img src="./image/logo_black.png" /> 
+		<span><b> &nbsp;홍 길 동 [ADMIN]</b></span>
+	</div>
+	<div class="modifyInfo">
+		<button type="button">내 정보 수정</button>
+	</div>
+	<div class="logout">
+		<button type="button">로그아웃</button>
+	</div>
+</div>
+<!-- 정보수정 & 로그아웃 팝업 end -->
 
 
+<!-- JS소스 -->
+<script>
+// loginInfo 모달 열고닫기 
+const logInfoBtn = document.querySelector(".header .bi-person");
+const loginInfoBox = document.querySelector(".modal.loginInfo");
+
+//팝업 열기/닫기 토글
+logInfoBtn.addEventListener("click", (e) => {
+    e.stopPropagation(); // **버튼을 눌러도 문서 클릭으로 닫히지 않게**
+    loginInfoBox.classList.toggle("hidden");
+});
+
+// 팝업 내부는 닫힘 방지
+loginInfoBox.addEventListener("click", (e) => e.stopPropagation());
+
+// 문서 아무 곳이나 클릭 → 팝업 닫기
+document.addEventListener("click", () => {
+    if (!loginInfoBox.classList.contains("hidden")) {
+    	loginInfoBox.classList.add("hidden");
+    }
+});
+
+
+//회원 검색 모달 열고닫기
+const cName_searchBtn = document.querySelector("#cName_searchBtn");
+const searchUserBox = document.querySelector(".modal.modal_search_box");
+const modal_selectBtn = document.getElementById("modal_selectBtn");
+
+
+// 팝업 열기/닫기 토글
+cName_searchBtn.addEventListener("click", (e) => {
+    e.stopPropagation(); // **버튼을 눌러도 문서 클릭으로 닫히지 않게**
+    searchUserBox.classList.toggle("hidden");
+});
+
+// 팝업 내부는 닫힘 방지
+searchUserBox.addEventListener("click", (e) => e.stopPropagation());
+
+// 문서 아무 곳이나 클릭 → 팝업 닫기
+document.addEventListener("click", () => {
+    if (!searchUserBox.classList.contains("hidden")) {
+        searchUserBox.classList.add("hidden");
+    }
+});
+
+</script>
+<!-- JS소스 end -->
 
 
