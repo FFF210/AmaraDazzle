@@ -11,7 +11,9 @@ public class Product {
     private Integer isExclusive;      // 단독 판매 여부 (tinyint, DEFAULT 0)
     private Integer isVisible;        // 상품 공개 여부 (tinyint, DEFAULT 1)
     private Integer isPlanned;        // 기획 상품 여부 (tinyint, DEFAULT 0)
-    private Long categoryId;          // 카테고리 ID (FK → category.category_id)
+    private Long category1Id;          // 대분류 카테고리 ID (FK → category.category_id)
+    private Long category2Id;          // 중분류 카테고리 ID (FK → category.category_id)
+    private Long category3Id;          // 소분류 카테고리 ID (FK → category.category_id)
     private Long thumbnailFileId;     // 썸네일 파일 ID (FK → upload_file.upload_file_id)
     private Long image1FileId;        // 업로드 이미지 파일 ID
     private Long image2FileId;        // 업로드 이미지 파일 ID
@@ -34,8 +36,82 @@ public class Product {
 
     public Product() {
     }
+    
+    // productId(AUTO_INCREMENT) 포함된 생성자
+    public Product(Long productId, String brandId, String name, Integer isExclusive, Integer isVisible,
+			Integer isPlanned, Long category1Id, Long category2Id, Long category3Id, Long thumbnailFileId, Long image1FileId, Long image2FileId,
+			Long image3FileId, Long image4FileId, Long image5FileId, String ingredients, BigDecimal price,
+			Integer orderLimit, Integer hasOption, Integer stockQty, String shippingMethod, String discountType,
+			BigDecimal discountValue, Date startDate, Date endDate, Long eventId, Timestamp createdAt,
+			Timestamp updatedAt) {
+		super();
+		this.productId = productId;
+		this.brandId = brandId;
+		this.name = name;
+		this.isExclusive = isExclusive;
+		this.isVisible = isVisible;
+		this.isPlanned = isPlanned;
+		this.category1Id = category1Id;
+		this.category2Id = category2Id;
+		this.category3Id = category3Id;
+		this.thumbnailFileId = thumbnailFileId;
+		this.image1FileId = image1FileId;
+		this.image2FileId = image2FileId;
+		this.image3FileId = image3FileId;
+		this.image4FileId = image4FileId;
+		this.image5FileId = image5FileId;
+		this.ingredients = ingredients;
+		this.price = price;
+		this.orderLimit = orderLimit;
+		this.hasOption = hasOption;
+		this.stockQty = stockQty;
+		this.shippingMethod = shippingMethod;
+		this.discountType = discountType;
+		this.discountValue = discountValue;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.eventId = eventId;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
 
-    public Long getProductId() {
+ // productId(AUTO_INCREMENT) 미포함된 생성자
+	public Product(String brandId, String name, Integer isExclusive, Integer isVisible, Integer isPlanned,
+			Long category1Id, Long category2Id, Long category3Id, Long thumbnailFileId, Long image1FileId, Long image2FileId, Long image3FileId,
+			Long image4FileId, Long image5FileId, String ingredients, BigDecimal price, Integer orderLimit,
+			Integer hasOption, Integer stockQty, String shippingMethod, String discountType, BigDecimal discountValue,
+			Date startDate, Date endDate, Long eventId, Timestamp createdAt, Timestamp updatedAt) {
+		super();
+		this.brandId = brandId;
+		this.name = name;
+		this.isExclusive = isExclusive;
+		this.isVisible = isVisible;
+		this.isPlanned = isPlanned;
+		this.category1Id = category1Id;
+		this.category2Id = category2Id;
+		this.category3Id = category3Id;
+		this.thumbnailFileId = thumbnailFileId;
+		this.image1FileId = image1FileId;
+		this.image2FileId = image2FileId;
+		this.image3FileId = image3FileId;
+		this.image4FileId = image4FileId;
+		this.image5FileId = image5FileId;
+		this.ingredients = ingredients;
+		this.price = price;
+		this.orderLimit = orderLimit;
+		this.hasOption = hasOption;
+		this.stockQty = stockQty;
+		this.shippingMethod = shippingMethod;
+		this.discountType = discountType;
+		this.discountValue = discountValue;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.eventId = eventId;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
+	}
+
+	public Long getProductId() {
         return productId;
     }
     public void setProductId(Long productId) {
@@ -77,14 +153,31 @@ public class Product {
         this.isPlanned = isPlanned;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
-    }
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
+    public Long getCategory1Id() {
+		return category1Id;
+	}
 
-    public Long getThumbnailFileId() {
+	public void setCategory1Id(Long category1Id) {
+		this.category1Id = category1Id;
+	}
+
+	public Long getCategory2Id() {
+		return category2Id;
+	}
+
+	public void setCategory2Id(Long category2Id) {
+		this.category2Id = category2Id;
+	}
+
+	public Long getCategory3Id() {
+		return category3Id;
+	}
+
+	public void setCategory3Id(Long category3Id) {
+		this.category3Id = category3Id;
+	}
+
+	public Long getThumbnailFileId() {
         return thumbnailFileId;
     }
     public void setThumbnailFileId(Long thumbnailFileId) {
@@ -217,20 +310,16 @@ public class Product {
         this.updatedAt = updatedAt;
     }
 
-    @Override
-    public String toString() {
-        return "Product [productId=" + productId + ", brandId=" + brandId +
-                ", name=" + name + ", isExclusive=" + isExclusive +
-                ", isVisible=" + isVisible + ", isPlanned=" + isPlanned +
-                ", categoryId=" + categoryId + ", thumbnailFileId=" + thumbnailFileId +
-                ", image1FileId=" + image1FileId + ", image2FileId=" + image2FileId +
-                ", image3FileId=" + image3FileId + ", image4FileId=" + image4FileId +
-                ", image5FileId=" + image5FileId + ", ingredients=" + ingredients +
-                ", price=" + price + ", orderLimit=" + orderLimit +
-                ", hasOption=" + hasOption + ", stockQty=" + stockQty +
-                ", shippingMethod=" + shippingMethod + ", discountType=" + discountType +
-                ", discountValue=" + discountValue + ", startDate=" + startDate +
-                ", endDate=" + endDate + ", eventId=" + eventId +
-                ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
-    }
+	@Override
+	public String toString() {
+		return "Product [productId=" + productId + ", brandId=" + brandId + ", name=" + name + ", isExclusive="
+				+ isExclusive + ", isVisible=" + isVisible + ", isPlanned=" + isPlanned + ", category1Id=" + category1Id
+				+ ", category2Id=" + category2Id + ", category3Id=" + category3Id + ", thumbnailFileId="
+				+ thumbnailFileId + ", image1FileId=" + image1FileId + ", image2FileId=" + image2FileId
+				+ ", image3FileId=" + image3FileId + ", image4FileId=" + image4FileId + ", image5FileId=" + image5FileId
+				+ ", ingredients=" + ingredients + ", price=" + price + ", orderLimit=" + orderLimit + ", hasOption="
+				+ hasOption + ", stockQty=" + stockQty + ", shippingMethod=" + shippingMethod + ", discountType="
+				+ discountType + ", discountValue=" + discountValue + ", startDate=" + startDate + ", endDate="
+				+ endDate + ", eventId=" + eventId + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + "]";
+	}
 }

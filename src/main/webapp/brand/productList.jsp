@@ -11,27 +11,27 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="./css/reset.css" />
-<link rel="stylesheet" href="./css/button.css" />
-<link rel="stylesheet" href="./css/form-controls.css" />
-<link rel="stylesheet" href="./css/layout.css" />
-<link rel="stylesheet" href="./css/sidebar.css" />
-<link rel="stylesheet" href="./css/header.css" />
-<link rel="stylesheet" href="./css/table.css" />
-<link rel="stylesheet" href="./css/dialog.css" />
-<link rel="stylesheet" href="./css/tag.css" />
-<link rel="stylesheet" href="./css/selectbox.css" />
-<link rel="stylesheet" href="./css/dateInput.css" />
-<link rel="stylesheet" href="./css/textInput.css" />
-<link rel="stylesheet" href="./css/breadcrumb.css" />
-<link rel="stylesheet" href="./css/pagination.css" />
-<link rel="stylesheet" href="./css/tableFilter.css" />
+<link rel="stylesheet" href="../tagcss/reset.css" />
+<link rel="stylesheet" href="../tagcss/button.css" />
+<link rel="stylesheet" href="../tagcss/form-controls.css" />
+<link rel="stylesheet" href="../tagcss/layout.css" />
+<link rel="stylesheet" href="../tagcss/sidebar.css" />
+<link rel="stylesheet" href="../tagcss/brandHeader.css" />
+<link rel="stylesheet" href="../tagcss/table.css" />
+<link rel="stylesheet" href="../tagcss/dialog.css" />
+<link rel="stylesheet" href="../tagcss/tag.css" />
+<link rel="stylesheet" href="../tagcss/selectbox.css" />
+<link rel="stylesheet" href="../tagcss/dateInput.css" />
+<link rel="stylesheet" href="../tagcss/textInput.css" />
+<link rel="stylesheet" href="../tagcss/breadcrumb.css" />
+<link rel="stylesheet" href="../tagcss/pagination.css" />
+<link rel="stylesheet" href="../tagcss/tableFilter.css" />
 </head>
 <body>
 
 	<my:layout>
 		<div class="page-container">
-		
+
 			<!-- breadcrumb -->
 			<div class="page-breadcrumb">
 				<my:breadcrumb items="상품목록:" />
@@ -53,7 +53,7 @@
 
 			<!-- 총 건수 -->
 			<div class="page-totalCount">
-				<p>총 200 건</p>
+				<p>총 ${totalCount} 건</p>
 			</div>
 
 			<!-- 결과 테이블 -->
@@ -80,24 +80,25 @@
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="i" begin="1" end="10">
+							<c:forEach var="product" items="${productList}" varStatus="loop">
 								<tr>
 									<td><input type="checkbox" class="form-check" /></td>
-									<td>${i}</td>
-									<td>2025090${i}</td>
+									<td>${loop.index + 1}</td>
+									<td>${product.productId}</td>
 									<td>
 										<div class="product-name">
-											<p>[스테디셀러특가/3년연속1위] 어노브 딥 데미지 헤어 트리트먼트 EX 320ml 더블/듀오
-												한정기획 4종 택1</p>
+											<p>${product.name}</p>
 										</div>
 									</td>
-									<td>화장품</td>
-									<td>25,000</td>
-									<td>20,000</td>
-									<td><my:tag color="green" size="sm" text="세일" /></td>
-									<td>123</td>
-									<td>456</td>
-									<td>78</td>
+									<td>${product.category1_id}</td>
+									<td>${product.price}</td>
+									<td>${product.price}- ${product.discountValue}</td>
+									<td><my:tag
+											color="${product.status == 'SALE' ? 'green' : (product.status == 'SOLD_OUT' ? 'red' : 'gray')}"
+											size="sm" text="${product.status.getDescription()}" /></td>
+									<td>${product.stockQty}</td>
+									<td>${product.stockQty}</td>
+									<td>${product.stockQty}</td>
 									<td>
 										<div class="actions">
 											<button type="button" class="btn btn-outline btn-sm">재고
@@ -115,8 +116,8 @@
 
 			<!-- 페이징 -->
 			<div class="page-pagination">
-				<my:pagination currentPage="1" totalPages="10"
-					baseUrl="/products?page=" />
+				<my:pagination currentPage="${currentPage}" totalPages="${totalPages}"
+					baseUrl="/brand/products?page=" />
 			</div>
 		</div>
 	</my:layout>
