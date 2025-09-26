@@ -6,7 +6,7 @@ import java.util.Map;
 
 import dao.brand.ProductDAO;
 import dao.brand.ProductDAOImpl;
-import dto.Product;
+import dto.brand.ProductList;
 
 public class ProductServiceImpl implements ProductService {
 	
@@ -20,7 +20,7 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public Map<String, Object> productListByPage(Map<String, Object> params) throws Exception {
 		// 상품 목록 조회
-		List<Product> productList = productDAO.selectProductListForBrand(params); 
+		List<ProductList> productList = productDAO.selectProductListForBrand(params); 
 		
 		// 총 상품 개수 조회
 		int totalCount = productDAO.selectProductCountForBrand(params); 

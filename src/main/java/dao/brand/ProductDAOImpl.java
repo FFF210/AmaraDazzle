@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
-import dto.Product;
+import dto.brand.ProductList;
 import util.MybatisSqlSessionFactory;
 
 public class ProductDAOImpl implements ProductDAO {
@@ -14,7 +14,7 @@ public class ProductDAOImpl implements ProductDAO {
 
 	// 상품 목록 조회
 	@Override
-	public List<Product> selectProductListForBrand(Map<String, Object> params) throws Exception {
+	public List<ProductList> selectProductListForBrand(Map<String, Object> params) throws Exception {
 		return sqlSession.selectList("mapper.product.selectProductListForBrand", params);
 	}
 
