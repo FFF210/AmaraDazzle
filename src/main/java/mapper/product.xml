@@ -450,7 +450,15 @@
 		p.stock_qty,
 		p.shipping_method,
 		p.discount_type,
-		p.discount_value,
+		CASE
+		WHEN
+		p.discount_type = 'RATE'
+		THEN p.price - (p.price * p.discount_value /
+		100)
+		WHEN p.discount_type = 'AMOUNT'
+		THEN p.price - p.discount_value
+		ELSE p.price
+		END AS sale_price,
 		p.created_at,
 		p.updated_at,
 		GROUP_CONCAT(CASE WHEN cm.code_group = 'SKIN_ISSUE'

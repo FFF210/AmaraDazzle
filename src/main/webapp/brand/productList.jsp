@@ -445,13 +445,12 @@
   
   //수정 버튼 클릭 → 상세 페이지 이동
   document.querySelectorAll(".btn-edit").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const productId = btn.dataset.productId;
-      if (productId) {
-        window.location.href = `/brand/productDetail?productId=${productId}`;
-      }
-    });
+  btn.addEventListener("click", () => {
+    const productId = btn.dataset.productId;   // 버튼의 data-product-id 값 가져오기
+    window.location.href = "/brand/productDetail?productId=" + productId;
   });
+});
+
 
   /*********************************************************************************************************
    * 테이블 체크박스

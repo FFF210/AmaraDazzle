@@ -96,6 +96,10 @@
 	padding: 16px 0;
 }
 
+.image-group-wrapper {
+	display: flex;
+	gap: 60px;
+}
 /* label + tag 그룹 */
 .form-group.tag {
 	height: 54px;

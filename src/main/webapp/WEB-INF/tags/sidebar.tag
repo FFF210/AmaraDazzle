@@ -30,8 +30,8 @@
 					관리</span> <i class="bi bi-chevron-down submenu-icon"></i>
 			</button>
 			<ul class="submenu">
-				<li><a href="#">상품 등록</a></li>
-				<li><a href="#">상품 목록 조회</a></li>
+				<li><a href="/brand/productDetail">상품 등록</a></li>
+				<li><a href="/brand/productList">상품 목록 조회</a></li>
 			</ul>
 		</li>
 
