@@ -3,4 +3,29 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.productOption">
+	<!-- 옵션 등록 -->
+	<insert id="insertOption" parameterType="productOption">
+		INSERT INTO
+		product_option (product_id, option_value, price, stock_qty)
+		VALUES
+		(#{productId}, #{optionValue}, #{price}, #{stockQty})
+	</insert>
+
+	<!-- 특정 상품 옵션 목록 -->
+	<select id="selectOptionsByProductId" parameterType="string"
+		resultType="productOption">
+		SELECT product_option_id, product_id, option_value, price,
+		stock_qty,
+		created_at, updated_at
+		FROM product_option
+		WHERE product_id =
+		#{productId}
+		ORDER BY product_option_id DESC
+	</select>
+
+	<!-- 옵션 삭제 -->
+	<delete id="deleteOption" parameterType="long">
+		DELETE FROM product_option
+		WHERE product_id = #{productId}
+	</delete>
 </mapper>

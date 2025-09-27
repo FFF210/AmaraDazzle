@@ -33,7 +33,7 @@
 
 <%-- 기본값 처리 --%>
 <c:set var="size" value="${empty size ? 'md' : size}" />
-<c:set var="items" value="${empty items ? 'item1,item2,item3' : items}" />
+<c:set var="items" value="${empty items ? '' : items}" />
 <c:set var="itemList" value="${fn:split(items, ',')}" />
 <c:set var="selectedValue"
 	value="${empty initial ? itemList[0] : initial}" />

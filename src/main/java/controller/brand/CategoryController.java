@@ -1,4 +1,4 @@
-package controller;
+package controller.brand;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.Gson;
 
 import dto.Category;
-import service.CategoryService;
-import service.CategoryServiceImpl;
+import service.brand.CategoryService;
+import service.brand.CategoryServiceImpl;
 
 @WebServlet("/category")
 public class CategoryController extends HttpServlet {

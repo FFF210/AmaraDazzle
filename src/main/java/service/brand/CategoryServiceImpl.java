@@ -1,4 +1,4 @@
-package service;
+package service.brand;
 
 import java.util.List;
 

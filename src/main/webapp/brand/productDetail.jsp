@@ -28,10 +28,46 @@
 <link rel="stylesheet" href="../tagcss/textArea.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/uploader.css" />
+<link rel="stylesheet" href="../tagcss/alert.css" />
 <link rel="stylesheet" href="./css/detailForm.css" />
 </head>
 
 <body class="<c:if test='${not empty product}'>edit-mode</c:if>">
+	<!-- Toast 알림 컨테이너 -->
+	<div id="toast-container"></div>
+
+	<!-- 옵션 모달 -->
+	<div id="optionDialog" class="modal">
+		<div class="modal-overlay"></div>
+		<div class="modal-content">
+			<h3 class="modal-title">상품 옵션 추가</h3>
+			<p class="modal-subTitle">상품에 다양한 옵션을 등록할 수 있습니다.</p>
+			<div class="modal-body">
+				<!-- 폼 내용 -->
+				<div class="form-row">
+					<label class="form-row-label">옵션명</label>
+					<my:textInput type="default" name="optionName"
+						placeholder="예: 100ml / 레드" size="sm" />
+				</div>
+				<div class="form-row">
+					<label class="form-row-label">판매가</label>
+					<my:textInput type="default" name="optionPrice" placeholder="20000"
+						size="sm" />
+				</div>
+				<div class="form-row">
+					<label class="form-row-label">재고 수량</label>
+					<my:textInput type="default" name="optionStock" placeholder="100"
+						size="sm" />
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline btn-md"
+					data-action="취소">취소</button>
+				<button type="button" class="btn btn-primary btn-md"
+					data-action="추가">추가</button>
+			</div>
+		</div>
+	</div>
 	<my:layout>
 		<div class="page-container">
 
@@ -54,7 +90,8 @@
 			<!-- 상품 등록/수정 폼 -->
 			<form
 				action="<c:out value='${not empty product ? "/productDetail/update" : "/productDetail/register"}'/>"
-				method="post" enctype="multipart/form-data" class="product-form">
+				method="post" enctype="multipart/form-data" class="product-form"
+				data-product-id="${product.productId}">
 
 				<section class="form-section">
 					<h3>상품 기본 정보</h3>
@@ -193,12 +230,18 @@
 				<section class="form-section">
 					<h3>상품 상세 정보</h3>
 
-					<!-- 옵션 등록 -->
+					<!-- 옵션 등록 영역 -->
 					<div class="form-group">
 						<label>옵션 등록</label>
-						<button type="submit" class="btn btn-primary btn-xl">추가</button>
-						<my:selectbox size="lg" items="추천순,인기순,최신순,낮은가격순,높은가격순"
-							initial="옵션" />
+						<button type="button" id="openOptionDialog"
+							class="btn btn-primary btn-xl">추가</button>
+
+						<!-- 커스텀 selectbox -->
+						<my:selectbox size="lg" items=" " initial="옵션"
+							id="optionSelectBox" />
+
+						<!-- hidden input (서버 전송용) -->
+						<input type="hidden" id="optionHidden" name="optionValues" />
 					</div>
 
 					<!-- 맞춤 필터링 -->
@@ -358,6 +401,8 @@
 		</div>
 	</my:layout>
 </body>
+<script src="./js/dialog.js"></script>
+<script src="./js/toast.js"></script>
 <script src="./js/selectbox.js"></script>
 <script>
   /*********************************************************************************************************
@@ -431,6 +476,7 @@
          });
      });
    });
+  
   /*********************************************************************************************************
    * 폼
    *********************************************************************************************************/
@@ -506,6 +552,107 @@
 	  // 초기 상태: 최소 1개는 보이도록
 	  ensureEmptySlot();
 	});
+
+ /*********************************************************************************************************
+  * 모달 오픈
+  *********************************************************************************************************/
+  function resetOptionDialog() {
+	  const dialog = document.getElementById("optionDialog");
+	  dialog.querySelectorAll("input").forEach(input => {
+	    input.value = "";
+	  });
+	}
+ 
+ //공통 이벤트 연결
+ document.addEventListener("dialogAction", (e) => {
+  const { id, action } = e.detail;
+  dialogHandlers[id]?.[action]?.();
+});
+ 
+ // 버튼 이벤트: 모달 열기
+ // 옵션 등록 버튼
+document.getElementById("openOptionDialog")?.addEventListener("click", () => {
+	resetOptionDialog(); 
+  	openDialog("optionDialog");
+});
+ 
+/*********************************************************************************************************
+ * 옵션 임시 저장 (메모리)
+ *********************************************************************************************************/
+let optionList = []; // 모달에서 입력된 옵션들을 보관
+
+// 커스텀 selectbox 업데이트 함수 재활용
+function updateSelectbox(selectElem, items, placeholder) {
+  const list = selectElem.querySelector(".select-list");
+  const label = selectElem.querySelector(".select-label");
+
+  // 초기화
+  list.innerHTML = "";
+  label.textContent = placeholder;
+
+  // 항목 추가
+  items.forEach(str => {
+    const li = document.createElement("li");
+    li.className = "select-item";
+    li.dataset.value = str;
+    li.textContent = str;
+    list.appendChild(li);
+
+    li.addEventListener("click", () => {
+      label.textContent = str;
+      list.querySelectorAll(".select-item").forEach(i => i.classList.remove("active"));
+      li.classList.add("active");
+
+      const event = new CustomEvent("selectChanged", {
+        detail: { value: str, text: str }
+      });
+      selectElem.dispatchEvent(event);
+    });
+  });
+}
+
+const dialogHandlers = {
+  optionDialog: {
+    추가: () => {
+      const dialog = document.getElementById("optionDialog");
+
+      // 값 읽기
+      const optionName = dialog.querySelector("input[name='optionName']").value.trim();
+      const optionPrice = dialog.querySelector("input[name='optionPrice']").value.trim();
+      const optionStock = dialog.querySelector("input[name='optionStock']").value.trim();
+
+      if (!optionName || !optionPrice || !optionStock) {
+        showToast("warning", "모든 항목을 입력해주세요.");
+        return;
+      }
+
+      // 옵션을 메모리에 추가
+      optionList.push({
+        name: optionName,
+        price: optionPrice,
+        stock: optionStock
+      });
+
+      // 표시용 문자열 (예: "100ml/20000/100")
+      const optionStrList = optionList.map(
+        o => `\${o.name}/\${o.price}/\${o.stock}`
+      );
+
+      // 커스텀 selectbox 다시 렌더링
+      const optionSelect = document.getElementById("optionSelectBox");
+      if (optionSelect) {
+        updateSelectbox(optionSelect, optionStrList, "옵션 선택");
+      }
+
+      // hidden input에도 옵션리스트 저장 (폼 전송용)
+      document.getElementById("optionHidden").value = optionStrList.join(",");
+
+      // 모달 닫기 + 알림
+      closeDialog("optionDialog");
+      showToast("success", "옵션이 추가되었습니다.");
+    }
+  }
+};
 </script>
 </html>
 

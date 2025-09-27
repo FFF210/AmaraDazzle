@@ -462,24 +462,95 @@
 		p.created_at,
 		p.updated_at,
 		GROUP_CONCAT(CASE WHEN cm.code_group = 'SKIN_ISSUE'
-		THEN CONCAT(cd.code, ':', cd.name) END) AS skin_issues,
-		GROUP_CONCAT(CASE WHEN cm.code_group = 'SKIN_TYPE'
-		THEN CONCAT(cd.code, ':', cd.name) END) AS skin_types,
-		GROUP_CONCAT(CASE WHEN cm.code_group = 'PERSONAL_COLOR'
-		THEN CONCAT(cd.code, ':', cd.name) END) AS personal_colors
+		THEN
+		CONCAT(cd.code, ':', cd.name) END) AS skin_issues,
+		GROUP_CONCAT(CASE
+		WHEN cm.code_group = 'SKIN_TYPE'
+		THEN CONCAT(cd.code, ':', cd.name)
+		END) AS skin_types,
+		GROUP_CONCAT(CASE WHEN cm.code_group =
+		'PERSONAL_COLOR'
+		THEN CONCAT(cd.code, ':', cd.name) END) AS
+		personal_colors
 		FROM product p
-		LEFT JOIN upload_file uf_thumb ON p.thumbnail_file_id =
+		LEFT JOIN upload_file uf_thumb ON
+		p.thumbnail_file_id =
 		uf_thumb.upload_file_id
-		LEFT JOIN upload_file uf1 ON p.image1_file_id = uf1.upload_file_id
-		LEFT JOIN upload_file uf2 ON p.image2_file_id = uf2.upload_file_id
-		LEFT JOIN upload_file uf3 ON p.image3_file_id = uf3.upload_file_id
-		LEFT JOIN upload_file uf4 ON p.image4_file_id = uf4.upload_file_id
-		LEFT JOIN upload_file uf5 ON p.image5_file_id = uf5.upload_file_id
-		LEFT JOIN product_filter_map pf ON p.product_id = pf.product_id
-		LEFT JOIN code_detail cd ON pf.filter_id = cd.code_detail_id
-		LEFT JOIN code_master cm ON cd.code_master_id = cm.code_master_id
+		LEFT JOIN upload_file uf1
+		ON p.image1_file_id = uf1.upload_file_id
+		LEFT JOIN upload_file uf2 ON
+		p.image2_file_id = uf2.upload_file_id
+		LEFT JOIN upload_file uf3 ON
+		p.image3_file_id = uf3.upload_file_id
+		LEFT JOIN upload_file uf4 ON
+		p.image4_file_id = uf4.upload_file_id
+		LEFT JOIN upload_file uf5 ON
+		p.image5_file_id = uf5.upload_file_id
+		LEFT JOIN product_filter_map pf
+		ON p.product_id = pf.product_id
+		LEFT JOIN code_detail cd ON
+		pf.filter_id = cd.code_detail_id
+		LEFT JOIN code_master cm ON
+		cd.code_master_id = cm.code_master_id
 		WHERE p.product_id = #{productId}
 		GROUP BY p.product_id
 	</select>
+
+	<!--======================= [브랜드 어드민] 상품 등록 ======================= -->
+	<insert id="insertProduct" parameterType="productDetail">
+		INSERT INTO product (
+		brand_id, name, is_exclusive, is_visible, is_planned,
+		category1_id,
+		category2_id, category3_id,
+		ingredients, price, order_limit,
+		has_option, stock_qty,
+		shipping_method, discount_type, discount_value,
+		start_date, end_date, event_id,
+		created_at, updated_at
+		) VALUES (
+		#{brandId}, #{name}, #{isExclusive}, #{isVisible}, #{isPlanned},
+		#{category1Id}, #{category2Id}, #{category3Id},
+		#{ingredients},
+		#{price}, #{orderLimit}, #{hasOption}, #{stockQty},
+		#{shippingMethod},
+		#{discountType}, #{salePrice},
+		#{startDate}, #{endDate}, #{eventId},
+		NOW(), NOW()
+		)
+	</insert>
+
+	<!--======================= [브랜드 어드민] 상품 수정 ======================= -->
+	<update id="updateProduct" parameterType="productDetail">
+		UPDATE product
+		SET name
+		= #{name},
+		is_exclusive =
+		#{isExclusive},
+		is_visible = #{isVisible},
+		is_planned = #{isPlanned},
+		category1_id = #{category1Id},
+		category2_id =
+		#{category2Id},
+		category3_id = #{category3Id},
+		ingredients =
+		#{ingredients},
+		price =
+		#{price},
+		order_limit = #{orderLimit},
+		has_option
+		= #{hasOption},
+		stock_qty = #{stockQty},
+		shipping_method =
+		#{shippingMethod},
+		discount_type = #{discountType},
+		discount_value =
+		#{salePrice},
+		start_date = #{startDate},
+		end_date = #{endDate},
+		event_id
+		= #{eventId},
+		updated_at = NOW()
+		WHERE product_id = #{productId}
+	</update>
 
 </mapper>
