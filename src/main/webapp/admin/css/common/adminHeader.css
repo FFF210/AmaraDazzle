@@ -4,7 +4,7 @@
 /*	 헤더                                */
 /* ==================================== */
 .header {
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid var(--outerbox);
     margin: 0;
     padding: 5px 10px;
     display: flex;
@@ -12,7 +12,7 @@
     align-items: center;
     position: sticky;
     top: 0;
-    background-color: #FFFFFF;
+    background-color: var(--base);
 }
 
 .header .icon-btn {
@@ -34,21 +34,21 @@
 }
 
 .header .icon-btn:hover i {
-	color: var(--primary);
+	color: var(--mainColor);
 }
 
 .header_button > button {
     padding: 5px;
-    border: 1px solid var(--primary);
+    border: 1px solid var(--mainColor);
     border-radius: 5px;
-    background : #FFFFFF;
-    color: var(--primary);
+    background : var(--base);
+    color: var(--mainColor);
     margin-left: 10px;
     cursor: pointer;
 }
 
 .header_button > button:hover {
-    background : var(--primary);
+    background : var(--mainColor);
     color: var(--base);
 }
 

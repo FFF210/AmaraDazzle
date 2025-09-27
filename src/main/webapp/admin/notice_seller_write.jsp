@@ -6,11 +6,11 @@
 <html>
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
-
 <title>공지 작성</title>
+
+<link rel="stylesheet" href="../tagcss/uploader.css" />
 <link rel="stylesheet" href="./css/myApplications.css" />
 <link rel="stylesheet" href="./css/boards_write.css" />
-<link rel="stylesheet" href="../tagcss/uploader.css" />
 
 <!-- toast editor CDN -->
 <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
@@ -25,9 +25,6 @@
 		<%@ include file="./main_content/notice_seller_write_content.jsp"%>
 	</my:adminLayout>
 	<!-- 레이아웃 + 메인컨텐츠 end -->
-
-
-
 
 </body>
 </html>

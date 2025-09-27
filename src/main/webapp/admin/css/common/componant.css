@@ -37,16 +37,18 @@ input[type="radio"] {
 }
 
 input[type="text"] {
-    padding: 5px;
+    padding: 5px 10px;
     border: 1px solid var(--innerbox);
     border-radius: 5px;
 }
 
-input[type="text"]:read-only {
+.text_readonly {
     cursor: default;
     color: gray;
 }
-
+input[type="text"]:read-only {
+	cursor: default;
+}
 
 input[type="text"]:focus,
 select:focus { 

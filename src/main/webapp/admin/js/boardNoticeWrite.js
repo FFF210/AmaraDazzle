@@ -1,3 +1,4 @@
+//toast editor 설정 
 const editor = new toastui.Editor({
 	el: document.querySelector('#editContent'),
 	height: '500px',
@@ -8,7 +9,6 @@ const editor = new toastui.Editor({
 //console.log(editor.getHTML());
 //console.log(editor.getMarkdown());
 
-//const frm = document.getElementById("noticeForm");
 const target = document.getElementById("noticeTargetType");
 const category = document.getElementById("noticeCate");
 const title = document.getElementById("noticeTitle");
@@ -65,7 +65,7 @@ writeBtn.addEventListener("click", () => {
 	}
 });
 
-//공지(seller) 글쓰끼 ajax
+//공지(seller) 글쓰기 ajax
 function insertSellerNotice(){
 	const fileAttach = document.getElementById("fileInput");
 
@@ -88,17 +88,17 @@ function insertSellerNotice(){
 		body : formData
 		
 	}).then(function(data) {
-		return data.text();
+		return data.json();
 
 	}).then(function(result) {
-		if(result=="ok"){
+		if(result.status == "ok"){
 			alert("공지 등록이 완료되었습니다.");
 			
 			//상세보기로 이동
-			location.href="noticeSellerDetail";
+			location.href="noticeSellerDetail?num="+result.id;
 			
 		}else if(result=="fail"){
-			alert("시스템문제로 거래처등록에 실패했습니다.\n관리자에게 문의해주세요.");
+			alert("시스템문제로 공지 등록에 실패했습니다.\n관리자에게 문의해주세요.");
 		}
 
 	}).catch(function(error) {

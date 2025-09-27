@@ -14,8 +14,9 @@ public class NoticeServiceImpl implements NoticeService {
 		n_dao = new NoticeDAOImpl();
 	}
 	
+	//seller공지 작성 
 	@Override
-	public int noticeSellerWrite(Notice notice_DTO) throws Exception  {
+	public Long noticeSellerWrite(Notice notice_DTO) throws Exception  {
 		 //파일 pk 리스트가 null 이면 빈 리스트로 처리(NPE 방지)
 	    List<Long> imageFiles = notice_DTO.getImageFileIds();
 	    if (imageFiles == null) {
@@ -28,10 +29,20 @@ public class NoticeServiceImpl implements NoticeService {
 	    notice_DTO.setImage3FileId(imageFiles.size() > 2 ? imageFiles.get(2) : null);
 
 	    //DAO 호출
-	    int result = n_dao.insertNoticeSeller(notice_DTO);
+	    Long noticePk = n_dao.insertNoticeSeller(notice_DTO);
 	    
-	    return result;
-		
+	    return noticePk;
 	}
+
+	//seller 공지 상세보기 
+	@Override
+	public Notice noticeSellerDetail(int num) throws Exception {
+//		n_dao.viewCount(num);
+		Notice notice_DTO = n_dao.noticeSellerDetail(num);
+		
+		return notice_DTO;
+	}
+	
+	
 
 }

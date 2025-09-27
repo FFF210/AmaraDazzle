@@ -17,8 +17,14 @@ public class Notice {
     private Timestamp createdAt;  // 생성 시각 (DEFAULT CURRENT_TIMESTAMP)
     private Timestamp updatedAt;  // 수정 시각 (ON UPDATE CURRENT_TIMESTAMP)
 
-    List<Long> imageFileIds;	//업로드된 이미지파일 id 모음 리스트 
+    List<Long> imageFileIds;	//업로드된 이미지파일 id(pk) 모음 리스트 
     
+    //join용 컬럼 
+    private String name; //CodeDetail - 한글 코드 이름 (view 용)
+    
+    private String fileName,image1FileName,image2FileName,image3FileName;     //UploadFile - 원본 파일명
+    private String fileRename, image2FileRename, image3FileRename;   //UploadFile - 리네임 파일명 (UNIQUE)
+    private String storagePath, image1StoragePath, image2StoragePath, image3StoragePath;	 //UploadFile - 서버/스토리지 경로
    
 	public Notice() {}
     public Notice(Long typeId, String title, String content, 
@@ -124,8 +130,83 @@ public class Notice {
 	public void setImageFileIds(List<Long> imageFileIds) {
 		this.imageFileIds = imageFileIds;
 	}
-
-    @Override
+	
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+    public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	public String getFileRename() {
+		return fileRename;
+	}
+	public void setFileRename(String fileRename) {
+		this.fileRename = fileRename;
+	}
+	public String getStoragePath() {
+		return storagePath;
+	}
+	public void setStoragePath(String storagePath) {
+		this.storagePath = storagePath;
+	}
+	
+	public String getImage1FileName() {
+		return image1FileName;
+	}
+	public void setImage1FileName(String image1FileName) {
+		this.image1FileName = image1FileName;
+	}
+	public String getImage2FileName() {
+		return image2FileName;
+	}
+	public void setImage2FileName(String image2FileName) {
+		this.image2FileName = image2FileName;
+	}
+	public String getImage3FileName() {
+		return image3FileName;
+	}
+	public void setImage3FileName(String image3FileName) {
+		this.image3FileName = image3FileName;
+	}
+	public String getImage2FileRename() {
+		return image2FileRename;
+	}
+	public void setImage2FileRename(String image2FileRename) {
+		this.image2FileRename = image2FileRename;
+	}
+	public String getImage3FileRename() {
+		return image3FileRename;
+	}
+	public void setImage3FileRename(String image3FileRename) {
+		this.image3FileRename = image3FileRename;
+	}
+	public String getImage1StoragePath() {
+		return image1StoragePath;
+	}
+	public void setImage1StoragePath(String image1StoragePath) {
+		this.image1StoragePath = image1StoragePath;
+	}
+	public String getImage2StoragePath() {
+		return image2StoragePath;
+	}
+	public void setImage2StoragePath(String image2StoragePath) {
+		this.image2StoragePath = image2StoragePath;
+	}
+	public String getImage3StoragePath() {
+		return image3StoragePath;
+	}
+	public void setImage3StoragePath(String image3StoragePath) {
+		this.image3StoragePath = image3StoragePath;
+	}
+	@Override
     public String toString() {
         return "Notice [noticeId=" + noticeId + ", typeId=" + typeId +
                 ", title=" + title + ", content=" + content +

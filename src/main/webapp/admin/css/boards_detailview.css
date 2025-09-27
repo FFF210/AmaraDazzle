@@ -36,7 +36,9 @@ section.board_detailview div.part_section .part_content .content_part {
     border: 1px solid var(--outerbox);
     border-radius: 5px;
     width: 100%;
-    height: 500px;
+    height: auto;
+    min-height : 500px;
+    padding : 10px;
 }
 
 section.board_detailview div.part_section.bottom_part .part_content {

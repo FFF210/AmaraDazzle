@@ -5,7 +5,28 @@
 <mapper namespace="mapper.notice">
 
 	<!-- 공지(seller) 저장 -->
-	<insert id="insertSellerNotice" parameterType="notice" >
-		insert into notice	values (0, #{typeId}, #{title}, #{content},#{image1FileId},#{image2FileId}, #{image3FileId}, #{writer}, #{targetTypeId}, 1, now(), null)
+	<insert id="insertSellerNotice" parameterType="notice" useGeneratedKeys="true" keyProperty="noticeId">
+		insert into notice (notice_id, type_id, title, content, image1_file_id, image2_file_id, image3_file_id, writer, target_type_id, is_exposed, created_at, updated_at) 
+		values (0, #{typeId}, #{title}, #{content},#{image1FileId},#{image2FileId}, #{image3FileId}, #{writer}, #{targetTypeId}, 1, now(), null)
 	</insert>
+	
+	<!-- 공지(seller) 상세보기  -->
+	<select id="selectSellerNoticeOne" parameterType="int" resultType="notice">
+		select n.*, c.name,
+		 		f1.file_name AS image1FileName,
+		       	f1.file_rename AS image1FileRename,
+		       	f1.storage_path AS image1StoragePath,
+		       	f2.file_name AS image2FileName,
+		       	f2.file_rename AS image2FileRename,
+		       	f2.storage_path AS image2StoragePath,
+		       	f3.file_name AS image3FileName,
+		       	f3.file_rename AS image3FileRename,
+		       	f3.storage_path AS image3StoragePath
+		from notice n
+		join code_detail c on (n.type_id = c.code_detail_id)
+		LEFT JOIN upload_file f1 ON (n.image1_file_id = f1.upload_file_id)
+		LEFT JOIN upload_file f2 ON (n.image2_file_id = f2.upload_file_id)
+		LEFT JOIN upload_file f3 ON (n.image3_file_id = f3.upload_file_id)
+		where n.notice_id = #{num}
+	</select>
 </mapper>

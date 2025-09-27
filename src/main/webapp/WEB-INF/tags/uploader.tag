@@ -27,8 +27,7 @@
 			<div class="uploader-muted">${empty desc ? "또는 파일을 이 영역으로 드래그하세요" : desc}</div>
 		</div>
 	</div>
-	<input id="fileInput" type="file" name="${name}" class="sr-only" style="display: none"
-		multiple />
+	<input id="fileInput" type="file" name="${name}" class="sr-only" style="display: none" multiple />
 
 	<div id="imgPreviewWrapper" class="preview-wrapper hidden">
 		<div id="imgPreviewArea" class="preview-area" aria-live="polite"></div>

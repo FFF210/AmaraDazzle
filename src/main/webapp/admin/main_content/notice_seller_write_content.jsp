@@ -1,14 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+
 <style>
 	.uploader {padding: 5px;}
 	.uploader-md { width: 95%; }
 </style>
-
-
 
 <!-- *********************************메인부분********************************* -->
 <form id="noticeForm"  method="post" enctype="multipart/form-data">
@@ -35,7 +32,7 @@
 			제목 <span class="reqired_write">*</span>
 		</div>
 		<div class="part_content">
-			<input type="text" id="noticeTitle" name="noticeTitle" placeholder="제목을 입력하세요" maxlength="150"/>
+			<input type="text" id="noticeTitle" name="noticeTitle" placeholder="제목을 입력하세요 (최대 150자까지 입력가능)" maxlength="150"/>
 		</div>
 	</div>
 
@@ -50,8 +47,8 @@
 		<div class="part_title">
 			내용 <span class="reqired_write">*</span>
 		</div>
-		
 		<div class="part_content">
+			<!-- toast editor 삽입 -->
 			<div id="editContent" ></div>
 		</div>
 	</div>
@@ -73,7 +70,6 @@
 </section>
 </form>
 <!-- *********************************메인부분 end********************************* -->
-
 
 <!-- JS부분 -->
 <script src="./js/boardNoticeWrite.js"></script>

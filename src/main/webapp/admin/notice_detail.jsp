@@ -8,8 +8,11 @@
 <%@ include file="./common/config.jsp"%>
 
 <title>공지 내용보기</title>
-<link rel="stylesheet" href="./css/myApplications.css" />
-<link rel="stylesheet" href="./css/boards_detailview.css" />
+
+<link rel="stylesheet" href="../tagcss/tag.css?v=2" />
+<link rel="stylesheet" href="./css/myApplications.css?v=2" />
+<link rel="stylesheet" href="./css/boards_detailview.css?v=2" />
+
 <!-- 헤드부분 -->
 
 <body>
@@ -25,9 +28,6 @@
 	<%@ include file="./modals/login_popup.jsp"%>
 	<!-- 정보수정 & 로그아웃 팝업 end -->
 
-
-	<!-- JS부분 -->
-	<!-- JS부분 end -->
 
 </body>
 </html>

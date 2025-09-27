@@ -1,6 +1,9 @@
 package controller.admin;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,33 +17,40 @@ import service.admin.NoticeServiceImpl;
 @WebServlet("/admin/noticeSellerDetail")
 public class NoticeSellerDetail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/admin/notice_detail.jsp").forward(request, response);
-	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	//공지(seller) 상세보기 
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
-		
-		String num = request.getParameter("num");  //?뒤의 파라미터명과 동일해야함
-		NoticeService n_service = new NoticeServiceImpl();
-		
-		try {
-			
-			Notice notice_DTO = null;
-//			notice_DTO = n_service.noticeSellerDetail(Integer.parseInt(num));
-//			n_service.viewCount(Integer.parseInt(num));
 
-			request.setAttribute("noticeSellerDetail", notice_DTO);
-			request.getRequestDispatcher("notice_detail.jsp").forward(request, response);
+		String num = request.getParameter("num"); // ?뒤의 파라미터명과 동일해야함
+		NoticeService notice_svc = new NoticeServiceImpl();
+
+		try {
+
+			Notice notice_DTO = null;
+			notice_DTO = notice_svc.noticeSellerDetail(Integer.parseInt(num));
 			
+			List<Long> ids = new ArrayList<>();
+			if (notice_DTO.getImage1FileId() != null) ids.add(notice_DTO.getImage1FileId());
+			if (notice_DTO.getImage2FileId() != null) ids.add(notice_DTO.getImage2FileId());
+			if (notice_DTO.getImage3FileId() != null) ids.add(notice_DTO.getImage3FileId());
+
+			notice_DTO.setImageFileIds(ids);
+			
+//			service.viewCount(Integer.parseInt(num));
+
+			request.setAttribute("notice", notice_DTO);
+			request.getRequestDispatcher("notice_detail.jsp").forward(request, response);
+
 		} catch (Exception e) {
+			
 			e.printStackTrace();
+			
 			request.setAttribute("err", "오류가 발생했습니다.");
 			request.getRequestDispatcher("error.jsp").forward(request, response);
 		}
-		
+
 	}
 
 }

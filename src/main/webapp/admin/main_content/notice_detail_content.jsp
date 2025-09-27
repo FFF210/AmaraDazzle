@@ -4,36 +4,68 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 
+<c:set var="contextPath" value="${pageContext.request.contextPath }"/> 
+
 <!-- *********************************메인부분********************************* -->
 <section class="board_detailview">
 	<div class="part_section">
-		<div class="part_title">글번호</div>
-		<div class="part_content">45</div>
+		<div class="part_title">작성일자 </div>
+		<div class="part_content">
+			<c:set var="createDate" value="${notice.createdAt}"/>
+			${fn:substring(createDate,0,19)}
+		</div>
 	</div>
 
 	<div class="part_section cate_part">
 		<div class="part_title">카테고리</div>
-		<div class="part_content">[zkxprhfl]</div>
+		<div class="part_content">
+			<c:choose>
+				<c:when test="${notice.typeId == '25' || notice.typeId == '29'}">  <!-- 카테고리 : 이벤트 -->
+					<my:tag color="pink" size="md" text="${notice.name}" />
+				</c:when>
+				<c:when test="${notice.typeId == '26' || notice.typeId == '28'}">	 <!-- 카테고리 : 점검 / 시스템 -->
+					<my:tag color="green" size="md" text="${notice.name}" />
+				</c:when>
+				<c:when test="${notice.typeId == '27' || notice.typeId == '30'}">	<!-- 카테고리 : 기타 -->
+					<my:tag color="blue" size="md" text="${notice.name}" />	
+				</c:when>
+			</c:choose>
+			
+		</div>
 	</div>
 
 	<div class="part_section title_part">
 		<div class="part_title">제목</div>
 		<div class="part_content">
-			<input type="text" class="text_readonly" value="${noticeSeller.title }" readonly />
+			<input type="text" value="${notice.title }" readonly />
 		</div>
 	</div>
 
 	<div class="part_section">
 		<div class="part_title">첨부파일</div>
-		<div class="part_content">${noticeSeller.image1FileId }</div>
+		<div class="part_content">
+			<div>
+				<c:forEach var="fileAttach" items="${notice.imageFileIds}" begin="1" end="3">
+				
+	
+				</c:forEach>	
+			</div>
+	
+
+			
+		</div>
 	</div>
 
 	<div class="part_section">
 		<div class="part_title">내용</div>
 		<div class="part_content">
 			<div class="content_part">
-				${noticeSeller.content }
-
+				<div class="img_div">
+					<img src="${contextPath}/upload_file/${notice.image1FileName}">
+				</div>
+				<div>
+					${notice.content }
+				</div>
 			</div>
 		</div>
 	</div>
@@ -42,7 +74,7 @@
 		<div class="part_title">작성자</div>
 		<div class="part_content">
 			<div class="writer_part">
-				<input type="text" class="text_readonly" value="${noticeSeller.writer}" readonly />
+				<input type="text" class="text_readonly" value="${notice.writer}" readonly />
 			</div>
 			<div class="btn_part">
 				<button type="button" class="btn first_btn action_btn">수정</button>

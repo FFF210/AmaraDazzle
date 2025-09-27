@@ -29,16 +29,14 @@ public class NoticeSellerWrite extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	// GET
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getRequestDispatcher("/admin/notice_seller_write.jsp").forward(request, response);
 	}
 
 	// POST
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
-		response.setContentType("text/html;charset=utf-8");
+		response.setContentType("application/json;charset=UTF-8");
 
 		try {
 
@@ -71,16 +69,17 @@ public class NoticeSellerWrite extends HttpServlet {
 
 			Notice notice = new Notice(category, title, content, writer, targetType, fileIds);
 
-			NoticeService noticeSvc = new NoticeServiceImpl();
-			int insertCount = noticeSvc.noticeSellerWrite(notice);
+			NoticeService notice_svc = new NoticeServiceImpl();
+			Long noticePk = notice_svc.noticeSellerWrite(notice); //DB에 데이터 저장과 함께 생성된 pk값 받아옴 
+			
+			String json = null;
+			if (noticePk != null && noticePk > 0) {
+				json = "{\"status\":\"ok\", \"id\":" + noticePk + "}";
+				response.getWriter().print(json);
 
-			if (insertCount > 0) {
-				response.getWriter().write("ok");
-
-				// request.setAttribute("noticeSeller", notice);
-				// request.getRequestDispatcher("notice_detail.jsp").forward(request, response);
 			} else {
-				response.getWriter().write("fail");
+				json = "{\"status\":\"fail\"}";
+				response.getWriter().write(json);
 			}
 
 		} catch (Exception e) {
