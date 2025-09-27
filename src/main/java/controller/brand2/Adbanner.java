@@ -18,7 +18,7 @@ import service.brand2.AdbannerServiceImpl;
 /**
  * Servlet implementation class Adbanner
  */
-@WebServlet("/adbanner")
+@WebServlet("/brand2/adbanner")
 public class Adbanner extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private AdbannerService service = new AdbannerServiceImpl();
