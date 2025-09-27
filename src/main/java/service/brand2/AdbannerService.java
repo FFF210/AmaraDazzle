@@ -1,8 +1,8 @@
 package service.brand2;
 
-import dto.Banner;
+import dto.brand2.BannerForm;
 
 public interface AdbannerService {
-	void applyBanner(Banner banner) throws Exception;
+	void registerBanner(BannerForm bannerForm) throws Exception;
 	
 }
