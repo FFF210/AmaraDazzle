@@ -26,9 +26,13 @@
 <link rel="stylesheet" href="../tagcss/textInput.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/pagination.css" />
+<link rel="stylesheet" href="../tagcss/alert.css" />
 <link rel="stylesheet" href="../tagcss/tableFilter.css" />
 </head>
 <body>
+	<!-- Toast 알림 컨테이너 -->
+	<div id="toast-container"></div>
+
 	<!-- 세일 모달 -->
 	<div id="saleDialog" class="modal">
 		<div class="modal-overlay"></div>
@@ -42,16 +46,17 @@
 				<div class="form-row">
 					<label class="form-row-label">할인 방식</label>
 					<div class="radio-wrapper">
-						<label> <input type="radio" name="discountType" value="RATE"
-							class="form-radio" />정률
-						</label> <label> <input type="radio" name="discountType" value="AMOUNT"
-							class="form-radio" />정액
+						<label> <input type="radio" name="discountType"
+							value="RATE" class="form-radio" />정률
+						</label> <label> <input type="radio" name="discountType"
+							value="AMOUNT" class="form-radio" />정액
 						</label>
 					</div>
 				</div>
 				<div class="form-row">
 					<label class="form-row-label">할인율 또는 금액</label>
-					<my:textInput type="default" name="discountValue" placeholder="20 또는 2,000" size="sm" />
+					<my:textInput type="default" name="discountValue"
+						placeholder="20 또는 2,000" size="sm" />
 				</div>
 				<div class="form-row">
 					<label class="form-row-label">기간 (시작-종료)</label>
@@ -101,10 +106,10 @@
 	<div id="stopSaleDialog" class="modal">
 		<div class="modal-overlay"></div>
 		<div class="modal-content">
-			<h3 class="modal-title">상품을 삭제할 수 없습니다.</h3>
+			<h3 class="modal-title">판매 중지</h3>
 			<p class="modal-subTitle">
-				해당 상품은 주문, 찜, 리뷰와<br>연결된 데이터가 있어 삭제할 수 없습니다. <br>대신 <span>판매중지
-					상태로 변경됩니다.</span>
+				해당 상품은 주문, 찜, 리뷰와<br>연결된 데이터가 있어 삭제할 수 없습니다. <br> <span>대신
+					판매중지 상태로 변경됩니다.</span>
 			</p>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline btn-md"
@@ -115,19 +120,19 @@
 		</div>
 	</div>
 
-	<!-- 삭제 모달 -->
-	<div id="deleteDialog" class="modal">
+	<!-- 상품 공개 모달 -->
+	<div id="releaseSaleDialog" class="modal">
 		<div class="modal-overlay"></div>
 		<div class="modal-content">
-			<h3 class="modal-title">상품을 삭제하시겠습니까?</h3>
+			<h3 class="modal-title">판매 재개</h3>
 			<p class="modal-subTitle">
-				삭제된 상품은 복구할 수 없습니다.<br>정말 삭제하시겠습니까?
+				현재 상품을 다시 판매 상태로 변경합니다.<br>변경 후에는 고객이 상품을 주문할 수 있습니다.
 			</p>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-outline btn-md"
 					data-action="취소">취소</button>
 				<button type="button" class="btn btn-primary btn-md"
-					data-action="삭제">삭제</button>
+					data-action="확인">확인</button>
 			</div>
 		</div>
 	</div>
@@ -151,6 +156,7 @@
 				<my:tableFilter
 					filters="판매상태:ALL=전체|SALE=판매중|SOLD_OUT=품절|STOP_SALE=판매중지"
 					hasDate="false" searchItems="상품명,카테고리" />
+
 			</div>
 
 			<!-- 총 건수 -->
@@ -164,7 +170,8 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th><input type="checkbox" class="form-check" /></th>
+								<th><input type="checkbox" id="selectAll"
+									class="form-check" /></th>
 								<th class="sortable">번호 <i class="bi bi-dash-lg sort-icon"></i></th>
 								<th>상품코드</th>
 								<th>상품명</th>
@@ -184,7 +191,9 @@
 						<tbody>
 							<c:forEach var="product" items="${productList}" varStatus="loop">
 								<tr>
-									<td><input type="checkbox" class="form-check" /></td>
+									<td><input type="checkbox"
+										class="form-check product-checkbox"
+										value="${product.productId}" /></td>
 									<td>${loop.index + 1}</td>
 									<td>${product.productId}</td>
 									<td>
@@ -195,8 +204,18 @@
 									<td>${product.categoryPath}</td>
 									<td><fmt:formatNumber value="${product.price}"
 											type="number" maxFractionDigits="0" groupingUsed="true" /></td>
-									<td><fmt:formatNumber value="${product.salePrice}"
-											type="number" maxFractionDigits="0" groupingUsed="true" /></td>
+									<td><c:choose>
+											<c:when test="${product.salePrice lt product.price}">
+												<span class="sale-price"> <fmt:formatNumber
+														value="${product.salePrice}" type="number"
+														maxFractionDigits="0" groupingUsed="true" />
+												</span>
+											</c:when>
+											<c:otherwise>
+												<fmt:formatNumber value="${product.salePrice}" type="number"
+													maxFractionDigits="0" groupingUsed="true" />
+											</c:otherwise>
+										</c:choose></td>
 									<td><my:tag
 											color="${product.status == 'SALE' ? 'green' : (product.status == 'SOLD_OUT' ? 'red' : 'gray')}"
 											size="sm" text="${product.status.getDescription()}" /></td>
@@ -209,13 +228,21 @@
 												class="btn btn-outline btn-sm btn-stock"
 												data-product-id="${product.productId}"
 												data-stock="${product.stockQty}">재고 수정</button>
-											<button type="button" class="btn btn-outline btn-sm" id=" ">수정</button>
-											<button type="button"
-												class="btn btn-danger btn-sm btn-delete"
-												data-product-id="${product.productId}"
-												data-sales-qty="${product.salesQty}"
-												data-has-wishlist="${product.hasWishlist}"
-												data-review-count="${product.reviewCount}">삭제</button>
+											<button type="button" class="btn btn-outline btn-sm btn-edit"
+												data-product-id="${product.productId}">수정</button>
+											<c:choose>
+												<c:when test="${product.isVisible eq 0}">
+													<button type="button"
+														class="btn btn-outline btn-sm btn-release"
+														data-product-id="${product.productId}">판매</button>
+												</c:when>
+												<c:otherwise>
+													<button type="button"
+														class="btn btn-danger btn-sm btn-delete"
+														data-product-id="${product.productId}">중지</button>
+												</c:otherwise>
+											</c:choose>
+
 										</div>
 									</td>
 								</tr>
@@ -225,16 +252,21 @@
 				</div>
 			</div>
 
+			<c:set var="queryString"> status=${param.status}&searchType=${param.searchType}&searchKeyword=${param.searchKeyword}&page=</c:set>
+
 			<!-- 페이징 -->
 			<div class="page-pagination">
 				<my:pagination currentPage="${currentPage}"
-					totalPages="${totalPages}" baseUrl="/brand/products?page=" />
+					totalPages="${totalPages}"
+					baseUrl="/brand/productList?${queryString}" />
 			</div>
 		</div>
 	</my:layout>
 
 	<script src="./js/dialog.js"></script>
+	<script src="./js/toast.js"></script>
 	<script>
+	
   /*********************************************************************************************************
    * tableFilter 이벤트
    *********************************************************************************************************/
@@ -260,108 +292,190 @@
     window.location.href = "/brand/productList?" + params.toString();
   }
 });
-
-  /*********************************************************************************************************
-   * 모달 오픈 이벤트
-   *********************************************************************************************************/
-  // 세일 등록 모달 열기
-  document.getElementById("openSaleDialog").addEventListener("click", () => {
-    openDialog("saleDialog");
-  });
-  
-  // 재고 변경 모달 열기
-  document.querySelectorAll(".btn-stock").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const productId = btn.dataset.productId;
-      const stock = btn.dataset.stock;
-
-      // 모달 안에 현재 재고 채워 넣기
-      const stockDialog = document.getElementById("stockDialog");
-      stockDialog.querySelector("input[name='currentStock']").value = stock;
-      stockDialog.querySelector("input[name='newStock']").value = "";
-      stockDialog.dataset.productId = productId;
-
-      openDialog("stockDialog");
-    });
-  });
-
-  // 삭제 모달 열기
-  document.querySelectorAll(".btn-delete").forEach(btn => {
-    btn.addEventListener("click", () => {
-    	const salesQty = Number(btn.dataset.salesQty);     
-        const hasWishlist = btn.dataset.hasWishlist === "true"; 
-        const reviewCount = Number(btn.dataset.reviewCount); 
-        
-        if (salesQty > 0 || hasWishlist || reviewCount > 0) {
-        	openDialog("stopSaleDialog");   // 판매중지 모달
-      	} else {
-        	openDialog("deleteDialog");     // 삭제 모달
-      	}
-    });
-  });
   
   /*********************************************************************************************************
-   * 모달 버튼 액션 이벤트 
+   * 모달 Ajax
    *********************************************************************************************************/
+   const sendAjax = (data) => {
+	    return fetch("/brand/productList", {
+	      method: "POST",
+	      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+	      body: new URLSearchParams(data)
+	    }).then(res => res.json());
+	  };
+	  
   const dialogHandlers = {
     saleDialog: {
-      저장: () => {
-    	const saleDialog = document.getElementById("saleDialog");
-    	const discountType = saleDialog.querySelector("input[name='discountType']:checked")?.value;
-    	const discountValue = saleDialog.querySelector("input[name='discountValue']").value;
-        const startDate = saleDialog.querySelector("input[name='startDate']").value;
-        const endDate = saleDialog.querySelector("input[name='endDate']").value;
+      저장: async() => {
+    	const dialog = document.getElementById("saleDialog");
+    	const discountType = dialog.querySelector("input[name='discountType']:checked")?.value;
+    	const discountValue = dialog.querySelector("input[name='discountValue']").value;
+        const startDate = dialog.querySelector("input[name='startDate']").value;
+        const endDate = dialog.querySelector("input[name='endDate']").value;
         
+     // 체크된 상품 ID 모으기
+        const selectedProducts = Array.from(
+          document.querySelectorAll(".product-checkbox:checked")
+        ).map(cb => cb.value);
+
         if (!discountType || !discountValue || !startDate || !endDate) {
-            alert("모든 항목을 입력해주세요.");
-            return;
-          }
+          showToast("warning", "모든 항목을 입력해주세요.");
+          return;
+        } else if (selectedProducts.length === 0) {
+          showToast("warning", "세일을 적용할 상품을 선택해주세요.");
+          return;
+        }
         
-        console.log("세일 등록 요청:", { discountType, discountValue, startDate, endDate });
-        // TODO: Ajax 호출
-      }
+        const result = await sendAjax({
+            action: "sale",
+            discountType, discountValue, startDate, endDate,
+            productIds: selectedProducts
+          });
+        
+        if (result.result === "success") {
+            localStorage.setItem("toast", JSON.stringify({
+              type: "success",
+              message: "세일이 등록되었습니다."
+            }));
+            location.reload();
+          } else {
+            showToast("error", result.message || "세일 등록 실패");
+          }
+        }
     },
     stockDialog: {
-      변경: () => {
-        const stockDialog = document.getElementById("stockDialog");
-        const productId = stockDialog.dataset.productId;
-        const newStock = stockDialog.querySelector("input[name='newStock']").value;
+      변경: async() => {
+        const dialog = document.getElementById("stockDialog");
+        const productId = dialog.dataset.productId;
+        const newStock = dialog.querySelector("input[name='newStock']").value;
 
         if (!newStock || Number(newStock) < 0) {
-          alert("재고 수량을 올바르게 입력해주세요.");
+        	showToast("error", "재고 수량을 올바르게 입력해주세요.");
           return;
         }
 
-        console.log("재고 변경 요청:", { productId, newStock });
-        // TODO: Ajax 호출
-      }
-    },
-    deleteDialog: {
-      삭제: () => {
-        console.log("상품 삭제 요청 실행");
-        // TODO: Ajax 호출
-      }
+        const result = await sendAjax({ action: "stock", productId, newStock });
+        
+        if (result.result === "success") {
+            localStorage.setItem("toast", JSON.stringify({
+              type: "success",
+              message: "재고가 변경되었습니다."
+            }));
+            location.reload();
+          } else {
+            showToast("error", result.message || "재고 변경 실패", "실패");
+          }
+       }
     },
     stopSaleDialog: {
-      확인: () => {
-        console.log("판매중지 처리 실행");
-        // TODO: Ajax 호출
-      }
-    }
-  };
+      확인: async() => {
+    	  const dialog = document.getElementById("stopSaleDialog");
+          const productId = dialog.dataset.productId;
 
-  // 공통 이벤트 리스너
+    	  const result = await sendAjax({ action: "delete", productId });
+    	  if (result.result === "success") {
+    	        localStorage.setItem("toast", JSON.stringify({
+    	          type: "info",
+    	          message: "상품이 판매중지 상태로 변경되었습니다."
+    	        }));
+    	        location.reload();
+    	     } else {
+    	        showToast("error", result.message || "판매중지 실패");
+    	   }
+      }
+  },
+  		releaseSaleDialog: {
+		    확인: async () => {
+		      const dialog = document.getElementById("releaseSaleDialog");
+		      const productId = dialog.dataset.productId;
+	
+		      const result = await sendAjax({ action: "release", productId });
+	
+		      if (result.result === "success") {
+		        localStorage.setItem("toast", JSON.stringify({
+		          type: "success",
+		          message: "상품이 판매 상태로 변경되었습니다."
+		        }));
+		        location.reload();
+		      } else {
+		        showToast("error", result.message || "판매 재개 실패");
+		      }
+		    }
+	  }
+	};
+
+  /*********************************************************************************************************
+   * 모달 오픈
+   *********************************************************************************************************/
+  //공통 이벤트 연결
   document.addEventListener("dialogAction", (e) => {
     const { id, action } = e.detail;
-
-    // 매핑된 핸들러 실행
-    const handler = dialogHandlers[id]?.[action];
-    if (handler) {
-      handler();
-    } else {
-      console.warn(`핸들러 없음: id=${id}, action=${action}`);
-    }
+    dialogHandlers[id]?.[action]?.();
   });
+
+  // 버튼 이벤트: 모달 열기
+  // 세일 등록 버튼
+  document.getElementById("openSaleDialog").addEventListener("click", () => openDialog("saleDialog"));
+  // 재고 변경 버튼
+  document.querySelectorAll(".btn-stock").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const stockDialog = document.getElementById("stockDialog");
+      stockDialog.querySelector("input[name='currentStock']").value = btn.dataset.stock;
+      stockDialog.querySelector("input[name='newStock']").value = "";
+      stockDialog.dataset.productId = btn.dataset.productId;
+      openDialog("stockDialog");
+    });
+  });
+  // 판매 중지 버튼
+  document.querySelectorAll(".btn-delete").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const stopSaleDialog = document.getElementById("stopSaleDialog");
+      stopSaleDialog.dataset.productId = btn.dataset.productId;
+      openDialog("stopSaleDialog");
+    });
+  });
+  //판매 재개 버튼
+  document.querySelectorAll(".btn-release").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const releaseSaleDialog = document.getElementById("releaseSaleDialog");
+      releaseSaleDialog.dataset.productId = btn.dataset.productId;
+      openDialog("releaseSaleDialog");
+    });
+  });
+  
+  //수정 버튼 클릭 → 상세 페이지 이동
+  document.querySelectorAll(".btn-edit").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const productId = btn.dataset.productId;
+      if (productId) {
+        window.location.href = `/brand/productDetail?productId=${productId}`;
+      }
+    });
+  });
+
+  /*********************************************************************************************************
+   * 테이블 체크박스
+   *********************************************************************************************************/
+  // 전체 선택 체크박스
+   const selectAll = document.getElementById("selectAll");
+
+   // 개별 상품 체크박스
+   const productCheckboxes = document.querySelectorAll(".product-checkbox");
+
+   // 전체 선택 → 하위 모두 체크
+   selectAll.addEventListener("change", (e) => {
+     productCheckboxes.forEach(cb => {
+       cb.checked = e.target.checked;
+     });
+   });
+
+   // 개별 선택 → 전체 선택 상태 업데이트
+   productCheckboxes.forEach(cb => {
+     cb.addEventListener("change", () => {
+       // 모두 체크된 경우에만 selectAll 체크
+       selectAll.checked = Array.from(productCheckboxes).every(c => c.checked);
+     });
+   });
 
   /*********************************************************************************************************
    * 테이블 정렬

@@ -44,6 +44,11 @@
 	flex: 1;
 }
 
+.sale-price {
+  color: #0C8CE9;
+  font-weight: bold;
+}
+
 /* 라벨 */
 .table-filter .filter-row label {
 	width: 94px;

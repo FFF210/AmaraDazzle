@@ -27,7 +27,7 @@
 
 <c:set var="hasSearch" value="${empty hasSearch ? 'true' : hasSearch}" />
 <c:set var="searchItems"
-	value="${empty searchItems ? '상품코드,상품명' : searchItems}" />
+	value="${empty searchItems ? '-' : searchItems}" />
 
 <div class="table-filter">
 
@@ -93,46 +93,55 @@
 	    return;
 	  }
 	
-	window.addEventListener("DOMContentLoaded", () => {
+	// URL → 상태 복원
+	  window.addEventListener("DOMContentLoaded", () => {
 	    const params = new URLSearchParams(window.location.search);
 
-	    // tableFilter.tag 로드 시 URL 파라미터 반영
 	    params.forEach((value, key) => {
-	    	  // 필터 버튼 선택
-	    	  const btn = container.querySelector(`.filter-btn[data-filter='${key}'][data-value='${value}']`);
-	    	  if (btn) {
-	    	    btn.classList.add("active");
-	    	    state.filters[key] = value; // 상태 반영
-	    	  }
+	    	 // 필터 버튼 (status 등)
+	        const btn = container.querySelector(`.filter-btn[data-filter='${key}'][data-value='${value}']`);
+	        if (btn) {
+	          btn.classList.add("active");
+	          state.filters[key] = value;
+	        }
 
-	    	  // 검색창
-	    	  if (key === "searchKeyword") {
-	    	    const searchInput = container.querySelector(".search-input");
-	    	    if (searchInput) searchInput.value = value;
-	    	    state.searchKeyword = value;
-	    	  }
+	      // 검색창
+	      if (key === "searchKeyword") {
+	        const searchInput = container.querySelector(".search-input");
+	        if (searchInput) searchInput.value = value;
+	        state.searchKeyword = value;
+	      }
 
-	    	  // 검색 필드 (selectbox 초기화)
-	    	  if (key === "searchType") {
-	    	    window.addEventListener("load", () => {
-	    	      const selectEvent = new CustomEvent("selectInit", { detail: { value }});
-	    	      document.dispatchEvent(selectEvent);
-	    	    });
-	    	    state.searchField = value;
-	    	  }
+	   // 검색조건 (셀렉트박스)
+	      if (key === "searchType") {
+	        const select = container.querySelector(".custom-select");
+	        if (select) {
+	          const label = select.querySelector(".select-label");
+	          const items = select.querySelectorAll(".select-item");
 
-	    	  // 날짜
-	    	  if (key === "startDate") {
-	    	    const start = container.querySelector(".date-start");
-	    	    if (start) start.value = value;
-	    	    state.dateStart = value;
-	    	  }
-	    	  if (key === "endDate") {
-	    	    const end = container.querySelector(".date-end");
-	    	    if (end) end.value = value;
-	    	    state.dateEnd = value;
-	    	  }
-	    	});
+	          items.forEach(item => {
+	            if (item.dataset.value === value) {
+	              if (label) label.textContent = item.textContent;
+	              items.forEach(i => i.classList.remove("active"));
+	              item.classList.add("active");
+	            }
+	          });
+	        }
+	        state.searchField = value;
+	      }
+
+	      // 날짜
+	      if (key === "startDate") {
+	        const start = container.querySelector(".date-start");
+	        if (start) start.value = value;
+	        state.dateStart = value;
+	      }
+	      if (key === "endDate") {
+	        const end = container.querySelector(".date-end");
+	        if (end) end.value = value;
+	        state.dateEnd = value;
+	      }
+	    });
 	  });
 
   const state = {
@@ -144,7 +153,7 @@
     searchKeyword: ""
   };
   
-//한글 → 서버 파라미터 매핑 (필요한 값 추가 가능)
+  // 검색 매핑 
   const searchMap = {
     "상품명": "NAME",
     "카테고리": "CATEGORY",
@@ -179,7 +188,7 @@
     });
   });
 
-//필터 버튼
+//필터 버튼 이벤트
   container.querySelectorAll(".filter-btn").forEach(btn => {
     btn.addEventListener("click", () => {
       // 공백 제거
@@ -224,27 +233,17 @@
     dispatch(true);
   });
 
-  // 초기화 버튼
+//초기화 버튼
   container.querySelector(".filter-reset")?.addEventListener("click", () => {
-    container.querySelectorAll("input, .active").forEach(el => {
-      if(el.tagName === "INPUT") el.value = "";
-      el.classList.remove("active");
-    });
-    state.dateStart = "";
-    state.dateEnd = "";
-    state.quickRange = "";
-    state.filters = {};
-    state.searchField = "";
-    state.searchKeyword = "";
-    dispatch();
+    // 상태 초기화 대신 URL 파라미터 제거 후 새로고침
+    window.location.href = window.location.pathname;
   });
 
   function dispatch(submit=false){
-    const event = new CustomEvent("filterChanged", {
-      detail: {...state, submit}
-    });
-    console.log("dispatch 실행됨:", event.detail);
-    document.dispatchEvent(event);
-  }
+	    const event = new CustomEvent("filterChanged", {
+	      detail: {...state, submit}
+	    });
+	    document.dispatchEvent(event);
+	  }
 })();
 </script>
