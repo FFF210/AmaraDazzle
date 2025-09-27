@@ -4,8 +4,8 @@
 
 <mapper namespace="mapper.product">
 
-	<!-- Product 객체와 DB 컬럼 매핑 -->
-	<resultMap id="productResultMap" type="dto.Product">
+	<!-- Product 객체와 DB 컬럼 매핑 참조용 -->
+<!-- 	<resultMap id="productResultMap" type="dto.Product">
 		<id property="productId" column="product_id" />
 		<result property="brandId" column="brand_id" />
 		<result property="name" column="name" />
@@ -32,11 +32,12 @@
 		<result property="eventId" column="event_id" />
 		<result property="createdAt" column="created_at" />
 		<result property="updatedAt" column="updated_at" />
-	</resultMap>
-
+	</resultMap> -->
+	
+	<!--======================= 소비자용 =======================-->
 	<!-- 상품 상세 조회 (상품 상세 페이지용) -->
-	<select id="selectById" parameterType="long"
-		resultMap="productResultMap">
+	<select id="selectProductByProductId" parameterType="Long"
+		resultType="dto.Product">
 		SELECT * FROM product
 		WHERE product_id = #{productId}
 		AND
@@ -45,7 +46,7 @@
 
 	<!-- 전체 상품 목록 조회 (페이징) -->
 	<select id="selectAllProducts" parameterType="map"
-		resultMap="productResultMap">
+		resultType="dto.Product">
 		SELECT * FROM product
 		WHERE is_visible = 1
 		ORDER BY created_at
@@ -53,9 +54,9 @@
 		LIMIT #{offset}, #{limit}
 	</select>
 
-	<!-- 카테고리별 상품 목록 조회 -->
-	<select id="selectByCategory" parameterType="map"
-		resultMap="productResultMap">
+	<!-- 카테고리별 상품 목록 조회 Id 수정했음!!!!! -->
+	<select id="selectProductByCategory" parameterType="map"
+		resultType="dto.Product">
 		SELECT * FROM product
 		WHERE category_id = #{categoryId}
 		AND
@@ -65,8 +66,8 @@
 	</select>
 
 	<!-- 브랜드별 상품 목록 조회 -->
-	<select id="selectByBrand" parameterType="map"
-		resultMap="productResultMap">
+	<select id="selectProductByBrand" parameterType="map"
+		resultType="dto.Product">
 		SELECT * FROM product
 		WHERE brand_id = #{brandId}
 		AND
@@ -76,8 +77,8 @@
 	</select>
 
 	<!-- 상품 검색 (상품명으로) -->
-	<select id="searchByName" parameterType="map"
-		resultMap="productResultMap">
+	<select id="searchProductByName" parameterType="map"
+		resultType="dto.Product">
 		SELECT * FROM product
 		WHERE name LIKE CONCAT('%', #{keyword},
 		'%')
@@ -89,7 +90,7 @@
 
 	<!-- 신상품 목록 조회 (최근 등록순) -->
 	<select id="selectNewProducts" parameterType="map"
-		resultMap="productResultMap">
+		resultType="dto.Product">
 		SELECT * FROM product
 		WHERE is_visible = 1
 		ORDER BY created_at
@@ -99,7 +100,7 @@
 
 	<!-- 인기상품 목록 조회 (판매량 기준 - 별도 테이블 조인 필요할 수 있음) -->
 	<select id="selectPopularProducts" parameterType="map"
-		resultMap="productResultMap">
+		resultType="dto.Product">
 		SELECT p.* FROM product p
 		WHERE p.is_visible = 1
 		ORDER BY
@@ -109,7 +110,7 @@
 
 	<!-- 할인 상품 목록 조회 -->
 	<select id="selectDiscountProducts" parameterType="map"
-		resultMap="productResultMap">
+		resultType="dto.Product">
 		SELECT * FROM product
 		WHERE is_visible = 1
 		AND discount_type
@@ -125,7 +126,7 @@
 
 	<!-- 기획상품 목록 조회 -->
 	<select id="selectPlannedProducts" parameterType="map"
-		resultMap="productResultMap">
+		resultType="dto.Product">
 		SELECT * FROM product
 		WHERE is_planned = 1
 		AND is_visible = 1
@@ -225,37 +226,67 @@
 
 	<!--======================= [브랜드 어드민] 상품 목록 조회 ======================= -->
 	<select id="selectProductListForBrand" parameterType="map"
-		resultType="ProductList">
+		resultType="productList">
 		SELECT
 		p.product_id,
 		p.name,
-		CONCAT_WS(' > ', c1.name, c2.name, c3.name) AS category_path,
+		CONCAT_WS(' > ', c1.name, c2.name, c3.name)
+		AS category_path,
 		p.price,
 		p.stock_qty,
 		p.is_visible,
 		CASE
-		WHEN p.discount_type = 'RATE'
-		THEN p.price - (p.price * p.discount_value / 100)
+		WHEN
+		p.discount_type = 'RATE'
+		THEN p.price - (p.price * p.discount_value /
+		100)
 		WHEN p.discount_type = 'AMOUNT'
 		THEN p.price - p.discount_value
 		ELSE p.price
 		END AS sale_price,
-		COALESCE(SUM(oi.quantity), 0) AS sales_qty,
-		COALESCE(COUNT(r.product_id), 0) AS review_count
+		CASE
+		WHEN p.is_visible = 0 THEN
+		'STOP_SALE'
+		WHEN p.stock_qty > 0 THEN 'SALE'
+		WHEN p.stock_qty = 0 THEN
+		'SOLD_OUT'
+		END AS status,
+		IFNULL(oi.sales_qty, 0) AS sales_qty,
+		IFNULL(r.review_count, 0) AS
+		review_count
 		FROM product p
-		LEFT JOIN category c1 ON p.category1_id = c1.category_id
-		LEFT JOIN category c2 ON p.category2_id = c2.category_id
-		LEFT JOIN category c3 ON p.category3_id = c3.category_id
-		LEFT JOIN order_item oi ON p.product_id = oi.product_id
-		LEFT JOIN review r ON p.product_id = r.product_id
+		LEFT JOIN
+		category c1 ON p.category1_id =
+		c1.category_id
+		LEFT JOIN category c2 ON
+		p.category2_id = c2.category_id
+		LEFT JOIN category c3 ON p.category3_id
+		= c3.category_id
+		LEFT JOIN (
+		SELECT product_id, SUM(quantity) AS
+		sales_qty
+		FROM order_item
+		GROUP BY
+		product_id
+		) oi ON p.product_id =
+		oi.product_id
+		LEFT JOIN (
+		SELECT
+		product_id, COUNT(*) AS review_count
+		FROM review
+		GROUP BY product_id
+		) r
+		ON p.product_id = r.product_id
 		<where>
 			<!-- 판매 상태 필터 -->
 			<if test="status != null and status != ''">
 				<choose>
 					<when test="status == 'SALE'">
+						AND p.is_visible = 1
 						AND p.stock_qty > 0
 					</when>
 					<when test="status == 'SOLD_OUT'">
+						AND p.is_visible = 1
 						AND p.stock_qty = 0
 					</when>
 					<when test="status == 'STOP_SALE'">
@@ -274,25 +305,27 @@
 					<when test="searchType == 'CATEGORY'">
 						AND (
 						p.category1_id IN (
-						SELECT category_id FROM category
+						SELECT category_id FROM
+						category
 						WHERE name LIKE CONCAT('%', #{searchKeyword}, '%')
 						)
-						OR p.category2_id IN (
+						OR
+						p.category2_id IN (
 						SELECT category_id FROM category
-						WHERE name LIKE CONCAT('%', #{searchKeyword}, '%')
+						WHERE name LIKE
+						CONCAT('%', #{searchKeyword}, '%')
 						)
 						OR p.category3_id IN (
-						SELECT category_id FROM category
-						WHERE name LIKE CONCAT('%', #{searchKeyword}, '%')
+						SELECT
+						category_id FROM category
+						WHERE name LIKE CONCAT('%',
+						#{searchKeyword}, '%')
 						)
 						)
 					</when>
 				</choose>
 			</if>
 		</where>
-		GROUP BY p.product_id, p.name, c1.name, c2.name, c3.name,
-		p.price, p.discount_type, p.discount_value,
-		p.stock_qty, p.is_visible
 		ORDER BY p.product_id DESC
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
@@ -305,11 +338,12 @@
 		FROM (
 		SELECT p.product_id
 		FROM product p
-		LEFT JOIN category c1 ON p.category1_id = c1.category_id
-		LEFT JOIN category c2 ON p.category2_id = c2.category_id
-		LEFT JOIN category c3 ON p.category3_id = c3.category_id
-		LEFT JOIN order_item oi ON p.product_id = oi.product_id
-		LEFT JOIN review r ON p.product_id = r.product_id
+		LEFT JOIN
+		category c1 ON p.category1_id = c1.category_id
+		LEFT JOIN category c2 ON
+		p.category2_id = c2.category_id
+		LEFT JOIN category c3 ON p.category3_id
+		= c3.category_id
 		<where>
 			<!-- 판매 상태 필터 -->
 			<if test="status != null and status != ''">
@@ -335,18 +369,16 @@
 					</when>
 					<when test="searchType == 'CATEGORY'">
 						AND (
-						p.category1_id IN (
-						SELECT category_id FROM category WHERE name LIKE CONCAT('%',
-						#{searchKeyword}, '%')
-						)
-						OR p.category2_id IN (
-						SELECT category_id FROM category WHERE name LIKE CONCAT('%',
-						#{searchKeyword}, '%')
-						)
-						OR p.category3_id IN (
-						SELECT category_id FROM category WHERE name LIKE CONCAT('%',
-						#{searchKeyword}, '%')
-						)
+						p.category1_id IN (SELECT category_id FROM
+						category WHERE name LIKE CONCAT('%',
+						#{searchKeyword}, '%'))
+						OR
+						p.category2_id IN (SELECT category_id FROM category WHERE name
+						LIKE CONCAT('%', #{searchKeyword}, '%'))
+						OR p.category3_id IN
+						(SELECT category_id FROM category WHERE name
+						LIKE CONCAT('%',
+						#{searchKeyword}, '%'))
 						)
 					</when>
 				</choose>
@@ -355,4 +387,171 @@
 		GROUP BY p.product_id
 		) AS countTable
 	</select>
+
+	<!--======================= [브랜드 어드민] 상품 재고 변경 ======================= -->
+	<update id="updateStockForBrand" parameterType="map">
+		UPDATE product
+		SET stock_qty = #{newStock}
+		WHERE product_id = #{productId}
+	</update>
+
+	<!--======================= [브랜드 어드민] 상품 공개 여부 토글 ======================= -->
+	<update id="toggleVisibilityForBrand" parameterType="long">
+		UPDATE
+		product
+		SET is_visible = CASE WHEN is_visible = 1 THEN 0 ELSE 1 END
+		WHERE product_id = #{productId}
+	</update>
+
+	<!--======================= [브랜드 어드민] 세일 등록 ======================= -->
+	<update id="registerSaleForBrand" parameterType="map">
+		UPDATE product
+		SET discount_type = #{discountType},
+		discount_value =
+		#{discountValue},
+		sale_start = #{startDate},
+		sale_end = #{endDate}
+		WHERE
+		product_id IN
+		<foreach item="id" collection="productIds" open="("
+			separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
+
+	<!--======================= [브랜드 어드민] 단일 상품 상세 조회 ======================= -->
+	<select id="selectProductForBrand" parameterType="long"
+		resultType="productDetail">
+		SELECT
+		p.product_id,
+		p.brand_id,
+		p.name,
+		p.is_exclusive,
+		p.is_visible,
+		p.is_planned,
+		p.category1_id,
+		p.category2_id,
+		p.category3_id,
+		uf_thumb.storage_path AS thumb_path,
+		uf_thumb.file_rename AS thumb_file,
+		uf1.storage_path AS image1_path,
+		uf1.file_rename AS image1_file,
+		uf2.storage_path AS image2_path,
+		uf2.file_rename AS image2_file,
+		uf3.storage_path AS image3_path,
+		uf3.file_rename AS image3_file,
+		uf4.storage_path AS image4_path,
+		uf4.file_rename AS image4_file,
+		uf5.storage_path AS image5_path,
+		uf5.file_rename AS image5_file,
+		p.ingredients,
+		p.price,
+		p.order_limit,
+		p.has_option,
+		p.stock_qty,
+		p.shipping_method,
+		p.discount_type,
+		CASE
+		WHEN
+		p.discount_type = 'RATE'
+		THEN p.price - (p.price * p.discount_value /
+		100)
+		WHEN p.discount_type = 'AMOUNT'
+		THEN p.price - p.discount_value
+		ELSE p.price
+		END AS sale_price,
+		p.created_at,
+		p.updated_at,
+		GROUP_CONCAT(CASE WHEN cm.code_group = 'SKIN_ISSUE'
+		THEN
+		CONCAT(cd.code, ':', cd.name) END) AS skin_issues,
+		GROUP_CONCAT(CASE
+		WHEN cm.code_group = 'SKIN_TYPE'
+		THEN CONCAT(cd.code, ':', cd.name)
+		END) AS skin_types,
+		GROUP_CONCAT(CASE WHEN cm.code_group =
+		'PERSONAL_COLOR'
+		THEN CONCAT(cd.code, ':', cd.name) END) AS
+		personal_colors
+		FROM product p
+		LEFT JOIN upload_file uf_thumb ON
+		p.thumbnail_file_id =
+		uf_thumb.upload_file_id
+		LEFT JOIN upload_file uf1
+		ON p.image1_file_id = uf1.upload_file_id
+		LEFT JOIN upload_file uf2 ON
+		p.image2_file_id = uf2.upload_file_id
+		LEFT JOIN upload_file uf3 ON
+		p.image3_file_id = uf3.upload_file_id
+		LEFT JOIN upload_file uf4 ON
+		p.image4_file_id = uf4.upload_file_id
+		LEFT JOIN upload_file uf5 ON
+		p.image5_file_id = uf5.upload_file_id
+		LEFT JOIN product_filter_map pf
+		ON p.product_id = pf.product_id
+		LEFT JOIN code_detail cd ON
+		pf.filter_id = cd.code_detail_id
+		LEFT JOIN code_master cm ON
+		cd.code_master_id = cm.code_master_id
+		WHERE p.product_id = #{productId}
+		GROUP BY p.product_id
+	</select>
+
+	<!--======================= [브랜드 어드민] 상품 등록 ======================= -->
+	<insert id="insertProduct" parameterType="productDetail">
+		INSERT INTO product (
+		brand_id, name, is_exclusive, is_visible, is_planned,
+		category1_id,
+		category2_id, category3_id,
+		ingredients, price, order_limit,
+		has_option, stock_qty,
+		shipping_method, discount_type, discount_value,
+		start_date, end_date, event_id,
+		created_at, updated_at
+		) VALUES (
+		#{brandId}, #{name}, #{isExclusive}, #{isVisible}, #{isPlanned},
+		#{category1Id}, #{category2Id}, #{category3Id},
+		#{ingredients},
+		#{price}, #{orderLimit}, #{hasOption}, #{stockQty},
+		#{shippingMethod},
+		#{discountType}, #{salePrice},
+		#{startDate}, #{endDate}, #{eventId},
+		NOW(), NOW()
+		)
+	</insert>
+
+	<!--======================= [브랜드 어드민] 상품 수정 ======================= -->
+	<update id="updateProduct" parameterType="productDetail">
+		UPDATE product
+		SET name
+		= #{name},
+		is_exclusive =
+		#{isExclusive},
+		is_visible = #{isVisible},
+		is_planned = #{isPlanned},
+		category1_id = #{category1Id},
+		category2_id =
+		#{category2Id},
+		category3_id = #{category3Id},
+		ingredients =
+		#{ingredients},
+		price =
+		#{price},
+		order_limit = #{orderLimit},
+		has_option
+		= #{hasOption},
+		stock_qty = #{stockQty},
+		shipping_method =
+		#{shippingMethod},
+		discount_type = #{discountType},
+		discount_value =
+		#{salePrice},
+		start_date = #{startDate},
+		end_date = #{endDate},
+		event_id
+		= #{eventId},
+		updated_at = NOW()
+		WHERE product_id = #{productId}
+	</update>
+
 </mapper>

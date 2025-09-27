@@ -1,7 +1,9 @@
 package controller.brand;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -20,17 +22,15 @@ import service.brand.ProductServiceImpl;
 public class ProductList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
+	private final ProductService service = new ProductServiceImpl();
+
 	public ProductList() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * 상품 목록 조회 (GET)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -50,12 +50,11 @@ public class ProductList extends HttpServlet {
 
 		try {
 			// 서비스 호출
-			ProductService service = new ProductServiceImpl();
 			Map<String, Object> result = service.productListByPage(params);
 
 			// JSP로 전달
 			request.setAttribute("productList", result.get("productList")); // 상품 목록
-			request.setAttribute("totalCount", result.get("totalCount")); //총 개수
+			request.setAttribute("totalCount", result.get("totalCount")); // 총 개수
 			request.setAttribute("totalPages", result.get("totalPages")); // 총 페이지 수
 			request.setAttribute("currentPage", page); // 현재 페이지
 
@@ -64,6 +63,73 @@ public class ProductList extends HttpServlet {
 		} catch (Exception e) {
 			request.setAttribute("err", "상품 목록 조회 오류");
 			request.getRequestDispatcher("error.jsp").forward(request, response);
+		}
+	}
+
+	/**
+	 * Ajax 요청 처리 (POST)
+	 */
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("application/json;charset=UTF-8");
+
+		String action = request.getParameter("action"); // delete, stock, sale
+		PrintWriter out = response.getWriter();
+
+		try {
+			if ("delete".equals(action)) {
+				// 상품 공개 여부 토글
+				long productId = Long.parseLong(request.getParameter("productId"));
+				service.toggleVisibility(productId);
+				out.write("{\"result\":\"success\"}");
+
+			} else if ("release".equals(action)) {
+				// 상품 공개 여부 토글
+				long productId = Long.parseLong(request.getParameter("productId"));
+				service.toggleVisibility(productId);
+				out.write("{\"result\":\"success\"}");
+
+			} else if ("stock".equals(action)) {
+				// 재고 변경
+				long productId = Long.parseLong(request.getParameter("productId"));
+				int newStock = Integer.parseInt(request.getParameter("newStock"));
+
+				Map<String, Object> params = new HashMap<>();
+				params.put("productId", productId);
+				params.put("newStock", newStock);
+
+				service.updateStock(params);
+				out.write("{\"result\":\"success\"}");
+
+			} else if ("sale".equals(action)) {
+				// 세일 등록
+				String discountType = request.getParameter("discountType");
+				int discountValue = Integer.parseInt(request.getParameter("discountValue"));
+				String startDate = request.getParameter("startDate");
+				String endDate = request.getParameter("endDate");
+
+				// 여러 상품 체크박스 선택된 경우
+				String[] productIds = request.getParameterValues("productIds");
+
+				Map<String, Object> params = new HashMap<>();
+				params.put("discountType", discountType);
+				params.put("discountValue", discountValue);
+				params.put("startDate", startDate);
+				params.put("endDate", endDate);
+				params.put("productIds", List.of(productIds));
+
+				service.registerSale(params);
+				out.write("{\"result\":\"success\"}");
+
+			} else {
+				out.write("{\"result\":\"error\",\"message\":\"알 수 없는 action\"}");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			out.write("{\"result\":\"error\",\"message\":\"요청 처리 중 오류 발생\"}");
 		}
 	}
 }

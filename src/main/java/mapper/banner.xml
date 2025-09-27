@@ -9,12 +9,12 @@
 
 <!-- 결제 성공 후 배너 신청 -->
 	<insert id = "insertBannerForm" parameterType="banner">
-		insert into Banner (brand_id, manager_name, manager_tel, start_date, end_date, banner_name, banner_message, status, brand_url) 
+		insert into banner (brand_id, manager_name, manager_tel, start_date, end_date, banner_name, banner_message, status, brand_url) 
 		values(#{brandId}, #{managerName}, #{managerTel}, #{startDate}, #{endDate}, #{bannerName}, #{bannerMessage}, 'PENDING', #{brandUrl} )
 	</insert>
 	
 	<update id = "updateBannerForm" parameterType="banner">
-		update Banner (managerName, managerTel, updatedAt, endDate, bannerName, bannerMessage, status, brandUrl) 
+		update banner (manager_name, manager_tel, updated_at, end_date, banner_name, banner_message, status, brand_url) 
 		values(#{managerName}, #{managerTel}, #{updatedAt}, #{endDate}, #{bannerName}, #{bannerMessage}, 'PENDING', #{brandUrl} )
 	</update>
 	

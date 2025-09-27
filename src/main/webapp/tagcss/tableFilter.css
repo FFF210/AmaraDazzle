@@ -44,6 +44,11 @@
 	flex: 1;
 }
 
+.sale-price {
+  color: #0C8CE9;
+  font-weight: bold;
+}
+
 /* 라벨 */
 .table-filter .filter-row label {
 	width: 94px;
@@ -71,7 +76,7 @@
 	height: 40px;
 	font-size: 14px;
 	font-weight: 500;
-	color: #333;
+	color: #000;
 	cursor: pointer;
 }
 
@@ -86,8 +91,7 @@
 
 .filter-btn-group .filter-btn.active {
 	background: #F1F9FF;
-	color: #2684FF;
-	font-weight: 600;
+	font-weight: 700;
 }
 
 /* 하단 버튼 섹션 */

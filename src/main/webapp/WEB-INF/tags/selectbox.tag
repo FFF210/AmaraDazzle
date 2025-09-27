@@ -7,6 +7,7 @@
     Selectbox 커스텀 태그
 
     속성(Props)
+    • id     : DOM 식별용 id (JS 제어에 필요)
     • size  : sm | md | lg (기본값 md)
     • items : 쉼표(,)로 구분된 항목 목록 (예: "item1,item2,item3")
     • initial : 초기에 보여줄 값 (선택 안하면 itemList[0])
@@ -25,20 +26,37 @@
       });
     </script>
 ================================ --%>
-
+<%@ attribute name="id" required="false"%>
 <%@ attribute name="size" required="false"%>
 <%@ attribute name="items" required="false"%>
 <%@ attribute name="initial" required="false"%>
 
 <%-- 기본값 처리 --%>
 <c:set var="size" value="${empty size ? 'md' : size}" />
-<c:set var="items" value="${empty items ? 'item1,item2,item3' : items}" />
+<c:set var="items" value="${empty items ? '' : items}" />
 <c:set var="itemList" value="${fn:split(items, ',')}" />
 <c:set var="selectedValue"
 	value="${empty initial ? itemList[0] : initial}" />
 
+<%-- id 속성이 있으면 그대로 쓰고, 없으면 자동 생성 --%>
+<c:choose>
+	<c:when test="${not empty id}">
+		<c:set var="selectId" value="${id}" />
+	</c:when>
+	<c:otherwise>
+		<%-- 자동 고유 ID 생성 --%>
+		<c:if test="${empty applicationScope.selectboxSeq}">
+			<c:set var="selectboxSeq" value="0" scope="application" />
+		</c:if>
+		<c:set var="selectboxSeq" value="${applicationScope.selectboxSeq + 1}"
+			scope="application" />
+		<c:set var="selectId" value="custom-select-${selectboxSeq}" />
+	</c:otherwise>
+</c:choose>
 
-<div class="custom-select ${size}" tabindex="0">
+
+<div class="custom-select ${size}"
+	<c:if test="${not empty id}">id="${id}"</c:if> tabindex="0">
 	<div class="select-header">
 		<span class="select-label">${selectedValue}</span> <i
 			class="bi bi-chevron-down"></i>
@@ -50,47 +68,3 @@
 		</c:forEach>
 	</ul>
 </div>
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".custom-select").forEach(select => {
-      const header = select.querySelector(".select-header");
-      const label = select.querySelector(".select-label");
-      const list = select.querySelector(".select-list");
-
-      // 드롭다운 열기/닫기
-      header.addEventListener("click", () => {
-        select.classList.toggle("open");
-      });
-
-      // 아이템 선택
-      list.querySelectorAll(".select-item").forEach(item => {
-        item.addEventListener("click", () => {
-          const value = item.dataset.value;
-          const text = item.textContent;
-
-          // 라벨 변경
-          label.textContent = text;
-
-          // 선택 표시
-          list.querySelectorAll(".select-item").forEach(i => i.classList.remove("active"));
-          item.classList.add("active");
-
-          select.classList.remove("open");
-
-          // 부모로 이벤트 전달
-          const event = new CustomEvent("selectChanged", {
-            detail: { value: value, text: text }
-          });
-          document.dispatchEvent(event);
-        });
-      });
-
-      // 포커스 아웃 시 닫기
-      select.addEventListener("blur", () => {
-        select.classList.remove("open");
-      });
-    });
-  });
-</script>
-

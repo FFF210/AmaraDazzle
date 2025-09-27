@@ -239,7 +239,7 @@ function showMessage(element, message, type) {
 
 // 약관 보기
 function showTerms(type) {
-    // 실제로는 모달이나 새 창으로 약관을 보여줘야 함
+    // 실제로는 모달이나 새 창으로 약관을 보여줘야 하는데 우리는 패스할듯
     alert('약관 내용을 보여주는 페이지로 이동합니다.');
 }
 

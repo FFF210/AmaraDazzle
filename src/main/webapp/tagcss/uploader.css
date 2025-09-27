@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @charset "UTF-8";
 
 :root {
@@ -118,4 +119,126 @@
 	font-weight :500;
 	font-size: 13px;
 	
+=======
+@charset "UTF-8";
+
+:root {
+	--primary: #4831D4; /* 메인 색 */
+	--muted: #595F6A; /* 보조 텍스트 */
+	--bg: #FFFFFF; /* 기본 배경 */
+	--line: #B6BCC9; /* 기본 외곽선 */
+	--hover-bg: #F4F2FD; /* hover 배경 */
+}
+
+.uploader {
+	border: 2px dashed var(--line);
+	border-radius: 12px;
+	padding: 22px;
+	display: grid;
+	place-items: center;
+	text-align: center;
+	background: var(--bg);
+	transition: 0.2s;
+	cursor: pointer;
+}
+
+.uploader:hover, 
+.uploader:focus, 
+.uploader.drag, 
+.uploader.dragover {
+	border-color: var(--primary);
+	background: var(--hover-bg);
+}
+
+.uploader-title {
+	font-weight: 700;
+	margin-bottom: 6px;
+	color: var(--primary);
+}
+
+.uploader-muted {
+	font-size: 14px;
+	color: var(--muted);
+}
+
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
+/* 크기별 */
+.uploader-lg { width: 600px; height: 100px; }
+.uploader-md { width: 500px; height: 100px; }
+.uploader-sm { width: 250px; height: 50px; }
+
+/* ================ 
+	미리보기 칸
+=================== */
+.preview-wrapper {
+	margin-top: 10px;
+	padding: 5px;
+	max-width: 600px; 
+	border: 1px solid #d9d9d9; 
+	border-radius: 8px;
+	background: transparent; 
+	box-sizing: border-box;
+	transition: 0.2s ease;   
+}
+
+.hidden {
+    display: none;
+}
+
+/* 카드들을 가로로 한 줄씩 나열 */
+.preview-area {
+	display: flex;
+	flex-wrap: wrap; /* 넘치면 자동 줄바꿈 */
+	gap: 10px; /* 카드 간격 */
+}
+
+/* 개별 카드 */
+.preview-card {
+	width: 80px; /* ✅ 카드 고정 크기 */
+	height: 80px;
+	background: white;
+	border: 1px solid #e3e3e3;
+	border-radius: 5px;
+	padding: 3px;
+	box-sizing: border-box;
+	position : relative;
+	display: flex;
+	align-items: center;
+}
+
+/* 미리보기 이미지 */
+.preview-thumb {
+	width: 100%;
+	object-fit: cover; /* 박스에 꽉 차게 */
+	border-radius: 5px;
+}
+
+/* 삭제 버튼 */
+.remove-btn {
+	position : absolute;
+	top : 1px;
+	right : 0;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	padding: 0;
+}
+
+.remove-btn i {
+	color: red;
+	font-weight :500;
+	font-size: 13px;
+	
+>>>>>>> branch 'main' of https://github.com/2025KostaProject/AmaraDazzle.git
 }
