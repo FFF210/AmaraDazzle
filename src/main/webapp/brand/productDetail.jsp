@@ -130,12 +130,10 @@
 					<!-- 카테고리 -->
 					<div class="form-group">
 						<label>카테고리 <span class="required">*</span></label>
-						<my:selectbox size="lg" items="추천순,인기순,최신순,낮은가격순,높은가격순"
-							initial="대분류" />
-						<my:selectbox size="lg" items="추천순,인기순,최신순,낮은가격순,높은가격순"
-							initial="중분류" />
-						<my:selectbox size="lg" items="추천순,인기순,최신순,낮은가격순,높은가격순"
-							initial="소분류" />
+						<my:selectbox size="lg" items="대분류" initial="대분류" id="largeSelect" />
+						<my:selectbox size="lg" items="중분류" initial="중분류"
+							id="middleSelect" />
+						<my:selectbox size="lg" items="소분류" initial="소분류" id="smallSelect" />
 					</div>
 
 					<!-- 대표 이미지 -->
@@ -360,8 +358,82 @@
 		</div>
 	</my:layout>
 </body>
-
+<script src="./js/selectbox.js"></script>
 <script>
+  /*********************************************************************************************************
+   * selectbox
+   *********************************************************************************************************/
+   document.addEventListener("DOMContentLoaded", () => {
+     const largeSelect = document.getElementById("largeSelect");
+     const middleSelect = document.getElementById("middleSelect");
+     const smallSelect  = document.getElementById("smallSelect");
+
+     // selectbox 내부를 갱신하는 함수 (li 생성)
+     function updateSelectbox(selectElem, items, placeholder) {
+       const list = selectElem.querySelector(".select-list");
+       const label = selectElem.querySelector(".select-label");
+
+       // 초기화
+       list.innerHTML = "";
+       label.textContent = placeholder;
+
+       // 항목 추가
+       items.forEach(c => {
+         const li = document.createElement("li");
+         li.className = "select-item";
+         li.dataset.value = c.categoryId;
+         li.textContent = c.name;
+         list.appendChild(li);
+
+         li.addEventListener("click", () => {
+           label.textContent = c.name;
+           list.querySelectorAll(".select-item").forEach(i => i.classList.remove("active"));
+           li.classList.add("active");
+
+           const event = new CustomEvent("selectChanged", {
+             detail: { value: c.categoryId, text: c.name }
+           });
+           selectElem.dispatchEvent(event);
+         });
+       });
+     }
+
+     // 대분류 불러오기
+     fetch("/category?type=large")
+       .then(res => res.json())
+       .then(data => {
+         updateSelectbox(largeSelect, data, "대분류");
+       });
+
+     // 대분류 선택 → 중분류 불러오기
+     largeSelect.addEventListener("selectChanged", e => {
+    	console.log("대분류 이벤트 발생:", e.detail);
+       const parentId = e.detail.value;
+       if (!parentId) return;
+
+       fetch(`/category?type=middle&parentId=\${parentId}`)
+         .then(res => res.json())
+         .then(data => {
+           updateSelectbox(middleSelect, data, "중분류");
+           updateSelectbox(smallSelect, [], "소분류"); // 초기화
+         });
+     });
+
+     // 중분류 선택 → 소분류 불러오기
+     middleSelect.addEventListener("selectChanged", e => {
+       const parentId = e.detail.value;
+       if (!parentId) return;
+
+       fetch(`/category?type=small&parentId=\${parentId}`)
+         .then(res => res.json())
+         .then(data => {
+           updateSelectbox(smallSelect, data, "소분류");
+         });
+     });
+   });
+  /*********************************************************************************************************
+   * 폼
+   *********************************************************************************************************/
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".filter-option").forEach(btn => {
       btn.addEventListener("click", (e) => {
@@ -370,7 +442,10 @@
       });
     });
   });
-  
+
+  /*********************************************************************************************************
+   * 이미지 버튼
+   *********************************************************************************************************/
   document.addEventListener("DOMContentLoaded", () => {
 	  const container = document.querySelector(".form-group.image"); // 이미지 그룹 전체
 
@@ -431,8 +506,6 @@
 	  // 초기 상태: 최소 1개는 보이도록
 	  ensureEmptySlot();
 	});
-
-
 </script>
 </html>
 

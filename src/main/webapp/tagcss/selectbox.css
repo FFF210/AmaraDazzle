@@ -1,9 +1,7 @@
 @charset "UTF-8";
 
-.custom-select,
-.select-header,
-.select-list {
-  box-sizing: border-box;
+.custom-select, .select-header, .select-list {
+	box-sizing: border-box;
 }
 
 .custom-select {
@@ -11,6 +9,11 @@
 	font-family: 'Noto Sans KR', sans-serif;
 	cursor: pointer;
 	outline: none;
+	z-index: 1;
+}
+
+.custom-select.open {
+	z-index: 1000;
 }
 
 /* 헤더 (라벨 + 화살표) */
@@ -62,7 +65,7 @@
 	list-style: none;
 	padding: 0;
 	margin: 0;
-	z-index: 10;
+	z-index: 2000;
 	overflow: hidden;
 }
 
