@@ -15,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import dto.Notice;
-import service.admin.NoticeSellerService;
-import service.admin.NoticeSellerServiceImpl;
+import service.admin.NoticeService;
+import service.admin.NoticeServiceImpl;
 import util.FileAttach;
 
 
@@ -71,11 +71,18 @@ public class NoticeSellerWrite extends HttpServlet {
 			}
 
 			notice_DTO = new Notice(noticeCate, noticeTitle, content, noticeWriter, noticeTargetType, notice_DTO.getImageFileIds());
-			NoticeSellerService notice_svc = new NoticeSellerServiceImpl();
-			notice_svc.noticeSellerWrite(notice_DTO);
+			NoticeService notice_svc = new NoticeServiceImpl();
+			int result = notice_svc.noticeSellerWrite(notice_DTO);
 			
-			request.setAttribute("noticeSeller", notice_DTO);
-			request.getRequestDispatcher("notice_detail.jsp").forward(request, response);
+			if(result > 0 ) {
+				response.getWriter().write("ok");
+				
+				request.setAttribute("noticeSeller", notice_DTO);
+				request.getRequestDispatcher("notice_detail.jsp").forward(request, response);
+				
+			} else {
+				response.getWriter().write("fail");
+			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();

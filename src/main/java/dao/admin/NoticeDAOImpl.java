@@ -5,7 +5,7 @@ import org.apache.ibatis.session.SqlSession;
 import dto.Notice;
 import util.MybatisSqlSessionFactory;
 
-public class NoticeSellerDAOImpl implements NoticeSellerDAO {
+public class NoticeDAOImpl implements NoticeDAO {
 	SqlSession ss = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
 
 	@Override

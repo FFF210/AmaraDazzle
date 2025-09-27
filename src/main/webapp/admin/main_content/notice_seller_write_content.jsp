@@ -76,5 +76,5 @@
 
 
 <!-- JS부분 -->
-<script src="./js/boardNotice.js"></script>
+<script src="./js/boardNoticeWrite.js"></script>
 <!-- JS부분 end -->

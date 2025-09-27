@@ -2,7 +2,7 @@ package service.admin;
 
 import dto.Notice;
 
-public interface NoticeSellerService {
+public interface NoticeService {
 
 	int noticeSellerWrite(Notice notice_DTO) throws Exception ;
 

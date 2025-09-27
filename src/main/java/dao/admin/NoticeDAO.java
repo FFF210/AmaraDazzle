@@ -2,7 +2,7 @@ package dao.admin;
 
 import dto.Notice;
 
-public interface NoticeSellerDAO {
+public interface NoticeDAO {
 
 	int insertNoticeSeller(Notice notice_DTO) throws Exception ;
 

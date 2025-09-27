@@ -4,15 +4,15 @@ import java.util.List;
 
 import dao.UploadFileDAO;
 import dao.UploadFileDAOImpl;
-import dao.admin.NoticeSellerDAO;
-import dao.admin.NoticeSellerDAOImpl;
+import dao.admin.NoticeDAO;
+import dao.admin.NoticeDAOImpl;
 import dto.Notice;
 
-public class NoticeSellerServiceImpl implements NoticeSellerService {
+public class NoticeServiceImpl implements NoticeService {
 
-	private NoticeSellerDAO n_seller_dao;
-	public NoticeSellerServiceImpl() {
-		n_seller_dao = new NoticeSellerDAOImpl();
+	private NoticeDAO n_dao;
+	public NoticeServiceImpl() {
+		n_dao = new NoticeDAOImpl();
 	}
 	
 	@Override
@@ -28,7 +28,7 @@ public class NoticeSellerServiceImpl implements NoticeSellerService {
 		notice_DTO.setImage2FileId(img2);
 		notice_DTO.setImage3FileId(img3);
 		
-		int result = n_seller_dao.insertNoticeSeller(notice_DTO);
+		int result = n_dao.insertNoticeSeller(notice_DTO);
 		return result;
 		
 	}

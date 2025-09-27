@@ -76,7 +76,7 @@
 	<!-- 버튼 -->
 	<div class="button_wrap">
 		<div>
-			<button type="button" class="btn first_btn action_btn">글쓰기</button>
+			<button type="button" class="btn first_btn action_btn" onclick="goWriteNoticeSeller()">글쓰기</button>
 		</div>
 		<div>
 			<button type="button" class="btn second_btn action_btn">삭제</button>
@@ -149,3 +149,5 @@
 	</div>
 </div>
 <!-- 메인부분 -->
+
+<script src="./js/boardNotice.js"></script>
