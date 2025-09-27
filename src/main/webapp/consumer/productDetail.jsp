@@ -4,33 +4,44 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 
 <%
-double avg = 4.89;
+// 서블릿에서 전달받은 리뷰 요약 데이터 사용
+Object reviewSummaryObj = request.getAttribute("reviewSummary");
+double avg = 0.0;
+if (reviewSummaryObj != null) {
+	java.util.Map reviewSummary = (java.util.Map) reviewSummaryObj;
+	Object avgValue = reviewSummary.get("averageRating");
+	if (avgValue != null) {
+		avg = Double.parseDouble(avgValue.toString());
+	}
+}
 int floor = (int) Math.floor(avg);
 request.setAttribute("avg", avg);
 request.setAttribute("floor", floor);
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>상품 상세 - AD</title>
-<link rel="stylesheet" href="./tagcss/reset.css" />
-<link rel="stylesheet" href="./consumer/css/header.css" />
-<link rel="stylesheet" href="./tagcss/button.css" />
-<link rel="stylesheet" href="./tagcss/heartBtn.css" />
-<link rel="stylesheet" href="./tagcss/tag.css" />
-<link rel="stylesheet" href="./consumer/css/tab.css" />
-<link rel="stylesheet" href="./tagcss/price.css" />
-<link rel="stylesheet" href="./tagcss/sortList.css" />
-<link rel="stylesheet" href="./tagcss/rating.css" />
-<link rel="stylesheet" href="./tagcss/selectbox.css" />
-<link rel="stylesheet" href="./tagcss/pagination.css" />
-<link rel="stylesheet" href="./consumer/css/productDetail.css" />
-<link rel="stylesheet" href="./tagcss/reviewSummary.css" />
-<link rel="stylesheet" href="./tagcss/reviewCard.css" />
-<link rel="stylesheet" href="./tagcss/qna.css" />
-<link rel="stylesheet" href="./tagcss/selectedOptionItem.css" />
-<link rel="stylesheet" href="./tagcss/footer.css" />
+<title>${product.name}</title>
+<link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/tab.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/sortList.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/rating.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/selectbox.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/productDetail.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/reviewSummary.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/reviewCard.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/qna.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/tagcss/selectedOptionItem.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
 </head>
 <body>
 	<!-- 헤더 include -->
@@ -58,16 +69,16 @@ request.setAttribute("floor", floor);
 			<div class="product-info-section">
 				<div class="product-info-wrapper">
 					<!-- 브랜드 -->
-					<div class="brand-name">브랜드명</div>
+					<div class="brand-name">${brand.brandName}</div>
 
 					<!-- 상품명 -->
-					<h1 class="product-title">홀리몰리 무지개 파레트 12색 / 무지개다리 건너는 대신
-						무지개색깔을 발라보세요</h1>
+					<h1 class="product-title">${product.name}</h1>
 
 					<!-- 가격 표시 -->
 					<div class="price-section">
-						<my:price isSale="true" hasOption="true" size="sm"
-							originPrice="14,000" saleRate="25" finalPrice="10,000" />
+						<my:price isSale="false" hasOption="${product.hasOption == 1}"
+							size="sm" originPrice="${product.price}" saleRate="0"
+							finalPrice="${product.price}" />
 					</div>
 				</div>
 
@@ -88,20 +99,42 @@ request.setAttribute("floor", floor);
 
 				<!-- 옵션 선택 -->
 				<div class="option-section">
-					<my:selectbox size="lg" items="추천순,인기순,최신순,낮은가격순,높은가격순"
-						initial="상품을 선택해주세요" />
+					<c:choose>
+						<c:when test="${product.hasOption == 1 and not empty productOptions}">
+							<%-- 옵션이 있는 상품: 실제 옵션들을 문자열로 변환 --%>
+							<c:set var="optionItems" value="상품을 선택해주세요" />
+							<c:forEach var="option" items="${productOptions}">
+								<c:set var="optionItems"
+									value="${optionItems},${option.optionValue} (${option.price}원)" />
+							</c:forEach>
+
+							<my:selectbox size="lg" items="${optionItems}"
+								initial="상품을 선택해주세요" />
+						</c:when>
+						<c:otherwise>
+							<%-- 옵션이 없는 상품: 단일 상품 표시 --%>
+							<my:selectbox size="lg" items="단일 상품 (재고: ${product.stockQty}개)"
+								initial="단일 상품" />
+						</c:otherwise>
+					</c:choose>
 				</div>
 
 				<!-- 선택된 옵션 리스트 -->
 				<div class="selected-options" id="selectedOptions">
-					<my:selectedOptionItem name="상품이름" price="10000" count="0" />
-					<my:selectedOptionItem name="상품이름" price="10000" count="0" />
+					<!-- JavaScript로 동적 생성된다고 하는데........ -->
 				</div>
 
 				<!-- 총 가격 -->
 				<div class="total-price-section">
 					<p class="total-label">총 상품 금액</p>
-					<p class="total-amount">20,000원</p>
+					<c:choose>
+						<c:when test="${product.hasOption == 1}">
+							<p class="total-amount" id="totalAmount">옵션을 선택해주세요</p>
+						</c:when>
+						<c:otherwise>
+							<p class="total-amount" id="totalAmount">${product.price}원</p>
+						</c:otherwise>
+					</c:choose>
 				</div>
 
 				<!-- 구매 버튼들 -->
@@ -117,7 +150,7 @@ request.setAttribute("floor", floor);
 
 		<!-- 상품 상세 정보 탭 -->
 		<div class="product-tabs-section">
-			<c:import url="/tab.jsp">
+			<c:import url="/consumer/tab.jsp">
 				<c:param name="tabs" value="상품설명,구매정보,리뷰,상품문의" />
 				<c:param name="activeTab" value="0" />
 				<c:param name="tabId" value="productTabs" />
@@ -162,15 +195,7 @@ request.setAttribute("floor", floor);
 						<!-- 상품정보 제공고시 -->
 						<div class="detail-section">
 							<h3 class="detail-title">상품정보 제공고시</h3>
-							<p>정제수, 다이프로필렌글라이콜, 페닐트라이메티콘, 세틸에틸헥사노에이트, 글리세린, 1,2-헥산다이올,
-								다이메티콘/비닐다이메티콘, 트라이메틸실록시실리케이트, 비닐디메티콘/메틸실세스퀴옥산크로스폴리머,
-								트라이메틸펜타페닐트라이실록세인, 폴리메틸실세스퀴옥산, 다이메티콘크로스폴리머, 실리카, 소듐클로라이드,
-								하이드로제네이티드폴리데센, 트라이에톡시카프릴릴실레인, 폴리글리세릴-10라우레이트, 판테놀, 알루미늄하이드록사이드,
-								스테아릭애씨드, 트라이에톡시카프릴릴실레인, 카프릴릴글라이콜, 에틸헥실글리세린, 아데노신, 향료, 토코페롤,
-								적색산화철, 흑색산화철, 티타늄디옥사이드, 황색산화철, 틴옥사이드, 마이카, 다이아이소스테아릴말레이트,
-								폴리글리세릴-2트라이아이소스테아레이트, 실리카다이메틸실릴레이트, 프로판다이올, 정제수, 부틸렌글라이콜, 알지닌,
-								카보머, 글리세릴아크릴레이트/아크릴릭애씨드코폴리머, 알란토인, 카프릴릴글라이콜, 펜틸렌글라이콜, 판테닐에틸에터,
-								알로에베라잎즙, 마카다미아씨오일, 하이드롤라이즈드콜라겐, 알지닌/라이신폴리펩타이드</p>
+							<p>${product.ingredients}</p>
 							<ul>
 								<li>사용 시의 주의사항: 본 제품 사용 시 피부에 이상이 있을 경우 사용을 중지하세요.</li>
 								<li>1. 화장품 사용 중 붉은 반점, 부어오름, 가려움증, 자극 등의 이상이 있을 경우 사용을 중지할
@@ -224,25 +249,36 @@ request.setAttribute("floor", floor);
 						<div class="review-summary-section">
 							<!-- 리뷰 요약 -->
 							<my:reviewSummary average="${avg}" floorAvg="${floor}"
-								total="120" dist5="100" dist4="15" dist3="3" dist2="1" dist1="1" />
+								total="${reviewSummary.totalCount != null ? reviewSummary.totalCount : 0}"
+								dist5="${reviewSummary.rating5Count != null ? reviewSummary.rating5Count : 0}"
+								dist4="${reviewSummary.rating4Count != null ? reviewSummary.rating4Count : 0}"
+								dist3="${reviewSummary.rating3Count != null ? reviewSummary.rating3Count : 0}"
+								dist2="${reviewSummary.rating2Count != null ? reviewSummary.rating2Count : 0}"
+								dist1="${reviewSummary.rating1Count != null ? reviewSummary.rating1Count : 0}" />
 						</div>
 						<!-- 정렬 -->
 						<my:sortList hasSelect="true" />
 						<!-- 리뷰 내용 -->
 						<div class="review-card-wrapper">
-							<my:reviewCard nickname="닉네임" skinType="지성/민감성/여드름" rating="5"
-								date="2025.09.04" option="옵션에 대한 이름" content="리뷰 본문 내용입니다."
-								images="/img/review1.png,/img/review2.png,/img/review3.png" />
-							<my:reviewCard nickname="닉네임" skinType="지성/민감성/여드름" rating="5"
-								date="2025.09.04" option="옵션에 대한 이름" content="리뷰 본문 내용입니다."
-								images="/img/review1.png,/img/review2.png,/img/review3.png" />
-							<my:reviewCard nickname="닉네임" skinType="지성/민감성/여드름" rating="5"
-								date="2025.09.04" option="옵션에 대한 이름" content="리뷰 본문 내용입니다."
-								images="/img/review1.png,/img/review2.png,/img/review3.png" />
+							<c:choose>
+								<c:when test="${not empty reviews}">
+									<c:forEach var="review" items="${reviews}">
+									  <div data-rating="${review.rating}" data-date="${review.questionedAt}">
+										<my:reviewCard nickname="User${review.memberId}"
+											skinType="All skin types" rating="${review.rating}"
+											date="${review.questionedAt}" option="Product Option"
+											content="${review.content}" images="" />
+										</div>
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<p>아직 작성된 리뷰가 없습니다.</p>
+								</c:otherwise>
+							</c:choose>
 						</div>
 						<div class="pagination-wrapper">
-							<my:pagination currentPage="1" totalPages="10"
-								baseUrl="/products?page=" />
+							<my:pagination currentPage="1" totalPages="1"
+								baseUrl="/consumer/productDetail?productId=${product.productId}&page=" />
 						</div>
 					</div>
 				</div>
@@ -257,23 +293,31 @@ request.setAttribute("floor", floor);
 
 						<!-- 상품 문의 리스트 -->
 						<div class="qna-list-wrapper">
-							<!-- Q&A 리스트 -->
-							<my:qnaItem status="waiting" title="네모패드 휴대용케이스 설명보면..."
-								nickname="닉네임" date="2025.08.04" />
-							<!-- Q&A 리스트 -->
-							<my:qnaItem status="waiting" title="네모패드 휴대용케이스 설명보면..."
-								nickname="닉네임" date="2025.08.04" />
+							<c:choose>
+								<c:when test="${not empty qnas}">
+									<c:forEach var="qna" items="${qnas}">
+										<my:qnaItem
+											status="${qna.status == 'ANSWERED' ? 'answered' : 'waiting'}"
+											title="${qna.question}" nickname="User${qna.memberId}"
+											date="${qna.questionedAt}" />
 
-							<!-- 상세 펼침 -->
-							<my:qnaQuestion
-								content="네모페드 휴대용케이스 설명보면 패드넣고 재사용 가능한 커버로 패드위에 덮으라고 써있는데, 재사용가능한 커버는 뭘까요? 그런커버 안들어있던대.." />
-							<my:qnaAnswer
-								content="안녕하세요. 메디힐 담당자입니다. 저희 메디힐 제품에 관심 가져주시고 문의 남겨주셔서 감사합니다.  문의주신 사항 관련, 정확한 사전 확인은 어렵지만 고객님의 소중한 의견은 관련 부서에도 전달 드리도록 하겠으며, 고객님들의 의견을 수렴하여 더욱 발전하는 메디힐이 되도록 노력하겠습니다.  감사합니다." />
+										<!-- 답변이 있는 경우 -->
+										<c:if
+											test="${qna.status == 'ANSWERED' and not empty qna.answer}">
+											<my:qnaQuestion content="${qna.question}" />
+											<my:qnaAnswer content="${qna.answer}" />
+										</c:if>
+									</c:forEach>
+								</c:when>
+								<c:otherwise>
+									<p>아직 등록된 문의가 없습니다.</p>
+								</c:otherwise>
+							</c:choose>
 						</div>
 
 						<div class="pagination-wrapper">
-							<my:pagination currentPage="1" totalPages="10"
-								baseUrl="/products?page=" />
+							<my:pagination currentPage="1" totalPages="1"
+								baseUrl="/consumer/productDetail?productId=${product.productId}&page=" />
 						</div>
 					</div>
 				</div>
@@ -284,7 +328,204 @@ request.setAttribute("floor", floor);
 	<!-- 푸터 include -->
 	<%@ include file="/consumer/footer.jsp"%>
 
-	<script src="<c:url value='/js/tab.js'/>"></script>
-	<script src="<c:url value='/js/productDetail.js'/>"></script>
+	<!-- 옵션 데이터를 JavaScript에서 사용할 수 있도록 추가 -->
+	<c:if test="${product.hasOption == 1}">
+		<script>
+			const productOptionsData = [
+				<c:forEach var="option" items="${productOptions}" varStatus="status">
+					{
+						id: ${option.productOptionId},
+						value: "${option.optionValue}",
+						price: ${option.price},
+						stock: ${option.stockQty}
+					}<c:if test="${!status.last}">,</c:if>
+				</c:forEach>
+			];
+		</script>
+	</c:if>
+
+	<script>
+		// 전역 변수
+		let selectedOptions = [];
+		let totalPrice = 0;
+
+		// 함수 정의 (한 번만)
+		function addSelectedOption(optionText) {
+			const selectedOptionsContainer = document.getElementById('selectedOptions');
+			
+			// 옵션에서 실제 데이터 찾기
+			let optionData = null;
+			if (typeof productOptionsData !== 'undefined') {
+				optionData = productOptionsData.find(opt => 
+					optionText.includes(opt.value)
+				);
+			}
+			
+			if (optionData) {
+				// 이미 선택된 옵션인지 확인
+				const existingOption = selectedOptions.find(opt => opt.id === optionData.id);
+				if (existingOption) {
+					alert('이미 선택된 옵션입니다.');
+					return;
+				}
+				
+				// 선택된 옵션 배열에 추가
+				selectedOptions.push({
+					id: optionData.id,
+					value: optionData.value,
+					price: optionData.price,
+					stock: optionData.stock,
+					quantity: 1
+				});
+				
+				// UI에 추가
+				const optionDiv = document.createElement('div');
+				optionDiv.className = 'selected-option-item';
+				optionDiv.setAttribute('data-option-id', optionData.id);
+				optionDiv.innerHTML = `
+					<p>선택된 옵션: ${optionData.value}</p>
+					<p>가격: ${optionData.price.toLocaleString()}원</p>
+					<p>수량: <button onclick="changeQuantity(${optionData.id}, -1)">-</button> 
+					       <span id="qty-${optionData.id}">1</span> 
+					       <button onclick="changeQuantity(${optionData.id}, 1)">+</button></p>
+					<button onclick="removeOption(${optionData.id})">삭제</button>
+				`;
+				selectedOptionsContainer.appendChild(optionDiv);
+			} else {
+				// 단일 상품인 경우
+				const optionDiv = document.createElement('div');
+				optionDiv.innerHTML = `<p>선택된 옵션: ${optionText}</p>`;
+				selectedOptionsContainer.appendChild(optionDiv);
+			}
+		}
+
+		function removeOption(optionId) {
+			// 배열에서 제거
+			selectedOptions = selectedOptions.filter(opt => opt.id !== optionId);
+			
+			// UI에서 제거
+			const optionElement = document.querySelector(`[data-option-id="${optionId}"]`);
+			if (optionElement) {
+				optionElement.remove();
+			}
+			
+			updateTotalPrice();
+		}
+
+		function changeQuantity(optionId, change) {
+			const option = selectedOptions.find(opt => opt.id === optionId);
+			if (option) {
+				const newQuantity = option.quantity + change;
+				if (newQuantity > 0 && newQuantity <= option.stock) {
+					option.quantity = newQuantity;
+					document.getElementById(`qty-${optionId}`).textContent = newQuantity;
+					updateTotalPrice();
+				} else if (newQuantity > option.stock) {
+					alert(`재고가 부족합니다. (재고: ${option.stock}개)`);
+				}
+			}
+		}
+
+		function updateTotalPrice() {
+			 if (selectedOptions.length === 0) {
+			        // 선택된 옵션이 없을 때
+			        const totalAmountElement = document.getElementById('totalAmount');
+			        if (typeof productOptionsData !== 'undefined') {
+			            // 옵션이 있는 상품
+			            totalAmountElement.textContent = '옵션을 선택해주세요';
+			        } else {
+			            // 단일 상품 - 기본 가격 유지
+			        }
+			        return;
+			    }
+			    
+			    totalPrice = selectedOptions.reduce((total, option) => {
+			        return total + (option.price * option.quantity);
+			    }, 0);
+			    
+			    const totalAmountElement = document.getElementById('totalAmount');
+			    if (totalAmountElement) {
+			        totalAmountElement.textContent = totalPrice.toLocaleString() + '원';
+			    }
+		}
+
+		// 이벤트 리스너
+		document.addEventListener("selectChanged", (e) => {
+			console.log("선택된 값:", e.detail.value);
+			console.log("선택된 텍스트:", e.detail.text);
+			
+			if (e.detail.value !== "상품을 선택해주세요" && 
+			    e.detail.value !== "단일 상품" && 
+			    !e.detail.value.includes("단일 상품")) {
+				addSelectedOption(e.detail.value);
+				updateTotalPrice();
+			}
+		});
+	</script>
+	<script>
+	// 리뷰 정렬 기능
+	document.addEventListener("sortSelected", (e) => {
+	    console.log("선택한 정렬:", e.detail.sort);
+	    
+	    const sortType = e.detail.sort;
+	    const reviewWrapper = document.querySelector('.review-card-wrapper');
+	    
+	    if (!reviewWrapper) return;
+	    
+	    // 현재 리뷰 카드들을 가져옴
+	    const reviewCards = Array.from(reviewWrapper.querySelectorAll('my\\:reviewCard, [class*="review-card"]'));
+	    
+	    if (reviewCards.length === 0) return;
+	    
+	    // 정렬 로직
+	    let sortedCards;
+	    
+	    switch(sortType) {
+	        case "별점 높은순":
+	            sortedCards = sortReviewsByRating(reviewCards, 'desc');
+	            break;
+	        case "별점 낮은순":
+	            sortedCards = sortReviewsByRating(reviewCards, 'asc');
+	            break;
+	        case "최신순":
+	            sortedCards = sortReviewsByDate(reviewCards, 'desc');
+	            break;
+	        default:
+	            return;
+	    }
+	    
+	    // DOM 재정렬
+	    reviewWrapper.innerHTML = '';
+	    sortedCards.forEach(card => reviewWrapper.appendChild(card));
+	});
+
+	function sortReviewsByRating(cards, order) {
+	    return cards.sort((a, b) => {
+	        const ratingA = parseInt(a.getAttribute('data-rating') || '0');
+	        const ratingB = parseInt(b.getAttribute('data-rating') || '0');
+	        
+	        if (order === 'desc') {
+	            return ratingB - ratingA;
+	        } else {
+	            return ratingA - ratingB;
+	        }
+	    });
+	}
+
+	function sortReviewsByDate(cards, order) {
+	    return cards.sort((a, b) => {
+	        const dateA = new Date(a.getAttribute('data-date') || '0');
+	        const dateB = new Date(b.getAttribute('data-date') || '0');
+	        
+	        if (order === 'desc') {
+	            return dateB - dateA;
+	        } else {
+	            return dateA - dateB;
+	        }
+	    });
+	}
+     </script>
+	<script src="<c:url value='/consumer/js/tab.js'/>"></script>
+	<script src="<c:url value='/consumer/js/productDetail.js'/>"></script>
 </body>
 </html>

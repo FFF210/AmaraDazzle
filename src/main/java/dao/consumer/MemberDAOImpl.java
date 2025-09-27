@@ -107,4 +107,30 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("mapper.member.selectBasicInfo", memberId);
 	}
 
+	@Override
+	public String selectEmailByNameAndPhone(String name, String phone) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("name", name);
+	    params.put("phone", phone);
+	    return sqlSession.selectOne("mapper.member.selectEmailByNameAndPhone", params);
+	}
+
+	@Override
+	public Long selectIdByEmailAndPhone(String email, String phone) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("email", email);
+	    params.put("phone", phone);
+	    return sqlSession.selectOne("mapper.member.selectIdByEmailAndPhone", params);
+	}
+
+	@Override
+	public void resetPassword(Long memberId, String newPassword) throws Exception {
+		 Map<String, Object> params = new HashMap<>();
+		    params.put("memberId", memberId);
+		    params.put("newPassword", newPassword);
+		    sqlSession.update("mapper.member.resetPassword", params);
+		    sqlSession.commit();
+		
+	}
+
 }
