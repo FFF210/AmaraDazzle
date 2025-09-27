@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 
 public class ProductOption {
     private Long productOptionId; // 고유 식별자 (PK, AUTO_INCREMENT)
-    private String productId;     // 상품 ID (FK → product.product_id)
+    private Long productId;     // 상품 ID (FK → product.product_id)
     private String optionValue;   // 옵션명 (예: 01호)
     private BigDecimal price;     // 옵션가
     private Integer stockQty;     // 옵션 재고 수량 (DEFAULT 0)
@@ -22,10 +22,10 @@ public class ProductOption {
         this.productOptionId = productOptionId;
     }
 
-    public String getProductId() {
+    public Long getProductId() {
         return productId;
     }
-    public void setProductId(String productId) {
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
 

@@ -1,246 +1,312 @@
 @charset "UTF-8";
-/* 회원가입 페이지 스타일 */
+
+body {
+    font-family: 'Noto Sans KR', Arial, sans-serif;
+    font-weight: 400;
+    min-width: 1200px; /* 최소 너비 고정 */
+}
+
 .join-container {
-    min-height: calc(100vh - 200px);
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    background-color: white;
-    padding: 40px 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	background: #FFF;
+	 width: 100%; /* 전체 너비 */
+    min-height: 100vh; /* 전체 화면 높이 */
 }
 
 .join-box {
-    background: white;
-    width: 100%;
-    max-width: 500px;
-    padding: 40px 30px;
+	background: white;
+	display: flex;
+	width: 380px;
+	padding: 100px 0;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 56px;
 }
 
 .join-title {
-    text-align: center;
-    font-size: 28px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 30px;
+	color: #000;
+	text-align: center;
+	font-family: Noto Sans;
+	font-size: 24px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: 120%; /* 28.8px */
 }
 
 /* 입력 그룹 스타일 */
 .input-group {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
+	display: flex;
+	width: 380px;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 4px;
+	flex-shrink: 0; /* 크기 변경 방지 */
 }
 
 .input-group label {
-    display: block;
-    font-size: 14px;
-    color: #333;
-    margin-bottom: 8px;
-    font-weight: 500;
+	/* display: block; */
+	font-size: 16px;
+	color: #000;;
+	/* 	margin-bottom: 8px; */
+	font-weight: 500;
+	display: flex;
+	align-items: flex-start;
+	gap: 2px;
+	align-self: stretch;
 }
 
 .required {
-    color: #ff0000;
+	color: #FF1D1D;
+	leading-trim: both;
+	text-edge: cap;
+	font-family: Inter;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 150%; /* 24px */
+	letter-spacing: 0.091px;
 }
 
 .input-group input {
-    width: 100%;
-    padding: 12px 16px;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: border-color 0.3s ease;
-    box-sizing: border-box;
-    background-color: #fafafa;
-    margin-bottom: 8px;
+	width: 100%;
+	font-size: 16px;
+	transition: border-color 0.3s ease;
+	box-sizing: border-box;
+	display: flex;
+	height: 56px;
+	padding: 21px 16px;
+	align-items: center;
+	gap: 10px;
+	align-self: stretch;
+	border-radius: 8px;
+	border: 1px solid #DDE1EB;
+	background: #FFF;
 }
 
 .input-group input:focus {
-    outline: none;
-    border-color: #007bff;
-    background-color: white;
+	outline: none;
+	border-color: #007bff;
+	background-color: white;
 }
 
 .input-group input:last-child {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 /* 버튼과 함께 있는 입력 필드 */
 .input-with-button {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 8px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	align-self: stretch;
 }
 
 .input-with-button input {
-    flex: 1;
-    margin-bottom: 0;
+	display: flex;
+	width: 195px;
+	height: 56px;
+	padding: 21px 16px;
+	align-items: center;
+	gap: 10px;
 }
 
 .check-btn {
-    padding: 12px 16px;
-    background-color: black;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background-color 0.3s ease;
+	background-color: black;
+	/* background: #FFF; */
+	color: white;
+	border: none;
+	/* border: 1px solid #0C8CE9; */
+	border-radius: 6px;
+	font-size: 14px;
+	cursor: pointer;
+	white-space: nowrap;
+	transition: background-color 0.3s ease;
+	display: flex;
+	padding: 7px 14px;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 .check-btn:hover {
-    background-color: #0056b3;
+	background-color: #0056b3;
+}
+
+/* 생년월일 어케 만드는거임 */
+.birthdate-group input[type="date"] {
+	width: 158.5px;
+	display: flex;
+	height: 36px;
+	align-items: center;
+	flex-shrink: 0;
+	border-radius: 12px;
+	border: 1px solid #ECEDF0;
+	background: #FFF;
 }
 
 /* 유효성 검사 메시지 */
 .validation-message {
-    font-size: 12px;
-    margin-top: 4px;
-    min-height: 16px;
+	font-size: 12px;
+	margin-top: 4px;
+	min-height: 16px;
 }
 
 .validation-message.success {
-    color: #28a745;
+	color: #28a745;
 }
 
 .validation-message.error {
-    color: #dc3545;
+	color: #dc3545;
 }
 
 /* 성별 선택 */
 .gender-group {
-    display: flex;
-    gap: 20px;
-    margin-top: 8px;
+	display: flex;
+	height: 56px;
+	padding: 8px 0;
+	align-items: center;
+	gap: 56px;
+	align-self: stretch;
 }
 
 .radio-label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    font-size: 14px;
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 500;
+	color: #000;
+	gap: 8px;
 }
 
-.radio-label input {
-    width: auto !important;
-    margin: 0 6px 0 0 !important;
+
+.radio-label input[type="radio"] {
+     width: 16px !important;
+    height: 16px !important;
+    margin: 0 8px 0 0 !important;
+    padding: 0 !important;
+    vertical-align: middle;
+    flex-shrink: 0;
 }
+
+.radio-label span {
+    line-height: 1; /* 텍스트 라인 높이 조정 */
+    vertical-align: middle; /* 추가 */
+}
+
 /* 기존 태그 CSS 가져와서 사용 (tag.css) */
 /* 피부타입 태그 컨테이너 */
 .skin-type-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 8px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 8px;
 }
 
-/* 태그 체크박스 숨기기 */
-.tag-checkbox {
-    display: none;
+.tag-radio {
+	display: none !important; /* !important 추가 */
+	position: absolute; /* 추가로 숨김 */
+	opacity: 0; /* 추가로 숨김 */
+	visibility: hidden; /* 추가로 숨김 */
 }
 
 /* 선택 가능한 태그 추가 스타일 */
 .selectable-tag {
-    cursor: pointer;
-    transition: all 0.3s ease;
-    user-select: none;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	user-select: none;
+	border: 1px solid #CDD1D5;
+	background: #FFF;
+}
+
+/* 선택된 상태 스타일링 */
+.tag-radio:checked+.selectable-tag {
+	background-color: #007bff;
+	color: white;
+	border-color: #007bff;
 }
 
 /* 태그 호버 효과 */
 .selectable-tag:hover {
-    background-color: #e2e8f0;
-    color: #1e293b;
+	background-color: #e2e8f0;
+	color: #1e293b;
 }
 
 /* 태그 선택 시 스타일 (blue 색상으로 변경) */
-.tag-checkbox:checked + .selectable-tag {
-    background-color: #EEF2FF;
-    color: #4F46E5;
+.tag-checkbox:checked+.selectable-tag {
+	background-color: #EEF2FF;
+	color: #4F46E5;
 }
 
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    font-size: 14px;
+.radio-label {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	font-size: 16px;
 }
 
-.checkbox-label input {
-    width: auto !important;
-    margin: 0 6px 0 0 !important;
+.radio-label input {
+	width: auto !important;
+	margin: 0 6px 0 0 !important;
 }
 
 /* 약관 동의 섹션 */
 .terms-section {
-    margin: 30px 0;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 4px;
+	margin: 30px 0;
+	padding: 20px;
+	background-color: #f8f9fa;
+	border-radius: 4px;
 }
 
 .terms-section h3 {
-    font-size: 16px;
-    margin-bottom: 15px;
-    color: #333;
+	font-size: 16px;
+	margin-bottom: 15px;
+	color: #333;
 }
 
 .terms-item {
-    margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 
 .terms-item a {
-    color: #007bff;
-    text-decoration: none;
+	color: #007bff;
+	text-decoration: none;
 }
 
 .terms-item a:hover {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 /* 가입하기 버튼 */
 .join-btn {
-    width: 100%;
-    padding: 16px;
-    background-color: black;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 20px;
+	width: 100%;
+	background-color: black;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	display: flex;
+	height: 48px;
+	padding: 12px 28px;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	align-self: stretch;
 }
 
 .join-btn:hover {
-    background-color: #0056b3;
+	background-color: #0056b3;
 }
 
 .join-btn:disabled {
-    background-color: #6c757d;
-    cursor: not-allowed;
-}
-
-/* 반응형 디자인 */
-@media (max-width: 480px) {
-    .join-box {
-        padding: 30px 20px;
-        margin: 0 10px;
-    }
-    
-    .join-title {
-        font-size: 24px;
-    }
-    
-    .input-with-button {
-        flex-direction: column;
-    }
-    
-    .skin-type-group {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .gender-group {
-        gap: 15px;
-    }
+	background-color: #6c757d;
+	cursor: not-allowed;
 }

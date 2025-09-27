@@ -86,5 +86,38 @@ public interface MemberService {
      * @throws Exception 데이터베이스 오류 또는 포인트 부족 시
      */
     void usePoints(Long memberId, int points) throws Exception;
+    
+    
+    /**
+     * 아이디(이메일) 찾기 - 이름과 휴대폰 번호로 이메일 찾기
+     * @param name 이름
+     * @param phone 휴대폰 번호
+     * @return 찾은 이메일 (마스킹 처리), 없으면 null
+     * @throws Exception 데이터베이스 오류 시
+     */
+    String findEmailByNameAndPhone(String name, String phone) throws Exception;
+    
+    
+    /**
+     * 비밀번호 재설정 권한 확인 - 이메일과 휴대폰 번호 일치 확인
+     * @param email 이메일
+     * @param phone 휴대폰 번호
+     * @return 일치하면 회원 ID, 불일치하면 null
+     * @throws Exception 데이터베이스 오류 시
+     */
+    Long verifyForPasswordReset(String email, String phone) throws Exception;
+    
+    
+    /**
+     * 비밀번호 재설정 (인증 후)
+     * @param memberId 회원 ID
+     * @param newPassword 새 비밀번호
+     * @throws Exception 데이터베이스 오류 시
+     */
+    void resetPassword(Long memberId, String newPassword) throws Exception;
+    
+    Member kakaoLogin(String code) throws Exception;
 }
+
+
 

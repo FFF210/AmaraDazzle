@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로그인 - AD</title>
+    <title>로그인</title>
     <link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
     <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">    
@@ -25,16 +25,16 @@
             <h1 class="login-title">로그인</h1>
             
             <!-- 일반 로그인 폼 -->
-            <form id="loginForm" action="${pageContext.request.contextPath}/login" method="post" class="auth-form">
+            <form id="loginForm" action="${pageContext.request.contextPath}/consumer/login" method="post" class="auth-form">
                 <div class="input-group">
                     <div class="form-group">
 					<label for="loginId">아이디</label>
-					<my:textInput id="loginId" name="loginId" placeholder="아이디를 입력하세요"
+					<my:textInput id="email" name="email" placeholder="이메일을 입력하세요"
 						type="default" size="lg" state="default" />
 				</div>
 				<div class="form-group">
 					<label for="loginPw">비밀번호</label>
-					<my:textInput id="loginPw" name="loginPw" placeholder="비밀번호를 입력하세요"
+					<my:textInput id="password" name="password" placeholder="비밀번호를 입력하세요"
 						type="password" size="lg" state="default" />
 				</div>
 			</div>
@@ -48,7 +48,7 @@
                 
             <!-- 카카오 로그인 버튼 -->
             <button type="button" class="kakao-login-btn" onclick="loginWithKakao()">
-                <img src="<c:url value='/images/kakao_login_icon.svg'/>" 
+                <img src="<c:url value='/image/kakao_login_icon.svg'/>" 
                      alt="카카오" class="kakao-icon">
                 카카오 로그인
             </button>

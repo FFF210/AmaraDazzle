@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html lang="ko">
@@ -7,15 +8,15 @@
 <title>온라인</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="./css/reset.css" />
-<link rel="stylesheet" href="./css/header.css" />
-<link rel="stylesheet" href="./css/mainBanner.css" />
+<link rel="stylesheet" href="<c:url value='/css/reset.css'/>" />
+<link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/mainBanner.css'/>" />
 <link rel="stylesheet" href="./css/recommendationSectionTitle.css" />
 <link rel="stylesheet" href="./css/productCard.css" />
 <link rel="stylesheet" href="./css/tag.css" />
 <link rel="stylesheet" href="./css/eventCard.css" />
-<link rel="stylesheet" href="./css/footer.css" />
-<link rel="stylesheet" href="./css/main.css" />
+<link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>" />
+<link rel="stylesheet" href="<c:url value='/consumer/css/main.css'/>" />
 </head>
 <body>
 	<!-- 상단 헤더 -->

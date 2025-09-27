@@ -3,4 +3,13 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.brand">
+
+	<!-- ======================= 소비자용 ======================= -->
+	<!-- 브랜드 ID로 브랜드 정보 조회 (상품 상세용) -->
+	<select id="selectBrandByBrandId" parameterType="Long"
+		resultType="dto.Brand">
+		SELECT * FROM brand WHERE brand_id = #{brandId}
+	</select>
+
+
 </mapper>
