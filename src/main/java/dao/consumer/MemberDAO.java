@@ -91,5 +91,14 @@ public interface MemberDAO {
      * @return 헤더 표시용 기본 정보
      */
     Map<String, Object> selectHeaderInfo(Long memberId) throws Exception;
+    
+    // 이름과 휴대폰으로 이메일 찾기
+    public String selectEmailByNameAndPhone(String name, String phone) throws Exception;
+    
+    // 이메일과 휴대폰으로 회원 ID 찾기 
+    public Long selectIdByEmailAndPhone(String email, String phone) throws Exception;
+ 
+    // 비밀번호 재설정
+    public void resetPassword(Long memberId, String newPassword) throws Exception;
 
 }

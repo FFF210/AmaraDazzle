@@ -1,21 +1,22 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="dto.Member" %>
 
-<%-- //JSP 처리 로직// 
+<%-- //JSP 처리 로직// --%>
 <%
     // 세션에서 로그인 사용자 정보 가져오기
-    MemberVO loginUser = (MemberVO) session.getAttribute("loginUser");
+    Member loginUser = (Member) session.getAttribute("loginUser");
     
     // 로그인된 사용자의 장바구니 개수 조회
     int cartCount = 0;
     if (loginUser != null) {
         // MyBatis를 통한 장바구니 개수 조회
-        cartCount = cartService.getCartCount(loginUser.getId());
+        //cartCount = cartService.getCartCount(loginUser.getId());
     }
     
     request.setAttribute("loginUser", loginUser);
-    request.setAttribute("cartCount", cartCount);
-%>--%>
+   // request.setAttribute("cartCount", cartCount);
+%>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -35,25 +36,27 @@
         <div class="header-top">
             <!-- 검색 영역 -->
             <div class="search-area">
-                <button class="search-btn" aria-label="검색">                   
-                     <i class="bi bi-search" aria-hidden="true"></i>
-                     </button>
                 <form action="<c:url value='/productList'/>" method="get" style="display:flex;width:100%;">
                     <!-- 숨김 라벨 -->
                     <label for="keyword" class="sr-only">검색어</label>
+                    <div class="search-input-wrapper">
+                     <button class="search-btn" aria-label="검색">                   
+                     <i class="bi bi-search" aria-hidden="true"></i>
+                     </button>
                     <input id="keyword"
                      type="text"
                      name="keyword"
                      class="search-input"
                      placeholder="상품, 브랜드 검색"
-                     value="${param.keyword}">                  
+                     value="${param.keyword}"> 
+                   </div>                   
                 </form>
             </div>
             
             <!-- 로고 -->
             <div class="logo">
-                 <a href="<c:url value='/'/>">
-                 <img src="<c:url value='/images/logo_black.svg'/>" alt="AD 로고">
+                 <a href="<c:url value='/consumer/main'/>">
+                 <img src="<c:url value='/image/logo_black.svg'/>" alt="AD 로고">
                  </a>
             </div>
             
@@ -63,10 +66,13 @@
                     <c:when test="${not empty loginUser}">
                         <!-- 로그인 상태 -->
                         <span class="username">${loginUser.name}님</span>
-                        <a href="<c:url value='/store/logout'/>">로그아웃</a>
+                        <a href="<c:url value='/consumer/logout'/>">로그아웃</a>
+                        
+                        <!-- 마이페이지 -->
+                        <a href="<c:url value='/consumer/mypage'/>">마이페이지</a>
                         
                         <!-- 장바구니 (배지 포함) -->
-                        <a href="<c:url value='/store/cart'/>" class="cart-link">
+                        <a href="<c:url value='/consumer/cart'/>" class="cart-link">
                          장바구니
                          <c:if test="${cartCount > 0}">
                            <span class="cart-count">${cartCount}</span>
@@ -75,13 +81,12 @@
                     </c:when>
                     <c:otherwise>
                         <!-- 비로그인 상태 -->
-                        <a href="<c:url value='/store/join'/>">회원가입</a>
-                        <a href="<c:url value='/store/login'/>">로그인</a>
-                         <a href="<c:url value='/store/cart'/>" class="cart-link">장바구니</a>
+                        <a href="<c:url value='/consumer/join'/>">회원가입</a>
+                        <a href="<c:url value='/consumer/login'/>">로그인</a>
+                         <a href="<c:url value='/consumer/cart'/>" class="cart-link">장바구니</a>
                     </c:otherwise>
                 </c:choose>
-                
-                 <!-- ✅ 최근 본 상품: 링크가 아니라 토글 버튼 -->
+                 <!-- ✅ 최근 본 상품: 토글 버튼 -->
                  <button type="button" class="recent-toggle" aria-controls="recent-drawer" aria-expanded="false">
                   최근 본 상품
                  </button>
@@ -90,8 +95,7 @@
                 
         
         <!-- 네비게이션 영역 -->
-        <nav class="header-nav">
-            <div class="nav-container">
+            <div class="tab-navigation" style="display: flex !important;">
                 <!-- 메인 카테고리 -->
                 <ul class="main-nav">
                     <li><a href="<c:url value='/productList?categoryId=1'/>">스킨케어</a></li>
@@ -104,14 +108,13 @@
                 
                 <!-- 서브 메뉴 -->
                 <ul class="sub-nav">
-                    <li><a href="<c:url value='/productList?ranking=true'/>">랭킹</a></li>
-                    <li><a href="<c:url value='/productList?sale=true'/>">세일</a></li>
-                    <li><a href="<c:url value='/store//productList?plan=true'/>">기획</a></li>
+                    <li><a href="<c:url value='/store/productList?ranking=true'/>">랭킹</a></li>
+                    <li><a href="<c:url value='/store/productList?sale=true'/>">세일</a></li>
+                    <li><a href="<c:url value='/store/productList?plan=true'/>">기획</a></li>
                     <li><a href="<c:url value='/store/event'/>">이벤트</a></li>
                     <li><a href="<c:url value='/store/coupon'/>">쿠폰</a></li>
                 </ul>
             </div>
-        </nav>
         
          <!-- ✅ 최근 본 상품 드로어 -->
          <div id="recent-overlay" class="recent-overlay" hidden></div>
@@ -141,7 +144,7 @@ document.querySelector('.search-input').addEventListener('keypress', function(e)
 //===== 최근 본 상품 드로어 =====
 const BASE = '<c:url value="/"/>';          // 컨텍스트 패스 안전하게
 const KEY  = 'recentProductIds';
-const MAX  = 20;
+const MAX  = 4;
 
 const btnToggle = document.querySelector('.recent-toggle');
 const drawer    = document.getElementById('recent-drawer');

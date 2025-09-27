@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class Product {
     private Long productId;           // 고유 식별자 (PK, AUTO_INCREMENT)
-    private String brandId;           // 등록 브랜드 관리자 ID (FK → brand.brand_id)
+    private Long brandId;           // 등록 브랜드 관리자 ID (FK → brand.brand_id)
     private String name;              // 상품명
     private Integer isExclusive;      // 단독 판매 여부 (tinyint, DEFAULT 0)
     private Integer isVisible;        // 상품 공개 여부 (tinyint, DEFAULT 1)
@@ -38,7 +38,7 @@ public class Product {
     }
     
     // productId(AUTO_INCREMENT) 포함된 생성자
-    public Product(Long productId, String brandId, String name, Integer isExclusive, Integer isVisible,
+    public Product(Long productId, Long brandId, String name, Integer isExclusive, Integer isVisible,
 			Integer isPlanned, Long category1Id, Long category2Id, Long category3Id, Long thumbnailFileId, Long image1FileId, Long image2FileId,
 			Long image3FileId, Long image4FileId, Long image5FileId, String ingredients, BigDecimal price,
 			Integer orderLimit, Integer hasOption, Integer stockQty, String shippingMethod, String discountType,
@@ -76,7 +76,7 @@ public class Product {
 	}
 
  // productId(AUTO_INCREMENT) 미포함된 생성자
-	public Product(String brandId, String name, Integer isExclusive, Integer isVisible, Integer isPlanned,
+	public Product(Long brandId, String name, Integer isExclusive, Integer isVisible, Integer isPlanned,
 			Long category1Id, Long category2Id, Long category3Id, Long thumbnailFileId, Long image1FileId, Long image2FileId, Long image3FileId,
 			Long image4FileId, Long image5FileId, String ingredients, BigDecimal price, Integer orderLimit,
 			Integer hasOption, Integer stockQty, String shippingMethod, String discountType, BigDecimal discountValue,
@@ -118,10 +118,10 @@ public class Product {
         this.productId = productId;
     }
 
-    public String getBrandId() {
+    public Long getBrandId() {
         return brandId;
     }
-    public void setBrandId(String brandId) {
+    public void setBrandId(Long brandId) {
         this.brandId = brandId;
     }
 
