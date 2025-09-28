@@ -3,4 +3,187 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.orders">
+<!-- ===========================소비자용===================== -->
+
+    <!-- 상품 정보 조회 (상품상세에서 바로 주문하는 경우) -->
+    <!-- 옵션이 없는 상품: product 테이블의 기본 정보만 -->
+    <select id="getProductForDirectOrder" parameterType="Long" resultType="map">
+        SELECT 
+            p.product_id as productId,
+            p.brand_id as brandId,
+            p.name as productName,
+            p.price as originalPrice,
+            p.discount_type as discountType,
+            p.discount_value as discountValue,
+            p.start_date as startDate,
+            p.end_date as endDate,
+            p.has_option as hasOption,
+            p.stock_qty as stockQty,
+            b.brand_name as brandName
+        FROM product p
+        LEFT JOIN brand b ON p.brand_id = b.brand_id
+        WHERE p.product_id = #{productId}
+        AND p.is_visible = 1
+    </select>
+
+    <!-- 상품 옵션 정보 조회 (옵션이 있는 상품의 경우) -->
+    <select id="getProductOptionInfo" parameterType="Long" resultType="map">
+        SELECT 
+            po.product_option_id as optionId,
+            po.product_id as productId,
+            po.option_value as optionValue,
+            po.price as optionPrice,
+            po.stock_qty as stockQty
+        FROM product_option po
+        WHERE po.product_option_id = #{optionId}
+    </select>
+
+    <!-- 주문 코드 생성 (YYYYMMDD-XXXXXX 형태????) -->
+    <select id="generateOrderCode" resultType="String">
+        SELECT CONCAT(
+            DATE_FORMAT(NOW(), '%Y%m%d'),
+            '-',
+            LPAD((
+                SELECT COALESCE(MAX(CAST(SUBSTRING(order_code, 10) AS UNSIGNED)), 0) + 1
+                FROM orders 
+                WHERE order_code LIKE CONCAT(DATE_FORMAT(NOW(), '%Y%m%d'), '-%')
+            ), 6, '0')
+        ) as orderCode
+    </select>
+
+    <!-- 새 주문 생성 -->
+    <insert id="createOrder" parameterType="dto.Orders" useGeneratedKeys="true" keyProperty="ordersId">
+        INSERT INTO orders (
+            order_code,
+            member_id,
+            phone,
+            subtotal_amount,
+            discount_amount,
+            shipping_amount,
+            total_amount,
+            ship_recipient,
+            ship_phone,
+            ship_postcode,
+            ship_line1,
+            ship_line2,
+            note,
+            using_coupon,
+            using_point,
+            created_at
+        ) VALUES (
+            #{orderCode},
+            #{memberId},
+            #{phone},
+            #{subtotalAmount},
+            #{discountAmount},
+            #{shippingAmount},
+            #{totalAmount},
+            #{shipRecipient},
+            #{shipPhone},
+            #{shipPostcode},
+            #{shipLine1},
+            #{shipLine2},
+            #{note},
+            #{usingCoupon},
+            #{usingPoint},
+            NOW()
+        )
+    </insert>
+
+    <!-- 주문 상품 추가 -->
+    <insert id="createOrderItem" parameterType="dto.OrderItem" useGeneratedKeys="true" keyProperty="orderItemId">
+        INSERT INTO order_item (
+            order_id,
+            brand_id,
+            product_id,
+            option_id,
+            unit_price,
+            quantity,
+            line_subtotal,
+            discount,
+            total,
+            status
+        ) VALUES (
+            #{orderId},
+            #{brandId},
+            #{productId},
+            #{optionId},
+            #{unitPrice},
+            #{quantity},
+            #{lineSubtotal},
+            #{discount},
+            #{total},
+            'PAID'
+        )
+    </insert>
+
+    <!-- 주문 조회 (주문 완료 후 확인용) -->
+    <select id="getOrderById" parameterType="Long" resultType="dto.Orders">
+        SELECT 
+            orders_id as ordersId,
+            order_code as orderCode,
+            member_id as memberId,
+            phone,
+            subtotal_amount as subtotalAmount,
+            discount_amount as discountAmount,
+            shipping_amount as shippingAmount,
+            total_amount as totalAmount,
+            ship_recipient as shipRecipient,
+            ship_phone as shipPhone,
+            ship_postcode as shipPostcode,
+            ship_line1 as shipLine1,
+            ship_line2 as shipLine2,
+            note,
+            using_coupon as usingCoupon,
+            using_point as usingPoint,
+            created_at as createdAt
+        FROM orders 
+        WHERE orders_id = #{ordersId}
+    </select>
+
+    <!-- 주문 상품 목록 조회 -->
+    <select id="getOrderItemsByOrderId" parameterType="Long" resultType="dto.OrderItem">
+        SELECT 
+            order_item_id as orderItemId,
+            order_id as orderId,
+            brand_id as brandId,
+            product_id as productId,
+            option_id as optionId,
+            unit_price as unitPrice,
+            quantity,
+            line_subtotal as lineSubtotal,
+            discount,
+            total,
+            tracking_no as trackingNo,
+            carrier_name as carrierName,
+            status
+        FROM order_item 
+        WHERE order_id = #{orderId}
+    </select>
+
+    <!-- 주문 상품 상세 정보 조회 (상품명, 브랜드명, 옵션명 포함) -->
+    <select id="getOrderItemsWithProductInfo" parameterType="Long" resultType="map">
+        SELECT 
+            oi.order_item_id as orderItemId,
+            oi.order_id as orderId,
+            oi.brand_id as brandId,
+            oi.product_id as productId,
+            oi.option_id as optionId,
+            oi.unit_price as unitPrice,
+            oi.quantity,
+            oi.line_subtotal as lineSubtotal,
+            oi.discount,
+            oi.total,
+            oi.status,
+            p.name as productName,
+            b.brand_name as brandName,
+            po.option_value as optionValue
+        FROM order_item oi
+        LEFT JOIN product p ON oi.product_id = p.product_id
+        LEFT JOIN brand b ON oi.brand_id = b.brand_id
+        LEFT JOIN product_option po ON oi.option_id = po.product_option_id
+        WHERE oi.order_id = #{orderId}
+    </select>
+
+
 </mapper>

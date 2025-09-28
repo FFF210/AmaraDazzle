@@ -3,36 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.product">
-
-	<!-- Product 객체와 DB 컬럼 매핑 참조용 -->
-<!-- 	<resultMap id="productResultMap" type="dto.Product">
-		<id property="productId" column="product_id" />
-		<result property="brandId" column="brand_id" />
-		<result property="name" column="name" />
-		<result property="isExclusive" column="is_exclusive" />
-		<result property="isVisible" column="is_visible" />
-		<result property="isPlanned" column="is_planned" />
-		<result property="categoryId" column="category_id" />
-		<result property="thumbnailFileId" column="thumbnail_file_id" />
-		<result property="image1FileId" column="image1_file_id" />
-		<result property="image2FileId" column="image2_file_id" />
-		<result property="image3FileId" column="image3_file_id" />
-		<result property="image4FileId" column="image4_file_id" />
-		<result property="image5FileId" column="image5_file_id" />
-		<result property="ingredients" column="ingredients" />
-		<result property="price" column="price" />
-		<result property="orderLimit" column="order_limit" />
-		<result property="hasOption" column="has_option" />
-		<result property="stockQty" column="stock_qty" />
-		<result property="shippingMethod" column="shipping_method" />
-		<result property="discountType" column="discount_type" />
-		<result property="discountValue" column="discount_value" />
-		<result property="startDate" column="start_date" />
-		<result property="endDate" column="end_date" />
-		<result property="eventId" column="event_id" />
-		<result property="createdAt" column="created_at" />
-		<result property="updatedAt" column="updated_at" />
-	</resultMap> -->
 	
 	<!--======================= 소비자용 =======================-->
 	<!-- 상품 상세 조회 (상품 상세 페이지용) -->
@@ -44,7 +14,7 @@
 		is_visible = 1
 	</select>
 
-	<!-- 전체 상품 목록 조회 (페이징) -->
+	<!-- ================[소비자] 전체 상품 목록 조회 (페이징)=================== -->
 	<select id="selectAllProducts" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -54,7 +24,7 @@
 		LIMIT #{offset}, #{limit}
 	</select>
 
-	<!-- 카테고리별 상품 목록 조회 Id 수정했음!!!!! -->
+	<!-- ================[소비자] 카테고리별 상품 목록 조회. Id 수정했음!!!!! ===================-->
 	<select id="selectProductByCategory" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -65,7 +35,7 @@
 		LIMIT #{offset}, #{limit}
 	</select>
 
-	<!-- 브랜드별 상품 목록 조회 -->
+	<!-- ================[소비자] 브랜드별 상품 목록 조회...필요한가? =================== -->
 	<select id="selectProductByBrand" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -76,7 +46,7 @@
 		LIMIT #{offset}, #{limit}
 	</select>
 
-	<!-- 상품 검색 (상품명으로) -->
+	<!-- ================[소비자] 상품 검색 (상품명으로) =================== -->
 	<select id="searchProductByName" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -88,7 +58,7 @@
 		#{limit}
 	</select>
 
-	<!-- 신상품 목록 조회 (최근 등록순) -->
+	<!-- ================[소비자]신상품 목록 조회 (최근 등록순)=================== -->
 	<select id="selectNewProducts" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -98,7 +68,7 @@
 		LIMIT #{limit}
 	</select>
 
-	<!-- 인기상품 목록 조회 (판매량 기준 - 별도 테이블 조인 필요할 수 있음) -->
+	<!-- ================[소비자] 인기상품 목록 조회 (판매량 기준 - 별도 테이블 조인 필요할 수 있음)=================== -->
 	<select id="selectPopularProducts" parameterType="map"
 		resultType="dto.Product">
 		SELECT p.* FROM product p
@@ -108,7 +78,7 @@
 		LIMIT #{limit}
 	</select>
 
-	<!-- 할인 상품 목록 조회 -->
+	<!-- ================[소비자] 세일 상품 목록 조회 =================== -->
 	<select id="selectDiscountProducts" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -124,7 +94,7 @@
 		LIMIT #{offset}, #{limit}
 	</select>
 
-	<!-- 기획상품 목록 조회 -->
+	<!-- ================[소비자] 기획상품 목록 조회 =================== -->
 	<select id="selectPlannedProducts" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -134,7 +104,7 @@
 		LIMIT #{offset}, #{limit}
 	</select>
 
-	<!-- 상품 재고 확인 -->
+	<!--  상품 재고 확인 -->
 	<select id="selectStockQty" parameterType="long"
 		resultType="int">
 		SELECT
@@ -223,6 +193,7 @@
 		</foreach>
 		AND is_visible = 1
 	</select>
+	
 
 	<!--======================= [브랜드 어드민] 상품 목록 조회 ======================= -->
 	<select id="selectProductListForBrand" parameterType="map"

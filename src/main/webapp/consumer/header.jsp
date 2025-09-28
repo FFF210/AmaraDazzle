@@ -117,7 +117,7 @@
             </div>
         
          <!-- ✅ 최근 본 상품 드로어 -->
-         <div id="recent-overlay" class="recent-overlay" hidden></div>
+        <!--  <div id="recent-overlay" class="recent-overlay" hidden></div>
 
        <section id="recent-drawer" class="recent-drawer" aria-hidden="true" >
           <div class="drawer-head">
@@ -128,7 +128,7 @@
            </div>
         </div>
         <div id="recent-grid" class="recent-grid">JS가 카드 렌더링</div>
-       </section> 
+       </section>  -->
               
   </header>
 </div>
