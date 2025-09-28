@@ -69,7 +69,7 @@
 	<!-- 검색 영역 -->
 	<c:if test="${hasSearch eq 'true'}">
 		<div class="filter-row search-row">
-			<my:selectbox size="md" items="${searchItems}" initial="검색조건" />
+			<my:selectbox id="searchSelectBox" size="md" items="${searchItems}" initial="검색조건" />
 			<my:textInput type="search" name="keyword" placeholder="검색어 입력"
 				size="sm" />
 		</div>
@@ -222,10 +222,12 @@
   }
 
   // selectbox 이벤트
-  document.addEventListener("selectChanged", (e) => {
-    const label = e.detail.value; // "상품명"
-    state.searchField = searchMap[label] || label; // "NAME"
-  });
+  const searchSelect = container.querySelector("#searchSelectBox");
+searchSelect?.addEventListener("selectChanged", (e) => {
+  const label = e.detail.value;
+  state.searchField = searchMap[label] || label;
+});
+
 
   // 검색 버튼
   container.querySelector(".filter-submit")?.addEventListener("click", () => {

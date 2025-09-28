@@ -5,36 +5,26 @@
 <mapper namespace="mapper.product">
 
 	<!-- Product 객체와 DB 컬럼 매핑 참조용 -->
-<!-- 	<resultMap id="productResultMap" type="dto.Product">
-		<id property="productId" column="product_id" />
-		<result property="brandId" column="brand_id" />
-		<result property="name" column="name" />
-		<result property="isExclusive" column="is_exclusive" />
-		<result property="isVisible" column="is_visible" />
-		<result property="isPlanned" column="is_planned" />
-		<result property="categoryId" column="category_id" />
-		<result property="thumbnailFileId" column="thumbnail_file_id" />
-		<result property="image1FileId" column="image1_file_id" />
-		<result property="image2FileId" column="image2_file_id" />
-		<result property="image3FileId" column="image3_file_id" />
-		<result property="image4FileId" column="image4_file_id" />
-		<result property="image5FileId" column="image5_file_id" />
-		<result property="ingredients" column="ingredients" />
-		<result property="price" column="price" />
-		<result property="orderLimit" column="order_limit" />
-		<result property="hasOption" column="has_option" />
-		<result property="stockQty" column="stock_qty" />
-		<result property="shippingMethod" column="shipping_method" />
-		<result property="discountType" column="discount_type" />
-		<result property="discountValue" column="discount_value" />
-		<result property="startDate" column="start_date" />
-		<result property="endDate" column="end_date" />
-		<result property="eventId" column="event_id" />
-		<result property="createdAt" column="created_at" />
-		<result property="updatedAt" column="updated_at" />
-	</resultMap> -->
-	
-	<!--======================= 소비자용 =======================-->
+	<!-- <resultMap id="productResultMap" type="dto.Product"> <id property="productId" 
+		column="product_id" /> <result property="brandId" column="brand_id" /> <result 
+		property="name" column="name" /> <result property="isExclusive" column="is_exclusive" 
+		/> <result property="isVisible" column="is_visible" /> <result property="isPlanned" 
+		column="is_planned" /> <result property="categoryId" column="category_id" 
+		/> <result property="thumbnailFileId" column="thumbnail_file_id" /> <result 
+		property="image1FileId" column="image1_file_id" /> <result property="image2FileId" 
+		column="image2_file_id" /> <result property="image3FileId" column="image3_file_id" 
+		/> <result property="image4FileId" column="image4_file_id" /> <result property="image5FileId" 
+		column="image5_file_id" /> <result property="ingredients" column="ingredients" 
+		/> <result property="price" column="price" /> <result property="orderLimit" 
+		column="order_limit" /> <result property="hasOption" column="has_option" 
+		/> <result property="stockQty" column="stock_qty" /> <result property="shippingMethod" 
+		column="shipping_method" /> <result property="discountType" column="discount_type" 
+		/> <result property="discountValue" column="discount_value" /> <result property="startDate" 
+		column="start_date" /> <result property="endDate" column="end_date" /> <result 
+		property="eventId" column="event_id" /> <result property="createdAt" column="created_at" 
+		/> <result property="updatedAt" column="updated_at" /> </resultMap> -->
+
+	<!--======================= 소비자용 ======================= -->
 	<!-- 상품 상세 조회 (상품 상세 페이지용) -->
 	<select id="selectProductByProductId" parameterType="Long"
 		resultType="dto.Product">
@@ -49,7 +39,8 @@
 		resultType="dto.Product">
 		SELECT * FROM product
 		WHERE is_visible = 1
-		ORDER BY created_at
+		ORDER BY
+		created_at
 		DESC
 		LIMIT #{offset}, #{limit}
 	</select>
@@ -80,11 +71,13 @@
 	<select id="searchProductByName" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
-		WHERE name LIKE CONCAT('%', #{keyword},
+		WHERE name LIKE CONCAT('%',
+		#{keyword},
 		'%')
 		AND is_visible = 1
 		ORDER BY created_at DESC
-		LIMIT #{offset},
+		LIMIT
+		#{offset},
 		#{limit}
 	</select>
 
@@ -93,7 +86,8 @@
 		resultType="dto.Product">
 		SELECT * FROM product
 		WHERE is_visible = 1
-		ORDER BY created_at
+		ORDER BY
+		created_at
 		DESC
 		LIMIT #{limit}
 	</select>
@@ -498,30 +492,28 @@
 	</select>
 
 	<!--======================= [브랜드 어드민] 상품 등록 ======================= -->
-	<insert id="insertProduct" parameterType="productDetail">
+	<insert id="insertProductForBrand" parameterType="productDetail" useGeneratedKeys="true" keyProperty="productId">
 		INSERT INTO product (
 		brand_id, name, is_exclusive, is_visible, is_planned,
 		category1_id,
 		category2_id, category3_id,
 		ingredients, price, order_limit,
 		has_option, stock_qty,
-		shipping_method, discount_type, discount_value,
-		start_date, end_date, event_id,
-		created_at, updated_at
+		shipping_method
 		) VALUES (
-		#{brandId}, #{name}, #{isExclusive}, #{isVisible}, #{isPlanned},
-		#{category1Id}, #{category2Id}, #{category3Id},
+		#{brandId}, #{name},
+		#{isExclusive}, #{isVisible}, #{isPlanned},
+		#{category1Id},
+		#{category2Id}, #{category3Id},
 		#{ingredients},
-		#{price}, #{orderLimit}, #{hasOption}, #{stockQty},
-		#{shippingMethod},
-		#{discountType}, #{salePrice},
-		#{startDate}, #{endDate}, #{eventId},
-		NOW(), NOW()
+		#{price}, #{orderLimit},
+		#{hasOption}, #{stockQty},
+		#{shippingMethod}
 		)
 	</insert>
 
 	<!--======================= [브랜드 어드민] 상품 수정 ======================= -->
-	<update id="updateProduct" parameterType="productDetail">
+	<update id="updateProductForBrand" parameterType="productDetail">
 		UPDATE product
 		SET name
 		= #{name},
@@ -543,13 +535,6 @@
 		stock_qty = #{stockQty},
 		shipping_method =
 		#{shippingMethod},
-		discount_type = #{discountType},
-		discount_value =
-		#{salePrice},
-		start_date = #{startDate},
-		end_date = #{endDate},
-		event_id
-		= #{eventId},
 		updated_at = NOW()
 		WHERE product_id = #{productId}
 	</update>

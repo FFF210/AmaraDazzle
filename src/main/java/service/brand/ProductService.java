@@ -19,4 +19,10 @@ public interface ProductService {
 
 	// 단일 상품 단일 조회
 	ProductDetail productDetail(long productId) throws Exception;
+
+	// 상품 등록
+	void registerProduct(ProductDetail product) throws Exception;
+
+	// 상품 수정
+	void updateProduct(ProductDetail product) throws Exception;
 }

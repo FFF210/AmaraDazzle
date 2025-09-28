@@ -74,4 +74,16 @@ public class ProductServiceImpl implements ProductService {
 		return productDAO.selectProductForBrand(productId);
 	}
 
+	// 상품 등록
+	@Override
+	public void registerProduct(ProductDetail product) throws Exception {
+		productDAO.insertProductForBrand(product);
+	}
+
+	// 상품 수정
+	@Override
+	public void updateProduct(ProductDetail product) throws Exception {
+		productDAO.updateProductForBrand(product);
+	}
+
 }
