@@ -3,27 +3,6 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.product">
-
-	<!-- Product 객체와 DB 컬럼 매핑 참조용 -->
-	<!-- <resultMap id="productResultMap" type="dto.Product"> <id property="productId" 
-		column="product_id" /> <result property="brandId" column="brand_id" /> <result 
-		property="name" column="name" /> <result property="isExclusive" column="is_exclusive" 
-		/> <result property="isVisible" column="is_visible" /> <result property="isPlanned" 
-		column="is_planned" /> <result property="categoryId" column="category_id" 
-		/> <result property="thumbnailFileId" column="thumbnail_file_id" /> <result 
-		property="image1FileId" column="image1_file_id" /> <result property="image2FileId" 
-		column="image2_file_id" /> <result property="image3FileId" column="image3_file_id" 
-		/> <result property="image4FileId" column="image4_file_id" /> <result property="image5FileId" 
-		column="image5_file_id" /> <result property="ingredients" column="ingredients" 
-		/> <result property="price" column="price" /> <result property="orderLimit" 
-		column="order_limit" /> <result property="hasOption" column="has_option" 
-		/> <result property="stockQty" column="stock_qty" /> <result property="shippingMethod" 
-		column="shipping_method" /> <result property="discountType" column="discount_type" 
-		/> <result property="discountValue" column="discount_value" /> <result property="startDate" 
-		column="start_date" /> <result property="endDate" column="end_date" /> <result 
-		property="eventId" column="event_id" /> <result property="createdAt" column="created_at" 
-		/> <result property="updatedAt" column="updated_at" /> </resultMap> -->
-
 	<!--======================= 소비자용 ======================= -->
 	<!-- 상품 상세 조회 (상품 상세 페이지용) -->
 	<select id="selectProductByProductId" parameterType="Long"
