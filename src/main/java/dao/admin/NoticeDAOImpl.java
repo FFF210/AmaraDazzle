@@ -1,6 +1,7 @@
 package dao.admin;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -34,6 +35,19 @@ public class NoticeDAOImpl implements NoticeDAO {
 		Notice notice_DTO = ss.selectOne("mapper.notice.selectSellerNoticeOne", num);
 		
 		return notice_DTO;
+	}
+
+	//seller 공지 총 게시글 수 
+	@Override
+	public Integer noticeCount() {
+		return ss.selectOne("mapper.notice.AllSellerNoticeCnt");
+	}
+
+	//seller 공지 리스트 
+	@Override
+	public List<Notice> sellerNoticeList(Integer row) {
+		List<Notice> sNoticeList = ss.selectList("mapper.notice.selectAllSellerNotice",row);
+		return sNoticeList;
 	}
 	
 	

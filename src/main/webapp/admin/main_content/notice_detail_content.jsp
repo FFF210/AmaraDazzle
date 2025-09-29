@@ -4,18 +4,10 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 
-<c:set var="contextPath" value="${pageContext.request.contextPath }"/> 
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/> 
 
 <!-- *********************************메인부분********************************* -->
 <section class="board_detailview">
-	<div class="part_section">
-		<div class="part_title">작성일자 </div>
-		<div class="part_content">
-			<c:set var="createDate" value="${notice.createdAt}"/>
-			${fn:substring(createDate,0,19)}
-		</div>
-	</div>
-
 	<div class="part_section cate_part">
 		<div class="part_title">카테고리</div>
 		<div class="part_content">
@@ -60,16 +52,25 @@
 		<div class="part_title">내용</div>
 		<div class="part_content">
 			<div class="content_part">
-				<div class="img_div">
+				<div class="img_content">
 					<img src="${contextPath}/upload_file/${notice.image1FileName}">
 				</div>
-				<div>
+				<div class="text_content">
 					${notice.content }
+					${contextPath}
 				</div>
 			</div>
 		</div>
 	</div>
 
+	<div class="part_section">
+		<div class="part_title">작성일자 </div>
+		<div class="part_content">
+			<c:set var="createDate" value="${notice.createdAt}"/>
+			&nbsp; ${fn:substring(createDate,0,19)}
+		</div>
+	</div>
+	
 	<div class="part_section bottom_part">
 		<div class="part_title">작성자</div>
 		<div class="part_content">

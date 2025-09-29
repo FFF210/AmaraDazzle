@@ -87,7 +87,12 @@
 	<!-- 테이블 -->
 	<div class="whole_table">
 		<div class="table_title">
-			<span>[ 검색 결과 ]&nbsp; 총 100건 중 1 - 10 건 </span>
+			<span class="list_count">
+				<c:if test="">
+					[ 검색 결과 ]
+				</c:if>
+				 &nbsp; 총 ${noticeCnt}건 중 1 - 10 건 
+			</span>
 		</div>
 		<div class="table_wrap">
 			<table>
@@ -125,18 +130,20 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td><input type="checkbox" /></td>
-						<td>10</td>
-						<td>[공지카테]</td>
-						<td><i class="bi bi-paperclip"></i></td>
-						<td class="title_cell">공지 공지 공지 공지</td>
-						<td>홍길동</td>
-						<td>2025-09-19 12:33:45</td>
-						<td>[게시중]</td>
-						<td class="detail_cell reply_view"><i
-							class="bi bi-three-dots-vertical"></i></td>
-					</tr>
+					<c:forEach items="${nlist}" var="noticeList">
+						<tr>
+							<td><input type="checkbox" /></td>
+							<td>10</td>
+							<td>[공지카테]</td>
+							<td><i class="bi bi-paperclip"></i></td>
+							<td class="title_cell">공지 공지 공지 공지</td>
+							<td>홍길동</td>
+							<td>2025-09-19 12:33:45</td>
+							<td>[게시중]</td>
+							<td class="detail_cell reply_view"><i
+								class="bi bi-three-dots-vertical"></i></td>
+						</tr>
+					</c:forEach>
 				</tbody>
 			</table>
 		</div>

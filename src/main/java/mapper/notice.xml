@@ -29,4 +29,18 @@
 		LEFT JOIN upload_file f3 ON (n.image3_file_id = f3.upload_file_id)
 		where n.notice_id = #{num}
 	</select>
+	
+	<!-- 공지(seller) 전체 게시글 수  -->
+	<select id="AllSellerNoticeCnt" resultType="Integer">
+		select count(*) from notice where target_type_id = 5
+	</select>
+	
+	<!-- 공지(seller) 리스트  -->
+	<select id="selectAllSellerNotice" parameterType="Integer" resultType="notice">
+		select * from notice order by notice_id desc limit  #{row},10
+	</select>
+	
+	
+	
+	
 </mapper>

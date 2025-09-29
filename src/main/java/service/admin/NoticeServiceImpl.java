@@ -6,6 +6,7 @@ import java.util.List;
 import dao.admin.NoticeDAO;
 import dao.admin.NoticeDAOImpl;
 import dto.Notice;
+import util.PageInfo;
 
 public class NoticeServiceImpl implements NoticeService {
 
@@ -42,6 +43,38 @@ public class NoticeServiceImpl implements NoticeService {
 		
 		return notice_DTO;
 	}
+
+	@Override
+	public Integer noticeCount() {
+		Integer sellerNoticeCnt = n_dao.noticeCount(); //전체 게시글 수 
+		return sellerNoticeCnt;
+	}
+	
+	//seller 공지 리스트 보기 
+	@Override
+	public List<Notice> sellerNoticeByPage(PageInfo pageInfo) {
+		Integer sellerNoticeCnt = noticeCount();
+		Integer allPage = (int)Math.ceil((double)sellerNoticeCnt / 10) ; //전체 페이지 수
+		
+		Integer startPage = (pageInfo.getCurPage()-1)/10*10 +1;
+		
+		Integer endPage = startPage+10 -1;
+		if(endPage > allPage) {
+			endPage = allPage;
+		}
+		
+		pageInfo.setAllPage(allPage);
+		pageInfo.setStartPage(startPage);
+		pageInfo.setEndPage(endPage);
+		
+		Integer row = (pageInfo.getCurPage()-1) *10 +1;
+		
+		List<Notice> sellerNoticeList = n_dao.sellerNoticeList(row-1);
+		
+		return sellerNoticeList;
+	}
+
+	
 	
 	
 

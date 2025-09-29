@@ -6,6 +6,20 @@ public class PageInfo {
 	private Integer startPage;
 	private Integer endPage;
 	
+	
+	public PageInfo() {}
+	public PageInfo(Integer curPage) {
+		this.curPage = curPage;
+	}
+	public PageInfo(Integer curPage, Integer allPage, Integer startPage, Integer endPage) {
+		super();
+		this.curPage = curPage;
+		this.allPage = allPage;
+		this.startPage = startPage;
+		this.endPage = endPage;
+	}
+	
+	
 	public Integer getCurPage() {
 		return curPage;
 	}
