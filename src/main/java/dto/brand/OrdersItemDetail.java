@@ -3,14 +3,77 @@ package dto.brand;
 import java.math.BigDecimal;
 
 public class OrdersItemDetail {
-	private Long orderItemId; // 주문 상품 ID (PK → order_item.order_item_id)
-	private Long productId; // 상품 ID
-	private Long optionId; // 옵션 ID
-	private String itemStatus; // 개별 상품 상태
-
+	private Long orderItemId; // 주문 상품 ID (PK)
+	private Long productId; // 상품 ID (FK → product.product_id)
+	private Long optionId; // 옵션 ID (FK → product_option.product_option_id)
+	private Integer quantity; // 주문 수량
+	private BigDecimal total; // 주문 상품 총 금액 (할인 포함, order_item.total)
+	private String itemStatus; // 주문 상품 상태
 	private String productName; // 상품명
-	private String optionName; // 옵션명
+	private String optionName; // 옵션명 (없을 경우 null)
 
-	private BigDecimal productPrice; // 최종 금액 (옵션가*수량 또는 상품가*수량)
+	public Long getOrderItemId() {
+		return orderItemId;
+	}
+
+	public void setOrderItemId(Long orderItemId) {
+		this.orderItemId = orderItemId;
+	}
+
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
+	}
+
+	public Long getOptionId() {
+		return optionId;
+	}
+
+	public void setOptionId(Long optionId) {
+		this.optionId = optionId;
+	}
+
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
+	}
+
+	public String getItemStatus() {
+		return itemStatus;
+	}
+
+	public void setItemStatus(String itemStatus) {
+		this.itemStatus = itemStatus;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
+	}
+
+	public String getOptionName() {
+		return optionName;
+	}
+
+	public void setOptionName(String optionName) {
+		this.optionName = optionName;
+	}
 
 }

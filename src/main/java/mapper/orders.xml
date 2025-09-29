@@ -333,14 +333,11 @@
 		oi.order_item_id,
 		oi.product_id,
 		oi.option_id,
+		oi.quantity,
+		oi.total,
 		oi.status AS item_status,
 		p.name AS product_name,
 		po.option_value AS option_name,
-		CASE
-		WHEN po.product_option_id IS NOT NULL
-		THEN (po.price * oi.quantity)
-		ELSE (p.price * oi.quantity)
-		END AS productPrice
 		FROM order_item oi
 		JOIN product p ON oi.product_id = p.product_id
 		LEFT JOIN product_option po ON oi.option_id = po.product_option_id
@@ -348,7 +345,4 @@
 		AND oi.order_id = #{orderId}
 		ORDER BY oi.order_item_id ASC
 	</select>
-
-
-
 </mapper>

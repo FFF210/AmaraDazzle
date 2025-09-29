@@ -1,0 +1,34 @@
+package dao.brand;
+
+import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.session.SqlSession;
+
+import dto.brand.OrdersItemDetail;
+import dto.brand.OrdersSummary;
+import util.MybatisSqlSessionFactory;
+
+public class OrdersDAOImpl implements OrdersDAO {
+
+	SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
+
+	// 주문 목록 조회
+	@Override
+	public List<Map<String, Object>> selectOrdersListForBrand(Long brandId) {
+		return sqlSession.selectList("mapper.orders.selectOrdersListForBrand", brandId);
+	}
+
+	// 주문 요약 조회
+	@Override
+	public OrdersSummary selectOrderSummaryForBrand(Map<String, Object> params) {
+		return sqlSession.selectOne("mapper.orders.selectOrderSummaryForBrand", params);
+	}
+
+	// 주문 상품 상세 조회
+	@Override
+	public List<OrdersItemDetail> selectOrderItemsForBrand(Map<String, Object> params) {
+		return sqlSession.selectList("mapper.orders.selectOrderItemsForBrand", params);
+	}
+
+}

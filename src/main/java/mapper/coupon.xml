@@ -7,16 +7,9 @@
 <select id="selectOrdersCouponForBrand" resultType="ordersCoupon">
     SELECT 
         mc.member_coupon_id,
-        mc.status AS coupon_status,
         mc.used_date,
         c.coupon_id,
         c.cname,
-        c.amount,
-        c.amount_condition,
-        c.start_date,
-        c.end_date,
-        c.reason,
-        c.provision
     FROM member_coupon mc
     JOIN coupon c ON mc.coupon_id = c.coupon_id
     WHERE mc.order_id = #{orderId}

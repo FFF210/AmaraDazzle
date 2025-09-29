@@ -26,4 +26,149 @@ public class OrdersSummary {
 	private String memberEmail; // 회원 이메일
 	private String memberName; // 회원 이름
 	private String memberPhone; // 회원 연락처
+
+	public Long getOrdersId() {
+		return ordersId;
+	}
+
+	public void setOrdersId(Long ordersId) {
+		this.ordersId = ordersId;
+	}
+
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public String getOrderStatus() {
+		return orderStatus;
+	}
+
+	public void setOrderStatus(String orderStatus) {
+		this.orderStatus = orderStatus;
+	}
+
+	public String getTrackingNo() {
+		return trackingNo;
+	}
+
+	public void setTrackingNo(String trackingNo) {
+		this.trackingNo = trackingNo;
+	}
+
+	public String getCarrierName() {
+		return carrierName;
+	}
+
+	public void setCarrierName(String carrierName) {
+		this.carrierName = carrierName;
+	}
+
+	public BigDecimal getSubtotalAmount() {
+		return subtotalAmount;
+	}
+
+	public void setSubtotalAmount(BigDecimal subtotalAmount) {
+		this.subtotalAmount = subtotalAmount;
+	}
+
+	public BigDecimal getDiscountAmount() {
+		return discountAmount;
+	}
+
+	public void setDiscountAmount(BigDecimal discountAmount) {
+		this.discountAmount = discountAmount;
+	}
+
+	public BigDecimal getShippingAmount() {
+		return shippingAmount;
+	}
+
+	public void setShippingAmount(BigDecimal shippingAmount) {
+		this.shippingAmount = shippingAmount;
+	}
+
+	public BigDecimal getTotalAmount() {
+		return totalAmount;
+	}
+
+	public void setTotalAmount(BigDecimal totalAmount) {
+		this.totalAmount = totalAmount;
+	}
+
+	public String getShipRecipient() {
+		return shipRecipient;
+	}
+
+	public void setShipRecipient(String shipRecipient) {
+		this.shipRecipient = shipRecipient;
+	}
+
+	public String getShipPhone() {
+		return shipPhone;
+	}
+
+	public void setShipPhone(String shipPhone) {
+		this.shipPhone = shipPhone;
+	}
+
+	public String getShipPostcode() {
+		return shipPostcode;
+	}
+
+	public void setShipPostcode(String shipPostcode) {
+		this.shipPostcode = shipPostcode;
+	}
+
+	public String getShipLine1() {
+		return shipLine1;
+	}
+
+	public void setShipLine1(String shipLine1) {
+		this.shipLine1 = shipLine1;
+	}
+
+	public String getShipLine2() {
+		return shipLine2;
+	}
+
+	public void setShipLine2(String shipLine2) {
+		this.shipLine2 = shipLine2;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
+	}
+
+	public String getMemberEmail() {
+		return memberEmail;
+	}
+
+	public void setMemberEmail(String memberEmail) {
+		this.memberEmail = memberEmail;
+	}
+
+	public String getMemberName() {
+		return memberName;
+	}
+
+	public void setMemberName(String memberName) {
+		this.memberName = memberName;
+	}
+
+	public String getMemberPhone() {
+		return memberPhone;
+	}
+
+	public void setMemberPhone(String memberPhone) {
+		this.memberPhone = memberPhone;
+	}
+
 }
