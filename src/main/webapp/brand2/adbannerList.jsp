@@ -1,5 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,7 +13,7 @@
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/dateInput.css" />
 <link rel="stylesheet" href="../tagcss/form-controls.css" />
-<link rel="stylesheet" href="../tagcss/header.css" />
+<link rel="stylesheet" href="../tagcss/brandHeader.css" />
 <link rel="stylesheet" href="../tagcss/layout.css" />
 <link rel="stylesheet" href="../tagcss/reset.css" />
 <link rel="stylesheet" href="../tagcss/selectbox.css" />
@@ -26,6 +29,7 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <style>
 .pagination {
 	display: flex;
@@ -50,11 +54,12 @@
 </head>
 <body>
 	<my:layout>
-		<my:breadcrumb
-			items="배너광고 관리:/miniProj2/brand2/adbannerList.jsp" />
+		<my:breadcrumb items="배너광고 관리:/miniProj2/brand2/adbannerList.jsp" />
 
 		<div class="filter">
-			<my:tableFilter filters="진행 상황:전체|대기|진행 중|완료" searchItems="광고명,광고담당자" />
+			<my:tableFilter
+				filters="진행 상황:ALL=전체|PENDING=대기|ONGOING=진행 중|COMPLETED=완료|CANCELED=취소"
+				searchItems="광고명,광고담당자" />
 		</div>
 
 		<div class="tcontainer">
@@ -75,126 +80,40 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="i" begin="1" end="10">
+						<c:forEach var="banner" items="${bannerList }">
 							<tr>
 								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-07</td>
-								<td>2025-09-07~2025-09-14</td>
+								<td>${banner.bannerId }</td>
+								<td><fmt:formatDate value="${banner.createdAt }"
+										pattern="yyyy-MM-dd" /></td>
+								<td><fmt:formatDate value="${banner.startDate}"
+										pattern="yyyy-MM-dd" /> ~ <fmt:formatDate
+										value="${banner.endDate}" pattern="yyyy-MM-dd" /></td>
+
 								<td>
-									<p class="product-name">[스테디셀러특가/3년연속1위] 어노브 딥 데미지 헤어 트리트먼트
-										EX 320ml 더블/듀오 한정기획 4종 택1</p>
+									<p class="product-name">${banner.bannerName }</p>
 								</td>
-								<td><my:tag color="green" size="sm" text="진행 중" /></td>
-								<td>홍길동 팀장</td>
-								<td>980,000</td>
-								<td>010-1234-5678</td>
+								<td><c:choose>
+										<c:when test="${banner.status eq 'ONGOING'}">
+											<my:tag color="green" size="sm" text="진행 중" />
+										</c:when>
+										<c:when test="${banner.status eq 'COMPLETED'}">
+											<my:tag color="gray" size="sm" text="완료" />
+										</c:when>
+										<c:when test="${banner.status eq 'PENDING'}">
+											<my:tag color="blue" size="sm" text="대기" />
+										</c:when>
+										<c:when test="${banner.status eq 'CANCELED'}">
+											<my:tag color="red" size="sm" text="취소" />
+										</c:when>
+									</c:choose></td>
+
+								<td>${banner.managerName }</td>
+								<td>미구현</td>
+								<td>${banner.managerTel }</td>
 								<td><div class="actions">
-										<button type="button" class="btn btn-outline btn-sm" onclick="location.href='/miniProj2/brand2/eventForm.jsp'">상세보기</button>
-									</div></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-07</td>
-								<td>2025-09-07~2025-09-14</td>
-								<td>
-									<p class="product-name">[스테디셀러특가/3년연속1위] 어노브 딥 데미지 헤어 트리트먼트
-										EX 320ml 더블/듀오 한정기획 4종 택1</p>
-								</td>
-								<td><my:tag color="blue" size="sm" text="대기" /></td>
-								<td>홍길동 팀장</td>
-								<td>980,000</td>
-								<td>010-1234-5678</td>
-								<td><div class="actions">
-										<button type="button" class="btn btn-outline btn-sm" onclick="location.href='/miniProj2/brand2/eventForm.jsp'">수정</button>
-										<button type="button" class="btn btn-outline btn-sm">취소</button>
-									</div></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-07</td>
-								<td>2025-09-07~2025-09-14</td>
-								<td>
-									<p class="product-name">[스테디셀러특가/3년연속1위] 어노브 딥 데미지 헤어 트리트먼트
-										EX 320ml 더블/듀오 한정기획 4종 택1</p>
-								</td>
-								<td><my:tag color="red" size="sm" text="취소" /></td>
-								<td>홍길동 팀장</td>
-								<td>980,000</td>
-								<td>010-1234-5678</td>
-								<td><div class="actions">
-										<button type="button" class="btn btn-outline btn-sm" onclick="location.href='/miniProj2/brand2/eventForm.jsp'">상세보기</button>
-									</div></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-07</td>
-								<td>2025-09-07~2025-09-14</td>
-								<td>
-									<p class="product-name">[스테디셀러특가/3년연속1위] 어노브 딥 데미지 헤어 트리트먼트
-										EX 320ml 더블/듀오 한정기획 4종 택1</p>
-								</td>
-								<td><my:tag color="blue" size="sm" text="대기" /></td>
-								<td>홍길동 팀장</td>
-								<td>980,000</td>
-								<td>010-1234-5678</td>
-								<td><div class="actions">
-										<button type="button" class="btn btn-outline btn-sm" onclick="location.href='/miniProj2/brand2/eventForm.jsp'">수정</button>
-										<button type="button" class="btn btn-outline btn-sm">취소</button>
-									</div></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-07</td>
-								<td>2025-09-07~2025-09-14</td>
-								<td>
-									<p class="product-name">[스테디셀러특가/3년연속1위] 어노브 딥 데미지 헤어 트리트먼트
-										EX 320ml 더블/듀오 한정기획 4종 택1</p>
-								</td>
-								<td><my:tag color="green" size="sm" text="진행 중" /></td>
-								<td>홍길동 팀장</td>
-								<td>980,000</td>
-								<td>010-1234-5678</td>
-								<td><div class="actions">
-										<button type="button" class="btn btn-outline btn-sm" onclick="location.href='/miniProj2/brand2/eventForm.jsp'">상세보기</button>
-									</div></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-07</td>
-								<td>2025-09-07~2025-09-14</td>
-								<td>
-									<p class="product-name">[스테디셀러특가/3년연속1위] 어노브 딥 데미지 헤어 트리트먼트
-										EX 320ml 더블/듀오 한정기획 4종 택1</p>
-								</td>
-								<td><my:tag color="green" size="sm" text="진행 중" /></td>
-								<td>홍길동 팀장</td>
-								<td>980,000</td>
-								<td>010-1234-5678</td>
-								<td><div class="actions">
-										<button type="button" class="btn btn-outline btn-sm" onclick="location.href='/miniProj2/brand2/eventForm.jsp'">상세보기</button>
-									</div></td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-07</td>
-								<td>2025-09-07~2025-09-14</td>
-								<td>
-									<p class="product-name">[스테디셀러특가/3년연속1위] 어노브 딥 데미지 헤어 트리트먼트
-										EX 320ml 더블/듀오 한정기획 4종 택1</p>
-								</td>
-								<td><my:tag color="green" size="sm" text="진행 중" /></td>
-								<td>홍길동 팀장</td>
-								<td>980,000</td>
-								<td>010-1234-5678</td>
-								<td><div class="actions">
-										<button type="button" class="btn btn-outline btn-sm" onclick="location.href='/miniProj2/brand2/eventForm.jsp'">상세보기</button>
+										<button type="button" class="btn btn-outline btn-sm"
+											onclick="location.href='/miniProj2/brand2/eventForm.jsp?bannerId=${banner.bannerId}'">상세보기</button>
 									</div></td>
 							</tr>
 						</c:forEach>
@@ -202,39 +121,107 @@
 				</table>
 			</div>
 		</div>
-		<div class="pagination">
-			<my:pagination currentPage="1" totalPages="10"
-				baseUrl="/products?page=" />
+		<!-- 페이징 -->
+		<div class="page-pagination">
+			<my:pagination currentPage="${currentPage}"
+				totalPages="${totalPages}"
+				baseUrl="/brand2/adbannerList?${queryString}&page=" />
+
 		</div>
 	</my:layout>
-
 	<script>
-	// 검색 버튼
-	const submitBtn = container.querySelector(".filter-submit");
-	if(submitBtn){
-	  submitBtn.addEventListener("click", () => {
-	    dispatch(true);
-	  });
-	}
+document.addEventListener("filterChanged", (e) => {
+  console.log("필터 상태:", e.detail);
 
-	// 초기화 버튼
-	const resetBtn = container.querySelector(".filter-reset");
-	if(resetBtn){
-	  resetBtn.addEventListener("click", () => {
-	    container.querySelectorAll("input, .active").forEach(el => {
-	      if(el.tagName === "INPUT") el.value = "";
-	      el.classList.remove("active");
-	    });
-	    state.dateStart = "";
-	    state.dateEnd = "";
-	    state.quickRange = "";
-	    state.filters = {};
-	    state.searchField = "";
-	    state.searchKeyword = "";
-	    dispatch();
-	  });
-	}
+  if (e.detail.submit) {
+    const { filters, searchField, searchKeyword } = e.detail;
+    const params = new URLSearchParams();
 
-	</script>
+    // 진행상황 필터 처리
+    for (const [key, value] of Object.entries(filters)) {
+      if (key === "진행 상황" && value && value !== "전체") {
+        // 한글 상태 → DB 코드 변환
+        switch (value) {
+          case "대기": params.append("status", "PENDING"); break;
+          case "진행 중": params.append("status", "ONGOING"); break;
+          case "완료": params.append("status", "COMPLETED"); break;
+          case "취소": params.append("status", "CANCELED"); break;
+        }
+      }
+    }
+
+    // 검색 항목 (광고명 / 광고담당자)
+    if (searchField) {
+      // ✅ selectbox에서 이미 매핑된 값이 넘어오기 때문에 그대로 사용
+      params.append("searchType", searchField);
+    }
+
+    if (searchKeyword !== undefined && searchKeyword !== null) {
+    	  params.append("searchKeyword", searchKeyword);
+    	}
+
+    // 페이지는 항상 1부터 시작
+    params.append("page", 1);
+
+    // 최종 URL로 이동 (GET 요청)
+    window.location.href = "/brand2/adbannerList?" + params.toString();
+  }
+});
+
+// =============================
+// ✅ selectbox 관련 코드 수정 부분
+// =============================
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".custom-select").forEach(select => {
+    const header = select.querySelector(".select-header");
+    const label = select.querySelector(".select-label");
+    const list = select.querySelector(".select-list");
+    const items = select.querySelectorAll(".select-item");
+
+    // 열기/닫기 토글
+    header.addEventListener("click", () => {
+      select.classList.toggle("open");
+    });
+
+    // 옵션 선택
+    items.forEach(item => {
+      item.addEventListener("click", () => {
+        // 라벨 교체
+        label.textContent = item.textContent;
+
+        // active 표시 갱신
+        items.forEach(i => i.classList.remove("active"));
+        item.classList.add("active");
+
+        // 닫기
+        select.classList.remove("open");
+
+        // ✅ 여기서 한글 라벨 → DB 컬럼명으로 변환
+        let mappedValue = item.textContent;
+        if (mappedValue === "광고명") mappedValue = "bannerName";
+        if (mappedValue === "광고담당자") mappedValue = "managerName";
+
+        // 커스텀 이벤트 발생 (value=DB 값, text=화면 표시 값)
+        const event = new CustomEvent("selectChanged", {
+          detail: {
+            value: mappedValue,      // DB에서 사용할 값
+            text: item.textContent   // 화면에 보이는 값
+          }
+        });
+        document.dispatchEvent(event);
+      });
+    });
+
+    // 다른 영역 클릭 시 닫기
+    document.addEventListener("click", (e) => {
+      if (!select.contains(e.target)) {
+        select.classList.remove("open");
+      }
+    });
+  });
+});
+</script>
+
+
 </body>
 </html>

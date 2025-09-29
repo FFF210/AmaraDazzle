@@ -53,6 +53,7 @@
 		<typeAlias type="dto.Wishlist" alias="wishlist" />
 		<typeAlias type="dto.brand.ProductList" alias="productList" />
 		<typeAlias type="dto.brand.ProductDetail" alias="productDetail" />
+		<typeAlias type="dto.brand2.BannerList" alias="bannerList" />
 		<!-- type="" : 패키지명.클래스명, alias="" : 별칭 -->
 	</typeAliases>
 
