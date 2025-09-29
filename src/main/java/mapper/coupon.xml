@@ -9,7 +9,7 @@
         mc.member_coupon_id,
         mc.used_date,
         c.coupon_id,
-        c.cname,
+        c.cname
     FROM member_coupon mc
     JOIN coupon c ON mc.coupon_id = c.coupon_id
     WHERE mc.order_id = #{orderId}

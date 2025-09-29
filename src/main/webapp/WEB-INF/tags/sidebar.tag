@@ -41,7 +41,7 @@
 					관리</span> <i class="bi bi-chevron-down submenu-icon"></i>
 			</button>
 			<ul class="submenu">
-				<li><a href="#">주문 관리</a></li>
+				<li><a href="/brand/orderList">주문 관리</a></li>
 				<li><a href="#">취소 관리</a></li>
 				<li><a href="#">교환 관리</a></li>
 				<li><a href="#">반품 관리</a></li>

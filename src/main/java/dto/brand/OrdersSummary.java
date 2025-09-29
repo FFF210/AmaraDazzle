@@ -14,6 +14,7 @@ public class OrdersSummary {
 	private BigDecimal subtotalAmount; // 상품금액 합계(할인 전)
 	private BigDecimal discountAmount; // 할인 금액
 	private BigDecimal shippingAmount; // 배송비
+	private int usingPoint;
 	private BigDecimal totalAmount; // 최종 결제 금액
 
 	private String shipRecipient; // 받는 분
@@ -61,6 +62,14 @@ public class OrdersSummary {
 
 	public String getCarrierName() {
 		return carrierName;
+	}
+
+	public int getUsingPoint() {
+		return usingPoint;
+	}
+
+	public void setUsingPoint(int usingPoint) {
+		this.usingPoint = usingPoint;
 	}
 
 	public void setCarrierName(String carrierName) {
