@@ -11,8 +11,11 @@
 <link rel="stylesheet" href="./css/myApplications.css" />
 <link rel="stylesheet" href="./css/boards_write.css" />
 <link rel="stylesheet" href="../tagcss/uploader.css" />
+
+<!-- toast editor CDN -->
 <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
 <!-- 헤드부분 -->
 
 <body>
@@ -24,10 +27,7 @@
 	<!-- 레이아웃 + 메인컨텐츠 end -->
 
 
-	<!-- JS부분 -->
 
-
-	<!-- JS부분 end -->
 
 </body>
 </html>

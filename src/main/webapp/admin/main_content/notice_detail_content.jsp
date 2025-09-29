@@ -19,20 +19,21 @@
 	<div class="part_section title_part">
 		<div class="part_title">제목</div>
 		<div class="part_content">
-			<input type="text" class="text_readonly" value="글제목" readonly />
+			<input type="text" class="text_readonly" value="${noticeSeller.title }" readonly />
 		</div>
 	</div>
 
 	<div class="part_section">
 		<div class="part_title">첨부파일</div>
-		<div class="part_content">첨부파일명</div>
+		<div class="part_content">${noticeSeller.image1FileId }</div>
 	</div>
 
 	<div class="part_section">
 		<div class="part_title">내용</div>
 		<div class="part_content">
 			<div class="content_part">
-				공지 내용 <br /> 공지 내용 <br />
+				${noticeSeller.content }
+
 			</div>
 		</div>
 	</div>
@@ -41,8 +42,7 @@
 		<div class="part_title">작성자</div>
 		<div class="part_content">
 			<div class="writer_part">
-				<input type="text" class="text_readonly" value="로그인된 관리자 이름"
-					readonly />
+				<input type="text" class="text_readonly" value="${noticeSeller.writer}" readonly />
 			</div>
 			<div class="btn_part">
 				<button type="button" class="btn first_btn action_btn">수정</button>

@@ -49,7 +49,21 @@
     const layoutContainer = document.getElementById("layoutContainer");
     const sidebar = document.getElementById("sidebar");
 
-    // 사이드바 상태 변화 감지
+    // ===============================
+    // 1. 초기 상태 localStorage 반영
+    // ===============================
+    const isPinned = localStorage.getItem("sidebarPinned") === "true";
+    if (!isPinned) {
+      // 사이드바 접힘 → layout도 접힘 처리
+      layoutContainer.classList.add("collapsed");
+    } else {
+      // 사이드바 고정 → layout 정상 상태
+      layoutContainer.classList.remove("collapsed");
+    }
+
+    // ===============================
+    // 2. 사이드바 상태 변화 감지
+    // ===============================
     const observer = new MutationObserver(() => {
       if (sidebar.classList.contains("collapsed")) {
         layoutContainer.classList.add("collapsed");

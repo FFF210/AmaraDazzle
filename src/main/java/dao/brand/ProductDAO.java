@@ -24,4 +24,10 @@ public interface ProductDAO {
 
 	// 단일 상품 단일 조회
 	ProductDetail selectProductForBrand(long productId) throws Exception;
+
+	// 상품 등록
+	void insertProductForBrand(ProductDetail product) throws Exception;
+
+	// 상품 수정
+	void updateProductForBrand(ProductDetail product) throws Exception;
 }

@@ -9,16 +9,18 @@
 <title>마이 페이지</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="./tagcss/reset.css" />
-<link rel="stylesheet" href="./consumer/css/header.css" />
-<link rel="stylesheet" href="./tagcss/productCard.css" />
-<link rel="stylesheet" href="./tagcss/tag.css" />
-<link rel="stylesheet" href="./consumer/css/mypageMenu.css" />
-<link rel="stylesheet" href="./consumer/css/footer.css" />
-<link rel="stylesheet" href="./tagcss/orderStatusCard.css" />
-<link rel="stylesheet" href="./tagcss/userInfo.css" />
-<link rel="stylesheet" href="./consumer/css/mypage.css" />
+<link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/mypageMenu.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/orderStatusCard.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/userInfo.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/mypage.css'/>">
 </head>
+
 <body>
 	<!-- 상단 헤더 -->
 	<%@ include file="/consumer/header.jsp"%>

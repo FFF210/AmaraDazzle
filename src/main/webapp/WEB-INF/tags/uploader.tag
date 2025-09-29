@@ -1,13 +1,9 @@
 <%@ tag description="파일 업로더" pageEncoding="UTF-8"%>
-<%@ attribute name="size" required="true"%>
-<!-- lg / md / sm -->
+<%@ attribute name="size" required="true"%> <!-- lg / md / sm -->
 <%-- <%@ attribute name="id" required="true"%> <!-- file input id --> --%>
-<%@ attribute name="name" required="false"%>
-<!-- file input name -->
-<%@ attribute name="label" required="false"%>
-<!-- 상단 문구 (기본: Click to upload) -->
-<%@ attribute name="desc" required="false"%>
-<!-- 하단 문구 (기본: 또는 파일을 이 영역으로 드래그하세요) -->
+<%@ attribute name="name" required="false"%> <!-- file input name -->
+<%@ attribute name="label" required="false"%> <!-- 상단 문구 (기본: Click to upload) -->
+<%@ attribute name="desc" required="false"%> <!-- 하단 문구 (기본: 또는 파일을 이 영역으로 드래그하세요) -->
 
 <%-- ================================
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
@@ -24,14 +20,14 @@
 ================================ --%>
 
 <div class="fileAttatch">
-	<div id="fileDropper" class="uploader uploader-${size}" tabindex="0"
-		role="button" aria-label="파일 업로드 영역">
+	<div id="fileDropper" class="uploader uploader-${size}" 
+			tabindex="0" role="button" aria-label="파일 업로드 영역">
 		<div class="hint">
 			<div class="uploader-title">${empty label ? "Click to upload" : label}</div>
 			<div class="uploader-muted">${empty desc ? "또는 파일을 이 영역으로 드래그하세요" : desc}</div>
 		</div>
 	</div>
-	<input id="fileInput" type="file" class="sr-only" style="display: none"
+	<input id="fileInput" type="file" name="${name}" class="sr-only" style="display: none"
 		multiple />
 
 	<div id="imgPreviewWrapper" class="preview-wrapper hidden">
@@ -55,8 +51,8 @@
 // ------------------ 공통 처리 ------------------
 	//파일 미리보기 추가
 	function addFiles(files) {
-	    const MAX = 5;
-	
+		const MAX = 5;
+
 	    // 현재 미리보기 개수
 	    const current = previews.length;
 	    const incoming = files.length;
@@ -84,15 +80,21 @@
 	    render();
 	}
 
-	
 	//미리보기 삭제
 	function removePreview(id) {
-		const idx = previews.findIndex((p) => p.id === id);
-		if (idx > -1) {
-			URL.revokeObjectURL(previews[idx].url);
-			previews.splice(idx, 1);
-			render();
-		}
+	    const idx = previews.findIndex((p) => p.id === id);
+	    if (idx > -1) {
+	        // 미리보기 제거
+	        URL.revokeObjectURL(previews[idx].url);
+	        previews.splice(idx, 1);
+	
+	        //FileList 재구성
+	        const dt = new DataTransfer(); // 새로운 가상의 드래그 데이터
+	        previews.forEach(p => dt.items.add(p.file)); // 남아 있는 파일만 추가
+	        input.files = dt.files; // input.files 교체
+	
+	        render();
+	    }
 	}
 	
 	//미리보기 렌더링

@@ -89,7 +89,7 @@
 
 			<!-- 상품 등록/수정 폼 -->
 			<form
-				action="<c:out value='${not empty product ? "/productDetail/update" : "/productDetail/register"}'/>"
+				action="<c:out value='${not empty product ? "/brand/productDetail/update" : "/brand/productDetail/register"}'/>"
 				method="post" enctype="multipart/form-data" class="product-form"
 				data-product-id="${product.productId}">
 
@@ -101,6 +101,7 @@
 						<div class="form-group">
 							<label>상품코드</label>
 							<my:textInput type="readOnly" state="default" size="lg"
+								name="productId"
 								value="${not empty product ? product.productId : ''}" />
 						</div>
 					</c:if>
@@ -126,7 +127,7 @@
 					<!-- 상품명 -->
 					<div class="form-group">
 						<label>상품명 <span class="required">*</span></label>
-						<my:textInput type="default" state="default" size="lg"
+						<my:textInput type="default" state="default" size="lg" name="name"
 							value="${not empty product ? product.name : ''}" />
 					</div>
 
@@ -159,7 +160,7 @@
 							class="form-radio"
 							<c:if test="${product.isPlanned eq '0'}">checked</c:if> /> 일반상품
 						</label> <label> <input type="radio" name="productType"
-							value="special" class="form-radio"
+							value="plan" class="form-radio"
 							<c:if test="${product.isPlanned eq '1'}">checked</c:if> /> 기획상품
 						</label>
 					</div>
@@ -168,9 +169,14 @@
 					<div class="form-group">
 						<label>카테고리 <span class="required">*</span></label>
 						<my:selectbox size="lg" items="대분류" initial="대분류" id="largeSelect" />
+						<input type="hidden" name="category1Id" id="category1Id" />
+
 						<my:selectbox size="lg" items="중분류" initial="중분류"
 							id="middleSelect" />
+						<input type="hidden" name="category2Id" id="category2Id" />
+
 						<my:selectbox size="lg" items="소분류" initial="소분류" id="smallSelect" />
+						<input type="hidden" name="category3Id" id="category3Id" />
 					</div>
 
 					<!-- 대표 이미지 -->
@@ -255,20 +261,20 @@
 							</p>
 						</div>
 
-						<%-- 주요기능(피부 고민) 그룹 --%>
+						<%-- 피부고민 그룹 --%>
 						<c:set var="skinIssueCodes"
 							value="${not empty product.skinIssues ? fn:split(product.skinIssues, ',') : null}" />
-						<div class="filter-group">
+						<div class="filter-group" data-group="skinIssues">
 							<div class="filter-label">주요기능</div>
 							<div class="filter-options">
 								<c:forEach var="opt"
-									items="ATOPIC:아토피,CALM:진정,MINERAL_UV:무기자차,ACNE:여드름,WHITENING:미백/잡티,SEBUM:피지/블랙헤드,DEADSKIN:각질,DARKCIRCLE:다크서클,PORE:모공,REDNESS:홍조,ANTIAGING:슬로우에이징,HYDRATION:피부보습/속건조,SUNBLOCK:자외선차단,NONE:해당없음"
+									items="1:아토피,2:진정,3:여드름,4:미백/잡티,5:피지/블랙헤드,6:각질,7:다크서클,8:모공,9:홍조,10:슬로우에이징,11:피부보습/속건조,12:자외선차단,13:해당없음"
 									varStatus="st">
-									<c:set var="code" value="${fn:split(opt,':')[0]}" />
+									<c:set var="id" value="${fn:split(opt,':')[0]}" />
 									<c:set var="label" value="${fn:split(opt,':')[1]}" />
 									<button
-										class="filter-option ${skinIssueCodes ne null and fn:contains(product.skinIssues, code) ? 'active' : ''}"
-										data-value="${code}">${label}</button>
+										class="filter-option ${skinIssueCodes ne null and fn:contains(product.skinIssues, id) ? 'active' : ''}"
+										data-value="${id}">${label}</button>
 								</c:forEach>
 							</div>
 						</div>
@@ -276,39 +282,44 @@
 						<%-- 피부타입 그룹 --%>
 						<c:set var="skinTypeCodes"
 							value="${not empty product.skinTypes ? fn:split(product.skinTypes, ',') : null}" />
-						<div class="filter-group">
+						<div class="filter-group" data-group="skinTypes">
 							<div class="filter-label">피부타입</div>
 							<div class="filter-options">
 								<c:forEach var="opt"
-									items="DRY:건성,OILY:지성,NORMAL:중성,SENSITIVE:민감성,COMBINATION:복합성,DEHYDRATED_OILY:수부지"
-									varStatus="st">
-									<c:set var="code" value="${fn:split(opt,':')[0]}" />
+									items="14:건성,15:지성,16:중성,17:민감성,18:복합성,19:수부지" varStatus="st">
+									<c:set var="id" value="${fn:split(opt,':')[0]}" />
 									<c:set var="label" value="${fn:split(opt,':')[1]}" />
 									<button
-										class="filter-option ${skinTypeCodes ne null and fn:contains(product.skinTypes, code) ? 'active' : ''}"
-										data-value="${code}">${label}</button>
+										class="filter-option ${skinTypeCodes ne null and fn:contains(product.skinTypes, id) ? 'active' : ''}"
+										data-value="${id}">${label}</button>
 								</c:forEach>
 							</div>
 						</div>
 
+
 						<%-- 퍼스널컬러 그룹 --%>
 						<c:set var="personalColorCodes"
 							value="${not empty product.personalColors ? fn:split(product.personalColors, ',') : null}" />
-						<div class="filter-group">
+						<div class="filter-group" data-group="personalColors">
 							<div class="filter-label">퍼스널컬러</div>
 							<div class="filter-options">
 								<c:forEach var="opt"
-									items="SPRING_WARM:봄웜톤,SUMMER_COOL:여름쿨톤,AUTUMN_WARM:가을웜톤,WINTER_COOL:겨울쿨톤,UNKNOWN:잘 모르겠어요"
+									items="20:봄웜톤,21:여름쿨톤,22:가을웜톤,23:겨울쿨톤,24:잘 모르겠어요"
 									varStatus="st">
-									<c:set var="code" value="${fn:split(opt,':')[0]}" />
+									<c:set var="id" value="${fn:split(opt,':')[0]}" />
 									<c:set var="label" value="${fn:split(opt,':')[1]}" />
 									<button
-										class="filter-option ${personalColorCodes ne null and fn:contains(product.personalColors, code) ? 'active' : ''}"
-										data-value="${code}">${label}</button>
+										class="filter-option ${personalColorCodes ne null and fn:contains(product.personalColors, id) ? 'active' : ''}"
+										data-value="${id}">${label}</button>
 								</c:forEach>
 							</div>
 						</div>
+
 					</div>
+					<!-- 필터 hidden input -->
+					<input type="hidden" name="skinIssues" id="skinIssues" /> <input
+						type="hidden" name="skinTypes" id="skinTypes" /> <input
+						type="hidden" name="personalColors" id="personalColors" />
 
 					<!-- 상세 설명 -->
 					<%-- <div class="form-group image">
@@ -335,7 +346,7 @@
 						<fmt:formatNumber value="${product.price}" type="number"
 							maxFractionDigits="0" groupingUsed="true" var="formattedPrice" />
 						<my:textInput type="default" state="default" size="lg"
-							value="${not empty product ? formattedPrice : ''}" />
+							name="price" value="${not empty product ? formattedPrice : ''}" />
 					</div>
 
 
@@ -346,7 +357,8 @@
 							<fmt:formatNumber value="${product.price}" type="number"
 								maxFractionDigits="0" groupingUsed="true"
 								var="formattedSalePrice" />
-							<my:textInput type="default" state="default" size="lg"
+							<my:textInput type="readOnly" state="default" size="lg"
+								name="salePrice"
 								value="${not empty product ? formattedSalePrice : ''}" />
 						</div>
 					</c:if>
@@ -355,6 +367,7 @@
 					<div class="form-group">
 						<label>주문수량제한</label>
 						<my:textInput type="default" state="default" size="lg"
+							name="orderLimit"
 							value="${not empty product ? product.orderLimit : ''}" />
 					</div>
 				</section>
@@ -363,7 +376,7 @@
 					<h3>재고 관리</h3>
 					<div class="form-group">
 						<label>재고 수량 <span class="required">*</span></label>
-						<my:textInput size="lg"
+						<my:textInput size="lg" name="stockQty"
 							value="${not empty product ? product.stockQty : ''}" />
 					</div>
 				</section>
@@ -372,11 +385,11 @@
 					<h3>배송 관리</h3>
 					<div class="form-group radio">
 						<label>배송 방법 <span class="required">*</span></label> <label>
-							<input type="radio" name="shipping" value="basic"
+							<input type="radio" name="shipping" value="DEFAULT"
 							class="form-radio"
 							<c:if test="${product.shippingMethod eq 'DEFAULT'}">checked</c:if> />
 							기본 배송
-						</label> <label> <input type="radio" name="shipping" value="free"
+						</label> <label> <input type="radio" name="shipping" value="FREE"
 							class="form-radio"
 							<c:if test="${product.shippingMethod eq 'FREE'}">checked</c:if> />
 							무료 배송
@@ -406,7 +419,7 @@
 <script src="./js/selectbox.js"></script>
 <script>
   /*********************************************************************************************************
-   * selectbox
+   * 카테고리 selectbox
    *********************************************************************************************************/
    document.addEventListener("DOMContentLoaded", () => {
      const largeSelect = document.getElementById("largeSelect");
@@ -452,7 +465,7 @@
 
      // 대분류 선택 → 중분류 불러오기
      largeSelect.addEventListener("selectChanged", e => {
-    	console.log("대분류 이벤트 발생:", e.detail);
+    	 document.getElementById("category1Id").value = e.detail.value;
        const parentId = e.detail.value;
        if (!parentId) return;
 
@@ -466,6 +479,7 @@
 
      // 중분류 선택 → 소분류 불러오기
      middleSelect.addEventListener("selectChanged", e => {
+    	 document.getElementById("category2Id").value = e.detail.value;
        const parentId = e.detail.value;
        if (!parentId) return;
 
@@ -475,20 +489,13 @@
            updateSelectbox(smallSelect, data, "소분류");
          });
      });
+     
+  	// 소분류 선택 → hidden 업데이트
+     smallSelect.addEventListener("selectChanged", e => {
+       document.getElementById("category3Id").value = e.detail.value;
+     });
    });
   
-  /*********************************************************************************************************
-   * 폼
-   *********************************************************************************************************/
-  document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".filter-option").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();  // 폼 제출 막기
-        btn.classList.toggle("active"); // 선택 토글 같은 동작 추가 가능
-      });
-    });
-  });
-
   /*********************************************************************************************************
    * 이미지 버튼
    *********************************************************************************************************/
@@ -554,7 +561,7 @@
 	});
 
  /*********************************************************************************************************
-  * 모달 오픈
+  * 옵션 등록 모달 오픈
   *********************************************************************************************************/
   function resetOptionDialog() {
 	  const dialog = document.getElementById("optionDialog");
@@ -653,6 +660,31 @@ const dialogHandlers = {
     }
   }
 };
+
+/*********************************************************************************************************
+ * 필터 버튼 선택 → hidden input 업데이트
+ *********************************************************************************************************/
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".filter-group").forEach(group => {
+    const hiddenId = group.dataset.group;
+    const hidden = document.getElementById(hiddenId);
+    const buttons = group.querySelectorAll(".filter-option");
+
+    buttons.forEach(btn => {
+      btn.addEventListener("click", e => {
+        e.preventDefault();
+        btn.classList.toggle("active");
+
+        const values = Array.from(buttons)
+          .filter(b => b.classList.contains("active"))
+          .map(b => b.dataset.value);
+
+        hidden.value = values.join(",");
+        console.log(hiddenId + " => " + hidden.value);
+      });
+    });
+  });
+});
 </script>
 </html>
 

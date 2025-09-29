@@ -23,8 +23,7 @@
 		<typeAlias type="dto.CodeMaster" alias="codeMaster" />
 		<typeAlias type="dto.Coupon" alias="coupon" />
 		<typeAlias type="dto.Event" alias="event" />
-		<typeAlias type="dto.EventApplication"
-			alias="eventApplication" />
+		<typeAlias type="dto.EventApplication" alias="eventApplication" />
 		<typeAlias type="dto.EventProduct" alias="eventProduct" />
 		<typeAlias type="dto.Exchange" alias="exchange" />
 		<typeAlias type="dto.MailSend" alias="mailSend" />
@@ -32,16 +31,14 @@
 		<typeAlias type="dto.MemberCoupon" alias="memberCoupon" />
 		<typeAlias type="dto.Membership" alias="membership" />
 		<typeAlias type="dto.MembershipPlan" alias="membershipPlan" />
-		<typeAlias type="dto.MemberSkinIssue"
-			alias="memberSkinIssue" />
+		<typeAlias type="dto.MemberSkinIssue" alias="memberSkinIssue" />
 		<typeAlias type="dto.Notice" alias="notice" />
 		<typeAlias type="dto.OrderItem" alias="orderItem" />
 		<typeAlias type="dto.Orders" alias="orders" />
 		<typeAlias type="dto.Payment" alias="payment" />
 		<typeAlias type="dto.Point" alias="point" />
 		<typeAlias type="dto.Product" alias="product" />
-		<typeAlias type="dto.ProductFilterMap"
-			alias="productFilterMap" />
+		<typeAlias type="dto.ProductFilterMap" alias="productFilterMap" />
 		<typeAlias type="dto.ProductOption" alias="productOption" />
 		<typeAlias type="dto.Qna" alias="qna" />
 		<typeAlias type="dto.Report" alias="report" />
@@ -54,6 +51,7 @@
 		<typeAlias type="dto.brand.ProductList" alias="productList" />
 		<typeAlias type="dto.brand.ProductDetail" alias="productDetail" />
 		<typeAlias type="dto.brand2.BannerList" alias="bannerList" />
+		<typeAlias type="dto.brand.OrdersList" alias="ordersList" />
 		<!-- type="" : 패키지명.클래스명, alias="" : 별칭 -->
 	</typeAliases>
 

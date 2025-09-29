@@ -1,6 +1,7 @@
 package dto;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class Notice {
     private Long noticeId;        // 자동증가값 (PK, AUTO_INCREMENT)
@@ -16,8 +17,22 @@ public class Notice {
     private Timestamp createdAt;  // 생성 시각 (DEFAULT CURRENT_TIMESTAMP)
     private Timestamp updatedAt;  // 수정 시각 (ON UPDATE CURRENT_TIMESTAMP)
 
-    public Notice() {
-    }
+    List<Long> imageFileIds;	//업로드된 이미지파일 id 모음 리스트 
+    
+   
+	public Notice() {}
+    public Notice(Long typeId, String title, String content, 
+    				String writer, Long targetTypeId,
+    				List<Long> imageFileIds) {
+		this.typeId = typeId;
+		this.title = title;
+		this.content = content;
+		this.writer = writer;
+		this.targetTypeId = targetTypeId;
+		this.imageFileIds = imageFileIds;
+	}
+
+
 
     public Long getNoticeId() {
         return noticeId;
@@ -102,6 +117,13 @@ public class Notice {
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
+    
+    public List<Long> getImageFileIds() {
+		return imageFileIds;
+	}
+	public void setImageFileIds(List<Long> imageFileIds) {
+		this.imageFileIds = imageFileIds;
+	}
 
     @Override
     public String toString() {

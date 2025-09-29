@@ -56,7 +56,7 @@ public class ProductDetail extends HttpServlet {
 			String productIdStr = request.getParameter("productId");
 
 			if (productIdStr == null || productIdStr.trim().isEmpty()) {
-				response.sendRedirect(request.getContextPath() + "/error.jsp");
+				response.sendRedirect(request.getContextPath() + "consumer/error.jsp");
 				return;
 			}
 
@@ -102,7 +102,7 @@ public class ProductDetail extends HttpServlet {
 
 		} catch (NumberFormatException e) {
 			// 숫자 형식 오류
-			response.sendRedirect(request.getContextPath() + "/error.jsp");
+			response.sendRedirect(request.getContextPath() + "/consumer/error.jsp");
 		} catch (Exception e) {
 			// 기타 오류
 			e.printStackTrace();
