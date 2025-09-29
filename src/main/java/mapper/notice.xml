@@ -6,8 +6,8 @@
 
 	<!-- 공지(seller) 글쓰기 저장 -->
 	<insert id="insertSellerNotice" parameterType="notice" useGeneratedKeys="true" keyProperty="noticeId">
-		insert into notice (notice_id, type_id, title, content, image1_file_id, image2_file_id, image3_file_id, writer, target_type_id, is_exposed, created_at, updated_at) 
-		values (0, #{typeId}, #{title}, #{content},#{image1FileId},#{image2FileId}, #{image3FileId}, #{writer}, #{targetTypeId}, 1, now(), null)
+		insert into notice (notice_id, type_id, title, content, image1_file_id, image2_file_id, image3_file_id, doc_file_id, writer, view_cnt, target_type_id, is_exposed, created_at, updated_at) 
+		values (0, #{typeId}, #{title}, #{content},#{image1FileId},#{image2FileId}, #{image3FileId}, #{docFileId}, #{writer}, 0, #{targetTypeId}, 1, now(), null)
 	</insert>
 	
 	
@@ -37,13 +37,13 @@
 		select count(*) from notice 
 		<choose>
 			<!-- 전체 게시글 총개수 -->
-			<when test="part==total">
+			<when test="part=='total'">
 				where target_type_id = 5
 			</when>
 			
 			<!-- 검색 후 게시글 총개수 -->
 			<when test="part=='search'">
-			where target_type_id = 5 and title like concat('%',#{keyword},'%') 
+				where target_type_id = 5 and title like concat('%',#{keyword},'%') 
 			</when>
 		</choose>
 	</select>
@@ -71,7 +71,7 @@
 	
 	
 	<!-- 공지 게시글 조회수 -->
-	<update id="notice_viewcnt">
+	<update id="notice_viewcnt" parameterType="Integer">
 		update notice set view_cnt = view_cnt+1 where notice_id=#{num}
 	</update>
 	

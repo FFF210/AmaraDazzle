@@ -24,7 +24,9 @@ public class Paging {
 	// 쿼리문 limit에 값 전달
 	public Map<String, Object> paging(Integer pageno) {
 		/*
-		 * 1p 클릭 => limit 0,10 2p 클릭 => limit 10,10 3p 클릭 => limit 20,10 ...
+		 * 1p 클릭 => limit 0,10 
+		 * 2p 클릭 => limit 10,10 
+		 * 3p 클릭 => limit 20,10 ...
 		 */
 		this.startPage = (pageno - 1) * this.post_cnt; // limit 시작번호
 
@@ -43,18 +45,24 @@ public class Paging {
 		int page_ea_total; // 총 페이지 개수
 		int start_pg;
 		int end_pg;
-
+		int final_post_ea;
+		
 		page_ea_total = (int) Math.ceil((double) total_post / this.post_cnt);
-
+		final_post_ea = total_post % this.post_cnt;
+		
 		// 1~5, 6~10, 11~
 		start_pg = (((pageno - 1) / page_ea) * page_ea) + 1;
 		end_pg = Math.min(start_pg + (page_ea - 1), page_ea_total);
 
 		Map<String, Object> pageinfo = new HashMap<String, Object>();
-		pageinfo.put("page_ea_total", page_ea_total);
-		pageinfo.put("page_ea", page_ea);
-		pageinfo.put("start_pg", start_pg);
-		pageinfo.put("end_pg", end_pg);
+		pageinfo.put("pageno", pageno);	//현재 페이지 번호
+		pageinfo.put("page_ea_total", page_ea_total);	//총 페이지 개수
+		pageinfo.put("page_ea", page_ea);	//한페이지에 보여줄 페이징의 갯수
+		pageinfo.put("final_post_ea", final_post_ea);	//마지막 페이지에 있는 게시물 개수 
+		pageinfo.put("start_pg", start_pg);	//현재화면의 시작 페이지 
+		pageinfo.put("end_pg", end_pg);	//현재화면의 끝 페이지 
+		
+			
 
 		return pageinfo;
 	}

@@ -23,7 +23,7 @@ public class NoticeSellerDetail extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
 
-		String num = request.getParameter("num"); // ?뒤의 파라미터명과 동일해야함
+		String num = request.getParameter("num"); 
 		NoticeService notice_svc = new NoticeServiceImpl();
 
 		try {

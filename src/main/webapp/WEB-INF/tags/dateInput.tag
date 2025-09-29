@@ -23,17 +23,19 @@
 <%@ attribute name="type" required="true"%>
 <%@ attribute name="name" required="false"%>
 <%@ attribute name="value" required="false"%>
+<%@ attribute name="id" required="false"%>
 <%@ attribute name="presets" required="false"%>
 
 <c:set var="value" value="${empty value ? '' : value}" />
 <c:set var="presetList"
 	value="${empty presets ? '' : fn:split(presets, ',')}" />
+<c:set var="id" value="${empty id ? '' : id}" />
 
 <div class="date-input">
 	<!-- Input 타입 -->
 	<c:if test="${type eq 'input'}">
 		<div class="input-wrapper">
-			<input type="text" name="${name}" value="${value}" class="date-text"
+			<input type="text" name="${name}" id="${id}" value="${value}" class="date-text"
 				placeholder="YYYY-MM-DD" readonly />
 			<button type="button" class="calendar-icon-wrapper">
 				<i class="bi bi-calendar4 calendar-icon"></i>

@@ -3,7 +3,6 @@ package service.admin;
 import java.util.List;
 
 import dto.Notice;
-import util.PageInfo;
 
 public interface NoticeService {
 

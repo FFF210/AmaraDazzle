@@ -8,7 +8,6 @@ import java.util.Map;
 import dao.admin.NoticeDAO;
 import dao.admin.NoticeDAOImpl;
 import dto.Notice;
-import util.PageInfo;
 import util.Paging;
 
 public class NoticeServiceImpl implements NoticeService {
@@ -62,7 +61,7 @@ public class NoticeServiceImpl implements NoticeService {
 			cntMap.put("part", "total");
 		}
 				
-		Integer sellerNoticeCnt = n_dao.noticeCount(cntMap); //전체 게시글 수 
+		Integer sellerNoticeCnt = n_dao.noticeCount(cntMap);
 		return sellerNoticeCnt;
 	}
 	

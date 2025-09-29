@@ -12,7 +12,7 @@
 
 </head>
 <body>
-	<form>
+	<form class="search_form">
 		<div class="search_container">
 			<div class="filter">
 				<div class="period_box">

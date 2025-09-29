@@ -8,7 +8,14 @@
 <%@ include file="./common/config.jsp"%>
 
 <title>공지게시판</title>
-<link rel="stylesheet" href="../tagcss/tag.css?v=2" />
+<link rel="stylesheet" href="../tagcss/tag.css" />
+<link rel="stylesheet" href="../tagcss/dateInput.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+
+
 <!-- 헤드부분 -->
 
 <body>

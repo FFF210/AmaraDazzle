@@ -13,64 +13,12 @@
 
 <!-- ************************* 판매자 탭 ************************* -->
 <div id="seller" class="tab_content">
+	
 	<!-- 필터 -->
-	<form class="search_form">
-		<div class="search_container">
-			<div class="filter">
-				<div class="period_box">
-					<div class="filtering_title">
-						<span class="searchbox_title">작성일 : </span>
-					</div>
-					<div class="period_body">
-						<div>
-							<input type="date" class="btn start_date" /> <span> - </span> <input
-								type="date" class="btn end_date" />
-						</div>
-
-						<div class="p_choice">
-							<input type="button" class="btn" value="오늘" /> <input
-								type="button" class="btn" value="어제" /> <input type="button"
-								class="btn" value="최근7일" /> <input type="button" class="btn"
-								value="최근30일" />
-						</div>
-					</div>
-				</div>
-
-				<div class="questionType_box">
-					<div class="filtering_title">
-						<span class="searchbox_title">카테고리 : </span>
-					</div>
-					<div>
-						<select class="">
-							<option>공지카테1</option>
-							<option>공지카테2</option>
-							<option>공지카테3</option>
-							<option>공지카테4</option>
-						</select>
-					</div>
-				</div>
-
-				<div class="totalSearch_box">
-					<div class="searchType">
-						<select>
-							<option>내용</option>
-							<option>제목</option>
-							<option>code</option>
-							<option>작성자</option>
-						</select>
-					</div>
-					<div class="searchKeyword">
-						<i class="bi bi-search"></i><input type="text" />
-					</div>
-				</div>
-			</div>
-
-			<div class="btn_box">
-				<input type="submit" class="btn first_btn" value="검색" /> <input
-					type="reset" class="btn second_btn" value="초기화" />
-			</div>
-		</div>
-	</form>
+	<my:adminSearchContainer id="noticeSellerSearch">
+		<my:adminSearchPeriod title="작성일" />
+		<my:adminSearchType title="카테고리" optList="시스템, 이벤트, 기타" init="공지 카테고리를 선택하세요"/>
+	</my:adminSearchContainer>
 	<!-- 필터 end -->
 
 	<!-- 버튼 -->
@@ -83,15 +31,24 @@
 		</div>
 	</div>
 	<!-- 버튼 end -->
-
+	
 	<!-- 테이블 -->
 	<div class="whole_table">
 		<div class="table_title">
 			<span class="list_count">
-				<c:if test="">
+				<c:if test="${keyword != null}">
 					[ 검색 결과 ]
 				</c:if>
-				 &nbsp; 총 ${noticeCnt}건 중 1 - 10 건 
+				 &nbsp; 총 ${noticeCnt}건 중 ${postNo + 1} - 
+				 <c:choose>
+					 <c:when test="${paging.pageno == paging.end_pg && paging.final_post_ea < 10 && paging.final_post_ea != 0}">
+					 	${postNo + paging.final_post_ea}  
+					 </c:when>
+					 <c:otherwise>
+					 	${postNo + 10}  
+					 </c:otherwise>
+				 </c:choose>
+				 건
 			</span>
 		</div>
 		<div class="table_wrap">
@@ -137,7 +94,7 @@
 						</tr>
 					</c:if>
 					
-					<c:set var="no" value="${noticeCnt-clickPage}" />
+					<c:set var="no" value="${noticeCnt-postNo}" />
 					<c:forEach items="${noticeList}" var="noticeList" varStatus="idx">
 						<tr>
 							<td><input type="checkbox" /></td>
@@ -155,19 +112,18 @@
 									</c:when>
 								</c:choose>
 							</td>
-							<td class="title_cell">
+							<td class="title_cell" onclick="goNoticeDetail('${noticeList.noticeId}','${noticeList.targetTypeId}');">
 								<c:if test="${fn:length(noticeList.imageFileIds)!=0}">
 									<i class="bi bi-paperclip"></i>
 								</c:if>
 								${noticeList.title}
-								
 							</td>
-							<td>${noticeList.writer}</td>
+							<td>Amara Dazzle</td>
 							<td>
 								<c:set var="createDate" value="${noticeList.createdAt}"/>
 								&nbsp; ${fn:substring(createDate,0,19)}
 							</td>
-							<td>조회수</td>
+							<td>${noticeList.viewCnt}</td>
 							<td>
 								<c:choose>
 									<c:when test="${noticeList.isExposed == '1' }">  <!-- 게시여부 : 게시중 -->
@@ -187,7 +143,7 @@
 
 		<!-- 페이지네이션 -->
 		<div class="pagination_wrap" id="paginationWrap">
-			<my:adminPagination currentPage="1" totalPages="10" baseUrl="/products?page=" />
+			<my:adminPagination currentPage="${paging.pageno}" allPage="${paging.end_pg}" baseUrl="/admin/noticeSellerList?page="/>
 		</div>
 		<!-- 페이지네이션 end -->
 	</div>
@@ -195,3 +151,5 @@
 <!-- 메인부분 -->
 
 <script src="./js/boardNotice.js"></script>
+<script src="./js/componant/select_box.js"></script>
+<script src="../tagjs/selectbox.js"></script>

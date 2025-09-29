@@ -1,6 +1,5 @@
 package dao.admin;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +57,14 @@ public class NoticeDAOImpl implements NoticeDAO {
 	//공지 게시글 조회수
 	@Override
 	public void viewCount(int num) {
-		ss.update("mapper.notice.notice_viewcnt",num);
+		int result = ss.update("mapper.notice.notice_viewcnt",num);
+
+		if(result > 0) {
+			ss.commit();
+			
+		} else {
+			ss.rollback();
+		}
 	}
 	
 	
