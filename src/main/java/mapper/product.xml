@@ -3,7 +3,12 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.product">
+<<<<<<< HEAD
 	<!--======================= 소비자용 ======================= -->
+=======
+	
+	<!--======================= 소비자용 =======================-->
+>>>>>>> branch 'main' of https://github.com/2025KostaProject/AmaraDazzle.git
 	<!-- 상품 상세 조회 (상품 상세 페이지용) -->
 	<select id="selectProductByProductId" parameterType="Long"
 		resultType="dto.Product">
@@ -13,7 +18,7 @@
 		is_visible = 1
 	</select>
 
-	<!-- 전체 상품 목록 조회 (페이징) -->
+	<!-- ================[소비자] 전체 상품 목록 조회 (페이징)=================== -->
 	<select id="selectAllProducts" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -24,7 +29,7 @@
 		LIMIT #{offset}, #{limit}
 	</select>
 
-	<!-- 카테고리별 상품 목록 조회 Id 수정했음!!!!! -->
+	<!-- ================[소비자] 카테고리별 상품 목록 조회. Id 수정했음!!!!! ===================-->
 	<select id="selectProductByCategory" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -35,7 +40,7 @@
 		LIMIT #{offset}, #{limit}
 	</select>
 
-	<!-- 브랜드별 상품 목록 조회 -->
+	<!-- ================[소비자] 브랜드별 상품 목록 조회...필요한가? =================== -->
 	<select id="selectProductByBrand" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -46,7 +51,7 @@
 		LIMIT #{offset}, #{limit}
 	</select>
 
-	<!-- 상품 검색 (상품명으로) -->
+	<!-- ================[소비자] 상품 검색 (상품명으로) =================== -->
 	<select id="searchProductByName" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -60,7 +65,7 @@
 		#{limit}
 	</select>
 
-	<!-- 신상품 목록 조회 (최근 등록순) -->
+	<!-- ================[소비자]신상품 목록 조회 (최근 등록순)=================== -->
 	<select id="selectNewProducts" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -71,7 +76,7 @@
 		LIMIT #{limit}
 	</select>
 
-	<!-- 인기상품 목록 조회 (판매량 기준 - 별도 테이블 조인 필요할 수 있음) -->
+	<!-- ================[소비자] 인기상품 목록 조회 (판매량 기준 - 별도 테이블 조인 필요할 수 있음)=================== -->
 	<select id="selectPopularProducts" parameterType="map"
 		resultType="dto.Product">
 		SELECT p.* FROM product p
@@ -81,7 +86,7 @@
 		LIMIT #{limit}
 	</select>
 
-	<!-- 할인 상품 목록 조회 -->
+	<!-- ================[소비자] 세일 상품 목록 조회 =================== -->
 	<select id="selectDiscountProducts" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -97,7 +102,7 @@
 		LIMIT #{offset}, #{limit}
 	</select>
 
-	<!-- 기획상품 목록 조회 -->
+	<!-- ================[소비자] 기획상품 목록 조회 =================== -->
 	<select id="selectPlannedProducts" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -107,7 +112,7 @@
 		LIMIT #{offset}, #{limit}
 	</select>
 
-	<!-- 상품 재고 확인 -->
+	<!--  상품 재고 확인 -->
 	<select id="selectStockQty" parameterType="long"
 		resultType="int">
 		SELECT
@@ -196,6 +201,7 @@
 		</foreach>
 		AND is_visible = 1
 	</select>
+	
 
 	<!--======================= [브랜드 어드민] 상품 목록 조회 ======================= -->
 	<select id="selectProductListForBrand" parameterType="map"

@@ -261,50 +261,49 @@ public class MemberServiceImpl implements MemberService {
 			return member;
 		}
 	}
-	
-	 private String getKaKaoToken(String code) throws Exception {
-	        String tokenUrl = "https://kauth.kakao.com/oauth/token";
-	        URL url = new URL(tokenUrl);
-	        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-	        conn.setRequestMethod("POST");
-	        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
-	        conn.setDoOutput(true);
-	        
-	        StringBuilder param = new StringBuilder();
-	        param.append("grant_type=authorization_code");
-	        param.append("&client_id=44080c9c34460d38b051817cfe95bd57");
-	        param.append("&redirect_uri=http://localhost:8080/social/kakao");
-	        param.append("&code=" + code);
-	        
-	        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
-	        bw.write(param.toString());
-	        bw.flush();
-	        
-	        BufferedReader br;
-	        int resCode = conn.getResponseCode();
-	        if(resCode == 200) {
-	            br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-	        } else {
-	            br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
-	        }
-	        
-	        StringBuilder resBuilder = new StringBuilder();
-	        String line;
-	        while((line = br.readLine()) != null) {
-	            resBuilder.append(line);
-	        }
-	        
-	        br.close();
-	        conn.disconnect();
-	        
-	        System.out.println(resBuilder.toString());
-	        JSONParser parser = new JSONParser();
-	        JSONObject jsonObj = (JSONObject)parser.parse(resBuilder.toString());
-	        String accessToken = (String)jsonObj.get("access_token");
-	        
-	        return accessToken;
-	    }
 
+	private String getKaKaoToken(String code) throws Exception {
+		String tokenUrl = "https://kauth.kakao.com/oauth/token";
+		URL url = new URL(tokenUrl);
+		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+		conn.setRequestMethod("POST");
+		conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+		conn.setDoOutput(true);
+
+		StringBuilder param = new StringBuilder();
+		param.append("grant_type=authorization_code");
+		param.append("&client_id=44080c9c34460d38b051817cfe95bd57");
+		param.append("&redirect_uri=http://localhost:8080/social/kakao");
+		param.append("&code=" + code);
+
+		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()));
+		bw.write(param.toString());
+		bw.flush();
+
+		BufferedReader br;
+		int resCode = conn.getResponseCode();
+		if (resCode == 200) {
+			br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+		} else {
+			br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+		}
+
+		StringBuilder resBuilder = new StringBuilder();
+		String line;
+		while ((line = br.readLine()) != null) {
+			resBuilder.append(line);
+		}
+
+		br.close();
+		conn.disconnect();
+
+		System.out.println(resBuilder.toString());
+		JSONParser parser = new JSONParser();
+		JSONObject jsonObj = (JSONObject) parser.parse(resBuilder.toString());
+		String accessToken = (String) jsonObj.get("access_token");
+
+		return accessToken;
+	}
 
 	private Member getKakaoUserInfo(String token) throws Exception {
 		String userUrl = "https://kapi.kakao.com/v2/user/me";
@@ -346,12 +345,30 @@ public class MemberServiceImpl implements MemberService {
 			Member member = new Member();
 			member.setKakaoId(id); //
 			member.setNickname(nickname);
-			
+
 			member.setLoginType("KAKAO");
-	        member.setStatus("ACTIVE");
-	        member.setPointBalance(0);
-	        member.setGrade("NORMAL");
-	        member.setMarketingOpt(0);
+			member.setStatus("ACTIVE");
+			member.setPointBalance(0);
+			member.setGrade("NORMAL");
+			member.setMarketingOpt(0);
+
+			// ✅ 카카오 로그인용 임시 이메일 생성
+			member.setEmail("kakao_" + id + "@temp.com"); // 예: kakao_4436275764@temp.com
+
+			// ✅ 필수 필드들 설정
+			member.setLoginType("KAKAO");
+			member.setStatus("ACTIVE");
+			member.setPointBalance(0);
+			member.setGrade("NORMAL");
+			member.setMarketingOpt(0);
+
+			// ✅ 필수이지만 카카오에서 제공하지 않는 필드들 기본값 설정
+			member.setPassword("KAKAO_LOGIN"); // 카카오 로그인은 비밀번호 불필요
+			member.setName(nickname); // 이름이 없으면 닉네임 사용
+			member.setPhone("000-0000-0000"); // 임시 전화번호
+			member.setPostcode("00000"); // 임시 우편번호
+			member.setLine1("카카오 로그인 사용자"); // 임시 주소
+			member.setLine2("-"); // 임시 상세주소
 
 			return member;
 
