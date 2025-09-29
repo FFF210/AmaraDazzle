@@ -18,7 +18,7 @@ import service.consumer.CartItemServiceImpl;
 /**
  * Servlet implementation class Cart
  */
-@WebServlet("/consumer/cart")
+@WebServlet("/store/mypage/cart")
 public class Cart extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

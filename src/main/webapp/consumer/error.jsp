@@ -4,10 +4,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>LG사이언스파크</title>
+<title>AMARA DAZZLE</title>
 <link rel="stylesheet" href="<c:url value="/css/error.css"/>">
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="<c:url value="/js/error.js"/>"></script>
+<script src="<c:url value="/consumer/js/error.js"/>"></script>
 </head>
 <body>
 <div class="error">
@@ -27,7 +27,7 @@
 	</table>
 	<hr>
 	<div class="buttonDiv">
-		<button type="button" id="homeBtn">홈으로</button>
+		<button type="button" onclick="location.href="<c:url value='/consumer/main'/>" id="homeBtn">홈으로</button>
 	</div>
 </div>
 </body>

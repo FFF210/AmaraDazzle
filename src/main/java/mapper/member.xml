@@ -90,7 +90,7 @@
 
 	<!-- 이메일과 휴대폰으로 회원 ID 찾기 (비밀번호 재설정용) -->
 	<select id="selectIdByEmailAndPhone" parameterType="map"
-		resultType="long">
+		resultType="Long">
 		SELECT member_id FROM member
 		WHERE email = #{email}
 		AND phone
@@ -194,7 +194,7 @@
 	</update>
 
 	<!-- 회원 탈퇴 (실제 삭제가 아닌 상태 변경) -->
-	<update id="deleteMember" parameterType="long">
+	<update id="deleteMember" parameterType="Long">
 		UPDATE member SET
 		status
 		= 'DELETED'
@@ -202,7 +202,7 @@
 	</update>
 
 	<!-- 카카오 ID로 회원 조회 (카카오 로그인용) -->
-	<select id="selectByKakaoId" parameterType="long"
+	<select id="selectByKakaoId" parameterType="Long"
 		resultType="dto.Member">
 		SELECT * FROM member
 		WHERE kakao_id = #{kakaoId}
@@ -211,7 +211,7 @@
 	</select>
 
 	<!-- 마이페이지용 - 회원의 기본 정보만 조회 -->
-	<select id="selectBasicInfo" parameterType="long"
+	<select id="selectMemberInfo" parameterType="Long"
 		resultType="map">
 		SELECT
 		member_id as memberId,

@@ -16,17 +16,20 @@ public class MemberDAOImpl implements MemberDAO {
 		sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
 	}
 
+	// 회원가입 (회원등록) //
 	@Override
 	public void insertMember(Member member) throws Exception {
 		sqlSession.insert("mapper.member.insertMember", member);
 		sqlSession.commit();
 	}
 
+	// 범용 회원 조회
 	@Override
 	public Member selectMember(Map<String, Object> params) throws Exception {
 		return sqlSession.selectOne("mapper.member.selectMember", params);
 	}
 
+	// 로그인 용도
 	@Override
 	public Member selectByEmailAndPassword(String email, String password) throws Exception {
 		Map<String, Object> params = new HashMap<>();
@@ -35,26 +38,31 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("mapper.member.selectByEmailAndPassword", params);
 	}
 
+	// 아이디(이메일) 찾기, 중복체크
 	@Override
 	public Member selectByEmail(String email) throws Exception {
 		return sqlSession.selectOne("mapper.member.selectByEmail", email);
 	}
 
+	// 회원ID로 회원 조회 (마이페이지 및 주문조회 용도)
 	@Override
 	public Member selectById(Long memberId) throws Exception {
 		return sqlSession.selectOne("mapper.member.selectById", memberId);
 	}
 
 	@Override
-	public int countByEmail(String email) throws Exception {
-		Integer result = sqlSession.selectOne("mapper.member.countByEmail", email);
-		return result != null ? result : 0;
-	}
-
-	@Override
 	public void updateMember(Member member) throws Exception {
 		sqlSession.update("mapper.member.updateMember", member);
 		sqlSession.commit();
+	}
+
+	// 이메일과 휴대폰으로 회원 ID 찾기 (비밀번호 재설정용)
+	@Override
+	public Long selectIdByEmailAndPhone(String email, String phone) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+		params.put("email", email);
+		params.put("phone", phone);
+		return sqlSession.selectOne("mapper.member.selectIdByEmailAndPhone", params);
 	}
 
 	@Override
@@ -75,6 +83,7 @@ public class MemberDAOImpl implements MemberDAO {
 		sqlSession.commit();
 	}
 
+	// 등급 변경
 	@Override
 	public void updateGrade(Long memberId, String grade) throws Exception {
 		Map<String, Object> params = new HashMap<>();
@@ -97,14 +106,15 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("mapper.member.selectByKakaoId", kakaoId);
 	}
 
+	//마이페이지용 - 회원의 기본 정보만 조회
 	@Override
-	public Map<String, Object> selectBasicInfo(Long memberId) throws Exception {
-		return sqlSession.selectOne("mapper.member.selectBasicInfo", memberId);
+	public Map<String, Object> selectMemberInfo(Long memberId) throws Exception {
+		return sqlSession.selectOne("mapper.member.selectMemberInfo", memberId);
 	}
 
 	@Override
 	public Map<String, Object> selectHeaderInfo(Long memberId) throws Exception {
-		return sqlSession.selectOne("mapper.member.selectBasicInfo", memberId);
+		return sqlSession.selectOne("mapper.member.selectMemberInfo", memberId);
 	}
 
 	@Override
@@ -113,14 +123,6 @@ public class MemberDAOImpl implements MemberDAO {
 		params.put("name", name);
 		params.put("phone", phone);
 		return sqlSession.selectOne("mapper.member.selectEmailByNameAndPhone", params);
-	}
-
-	@Override
-	public Long selectIdByEmailAndPhone(String email, String phone) throws Exception {
-		Map<String, Object> params = new HashMap<>();
-		params.put("email", email);
-		params.put("phone", phone);
-		return sqlSession.selectOne("mapper.member.selectIdByEmailAndPhone", params);
 	}
 
 	@Override
@@ -148,21 +150,21 @@ public class MemberDAOImpl implements MemberDAO {
 	@Override
 	public int useMemberPoint(Long memberId, int usingPoint) throws Exception {
 		Map<String, Object> params = new HashMap<>();
-	    params.put("memberId", memberId);
-	    params.put("usingPoint", usingPoint);
-	    
-	    int result = sqlSession.update("mapper.member.useMemberPoint", params);
-	    sqlSession.commit();
-	    return result;
+		params.put("memberId", memberId);
+		params.put("usingPoint", usingPoint);
+
+		int result = sqlSession.update("mapper.member.useMemberPoint", params);
+		sqlSession.commit();
+		return result;
 	}
 
 	@Override
 	public boolean checkPointAvailable(Long memberId, int usingPoint) throws Exception {
 		Map<String, Object> params = new HashMap<>();
-	    params.put("memberId", memberId);
-	    params.put("usingPoint", usingPoint);
-	    
-	    return sqlSession.selectOne("mapper.member.checkPointAvailable", params);
+		params.put("memberId", memberId);
+		params.put("usingPoint", usingPoint);
+
+		return sqlSession.selectOne("mapper.member.checkPointAvailable", params);
 	}
 
 }

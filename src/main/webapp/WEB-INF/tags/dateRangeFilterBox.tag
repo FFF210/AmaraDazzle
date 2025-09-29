@@ -2,7 +2,6 @@
 <%@ tag body-content="empty" %>
 <%@ taglib prefix="c"   uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<link rel="stylesheet" href="./css/dateRangeFilter.css" />
 
 <%-- ==========================================
   DateRangeFilter 커스텀 태그 (고정 레이아웃)
@@ -10,19 +9,22 @@
   Props
   • submitLabel : 조회 버튼 텍스트 (기본 "조회")
   • periods     : 빠른기간 버튼 CSV  (기본 "1,3,6,12")
+  • size        : sm, md(디폴트)
   • yearsFrom   : 연도 시작 (기본: 오늘-5)
   • yearsTo     : 연도 끝   (기본: 오늘)
   • startY/M/D  : 시작 기본값 (기본: 오늘)
   • endY/M/D    : 종료 기본값 (기본: 오늘)
   • namePrefix  : 필드 name prefix (기본 "drf")
   
-  사용법?
-  <my:dateRangeFilterBox periods="1,3,6,12" submitLabel="조회"/>     
-  
+  사용법
+  <form action="<c:url value='해당url(예시:/consumer/mypage/myCoupoint)'/>" method="get">
+  <my:dateRangeFilterBox periods="1,3,6,12" submitLabel="조회" size="sm"/>     
+  </form>
 =========================================== --%>
 
 <%@ attribute name="submitLabel" required="false" %>
 <%@ attribute name="periods"     required="false" %>
+<%@ attribute name="size"        required="false" %>
 <%@ attribute name="yearsFrom"   required="false" %>
 <%@ attribute name="yearsTo"     required="false" %>
 <%@ attribute name="startY"      required="false" %>
@@ -41,6 +43,7 @@
 <c:set var="__submit"  value="${empty submitLabel ? '조회' : submitLabel}" />
 <c:set var="__periods" value="${empty periods ? '1,3,6,12' : periods}" />
 <c:set var="__prefix"  value="${empty namePrefix ? 'drf' : namePrefix}" />
+<c:set var="__size"    value="${empty size ? 'md' : size}" />  <%-- 기본값 md --%>
 
 <c:set var="__yFrom" value="${empty yearsFrom ? __todayY - 5 : yearsFrom}" />
 <c:set var="__yTo"   value="${empty yearsTo   ? __todayY      : yearsTo}" />
@@ -52,10 +55,10 @@
 <c:set var="__endM"   value="${empty endM   ? __todayM : endM}" />
 <c:set var="__endD"   value="${empty endD   ? __todayD : endD}" />
 
-<div class="drf-wrap"><!-- 왼쪽 박스 + 오른쪽 버튼을 한 덩어리 -->
-  <!-- 왼쪽 컨트롤 박스 -->
+
+<%-- size 클래스 --%>
+<div class="drf-wrap drf-${__size}">
   <div class="drf-box">
-    <!-- 상단: 구매기간 + 개월 버튼 -->
     <div class="drf-header">
       <div class="drf-label">구매기간</div>
       <div class="drf-periods">
@@ -69,9 +72,8 @@
       </div>
     </div>
 
-    <!-- 하단: 날짜 선택 -->
     <div class="drf-dates">
-      <div class="drf-date">
+      <div class="since-drf-date">
         <select class="drf-select" name="${__prefix}StartY" data-role="start-y">
           <c:forEach var="y" begin="${__yFrom}" end="${__yTo}">
             <option value="${y}" ${y == __startY ? 'selected' : ''}>${y}</option>
@@ -93,7 +95,7 @@
 
       <div class="drf-tilde">~</div>
 
-      <div class="drf-date">
+      <div class="until-drf-date">
         <select class="drf-select" name="${__prefix}EndY" data-role="end-y">
           <c:forEach var="y" begin="${__yFrom}" end="${__yTo}">
             <option value="${y}" ${y == __endY ? 'selected' : ''}>${y}</option>
@@ -115,7 +117,6 @@
     </div>
   </div>
 
-  <!-- 오른쪽: 같은 높이의 파란 버튼 (폭 77px 고정) -->
   <button class="drf-submit" type="submit">${__submit}</button>
 </div>
 
