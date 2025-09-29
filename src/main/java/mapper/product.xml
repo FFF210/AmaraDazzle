@@ -3,12 +3,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.product">
-<<<<<<< HEAD
 	<!--======================= 소비자용 ======================= -->
-=======
-	
-	<!--======================= 소비자용 =======================-->
->>>>>>> branch 'main' of https://github.com/2025KostaProject/AmaraDazzle.git
 	<!-- 상품 상세 조회 (상품 상세 페이지용) -->
 	<select id="selectProductByProductId" parameterType="Long"
 		resultType="dto.Product">
