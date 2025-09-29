@@ -16,7 +16,7 @@ import service.consumer.MemberServiceImpl;
 /**
  * Servlet implementation class KakaoLogin
  */
-@WebServlet("/kakao")
+@WebServlet("/social/kakao")
 public class KakaoLogin extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -39,6 +39,13 @@ public class KakaoLogin extends HttpServlet {
 		String code = request.getParameter("code");
 		System.out.println(code);
 		
+		// ✅ 코드 체크
+	    if (code == null || code.trim().isEmpty()) {
+	        System.out.println("인증 코드가 없습니다!");
+	        response.sendRedirect(request.getContextPath() + "/consumer/login.jsp?error=1");
+	        return;
+	    }
+		
 		try {
 			MemberService service = new MemberServiceImpl();
 			Member userInfo = service.kakaoLogin(code);
@@ -47,6 +54,8 @@ public class KakaoLogin extends HttpServlet {
 			request.getRequestDispatcher("/consumer/main.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
+			
+			response.sendRedirect(request.getContextPath() + "/consumer/login.jsp?error=2");
 		}
 	}
 

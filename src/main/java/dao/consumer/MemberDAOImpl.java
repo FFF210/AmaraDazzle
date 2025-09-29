@@ -99,7 +99,7 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Override
 	public Map<String, Object> selectBasicInfo(Long memberId) throws Exception {
-		   return sqlSession.selectOne("mapper.member.selectBasicInfo", memberId);
+		return sqlSession.selectOne("mapper.member.selectBasicInfo", memberId);
 	}
 
 	@Override
@@ -110,27 +110,59 @@ public class MemberDAOImpl implements MemberDAO {
 	@Override
 	public String selectEmailByNameAndPhone(String name, String phone) throws Exception {
 		Map<String, Object> params = new HashMap<>();
-	    params.put("name", name);
-	    params.put("phone", phone);
-	    return sqlSession.selectOne("mapper.member.selectEmailByNameAndPhone", params);
+		params.put("name", name);
+		params.put("phone", phone);
+		return sqlSession.selectOne("mapper.member.selectEmailByNameAndPhone", params);
 	}
 
 	@Override
 	public Long selectIdByEmailAndPhone(String email, String phone) throws Exception {
 		Map<String, Object> params = new HashMap<>();
-	    params.put("email", email);
-	    params.put("phone", phone);
-	    return sqlSession.selectOne("mapper.member.selectIdByEmailAndPhone", params);
+		params.put("email", email);
+		params.put("phone", phone);
+		return sqlSession.selectOne("mapper.member.selectIdByEmailAndPhone", params);
 	}
 
 	@Override
 	public void resetPassword(Long memberId, String newPassword) throws Exception {
-		 Map<String, Object> params = new HashMap<>();
-		    params.put("memberId", memberId);
-		    params.put("newPassword", newPassword);
-		    sqlSession.update("mapper.member.resetPassword", params);
-		    sqlSession.commit();
-		
+		Map<String, Object> params = new HashMap<>();
+		params.put("memberId", memberId);
+		params.put("newPassword", newPassword);
+		sqlSession.update("mapper.member.resetPassword", params);
+		sqlSession.commit();
+
+	}
+
+	// =================체크아웃용 >> 그래서 OrderService에 추가...
+
+	@Override
+	public Member getMemberInfoForCheckout(Long memberId) throws Exception {
+		return sqlSession.selectOne("mapper.member.getMemberInfoForCheckout", memberId);
+	}
+
+	@Override
+	public Integer getMemberPointBalance(Long memberId) throws Exception {
+		return sqlSession.selectOne("mapper.member.getMemberPointBalance", memberId);
+	}
+
+	@Override
+	public int useMemberPoint(Long memberId, int usingPoint) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("memberId", memberId);
+	    params.put("usingPoint", usingPoint);
+	    
+	    int result = sqlSession.update("mapper.member.useMemberPoint", params);
+	    sqlSession.commit();
+	    return result;
+	}
+
+	@Override
+	public boolean checkPointAvailable(Long memberId, int usingPoint) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("memberId", memberId);
+	    params.put("usingPoint", usingPoint);
+	    
+	    return sqlSession.selectOne("mapper.member.checkPointAvailable", params);
 	}
 
 }

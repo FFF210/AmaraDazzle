@@ -35,7 +35,8 @@ request.setAttribute("floor", floor);
 <link rel="stylesheet" href="<c:url value='/tagcss/rating.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/selectbox.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
-<link rel="stylesheet" href="<c:url value='/consumer/css/productDetail.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/consumer/css/productDetail.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/reviewSummary.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/reviewCard.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/qna.css'/>">
@@ -97,20 +98,36 @@ request.setAttribute("floor", floor);
 					</div>
 				</div>
 
+				<!-- 디버깅용 정보 -->
+				<%-- <div
+					style="background: #f0f0f0; padding: 10px; margin: 10px 0; font-size: 12px;">
+					<strong>디버깅 정보:</strong><br> product.hasOption:
+					${product.hasOption}<br> product.hasOption == 1:
+					${product.hasOption == 1}<br> productOptions 개수:
+					${productOptions != null ? productOptions.size() : 'null'}<br>
+					<c:if test="${not empty productOptions}">
+                     첫 번째 옵션: ${productOptions[0].optionValue}<br>
+					</c:if>
+				</div> --%>
+
 				<!-- 옵션 선택 -->
 				<div class="option-section">
 					<c:choose>
-						<c:when test="${product.hasOption == 1 and not empty productOptions}">
-							<%-- 옵션이 있는 상품: 실제 옵션들을 문자열로 변환 --%>
-							<c:set var="optionItems" value="상품을 선택해주세요" />
-							<c:forEach var="option" items="${productOptions}">
-								<c:set var="optionItems"
-									value="${optionItems},${option.optionValue} (${option.price}원)" />
-							</c:forEach>
+						<c:when
+							test="${product.hasOption == 1 and not empty productOptions}">
+							
 
-							<my:selectbox size="lg" items="${optionItems}"
-								initial="상품을 선택해주세요" />
-						</c:when>
+						<%-- 옵션이 있는 상품: 실제 옵션들을 문자열로 변환 --%>
+						<c:set var="optionItems" value="상품을 선택해주세요" />
+						<c:forEach var="option" items="${productOptions}">
+							<c:set var="optionItems"
+								value="${optionItems},${option.optionValue} (${option.price}원)" />
+						</c:forEach>
+
+						<my:selectbox size="lg" items="${optionItems}"
+							initial="상품을 선택해주세요" />
+						</c:when> 
+
 						<c:otherwise>
 							<%-- 옵션이 없는 상품: 단일 상품 표시 --%>
 							<my:selectbox size="lg" items="단일 상품 (재고: ${product.stockQty}개)"
@@ -122,6 +139,7 @@ request.setAttribute("floor", floor);
 				<!-- 선택된 옵션 리스트 -->
 				<div class="selected-options" id="selectedOptions">
 					<!-- JavaScript로 동적 생성된다고 하는데........ -->
+					<my:selectedOptionItem name="상품이름" price="10000" count="0" />
 				</div>
 
 				<!-- 총 가격 -->
@@ -263,11 +281,12 @@ request.setAttribute("floor", floor);
 							<c:choose>
 								<c:when test="${not empty reviews}">
 									<c:forEach var="review" items="${reviews}">
-									  <div data-rating="${review.rating}" data-date="${review.questionedAt}">
-										<my:reviewCard nickname="User${review.memberId}"
-											skinType="All skin types" rating="${review.rating}"
-											date="${review.questionedAt}" option="Product Option"
-											content="${review.content}" images="" />
+										<div data-rating="${review.rating}"
+											data-date="${review.questionedAt}">
+											<my:reviewCard nickname="User${review.memberId}"
+												skinType="All skin types" rating="${review.rating}"
+												date="${review.questionedAt}" option="Product Option"
+												content="${review.content}" images="" />
 										</div>
 									</c:forEach>
 								</c:when>
@@ -328,203 +347,25 @@ request.setAttribute("floor", floor);
 	<!-- 푸터 include -->
 	<%@ include file="/consumer/footer.jsp"%>
 
-	<!-- 옵션 데이터를 JavaScript에서 사용할 수 있도록 추가 -->
-	<c:if test="${product.hasOption == 1}">
-		<script>
-			const productOptionsData = [
-				<c:forEach var="option" items="${productOptions}" varStatus="status">
-					{
-						id: ${option.productOptionId},
-						value: "${option.optionValue}",
-						price: ${option.price},
-						stock: ${option.stockQty}
-					}<c:if test="${!status.last}">,</c:if>
-				</c:forEach>
-			];
-		</script>
-	</c:if>
 
 	<script>
-		// 전역 변수
-		let selectedOptions = [];
-		let totalPrice = 0;
-
-		// 함수 정의 (한 번만)
-		function addSelectedOption(optionText) {
-			const selectedOptionsContainer = document.getElementById('selectedOptions');
-			
-			// 옵션에서 실제 데이터 찾기
-			let optionData = null;
-			if (typeof productOptionsData !== 'undefined') {
-				optionData = productOptionsData.find(opt => 
-					optionText.includes(opt.value)
-				);
-			}
-			
-			if (optionData) {
-				// 이미 선택된 옵션인지 확인
-				const existingOption = selectedOptions.find(opt => opt.id === optionData.id);
-				if (existingOption) {
-					alert('이미 선택된 옵션입니다.');
-					return;
-				}
-				
-				// 선택된 옵션 배열에 추가
-				selectedOptions.push({
-					id: optionData.id,
-					value: optionData.value,
-					price: optionData.price,
-					stock: optionData.stock,
-					quantity: 1
-				});
-				
-				// UI에 추가
-				const optionDiv = document.createElement('div');
-				optionDiv.className = 'selected-option-item';
-				optionDiv.setAttribute('data-option-id', optionData.id);
-				optionDiv.innerHTML = `
-					<p>선택된 옵션: ${optionData.value}</p>
-					<p>가격: ${optionData.price.toLocaleString()}원</p>
-					<p>수량: <button onclick="changeQuantity(${optionData.id}, -1)">-</button> 
-					       <span id="qty-${optionData.id}">1</span> 
-					       <button onclick="changeQuantity(${optionData.id}, 1)">+</button></p>
-					<button onclick="removeOption(${optionData.id})">삭제</button>
-				`;
-				selectedOptionsContainer.appendChild(optionDiv);
-			} else {
-				// 단일 상품인 경우
-				const optionDiv = document.createElement('div');
-				optionDiv.innerHTML = `<p>선택된 옵션: ${optionText}</p>`;
-				selectedOptionsContainer.appendChild(optionDiv);
-			}
-		}
-
-		function removeOption(optionId) {
-			// 배열에서 제거
-			selectedOptions = selectedOptions.filter(opt => opt.id !== optionId);
-			
-			// UI에서 제거
-			const optionElement = document.querySelector(`[data-option-id="${optionId}"]`);
-			if (optionElement) {
-				optionElement.remove();
-			}
-			
-			updateTotalPrice();
-		}
-
-		function changeQuantity(optionId, change) {
-			const option = selectedOptions.find(opt => opt.id === optionId);
-			if (option) {
-				const newQuantity = option.quantity + change;
-				if (newQuantity > 0 && newQuantity <= option.stock) {
-					option.quantity = newQuantity;
-					document.getElementById(`qty-${optionId}`).textContent = newQuantity;
-					updateTotalPrice();
-				} else if (newQuantity > option.stock) {
-					alert(`재고가 부족합니다. (재고: ${option.stock}개)`);
-				}
-			}
-		}
-
-		function updateTotalPrice() {
-			 if (selectedOptions.length === 0) {
-			        // 선택된 옵션이 없을 때
-			        const totalAmountElement = document.getElementById('totalAmount');
-			        if (typeof productOptionsData !== 'undefined') {
-			            // 옵션이 있는 상품
-			            totalAmountElement.textContent = '옵션을 선택해주세요';
-			        } else {
-			            // 단일 상품 - 기본 가격 유지
-			        }
-			        return;
-			    }
-			    
-			    totalPrice = selectedOptions.reduce((total, option) => {
-			        return total + (option.price * option.quantity);
-			    }, 0);
-			    
-			    const totalAmountElement = document.getElementById('totalAmount');
-			    if (totalAmountElement) {
-			        totalAmountElement.textContent = totalPrice.toLocaleString() + '원';
-			    }
-		}
-
-		// 이벤트 리스너
-		document.addEventListener("selectChanged", (e) => {
-			console.log("선택된 값:", e.detail.value);
-			console.log("선택된 텍스트:", e.detail.text);
-			
-			if (e.detail.value !== "상품을 선택해주세요" && 
-			    e.detail.value !== "단일 상품" && 
-			    !e.detail.value.includes("단일 상품")) {
-				addSelectedOption(e.detail.value);
-				updateTotalPrice();
-			}
-		});
-	</script>
-	<script>
-	// 리뷰 정렬 기능
-	document.addEventListener("sortSelected", (e) => {
-	    console.log("선택한 정렬:", e.detail.sort);
-	    
-	    const sortType = e.detail.sort;
-	    const reviewWrapper = document.querySelector('.review-card-wrapper');
-	    
-	    if (!reviewWrapper) return;
-	    
-	    // 현재 리뷰 카드들을 가져옴
-	    const reviewCards = Array.from(reviewWrapper.querySelectorAll('my\\:reviewCard, [class*="review-card"]'));
-	    
-	    if (reviewCards.length === 0) return;
-	    
-	    // 정렬 로직
-	    let sortedCards;
-	    
-	    switch(sortType) {
-	        case "별점 높은순":
-	            sortedCards = sortReviewsByRating(reviewCards, 'desc');
-	            break;
-	        case "별점 낮은순":
-	            sortedCards = sortReviewsByRating(reviewCards, 'asc');
-	            break;
-	        case "최신순":
-	            sortedCards = sortReviewsByDate(reviewCards, 'desc');
-	            break;
-	        default:
-	            return;
-	    }
-	    
-	    // DOM 재정렬
-	    reviewWrapper.innerHTML = '';
-	    sortedCards.forEach(card => reviewWrapper.appendChild(card));
-	});
-
-	function sortReviewsByRating(cards, order) {
-	    return cards.sort((a, b) => {
-	        const ratingA = parseInt(a.getAttribute('data-rating') || '0');
-	        const ratingB = parseInt(b.getAttribute('data-rating') || '0');
-	        
-	        if (order === 'desc') {
-	            return ratingB - ratingA;
-	        } else {
-	            return ratingA - ratingB;
-	        }
-	    });
-	}
-
-	function sortReviewsByDate(cards, order) {
-	    return cards.sort((a, b) => {
-	        const dateA = new Date(a.getAttribute('data-date') || '0');
-	        const dateB = new Date(b.getAttribute('data-date') || '0');
-	        
-	        if (order === 'desc') {
-	            return dateB - dateA;
-	        } else {
-	            return dateA - dateB;
-	        }
-	    });
-	}
-     </script>
+    const productId = ${product.productId};
+    const productBrandId = '${brand.brandId}';
+    const productPrice = ${product.price}; // 단일 상품 가격 추가
+    
+    <c:if test="${product.hasOption == 1}">
+    const productOptionsData = [
+        <c:forEach var="option" items="${productOptions}" varStatus="status">
+            {
+                id: ${option.productOptionId},
+                value: '${option.optionValue}',
+                price: ${option.price},
+                stock: ${option.stockQty}
+            }<c:if test="${!status.last}">,</c:if>
+        </c:forEach>
+    ];
+</c:if>
+</script>
 	<script src="<c:url value='/consumer/js/tab.js'/>"></script>
 	<script src="<c:url value='/consumer/js/productDetail.js'/>"></script>
 </body>

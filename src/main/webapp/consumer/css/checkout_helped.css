@@ -1,0 +1,497 @@
+/* 주문결제 페이지 스타일 */
+.checkout-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.checkout-content {
+    display: flex;
+    gap: 40px;
+}
+
+/* 왼쪽 영역 */
+.checkout-left {
+    flex: 2;
+    max-width: 700px;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+/* 섹션 공통 스타일 */
+section {
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    padding: 30px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* 폼 요소 스타일 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    background-color: #fafafa;
+}
+
+.form-input:focus, .form-select:focus, .form-textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    background-color: white;
+}
+
+.form-textarea {
+    height: 80px;
+    resize: vertical;
+}
+
+/* 전화번호 입력 */
+.phone-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.phone-select {
+    width: 80px;
+    padding: 12px 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fafafa;
+}
+
+.phone-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fafafa;
+    text-align: center;
+}
+
+.phone-dash {
+    color: #666;
+    font-size: 14px;
+}
+
+/* 주소 입력 */
+.address-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.address-row {
+    display: flex;
+    gap: 8px;
+}
+
+.address-search-btn {
+    padding: 12px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.address-search-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 주문 상품 */
+.order-item {
+    display: flex;
+    gap: 16px;
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #fafafa;
+}
+
+.item-image {
+    width: 80px;
+    height: 80px;
+    flex-shrink: 0;
+}
+
+.item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.item-info {
+    flex: 1;
+}
+
+.brand-name {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.product-name {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.4;
+    margin-bottom: 8px;
+}
+
+.item-price {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.original-price {
+    font-size: 14px;
+    color: #999;
+    text-decoration: line-through;
+}
+
+.final-price {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* 포인트 입력 */
+.point-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.point-info {
+    font-size: 14px;
+    color: #666;
+}
+
+.point-input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.point-input-group .form-input {
+    width: 120px;
+    text-align: right;
+}
+
+.point-unit {
+    font-size: 14px;
+    color: #666;
+}
+
+/* 토스페이 결제 */
+
+
+.payment-method-option {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    transition: border-color 0.3s ease;
+}
+
+.payment-method-option:hover {
+    border-color: #007bff;
+}
+
+.payment-method-label {
+    display: flex;
+/*     align-items: flex-start; */
+	justify-content: center;
+    gap: 12px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.payment_box {
+	display: flex;
+}
+
+.payment_box div.payment-method-check {
+/* 	width : 10%; */
+	display: flex;
+	align-items: center;
+	padding : 15px;
+	
+}
+
+.payment_box div.payment-method-option {
+	width : 90%;
+	
+}
+
+
+.payment-radio {
+    margin-top: 4px;
+    transform: scale(1.2);
+    accent-color: #0064ff;
+}
+
+.payment-content {
+    flex: 1;
+    text-align: center;
+}
+.payment-method {
+    text-align: center;
+}
+
+.toss-pay-button {
+    display: inline-block;
+    padding: 16px 32px;
+    border: 2px solid #0064ff;
+    border-radius: 8px;
+    background-color: #0064ff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toss-pay-button:hover {
+    background-color: #0052cc;
+    border-color: #0052cc;
+}
+
+.toss-logo {
+    height: 30px;
+}
+
+.payment-description {
+    margin-top: 12px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* 오른쪽 영역: 결제 요약 (Sticky) */
+.checkout-right {
+    flex: 1;
+    width: 350px; /* 400px에서 350px로 줄임 */
+}
+
+.payment-summary {
+	width: 100%;
+	display: flex;
+	flex-direction : column;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 22px;
+    background-color: white;
+    position: sticky; /* 스크롤에 따라 고정 */
+    top: 20px; /* 상단에서 20px 떨어진 위치에 고정 */
+    max-height: calc(100vh - 40px); /* 화면 높이에 맞춰 최대 높이 설정 */
+    overflow-y: auto; /* 내용이 길면 스크롤 */
+    z-index: 10; /* 다른 요소들 위에 표시 */
+}
+
+
+.payment_info {
+	width: inherit;
+	height: inherit;
+	
+}
+
+.payment_btn {
+	width: inherit;
+	
+}
+
+/* 최종 결제 버튼 */
+.payment_btn button.final-payment-btn {
+	width: 100%;
+	background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    height : 20px;
+    padding : 14px 0;
+    text-align: center;
+	
+	
+}
+
+
+
+
+
+.summary-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px; 
+}
+
+.summary-row.total {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 2px solid #333;
+}
+
+.summary-row.points {
+    margin-bottom: 16px;
+}
+
+.summary-label {
+    font-size: 13px;
+    color: #666;
+}
+
+.summary-row.total .summary-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+}
+
+.summary-value {
+    font-size: 13px;
+    color: #333;
+}
+
+.summary-value.discount {
+    color: #f31110;
+}
+
+.summary-value.final-amount {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f31110;
+}
+
+.summary-divider {
+    height: 1px;
+    background-color: #e0e0e0;
+    margin: 12px 0;
+}
+
+/* 약관 동의 */
+.agreement-section {
+    margin: 16px 0;
+    padding: 16px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+    font-size: 12px;
+    color: #333;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.checkbox-label input {
+    margin: 0;
+    flex-shrink: 0;
+}
+
+.agreement-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 11px;
+    color: #666;
+}
+
+.agreement-list li {
+    margin-bottom: 3px;
+    padding-left: 14px;
+    position: relative;
+}
+
+.agreement-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #999;
+}
+
+
+
+
+.final-payment-btn:hover {
+    background-color: #0056b3;
+}
+
+.final-payment-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .checkout-content {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .payment-summary {
+        position: static; /* 모바일에서는 sticky 해제 */
+        max-height: none;
+    }
+    
+    .phone-group {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .address-row {
+        flex-direction: column;
+    }
+    
+    .point-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+}

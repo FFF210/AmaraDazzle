@@ -51,4 +51,20 @@ public class ProductDAOImpl implements ProductDAO {
 	public ProductDetail selectProductForBrand(long productId) throws Exception {
 		return sqlSession.selectOne("mapper.product.selectProductForBrand", productId);
 	}
+
+	// 상품 등록
+	@Override
+	public void insertProductForBrand(ProductDetail product) throws Exception {
+		sqlSession.insert("mapper.product.insertProductForBrand", product);
+		sqlSession.commit();
+
+	}
+
+	// 상품 수정
+	@Override
+	public void updateProductForBrand(ProductDetail product) throws Exception {
+		sqlSession.update("mapper.product.updateProductForBrand", product);
+		sqlSession.commit();
+
+	}
 }

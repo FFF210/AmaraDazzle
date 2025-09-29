@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
-    
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,42 +11,40 @@
 <title>장바구니</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="./tagcss/reset.css" />
-<link rel="stylesheet" href="./consumer/css/header.css" />
-<link rel="stylesheet" href="./consumer/css/cart.css" />
-<link rel="stylesheet" href="./tagcss/productCard.css" />
-<link rel="stylesheet" href="./consumer/css/footer.css" />
-<link rel="stylesheet" href="./tagcss/table.css" />
-<link rel="stylesheet" href="./tagcss/button.css" />
-<link rel="stylesheet" href="./tagcss/pageHeader.css" />
+<link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/cart.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/table.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/pageHeader.css'/>">
 </head>
 <body>
-    <!-- 상단 헤더 -->
+	<!-- 상단 헤더 -->
 	<%@ include file="/consumer/header.jsp"%>
-	
+
 	<!-- 페이지 헤더 -->
 	<div class="pageHeader">
-	<my:pageHeader 
-       hasButton="false"
-       title="장바구니" />
-     </div>
+		<my:pageHeader hasButton="false" title="장바구니" />
+	</div>
 
-    <!-- 장바구니에 담은 상품 정보 테이블 -->
-    <div class="table-wrapper">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th style="width: 50px;">선택</th>
-                    <th style="width: 80px;">상품정보</th>
-                    <th style="width: 300px;">상품명</th>
-                    <th style="width: 120px;">수량</th>
-                    <th style="width: 120px;">구매가격</th>
-                    <th style="width: 80px;">적립금</th>
-                    <th style="width: 100px;">관리</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
+	<!-- 장바구니에 담은 상품 정보 테이블 -->
+	<div class="table-wrapper">
+		<table class="table">
+			<thead>
+				<tr>
+					<th style="width: 50px;">선택</th>
+					<th style="width: 80px;">상품정보</th>
+					<th style="width: 300px;">상품명</th>
+					<th style="width: 120px;">수량</th>
+					<th style="width: 120px;">구매가격</th>
+					<th style="width: 80px;">적립금</th>
+					<th style="width: 100px;">관리</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- <tr>
                     <td>
                         <input type="checkbox" class="form-check" />
                     </td>
@@ -93,32 +93,198 @@
                             <button class="btn btn-danger btn-sm">삭제</button>
                         </div>
                     </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <!-- 선택/삭제 버튼 -->
-    <div class="select-all-container">
-        <button type="button">전체선택 해제</button>
-        <button type="button">선택상품 삭제</button>
-    </div>
+                </tr> -->
+				<c:choose>
+					<c:when test="${empty cartItems}">
+						<tr>
+							<td colspan="7" style="text-align: center; padding: 50px;">
+								장바구니가 비어있습니다.</td>
+						</tr>
+					</c:when>
+					<c:otherwise>
+						<c:forEach var="item" items="${cartItems}" varStatus="status">
+							<tr data-cart-item-id="${item.cartItemId}">
+								<td><input type="checkbox" class="form-check item-checkbox"
+									value="${item.cartItemId}" /></td>
+								<td><img src="/images/product-placeholder.jpg"
+									alt="${item.productName}"
+									style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+								</td>
+								<td class="product-name"><a
+									href="/consumer/productDetail?productId=${item.productId}">
+										${item.productName} </a> <c:if test="${not empty item.optionName}">
+										<br>
+										<small>옵션: ${item.optionName}</small>
+									</c:if> <br> <small>브랜드: ${item.brandName}</small></td>
+								<td><input type="number" value="${item.quantity}" min="1"
+									max="100" class="quantity-input"
+									data-cart-item-id="${item.cartItemId}"
+									data-original-quantity="${item.quantity}"></td>
+								<td>
+									<div class="price">
+										<fmt:formatNumber value="${item.finalPrice * item.quantity}"
+											type="number" />
+										원
+									</div> <c:if test="${item.finalPrice < item.productPrice}">
+										<small style="text-decoration: line-through; color: #999;">
+											<fmt:formatNumber
+												value="${item.productPrice * item.quantity}" type="number" />원
+										</small>
+									</c:if>
+								</td>
+								<td><fmt:formatNumber
+										value="${(item.finalPrice * item.quantity) * 0.01}"
+										pattern="#" />P</td>
+								<td>
+									<div class="action-buttons">
+										<%-- <button class="btn btn-outline btn-sm buy-now-btn"
+											data-cart-item-id="${item.cartItemId}"
+											data-product-id="${item.productId}"
+											data-option-id="${item.optionId}"
+											data-quantity="${item.quantity}" 
+											onclick="buyNow(this)">바로구매</button> --%>
+											<a href="/consumer/checkout?productId=1&quantity=1" class="btn btn-primary">주문하기</a>
+										<button class="btn btn-outline btn-sm">찜 등록</button>
+										<button class="btn btn-danger btn-sm delete-btn"
+											data-cart-item-id="${item.cartItemId}">삭제</button>
+									</div>
+								</td>
+							</tr>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
+			</tbody>
+		</table>
+	</div>
+	<!-- 선택/삭제 버튼 -->
+	<div class="select-all-container">
+		<button type="button">전체선택 해제</button>
+		<button type="button">선택상품 삭제</button>
+	</div>
 
-    <!-- 총 결제 예상 정보 -->
-    <div class="cart-summary">
-        <div class="total-amount">
-            총 결제예상금액 38,000원
-        </div>
-    </div>
+	<!-- 총 결제 예상 정보 -->
+	<div class="cart-summary">
+		<div class="total-amount">
+			총 결제예상금액
+			<fmt:formatNumber value="${totalAmount}" type="number" />
+			원
+			<c:if test="${itemCount > 0}">
+            (${itemCount}개 상품)
+        </c:if>
+		</div>
+	</div>
 
-    <!-- 버튼 -->
-    <div class="button-container">
-        <button class="btn btn-outline btn-lg">선택 주문</button>
-        <button class="btn btn-primary btn-lg">전체 주문</button>
-    </div>
-</div>
-	
-	
+	<!-- 버튼 -->
+	<div class="button-container">
+		<button class="btn btn-outline btn-lg">선택 주문</button>
+		<button class="btn btn-primary btn-lg">전체 주문</button>
+	</div>
+
 	<!-- 하단 푸터 -->
 	<%@ include file="/consumer/footer.jsp"%>
+
+	<script>
+		$(document)
+				.ready(
+						function() {
+							// 수량 변경 이벤트
+							$('.quantity-input').on(
+									'change',
+									function() {
+										const cartItemId = $(this).data(
+												'cart-item-id');
+										const newQuantity = $(this).val();
+										const originalQuantity = $(this).data(
+												'original-quantity');
+
+										if (newQuantity != originalQuantity) {
+											updateQuantity(cartItemId,
+													newQuantity);
+										}
+									});
+
+							// 삭제 버튼 이벤트
+							$('.delete-btn').on(
+									'click',
+									function() {
+										const cartItemId = $(this).data(
+												'cart-item-id');
+										if (confirm('정말 삭제하시겠습니까?')) {
+											removeFromCart(cartItemId);
+										}
+									});
+
+							// 선택 주문 버튼
+							$('.btn-outline.btn-lg')
+									.on(
+											'click',
+											function() {
+												const selectedItems = $(
+														'.item-checkbox:checked')
+														.map(
+																function() {
+																	return $(
+																			this)
+																			.val();
+																}).get();
+
+												if (selectedItems.length === 0) {
+													alert('주문할 상품을 선택해주세요.');
+													return;
+												}
+
+												// 선택상품 주문
+												const form = $('<form method="post" action="/cart/checkout"></form>');
+												selectedItems
+														.forEach(function(id) {
+															form
+																	.append('<input type="hidden" name="cartItemIds" value="' + id + '">');
+														});
+												$('body').append(form);
+												form.submit();
+											});
+						});
+
+		function updateQuantity(cartItemId, quantity) {
+			$.post('/cart/updateQuantity', {
+				cartItemId : cartItemId,
+				quantity : quantity
+			}, function(data) {
+				if (data.success) {
+					location.reload(); // 페이지 새로고침하여 총액 업데이트
+				} else {
+					alert(data.message);
+				}
+			});
+		}
+
+		function removeFromCart(cartItemId) {
+			$.post('/cart/remove', {
+				cartItemId : cartItemId
+			}, function(data) {
+				if (data.success) {
+					location.reload();
+				} else {
+					alert(data.message);
+				}
+			});
+		}
+		
+		function buyNow(button) {
+		    const productId = button.getAttribute('data-product-id');
+		    const optionId = button.getAttribute('data-option-id');
+		    const quantity = button.getAttribute('data-quantity');
+		    
+		    // checkout 페이지로 이동
+		    let url = 'checkout?productId=' + productId + '&quantity=' + quantity;
+		    
+		    // 옵션이 있는 경우만 추가
+		    if (optionId && optionId !== 'null') {
+		        url += '&optionId=' + optionId;
+		    }
+		    
+		    window.location.href = url;
+		}
+	</script>
 </body>
 </html>

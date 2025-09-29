@@ -3,4 +3,114 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.cartItem">
+
+<!-- =======================소비자용================ -->
+	<!-- 장바구니에 상품 추가 -->
+	<insert id="insertCartItem" parameterType="dto.CartItem"
+		useGeneratedKeys="true" keyProperty="cartItemId">
+		INSERT INTO cart_item (
+		member_id, brand_id, product_id, option_id, quantity
+		) VALUES (
+		#{memberId}, #{brandId}, #{productId}, #{optionId}, #{quantity}
+		)
+	</insert>
+
+	<!-- 특정 회원의 장바구니 조회 (상품 정보 포함) -->
+	<select id="selectCartItemByMemberId" parameterType="long"
+		resultType="map">
+		SELECT
+		ci.cart_item_id as cartItemId,
+		ci.member_id as memberId,
+		ci.product_id as productId,
+		ci.option_id as optionId,
+		ci.quantity,
+		ci.created_at as createdAt,
+		p.name as productName,
+		p.price as productPrice,
+		p.thumbnail_file_id as thumbnailFileId,
+		CASE
+		WHEN p.discount_type = 'RATE' AND
+		(p.start_date IS NULL OR p.start_date &lt;= NOW()) AND
+		(p.end_date IS NULL OR p.end_date >= NOW())
+		THEN ROUND(p.price * (1 - p.discount_value / 100), 0)
+		WHEN p.discount_type = 'AMOUNT' AND
+		(p.start_date IS NULL OR p.start_date &lt;= NOW()) AND
+		(p.end_date IS NULL OR p.end_date >= NOW())
+		THEN p.price - p.discount_value
+		ELSE p.price
+		END as finalPrice,
+		po.option_value as optionName,
+		po.price as optionPrice,
+		b.brand_name as brandName
+		FROM cart_item ci
+		JOIN product p ON ci.product_id = p.product_id
+		LEFT JOIN product_option po ON ci.option_id = po.product_option_id
+		LEFT JOIN brand b ON ci.brand_id = b.brand_id
+		WHERE ci.member_id = #{memberId}
+		AND p.is_visible = 1
+		ORDER BY ci.created_at DESC
+	</select>
+
+	<!-- 장바구니 상품 수량 변경 -->
+	<update id="updateCartItemQuantity" parameterType="map">
+		UPDATE cart_item SET
+		quantity = #{quantity}
+		WHERE cart_item_id = #{cartItemId}
+		AND member_id = #{memberId}
+	</update>
+
+	<!-- 장바구니 특정 상품 삭제 -->
+	<delete id="deleteCartItemById" parameterType="map">
+		DELETE FROM cart_item
+		WHERE cart_item_id = #{cartItemId}
+		AND member_id = #{memberId}
+	</delete>
+
+	<!-- 장바구니 상품 개수 조회 (헤더용) -->
+	<select id="countCartItemByMemberId" parameterType="long"
+		resultType="int">
+		SELECT COUNT(*) FROM cart_item
+		WHERE member_id = #{memberId}
+	</select>
+
+	<!-- 선택된 장바구니 상품들 조회 (checkout으로 넘어갈 때) -->
+	<select id="selectCartItemsByIds" parameterType="map"
+		resultType="map">
+		SELECT
+		ci.cart_item_id as cartItemId,
+		ci.member_id as memberId,
+		ci.product_id as productId,
+		ci.option_id as optionId,
+		ci.quantity,
+		p.name as productName,
+		p.price as productPrice,
+		p.shipping_method as shippingMethod,
+		CASE
+		WHEN p.discount_type = 'RATE' AND
+		(p.start_date IS NULL OR p.start_date &lt;= NOW()) AND
+		(p.end_date IS NULL OR p.end_date >= NOW())
+		THEN ROUND(p.price * (1 - p.discount_value / 100), 0)
+		WHEN p.discount_type = 'AMOUNT' AND
+		(p.start_date IS NULL OR p.start_date &lt;= NOW()) AND
+		(p.end_date IS NULL OR p.end_date >= NOW())
+		THEN p.price - p.discount_value
+		ELSE p.price
+		END as finalPrice,
+		po.option_value as optionName,
+		po.price as optionPrice,
+		b.brand_name as brandName
+		FROM cart_item ci
+		JOIN product p ON ci.product_id = p.product_id
+		LEFT JOIN product_option po ON ci.option_id = po.product_option_id
+		LEFT JOIN brand b ON ci.brand_id = b.brand_id
+		WHERE ci.member_id = #{memberId}
+		AND ci.cart_item_id IN
+		<foreach collection="cartItemIds" item="cartItemId" open="("
+			separator="," close=")">
+			#{cartItemId}
+		</foreach>
+		AND p.is_visible = 1
+		ORDER BY ci.created_at DESC
+	</select>
+
 </mapper>

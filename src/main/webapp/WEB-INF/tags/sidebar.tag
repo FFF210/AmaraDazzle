@@ -150,52 +150,97 @@
     const sidebar = document.getElementById("sidebar");
     const pinBtn = document.getElementById("pinBtn");
 
-    let isPinned = false;
+    // ===============================
+    // 1. 초기 상태 로드 (localStorage에서 불러오기)
+    // ===============================
+    const isPinned = localStorage.getItem("sidebarPinned") === "true";
+    if (isPinned) {
+      // 고정 상태 → 항상 열려 있음
+      sidebar.classList.remove("collapsed");
+      pinBtn.classList.add("pinned");
+    } else {
+      // 비고정 상태 → 기본은 닫혀 있음
+      sidebar.classList.add("collapsed");
+      pinBtn.classList.remove("pinned");
+    }
 
-    // hover 시 자동 열림/닫힘
-    sidebar.addEventListener("mouseenter", () => {
-      if (!isPinned) sidebar.classList.remove("collapsed");
-    });
-    sidebar.addEventListener("mouseleave", () => {
-      if (!isPinned) sidebar.classList.add("collapsed");
-    });
-
-    // 고정 버튼
+    // ===============================
+    // 2. 고정 버튼 클릭 → 상태 토글 + 저장
+    // ===============================
     pinBtn.addEventListener("click", () => {
-      isPinned = !isPinned;
-      if (isPinned) {
-        sidebar.classList.remove("collapsed");
-        pinBtn.classList.add("pinned");
-      } else {
+      const nowPinned = localStorage.getItem("sidebarPinned") === "true";
+      if (nowPinned) {
+        // 이미 고정되어 있으면 → 해제
         sidebar.classList.add("collapsed");
         pinBtn.classList.remove("pinned");
+        localStorage.setItem("sidebarPinned", "false");
+      } else {
+        // 고정되어 있지 않으면 → 고정
+        sidebar.classList.remove("collapsed");
+        pinBtn.classList.add("pinned");
+        localStorage.setItem("sidebarPinned", "true");
       }
     });
 
-    // 서브메뉴 열고 닫기
-    document.querySelectorAll(".menu-item.has-submenu > .menu-link").forEach(btn => {
+    // ===============================
+    // 3. hover 시 자동 열림/닫힘 (고정 상태가 아닐 때만)
+    // ===============================
+    sidebar.addEventListener("mouseenter", () => {
+      if (localStorage.getItem("sidebarPinned") !== "true") {
+        sidebar.classList.remove("collapsed");
+      }
+    });
+    sidebar.addEventListener("mouseleave", () => {
+      if (localStorage.getItem("sidebarPinned") !== "true") {
+        sidebar.classList.add("collapsed");
+      }
+    });
+
+    // ===============================
+    // 4. 서브메뉴 열림/닫힘 상태 저장
+    // ===============================
+    document.querySelectorAll(".menu-item.has-submenu > .menu-link").forEach((btn, idx) => {
+      const parent = btn.closest(".menu-item");
+
+      // 저장된 열림 상태 불러오기
+      const isOpen = localStorage.getItem("submenuOpen_" + idx) === "true";
+      if (isOpen) parent.classList.add("open");
+
+      // 클릭 시 토글 + 저장
       btn.addEventListener("click", () => {
-        const parent = btn.closest(".menu-item");
         parent.classList.toggle("open");
+        localStorage.setItem("submenuOpen_" + idx, parent.classList.contains("open"));
       });
     });
 
-    // 단일 메뉴 클릭 시 active 적용
+    // ===============================
+    // 5. 단일 메뉴(active) 처리
+    // ===============================
     document.querySelectorAll(".menu-item:not(.has-submenu) > .menu-link").forEach(link => {
       link.addEventListener("click", () => {
+        // 모든 메뉴/링크 active 해제
         document.querySelectorAll(".menu-item, .submenu a").forEach(el => el.classList.remove("active"));
+
+        // 클릭된 메뉴에 active 추가
         link.closest(".menu-item").classList.add("active");
       });
     });
 
-    // 서브메뉴 클릭 시 active 적용
+    // ===============================
+    // 6. 서브메뉴 항목 클릭 시 active 처리
+    // ===============================
     document.querySelectorAll(".submenu a").forEach(link => {
       link.addEventListener("click", () => {
+        // 모든 메뉴/링크 active 해제
         document.querySelectorAll(".menu-item, .submenu a").forEach(el => el.classList.remove("active"));
+
+        // 부모 메뉴 + 클릭한 항목에 active 추가
         const parentItem = link.closest(".menu-item");
         parentItem.classList.add("active");
         link.classList.add("active");
       });
     });
   });
+</script>
+
 </script>

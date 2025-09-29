@@ -47,7 +47,7 @@
                 <button type="submit" class="btn btn-primary btn-xl login">로그인</button>
                 
             <!-- 카카오 로그인 버튼 -->
-            <button type="button" class="kakao-login-btn" onclick="loginWithKakao()">
+            <button type="button" class="kakao-login-btn" onclick="location.href='https://kauth.kakao.com/oauth/authorize?client_id=44080c9c34460d38b051817cfe95bd57&redirect_uri=http://localhost:8080/social/kakao&response_type=code'">
                 <img src="<c:url value='/image/kakao_login_icon.svg'/>" 
                      alt="카카오" class="kakao-icon">
                 카카오 로그인

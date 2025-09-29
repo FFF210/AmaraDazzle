@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 public class ProductDetail {
 	// 기본 정보
 	private Long productId; // 상품 고유 ID (PK)
-	private String brandId; // 브랜드 관리자 ID
+	private Long brandId; // 브랜드 관리자 ID
 	private String name; // 상품명
 
 	private Integer isExclusive; // 단독 판매 여부 (0=비단독, 1=단독)
@@ -56,11 +56,11 @@ public class ProductDetail {
 		this.productId = productId;
 	}
 
-	public String getBrandId() {
+	public Long getBrandId() {
 		return brandId;
 	}
 
-	public void setBrandId(String brandId) {
+	public void setBrandId(Long brandId) {
 		this.brandId = brandId;
 	}
 
