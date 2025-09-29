@@ -97,19 +97,21 @@
 		<div class="table_wrap">
 			<table>
 				<colgroup>
-					<col style="width: 5%" />
+					<col style="width: 6%" />
 					<!-- 체크박스 -->
-					<col style="width: 5%" />
+					<col style="width: 7%" />
 					<!-- 번호 -->
 					<col style="width: 10%" />
 					<!-- 카테고리 -->
-					<col style="width: 35%" />
+					<col style="width: 30%" />
 					<!-- 제목 -->
-					<col style="width: 10%" />
+					<col style="width: 9%" />
 					<!-- 작성자 -->
 					<col style="width: 15%" />
 					<!-- 작성일 -->
-					<col style="width: 10%" />
+					<col style="width: 7%" />
+					<!-- 조회수 -->
+					<col style="width: 8%" />
 					<!-- 노출여부 -->
 					<col style="width: 8%" />
 					<!-- 상세보기-->
@@ -122,14 +124,16 @@
 						<th>제목</th>
 						<th>작성자</th>
 						<th>작성일</th>
+						<th>조회수</th>
 						<th>노출여부</th>
 						<th>상세보기</th>
 					</tr>
 				</thead>
 				<tbody>
+					<!-- 게시물 개수가 0일 경우 -->
 					<c:if test="${fn:length(noticeList)==0}">
 						<tr>
-							<td colspan="8">등록된 게시물이 없습니다.</td>
+							<td colspan="9">등록된 게시물이 없습니다.</td>
 						</tr>
 					</c:if>
 					
@@ -163,6 +167,7 @@
 								<c:set var="createDate" value="${noticeList.createdAt}"/>
 								&nbsp; ${fn:substring(createDate,0,19)}
 							</td>
+							<td>조회수</td>
 							<td>
 								<c:choose>
 									<c:when test="${noticeList.isExposed == '1' }">  <!-- 게시여부 : 게시중 -->

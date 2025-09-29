@@ -4,11 +4,12 @@
 
 <mapper namespace="mapper.notice">
 
-	<!-- 공지(seller) 저장 -->
+	<!-- 공지(seller) 글쓰기 저장 -->
 	<insert id="insertSellerNotice" parameterType="notice" useGeneratedKeys="true" keyProperty="noticeId">
 		insert into notice (notice_id, type_id, title, content, image1_file_id, image2_file_id, image3_file_id, writer, target_type_id, is_exposed, created_at, updated_at) 
 		values (0, #{typeId}, #{title}, #{content},#{image1FileId},#{image2FileId}, #{image3FileId}, #{writer}, #{targetTypeId}, 1, now(), null)
 	</insert>
+	
 	
 	<!-- 공지(seller) 상세보기  -->
 	<select id="selectSellerNoticeOne" parameterType="int" resultType="notice">
@@ -30,20 +31,49 @@
 		where n.notice_id = #{num}
 	</select>
 	
-	<!-- 공지(seller) 전체 게시글 수  -->
-	<select id="AllSellerNoticeCnt" resultType="Integer">
-		select count(*) from notice where target_type_id = 5
+	
+	<!-- 공지(seller) 게시글 수  -->
+	<select id="SellerNoticeCnt" resultType="Integer" parameterType="Map">
+		select count(*) from notice 
+		<choose>
+			<!-- 전체 게시글 총개수 -->
+			<when test="part==total">
+				where target_type_id = 5
+			</when>
+			
+			<!-- 검색 후 게시글 총개수 -->
+			<when test="part=='search'">
+			where target_type_id = 5 and title like concat('%',#{keyword},'%') 
+			</when>
+		</choose>
 	</select>
 	
+	
 	<!-- 공지(seller) 리스트  -->
-	<select id="selectAllSellerNotice" parameterType="Integer" resultType="notice">
+	<select id="selectAllSellerNotice" resultType="notice" parameterType="Map" >
 		select n.*, c.name
 		from notice n
 		join code_detail c on (n.type_id = c.code_detail_id)
-		order by notice_id desc limit  #{row},10
+		where target_type_id = 5
+		order by notice_id desc limit #{start_p},#{post_ea}
 	</select>
 	
 	
+	<!--  공지(seller) 게시글 검색 리스트 -->
+	<select id="selectSearchSellerNotice" resultType="notice" parameterType="Map">
+		select n.*, c.name
+		from notice n
+		join code_detail c on (n.type_id = c.code_detail_id)
+		where target_type_id = 5 
+			and title like concat('%',#{keyword},'%') 
+		order by notice_id desc limit #{start_p},#{post_ea}
+	</select>
+	
+	
+	<!-- 공지 게시글 조회수 -->
+	<update id="notice_viewcnt">
+		update notice set view_cnt = view_cnt+1 where notice_id=#{num}
+	</update>
 	
 	
 </mapper>

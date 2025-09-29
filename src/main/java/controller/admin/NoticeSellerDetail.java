@@ -27,7 +27,6 @@ public class NoticeSellerDetail extends HttpServlet {
 		NoticeService notice_svc = new NoticeServiceImpl();
 
 		try {
-
 			Notice notice_DTO = null;
 			notice_DTO = notice_svc.noticeSellerDetail(Integer.parseInt(num));
 			
