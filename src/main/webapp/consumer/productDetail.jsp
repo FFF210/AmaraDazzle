@@ -35,14 +35,13 @@ request.setAttribute("floor", floor);
 <link rel="stylesheet" href="<c:url value='/tagcss/rating.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/selectbox.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
-<link rel="stylesheet"
-	href="<c:url value='/consumer/css/productDetail.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/productDetail.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/reviewSummary.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/reviewCard.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/qna.css'/>">
-<link rel="stylesheet"
-	href="<c:url value='/tagcss/selectedOptionItem.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/selectedOptionItem.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
 </head>
 <body>
 	<!-- 헤더 include -->
@@ -92,8 +91,8 @@ request.setAttribute("floor", floor);
 					<div class="info-row">
 						<p>배송일</p>
 						<div class="set">
-							<span class="value">3,000 원</span><br>50,000원 이상 구매 시 무료배송<br>제주/도서산간
-							3,000원 추가
+							<span class="value">2,500 원</span><br>50,000원 이상 구매 시 무료배송<br>제주/도서산간
+							1,000원 추가
 						</div>
 					</div>
 				</div>
@@ -121,7 +120,7 @@ request.setAttribute("floor", floor);
 						<c:set var="optionItems" value="상품을 선택해주세요" />
 						<c:forEach var="option" items="${productOptions}">
 							<c:set var="optionItems"
-								value="${optionItems},${option.optionValue} (${option.price}원)" />
+								value="${optionItems},${option.optionValue} (${option.price.intValue()}원)" />
 						</c:forEach>
 
 						<my:selectbox size="lg" items="${optionItems}"
@@ -138,8 +137,7 @@ request.setAttribute("floor", floor);
 
 				<!-- 선택된 옵션 리스트 -->
 				<div class="selected-options" id="selectedOptions">
-					<!-- JavaScript로 동적 생성된다고 하는데........ -->
-					<my:selectedOptionItem name="상품이름" price="10000" count="0" />
+					<!-- JavaScript로 동적 생성됨........ -->
 				</div>
 
 				<!-- 총 가격 -->
@@ -351,7 +349,7 @@ request.setAttribute("floor", floor);
 	<script>
     const productId = ${product.productId};
     const productBrandId = '${brand.brandId}';
-    const productPrice = ${product.price}; // 단일 상품 가격 추가
+    const productPrice = ${product.price.intValue()}; // 단일 상품 가격. intValue() 추가 
     
     <c:if test="${product.hasOption == 1}">
     const productOptionsData = [
@@ -359,7 +357,7 @@ request.setAttribute("floor", floor);
             {
                 id: ${option.productOptionId},
                 value: '${option.optionValue}',
-                price: ${option.price},
+                price: ${option.price.intValue()},  // intValue() 추가
                 stock: ${option.stockQty}
             }<c:if test="${!status.last}">,</c:if>
         </c:forEach>
