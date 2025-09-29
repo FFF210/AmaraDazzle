@@ -41,7 +41,7 @@ public class AddToCart extends HttpServlet {
 			// 로그인 후 돌아올 URL 저장
 			session = request.getSession(true);
 			session.setAttribute("redirectURL", request.getHeader("Referer"));
-			response.sendRedirect(request.getContextPath() + "/member/login");
+			response.sendRedirect(request.getContextPath() + "/consumer/login");
 			return;
 		}
 
@@ -73,7 +73,7 @@ public class AddToCart extends HttpServlet {
 			service.addToCart(memberId, brandId, productId, optionId, quantity);
 
 			// 성공 시 상품 상세 페이지로 리다이렉트 (성공 메시지와 함께)
-			response.sendRedirect(request.getContextPath() + "/product/detail?id=" + productId + "&added=true");
+			response.sendRedirect(request.getContextPath() + "/productDetail?id=" + productId + "&added=true");
 
 		} catch (NumberFormatException e) {
 			// 숫자 변환 오류
@@ -93,7 +93,7 @@ public class AddToCart extends HttpServlet {
 				response.sendRedirect(referer + errorParam + e.getMessage());
 			} else {
 				request.setAttribute("err", "장바구니 추가 오류: " + e.getMessage());
-				request.getRequestDispatcher("/error.jsp").forward(request, response);
+				request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);
 			}
 		}
 	}

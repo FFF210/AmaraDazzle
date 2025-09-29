@@ -62,7 +62,7 @@
     <!-- 푸터 include -->
     <%@ include file="/consumer/footer.jsp" %>
     
-    <script src="${pageContext.request.contextPath}/resources/js/login.js"></script>
+    <script src="${pageContext.request.contextPath}/consumer/js/login.js"></script>
     
     <!-- 에러 메시지 표시 -->
     <c:if test="${not empty errorMessage}">
