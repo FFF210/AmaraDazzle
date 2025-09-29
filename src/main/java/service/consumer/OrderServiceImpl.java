@@ -1,18 +1,28 @@
 package service.consumer;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import dao.consumer.OrderDAO;
-import dao.consumer.OrderDAOImpl;
-import dto.Member;
+import dao.consumer.BrandDAO;
+import dao.consumer.BrandDAOImpl;
 import dao.consumer.MemberDAO;
 import dao.consumer.MemberDAOImpl;
+import dao.consumer.OrderDAO;
+import dao.consumer.OrderDAOImpl;
+import dao.consumer.ProductDAO;
+import dao.consumer.ProductDAOImpl;
+import dao.consumer.ProductOptionDAO;
+import dao.consumer.ProductOptionDAOImpl;
+import dto.Brand;
+import dto.Member;
 import dto.OrderItem;
 import dto.Orders;
+import dto.Product;
+import dto.ProductOption;
 
 public class OrderServiceImpl implements OrderService {
 
@@ -218,6 +228,10 @@ public class OrderServiceImpl implements OrderService {
 	    // 3. 수량 정보
 	    checkoutData.put("quantity", quantity);
 	    
+	    // 4. 배송비 계산
+	    BigDecimal shippingFee = calculateShippingFee(BigDecimal.ZERO); // 현재는 무조건 2500원
+	    checkoutData.put("shippingFee", shippingFee);
+	    
 	    return checkoutData;
 	}
 
@@ -225,6 +239,86 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public boolean checkPointAvailable(Long memberId, int usingPoint) throws Exception {
 		   return memberDAO.checkPointAvailable(memberId, usingPoint);
+	}
+
+	@Override
+	public Map<String, Object> prepareCheckoutDataForMultipleOptions(Long memberId, Long productId, String[] optionIds,
+			String[] quantities) throws Exception {
+		  Map<String, Object> checkoutData = new HashMap<>();
+		    
+		    // 1. 회원 정보 조회
+		    MemberDAO memberDAO = new MemberDAOImpl();
+		    Member member = memberDAO.selectById(memberId);
+		    
+		    if (member == null) {
+		        throw new Exception("회원 정보를 찾을 수 없습니다.");
+		    }
+		    
+		    // 2. 상품 정보 조회
+		    ProductDAO productDAO = new ProductDAOImpl();
+		    Product product = productDAO.selectProductByProductId(productId);
+		    
+		    if (product == null) {
+		        throw new Exception("상품 정보를 찾을 수 없습니다.");
+		    }
+		    
+		    // 3. 브랜드 정보 조회
+		    BrandDAO brandDAO = new BrandDAOImpl();
+		    Brand brand = brandDAO.selectBrandByBrandId(product.getBrandId());
+		    
+		    // 4. 여러 옵션 정보 조회 및 총액 계산
+		    ProductOptionDAO optionDAO = new ProductOptionDAOImpl();
+		    List<Map<String, Object>> itemList = new ArrayList<>();
+		    BigDecimal totalAmount = BigDecimal.ZERO;
+		    
+		    for (int i = 0; i < optionIds.length; i++) {
+		        Long optionId = Long.parseLong(optionIds[i]);
+		        int quantity = Integer.parseInt(quantities[i]);
+		        
+		        ProductOption option = optionDAO.selectProductOptionByOptionId(optionId);
+		        
+		        if (option == null) {
+		            throw new Exception("옵션 정보를 찾을 수 없습니다.");
+		        }
+		        
+		        // 재고 확인
+		        if (option.getStockQty() < quantity) {
+		            throw new Exception(option.getOptionValue() + " 옵션의 재고가 부족합니다.");
+		        }
+		        
+		        // 개별 아이템 정보
+		        Map<String, Object> item = new HashMap<>();
+		        item.put("optionId", optionId);
+		        item.put("optionValue", option.getOptionValue());
+		        item.put("quantity", quantity);
+		        item.put("unitPrice", option.getPrice());
+		        
+		        BigDecimal itemTotal = option.getPrice().multiply(new BigDecimal(quantity));
+		        item.put("itemTotal", itemTotal);
+		        
+		        itemList.add(item);
+		        totalAmount = totalAmount.add(itemTotal);
+		    }
+		    
+		    // 5. 배송비 계산 (50,000원 이상 무료)
+		    BigDecimal shippingFee = totalAmount.compareTo(new BigDecimal("50000")) >= 0 
+		        ? BigDecimal.ZERO 
+		        : new BigDecimal("2500");
+		    
+		    // 6. 최종 금액
+		    BigDecimal finalAmount = totalAmount.add(shippingFee);
+		    
+		    // 7. checkoutData에 정보 담기
+		    checkoutData.put("member", member);
+		    checkoutData.put("product", product);
+		    checkoutData.put("brand", brand);
+		    checkoutData.put("items", itemList);  // 여러 아이템 리스트
+		    checkoutData.put("subtotalAmount", totalAmount);
+		    checkoutData.put("shippingFee", shippingFee);
+		    checkoutData.put("totalAmount", finalAmount);
+		    checkoutData.put("availablePoint", member.getPointBalance() != null ? member.getPointBalance() : 0);
+		    
+		    return checkoutData;
 	}
 
 }

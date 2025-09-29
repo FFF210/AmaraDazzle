@@ -137,13 +137,11 @@
 										pattern="#" />P</td>
 								<td>
 									<div class="action-buttons">
-										<%-- <button class="btn btn-outline btn-sm buy-now-btn"
-											data-cart-item-id="${item.cartItemId}"
+										<button class="btn btn-outline btn-sm buy-now-btn"
 											data-product-id="${item.productId}"
+											data-brand-id="${item.brandId}"
 											data-option-id="${item.optionId}"
-											data-quantity="${item.quantity}" 
-											onclick="buyNow(this)">바로구매</button> --%>
-											<a href="/consumer/checkout?productId=1&quantity=1" class="btn btn-primary">주문하기</a>
+											data-quantity="${item.quantity}">바로구매</button>
 										<button class="btn btn-outline btn-sm">찜 등록</button>
 										<button class="btn btn-danger btn-sm delete-btn"
 											data-cart-item-id="${item.cartItemId}">삭제</button>
@@ -182,109 +180,9 @@
 
 	<!-- 하단 푸터 -->
 	<%@ include file="/consumer/footer.jsp"%>
-
-	<script>
-		$(document)
-				.ready(
-						function() {
-							// 수량 변경 이벤트
-							$('.quantity-input').on(
-									'change',
-									function() {
-										const cartItemId = $(this).data(
-												'cart-item-id');
-										const newQuantity = $(this).val();
-										const originalQuantity = $(this).data(
-												'original-quantity');
-
-										if (newQuantity != originalQuantity) {
-											updateQuantity(cartItemId,
-													newQuantity);
-										}
-									});
-
-							// 삭제 버튼 이벤트
-							$('.delete-btn').on(
-									'click',
-									function() {
-										const cartItemId = $(this).data(
-												'cart-item-id');
-										if (confirm('정말 삭제하시겠습니까?')) {
-											removeFromCart(cartItemId);
-										}
-									});
-
-							// 선택 주문 버튼
-							$('.btn-outline.btn-lg')
-									.on(
-											'click',
-											function() {
-												const selectedItems = $(
-														'.item-checkbox:checked')
-														.map(
-																function() {
-																	return $(
-																			this)
-																			.val();
-																}).get();
-
-												if (selectedItems.length === 0) {
-													alert('주문할 상품을 선택해주세요.');
-													return;
-												}
-
-												// 선택상품 주문
-												const form = $('<form method="post" action="/cart/checkout"></form>');
-												selectedItems
-														.forEach(function(id) {
-															form
-																	.append('<input type="hidden" name="cartItemIds" value="' + id + '">');
-														});
-												$('body').append(form);
-												form.submit();
-											});
-						});
-
-		function updateQuantity(cartItemId, quantity) {
-			$.post('/cart/updateQuantity', {
-				cartItemId : cartItemId,
-				quantity : quantity
-			}, function(data) {
-				if (data.success) {
-					location.reload(); // 페이지 새로고침하여 총액 업데이트
-				} else {
-					alert(data.message);
-				}
-			});
-		}
-
-		function removeFromCart(cartItemId) {
-			$.post('/cart/remove', {
-				cartItemId : cartItemId
-			}, function(data) {
-				if (data.success) {
-					location.reload();
-				} else {
-					alert(data.message);
-				}
-			});
-		}
-		
-		function buyNow(button) {
-		    const productId = button.getAttribute('data-product-id');
-		    const optionId = button.getAttribute('data-option-id');
-		    const quantity = button.getAttribute('data-quantity');
-		    
-		    // checkout 페이지로 이동
-		    let url = 'checkout?productId=' + productId + '&quantity=' + quantity;
-		    
-		    // 옵션이 있는 경우만 추가
-		    if (optionId && optionId !== 'null') {
-		        url += '&optionId=' + optionId;
-		    }
-		    
-		    window.location.href = url;
-		}
-	</script>
+	
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="<c:url value='/consumer/js/cart.js'/>"></script>
+	
 </body>
 </html>

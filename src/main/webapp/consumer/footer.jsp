@@ -7,7 +7,7 @@
 		<!-- 왼쪽: 로고 -->
 		<div class="footer-col footer-brand">
 			<a href="<c:url value='/'/>" class="footer-logo" aria-label="홈">
-				<img src="<c:url value='/images/logo_sidelower.svg'/>"
+				<img src="<c:url value='/image/logo_black_sidelower.svg'/>"
 				alt="AD ADARA DAZZLE">
 			</a>
 		</div>

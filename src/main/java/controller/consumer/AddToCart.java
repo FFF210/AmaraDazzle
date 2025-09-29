@@ -1,6 +1,7 @@
 package controller.consumer;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -8,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.json.simple.JSONObject;
 
 import service.consumer.CartItemService;
 import service.consumer.CartItemServiceImpl;
@@ -31,29 +34,36 @@ public class AddToCart extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	@SuppressWarnings("unchecked")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
+		response.setContentType("application/json;charset=utf-8");
 
-		// 로그인 확인
-		HttpSession session = request.getSession(false);
-		if (session == null || session.getAttribute("memberId") == null) {
-			// 로그인 후 돌아올 URL 저장
-			session = request.getSession(true);
-			session.setAttribute("redirectURL", request.getHeader("Referer"));
-			response.sendRedirect(request.getContextPath() + "/consumer/login");
-			return;
-		}
-
-		Long memberId = (Long) session.getAttribute("memberId");
-
-		// 파라미터 받기
-		String brandIdStr = request.getParameter("brandId");
-		String productIdStr = request.getParameter("productId");
-		String optionIdStr = request.getParameter("optionId");
-		String quantityStr = request.getParameter("quantity");
+		JSONObject jsonResponse = new JSONObject();
 
 		try {
+			// 로그인 확인
+			HttpSession session = request.getSession(false);
+			if (session == null || session.getAttribute("memberId") == null) {
+				jsonResponse.put("success", false);
+				jsonResponse.put("message", "로그인이 필요합니다.");
+				jsonResponse.put("needLogin", true);
+
+				PrintWriter out = response.getWriter();
+				out.print(jsonResponse.toJSONString());
+				out.flush();
+				return;
+			}
+
+			Long memberId = (Long) session.getAttribute("memberId");
+
+			// 파라미터 받기
+			String brandIdStr = request.getParameter("brandId");
+			String productIdStr = request.getParameter("productId");
+			String optionIdStr = request.getParameter("optionId");
+			String quantityStr = request.getParameter("quantity");
+
 			// 필수 파라미터 검증
 			if (productIdStr == null || productIdStr.trim().isEmpty()) {
 				throw new Exception("상품 정보가 올바르지 않습니다.");
@@ -72,30 +82,21 @@ public class AddToCart extends HttpServlet {
 			CartItemService service = new CartItemServiceImpl();
 			service.addToCart(memberId, brandId, productId, optionId, quantity);
 
-			// 성공 시 상품 상세 페이지로 리다이렉트 (성공 메시지와 함께)
-			response.sendRedirect(request.getContextPath() + "/productDetail?id=" + productId + "&added=true");
+			// 성공 응답
+			jsonResponse.put("success", true);
+			jsonResponse.put("message", "장바구니에 추가되었습니다.");
 
 		} catch (NumberFormatException e) {
-			// 숫자 변환 오류
-			String referer = request.getHeader("Referer");
-			if (referer != null) {
-				response.sendRedirect(referer + "?error=잘못된 입력 형식입니다.");
-			} else {
-				response.sendRedirect(request.getContextPath() + "/");
-			}
+			jsonResponse.put("success", false);
+			jsonResponse.put("message", "잘못된 입력 형식입니다.");
 		} catch (Exception e) {
 			e.printStackTrace();
-
-			// 에러 시 이전 페이지로 되돌아가기 (에러 메시지와 함께)
-			String referer = request.getHeader("Referer");
-			if (referer != null) {
-				String errorParam = referer.contains("?") ? "&error=" : "?error=";
-				response.sendRedirect(referer + errorParam + e.getMessage());
-			} else {
-				request.setAttribute("err", "장바구니 추가 오류: " + e.getMessage());
-				request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);
-			}
+			jsonResponse.put("success", false);
+			jsonResponse.put("message", e.getMessage());
 		}
-	}
 
+		PrintWriter out = response.getWriter();
+		out.print(jsonResponse.toJSONString()); // toJSONString() 사용
+		out.flush();
+	}
 }

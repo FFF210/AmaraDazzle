@@ -100,18 +100,18 @@ function handleOptionSelection(value, text) {
 		if (priceMatch) {
 			const price = parseInt(priceMatch[1]);
 			const optionName = text.replace(/\s*\(\d+원\)/, '').trim();
-			
+
 			console.log('추출된 price:', price);
-            console.log('추출된 optionName:', optionName);
-            console.log('전체 productOptionsData:', productOptionsData);
+			console.log('추출된 optionName:', optionName);
+			console.log('전체 productOptionsData:', productOptionsData);
 
 			// productOptionsData에서 해당 옵션 찾기
 			const optionData = productOptionsData.find(opt => {
-                console.log('비교중:', opt.price, '===', price, '그리고', opt.value, '===', optionName);
-                return opt.price == price && opt.value === optionName;  // == 사용 (타입 변환)
-            });
-            
-            console.log('찾은 optionData:', optionData); 
+				console.log('비교중:', opt.price, '===', price, '그리고', opt.value, '===', optionName);
+				return opt.price == price && opt.value === optionName;  // == 사용 (타입 변환)
+			});
+
+			console.log('찾은 optionData:', optionData);
 
 			if (optionData) {
 				addSelectedOptionData(optionData);
@@ -245,32 +245,32 @@ function removeOptionById(optionId) {
 }
 
 function updateTotalPrice() {
-    console.log('updateTotalPrice 호출됨');
-    console.log('selectedOptions:', selectedOptions);
-    
-    if (selectedOptions.length === 0) {
-        const totalAmountElement = document.getElementById('totalAmount');
-        console.log('totalAmountElement 찾음:', totalAmountElement);
-        if (typeof productOptionsData !== 'undefined') {
-            totalAmountElement.textContent = '옵션을 선택해주세요';
-        }
-        return;
-    }
+	console.log('updateTotalPrice 호출됨');
+	console.log('selectedOptions:', selectedOptions);
 
-    totalPrice = selectedOptions.reduce((total, option) => {
-        return total + (option.price * option.quantity);
-    }, 0);
-    
-    console.log('계산된 totalPrice:', totalPrice);
+	if (selectedOptions.length === 0) {
+		const totalAmountElement = document.getElementById('totalAmount');
+		console.log('totalAmountElement 찾음:', totalAmountElement);
+		if (typeof productOptionsData !== 'undefined') {
+			totalAmountElement.textContent = '옵션을 선택해주세요';
+		}
+		return;
+	}
 
-    const totalAmountElement = document.getElementById('totalAmount');
-    console.log('totalAmountElement 찾음:', totalAmountElement);
-    if (totalAmountElement) {
-        totalAmountElement.textContent = totalPrice.toLocaleString() + '원';
-        console.log('가격 업데이트 완료:', totalAmountElement.textContent);
-    } else {
-        console.log('totalAmountElement를 찾을 수 없습니다!');
-    }
+	totalPrice = selectedOptions.reduce((total, option) => {
+		return total + (option.price * option.quantity);
+	}, 0);
+
+	console.log('계산된 totalPrice:', totalPrice);
+
+	const totalAmountElement = document.getElementById('totalAmount');
+	console.log('totalAmountElement 찾음:', totalAmountElement);
+	if (totalAmountElement) {
+		totalAmountElement.textContent = totalPrice.toLocaleString() + '원';
+		console.log('가격 업데이트 완료:', totalAmountElement.textContent);
+	} else {
+		console.log('totalAmountElement를 찾을 수 없습니다!');
+	}
 }
 
 // 탭 내용 초기화
@@ -316,64 +316,64 @@ function addToWishlist() {
 // 장바구니 추가
 function addToCart() {
 	// 옵션이 있는 상품인지 확인
-    if (typeof productOptionsData !== 'undefined') {
-        // 옵션 상품 - 선택된 옵션이 있는지 확인
-        if (selectedOptions.length === 0) {
-            alert('옵션을 선택해주세요.');
-            return;
-        }
+	if (typeof productOptionsData !== 'undefined') {
+		// 옵션 상품 - 선택된 옵션이 있는지 확인
+		if (selectedOptions.length === 0) {
+			alert('옵션을 선택해주세요.');
+			return;
+		}
 
-        // 각 선택된 옵션별로 장바구니 추가
-        let completedRequests = 0;
-        const totalRequests = selectedOptions.length;
+		// 각 선택된 옵션별로 장바구니 추가
+		let completedRequests = 0;
+		const totalRequests = selectedOptions.length;
 
-        selectedOptions.forEach(option => {
-            addToCartRequest(option.id, option.quantity, () => {
-                completedRequests++;
-                if (completedRequests === totalRequests) {
-                    // 모든 요청 완료 시 확인 팝업
-                    if (confirm('장바구니에 담았습니다. 장바구니로 이동하시겠습니까?')) {
-                        location.href = '/cart';
-                    }
-                }
-            });
-        });
-    } else {
-        // 단일 상품
-        const quantity = 1;
-        addToCartRequest(null, quantity, () => {
-            if (confirm('장바구니에 담았습니다. 장바구니로 이동하시겠습니까?')) {
-                location.href = '/cart';
-            }
-        });
-    }
+		selectedOptions.forEach(option => {
+			addToCartRequest(option.id, option.quantity, () => {
+				completedRequests++;
+				if (completedRequests === totalRequests) {
+					// 모든 요청 완료 시 확인 팝업
+					if (confirm('장바구니에 담았습니다. 장바구니로 이동하시겠습니까?')) {
+						location.href = '/consumer/cart';
+					}
+				}
+			});
+		});
+	} else {
+		// 단일 상품
+		const quantity = 1;
+		addToCartRequest(null, quantity, () => {
+			if (confirm('장바구니에 담았습니다. 장바구니로 이동하시겠습니까?')) {
+				location.href = '/consumer/cart';
+			}
+		});
+	}
 }
 
 function addToCartRequest(optionId, quantity, callback) {
-    // AJAX로 변경
-    const formData = new FormData();
-    formData.append('brandId', productBrandId);
-    formData.append('productId', productId);
-    formData.append('quantity', quantity);
-    if (optionId) {
-        formData.append('optionId', optionId);
-    }
+	// AJAX로 변경
+	const formData = new FormData();
+	formData.append('brandId', productBrandId);
+	formData.append('productId', productId);
+	formData.append('quantity', quantity);
+	if (optionId) {
+		formData.append('optionId', optionId);
+	}
 
-    fetch('/cart/add', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => {
-        if (response.ok) {
-            callback();
-        } else {
-            alert('장바구니 담기에 실패했습니다.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('오류가 발생했습니다.');
-    });
+	fetch('/addToCart', {
+		method: 'POST',
+		body: formData
+	})
+		.then(response => {
+			if (response.ok) {
+				callback();
+			} else {
+				alert('장바구니 담기에 실패했습니다.');
+			}
+		})
+		.catch(error => {
+			console.error('Error:', error);
+			alert('오류가 발생했습니다.');
+		});
 }
 
 function createHiddenInput(name, value) {
@@ -386,37 +386,37 @@ function createHiddenInput(name, value) {
 
 // 바로 구매
 function buyNow() {
-    // 옵션이 있는 상품인지 확인
-    if (typeof productOptionsData !== 'undefined') {
-        // 옵션 상품 - 선택된 옵션이 있는지 확인
-        if (selectedOptions.length === 0) {
-            alert('옵션을 선택해주세요.');
-            return;
-        }
-    }
+	// ✅ 디버깅
+    console.log('productOptionsData:', typeof productOptionsData !== 'undefined' ? productOptionsData : 'undefined');
+    console.log('selectedOptions:', selectedOptions);
+    console.log('productId:', productId);
+    console.log('productBrandId:', productBrandId);
+	
+	// 옵션이 있는 상품인지 확인
+	if (typeof productOptionsData !== 'undefined') {
+		if (selectedOptions.length === 0) {
+			alert('옵션을 선택해주세요.');
+			return;
+		}
+	}
+	// GET 방식으로 URL 파라미터 생성
+	const params = new URLSearchParams();
+	params.append('productId', productId);
+	params.append('brandId', productBrandId);
 
-    // checkout.jsp로 이동하며 데이터 전달
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '/checkout';
+	if (typeof productOptionsData !== 'undefined' && selectedOptions.length > 0) {
+		// 여러 옵션 모두 URL 파라미터로 추가
+		selectedOptions.forEach((option, index) => {
+			params.append(`items[${index}].optionId`, option.id);
+			params.append(`items[${index}].quantity`, option.quantity);
+		});
+	} else {
+		// 단일 상품
+		params.append('quantity', 1);
+	}
 
-    // 상품 정보 추가
-    form.appendChild(createHiddenInput('brandId', productBrandId));
-    form.appendChild(createHiddenInput('productId', productId));
-
-    if (typeof productOptionsData !== 'undefined' && selectedOptions.length > 0) {
-        // 옵션 상품 - 선택된 모든 옵션 전달
-        selectedOptions.forEach((option, index) => {
-            form.appendChild(createHiddenInput(`options[${index}].optionId`, option.id));
-            form.appendChild(createHiddenInput(`options[${index}].quantity`, option.quantity));
-        });
-    } else {
-        // 단일 상품
-        form.appendChild(createHiddenInput('quantity', 1));
-    }
-
-    document.body.appendChild(form);
-    form.submit();
+	// GET 요청으로 이동
+	location.href = '/consumer/checkout?' + params.toString();
 }
 
 // 상품 상세설명 더보기/접기=========================================

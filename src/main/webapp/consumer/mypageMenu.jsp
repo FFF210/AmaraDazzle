@@ -32,7 +32,7 @@
       <li><a class="menu-item ${currentMenu eq 'tickets' ? 'is-active' : ''}"
              href="<c:url value='/store/mypage/tickets'/>">1:1 문의내역</a></li>
       <li><a class="menu-item ${currentMenu eq 'reviews' ? 'is-active' : ''}"
-             href="<c:url value='/store/mypage/reviews'/>">리뷰</a></li>
+             href="<c:url value='/store/mypage/myReview'/>">리뷰</a></li>
     </ul>
   </section>
 

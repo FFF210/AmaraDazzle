@@ -24,17 +24,52 @@
 	width: 824px;
 	display: flex;
 	flex-direction: column;
-	align-items: stretch;
+	gap: 20px;
 }
 
+/* 섹션 공통 스타일 */
+.main-content section {
+	width: 100%;
+}
+
+/* 쿠폰 섹션 */
+.coupon-section {
+	margin-bottom: 20px;
+	display: flex;
+	width: 916px;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 18px;
+}
+
+.coupon .btn {
+	margin-top: 20px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* 포인트 섹션 */
+.point {
+	width: 100%;
+}
+
+/* 중간 구분선 */
 .middle-devider {
 	display: flex;
-	width: 888px;
+	width: 860px;
 	padding: 16px 4px;
 	justify-content: flex-end;
 	align-items: center;
 	gap: 40px;
 	border-top: 1px solid rgba(0, 0, 0, 0.30);
+}
+
+/* 테이블 wrapper */
+.table-wrapper {
+	width: 100%;
+	overflow-x: auto;
+	margin: 20px 0;
 }
 
 #coupon-zone {

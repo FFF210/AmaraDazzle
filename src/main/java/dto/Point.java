@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class Point {
     private Long pointId;        // 포인트 ID (PK, AUTO_INCREMENT)
     private String pointHistory; // 포인트 내역
-    private String memberId;     // 회원 ID (FK → member.member_id)
+    private Long memberId;     // 회원 ID (FK → member.member_id)
     private String amount;       // 금액 (사용은 -, 적립은 +로 표기)
     private String writer;       // 포인트 지급자 (FK → admin_info.aid)
     private String orderId;      // 주문번호 (FK → orders.order_id, UNIQUE)
@@ -28,10 +28,10 @@ public class Point {
         this.pointHistory = pointHistory;
     }
 
-    public String getMemberId() {
+    public Long getMemberId() {
         return memberId;
     }
-    public void setMemberId(String memberId) {
+    public void setMemberId(Long memberId) {
         this.memberId = memberId;
     }
 
