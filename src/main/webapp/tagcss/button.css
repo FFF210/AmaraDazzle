@@ -26,6 +26,7 @@
 
 /* 공통 스타일 */
 .btn {
+	white-space: nowrap;
 	cursor: pointer;
 	transition: all 0.2s ease;
 	text-align: center;
