@@ -24,10 +24,6 @@
 	<!-- 레이아웃 + 메인컨텐츠 end -->
 
 
-	<!-- 정보수정 & 로그아웃 팝업 -->
-	<%@ include file="./modals/login_popup.jsp"%>
-	<!-- 정보수정 & 로그아웃 팝업 end -->
-
 
 </body>
 </html>

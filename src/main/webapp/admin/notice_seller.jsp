@@ -8,6 +8,7 @@
 <%@ include file="./common/config.jsp"%>
 
 <title>공지게시판</title>
+<link rel="stylesheet" href="../tagcss/tag.css?v=2" />
 <!-- 헤드부분 -->
 
 <body>

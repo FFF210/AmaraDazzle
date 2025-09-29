@@ -36,7 +36,7 @@ public class NoticeSellerList extends HttpServlet {
 			Integer sellerNoticeCnt = notice_svc.noticeCount(); //전체 게시글 수 
 			List<Notice> noticeSellerList = notice_svc.sellerNoticeByPage(pageInfo);
 			
-
+			System.out.println("noticeSellerList : " + noticeSellerList);
 			request.setAttribute("noticeCnt", sellerNoticeCnt);
 			request.setAttribute("noticeList", noticeSellerList);
 			request.setAttribute("pageInfo", pageInfo);

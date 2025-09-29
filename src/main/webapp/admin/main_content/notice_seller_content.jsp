@@ -103,9 +103,7 @@
 					<!-- 번호 -->
 					<col style="width: 10%" />
 					<!-- 카테고리 -->
-					<col style="width: 4%" />
-					<!-- 첨부 -->
-					<col style="width: 33%" />
+					<col style="width: 35%" />
 					<!-- 제목 -->
 					<col style="width: 10%" />
 					<!-- 작성자 -->
@@ -121,7 +119,6 @@
 						<th><input type="checkbox" /></th>
 						<th>#</th>
 						<th>카테고리</th>
-						<th>첨부</th>
 						<th>제목</th>
 						<th>작성자</th>
 						<th>작성일</th>
@@ -130,18 +127,53 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach items="${nlist}" var="noticeList">
+					<c:if test="${fn:length(noticeList)==0}">
+						<tr>
+							<td colspan="8">등록된 게시물이 없습니다.</td>
+						</tr>
+					</c:if>
+					
+					<c:set var="no" value="${noticeCnt-clickPage}" />
+					<c:forEach items="${noticeList}" var="noticeList" varStatus="idx">
 						<tr>
 							<td><input type="checkbox" /></td>
-							<td>10</td>
-							<td>[공지카테]</td>
-							<td><i class="bi bi-paperclip"></i></td>
-							<td class="title_cell">공지 공지 공지 공지</td>
-							<td>홍길동</td>
-							<td>2025-09-19 12:33:45</td>
-							<td>[게시중]</td>
-							<td class="detail_cell reply_view"><i
-								class="bi bi-three-dots-vertical"></i></td>
+							<td>${no-idx.index}</td>
+							<td>
+								<c:choose>
+									<c:when test="${noticeList.typeId == '25' || noticeList.typeId == '29'}">  <!-- 카테고리 : 이벤트 -->
+										<my:tag color="pink" size="md" text="${noticeList.name}" />
+									</c:when>
+									<c:when test="${noticeList.typeId == '26' || noticeList.typeId == '28'}">	 <!-- 카테고리 : 점검 / 시스템 -->
+										<my:tag color="green" size="md" text="${noticeList.name}" />
+									</c:when>
+									<c:when test="${noticeList.typeId == '27' || noticeList.typeId == '30'}">	<!-- 카테고리 : 기타 -->
+										<my:tag color="blue" size="md" text="${noticeList.name}" />	
+									</c:when>
+								</c:choose>
+							</td>
+							<td class="title_cell">
+								<c:if test="${fn:length(noticeList.imageFileIds)!=0}">
+									<i class="bi bi-paperclip"></i>
+								</c:if>
+								${noticeList.title}
+								
+							</td>
+							<td>${noticeList.writer}</td>
+							<td>
+								<c:set var="createDate" value="${noticeList.createdAt}"/>
+								&nbsp; ${fn:substring(createDate,0,19)}
+							</td>
+							<td>
+								<c:choose>
+									<c:when test="${noticeList.isExposed == '1' }">  <!-- 게시여부 : 게시중 -->
+										<my:tag color="yellow" size="md" text="게시중" />
+									</c:when>
+									<c:when test="${noticeList.isExposed == '0'}">	 <!-- 게시여부 : 노게시 -->
+										<my:tag color="gray" size="md" text="비공개" />
+									</c:when>
+								</c:choose>
+							</td>
+							<td class="detail_cell" onclick="goNoticeDetail('${noticeList.noticeId}','${noticeList.targetTypeId}');"><i class="bi bi-three-dots-vertical" ></i></td>
 						</tr>
 					</c:forEach>
 				</tbody>
