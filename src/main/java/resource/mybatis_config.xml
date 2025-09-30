@@ -57,6 +57,8 @@
 		<typeAlias type="dto.brand.OrdersCoupon" alias="ordersCoupon" />
 		<typeAlias type="dto.brand.MemberQnaList" alias="memberQnaList" />
 		<typeAlias type="dto.brand.ReviewList" alias="reviewList" />
+		<typeAlias type="dto.brand.ShippingList" alias="shippingList" />
+		<typeAlias type="dto.brand.ShippingDetailItem" alias="shippingDetailItem" />
 		<typeAlias type="dto.brand2.BannerList" alias="bannerList" />
 		<typeAlias type="dto.brand2.MembershipList" alias="membershipList" />
 		<!-- type="" : 패키지명.클래스명, alias="" : 별칭 -->

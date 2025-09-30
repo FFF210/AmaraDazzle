@@ -30,9 +30,8 @@ public class ReviewDetail extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		Long reviewId = Long.parseLong(request.getParameter("reviewId"));
 		try {
-			Long reviewId = Long.parseLong(request.getParameter("reviewId"));
-
 			ReviewList detail = service.reviewDetail(reviewId);
 
 			request.setAttribute("review", detail);

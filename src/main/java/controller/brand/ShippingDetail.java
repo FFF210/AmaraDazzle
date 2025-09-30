@@ -11,19 +11,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dto.Brand;
-import service.brand.OrdersService;
-import service.brand.OrdersServiceImpl;
+import service.brand.ShippingService;
+import service.brand.ShippingServiceImpl;
 
 /**
- * Servlet implementation class OrderDetail
+ * Servlet implementation class ShippingDetail
  */
-@WebServlet("/brand/orderDetail")
-public class OrderDetail extends HttpServlet {
+@WebServlet("/brand/shippingDetail")
+public class ShippingDetail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private final OrdersService service = new OrdersServiceImpl();
+	private ShippingService service = new ShippingServiceImpl();
 
-	public OrderDetail() {
+	public ShippingDetail() {
 		super();
 	}
 
@@ -43,14 +43,15 @@ public class OrderDetail extends HttpServlet {
 		// 파라미터에서 주문 ID 가져오기
 		String orderIdParam = request.getParameter("orderId");
 		Long orderId = Long.parseLong(orderIdParam);
+		String status = request.getParameter("status");
 
 		try {
-			// 주문 상세 데이터(Map 구조: summary, items, coupons)
-			Map<String, Object> orderDetail = service.ordersDetail(brandId, orderId);
+			// 배송 상세 데이터(Map 구조: summary, items)
+			Map<String, Object> shippingDetail = service.shippingDetail(brandId, orderId, status);
 
 			// JSP에 전달
-			request.setAttribute("orderDetail", orderDetail);
-			request.getRequestDispatcher("/brand/orderDetail.jsp").forward(request, response);
+			request.setAttribute("shippingDetail", shippingDetail);
+			request.getRequestDispatcher("/brand/shippingDetail.jsp").forward(request, response);
 
 		} catch (Exception e) {
 			e.printStackTrace();

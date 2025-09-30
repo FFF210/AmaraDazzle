@@ -45,7 +45,7 @@
 				<li><a href="/brand/cancelList">취소 관리</a></li>
 				<li><a href="/brand/exchangeList">교환 관리</a></li>
 				<li><a href="/brand/returnList">반품 관리</a></li>
-				<li><a href="/brand/deliveryList">배송 관리</a></li>
+				<li><a href="/brand/shippingList">배송 관리</a></li>
 			</ul>
 		</li>
 

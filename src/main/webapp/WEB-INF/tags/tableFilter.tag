@@ -67,8 +67,7 @@
 						<c:set var="optValue" value="${optParts[0]}" />
 						<c:set var="optLabel" value="${optParts[1]}" />
 						<button type="button" class="filter-btn"
-							data-filter="${filterKey}"
-							data-value="${optValue}">${optLabel}
+							data-filter="${filterKey}" data-value="${optValue}">${optLabel}
 						</button>
 					</c:forEach>
 				</div>
@@ -171,7 +170,9 @@
     "카테고리": "CATEGORY",
     "주문자": "MEMBER",
     "주문상품명": "PRODUCT",
-    "작성자": "SENDER"
+    "작성자": "SENDER",
+   	"수령인":"RECIPIENT",
+   	"송장번호": "TRACKINGNO",
   };
 
   // 날짜 빠른 선택

@@ -12,24 +12,24 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dto.Brand;
-import service.brand.ReviewService;
-import service.brand.ReviewServiceImpl;
+import service.brand.ShippingService;
+import service.brand.ShippingServiceImpl;
 
 /**
- * Servlet implementation class ReviewList
+ * Servlet implementation class ShippingList
  */
-@WebServlet("/brand/reviewList")
-public class ReviewList extends HttpServlet {
+@WebServlet("/brand/shippingList")
+public class ShippingList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private final ReviewService service = new ReviewServiceImpl();
+	private ShippingService service = new ShippingServiceImpl();
 
-	public ReviewList() {
+	public ShippingList() {
 		super();
 	}
 
 	/**
-	 * 리뷰 목록 조회 (GET)
+	 * 배송 목록 조회 (GET)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -46,7 +46,7 @@ public class ReviewList extends HttpServlet {
 		Brand brand = (Brand) session.getAttribute("brand");
 		Long brandId = brand.getBrandId();
 
-		// 파라미터 수집
+		// 페이지네이션 파라미터
 		int page = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
 		int limit = 10; // 한 페이지당 개수
 		int offset = (page - 1) * limit;
@@ -55,10 +55,11 @@ public class ReviewList extends HttpServlet {
 		Map<String, Object> params = new HashMap<>();
 		params.put("brandId", brandId);
 
-		// 답변 상태 필터
-		params.put("answerStatus", request.getParameter("answerStatus"));
+		// 배송 상태 필터
+		params.put("status", request.getParameter("status"));
 
 		// 검색 필터
+		// searchType = RECIPIENT(수령인), NAME(상품명), TRACKINGNO(송장번호)
 		params.put("searchType", request.getParameter("searchType"));
 		params.put("searchKeyword", request.getParameter("searchKeyword"));
 
@@ -66,20 +67,20 @@ public class ReviewList extends HttpServlet {
 		params.put("startDate", request.getParameter("startDate")); // 시작일
 		params.put("endDate", request.getParameter("endDate")); // 종료일
 
-		params.put("page", page);
 		params.put("limit", limit);
 		params.put("offset", offset);
 
 		try {
-			Map<String, Object> result = service.reviewListByPage(params);
+			// 서비스 호출
+			Map<String, Object> result = service.shippingListByPage(params);
 
 			// JSP로 전달
-			request.setAttribute("reviewList", result.get("reviewList"));
-			request.setAttribute("totalCount", result.get("totalCount"));
-			request.setAttribute("totalPages", result.get("totalPages"));
-			request.setAttribute("currentPage", page);
+			request.setAttribute("shippingList", result.get("shippingList")); // 주문 목록
+			request.setAttribute("totalCount", result.get("totalCount")); // 총 개수
+			request.setAttribute("totalPages", result.get("totalPages")); // 총 페이지 수
+			request.setAttribute("currentPage", page); // 현재 페이지
 
-			request.getRequestDispatcher("/brand/reviewList.jsp").forward(request, response);
+			request.getRequestDispatcher("/brand/shippingList.jsp").forward(request, response);
 
 		} catch (Exception e) {
 			e.printStackTrace();
