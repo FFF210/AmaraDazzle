@@ -1,5 +1,5 @@
 (function() {
-
+	//tagjs
 	// 페이지 로드 후 실행
 	document.addEventListener("DOMContentLoaded", () => {
 		const selects = document.querySelectorAll(".custom-select");

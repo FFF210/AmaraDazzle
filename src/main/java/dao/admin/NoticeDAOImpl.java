@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 import dto.Notice;
+import dto.admin.SearchConditionDTO;
 import util.MybatisSqlSessionFactory;
 
 public class NoticeDAOImpl implements NoticeDAO {
@@ -38,8 +39,8 @@ public class NoticeDAOImpl implements NoticeDAO {
 
 	//seller 공지 총 게시글 수 
 	@Override
-	public Integer noticeCount(Map<String, String> cntMap) {
-		return ss.selectOne("mapper.notice.SellerNoticeCnt", cntMap);
+	public Integer noticeCount(SearchConditionDTO sc_DTO) {
+		return ss.selectOne("mapper.notice.SellerNoticeCnt", sc_DTO);
 	}
 
 	//seller 공지 리스트 
@@ -50,8 +51,8 @@ public class NoticeDAOImpl implements NoticeDAO {
 
 	//검색된 seller 공지 리스트 
 	@Override
-	public List<Notice> search_nlist( Map<String, Object> searchlistMap) {
-		return ss.selectList("mapper.notice.selectSearchSellerNotice",searchlistMap);
+	public List<Notice> search_nlist(SearchConditionDTO sc_DTO ) {
+		return ss.selectList("mapper.notice.selectSearchSellerNotice",sc_DTO);
 	}
 
 	//공지 게시글 조회수

@@ -61,9 +61,7 @@ public class Paging {
 		pageinfo.put("final_post_ea", final_post_ea);	//마지막 페이지에 있는 게시물 개수 
 		pageinfo.put("start_pg", start_pg);	//현재화면의 시작 페이지 
 		pageinfo.put("end_pg", end_pg);	//현재화면의 끝 페이지 
-		
 			
-
 		return pageinfo;
 	}
 

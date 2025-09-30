@@ -5,18 +5,17 @@
     width: 100%;
 }
 
+
 .search_container {
     border: 1px solid var(--outerbox);
     border-radius: 10px;
-    /* width: 700px; */
-    width: 93%;
-    /* height: 300px; */
-    background-color: white;
-    padding: 15px;
+    width: 95%;
+    background-color:var (--base);
+    padding: 16px 32px;
     display: flex;
     flex-direction: column;
-    /* align-items: center; */
     margin: 15px;
+    box-sizing: border-box;
 }
 
 .filter {
@@ -24,6 +23,25 @@
 	flex-direction: column;
 	gap : 10px;
 }
+
+/* 타이틀 */
+.filter_box .filtering_title label {
+	width: 94px;
+	color: #000;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+}
+
+/* selectbox는 고정 폭 */
+.table-filter .search-row .custom-select {
+	flex: 0 0 160px;
+}
+
+
+
+
 
 .period_box,
 .answer_box,
@@ -36,7 +54,6 @@
     justify-content: flex-start;
     align-items: center;
     gap: 10px;
-    /* margin-bottom: 10px; */
 }
 
 .filtering_title {
@@ -67,6 +84,15 @@
 .period_body input[type="date"]:last-child {
     margin-right: 15px;
 }
+
+/* 버튼 그룹 */
+.filter-btn-group {
+	display: inline-flex;
+	border: 1px solid #DDE1EB;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
 .p_choice{
 	margin-left : 15px;
 }
@@ -94,81 +120,61 @@
 
 /* 답변상태 */
 .answer_body {
-    display: flex;
-    border: 1px solid var(--innerbox);
-    border-radius: 5px;
-    height: 30px;
-    /* padding: 5px; */
-    align-items: center;
-}
-.choice {
-    min-width: 70px;
-    height: 100%;
-    text-align: center;
-    /* vertical-align: middle; */
-}
-.choice:first-child {
-    border-radius: 3px 0 0 3px;
+    border-radius: 8px;
 }
 
-.choice:last-child {
-    border-radius: 0 3px 3px 0;
+.filter-btn-group .filter-btn {
+	border: none;
+	border-right: 1px solid var(--innerbox);
+	background: #fff;
+	padding: 0 20px;
+	height: 35px;
+	font-size: 14px;
+	font-weight: 500;
+	color: #000;
+	cursor: pointer;
 }
 
-.ch {
-    border-right: 1px solid var(--innerbox);
+/* 마지막 버튼은 구분선 제거 */
+.filter-btn-group .filter-btn:last-child {
+	border-right: none;
 }
 
-.choice > input[type="button"] {
-    width: 100%;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    padding: 5px;
-    margin: 0;
+.filter-btn-group .filter-btn:hover {
+	background: #f7f7f9;
 }
 
-/* 클릭시 파란불 */
-.choice.active {
-    background-color: var(--mainColor);
-}
-.choice.active input[type="button"] {
-    color: white;
+.filter-btn-group .filter-btn.active {
+	background: #F1F9FF;
+	color : #2684FF;
 }
 
-/* 체크박스 */
-.check_box > div:nth-child(2) {
-    display: flex;
-}
-
-.check_box > div:nth-child(2) > label {
-    margin-right: 15px;
-}
 
 /* 통합검색 */
 .totalSearch_box {
     gap: 5px;
-    /* width: 100%; */
+    flex-wrap: nowrap; /* 줄바꿈 방지 */
 }
 
-.totalSearch_box > .searchType > select {
-    width: 150px;
-}
+
 .totalSearch_box > .searchKeyword {
     width: 90%;
-    height: 40px;
+    height: 38px;
     border: 1px solid var(--innerbox);
-    border-radius: 5px;
+    border-radius: 8px;
     padding: 0 5px;
     display: flex;
     align-items: center;
 }
 .searchKeyword > input {
-    width: 100%;
+	/* textInput은 남은 공간 다 차지 */
+    flex: 1;
     outline: none;
     border: none;
     padding: 0 15px;
 }
+
+
 
 .searchKeyword > input[type="text"]:focus {
     border: none !important;

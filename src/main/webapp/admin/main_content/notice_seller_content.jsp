@@ -13,45 +13,56 @@
 
 <!-- ************************* 판매자 탭 ************************* -->
 <div id="seller" class="tab_content">
-	
+
+
 	<!-- 필터 -->
 	<form class="search_form" id="noticeSellerSearch">
-	<my:adminSearchContainer>
-		<my:adminSearchPeriod title="작성일" range="오늘,어제,최근 7일,최근 30일" dateCate="write_"/>
-		<my:adminSearchType title="카테고리" optList="시스템, 이벤트, 기타" init="공지 카테고리를 선택하세요"/>
-		<my:adminSearchTotal optList="내용, 제목, 작성자" init="내용" />
-	</my:adminSearchContainer>
+		<my:adminTableFilter >
+			<my:adminFilterPeriod title="작성일" dateCate="write_"/>
+			<my:adminFilterType optList="상품명,카테고리" initial="" name=""/>
+			<my:adminFilterTotal searchItems="상품명,카테고리"/>
+		</my:adminTableFilter>
 	</form>
+	
 	<!-- 필터 end -->
 
 	<!-- 버튼 -->
 	<div class="button_wrap">
 		<div>
-			<button type="button" class="btn first_btn action_btn" onclick="goWriteNoticeSeller()">글쓰기</button>
+			<button type="button" class="btn first_btn action_btn"
+				onclick="goWriteNoticeSeller()">글쓰기</button>
 		</div>
 		<div>
 			<button type="button" class="btn second_btn action_btn">삭제</button>
 		</div>
 	</div>
 	<!-- 버튼 end -->
-	
+
 	<!-- 테이블 -->
 	<div class="whole_table">
 		<div class="table_title">
-			<span class="list_count">
-				<c:if test="${keyword != null}">
+			<span class="list_count"> 
+				<c:if test="${not empty searchContent}">
 					[ 검색 결과 ]
-				</c:if>
-				 &nbsp; 총 ${noticeCnt}건 중 ${postNo + 1}
-				 <c:choose>
-					 <c:when test="${paging.pageno == paging.end_pg && paging.final_post_ea < 10 && paging.final_post_ea != 0}">
-					 	 -  ${postNo + paging.final_post_ea}  
-					 </c:when>
-					 <c:otherwise>
-					 	 - ${postNo + 10}  
-					 </c:otherwise>
-				 </c:choose>
-				 건
+				</c:if> 
+				&nbsp; 총 ${noticeCnt}건 중 
+				<c:choose>
+					<c:when test="${noticeCnt == 0}">
+       					0 건
+    				</c:when>
+					<c:otherwise>
+       					 ${postNo + 1}
+       					 <c:choose>
+							<c:when test="${paging.pageno == paging.end_pg && paging.final_post_ea < 10 && paging.final_post_ea != 0}">
+                 				- ${postNo + paging.final_post_ea}
+            				</c:when>
+							<c:otherwise>
+                 				- ${postNo + 10}
+            				</c:otherwise>
+						</c:choose>
+       					건
+    				</c:otherwise>
+				</c:choose>
 			</span>
 		</div>
 		<div class="table_wrap">
@@ -96,48 +107,52 @@
 							<td colspan="9">등록된 게시물이 없습니다.</td>
 						</tr>
 					</c:if>
-					
+
 					<c:set var="no" value="${noticeCnt-postNo}" />
 					<c:forEach items="${noticeList}" var="noticeList" varStatus="idx">
 						<tr>
 							<td><input type="checkbox" /></td>
 							<td>${no-idx.index}</td>
-							<td>
-								<c:choose>
-									<c:when test="${noticeList.typeId == '25' || noticeList.typeId == '29'}">  <!-- 카테고리 : 이벤트 -->
+							<td><c:choose>
+									<c:when
+										test="${noticeList.typeId == '25' || noticeList.typeId == '29'}">
+										<!-- 카테고리 : 이벤트 -->
 										<my:tag color="pink" size="md" text="${noticeList.name}" />
 									</c:when>
-									<c:when test="${noticeList.typeId == '26' || noticeList.typeId == '28'}">	 <!-- 카테고리 : 점검 / 시스템 -->
+									<c:when
+										test="${noticeList.typeId == '26' || noticeList.typeId == '28'}">
+										<!-- 카테고리 : 점검 / 시스템 -->
 										<my:tag color="green" size="md" text="${noticeList.name}" />
 									</c:when>
-									<c:when test="${noticeList.typeId == '27' || noticeList.typeId == '30'}">	<!-- 카테고리 : 기타 -->
-										<my:tag color="blue" size="md" text="${noticeList.name}" />	
+									<c:when
+										test="${noticeList.typeId == '27' || noticeList.typeId == '30'}">
+										<!-- 카테고리 : 기타 -->
+										<my:tag color="blue" size="md" text="${noticeList.name}" />
 									</c:when>
-								</c:choose>
-							</td>
-							<td class="title_cell" onclick="goNoticeDetail('${noticeList.noticeId}','${noticeList.targetTypeId}');">
+								</c:choose></td>
+							<td class="title_cell"
+								onclick="goNoticeDetail('${noticeList.noticeId}','${noticeList.targetTypeId}');">
 								<c:if test="${fn:length(noticeList.imageFileIds)!=0}">
 									<i class="bi bi-paperclip"></i>
-								</c:if>
-								${noticeList.title}
+								</c:if> ${noticeList.title}
 							</td>
 							<td>Amara Dazzle</td>
-							<td>
-								<c:set var="createDate" value="${noticeList.createdAt}"/>
-								&nbsp; ${fn:substring(createDate,0,19)}
-							</td>
+							<td><c:set var="createDate" value="${noticeList.createdAt}" />
+								&nbsp; ${fn:substring(createDate,0,19)}</td>
 							<td>${noticeList.viewCnt}</td>
-							<td>
-								<c:choose>
-									<c:when test="${noticeList.isExposed == '1' }">  <!-- 게시여부 : 게시중 -->
+							<td><c:choose>
+									<c:when test="${noticeList.isExposed == '1' }">
+										<!-- 게시여부 : 게시중 -->
 										<my:tag color="yellow" size="md" text="게시중" />
 									</c:when>
-									<c:when test="${noticeList.isExposed == '0'}">	 <!-- 게시여부 : 노게시 -->
+									<c:when test="${noticeList.isExposed == '0'}">
+										<!-- 게시여부 : 노게시 -->
 										<my:tag color="gray" size="md" text="비공개" />
 									</c:when>
-								</c:choose>
-							</td>
-							<td class="detail_cell" onclick="goNoticeDetail('${noticeList.noticeId}','${noticeList.targetTypeId}');"><i class="bi bi-three-dots-vertical" ></i></td>
+								</c:choose></td>
+							<td class="detail_cell"
+								onclick="goNoticeDetail('${noticeList.noticeId}','${noticeList.targetTypeId}');"><i
+								class="bi bi-three-dots-vertical"></i></td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -145,8 +160,17 @@
 		</div>
 
 		<!-- 페이지네이션 -->
-		<div class="pagination_wrap" id="paginationWrap">
-			<my:adminPagination currentPage="${paging.pageno}" allPage="${paging.end_pg}" baseUrl="/admin/noticeSellerList?page="/>
+		<c:url var="noticeSellerUrl" value="/admin/noticeSellerList">
+    		<c:param name="write_startDate" value="${param.write_startDate}" />
+    		<c:param name="write_endDate" value="${param.write_endDate}" />
+    		<c:param name="q_select" value="${param.q_select}" />
+    		<c:param name="totalSearch" value="${param.totalSearch}" />
+    		<c:param name="keyword" value="${param.keyword}" />
+		</c:url>
+
+		<div class="pagination_wrap" >
+			<my:adminPagination currentPage="${paging.pageno}"
+				allPage="${paging.end_pg}" baseUrl="${noticeSellerUrl}" />
 		</div>
 		<!-- 페이지네이션 end -->
 	</div>
@@ -155,4 +179,6 @@
 
 <script src="./js/boardNotice.js"></script>
 <script src="../tagjs/selectbox.js"></script>
-<script src="./js/componant/select_box.js"></script>
+<script src="../tagjs/dateInput.js"></script>
+<script src="./js/componant/searchBox.js"></script>
+

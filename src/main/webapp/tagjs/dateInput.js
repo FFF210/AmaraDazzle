@@ -11,7 +11,7 @@ function settingToday() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-	settingToday();
+//	settingToday();
 
 	document.querySelectorAll(".date-input .input-wrapper").forEach(wrapper => {
 		const input = wrapper.querySelector(".date-text");

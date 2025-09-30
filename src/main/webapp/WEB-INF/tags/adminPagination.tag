@@ -15,7 +15,6 @@
     <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 	<my:pagination currentPage="1" allPage="10" baseUrl="/products?page=" />
 ================================ --%>
-
 <%@ attribute name="currentPage" required="true"%>
 <%@ attribute name="allPage" required="true"%>
 <%@ attribute name="maxVisible" required="false"%>
@@ -25,72 +24,83 @@
 <c:set var="allPage" value="${allPage}" />
 <c:set var="maxVisible" value="${empty maxVisible ? 5 : maxVisible}" />
 
+<!-- 최소 1페이지는 유지 -->
+<c:if test="${allPage lt 1}">
+    <c:set var="allPage" value="1" />
+</c:if>
+
 <c:set var="startPage" value="${currentPage - (maxVisible div 2)}" />
 <c:set var="endPage" value="${currentPage + (maxVisible div 2)}" />
 
 <c:if test="${startPage lt 1}">
-	<c:set var="endPage" value="${endPage + (1 - startPage)}" />
-	<c:set var="startPage" value="1" />
+    <c:set var="endPage" value="${endPage + (1 - startPage)}" />
+    <c:set var="startPage" value="1" />
 </c:if>
 
 <c:if test="${endPage gt allPage}">
-	<c:set var="startPage" value="${startPage - (endPage - allPage)}" />
-	<c:set var="endPage" value="${allPage}" />
+    <c:set var="startPage" value="${startPage - (endPage - allPage)}" />
+    <c:set var="endPage" value="${allPage}" />
 </c:if>
 
 <c:if test="${startPage lt 1}">
-	<c:set var="startPage" value="1" />
+    <c:set var="startPage" value="1" />
 </c:if>
 
 <div class="pagination">
-	<!-- 이전 버튼 -->
-	<c:choose>
-		<c:when test="${currentPage gt 1}"> <!-- currentPage > 1 -->
-			<a href="${baseUrl}${currentPage-1}" class="page-btn prev"> 
-				<i class="bi bi-chevron-left"></i> 이전
-			</a>
-		</c:when>
-		<c:otherwise>
-			<span class="page-btn prev disabled"> 
-				<i class="bi bi-chevron-left"></i> 이전
-			</span>
-		</c:otherwise>
-	</c:choose>
+    <!-- 이전 버튼 -->
+    <c:choose>
+        <c:when test="${currentPage gt 1}">
+            <a href="${baseUrl}&page=${currentPage-1}" class="page-btn prev"> 
+                <i class="bi bi-chevron-left"></i> 이전
+            </a>
+        </c:when>
+        <c:otherwise>
+            <span class="page-btn prev disabled"> 
+                <i class="bi bi-chevron-left"></i> 이전
+            </span>
+        </c:otherwise>
+    </c:choose>
 
+    <!-- 페이지 번호 -->
+    <c:if test="${startPage gt 1}">
+        <a href="${baseUrl}&page=1" class="page-btn">1</a>
+        <span class="dots">...</span>
+    </c:if>
 
-	<!-- 페이지 번호 -->
-	<c:if test="${startPage gt 1}">	<!-- startPage > 1 -->
-		<a href="${baseUrl}1" class="page-btn">1</a>
-		<span class="dots">...</span>
-	</c:if>
+    <c:forEach var="i" begin="${startPage}" end="${endPage}">
+        <c:choose>
+            <c:when test="${i eq currentPage}">
+                <span class="page-btn active">${i}</span>
+            </c:when>
+            <c:otherwise>
+                <a href="${baseUrl}&page=${i}" class="page-btn">${i}</a>
+            </c:otherwise>
+        </c:choose>
+    </c:forEach>
 
-	<c:forEach var="i" begin="${startPage}" end="${endPage}">
-		<c:choose>
-			<c:when test="${i eq currentPage}">
-				<span class="page-btn active">${i}</span>
-			</c:when>
-			<c:otherwise>
-				<a href="${baseUrl}${i}" class="page-btn">${i}</a>
-			</c:otherwise>
-		</c:choose>
-	</c:forEach>
+    <c:if test="${endPage lt allPage && allPage gt 1}">
+        <span class="dots">...</span>
+        <c:choose>
+            <c:when test="${allPage eq currentPage}">
+                <span class="page-btn active">${allPage}</span>
+            </c:when>
+            <c:otherwise>
+                <a href="${baseUrl}&page=${allPage}" class="page-btn">${allPage}</a>
+            </c:otherwise>
+        </c:choose>
+    </c:if>
 
-	<c:if test="${endPage lt allPage}">	<!-- endPage < allPage -->
-		<span class="dots">...</span>
-		<a href="${baseUrl}${allPage}" class="page-btn">${allPage}</a>
-	</c:if>
-
-	<!-- 다음 버튼 -->
-	<c:choose>
-		<c:when test="${currentPage lt allPage}">
-			<a href="${baseUrl}${currentPage+1}" class="page-btn next"> 다음 <i
-				class="bi bi-chevron-right"></i>
-			</a>
-		</c:when>
-		<c:otherwise>
-			<span class="page-btn next disabled"> 다음 <i
-				class="bi bi-chevron-right"></i>
-			</span>
-		</c:otherwise>
-	</c:choose>
+    <!-- 다음 버튼 -->
+    <c:choose>
+        <c:when test="${currentPage lt allPage}">
+            <a href="${baseUrl}&page=${currentPage+1}" class="page-btn next"> 
+                다음 <i class="bi bi-chevron-right"></i>
+            </a>
+        </c:when>
+        <c:otherwise>
+            <span class="page-btn next disabled"> 
+                다음 <i class="bi bi-chevron-right"></i>
+            </span>
+        </c:otherwise>
+    </c:choose>
 </div>

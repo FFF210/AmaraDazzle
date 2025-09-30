@@ -55,7 +55,6 @@
 	</c:otherwise>
 </c:choose>
 
-
 <div class="custom-select ${size}" 
 	<c:if test="${not empty id}">id="${id}"</c:if> tabindex="0">
 	
@@ -69,7 +68,4 @@
 				data-value="${it}" >${it}</li>
 		</c:forEach>
 	</ul>
-	
-	<!-- 실제 서버로 전송할 hidden input -->
-	<input type="hidden" name="${name}" value="${selectedValue}" class="select_hidden" />
 </div>

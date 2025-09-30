@@ -7,8 +7,9 @@
 	<settings>
 		<!-- 언더스코어 → 카멜 자동 매핑 -->
 		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<setting name="logImpl" value="LOG4J"/>
 	</settings>
-	
+        
 	<!-- mapper.xml의 parameterType에 쓸 별칭 지정 -->
 	<typeAliases>
 		<typeAlias type="dto.AdminInfo" alias="adminInfo" />
@@ -48,6 +49,7 @@
 		<typeAlias type="dto.Ticket" alias="ticket" />
 		<typeAlias type="dto.UploadFile" alias="uploadFile" />
 		<typeAlias type="dto.Wishlist" alias="wishlist" />
+		<typeAlias type="dto.admin.SearchConditionDTO" alias="searchCondition" />
 		<typeAlias type="dto.brand.ProductList" alias="productList" />
 		<typeAlias type="dto.brand.ProductDetail" alias="productDetail" />
 		<typeAlias type="dto.brand.OrdersList" alias="ordersList" />
@@ -74,6 +76,7 @@
 			</dataSource>
 		</environment>
 	</environments>
+	
 
 	<mappers>
 		<mapper resource="mapper/adminInfo.xml" />

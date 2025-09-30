@@ -14,75 +14,27 @@
     • searchItems : "상품코드,상품명,카테고리"
     
     사용법 예시
-    <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
-    <my:tableFilter
-			filters="판매상태:ALL=전체|SALE=판매중|SOLD_OUT=품절|STOP_SALE=판매중지"
-			searchItems="상품코드,상품명,카테고리" />
+ 	<%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+	 <form class="search_form" id="noticeSellerSearch">
+		<my:adminTableFilter >
+			<my:adminFilterPeriod title="작성일"/>
+			<my:adminFilterMiddle filters=""/>
+			<my:adminFilterType optList="상품명,카테고리" initial="" name=""/>
+			<my:adminFilterCate large="${ss}" />
+			<my:adminFilterTotal searchItems="상품명,카테고리"/>
+		</my:adminTableFilter>
+	</form>
 ================================ --%>
 
-<%@ attribute name="filters" required="false"%>
-<%@ attribute name="hasDate" required="false"%>
-<%@ attribute name="hasSearch" required="false"%>
-<%@ attribute name="searchItems" required="false"%>
-
-<c:set var="hasSearch" value="${empty hasSearch ? 'true' : hasSearch}" />
-<c:set var="searchItems" value="${empty searchItems ? '-' : searchItems}" />
-
-<div class="table-filter">
-
-	<!-- 날짜 필터 -->
-	<c:if test="${hasDate eq 'true'}">
-		<div class="filter-row date-row">
-			<label>기간:</label>
-			<my:dateInput type="input" name="startDate" value="2025-09-02" />
-			<span>~</span>
-			<my:dateInput type="input" name="endDate" value="2025-09-02" />
-			<div class="margin"></div>
-			<my:dateInput type="preset" presets="오늘,어제,최근 7일,최근 30일" />
-		</div>
-	</c:if>
-
-	<!-- 중간 필터 -->
-	<c:if test="${not empty filters}">
-		<c:set var="filterLines" value="${fn:split(filters, ',')}" />
-		<c:forEach var="line" items="${filterLines}">
-			<c:set var="parts" value="${fn:split(line, ':')}" />
-			<c:set var="label" value="${parts[0]}" />
-			<c:set var="options" value="${fn:split(parts[1], '|')}" />
-
-			<div class="filter-row">
-				<label>${label}:</label>
-				<div class="filter-btn-group">
-					<c:forEach var="opt" items="${options}">
-						<c:set var="optParts" value="${fn:split(opt, '=')}" />
-						<c:set var="optValue" value="${optParts[0]}" />
-						<c:set var="optLabel" value="${optParts[1]}" />
-						<button type="button" class="filter-btn" data-filter="${label}"
-							data-value="${optValue}">${optLabel}</button>
-					</c:forEach>
-				</div>
-			</div>
-		</c:forEach>
-	</c:if>
-
-	<!-- 검색 영역 -->
-	<c:if test="${hasSearch eq 'true'}">
-		<div class="filter-row search-row">
-			<my:selectbox id="searchSelectBox" size="md" items="${searchItems}" initial="검색조건" />
-			<my:textInput type="search" name="keyword" placeholder="검색어 입력"
-				size="sm" />
-		</div>
-	</c:if>
-
-	<!-- 버튼 (button.css 파일 import 필수) -->
-	<div class="filter-actions">
-		<button type="button" class="btn btn-primary btn-md filter-submit">검색</button>
-		<button type="button" class="btn btn-outline btn-md filter-reset">설정
-			초기화</button>
+<div class="search_container">
+	<div class="table-filter filter">
+		<jsp:doBody />
 	</div>
-
+	<div class="filter-actions btn_box ">
+		<input type="submit" class="btn first_btn" id="searchBtn" value="검색" />
+		<input type="reset" class="btn second_btn" value="초기화" />
+	</div>
 </div>
-
 <script>
 (function(){
 	const container = document.currentScript.previousElementSibling;
@@ -93,7 +45,7 @@
 	  }
 	
 	// URL → 상태 복원
-	  window.addEventListener("DOMContentLoaded", () => {
+	window.addEventListener("DOMContentLoaded", () => {
 	    const params = new URLSearchParams(window.location.search);
 
 	    params.forEach((value, key) => {
