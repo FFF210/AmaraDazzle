@@ -2,6 +2,8 @@ package dto;
 
 import java.sql.Timestamp;
 
+import dto.brand2.BannerForm;
+
 public class Banner {
     private Long bannerId;         // 배너 광고 신청 ID (PK, AUTO_INCREMENT)
     private Long brandId;          // 브랜드 관리자 ID (FK → brand.brand_id)
@@ -21,8 +23,20 @@ public class Banner {
 
     public Banner() {
     }
+    
+    public Banner(BannerForm form) {
+        this.brandId = form.getBrandId();
+        this.managerName = form.getManagerName();
+        this.managerTel = form.getManagerTel();
+        this.startDate = form.getStartDate();
+        this.endDate = form.getEndDate();
+        this.bannerName = form.getBannerName();
+        this.bannerMessage = form.getBannerMessage();
+        this.brandUrl = form.getBrandUrl();
+        this.status = form.getStatus();
+	}
 
-    public Long getBannerId() {
+	public Long getBannerId() {
         return bannerId;
     }
     public void setBannerId(Long bannerId) {
@@ -136,5 +150,21 @@ public class Banner {
                 ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt +
                 ", isExposed=" + isExposed + ", brandUrl=" + brandUrl +
                 ", stateChange=" + stateChange + ", adminId=" + adminId + "]";
+    }
+    
+    
+    // brand2 Adbanner 정적 팩토리 메서드
+    public static Banner from(BannerForm form) {
+        Banner b = new Banner();
+        b.setBrandId(form.getBrandId());
+        b.setManagerName(form.getManagerName());
+        b.setManagerTel(form.getManagerTel());
+        b.setStartDate(form.getStartDate());
+        b.setEndDate(form.getEndDate());
+        b.setBannerName(form.getBannerName());
+        b.setBannerMessage(form.getBannerMessage());
+        b.setBrandUrl(form.getBrandUrl());
+        b.setStatus(form.getStatus() != null ? form.getStatus() : "PENDING");
+        return b;
     }
 }
