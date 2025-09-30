@@ -3,4 +3,40 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.point">
+
+	<!-- ======================소비자용=============== -->
+	<!-- 포인트 내역 조회 (최근순) -->
+	<select id="selectPointHistory" parameterType="Long"
+		resultType="dto.Point">
+		SELECT
+		point_id AS pointId,
+		point_history AS pointHistory,
+		member_id AS memberId,
+		amount,
+		writer,
+		order_id AS orderId,
+		created_at AS createdAt
+		FROM point
+		WHERE member_id = #{memberId}
+		ORDER BY created_at DESC
+	</select>
+
+	<!-- 특정 기간의 포인트 내역 조회 -->
+	<select id="selectPointHistoryByPeriod" parameterType="map"
+		resultType="dto.Point">
+		SELECT
+		point_id AS pointId,
+		point_history AS pointHistory,
+		member_id AS memberId,
+		amount,
+		writer,
+		order_id AS orderId,
+		created_at AS createdAt
+		FROM point
+		WHERE member_id = #{memberId}
+		AND created_at BETWEEN #{startDate} AND #{endDate}
+		ORDER BY created_at DESC
+	</select>
+
+
 </mapper>

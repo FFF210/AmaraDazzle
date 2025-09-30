@@ -9,17 +9,18 @@
 <title>주문/배송 조회</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="./tagcss/reset.css" />
-<link rel="stylesheet" href="./consumer/css/header.css" />
-<link rel="stylesheet" href="./tagcss/tag.css" />
-<link rel="stylesheet" href="./tagcss/table.css" />
-<link rel="stylesheet" href="./tagcss/button.css" />
-<link rel="stylesheet" href="./consumer/css/mypageMenu.css" />
-<link rel="stylesheet" href="./consumer/css/footer.css" />
-<link rel="stylesheet" href="./tagcss/orderStatusCard.css" />
-<link rel="stylesheet" href="./tagcss/userInfo.css" />
-<link rel="stylesheet" href="./tagcss/dateRangeFilterBox.css" />
-<link rel="stylesheet" href="./tagcss/pagination.css" />
+<link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/table.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/mypageMenu.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/orderStatusCard.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/userInfo.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/dateRangeFilterBox.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
+
 
 </head>
 <body>

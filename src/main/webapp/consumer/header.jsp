@@ -72,7 +72,7 @@
                         <a href="<c:url value='/consumer/mypage'/>">마이페이지</a>
                         
                         <!-- 장바구니 (배지 포함) -->
-                        <a href="<c:url value='/consumer/cart'/>" class="cart-link">
+                        <a href="<c:url value='/store/mypage/cart'/>" class="cart-link">
                          장바구니
                          <c:if test="${cartCount > 0}">
                            <span class="cart-count">${cartCount}</span>

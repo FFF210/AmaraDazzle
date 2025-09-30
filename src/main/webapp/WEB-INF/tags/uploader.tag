@@ -1,6 +1,6 @@
 <%@ tag description="파일 업로더" pageEncoding="UTF-8"%>
-<%@ attribute name="size" required="true"%> <!-- lg / md / sm -->
-<%-- <%@ attribute name="id" required="true"%> <!-- file input id --> --%>
+<%@ attribute name="size" required="false"%> <!-- lg / md / sm -->
+<%@ attribute name="id" required="false"%> <!-- file input id -->
 <%@ attribute name="name" required="false"%> <!-- file input name -->
 <%@ attribute name="label" required="false"%> <!-- 상단 문구 (기본: Click to upload) -->
 <%@ attribute name="desc" required="false"%> <!-- 하단 문구 (기본: 또는 파일을 이 영역으로 드래그하세요) -->

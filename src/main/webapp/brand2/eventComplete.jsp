@@ -8,7 +8,7 @@
 <title>이벤트 신청 완료</title>
 
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
-<link rel="stylesheet" href="../tagcss/header.css" />
+<link rel="stylesheet" href="../tagcss/brandHeader.css" />
 <link rel="stylesheet" href="../tagcss/layout.css" />
 <link rel="stylesheet" href="../tagcss/reset.css" />
 <link rel="stylesheet" href="../tagcss/selectbox.css" />

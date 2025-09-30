@@ -156,7 +156,6 @@
 				<my:tableFilter
 					filters="판매상태:ALL=전체|SALE=판매중|SOLD_OUT=품절|STOP_SALE=판매중지"
 					hasDate="false" searchItems="상품명,카테고리" />
-
 			</div>
 
 			<!-- 총 건수 -->

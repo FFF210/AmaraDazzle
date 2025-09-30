@@ -1,0 +1,167 @@
+@charset "UTF-8";
+
+/* ===== 토큰 ===== */
+ .drf-wrap {
+  --blue:#0C8CE9;
+  --border:rgba(0,0,0,0.10);
+  --radius:8px;
+  --text:#333;
+  --gray:#666;
+  --chip-w:80px;
+  --chip-py:9px;
+  --chip-px:20px;
+  --sel-w:111px;
+  --sel-h:40px;
+  font-family:"Noto Sans KR", sans-serif;
+  box-sizing:border-box;
+}
+
+/* ===== 외곽 래퍼: 왼쪽 박스 + 오른쪽 버튼을 한 덩어리로 ===== */
+.drf-wrap {
+	display: inline-flex; /* 고정 */
+	align-items: stretch; /* 버튼 높이를 왼쪽 박스와 동일하게 */
+	gap: 0;
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	background: #fff;
+	overflow: hidden; /* 둥근 모서리 일체감 */
+}
+
+/* ===== 왼쪽 컨트롤 박스(세로 스택) ===== */
+.drf-box {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 20px;
+	background: #FAFAFA;
+}
+
+/* 상단: 구매기간 + 개월 버튼 */
+.drf-header {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.drf-label {
+	color: var(--gray);
+	font: 600 14px/1 "Noto Sans KR", sans-serif;
+	white-space: nowrap;
+}
+
+.drf-periods {
+	display: flex;
+	gap: 8px;
+}
+
+.drf-chip {
+	display: flex;
+	width: var(--chip-w);
+	padding: var(--chip-py) var(--chip-px);
+	justify-content: center;
+	align-items: center;
+	border-radius: var(--radius);
+	/* 기본: 파랑 아웃라인 */
+	background: #fff;
+	border: 1px solid var(--blue);
+	color: var(--blue);
+	font: 700 14px/1 "Noto Sans KR", sans-serif;
+	cursor: pointer;
+}
+
+.drf-chip.is-active {
+	background: var(--blue); /* 활성: 꽉 찬 파랑 */
+	color: #fff;
+}
+
+/* 하단: 날짜 선택 세션 */
+.drf-dates {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.drf-date {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.drf-tilde {
+	color: var(--gray);
+	font-weight: 600;
+	padding: 0 8px;
+}
+
+/* 셀렉트: 정확한 수직 중앙 정렬 */
+.drf-select {
+	width: var(--sel-w);
+	height: var(--sel-h);
+	line-height: var(--sel-h); /* 핵심 1 */
+	padding: 0 16px; /* 핵심 2: 상하 0 */
+	appearance: auto; /* 핵심 3: 기본 화살표 */
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	background: #fff;
+	color: var(--text);
+	font: 500 14px/var(--sel-h) "Noto Sans KR", sans-serif;
+	box-sizing: border-box;
+}
+
+.drf-suffix {
+	color: gray;
+	font: 600 14px/1 "Noto Sans KR", sans-serif;
+	margin-right: 6px;
+}
+
+/* 오른쪽: 같은 높이의 파란 조회 버튼 (폭 77px 고정) */
+.drf-submit {
+	display: flex;
+	width: 77px;
+	justify-content: center;
+	align-items: center;
+	border: 0;
+	border-left: 1px solid var(--border);
+	background: var(--blue);
+	color: #fff;
+	font: 700 14px/1 "Noto Sans KR", sans-serif;
+	cursor: pointer;
+	padding: 0; /* 박스 높이와 정확히 맞춤 */
+}
+
+/* ===== Small 크기 ===== */
+
+.drf-sm .drf-dates {
+    flex-direction: column;
+    align-items: stretch;
+    
+    display: flex;
+padding-left: 80px;
+gap: 4px;
+}
+
+.drf-sm .since-drf-date,
+.drf-sm .until-drf-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.drf-sm .since-drf-date {
+    justify-content: flex-start;  /* 왼쪽 정렬 */
+}
+
+.drf-sm .until-drf-date {
+    justify-content: flex-end;  /* 오른쪽 정렬 */
+    width:623px;
+}
+
+.drf-sm .drf-tilde {
+    padding: 4px 0;
+    text-align: center;
+    align-self: center;
+}
+
+.drf-sm .drf-submit {
+	width: 77px;
+}

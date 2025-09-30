@@ -20,4 +20,9 @@ private SqlSession sqlSession;
 		return sqlSession.selectList("mapper.productOption.selectProductOptionsByProductId", productId);
 	}
 
+	@Override
+	public ProductOption selectProductOptionByOptionId(Long optionId) throws Exception {
+		 return sqlSession.selectOne("mapper.productOption.selectProductOptionByOptionId", optionId);
+	}
+
 }

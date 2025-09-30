@@ -95,14 +95,17 @@
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://js.tosspayments.com/v2"></script>
+<!-- <script src="https://js.tosspayments.com/v2"></script> -->
+<script src="https://js.tosspayments.com/v1/payment"></script>
 </head>
 <body>
 	<my:layout>
 
 		<my:breadcrumb
 			items="배너광고 관리:/brand2/adbannerList.jsp, 배너광고 신청:/brand2/adbannerForm.jsp" />
-		<my:brand2formLayout title="배너광고 신청" formId="eventForm">
+		<my:brand2formLayout title="배너광고 신청" formId="eventForm"
+			action="/brand2/adbanner" method="post"
+			enctype="multipart/form-data">
 
 			<div class="grid">
 				<div class="label req">배너 광고명</div>
@@ -149,11 +152,18 @@
 						</span> <span>1일 ₩140,000</span> <span>예상 결제 금액 <strong
 							id="totalPrice" class="highlight">₩0</strong></span>
 					</div>
-					<button type="button" class="pay-button" id="payBtn">
+					<div class="actions">
+						<button type="button" class="btn btn-outline btn-sm" id="btnClose"
+							onclick="location.href='/brand2/adbannerList.jsp'">닫기</button>
+						<button type="submit" class="btn btn-outline btn-sm" id="payBtn">신청하기</button>
+					</div>
+
+
+					<%-- <button type="button" class="pay-button" id="payBtn">
 						<img
 							src="${pageContext.request.contextPath}/brand2/images/TossPay_Logo_Primary.png"
 							width="280px" alt="토스페이결제하기">
-					</button>
+					</button> --%>
 					<!-- 
 					결제 UI
 					<div id="payment-method"></div>
@@ -226,12 +236,12 @@ document.addEventListener("DOMContentLoaded", function() {
         // 결제 정보 파라미터
         // 더 많은 결제 정보 파라미터는 결제창 Javascript SDK에서 확인하세요.
         // https://docs.tosspayments.com/sdk/payment-js
-        amount: 100, // 결제 금액
-        orderId: 'owxy0ZK_p8jVqCygWlsWW', // 주문번호(주문번호는 상점에서 직접 만들어주세요.)
+        amount: 1, // 결제 금액
+        orderId: 'owxy0ZK_p8jVqCygWlsWWC', // 주문번호(주문번호는 상점에서 직접 만들어주세요.)
         orderName: "테스트 결제", // 구매상품
         customerName: "김토스", // 구매자 이름
-        successUrl: "https://docs.tosspayments.com/guides/payment/test-success", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
-        failUrl: "https://docs.tosspayments.com/guides/payment/test-fail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+        successUrl: "http://localhost:8080/tossSuccess", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+        failUrl: "http://localhost:8080/tossFail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
       })
       // ------결제창을 띄울 수 없는 에러 처리 ------
       // 메서드 실행에 실패해서 reject 된 에러를 처리하는 블록입니다.
@@ -240,8 +250,10 @@ document.addEventListener("DOMContentLoaded", function() {
       .catch(function (error) {
         if (error.code === "USER_CANCEL") {
           // 구매자가 결제창을 닫았을 때 에러 처리
+          alert("결제 처리가 취소되었습니다")
         } else if (error.code === "INVALID_CARD_COMPANY") {
           // 유효하지 않은 카드 코드에 대한 에러 처리
+            alert("결제 처리 중 오류가 발생했습니다")
         }
       });
   });

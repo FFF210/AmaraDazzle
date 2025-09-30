@@ -11,5 +11,73 @@
 		SELECT * FROM brand WHERE brand_id = #{brandId}
 	</select>
 
+	<!--======================= [브랜드 어드민] 회원가입 ======================= -->
+	<insert id="insertBrand" parameterType="brand"
+		useGeneratedKeys="true" keyProperty="brandId">
+		INSERT INTO brand
+		(
+		email,
+		password,
+		brn,
+		brand_name,
+		manager_name,
+		phone,
+		brand_status
+		)
+		VALUES
+		(
+		#{email},
+		#{password},
+		#{brn},
+		#{brandName},
+		#{managerName},
+		#{phone},
+		'SIGNUP_COMPLETED'
+		)
+	</insert>
 
+	<!--======================= [브랜드 어드민] 브랜드 입점신청 ======================= -->
+	<update id="updateBrandApply" parameterType="brand">
+		UPDATE brand
+		SET
+		logo_file_id = #{logoFileId},
+		hero_file_id = #{heroFileId},
+		intro =
+		#{intro},
+		bank = #{bank},
+		account_number = #{accountNumber},
+		account_holder = #{accountHolder},
+		settlement_date = #{settlementDate},
+		brand_status = #{brandStatus}
+		WHERE brand_id = #{brandId}
+	</update>
+
+	<!--======================= [브랜드 어드민] 이메일 존재 여부 ======================= -->
+	<select id="selectByEmail" parameterType="string"
+		resultType="int">
+		SELECT COUNT(*) > 0 FROM brand WHERE email = #{value}
+	</select>
+
+	<!--======================= [브랜드 어드민] 사업자등록번호 존재 여부 ======================= -->
+	<select id="selectByBrn" parameterType="string" resultType="int">
+		SELECT COUNT(*) > 0 FROM brand WHERE brn = #{value}
+	</select>
+
+	<!--======================= [브랜드 어드민] 브랜드명 존재 여부 ======================= -->
+	<select id="selectByBrandName" parameterType="string"
+		resultType="int">
+		SELECT COUNT(*) > 0 FROM brand WHERE brand_name = #{value}
+	</select>
+
+	<!-- ======================= [브랜드 어드민] 로그인 ======================= -->
+	<select id="selectBrandByPassword" parameterType="string" resultType="brand">
+		SELECT
+		brand_id, email, password, brn, brand_name, manager_name, phone,
+		brand_status, logo_file_id, hero_file_id, intro, bank,
+		account_number, account_holder, settlement_date,
+		created_at, updated_at
+		FROM brand
+		WHERE email = #{value}
+		AND brand_status IN ('SIGNUP_COMPLETED', 'APPLY_SUBMITTED', 'APPROVED')
+	</select>
 </mapper>

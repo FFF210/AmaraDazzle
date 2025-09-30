@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class MemberCoupon {
     private Long memberCouponId; // 쿠폰 내역 ID (PK, AUTO_INCREMENT)
     private Long couponId;       // 쿠폰 ID (FK → coupon.coupon_id)
-    private String memberId;     // 고객 ID (FK → member.member_id)
+    private Long memberId;     // 고객 ID (FK → member.member_id)
     private String status;       // 쿠폰 상태 (USED, AVAILABLE, EXPIRED)
     private Timestamp usedDate;  // 사용일자
     private String orderId;      // 주문번호 (FK → orders.order_id)
@@ -28,10 +28,10 @@ public class MemberCoupon {
         this.couponId = couponId;
     }
 
-    public String getMemberId() {
+    public Long getMemberId() {
         return memberId;
     }
-    public void setMemberId(String memberId) {
+    public void setMemberId(Long memberId) {
         this.memberId = memberId;
     }
 

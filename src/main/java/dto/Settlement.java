@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 public class Settlement {
     private Long settlementId;     // 자동증가값 (PK)
-    private String brandId;        // 브랜드 ID (FK → brand.brand_id)
+    private Long brandId;        // 브랜드 ID (FK → brand.brand_id)
     private Timestamp startDate;   // 정산일자 시작일
     private Timestamp endDate;     // 정산일자 끝일
     private Long totalSales;       // 총매출
@@ -30,10 +30,10 @@ public class Settlement {
         this.settlementId = settlementId;
     }
 
-    public String getBrandId() {
+    public Long getBrandId() {
         return brandId;
     }
-    public void setBrandId(String brandId) {
+    public void setBrandId(Long brandId) {
         this.brandId = brandId;
     }
 

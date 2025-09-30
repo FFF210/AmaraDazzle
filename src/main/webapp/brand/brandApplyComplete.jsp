@@ -9,8 +9,8 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/pretendard/dist/web/static/pretendard.css" />
-<link rel="stylesheet" href="./css/button.css" />
-
+<link rel="stylesheet" href="../tagcss/reset.css" />
+<link rel="stylesheet" href="../tagcss/button.css" />
 
 <style>
 .CompleteWrapper {
@@ -42,26 +42,35 @@
 
 .check-icon i {
 	font-size: 80px; /* 아이콘 크기 */
-	color: green; /* 아이콘 색상 */
+	color: #0C8CE9; /* 아이콘 색상 */
 }
 
 h2 {
-	margin-bottom: 15px;
-	font-size: 20px;
-	color: #333;
+	margin-bottom: 12px;
+	color: #171717;
+	text-align: center;
+	font-size: 32px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: 150%;
+	letter-spacing: 0.182px;
+	white-space: nowrap;
 }
 
 .info {
 	font-size: 15px;
 	margin-bottom: 5px;
 	color: #444;
+	white-space: nowrap;
 }
 
 .bold {
-	font-weight: bold;
-	margin: 15px 0;
-	font-size: 16px;
-	color: #000;
+	margin-bottom: 48px;
+	color: #333;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: 600;
+	white-space: nowrap;
 }
 
 .b {
@@ -75,13 +84,13 @@ h2 {
 	<div class="CompleteWrapper">
 		<div class="CompleteContainer">
 			<div class="check-icon">
-				<i class="bi bi-check2-circle"></i>
+				<i class="bi bi-clipboard-check-fill"></i>
 			</div>
 			<h2>신청이 접수되었습니다</h2>
 			<div class="bold">운영팀이 확인 후 승인 여부를 이메일로 알려드립니다.</div>
 			<div class="b">
-				<button class="btn btn-primary btn-md"
-					onclick="location.href='/brand'">플랫폼 둘러보기</button>
+				<button class="btn btn-primary btn-xl"
+					onclick="location.href='/consumer/main'">AmaraDazzle 둘러보기</button>
 			</div>
 		</div>
 	</div>

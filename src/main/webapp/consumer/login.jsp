@@ -54,7 +54,7 @@
             </button>
                     
             <p class="auth-footer">
-				아직 계정이 없으신가요? <a href="/signup" class="link">회원가입</a>
+				아직 계정이 없으신가요? <a href="/consumer/join" class="link">회원가입</a>
 		    </p>
 	</form>
    </div>

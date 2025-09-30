@@ -2,7 +2,7 @@ package dto;
 
 public class ProductFilterMap {
     private Long productFilterMapId; // 고유 식별자 (PK, AUTO_INCREMENT)
-    private String productId;        // 상품 ID (FK → product.product_id)
+    private Long productId;        // 상품 ID (FK → product.product_id)
     private Long filterId;           // 필터 코드 ID (FK → code_detail.code_detail_id)
 
     public ProductFilterMap() {
@@ -15,10 +15,10 @@ public class ProductFilterMap {
         this.productFilterMapId = productFilterMapId;
     }
 
-    public String getProductId() {
+    public Long getProductId() {
         return productId;
     }
-    public void setProductId(String productId) {
+    public void setProductId(Long productId) {
         this.productId = productId;
     }
 

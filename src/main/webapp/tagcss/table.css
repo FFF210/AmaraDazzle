@@ -43,7 +43,7 @@
 
 /* 마지막 행 border 제거 */
 .table tbody tr:last-child td {
-  border-bottom: none;
+	border-bottom: none;
 }
 
 .table td {
@@ -52,6 +52,20 @@
 	font-style: normal;
 	font-weight: 400;
 	line-height: 20px;
+}
+
+.table td a {
+	color: #101828;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 20px;
+	text-decoration-line: underline;
+	text-decoration-style: solid;
+	text-decoration-skip-ink: none;
+	text-decoration-thickness: auto;
+	text-underline-offset: auto;
+	text-underline-position: from-font;
 }
 
 .table th {

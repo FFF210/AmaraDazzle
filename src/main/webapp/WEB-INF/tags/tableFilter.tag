@@ -157,6 +157,8 @@
   const searchMap = {
     "상품명": "NAME",
     "카테고리": "CATEGORY",
+    "주문자": "MEMBER",
+    "주문상품명": "PRODUCT"
   };
 
   // 날짜 빠른 선택
