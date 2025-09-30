@@ -13,7 +13,7 @@ public class BannerForm {
 	private Timestamp endDate; // 종료일
 	private String bannerName; // 배너 광고명
 	private String bannerMessage; // 관리자 전달사항
-	private String status; // 진행상황 (PENDING / ONGOING / COMPLETED / CANCELED)
+	private String status; // 진행상황 (PENDING / APPROVED / ONGOING / COMPLETED / CANCELED)
 	private Timestamp createdAt; // 신청일 (DEFAULT CURRENT_TIMESTAMP)
 	private String brandUrl; // 브랜드페이지 URL
 

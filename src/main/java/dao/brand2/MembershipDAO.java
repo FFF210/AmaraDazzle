@@ -1,0 +1,14 @@
+package dao.brand2;
+
+import java.util.List;
+import java.util.Map;
+
+import dto.Membership;
+
+public interface MembershipDAO {
+	// 멤버십 결제 목록 조회
+	List<Membership> selectMembershipList(Map<String, Object> params) throws Exception;
+	
+	// 멤버십 개수 조회
+	Integer selectMembershipCount(Map<String, Object> params) throws Exception;
+}

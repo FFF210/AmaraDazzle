@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +17,7 @@
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/dateInput.css" />
 <link rel="stylesheet" href="../tagcss/form-controls.css" />
-<link rel="stylesheet" href="../tagcss/header.css" />
+<link rel="stylesheet" href="../tagcss/brandHeader.css" />
 <link rel="stylesheet" href="../tagcss/layout.css" />
 <link rel="stylesheet" href="../tagcss/reset.css" />
 <link rel="stylesheet" href="../tagcss/selectbox.css" />
@@ -75,35 +77,28 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="i" begin="1" end="10">
+						<c:forEach var="membership" items="${membershipList }">
 							<tr>
 								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-01</td>
+								<td>${membership.membershipId}</td>
+								<td>결제/취소일</td>
 								<td><my:tag color="green" size="sm" text="결제" /></td>
-								<td>2025-09-01~2025-09-30</td>
+								<td><fmt:formatDate value="${membership.startDate}"
+										pattern="yyyy-MM-dd" /> ~ <fmt:formatDate
+										value="${membership.endDate}" pattern="yyyy-MM-dd" /></td>
 								<td>멤버십 1개월</td>
-								<td>토스페이</td>
-								<td>2025-10-01</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-10-01</td>
-								<td><my:tag color="green" size="sm" text="결제" /></td>
-								<td>2025-10-01~2025-12-31</td>
-								<td>멤버십 3개월</td>
-								<td>토스페이</td>
-								<td>2026-01-01</td>
+								<td>토스페이/취소</td>
+								<td>정기결제인경우에만</td>
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
 			</div>
 		</div>
-		<div class="pagination">
-			<my:pagination currentPage="1" totalPages="10"
-				baseUrl="/products?page=" />
+		<div class="page-pagination">
+			<my:pagination currentPage="${currentPage}"
+				totalPages="${totalPages}"
+				baseUrl="/brand2/membership?${queryString}&page=" />
 		</div>
 
 		<!-- 정기결제 해지 / 멤버십 없음 버튼 -->
@@ -111,10 +106,10 @@
 			<button type="button" class="btn btn-outline btn-sm" id="btnCancel">해지하기</button>
 		</div>
 
-		<!-- 멤버십 없음 alert -->
+		<%-- <!-- 멤버십 없음 alert -->
 		<div class="alertBox" id="alertBox" style="display: none;">
 			<my:alert type="error" message="멤버십을 보유하고 있지 않습니다." />
-		</div>
+		</div> --%>
 
 		<!-- 멤버십 있음 popup -->
 		<div class="popup-overlay" id="popupOverlay" role="dialog"
@@ -129,8 +124,6 @@
 				<button class="btn btn-outline btn-sm" id="btnClose">닫기</button>
 			</div>
 		</div>
-		<!-- 팝업 -->
 	</my:layout>
-	<script src="../js/membership.js"></script>
 </body>
 </html>

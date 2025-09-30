@@ -50,15 +50,16 @@
 	margin: 0px 24px 24px 24px;
 }
 </style>
-
+<!-- TossPayments SDK -->
+<script src="https://js.tosspayments.com/v1/payment"></script>
 </head>
 <body>
 	<my:layout>
-		<my:breadcrumb items="배너광고 관리:/miniProj2/brand2/adbannerList.jsp" />
+		<my:breadcrumb items="배너광고 관리:/brand2/adbannerList.jsp" />
 
 		<div class="filter">
 			<my:tableFilter
-				filters="진행 상황:ALL=전체|PENDING=대기|ONGOING=진행 중|COMPLETED=완료|CANCELED=취소"
+				filters="진행 상황:ALL=전체|PENDING=승인 대기|APPROVED=승인 완료|ONGOING=진행 중|COMPLETED=완료|CANCELED=취소"
 				searchItems="광고명,광고담당자" />
 		</div>
 
@@ -94,14 +95,17 @@
 									<p class="product-name">${banner.bannerName }</p>
 								</td>
 								<td><c:choose>
+										<c:when test="${banner.status eq 'PENDING'}">
+											<my:tag color="blue" size="sm" text="승인 대기" />
+										</c:when>
+										<c:when test="${banner.status eq 'APPROVED'}">
+											<my:tag color="gray" size="sm" text="승인 완료" />
+										</c:when>
 										<c:when test="${banner.status eq 'ONGOING'}">
 											<my:tag color="green" size="sm" text="진행 중" />
 										</c:when>
 										<c:when test="${banner.status eq 'COMPLETED'}">
-											<my:tag color="gray" size="sm" text="완료" />
-										</c:when>
-										<c:when test="${banner.status eq 'PENDING'}">
-											<my:tag color="blue" size="sm" text="대기" />
+											<my:tag color="green" size="sm" text="완료" />
 										</c:when>
 										<c:when test="${banner.status eq 'CANCELED'}">
 											<my:tag color="red" size="sm" text="취소" />
@@ -111,10 +115,38 @@
 								<td>${banner.managerName }</td>
 								<td>미구현</td>
 								<td>${banner.managerTel }</td>
-								<td><div class="actions">
-										<button type="button" class="btn btn-outline btn-sm"
-											onclick="location.href='/miniProj2/brand2/eventForm.jsp?bannerId=${banner.bannerId}'">상세보기</button>
-									</div></td>
+
+
+								<td>
+									<div class="actions">
+										<c:choose>
+											<%-- 승인 대기 --%>
+											<c:when test="${banner.status eq 'PENDING'}">
+												<button type="button" class="btn btn-outline btn-sm"
+													onclick="location.href='/miniProj2/brand2/eventForm.jsp?bannerId=${banner.bannerId}'">
+													상세보기</button>
+												<button type="button" class="btn btn-danger btn-sm"
+													onclick="if(confirm('정말 취소하시겠습니까?')) location.href='/miniProj2/brand2/bannerCancel.do?bannerId=${banner.bannerId}'">
+													취소</button>
+											</c:when>
+
+											<%-- 승인 완료 --%>
+											<c:when test="${banner.status eq 'APPROVED'}">
+												<button type="button" class="btn btn-success btn-sm"
+													onclick="location.href='/miniProj2/brand2/payment.jsp?bannerId=${banner.bannerId}'">
+													결제하기</button>
+											</c:when>
+
+											<%-- 진행 중 / 완료 / 취소 --%>
+											<c:when
+												test="${banner.status eq 'ONGOING' or banner.status eq 'COMPLETED' or banner.status eq 'CANCELED'}">
+												<button type="button" class="btn btn-outline btn-sm"
+													onclick="location.href='/miniProj2/brand2/eventForm.jsp?bannerId=${banner.bannerId}'">
+													상세보기</button>
+											</c:when>
+										</c:choose>
+									</div>
+								</td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -152,7 +184,6 @@ document.addEventListener("filterChanged", (e) => {
 
     // 검색 항목 (광고명 / 광고담당자)
     if (searchField) {
-      // ✅ selectbox에서 이미 매핑된 값이 넘어오기 때문에 그대로 사용
       params.append("searchType", searchField);
     }
 
@@ -169,7 +200,7 @@ document.addEventListener("filterChanged", (e) => {
 });
 
 // =============================
-// ✅ selectbox 관련 코드 수정 부분
+// selectbox 관련 코드 수정 부분
 // =============================
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".custom-select").forEach(select => {
@@ -196,7 +227,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // 닫기
         select.classList.remove("open");
 
-        // ✅ 여기서 한글 라벨 → DB 컬럼명으로 변환
         let mappedValue = item.textContent;
         if (mappedValue === "광고명") mappedValue = "bannerName";
         if (mappedValue === "광고담당자") mappedValue = "managerName";
