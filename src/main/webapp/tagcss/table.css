@@ -156,7 +156,8 @@
 
 /* 테이블 상품명 */
 .product-name {
-	width: 260px;
+	width: 100%;
+	min-width: 150px;
 	height: 44px;
 	white-space: normal;
 	line-height: 22px;

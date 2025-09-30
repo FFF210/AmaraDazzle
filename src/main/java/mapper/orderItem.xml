@@ -223,37 +223,31 @@
 	</select>
 
 	<!-- ======================= [브랜드 어드민] 배송 상세 상품 목록 조회 ======================= -->
-	<select id="selectShippingDetailItemsForBrand"
-		parameterType="map" resultType="shippingDetailItem">
-		SELECT
-		oi.order_item_id AS orderItemId,
-		oi.product_id AS productId,
-		oi.option_id AS optionId,
-		p.name AS productName,
-		po.name AS optionName,
-		oi.quantity AS quantity,
-		oi.status AS status,
-		CASE
-		WHEN oi.status IN
-		('SHIPPING','DELIVERED','COLLECTING','EXCHANGE
-		SHIPPING') THEN
-		oi.status
-		ELSE 'DELIVERED'
-		END AS displayStatus
-		FROM order_item oi
-		INNER
-		JOIN product p ON oi.product_id = p.product_id
-		LEFT JOIN product_option
-		po ON oi.option_id = po.product_option_id
+<select id="selectShippingDetailItemsForBrand"
+        parameterType="map" resultType="shippingDetailItem">
+    SELECT
+        oi.order_item_id AS orderItemId,
+        oi.product_id AS productId,
+        oi.option_id AS optionId,
+        p.name AS productName,
+        po.option_value AS optionName,
+        oi.quantity AS quantity,
+        oi.status AS status,
+        CASE
+            WHEN oi.status IN ('SHIPPING','DELIVERED','COLLECTING','EXCHANGE SHIPPING') 
+            THEN oi.status
+            ELSE 'DELIVERED'
+        END AS displayStatus
+    FROM order_item oi
+    INNER JOIN product p ON oi.product_id = p.product_id
+    LEFT JOIN product_option po ON oi.option_id = po.product_option_id
+    <where>
+        oi.order_id = #{orderId}
+        AND oi.status = #{status}
+        AND oi.brand_id = #{brandId}
+    </where>
+    ORDER BY oi.order_item_id ASC
+</select>
 
-		<where>
-			oi.order_id = #{orderId}
-			AND oi.status = #{status}
-			AND
-			oi.brand_id = #{brandId}
-		</where>
-
-		ORDER BY oi.order_item_id ASC
-	</select>
 
 </mapper>

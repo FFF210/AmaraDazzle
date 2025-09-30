@@ -20,6 +20,10 @@
 	box-sizing: border-box;
 }
 
+.text-input.link {
+	align-content: center;
+}
+
 .text-input::placeholder {
 	color: #B2BAC6;
 }

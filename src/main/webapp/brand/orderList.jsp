@@ -71,8 +71,8 @@
 								<tr>
 									<td><fmt:formatDate value="${order.createdAt}"
 											pattern="yyyy-MM-dd HH:mm" /></td>
-									<td><a href="/brand/orderDetail?orderId=${order.ordersId}"><c:out
-												value="${order.ordersId}" /></a></td>
+									<td><a href="/brand/orderDetail?orderId=${order.ordersId}&from=order"><c:out
+												value="${order.orderCode}" /></a></td>
 									<td><c:out value="${order.memberName}" /></td>
 									<td>
 										<div class="product-name">

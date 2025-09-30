@@ -6,7 +6,7 @@
      TextInput 커스텀 태그
 
      속성(Props)
-     • type      : default | password | preview | readOnly | search
+     • type      : default | password | preview | readOnly | search | link
      • state     : default | error
      • size      : sm | lg  
      • name      : input name 속성
@@ -29,6 +29,7 @@
 <%@ attribute name="placeholder" required="false"%>
 <%@ attribute name="errorText" required="false"%>
 <%@ attribute name="id" required="false"%>
+<%@ attribute name="link" required="false"%>
 
 <c:set var="type" value="${empty type ? 'default' : type}" />
 <c:set var="state" value="${empty state ? 'default' : state}" />
@@ -37,11 +38,21 @@
 
 <div class="text-input-wrapper size--${size} state--${state}">
 	<div class="text-input-inner ${type}">
-		<input type="${type eq 'password' ? 'password' : 'text'}" id="${id}"
-			name="${name}"
-			class="text-input ${type} ${type eq 'search' ? 'search-input' : ''}"
-			placeholder="${placeholder}" value="${value}"
-			${type eq 'readOnly' ? 'readonly' : ''} />
+
+		<!-- link 타입 처리 -->
+		<c:choose>
+			<c:when test="${type eq 'link'}">
+				<a id="${id}" name="${name}" href="${link}" class="text-input link">
+					${value} </a>
+			</c:when>
+			<c:otherwise>
+				<input type="${type eq 'password' ? 'password' : 'text'}" id="${id}"
+					name="${name}"
+					class="text-input ${type} ${type eq 'search' ? 'search-input' : ''}"
+					placeholder="${placeholder}" value="${value}"
+					${type eq 'readOnly' ? 'readonly' : ''} />
+			</c:otherwise>
+		</c:choose>
 
 		<!-- 비밀번호 / preview 토글 -->
 		<c:if test="${type eq 'password' or type eq 'preview'}">
