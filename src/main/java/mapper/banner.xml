@@ -26,26 +26,21 @@
 	<!-- brand2 -->
 
 	<!-- 배너 신청 -->
-	<insert id="insertBannerForm" parameterType="banner" >
-		insert into banner
-		(brand_id, manager_name, manager_tel, start_date,
-		end_date,
-		banner_name,
-		banner_message, status, brand_url)
-		values(#{brandId}, #{managerName}, #{managerTel},
-		#{startDate},
-		#{endDate}, #{bannerName}, #{bannerMessage}, 'PENDING',
-		#{brandUrl}
-		)
-	</insert> 
-		
-		<!-- <update id="update" parameterType="banner"> UPDATE banner SET 
-		manager_name = #{managerName}, manager_tel = #{managerTel}, updated_at = 
-		NOW(), start_date = #{startDate}, end_date = #{endDate}, banner_name = #{bannerName}, 
-		banner_message = #{bannerMessage}, status = #{status}, brand_url = #{brandUrl}, 
-		is_exposed = #{isExposed}, state_change = #{stateChange}, admin_id = #{adminId} 
-		WHERE banner_id = #{bannerId} </update>
- -->
+	<insert id="insertBannerForm" parameterType="banner" useGeneratedKeys="true" keyProperty="bannerId">
+		INSERT INTO banner
+		(brand_id, manager_name, manager_tel, start_date, end_date,
+		banner_name, banner_message, status, brand_url)
+		VALUES
+		(#{brandId}, #{managerName}, #{managerTel}, #{startDate}, #{endDate},
+		#{bannerName}, #{bannerMessage}, #{status}, #{brandUrl})
+	</insert>
+
+	<!-- <update id="update" parameterType="banner"> UPDATE banner SET manager_name 
+		= #{managerName}, manager_tel = #{managerTel}, updated_at = NOW(), start_date 
+		= #{startDate}, end_date = #{endDate}, banner_name = #{bannerName}, banner_message 
+		= #{bannerMessage}, status = #{status}, brand_url = #{brandUrl}, is_exposed 
+		= #{isExposed}, state_change = #{stateChange}, admin_id = #{adminId} WHERE 
+		banner_id = #{bannerId} </update> -->
 	<!-- 배너 광고 신청 목록 조회 -->
 	<select id="selectAdbannerList" parameterType="map"
 		resultType="bannerList">
@@ -78,13 +73,16 @@
 				test="searchType != null and searchKeyword != null and searchKeyword != ''">
 				<choose>
 					<when test="searchType eq 'managerName'">
-						AND b.manager_name LIKE CONCAT('%', #{searchKeyword}, '%')
+						AND b.manager_name LIKE CONCAT('%',
+						#{searchKeyword}, '%')
 					</when>
 					<when test="searchType eq 'managerTel'">
-						AND b.manager_tel LIKE CONCAT('%', #{searchKeyword}, '%')
+						AND b.manager_tel LIKE CONCAT('%',
+						#{searchKeyword}, '%')
 					</when>
 					<when test="searchType eq 'bannerName'">
-						AND b.banner_name LIKE CONCAT('%', #{searchKeyword}, '%')
+						AND b.banner_name LIKE CONCAT('%',
+						#{searchKeyword}, '%')
 					</when>
 				</choose>
 			</if>
