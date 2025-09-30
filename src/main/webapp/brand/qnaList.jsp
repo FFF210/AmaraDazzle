@@ -29,7 +29,7 @@
 <link rel="stylesheet" href="../tagcss/table.css" />
 </head>
 <body>
-<!-- Toast 알림 컨테이너 -->
+	<!-- Toast 알림 컨테이너 -->
 	<div id="toast-container"></div>
 
 	<my:layout>

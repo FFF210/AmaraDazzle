@@ -26,6 +26,14 @@ public class ReviewDAOImpl implements ReviewDAO {
 		}
 	}
 
+	// 고객 리뷰 상세 조회
+	@Override
+	public ReviewList selectReviewDetailForBrand(Long reviewId) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.review.selectReviewDetailForBrand", reviewId);
+		}
+	}
+
 	// 고객 리뷰 답변 작성
 	@Override
 	public void updateReviewAnswer(Map<String, Object> params) throws Exception {

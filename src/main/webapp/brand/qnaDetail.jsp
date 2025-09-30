@@ -19,9 +19,13 @@
 <link rel="stylesheet" href="../tagcss/textInput.css" />
 <link rel="stylesheet" href="../tagcss/imageBtn.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
+<link rel="stylesheet" href="../tagcss/alert.css" />
 <link rel="stylesheet" href="./css/contentDetail.css" />
 </head>
 <body>
+	<!-- Toast 알림 컨테이너 -->
+	<div id="toast-container"></div>
+
 	<my:layout>
 		<!-- breadcrumb -->
 		<div class="page-breadcrumb">
@@ -121,8 +125,7 @@
 				<div class="content-reply">
 					<div class="reply-title">판매자 답변</div>
 
-					<form id="replyForm" method="post"
-						action="/brand/memberQnaReply">
+					<form id="replyForm" method="post" action="/brand/memberQnaReply">
 						<input type="hidden" name="qnaId" value="${qna.memberQnaId}" /> <input
 							type="hidden" name="type" value="${qna.type}" /> <input
 							type="hidden" name="answer" />
@@ -152,6 +155,7 @@
 		</div>
 	</my:layout>
 </body>
+<script src="./js/toast.js"></script>
 <script>
 /*********************************************************************************************************
  * 답변 등록/수정 이벤트
@@ -161,7 +165,7 @@ function submitReply(qnaId, type) {
   const answer = answerField ? answerField.value.trim() : "";
 
   if (!answer) {
-    alert("답변 내용을 입력해주세요.");
+    showToast("error","답변 내용을 입력해주세요.");
     return;
   }
 

@@ -37,6 +37,12 @@ public class ReviewServiceImpl implements ReviewService {
 		return result;
 	}
 
+	// 리뷰 상세 조회
+	@Override
+	public ReviewList reviewDetail(Long reviewId) throws Exception {
+		return reviewDAO.selectReviewDetailForBrand(reviewId);
+	}
+
 	// 리뷰 답변 등록/수정
 	@Override
 	public void updateReviewAnswer(Long reviewId, String answer) throws Exception {

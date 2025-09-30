@@ -26,9 +26,12 @@
 <link rel="stylesheet" href="../tagcss/textInput.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/pagination.css" />
+<link rel="stylesheet" href="../tagcss/alert.css" />
 <link rel="stylesheet" href="../tagcss/tableFilter.css" />
 </head>
 <body>
+	<!-- Toast 알림 컨테이너 -->
+	<div id="toast-container"></div>
 
 	<my:layout>
 		<div class="page-container">

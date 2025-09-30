@@ -112,9 +112,12 @@
 		FROM (
 		SELECT r.review_id
 		FROM review r
-		INNER JOIN product p ON r.product_id = p.product_id
-		LEFT JOIN product_option po ON r.product_option_id = po.product_option_id
-		INNER JOIN member m ON r.member_id = m.member_id
+		INNER JOIN product
+		p ON r.product_id = p.product_id
+		LEFT JOIN product_option po ON
+		r.product_option_id = po.product_option_id
+		INNER JOIN member m ON
+		r.member_id = m.member_id
 		<where>
 			p.brand_id = #{brandId}
 
@@ -152,6 +155,36 @@
 		) AS countTable
 	</select>
 
+	<!-- ======================= [브랜드 어드민] 리뷰 단건 조회 ======================= -->
+	<select id="selectReviewDetailForBrand" parameterType="Long"
+		resultType="reviewList">
+		SELECT
+		r.review_id,
+		r.member_id,
+		r.order_item_id,
+		r.product_id,
+		r.product_option_id,
+		r.rating,
+		r.content,
+		r.image1_file_id,
+		r.image2_file_id,
+		r.image3_file_id,
+		r.answer,
+		r.status,
+		r.questioned_at,
+		r.answered_at,
+		po.option_value AS option_name,
+		p.thumbnail_file_id,
+		p.name AS product_name,
+		m.name AS member_name,
+		CASE WHEN r.answer IS NOT NULL THEN 'ANSWERED' ELSE 'PENDING' END AS
+		answer_status
+		FROM review r
+		INNER JOIN product p ON r.product_id = p.product_id
+		LEFT JOIN product_option po ON r.product_option_id = po.product_option_id
+		INNER JOIN member m ON r.member_id = m.member_id
+		WHERE r.review_id = #{value}
+	</select>
 
 	<!-- ======================= [브랜드 어드민] 리뷰 답변 등록 ======================= -->
 	<update id="updateReviewAnswer" parameterType="map">
