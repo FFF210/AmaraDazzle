@@ -15,10 +15,13 @@
 <div id="seller" class="tab_content">
 	
 	<!-- 필터 -->
-	<my:adminSearchContainer id="noticeSellerSearch">
-		<my:adminSearchPeriod title="작성일" />
+	<form class="search_form" id="noticeSellerSearch">
+	<my:adminSearchContainer>
+		<my:adminSearchPeriod title="작성일" range="오늘,어제,최근 7일,최근 30일" dateCate="write"/>
 		<my:adminSearchType title="카테고리" optList="시스템, 이벤트, 기타" init="공지 카테고리를 선택하세요"/>
+		<my:adminSearchTotal optList="내용, 제목, 작성자" init="내용" />
 	</my:adminSearchContainer>
+	</form>
 	<!-- 필터 end -->
 
 	<!-- 버튼 -->
@@ -39,13 +42,13 @@
 				<c:if test="${keyword != null}">
 					[ 검색 결과 ]
 				</c:if>
-				 &nbsp; 총 ${noticeCnt}건 중 ${postNo + 1} - 
+				 &nbsp; 총 ${noticeCnt}건 중 ${postNo + 1}
 				 <c:choose>
 					 <c:when test="${paging.pageno == paging.end_pg && paging.final_post_ea < 10 && paging.final_post_ea != 0}">
-					 	${postNo + paging.final_post_ea}  
+					 	 -  ${postNo + paging.final_post_ea}  
 					 </c:when>
 					 <c:otherwise>
-					 	${postNo + 10}  
+					 	 - ${postNo + 10}  
 					 </c:otherwise>
 				 </c:choose>
 				 건
@@ -151,5 +154,5 @@
 <!-- 메인부분 -->
 
 <script src="./js/boardNotice.js"></script>
-<script src="./js/componant/select_box.js"></script>
 <script src="../tagjs/selectbox.js"></script>
+<script src="./js/componant/select_box.js"></script>

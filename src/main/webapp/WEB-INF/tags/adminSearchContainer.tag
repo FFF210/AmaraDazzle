@@ -19,36 +19,19 @@
 
 
 ================================ --%>
-<%@ attribute name="id" required="true"%>
-<%@ attribute name="name" required="false"%>
 
-<%@ attribute name="optList" required="true"%>
-<%@ attribute name="init" required="true"%>
+<div class="search_container">
+	<div class="filter">
 
-<c:set var="optList" value="${optList}" />
-<c:set var="init" value="${init}" />
+		<jsp:doBody />
 
-<form class="search_form" id="${id}">
-	<div class="search_container">
-		<div class="filter">
-
-			<jsp:doBody />
-
-			<!-- 통합검색 -->
-			<div class="filter_box totalSearch_box">
-				<my:selectbox size="md" items="${optList}" initial="${init}" />
-				<div class="searchKeyword">
-					<i class="bi bi-search"></i> 
-					<input type="text" placeholder="Search" />
-				</div>
-			</div>
-		</div>
-		<div class="btn_box">
-			<input type="submit" class="btn first_btn" value="검색" /> <input
-				type="reset" class="btn second_btn" value="초기화" />
-		</div>
 	</div>
-</form>
+	<div class="btn_box">
+		<input type="submit" class="btn first_btn" value="검색" /> <input
+			type="reset" class="btn second_btn" value="초기화" />
+	</div>
+</div>
+
 
 <script>
 const today = new Date();

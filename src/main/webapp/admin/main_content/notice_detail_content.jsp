@@ -8,6 +8,20 @@
 
 <!-- *********************************메인부분********************************* -->
 <section class="board_detailview">
+	<div class="part_section">
+		<div class="part_title">노출여부</div>
+		<div class="part_content">
+			<c:choose>
+				<c:when test="${notice.isExposed == '1' }">  <!-- 게시여부 : 게시중 -->
+					<my:tag color="yellow" size="md" text="게시중" />
+				</c:when>
+				<c:when test="${notice.isExposed == '0'}">	 <!-- 게시여부 : 노게시 -->
+					<my:tag color="gray" size="md" text="비공개" />
+				</c:when>
+			</c:choose>
+			
+		</div>
+	</div>
 	<div class="part_section cate_part">
 		<div class="part_title">카테고리</div>
 		<div class="part_content">
@@ -36,12 +50,9 @@
 	<div class="part_section">
 		<div class="part_title">첨부파일</div>
 		<div class="part_content">
-			<div>
-				<c:forEach var="fileAttach" items="${notice.imageFileIds}" begin="1" end="3">
-				
-	
-				</c:forEach>	
-			</div>
+			<c:if test="${notice.docFileId == null}">
+				<span class="text_readonly">&nbsp; 첨부파일 없음</span>
+			</c:if>				
 		</div>
 	</div>
 
@@ -72,7 +83,7 @@
 		<div class="part_title">작성자</div>
 		<div class="part_content">
 			<div class="writer_part">
-				<input type="text" class="text_readonly" value="${notice.writer}" readonly />
+				<span class="text_readonly" >&nbsp; Amara Dazzle</span>
 			</div>
 			<div class="btn_part">
 				<button type="button" class="btn first_btn action_btn">수정</button>

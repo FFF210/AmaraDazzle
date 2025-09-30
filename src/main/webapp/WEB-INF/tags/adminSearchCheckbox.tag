@@ -2,7 +2,8 @@
 <%@ tag body-content="empty"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-
+<%@ attribute name="id" required="false"%>
+<%@ attribute name="name" required="false"%>
 <%@ attribute name="title" required="true"%>
 
 <!-- 체크박스 -->

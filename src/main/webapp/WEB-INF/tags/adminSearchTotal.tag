@@ -4,19 +4,17 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 
 <%@ attribute name="id" required="false"%>
-<%@ attribute name="name" required="false"%>
-
-<%@ attribute name="title" required="true"%>
 <%@ attribute name="optList" required="true"%>
 <%@ attribute name="init" required="true"%>
 
 <c:set var="optList" value="${optList}" />
 <c:set var="init" value="${init}" />
 
-<!-- 문의유형 -->
-<div class="filter_box questionType_box">
-	<div class="filtering_title">
-		<span>${title} :</span>
+<!-- 통합검색 -->
+<div class="filter_box totalSearch_box">
+	<my:selectbox size="md" items="${optList}" initial="${init}" name="totalSearch"/>
+	<div class="searchKeyword">
+		&nbsp;<i class="bi bi-search"></i> 
+		<input type="text" placeholder="Search" value="${keyword}" name="keyword" />
 	</div>
-	<my:selectbox size="md" items="${optList}" initial="${init}" />
 </div>

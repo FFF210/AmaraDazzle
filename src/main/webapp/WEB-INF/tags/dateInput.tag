@@ -10,6 +10,7 @@
     • type    : input | preset (필수)
     • name    : input name (type=input일 때 필수)
     • value   : 초기값 (기본값 "")
+    • input   : 초기값 (기본값 "start")
     • presets : 프리셋 버튼 목록 (쉼표 구분, type=preset일 때 필수)
 
     사용법 예시
@@ -17,25 +18,35 @@
 	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
     <my:dateInput type="input" name="startDate" value="2025-09-02" />
+    <my:dateInput type="input" name="endDate" value="2025-09-20" input="end" />
     <my:dateInput type="preset" presets="오늘,어제,최근 7일,최근 30일" />
+    
+    <!-- <div class="filter_box"> 를 꼭 씌워주세요 --> 
+    <div class="filter_box"> 
+		<my:dateInput type="input" name="startDate" value="2025-09-02" />
+		<span> - </span>
+		<my:dateInput type="input" name="endDate" value="2025-09-20" input="end"/>
+		<my:dateInput type="preset" presets="오늘,어제,최근 7일,최근 30일" />
+	</div>
 ================================ --%>
 
 <%@ attribute name="type" required="true"%>
 <%@ attribute name="name" required="false"%>
 <%@ attribute name="value" required="false"%>
-<%@ attribute name="id" required="false"%>
 <%@ attribute name="presets" required="false"%>
+<%@ attribute name="input" required="false"%>
+<%@ attribute name="id" required="false"%>
 
 <c:set var="value" value="${empty value ? '' : value}" />
 <c:set var="presetList"
 	value="${empty presets ? '' : fn:split(presets, ',')}" />
-<c:set var="id" value="${empty id ? '' : id}" />
+<c:set var="inputDay" value="${empty input ? 'start' : input}" />
 
 <div class="date-input">
 	<!-- Input 타입 -->
 	<c:if test="${type eq 'input'}">
 		<div class="input-wrapper">
-			<input type="text" name="${name}" id="${id}" value="${value}" class="date-text"
+			<input type="text" name="${name}" value="${value}" class="date-text ${inputDay}_date"
 				placeholder="YYYY-MM-DD" readonly />
 			<button type="button" class="calendar-icon-wrapper">
 				<i class="bi bi-calendar4 calendar-icon"></i>
@@ -47,7 +58,7 @@
 	<c:if test="${type eq 'preset'}">
 		<div class="preset-buttons">
 			<c:forEach var="preset" items="${presetList}" varStatus="st">
-				<button type="button" class="preset-btn ${st.first ? 'active' : ''}">
+				<button type="button" class="preset-btn ">
 					${preset}</button>
 			</c:forEach>
 		</div>
@@ -78,33 +89,51 @@
     document.querySelectorAll(".date-input .preset-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         const parent = btn.closest(".date-input");
-        const input = document.querySelector(".date-input .date-text"); // 첫 번째 input 기준 (필요 시 조정)
 
         parent.querySelectorAll(".preset-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
 
         // 오늘 날짜 기준으로 값 계산
         const today = new Date();
-        let targetDate = new Date(today);
-
+		const offset = today.getTimezoneOffset() * 60000; // 로컬 타임존 보정
+		const local = new Date(today.getTime() - offset);
+		
+		const toDateStr = d => d.toISOString().split("T")[0];
+		
+		const filterBox = btn.closest(".filter_box");
+	    if (!filterBox) return;
+	    
+	    const startInput = filterBox.querySelector(".start_date");
+	    const endInput   = filterBox.querySelector(".end_date");
+	    if (!startInput || !endInput) return;
+		
         switch(btn.textContent.trim()){
           case "오늘":
+      	  	startInput.value = toDateStr(local);
+            endInput.value   = toDateStr(local);
             break;
           case "어제":
-            targetDate.setDate(today.getDate() - 1);
+       	  	const yest = new Date(local.getTime() - 1 * 24 * 60 * 60 * 1000);
+            startInput.value = toDateStr(yest);
+            endInput.value   = toDateStr(yest);
             break;
           case "최근 7일":
-            targetDate.setDate(today.getDate() - 7);
+      	  	const last7 = new Date(local.getTime() - 7 * 24 * 60 * 60 * 1000);
+            startInput.value = toDateStr(last7);
+            endInput.value   = toDateStr(local);
             break;
           case "최근 30일":
-            targetDate.setDate(today.getDate() - 30);
+     	  	const last30 = new Date(local.getTime() - 30 * 24 * 60 * 60 * 1000);
+           	startInput.value = toDateStr(last30);
+           	endInput.value   = toDateStr(local);
             break;
         }
 
+
         // YYYY-MM-DD 포맷
-        const y = targetDate.getFullYear();
-        const m = String(targetDate.getMonth() + 1).padStart(2, "0");
-        const d = String(targetDate.getDate()).padStart(2, "0");
+        const y = today.getFullYear();
+        const m = String(today.getMonth() + 1).padStart(2, "0");
+        const d = String(today.getDate()).padStart(2, "0");
         const formatted = `${y}-${m}-${d}`;
 
         if(input){

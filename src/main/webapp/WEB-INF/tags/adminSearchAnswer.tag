@@ -2,6 +2,8 @@
 <%@ tag body-content="empty"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 
+<%@ attribute name="id" required="false"%>
+<%@ attribute name="name" required="false"%>
 <%@ attribute name="title" required="true"%>
 
 <!-- 답변상태 -->

@@ -35,7 +35,15 @@ public class NoticeSellerList extends HttpServlet {
 			NoticeService notice_svc = new NoticeServiceImpl();
 			
 			String condition = ""; //검색여부 
+			String startDate = request.getParameter("writestartDate"); //검색 시작일 
+			String endDate = request.getParameter("writeendDate"); //검색 시작일 
+			String totalSearch = request.getParameter("totalSearch"); //검색어
 			String keyword = request.getParameter("keyword"); //검색어
+			
+			System.out.println("startDate : " + startDate);
+			System.out.println("endDate : " + endDate);
+			System.out.println("totalSearch : " + totalSearch);
+			System.out.println("keyword : " + keyword);
 
 			
 			//총 게시글 수 
@@ -43,7 +51,6 @@ public class NoticeSellerList extends HttpServlet {
 			
 			int postNo = m_pg.serial_no(p_no);  // 게시물 일련번호 계산 
 			Map<String, Object> paging = m_pg.page_ea(p_no, sellerNoticeCnt); // 페이징Map
-			System.out.println("postNo : " + postNo);
 			
 			//총 게시물 리스트
 			List<Notice> noticeSellerList = null;
