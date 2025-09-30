@@ -12,7 +12,7 @@
 	<!-- <result property="endDate" column="end_date" /> 종료일 -->
 	<!-- <result property="bannerName" column="banner_name" /> 배너 광고명 -->
 	<!-- <result property="bannerMessage" column="banner_message" /> 관리자 전달사항 -->
-	<!-- <result property="status" column="status" /> 진행상황 (PENDING/ONGOING/COMPLETED/CANCELED) -->
+	<!-- <result property="status" column="status" /> 진행상황 (PENDING/APPROVED/ONGOING/COMPLETED/CANCELED) -->
 	<!-- <result property="createdAt" column="created_at" /> 신청일 (DEFAULT CURRENT_TIMESTAMP) -->
 	<!-- <result property="updatedAt" column="updated_at" /> 수정일 -->
 	<!-- <result property="isExposed" column="is_exposed" /> 노출 여부 (TINYINT, 
@@ -25,18 +25,27 @@
 
 	<!-- brand2 -->
 
-	<!-- 결제 성공 후 배너 신청 -->
-	<!-- <insert id="insertBannerForm" parameterType="banner"> insert into banner 
-		(brand_id, manager_name, manager_tel, start_date, end_date, banner_name, 
-		banner_message, status, brand_url) values(#{brandId}, #{managerName}, #{managerTel}, 
-		#{startDate}, #{endDate}, #{bannerName}, #{bannerMessage}, 'PENDING', #{brandUrl} 
-		) </insert> <update id="update" parameterType="banner"> UPDATE banner SET 
+	<!-- 배너 신청 -->
+	<insert id="insertBannerForm" parameterType="banner" >
+		insert into banner
+		(brand_id, manager_name, manager_tel, start_date,
+		end_date,
+		banner_name,
+		banner_message, status, brand_url)
+		values(#{brandId}, #{managerName}, #{managerTel},
+		#{startDate},
+		#{endDate}, #{bannerName}, #{bannerMessage}, 'PENDING',
+		#{brandUrl}
+		)
+	</insert> 
+		
+		<!-- <update id="update" parameterType="banner"> UPDATE banner SET 
 		manager_name = #{managerName}, manager_tel = #{managerTel}, updated_at = 
 		NOW(), start_date = #{startDate}, end_date = #{endDate}, banner_name = #{bannerName}, 
 		banner_message = #{bannerMessage}, status = #{status}, brand_url = #{brandUrl}, 
 		is_exposed = #{isExposed}, state_change = #{stateChange}, admin_id = #{adminId} 
-		WHERE banner_id = #{bannerId} </update> -->
-
+		WHERE banner_id = #{bannerId} </update>
+ -->
 	<!-- 배너 광고 신청 목록 조회 -->
 	<select id="selectAdbannerList" parameterType="map"
 		resultType="bannerList">
