@@ -25,7 +25,6 @@
 <link rel="stylesheet" href="../tagcss/selectbox.css" />
 <link rel="stylesheet" href="../tagcss/dateInput.css" />
 <link rel="stylesheet" href="../tagcss/textInput.css" />
-<link rel="stylesheet" href="../tagcss/productList.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/pagination.css" />
 <link rel="stylesheet" href="../tagcss/tableFilter.css" />
@@ -41,7 +40,7 @@
 			<!-- 테이블 필터 -->
 			<div class="page-tableFilter">
 				<my:tableFilter
-					filters="주문상태:ALL=전체|PAID=결제완료|PREPARING=상품준비중|SHIPPING=배송중|DELIVERED=배송완료|CANCELLED=주문취소|EXCHANGE=교환|RETURN=반품"
+					filters="status|주문상태:ALL=전체|PAID=결제완료|PREPARING=상품준비중|SHIPPING=배송중|DELIVERED=배송완료|CANCELLED=주문취소|EXCHANGE=교환|RETURN=반품"
 					hasDate="true" searchItems="주문자,주문상품명" />
 			</div>
 

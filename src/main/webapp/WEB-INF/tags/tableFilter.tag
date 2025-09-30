@@ -8,7 +8,7 @@
     TableFilter 커스텀 태그
 
     속성(Props)
-    • filters : 예) "판매상태:ALL=전체|SALE=판매중|SOLD_OUT=품절|STOP_SALE=판매중지" (쉼표로 줄 구분)
+    • filters : 예) "answerStatus|답변상태:ALL2=전체|PENDING=미답변|ANSWERED=답변완료" (쉼표로 줄 구분)
     • hasDate   : true | false (기본 true) 날짜 필터 여부
     • hasSearch   : true | false (기본 true) 검색 영역 여부
     • searchItems : "상품코드,상품명,카테고리"
@@ -16,8 +16,10 @@
     사용법 예시
     <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
     <my:tableFilter
-			filters="판매상태:ALL=전체|SALE=판매중|SOLD_OUT=품절|STOP_SALE=판매중지"
-			searchItems="상품코드,상품명,카테고리" />
+			filters="category|문의유형:ALL=전체|PRODUCT=상품|ORDER=주문|CANCEL=취소|REFUND=환불|EXCHANGE=교환|DELIVERY=배송, 
+					answerStatus|답변상태:ALL2=전체|PENDING=미답변|ANSWERED=답변완료"
+					hasDate="true" 
+					searchItems="작성자" />
 ================================ --%>
 
 <%@ attribute name="filters" required="false"%>
@@ -35,11 +37,13 @@
 	<c:if test="${hasDate eq 'true'}">
 		<div class="filter-row date-row">
 			<label>기간:</label>
-			<my:dateInput type="input" name="startDate" value="2025-09-02" />
-			<span>~</span>
-			<my:dateInput type="input" name="endDate" value="2025-09-02" />
-			<div class="margin"></div>
-			<my:dateInput type="preset" presets="오늘,어제,최근 7일,최근 30일" />
+			<div class="filter_box">
+				<my:dateInput type="input" name="startDate" />
+				<span>~</span>
+				<my:dateInput type="input" name="endDate" inputDay="end" />
+				<div class="margin"></div>
+				<my:dateInput type="preset" presets="오늘,어제,최근 7일,최근 30일" />
+			</div>
 		</div>
 	</c:if>
 
@@ -48,7 +52,11 @@
 		<c:set var="filterLines" value="${fn:split(filters, ',')}" />
 		<c:forEach var="line" items="${filterLines}">
 			<c:set var="parts" value="${fn:split(line, ':')}" />
-			<c:set var="label" value="${parts[0]}" />
+			<c:set var="keyAndLabel" value="${fn:split(parts[0], '|')}" />
+			<c:set var="filterKey" value="${keyAndLabel[0]}" />
+			<!-- 서버 전달용 -->
+			<c:set var="label" value="${keyAndLabel[1]}" />
+			<!-- 화면 노출용 -->
 			<c:set var="options" value="${fn:split(parts[1], '|')}" />
 
 			<div class="filter-row">
@@ -58,10 +66,13 @@
 						<c:set var="optParts" value="${fn:split(opt, '=')}" />
 						<c:set var="optValue" value="${optParts[0]}" />
 						<c:set var="optLabel" value="${optParts[1]}" />
-						<button type="button" class="filter-btn" data-filter="${label}"
-							data-value="${optValue}">${optLabel}</button>
+						<button type="button" class="filter-btn"
+							data-filter="${filterKey}"
+							data-value="${optValue}">${optLabel}
+						</button>
 					</c:forEach>
 				</div>
+
 			</div>
 		</c:forEach>
 	</c:if>
@@ -69,7 +80,8 @@
 	<!-- 검색 영역 -->
 	<c:if test="${hasSearch eq 'true'}">
 		<div class="filter-row search-row">
-			<my:selectbox id="searchSelectBox" size="md" items="${searchItems}" initial="검색조건" />
+			<my:selectbox id="searchSelectBox" size="md" items="${searchItems}"
+				initial="검색조건" />
 			<my:textInput type="search" name="keyword" placeholder="검색어 입력"
 				size="sm" />
 		</div>
@@ -158,7 +170,8 @@
     "상품명": "NAME",
     "카테고리": "CATEGORY",
     "주문자": "MEMBER",
-    "주문상품명": "PRODUCT"
+    "주문상품명": "PRODUCT",
+    "작성자": "SENDER"
   };
 
   // 날짜 빠른 선택

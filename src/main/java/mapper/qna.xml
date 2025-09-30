@@ -3,20 +3,297 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.qna">
-<!-- ======================소비자용===================== -->
- <!-- 상품 ID로 해당 상품의 문의 목록 조회 (공개된 것만) -->
-    <select id="selectQnasByProductId" parameterType="Long" resultType="dto.Qna">
-        SELECT * FROM qna
-        WHERE product_id = #{productId}
-        AND exposure_status = 'PUBLISHED'
-        ORDER BY questioned_at DESC
-        LIMIT 10
-    </select>
-    
-    <!-- 상품의 문의 개수 조회 -->
-    <select id="getQnaCountByProductId" parameterType="Long" resultType="Integer">
-        SELECT COUNT(*) FROM qna
-        WHERE product_id = #{productId}
-        AND exposure_status = 'PUBLISHED'
-    </select>
+	<!-- ======================소비자용===================== -->
+	<!-- 상품 ID로 해당 상품의 문의 목록 조회 (공개된 것만) -->
+	<select id="selectQnasByProductId" parameterType="Long"
+		resultType="dto.Qna">
+		SELECT * FROM qna
+		WHERE product_id = #{productId}
+		AND
+		exposure_status = 'PUBLISHED'
+		ORDER BY questioned_at DESC
+		LIMIT 10
+	</select>
+
+	<!-- 상품의 문의 개수 조회 -->
+	<select id="getQnaCountByProductId" parameterType="Long"
+		resultType="Integer">
+		SELECT COUNT(*) FROM qna
+		WHERE product_id = #{productId}
+		AND
+		exposure_status = 'PUBLISHED'
+	</select>
+
+	<!--======================= [브랜드 어드민] 통합 문의 목록 조회 ======================= -->
+	<select id="selectMemberQnaListForBrand" parameterType="map"
+		resultType="memberQnaList">
+		SELECT *
+		FROM (
+		SELECT
+		t.ticket_id AS member_qna_id,
+		t.category AS
+		category,
+		NULL AS product_name,
+		t.image1_file_id AS
+		image1_file_id,
+		t.image2_file_id AS image2_file_id,
+		t.image3_file_id AS
+		image3_file_id,
+		NULL AS product_thumbnail,
+		t.order_id AS order_id,
+		m.name AS
+		sender_name,
+		t.sender_id AS sender_id,
+		t.question AS question,
+		t.answer
+		AS answer,
+		CASE WHEN t.answer IS NOT NULL THEN 'ANSWERED' ELSE
+		'PENDING' END AS
+		status,
+		t.exposure_status AS exposure_status,
+		t.questioned_at AS questioned_at,
+		t.answered_at AS answered_at,
+		'TICKET' AS type
+		FROM
+		ticket t
+		INNER JOIN order_item oi ON t.order_id =
+		oi.order_id
+		LEFT JOIN
+		member m ON t.sender_id = m.member_id
+		WHERE
+		t.sender_type = 'CONSUMER'
+		AND t.reciever_type = 'BRAND_ADMIN'
+		AND
+		oi.brand_id = #{brandId}
+
+		UNION
+		ALL
+
+		SELECT
+		q.qna_id AS member_qna_id,
+		'PRODUCT' AS
+		category,
+		p.name AS
+		product_name,
+		NULL AS image1_file_id,
+		NULL AS
+		image2_file_id,
+		NULL AS
+		image3_file_id,
+		p.thumbnail_file_id AS
+		product_thumbnail,
+		NULL AS
+		order_id,
+		m.name AS sender_name,
+		q.member_id
+		AS
+		sender_id,
+		q.question AS
+		question,
+		q.answer AS answer,
+		q.status AS
+		status,
+		q.exposure_status AS
+		exposure_status,
+		q.questioned_at AS
+		questioned_at,
+		q.answered_at AS
+		answered_at,
+		'QNA' AS type
+		FROM qna q
+		LEFT JOIN member m
+		ON q.member_id = m.member_id
+		LEFT JOIN product
+		p ON q.product_id =
+		p.product_id
+		WHERE q.brand_id =
+		#{brandId}
+		) merged
+		<where>
+			<if test="category != null and category != ''">
+				AND category = #{category}
+			</if>
+
+			<if test="answerStatus != null and answerStatus != ''">
+				<choose>
+					<when test="answerStatus == 'ANSWERED'">
+						AND status = 'ANSWERED'
+					</when>
+					<when test="answerStatus == 'PENDING'">
+						AND status = 'PENDING'
+					</when>
+				</choose>
+			</if>
+
+			<if test="startDate != null and startDate != ''">
+				AND questioned_at &gt;= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND questioned_at &lt;= #{endDate}
+			</if>
+
+			<if test="searchKeyword != null and searchKeyword != ''">
+				AND sender_name LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+		</where>
+		ORDER BY questioned_at DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<!--======================= [브랜드 어드민] 통합 문의 개수 조회 ======================= -->
+	<select id="selectMemberQnaCountForBrand" parameterType="map"
+		resultType="Integer">
+		SELECT COUNT(*)
+		FROM (
+		SELECT
+		t.ticket_id AS member_qna_id,
+		CASE WHEN
+		t.answer IS NOT NULL THEN 'ANSWERED' ELSE 'PENDING' END AS
+		status,
+		t.category AS category,
+		t.questioned_at AS questioned_at,
+		m.name AS
+		sender_name
+		FROM ticket t
+		INNER JOIN order_item oi ON t.order_id =
+		oi.order_id
+		LEFT JOIN member m ON t.sender_id = m.member_id
+		WHERE
+		t.sender_type = 'CONSUMER'
+		AND t.reciever_type = 'BRAND_ADMIN'
+		AND
+		oi.brand_id = #{brandId}
+
+		UNION ALL
+
+		SELECT
+		q.qna_id AS member_qna_id,
+		q.status AS status,
+		'PRODUCT' AS category,
+		q.questioned_at AS
+		questioned_at,
+		m.name AS sender_name
+		FROM qna q
+		LEFT JOIN member m ON
+		q.member_id = m.member_id
+		LEFT JOIN product p ON q.product_id =
+		p.product_id
+		WHERE q.brand_id = #{brandId}
+		) merged
+		<where>
+			<if test="category != null and category != ''">
+				AND category = #{category}
+			</if>
+
+			<if test="answerStatus != null and answerStatus != ''">
+				<choose>
+					<when test="answerStatus == 'ANSWERED'">
+						AND status = 'ANSWERED'
+					</when>
+					<when test="answerStatus == 'PENDING'">
+						AND status = 'PENDING'
+					</when>
+				</choose>
+			</if>
+
+			<if test="startDate != null and startDate != ''">
+				AND questioned_at &gt;= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND questioned_at &lt;= #{endDate}
+			</if>
+
+			<if test="searchKeyword != null and searchKeyword != ''">
+				AND sender_name LIKE CONCAT('%', #{searchKeyword}, '%')
+			</if>
+		</where>
+	</select>
+
+	<!--======================= [브랜드 어드민] 소비자 문의 단건 조회 ======================= -->
+	<select id="selectMemberQnaDetail" parameterType="map"
+		resultType="memberQnaList">
+		<choose>
+			<when test="type == 'QNA'">
+				SELECT
+				q.qna_id AS member_qna_id,
+				'PRODUCT' AS
+				category,
+				p.name AS product_name,
+				NULL AS image1_file_id,
+				NULL AS
+				image2_file_id,
+				NULL AS image3_file_id,
+				p.thumbnail_file_id AS
+				product_thumbnail,
+				NULL AS order_id,
+				m.name AS sender_name,
+				q.member_id AS sender_id,
+				q.question AS question,
+				q.answer AS answer,
+				q.status AS status,
+				q.exposure_status AS exposure_status,
+				q.questioned_at AS questioned_at,
+				q.answered_at AS answered_at,
+				'QNA'
+				AS type
+				FROM qna q
+				LEFT JOIN member m ON q.member_id = m.member_id
+				LEFT JOIN product p ON q.product_id = p.product_id
+				WHERE q.qna_id =
+				#{id}
+			</when>
+
+			<when test="type == 'TICKET'">
+				SELECT
+				t.ticket_id AS member_qna_id,
+				t.category AS
+				category,
+				NULL AS product_name,
+				t.image1_file_id AS image1_file_id,
+				t.image2_file_id AS image2_file_id,
+				t.image3_file_id AS
+				image3_file_id,
+				NULL AS product_thumbnail,
+				t.order_id AS order_id,
+				m.name AS sender_name,
+				t.sender_id AS sender_id,
+				t.question AS
+				question,
+				t.answer AS answer,
+				CASE WHEN t.answer IS NOT NULL THEN
+				'ANSWERED' ELSE 'PENDING' END AS
+				status,
+				t.exposure_status AS
+				exposure_status,
+				t.questioned_at AS questioned_at,
+				t.answered_at AS
+				answered_at,
+				'TICKET' AS type
+				FROM ticket t
+				LEFT JOIN member m ON
+				t.sender_id = m.member_id
+				WHERE t.ticket_id = #{id}
+			</when>
+		</choose>
+	</select>
+
+	<!--======================= [브랜드 어드민] 소비자 문의 업데이트 ======================= -->
+	<update id="updateMemberQnaAnswer" parameterType="map">
+		<choose>
+			<when test="type == 'QNA'">
+				UPDATE qna
+				SET answer = #{answer},
+				status = 'ANSWERED',
+				answered_at = NOW()
+				WHERE qna_id = #{qnaId}
+			</when>
+			<when test="type == 'TICKET'">
+				UPDATE ticket
+				SET answer = #{answer},
+				answered_at = NOW()
+				WHERE ticket_id = #{qnaId}
+			</when>
+		</choose>
+	</update>
+
 </mapper>

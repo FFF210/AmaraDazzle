@@ -74,7 +74,7 @@
 			<!-- breadcrumb -->
 			<div class="page-breadcrumb">
 				<my:breadcrumb
-					items="상품관리:/brand/productList,${not empty product ? '상품수정' : '상품등록'}:" />
+					items="상품목록:/brand/productList,${not empty product ? '상품수정' : '상품등록'}:" />
 			</div>
 
 			<!-- 페이지 헤더 -->

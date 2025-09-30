@@ -41,7 +41,7 @@ public class OrderDetail extends HttpServlet {
 			Long brandId = 1L;
 
 			// 주문 상세 데이터(Map 구조: summary, items, coupons)
-			Map<String, Object> orderDetail = service.getOrderDetailForBrand(brandId, orderId);
+			Map<String, Object> orderDetail = service.ordersDetail(brandId, orderId);
 
 			// JSP에 전달
 			request.setAttribute("orderDetail", orderDetail);

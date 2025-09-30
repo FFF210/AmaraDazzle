@@ -56,7 +56,7 @@
 			</button>
 			<ul class="submenu">
 				<li><a href="#">리뷰 조회</a></li>
-				<li><a href="#">문의 조회</a></li>
+				<li><a href="/brand/qnaList">문의 조회</a></li>
 			</ul>
 		</li>
 
@@ -67,7 +67,7 @@
 			</button>
 			<ul class="submenu">
 				<li><a href="#">정산 대시보드</a></li>
-				<li><a href="#">정산 목록 조회</a></li>
+				<li><a href="/brand/settlementList">정산 목록 조회</a></li>
 			</ul>
 		</li>
 

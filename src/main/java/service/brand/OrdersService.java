@@ -9,17 +9,17 @@ import dto.brand.OrdersSummary;
 
 public interface OrdersService {
 	// 주문 목록 조회 (브랜드별)
-	Map<String, Object> getOrdersListForBrand(Map<String, Object> params) throws Exception;
+	Map<String, Object> ordersListByPage(Map<String, Object> params) throws Exception;
 
 	// 주문 요약 조회 (단건)
-	OrdersSummary getOrderSummaryForBrand(Long brandId, Long orderId) throws Exception;
+	OrdersSummary ordersSummaryDetail(Long brandId, Long orderId) throws Exception;
 
 	// 주문 상품 상세 조회
-	List<OrdersItemDetail> getOrderItemsForBrand(Long brandId, Long orderId) throws Exception;
+	List<OrdersItemDetail> ordersItemDetail(Long brandId, Long orderId) throws Exception;
 
 	// 주문 사용 쿠폰 조회
-	List<OrdersCoupon> getOrderCouponsForBrand(Long orderId) throws Exception;
+	List<OrdersCoupon> ordersCouponDetail(Long orderId) throws Exception;
 
 	// 주문 상세 (요약 + 상품 + 쿠폰) 종합 조회
-	Map<String, Object> getOrderDetailForBrand(Long brandId, Long orderId) throws Exception;
+	Map<String, Object> ordersDetail(Long brandId, Long orderId) throws Exception;
 }

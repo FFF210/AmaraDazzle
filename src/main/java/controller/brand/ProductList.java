@@ -60,8 +60,7 @@ public class ProductList extends HttpServlet {
 			request.getRequestDispatcher("/brand/productList.jsp").forward(request, response);
 
 		} catch (Exception e) {
-			request.setAttribute("err", "상품 목록 조회 오류");
-			request.getRequestDispatcher("error.jsp").forward(request, response);
+			e.printStackTrace();
 		}
 	}
 

@@ -11,24 +11,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dto.Brand;
-import service.brand.OrdersService;
-import service.brand.OrdersServiceImpl;
+import service.brand.SettlementService;
+import service.brand.SettlementServiceImpl;
 
 /**
- * Servlet implementation class OrderList
+ * Servlet implementation class SettlementList
  */
-@WebServlet("/brand/orderList")
-public class OrderList extends HttpServlet {
+@WebServlet("/brand/settlementList")
+public class SettlementList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private final OrdersService service = new OrdersServiceImpl();
+	private final SettlementService service = new SettlementServiceImpl();
 
-	public OrderList() {
+	public SettlementList() {
 		super();
 	}
 
 	/**
-	 * 주문 목록 조회 (GET)
+	 * 정산 목록 조회 (GET)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -46,35 +46,20 @@ public class OrderList extends HttpServlet {
 		// 파라미터 수집
 		Map<String, Object> params = new HashMap<>();
 		params.put("brandId", brandId);
-
-		// 주문 상태 필터
-		// ALL=전체 | PAID=결제완료 | PREPARING=상품준비중 | SHIPPING=배송중 | DELIVERED=배송완료
-		// CANCELLED=주문취소 | EXCHANGE=교환(전체) | RETURN=반품(전체)
-		params.put("status", request.getParameter("status"));
-
-		// 검색 필터
-		// searchType = MEMBER(주문자), PRODUCT(상품명)
-		params.put("searchType", request.getParameter("searchType"));
-		params.put("searchKeyword", request.getParameter("searchKeyword"));
-
-		// 날짜 필터 (yyyy-MM-dd 형식으로 넘어옴)
-		params.put("startDate", request.getParameter("startDate")); // 시작일
-		params.put("endDate", request.getParameter("endDate")); // 종료일
-
 		params.put("limit", limit);
 		params.put("offset", offset);
 
 		try {
 			// 서비스 호출
-			Map<String, Object> result = service.ordersListByPage(params);
+			Map<String, Object> result = service.settlementListByPage(params);
 
 			// JSP로 전달
-			request.setAttribute("ordersList", result.get("ordersList")); // 주문 목록
+			request.setAttribute("settlementList", result.get("settlementList")); // 정산 목록
 			request.setAttribute("totalCount", result.get("totalCount")); // 총 개수
 			request.setAttribute("totalPages", result.get("totalPages")); // 총 페이지 수
 			request.setAttribute("currentPage", page); // 현재 페이지
 
-			request.getRequestDispatcher("/brand/orderList.jsp").forward(request, response);
+			request.getRequestDispatcher("/brand/settlementList.jsp").forward(request, response);
 
 		} catch (Exception e) {
 			e.printStackTrace();

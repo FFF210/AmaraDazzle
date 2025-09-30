@@ -154,7 +154,7 @@
 			<!-- 테이블 필터 -->
 			<div class="page-tableFilter">
 				<my:tableFilter
-					filters="판매상태:ALL=전체|SALE=판매중|SOLD_OUT=품절|STOP_SALE=판매중지"
+					filters="status|판매상태:ALL=전체|SALE=판매중|SOLD_OUT=품절|STOP_SALE=판매중지"
 					hasDate="false" searchItems="상품명,카테고리" />
 			</div>
 
@@ -241,7 +241,6 @@
 														data-product-id="${product.productId}">중지</button>
 												</c:otherwise>
 											</c:choose>
-
 										</div>
 									</td>
 								</tr>

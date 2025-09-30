@@ -88,7 +88,7 @@ public class BrandLogin extends HttpServlet {
 				response.addCookie(cookie2);
 				response.addCookie(cookie3);
 
-				response.sendRedirect("/brand/todoDashboard.jsp");
+				response.sendRedirect("/brand/productList");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

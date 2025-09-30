@@ -304,7 +304,6 @@
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
-
 	<!--======================= [브랜드 어드민] 상품 개수 조회 ======================= -->
 	<select id="selectProductCountForBrand" parameterType="map"
 		resultType="Integer">
