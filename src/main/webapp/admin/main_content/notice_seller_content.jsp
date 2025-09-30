@@ -17,7 +17,7 @@
 	<!-- 필터 -->
 	<form class="search_form" id="noticeSellerSearch">
 	<my:adminSearchContainer>
-		<my:adminSearchPeriod title="작성일" range="오늘,어제,최근 7일,최근 30일" dateCate="write"/>
+		<my:adminSearchPeriod title="작성일" range="오늘,어제,최근 7일,최근 30일" dateCate="write_"/>
 		<my:adminSearchType title="카테고리" optList="시스템, 이벤트, 기타" init="공지 카테고리를 선택하세요"/>
 		<my:adminSearchTotal optList="내용, 제목, 작성자" init="내용" />
 	</my:adminSearchContainer>
