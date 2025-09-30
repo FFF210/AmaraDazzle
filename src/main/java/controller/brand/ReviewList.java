@@ -11,24 +11,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dto.Brand;
-import service.brand.MemberQnaService;
-import service.brand.MemberQnaServiceImpl;
+import service.brand.ReviewService;
+import service.brand.ReviewServiceImpl;
 
 /**
- * Servlet implementation class QnaList
+ * Servlet implementation class ReviewList
  */
-@WebServlet("/brand/qnaList")
-public class MemberQnaList extends HttpServlet {
+@WebServlet("/brand/reviewList")
+public class ReviewList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private final MemberQnaService service = new MemberQnaServiceImpl();
+	private final ReviewService service = new ReviewServiceImpl();
 
-	public MemberQnaList() {
+	public ReviewList() {
 		super();
 	}
 
 	/**
-	 * 고객 문의 목록 조회 (GET)
+	 * 리뷰 목록 조회 (GET)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -49,11 +49,9 @@ public class MemberQnaList extends HttpServlet {
 
 		// 답변 상태 필터
 		params.put("answerStatus", request.getParameter("answerStatus"));
-		// 문의 유형 상태 필터
-		params.put("category", request.getParameter("category"));
 
 		// 검색 필터
-		// searchType = SENDER(작성자)
+		params.put("searchType", request.getParameter("searchType"));
 		params.put("searchKeyword", request.getParameter("searchKeyword"));
 
 		// 날짜 필터 (yyyy-MM-dd 형식으로 넘어옴)
@@ -65,15 +63,15 @@ public class MemberQnaList extends HttpServlet {
 		params.put("offset", offset);
 
 		try {
-			Map<String, Object> result = service.memberQnaListByPage(params);
+			Map<String, Object> result = service.reviewListByPage(params);
 
 			// JSP로 전달
-			request.setAttribute("qnaList", result.get("qnaList"));
+			request.setAttribute("reviewList", result.get("reviewList"));
 			request.setAttribute("totalCount", result.get("totalCount"));
 			request.setAttribute("totalPages", result.get("totalPages"));
 			request.setAttribute("currentPage", page);
 
-			request.getRequestDispatcher("/brand/qnaList.jsp").forward(request, response);
+			request.getRequestDispatcher("/brand/reviewList.jsp").forward(request, response);
 
 		} catch (Exception e) {
 			e.printStackTrace();

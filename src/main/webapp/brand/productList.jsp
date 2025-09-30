@@ -249,8 +249,15 @@
 					</table>
 				</div>
 			</div>
-
-			<c:set var="queryString"> status=${param.status}&searchType=${param.searchType}&searchKeyword=${param.searchKeyword}&page=</c:set>
+			
+			<c:set var="queryString">
+				<c:if test="${not empty param.status}">status=${param.status}&</c:if>
+				<c:if test="${not empty param.searchType}">searchType=${param.searchType}&</c:if>
+				<c:if test="${not empty param.searchKeyword}">searchKeyword=${param.searchKeyword}&</c:if>
+				<c:if test="${not empty param.startDate}">startDate=${param.startDate}&</c:if>
+				<c:if test="${not empty param.endDate}">endDate=${param.endDate}&</c:if>
+				page=
+			</c:set>
 
 			<!-- 페이징 -->
 			<div class="page-pagination">

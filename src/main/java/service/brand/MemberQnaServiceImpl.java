@@ -16,7 +16,7 @@ public class MemberQnaServiceImpl implements MemberQnaService {
 		memberQnaDAO = new MemberQnaDAOImpl();
 	}
 
-	// 고개 문의 조회
+	// 고객 문의 조회
 	@Override
 	public Map<String, Object> memberQnaListByPage(Map<String, Object> params) throws Exception {
 		List<MemberQnaList> list = memberQnaDAO.selectMemberQnaListForBrand(params); // 목록

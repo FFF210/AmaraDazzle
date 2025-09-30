@@ -168,6 +168,11 @@
 	text-overflow: ellipsis;
 }
 
+.product-name p {
+	height: 100%;
+	align-content: center;
+}
+
 /* 테이블 액션 버튼 컨테이너 */
 .actions {
 	display: flex;

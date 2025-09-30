@@ -158,7 +158,7 @@
 		</div>
 	</my:layout>
 
-<script src="./js/toast.js"></script>
+	<script src="./js/toast.js"></script>
 	<script src="../tagjs/selectbox.js"></script>
 	<script src="../tagjs/dateInput.js"></script>
 	<script>

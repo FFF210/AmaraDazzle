@@ -18,7 +18,7 @@
 	<!-- 메뉴 리스트 -->
 	<ul class="menu">
 		<!-- 단일 메뉴 -->
-		<li class="menu-item active"><a href="#" class="menu-link"
+		<li class="menu-item active"><a href="/brand/todoDashboard" class="menu-link"
 			title="홈"> <i class="bi bi-house-fill"></i> <span
 				class="menu-text">홈</span>
 		</a></li>
@@ -42,10 +42,10 @@
 			</button>
 			<ul class="submenu">
 				<li><a href="/brand/orderList">주문 관리</a></li>
-				<li><a href="#">취소 관리</a></li>
-				<li><a href="#">교환 관리</a></li>
-				<li><a href="#">반품 관리</a></li>
-				<li><a href="#">배송 관리</a></li>
+				<li><a href="/brand/cancelList">취소 관리</a></li>
+				<li><a href="/brand/exchangeList">교환 관리</a></li>
+				<li><a href="/brand/returnList">반품 관리</a></li>
+				<li><a href="/brand/deliveryList">배송 관리</a></li>
 			</ul>
 		</li>
 
@@ -55,7 +55,7 @@
 					관리</span> <i class="bi bi-chevron-down submenu-icon"></i>
 			</button>
 			<ul class="submenu">
-				<li><a href="#">리뷰 조회</a></li>
+				<li><a href="/brand/reviewList">리뷰 조회</a></li>
 				<li><a href="/brand/qnaList">문의 조회</a></li>
 			</ul>
 		</li>
@@ -66,7 +66,7 @@
 					관리</span> <i class="bi bi-chevron-down submenu-icon"></i>
 			</button>
 			<ul class="submenu">
-				<li><a href="#">정산 대시보드</a></li>
+				<li><a href="/brand/settlementDashboard">정산 대시보드</a></li>
 				<li><a href="/brand/settlementList">정산 목록 조회</a></li>
 			</ul>
 		</li>
@@ -135,8 +135,8 @@
 					지원</span> <i class="bi bi-chevron-down submenu-icon"></i>
 			</button>
 			<ul class="submenu">
-				<li><a href="#">공지사항</a></li>
-				<li><a href="#">문의하기</a></li>
+				<li><a href="/brand/noticeList">공지사항</a></li>
+				<li><a href="/brand/inquiryList">문의하기</a></li>
 			</ul>
 		</li>
 	</ul>
