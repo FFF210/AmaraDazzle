@@ -27,7 +27,7 @@
 	</table>
 	<hr>
 	<div class="buttonDiv">
-		<button type="button" onclick="location.href="<c:url value='/consumer/main'/>" id="homeBtn">홈으로</button>
+		<button type="button" onclick="location.href='<c:url value="/store/main"/>'" id="homeBtn">홈으로</button>
 	</div>
 </div>
 </body>

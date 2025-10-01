@@ -27,4 +27,10 @@ public class MemberCouponDAOImpl implements MemberCouponDAO {
 	public List<Map<String, Object>> selectMemberCouponList(Long memberId) throws Exception {
 	    return sqlSession.selectList("mapper.memberCoupon.selectMemberCouponList", memberId);
 	}
+
+	//사용한 쿠폰 조회 (orderDetail 용도)
+	@Override
+	public Map<String, Object> getCouponInfoByMemberCouponId(Long memberCouponId) throws Exception {
+		 return sqlSession.selectOne("mapper.memberCoupon.getCouponInfoByMemberCouponId", memberCouponId);
+	}
 }

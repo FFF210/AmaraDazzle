@@ -37,8 +37,28 @@ $(document).ready(function() {
         }
 
         // 선택상품 주문
-        const form = $('<form method="post" action="/cart/checkout"></form>');
+        const form = $('<form method="post" action="/store/checkout"></form>');
         selectedItems.forEach(function(id) {
+            form.append('<input type="hidden" name="cartItemIds" value="' + id + '">');
+        });
+        $('body').append(form);
+        form.submit();
+    });
+    
+    // ✅ 전체 주문 버튼
+    $('.order-all-btn').on('click', function() {
+        const allItems = $('.item-checkbox').map(function() {
+            return $(this).val();
+        }).get();
+
+        if (allItems.length === 0) {
+            alert('장바구니가 비어있습니다.');
+            return;
+        }
+
+        // 전체상품 주문
+        const form = $('<form method="post" action="/store/checkout"></form>');
+        allItems.forEach(function(id) {
             form.append('<input type="hidden" name="cartItemIds" value="' + id + '">');
         });
         $('body').append(form);
@@ -53,7 +73,7 @@ $(document).ready(function() {
     });
 
     // 선택상품 삭제 버튼
-    $('.delete-selected-btn').on('click', function() {
+     $('.delete-selected-btn').on('click', function() {
         const selectedItems = $('.item-checkbox:checked').map(function() {
             return $(this).val();
         }).get();
@@ -71,7 +91,7 @@ $(document).ready(function() {
 
 // 수량 변경
 function updateQuantity(cartItemId, quantity) {
-    $.post('/cart/updateQuantity', {
+    $.post('/store/cart/updateQuantity', {
         cartItemId: cartItemId,
         quantity: quantity
     }, function(data) {
@@ -85,7 +105,7 @@ function updateQuantity(cartItemId, quantity) {
 
 // 장바구니에서 제거
 function removeFromCart(cartItemId) {
-    $.post('/cart/remove', {
+    $.post('/store/cart/remove', {
         cartItemId: cartItemId
     }, function(data) {
         if (data.success) {
@@ -99,7 +119,7 @@ function removeFromCart(cartItemId) {
 // 선택 상품 삭제
 function deleteSelectedItems(cartItemIds) {
     $.ajax({
-        url: '/cart/removeMultiple',
+        url: '/store/cart/removeMultiple',
         method: 'POST',
         data: { cartItemIds: cartItemIds },
         traditional: true,
@@ -135,5 +155,5 @@ function buyNow(button) {
     }
 
     // GET 요청으로 이동
-    window.location.href = '/consumer/checkout?' + params.toString();
+    window.location.href = '/store/checkout?' + params.toString();
 }

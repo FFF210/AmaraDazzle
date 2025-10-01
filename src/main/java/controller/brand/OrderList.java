@@ -9,7 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import dto.Brand;
 import service.brand.OrdersService;
 import service.brand.OrdersServiceImpl;
 
@@ -33,14 +35,21 @@ public class OrderList extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 
+		HttpSession session = request.getSession(false);
+
+		// 세션 없거나 브랜드 정보 없음 → 로그인 페이지로 리다이렉트
+		if (session == null || session.getAttribute("brand") == null) {
+			response.sendRedirect(request.getContextPath() + "/brand/login");
+			return;
+		}
+
+		Brand brand = (Brand) session.getAttribute("brand");
+		Long brandId = brand.getBrandId();
+
 		// 페이지네이션 파라미터
 		int page = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
 		int limit = 10; // 한 페이지당 개수
 		int offset = (page - 1) * limit;
-
-		// 브랜드 아이디
-//		Long brandId = (Long) request.getSession().getAttribute("brandId");
-		Long brandId = 1L;
 
 		// 파라미터 수집
 		Map<String, Object> params = new HashMap<>();
@@ -65,7 +74,7 @@ public class OrderList extends HttpServlet {
 
 		try {
 			// 서비스 호출
-			Map<String, Object> result = service.getOrdersListForBrand(params);
+			Map<String, Object> result = service.ordersListByPage(params);
 
 			// JSP로 전달
 			request.setAttribute("ordersList", result.get("ordersList")); // 주문 목록
@@ -76,8 +85,7 @@ public class OrderList extends HttpServlet {
 			request.getRequestDispatcher("/brand/orderList.jsp").forward(request, response);
 
 		} catch (Exception e) {
-			request.setAttribute("err", "주문 목록 조회 오류");
-			request.getRequestDispatcher("error.jsp").forward(request, response);
+			e.printStackTrace();
 		}
 	}
 

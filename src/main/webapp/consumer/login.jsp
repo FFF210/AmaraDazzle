@@ -25,7 +25,7 @@
             <h1 class="login-title">로그인</h1>
             
             <!-- 일반 로그인 폼 -->
-            <form id="loginForm" action="${pageContext.request.contextPath}/consumer/login" method="post" class="auth-form">
+            <form id="loginForm" action="${pageContext.request.contextPath}/store/login" method="post" class="auth-form">
                 <div class="input-group">
                     <div class="form-group">
 					<label for="loginId">아이디</label>
@@ -54,7 +54,7 @@
             </button>
                     
             <p class="auth-footer">
-				아직 계정이 없으신가요? <a href="/consumer/join" class="link">회원가입</a>
+				아직 계정이 없으신가요? <a href="/store/join" class="link">회원가입</a>
 		    </p>
 	</form>
    </div>

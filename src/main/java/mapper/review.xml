@@ -4,29 +4,195 @@
 
 <mapper namespace="mapper.review">
 
-<!-- =================소비자=================== -->
-<!-- 상품 ID로 해당 상품의 리뷰 목록 조회 (공개된 것만) -->
-    <select id="selectReviewsByProductId" parameterType="Long" resultType="dto.Review">
-        SELECT * FROM review
-        WHERE product_id = #{productId}
-        AND status = 'PUBLISHED'
-        ORDER BY questioned_at DESC
-        LIMIT 10
-    </select>
-    
-    <!-- 상품의 리뷰 요약 정보 조회 -->
-    <select id="getReviewSummaryByProductId" parameterType="Long" resultType="java.util.Map">
-        SELECT 
-            COUNT(*) as totalCount,
-            AVG(rating) as averageRating,
-            SUM(CASE WHEN rating = 5 THEN 1 ELSE 0 END) as rating5Count,
-            SUM(CASE WHEN rating = 4 THEN 1 ELSE 0 END) as rating4Count,
-            SUM(CASE WHEN rating = 3 THEN 1 ELSE 0 END) as rating3Count,
-            SUM(CASE WHEN rating = 2 THEN 1 ELSE 0 END) as rating2Count,
-            SUM(CASE WHEN rating = 1 THEN 1 ELSE 0 END) as rating1Count
-        FROM review
-        WHERE product_id = #{productId}
-        AND status = 'PUBLISHED'
-    </select>
+	<!-- =================소비자=================== -->
+	<!-- 상품 ID로 해당 상품의 리뷰 목록 조회 (공개된 것만) -->
+	<select id="selectReviewsByProductId" parameterType="Long"
+		resultType="dto.Review">
+		SELECT * FROM review
+		WHERE product_id = #{productId}
+		AND
+		status = 'PUBLISHED'
+		ORDER BY questioned_at DESC
+		LIMIT 10
+	</select>
+
+	<!-- 상품의 리뷰 요약 정보 조회 -->
+	<select id="getReviewSummaryByProductId" parameterType="Long"
+		resultType="java.util.Map">
+		SELECT
+		COUNT(*) as totalCount,
+		AVG(rating) as averageRating,
+		SUM(CASE WHEN rating = 5 THEN 1 ELSE 0 END) as rating5Count,
+		SUM(CASE
+		WHEN rating = 4 THEN 1 ELSE 0 END) as rating4Count,
+		SUM(CASE WHEN
+		rating = 3 THEN 1 ELSE 0 END) as rating3Count,
+		SUM(CASE WHEN rating = 2
+		THEN 1 ELSE 0 END) as rating2Count,
+		SUM(CASE WHEN rating = 1 THEN 1
+		ELSE 0 END) as rating1Count
+		FROM review
+		WHERE product_id = #{productId}
+		AND status = 'PUBLISHED'
+	</select>
+
+	<!-- ======================= [브랜드 어드민] 리뷰 목록 조회 ======================= -->
+	<select id="selectReviewListForBrand" parameterType="map"
+		resultType="reviewList">
+		SELECT
+		r.review_id,
+		r.member_id,
+		r.order_item_id,
+		r.product_id,
+		r.product_option_id,
+		r.rating,
+		r.content,
+		r.image1_file_id,
+		r.image2_file_id,
+		r.image3_file_id,
+		r.answer,
+		r.status,
+		r.questioned_at,
+		r.answered_at,
+		po.option_value AS option_name,
+		p.thumbnail_file_id,
+		p.name AS product_name,
+		m.name AS member_name,
+		CASE WHEN r.answer IS NOT
+		NULL THEN 'ANSWERED' ELSE 'PENDING' END AS answer_status
+		FROM review r
+		INNER JOIN product p ON r.product_id = p.product_id
+		LEFT JOIN
+		product_option po ON r.product_option_id = po.product_option_id
+		INNER
+		JOIN member m ON r.member_id = m.member_id
+
+		<where>
+			p.brand_id = #{brandId}
+
+			<if test="answerStatus != null and answerStatus != ''">
+				<choose>
+					<when test="answerStatus == 'ANSWERED'">
+						AND r.answer IS NOT NULL
+					</when>
+					<when test="answerStatus == 'PENDING'">
+						AND r.answer IS NULL
+					</when>
+				</choose>
+			</if>
+
+			<if test="startDate != null and startDate != ''">
+				AND r.questioned_at &gt;= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND r.questioned_at &lt;= #{endDate}
+			</if>
+
+			<if
+				test="searchType != null and searchKeyword != null and searchKeyword != ''">
+				<choose>
+					<when test="searchType == 'NAME'">
+						AND p.name LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+					<when test="searchType == 'SENDER'">
+						AND m.name LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+				</choose>
+			</if>
+		</where>
+
+		ORDER BY r.review_id DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<!-- ======================= [브랜드 어드민] 리뷰 개수 조회 ======================= -->
+	<select id="selectReviewCountForBrand" parameterType="map"
+		resultType="Integer">
+		SELECT COUNT(*)
+		FROM (
+		SELECT r.review_id
+		FROM review r
+		INNER JOIN product
+		p ON r.product_id = p.product_id
+		LEFT JOIN product_option po ON
+		r.product_option_id = po.product_option_id
+		INNER JOIN member m ON
+		r.member_id = m.member_id
+		<where>
+			p.brand_id = #{brandId}
+
+			<if test="answerStatus != null and answerStatus != ''">
+				<choose>
+					<when test="answerStatus == 'ANSWERED'">
+						AND r.answer IS NOT NULL
+					</when>
+					<when test="answerStatus == 'PENDING'">
+						AND r.answer IS NULL
+					</when>
+				</choose>
+			</if>
+
+			<if test="startDate != null and startDate != ''">
+				AND r.questioned_at &gt;= #{startDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				AND r.questioned_at &lt;= #{endDate}
+			</if>
+
+			<if
+				test="searchType != null and searchKeyword != null and searchKeyword != ''">
+				<choose>
+					<when test="searchType == 'NAME'">
+						AND p.name LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+					<when test="searchType == 'SENDER'">
+						AND m.name LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+				</choose>
+			</if>
+		</where>
+		GROUP BY r.review_id
+		) AS countTable
+	</select>
+
+	<!-- ======================= [브랜드 어드민] 리뷰 단건 조회 ======================= -->
+	<select id="selectReviewDetailForBrand" parameterType="Long"
+		resultType="reviewList">
+		SELECT
+		r.review_id,
+		r.member_id,
+		r.order_item_id,
+		r.product_id,
+		r.product_option_id,
+		r.rating,
+		r.content,
+		r.image1_file_id,
+		r.image2_file_id,
+		r.image3_file_id,
+		r.answer,
+		r.status,
+		r.questioned_at,
+		r.answered_at,
+		po.option_value AS option_name,
+		p.thumbnail_file_id,
+		p.name AS product_name,
+		m.name AS member_name,
+		CASE WHEN r.answer IS NOT NULL THEN 'ANSWERED' ELSE 'PENDING' END AS
+		answer_status
+		FROM review r
+		INNER JOIN product p ON r.product_id = p.product_id
+		LEFT JOIN product_option po ON r.product_option_id = po.product_option_id
+		INNER JOIN member m ON r.member_id = m.member_id
+		WHERE r.review_id = #{value}
+	</select>
+
+	<!-- ======================= [브랜드 어드민] 리뷰 답변 등록 ======================= -->
+	<update id="updateReviewAnswer" parameterType="map">
+		UPDATE review
+		SET
+		answer = #{answer},
+		answered_at = NOW()
+		WHERE review_id = #{reviewId}
+	</update>
 
 </mapper>

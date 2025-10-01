@@ -27,7 +27,7 @@
 		<div class="join-box">
 			<h1 class="join-title">회원가입</h1>
 
-			<form id="joinForm" action="<c:url value='/consumer/join'/>"
+			<form id="joinForm" action="<c:url value='/store/join'/>"
 				method="post">
 				<!-- 아이디(이메일) -->
 				<div class="input-group">
@@ -96,9 +96,9 @@
 					<label>성별</label>
 					<div class="gender-group">
 						<label class="radio-label"> <input type="radio"
-							name="gender" value="남" id="male"> <span>남</span>
+							name="gender" value="M" id="male"> <span>남</span>
 						</label> <label class="radio-label"> <input type="radio"
-							name="gender" value="여" id="female"> <span>여</span>
+							name="gender" value="F" id="female"> <span>여</span>
 						</label>
 					</div>
 				</div>

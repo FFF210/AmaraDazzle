@@ -191,7 +191,7 @@ function saveOrderDataToSession() {
     params.append('usingCoupon', document.querySelector('select[name="usingCoupon"]').value);
     params.append('usingPoint', document.querySelector('input[name="usingPoint"]').value);
     
-    fetch('/consumer/checkout', {
+    fetch('/store/checkout', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -246,7 +246,7 @@ function processPayment(temporaryOrderId) {
         amount: totalAmount,
         customerName: customerName,
         customerEmail: 'test@example.com',
-        successUrl: window.location.origin + '/consumer/paymentSuccess',
+        successUrl: window.location.origin + '/store/paymentSuccess',
         failUrl: window.location.href + (window.location.href.includes('?') ? '&' : '?') + 'paymentFailed=true'
     }).catch(function(error) {
         console.error('토스 결제 오류:', error);

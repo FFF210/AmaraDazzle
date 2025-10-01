@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 public class OrdersSummary {
 	private Long ordersId; // 주문 ID (PK → orders.orders_id)
+	private String orderCode; // 주문번호 (order_code)
 	private Timestamp createdAt; // 주문 생성일자
 	private String orderStatus; // 주문 상태 (우선순위 적용)
 
@@ -34,6 +35,14 @@ public class OrdersSummary {
 
 	public void setOrdersId(Long ordersId) {
 		this.ordersId = ordersId;
+	}
+
+	public String getOrderCode() {
+		return orderCode;
+	}
+
+	public void setOrderCode(String orderCode) {
+		this.orderCode = orderCode;
 	}
 
 	public Timestamp getCreatedAt() {

@@ -25,7 +25,6 @@
 <link rel="stylesheet" href="../tagcss/selectbox.css" />
 <link rel="stylesheet" href="../tagcss/dateInput.css" />
 <link rel="stylesheet" href="../tagcss/textInput.css" />
-<link rel="stylesheet" href="../tagcss/productList.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/pagination.css" />
 <link rel="stylesheet" href="../tagcss/tableFilter.css" />
@@ -41,7 +40,7 @@
 			<!-- 테이블 필터 -->
 			<div class="page-tableFilter">
 				<my:tableFilter
-					filters="주문상태:ALL=전체|PAID=결제완료|PREPARING=상품준비중|SHIPPING=배송중|DELIVERED=배송완료|CANCELLED=주문취소|EXCHANGE=교환|RETURN=반품"
+					filters="status|주문상태:ALL=전체|PAID=결제완료|PREPARING=상품준비중|SHIPPING=배송중|DELIVERED=배송완료|CANCELLED=주문취소|EXCHANGE=교환|RETURN=반품"
 					hasDate="true" searchItems="주문자,주문상품명" />
 			</div>
 
@@ -72,8 +71,8 @@
 								<tr>
 									<td><fmt:formatDate value="${order.createdAt}"
 											pattern="yyyy-MM-dd HH:mm" /></td>
-									<td><a href="/brand/orderDetail?orderId=${order.ordersId}"><c:out
-												value="${order.ordersId}" /></a></td>
+									<td><a href="/brand/orderDetail?orderId=${order.ordersId}&from=order"><c:out
+												value="${order.orderCode}" /></a></td>
 									<td><c:out value="${order.memberName}" /></td>
 									<td>
 										<div class="product-name">
@@ -129,7 +128,14 @@
 				</div>
 			</div>
 
-			<c:set var="queryString"> status=${param.status}&searchType=${param.searchType}&searchKeyword=${param.searchKeyword}&startDate=${param.startDate}&endDate=${param.endDate}&page=</c:set>
+			<c:set var="queryString">
+				<c:if test="${not empty param.status}">status=${param.status}&</c:if>
+				<c:if test="${not empty param.searchType}">searchType=${param.searchType}&</c:if>
+				<c:if test="${not empty param.searchKeyword}">searchKeyword=${param.searchKeyword}&</c:if>
+				<c:if test="${not empty param.startDate}">startDate=${param.startDate}&</c:if>
+				<c:if test="${not empty param.endDate}">endDate=${param.endDate}&</c:if>
+				page=
+			</c:set>
 
 			<!-- 페이징 -->
 			<div class="page-pagination">

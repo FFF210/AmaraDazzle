@@ -154,7 +154,7 @@
 			<!-- 테이블 필터 -->
 			<div class="page-tableFilter">
 				<my:tableFilter
-					filters="판매상태:ALL=전체|SALE=판매중|SOLD_OUT=품절|STOP_SALE=판매중지"
+					filters="status|판매상태:ALL=전체|SALE=판매중|SOLD_OUT=품절|STOP_SALE=판매중지"
 					hasDate="false" searchItems="상품명,카테고리" />
 			</div>
 
@@ -241,7 +241,6 @@
 														data-product-id="${product.productId}">중지</button>
 												</c:otherwise>
 											</c:choose>
-
 										</div>
 									</td>
 								</tr>
@@ -250,8 +249,15 @@
 					</table>
 				</div>
 			</div>
-
-			<c:set var="queryString"> status=${param.status}&searchType=${param.searchType}&searchKeyword=${param.searchKeyword}&page=</c:set>
+			
+			<c:set var="queryString">
+				<c:if test="${not empty param.status}">status=${param.status}&</c:if>
+				<c:if test="${not empty param.searchType}">searchType=${param.searchType}&</c:if>
+				<c:if test="${not empty param.searchKeyword}">searchKeyword=${param.searchKeyword}&</c:if>
+				<c:if test="${not empty param.startDate}">startDate=${param.startDate}&</c:if>
+				<c:if test="${not empty param.endDate}">endDate=${param.endDate}&</c:if>
+				page=
+			</c:set>
 
 			<!-- 페이징 -->
 			<div class="page-pagination">

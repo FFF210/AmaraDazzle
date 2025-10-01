@@ -56,16 +56,20 @@
 </c:choose>
 
 
-<div class="custom-select ${size}"
+<div class="custom-select ${size}" 
 	<c:if test="${not empty id}">id="${id}"</c:if> tabindex="0">
-	<div class="select-header" name="${name}">
+	
+	<div class="select-header" >
 		<span class="select-label">${selectedValue}</span> 
 		<i class="bi bi-chevron-down"></i>
 	</div>
 	<ul class="select-list">
 		<c:forEach var="it" items="${itemList}">
 			<li class="select-item ${it eq selectedValue ? 'active' : ''}"
-				data-value="${it}" value="${it}">${it}</li>
+				data-value="${it}" >${it}</li>
 		</c:forEach>
 	</ul>
+	
+	<!-- 실제 서버로 전송할 hidden input -->
+	<input type="hidden" name="${name}" value="${selectedValue}" class="select_hidden" />
 </div>

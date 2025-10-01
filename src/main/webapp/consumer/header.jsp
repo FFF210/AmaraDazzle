@@ -55,7 +55,7 @@
             
             <!-- 로고 -->
             <div class="logo">
-                 <a href="<c:url value='/consumer/main'/>">
+                 <a href="<c:url value='/store/main'/>">
                  <img src="<c:url value='/image/logo_black.svg'/>" alt="AD 로고">
                  </a>
             </div>
@@ -66,10 +66,10 @@
                     <c:when test="${not empty loginUser}">
                         <!-- 로그인 상태 -->
                         <span class="username">${loginUser.name}님</span>
-                        <a href="<c:url value='/consumer/logout'/>">로그아웃</a>
+                        <a href="<c:url value='/store/logout'/>">로그아웃</a>
                         
                         <!-- 마이페이지 -->
-                        <a href="<c:url value='/consumer/mypage'/>">마이페이지</a>
+                        <a href="<c:url value='/store/mypage'/>">마이페이지</a>
                         
                         <!-- 장바구니 (배지 포함) -->
                         <a href="<c:url value='/store/mypage/cart'/>" class="cart-link">
@@ -81,9 +81,9 @@
                     </c:when>
                     <c:otherwise>
                         <!-- 비로그인 상태 -->
-                        <a href="<c:url value='/consumer/join'/>">회원가입</a>
-                        <a href="<c:url value='/consumer/login'/>">로그인</a>
-                         <a href="<c:url value='/consumer/cart'/>" class="cart-link">장바구니</a>
+                        <a href="<c:url value='/store/join'/>">회원가입</a>
+                        <a href="<c:url value='/store/login'/>">로그인</a>
+                         <a href="<c:url value='/store/cart'/>" class="cart-link">장바구니</a>
                     </c:otherwise>
                 </c:choose>
                  <!-- ✅ 최근 본 상품: 토글 버튼 -->

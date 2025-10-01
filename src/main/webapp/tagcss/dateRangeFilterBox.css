@@ -136,8 +136,8 @@
     align-items: stretch;
     
     display: flex;
-padding-left: 80px;
-gap: 4px;
+    padding-left: 80px;
+    gap: 4px;
 }
 
 .drf-sm .since-drf-date,
@@ -153,7 +153,7 @@ gap: 4px;
 
 .drf-sm .until-drf-date {
     justify-content: flex-end;  /* 오른쪽 정렬 */
-    width:623px;
+    width: auto;
 }
 
 .drf-sm .drf-tilde {

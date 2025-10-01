@@ -19,7 +19,7 @@
 		<div class="filtering_content">
 			<my:dateInput type="input" id="${dateCate}startDate" name="${dateCate}startDate" />
 			<span> - </span>
-			<my:dateInput type="input" id="${dateCate}endDate" name="${dateCate}endDate" input="end"/>
+			<my:dateInput type="input" id="${dateCate}endDate" name="${dateCate}endDate" inputDay="end"/>
 		</div>
 
 		<div class="p_choice">

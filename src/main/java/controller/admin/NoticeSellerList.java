@@ -35,15 +35,15 @@ public class NoticeSellerList extends HttpServlet {
 			NoticeService notice_svc = new NoticeServiceImpl();
 			
 			String condition = ""; //검색여부 
-			String startDate = request.getParameter("writestartDate"); //검색 시작일 
-			String endDate = request.getParameter("writeendDate"); //검색 시작일 
+			String startDate = request.getParameter("write_startDate"); //검색 시작일 
+			String endDate = request.getParameter("write_endDate"); //검색 시작일 
 			String totalSearch = request.getParameter("totalSearch"); //검색어
 			String keyword = request.getParameter("keyword"); //검색어
 			
-			System.out.println("startDate : " + startDate);
-			System.out.println("endDate : " + endDate);
-			System.out.println("totalSearch : " + totalSearch);
-			System.out.println("keyword : " + keyword);
+//			System.out.println("startDate : " + startDate);
+//			System.out.println("endDate : " + endDate);
+//			System.out.println("totalSearch : " + totalSearch);
+//			System.out.println("keyword : " + keyword);
 
 			
 			//총 게시글 수 

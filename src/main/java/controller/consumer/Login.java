@@ -16,7 +16,7 @@ import service.consumer.MemberServiceImpl;
 /**
  * Servlet implementation class Login
  */
-@WebServlet("/consumer/login")
+@WebServlet("/store/login")
 public class Login extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -54,13 +54,13 @@ public class Login extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("loginUser", member);
             
-            //이건 저장 굳이 안 해도 되는듯...?
+            //이건 저장 굳이 안 해도 되는듯 하지만...
             session.setAttribute("memberId", member.getMemberId());
             session.setAttribute("memberName", member.getName());
             session.setAttribute("memberEmail", member.getEmail());
             session.setAttribute("memberGrade", member.getGrade());
             
-            response.sendRedirect(request.getContextPath() + "/consumer/main");              
+            response.sendRedirect(request.getContextPath() + "/store/main");              
             
         } catch (Exception e) {
         	e.printStackTrace();

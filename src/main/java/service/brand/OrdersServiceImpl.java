@@ -25,7 +25,7 @@ public class OrdersServiceImpl implements OrdersService {
 
 	// 주문 목록 조회 (브랜드별)
 	@Override
-	public Map<String, Object> getOrdersListForBrand(Map<String, Object> params) throws Exception {
+	public Map<String, Object> ordersListByPage(Map<String, Object> params) throws Exception {
 		// 주문 목록 조회
 		List<OrdersList> ordersList = ordersDAO.selectOrdersListForBrand(params);
 
@@ -46,7 +46,7 @@ public class OrdersServiceImpl implements OrdersService {
 
 	// 주문 요약 조회 (단건)
 	@Override
-	public OrdersSummary getOrderSummaryForBrand(Long brandId, Long orderId) throws Exception {
+	public OrdersSummary ordersSummaryDetail(Long brandId, Long orderId) throws Exception {
 		Map<String, Object> params = new HashMap<>();
 		params.put("brandId", brandId);
 		params.put("orderId", orderId);
@@ -55,7 +55,7 @@ public class OrdersServiceImpl implements OrdersService {
 
 	// 주문 상품 상세 조회
 	@Override
-	public List<OrdersItemDetail> getOrderItemsForBrand(Long brandId, Long orderId) throws Exception {
+	public List<OrdersItemDetail> ordersItemDetail(Long brandId, Long orderId) throws Exception {
 		Map<String, Object> params = new HashMap<>();
 		params.put("brandId", brandId);
 		params.put("orderId", orderId);
@@ -64,25 +64,25 @@ public class OrdersServiceImpl implements OrdersService {
 
 	// 주문 사용 쿠폰 조회
 	@Override
-	public List<OrdersCoupon> getOrderCouponsForBrand(Long orderId) throws Exception {
+	public List<OrdersCoupon> ordersCouponDetail(Long orderId) throws Exception {
 		return couponDAO.selectOrdersCouponForBrand(orderId);
 	}
 
 	// 주문 상세 (요약 + 상품 + 쿠폰) 종합 조회
 	@Override
-	public Map<String, Object> getOrderDetailForBrand(Long brandId, Long orderId) throws Exception {
+	public Map<String, Object> ordersDetail(Long brandId, Long orderId) throws Exception {
 		Map<String, Object> result = new HashMap<>();
 
 		// 주문 요약
-		OrdersSummary summary = getOrderSummaryForBrand(brandId, orderId);
+		OrdersSummary summary = ordersSummaryDetail(brandId, orderId);
 		result.put("summary", summary);
 
 		// 주문 상품 상세
-		List<OrdersItemDetail> items = getOrderItemsForBrand(brandId, orderId);
+		List<OrdersItemDetail> items = ordersItemDetail(brandId, orderId);
 		result.put("items", items);
 
 		// 주문 사용 쿠폰
-		List<OrdersCoupon> coupons = getOrderCouponsForBrand(orderId);
+		List<OrdersCoupon> coupons = ordersCouponDetail(orderId);
 		result.put("coupons", coupons);
 
 		return result;

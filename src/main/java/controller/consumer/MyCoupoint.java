@@ -49,7 +49,7 @@ public class MyCoupoint extends HttpServlet {
 
 		// 로그인 체크
 		if (memberId == null) {
-			response.sendRedirect(request.getContextPath() + "/consumer/login.jsp");
+			response.sendRedirect(request.getContextPath() + "/store/login");
 			return;
 		}
 

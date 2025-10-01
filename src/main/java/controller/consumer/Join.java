@@ -16,7 +16,7 @@ import service.consumer.MemberServiceImpl;
 /**
  * Servlet implementation class Join
  */
-@WebServlet("/consumer/join")
+@WebServlet("/store/join")
 public class Join extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -90,8 +90,8 @@ public class Join extends HttpServlet {
 	            MemberService service = new MemberServiceImpl();
 	            service.join(member);
 	            
-	            // 성공 시 로그인 페이지로 이동
-	            response.sendRedirect("/consumer/login");
+	            // 성공 시 회원가입 완료 페이지
+	            response.sendRedirect(request.getContextPath() + "/consumer/joinComplete.jsp");
 	            
 	        } catch (Exception e) {
 	            e.printStackTrace();
