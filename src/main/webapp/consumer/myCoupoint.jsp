@@ -43,7 +43,7 @@
             userName="${memberInfo.name}" 
             points="${memberInfo.pointBalance}" 
             coupons="${couponCount}" 
-            notifications="0" />
+            notifications="${sessionScope.memberNotifications}" />
 
 			<!-- 쿠폰 섹션 -->
 			<section class="coupon-section">

@@ -98,7 +98,7 @@
 													<button type="button" class="action-btn">배송조회</button>
 												</c:when>
 												<c:when test="${item.status == 'DELIVERED'}">
-													<button type="button" class="action-btn">리뷰작성</button>
+													<button onclick="location.href='${pageContext.request.contextPath}/store/mypage/myReview'" type="button" class="action-btn">리뷰작성</button>
 												</c:when>
 											</c:choose>
 										</td>
