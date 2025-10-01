@@ -57,6 +57,7 @@
 		<typeAlias type="dto.brand.OrdersCoupon" alias="ordersCoupon" />
 		<typeAlias type="dto.brand2.BannerList" alias="bannerList" />
 		<typeAlias type="dto.brand2.BannerForm" alias="bannerForm" />
+		<typeAlias type="dto.brand2.AdminToss" alias="adminToss" />
 		<typeAlias type="dto.brand2.MembershipList" alias="membershipList" />
 		<!-- type="" : 패키지명.클래스명, alias="" : 별칭 -->
 	</typeAliases>
