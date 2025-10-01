@@ -1,5 +1,5 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
-<%@ tag body-content="scriptless"%>
+<%@ tag body-content="empty"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
@@ -18,7 +18,7 @@
 
 <c:set var="crumbList" value="${fn:split(items, ',')}" />
 
-<div class="breadcrumb">
+<nav class="breadcrumb">
 	<ul>
 		<!-- 홈 고정 -->
 		<li class="home"><a href="/"> 홈</a><i
@@ -38,4 +38,4 @@
 				</c:if></li>
 		</c:forEach>
 	</ul>
-</div>
+</nav>

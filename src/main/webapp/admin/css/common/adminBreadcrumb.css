@@ -8,7 +8,7 @@
 	position: sticky;
 	top:39px;
 	background-color: var(--base);
-	z-index : 99999999;
+	z-index : 9998;
 }
 
 .breadcrumb ul {

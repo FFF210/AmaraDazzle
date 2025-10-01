@@ -1,47 +1,61 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<title>로그인</title>
-<link rel="stylesheet" href="../css/reset.css" />
-<link rel="stylesheet" href="../css/componant/button.css" />
-<link rel="stylesheet" href="../css/admin/auth.css" />
-<link rel="stylesheet" href="../css/componant/textInput.css" />
+<title>관리자 로그인</title>
+
+<link rel="stylesheet" href="./css/login.css" />
+<link rel="stylesheet" href="../tagcss/alert.css" />
+<link rel="stylesheet" href="../tagcss/button.css" />
+<link rel="stylesheet" href="../tagcss/textInput.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+
 </head>
+
 <body class="login-page">
+	<div class="alert_section" id="toast"></div>
+	
 	<div class="auth-container">
 		<!-- 로고 -->
 		<div class="login-logo">
-			<img src="./images/logo_black.svg" alt="Brand" />
-			<h1 class="brand-name">Brand</h1>
+			<img src="/image/logo_black_below.svg" alt="logo" />
 		</div>
 
 		<!-- 로그인 폼 -->
-		<form action="/login" method="post" class="auth-form">
+		<form id="loginForm" class="auth-form">
 			<div class="input-group">
 				<div class="form-group">
-					<label for="loginId">아이디</label>
-					<my:textInput id="loginId" name="loginId" placeholder="아이디를 입력하세요"
-						type="default" size="lg" state="default" />
+					<label for="aid">아이디</label>
+					<my:textInput id="aid" name="aid" 
+						placeholder="아이디를 입력하세요" type="default" size="lg"
+						state="${field eq 'aid' ? 'error' : 'default'}"
+						errorText="${field eq 'aid' ? fieldError : ''}"
+						value="${cookie.id.value}" />
 				</div>
 				<div class="form-group">
-					<label for="loginPw">비밀번호</label>
-					<my:textInput id="loginPw" name="loginPw" placeholder="비밀번호를 입력하세요"
-						type="password" size="lg" state="default" />
+					<label for="apass">비밀번호</label>
+					<my:textInput id="apass" name="apass"
+						placeholder="비밀번호를 입력하세요" type="password" size="lg"
+						state="${field eq 'apass' ? 'error' : 'default'}"
+						errorText="${field eq 'apass' ? fieldError : ''}" />
 				</div>
 			</div>
 
 			<div class="form-options">
 				<p>
-					<input type="checkbox" name="rememberId" /> 아이디 기억하기
+					<label><input type="checkbox" id="rememberId" name="rememberId"
+								<c:if test="${cookie.rememberId.value == 'Y'}">checked</c:if>/>
+								 아이디 기억하기</label>
 				</p>
 			</div>
 
 			<button type="submit" class="btn btn-primary btn-xl login">로그인</button>
-			
 		</form>
 	</div>
 </body>
+
+<script src="./js/admin_login.js"></script>
 </html>

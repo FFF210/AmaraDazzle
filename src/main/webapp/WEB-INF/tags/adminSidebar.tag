@@ -2,7 +2,7 @@
 <%@ tag body-content="empty"%>
 
 <!-- 사이드바 -->
-<nav class="sidebar collapsed" id="sidebar">
+<aside class="sidebar collapsed" id="sidebar">
 	<div>
 		<!-- 헤더 -->
 		<div class="sidebar_header">
@@ -130,7 +130,7 @@
 	<div class="copyRight">
 		ⓒ copyRight 2025. <br /> All rights reserved.
 	</div>
-</nav>
+</aside>
 <!-- 사이드바 end -->
 
 <script>
