@@ -48,6 +48,7 @@
 		<typeAlias type="dto.Ticket" alias="ticket" />
 		<typeAlias type="dto.UploadFile" alias="uploadFile" />
 		<typeAlias type="dto.Wishlist" alias="wishlist" />
+		<typeAlias type="dto.consumer.ProductPlan" alias="productPlan" />
 		<typeAlias type="dto.brand.ProductList" alias="productList" />
 		<typeAlias type="dto.brand.ProductDetail" alias="productDetail" />
 		<typeAlias type="dto.brand.OrdersList" alias="ordersList" />

@@ -73,6 +73,173 @@
 		AND is_visible = 1
 	</select>
 
+	<!-- ================[소비자] 기획상품 목록 조회 =================== -->
+	<select id="selectPlannedProducts" parameterType="map"
+		resultType="productPlan">
+		SELECT
+		p.product_id AS productId,
+		p.brand_id AS brandId,
+		p.has_option AS hasOption,
+		b.brand_name AS brandName,
+		p.name AS name,
+		p.is_exclusive AS isExclusive,
+		p.is_visible AS isVisible,
+		p.is_planned AS isPlanned,
+		p.category1_id AS category1Id,
+		p.category2_id AS category2Id,
+		p.category3_id AS category3Id,
+		p.thumbnail_file_id AS thumbnailFileId,
+		p.price AS price,
+		p.discount_type AS discountType,
+		p.discount_value AS discountValue,
+		p.start_date AS startDate,
+		p.end_date AS endDate,
+		p.created_at AS createdAt,
+		p.updated_at AS updatedAt,
+
+		IFNULL(s.total_sold, 0) AS totalSold,
+		IFNULL(r.review_count, 0) AS reviewCount,
+		IFNULL(r.avg_rating, 0) AS avgRating,
+		IFNULL(w.wish_count, 0) AS wishCount,
+		(
+		(IFNULL(s.total_sold, 0) * 0.5) +
+		(IFNULL(r.review_count, 0) * 0.2) +
+		(IFNULL(r.avg_rating, 0) * 0.1) +
+		(IFNULL(w.wish_count, 0) * 0.2)
+		) AS popularityScore,
+
+		CASE WHEN uw.wishlist_id IS NOT NULL THEN 1 ELSE 0 END AS isWished
+
+		FROM product p
+		JOIN brand b ON p.brand_id = b.brand_id
+
+		LEFT JOIN (
+		SELECT oi.product_id, SUM(oi.quantity) AS total_sold
+		FROM order_item oi
+		WHERE oi.status IN ('PAID','PREPARING','SHIPPING','DELIVERED','CONFIRMED')
+		AND oi.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY oi.product_id
+		) s ON p.product_id = s.product_id
+
+		LEFT JOIN (
+		SELECT rv.product_id,
+		COUNT(rv.review_id) AS review_count,
+		AVG(rv.rating) AS avg_rating
+		FROM review rv
+		WHERE rv.status = 'PUBLISHED'
+		AND rv.questioned_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY rv.product_id
+		) r ON p.product_id = r.product_id
+
+		LEFT JOIN (
+		SELECT wl.product_id, COUNT(wl.wishlist_id) AS wish_count
+		FROM wishlist wl
+		WHERE wl.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY wl.product_id
+		) w ON p.product_id = w.product_id
+
+		<!-- 현재 로그인한 회원이 찜한 상품 -->
+		LEFT JOIN (
+		SELECT wishlist_id, product_id
+		FROM wishlist
+		WHERE member_id = #{memberId}
+		) uw ON p.product_id = uw.product_id
+
+		WHERE p.is_planned = 1
+		AND p.is_visible = 1
+
+		<if test="category1Id != null">
+			AND p.category1_id = #{category1Id}
+		</if>
+		<if test="category2Id != null">
+			AND p.category2_id = #{category2Id}
+		</if>
+		<if test="category3Id != null">
+			AND p.category3_id = #{category3Id}
+		</if>
+
+		<choose>
+			<when test="sort == 'RECENT'">
+				ORDER BY p.created_at DESC
+			</when>
+			<when test="sort == 'SALES'">
+				ORDER BY totalSold DESC
+			</when>
+			<when test="sort == 'PRICELOW'">
+				ORDER BY p.price ASC
+			</when>
+			<when test="sort == 'PRICEHIGH'">
+				ORDER BY p.price DESC
+			</when>
+			<when test="sort == 'POPULAR'">
+				ORDER BY popularityScore DESC
+			</when>
+			<otherwise>
+				ORDER BY p.created_at DESC
+			</otherwise>
+		</choose>
+
+		LIMIT #{offset}, #{limit}
+	</select>
+
+	<!-- ================[소비자] 기획상품 개수 조회 =================== -->
+	<select id="selectPlannedProductsCount" parameterType="map"
+		resultType="Integer">
+		SELECT COUNT(*)
+		FROM (
+		SELECT p.product_id
+		FROM product p
+		LEFT JOIN (
+		SELECT oi.product_id,
+		SUM(oi.quantity) AS total_sold
+		FROM order_item oi
+		WHERE oi.status IN
+		('PAID','PREPARING','SHIPPING','DELIVERED','CONFIRMED')
+		AND
+		oi.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		oi.product_id
+		) s ON p.product_id = s.product_id
+		LEFT JOIN (
+		SELECT
+		rv.product_id,
+		COUNT(rv.review_id) AS review_count,
+		AVG(rv.rating) AS
+		avg_rating
+		FROM review rv
+		WHERE rv.status = 'PUBLISHED'
+		AND
+		rv.questioned_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		rv.product_id
+		) r ON p.product_id = r.product_id
+		LEFT JOIN (
+		SELECT
+		wl.product_id,
+		COUNT(wl.wishlist_id) AS wish_count
+		FROM wishlist wl
+		WHERE wl.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		wl.product_id
+		) w ON p.product_id = w.product_id
+		WHERE p.is_planned = 1
+		AND p.is_visible = 1
+		<if test="category1Id != null">
+			AND p.category1_id = #{category1Id}
+		</if>
+		<if test="category2Id != null">
+			AND p.category2_id = #{category2Id}
+		</if>
+		<if test="category3Id != null">
+			AND p.category3_id = #{category3Id}
+		</if>
+		GROUP BY p.product_id
+		) AS countTable
+	</select>
+
+
+
+
 
 	<!--======================= [브랜드 어드민] 상품 목록 조회 ======================= -->
 	<select id="selectProductListForBrand" parameterType="map"
@@ -332,11 +499,15 @@
 	<insert id="insertProductForBrand" parameterType="productDetail"
 		useGeneratedKeys="true" keyProperty="productId">
 		INSERT INTO product (
-		brand_id, name, is_exclusive, is_visible, is_planned,
-		category1_id, category2_id, category3_id,
+		brand_id,
+		name, is_exclusive, is_visible, is_planned,
+		category1_id, category2_id,
+		category3_id,
 		thumbnail_file_id,
-		image1_file_id, image2_file_id, image3_file_id, image4_file_id, image5_file_id,
-		ingredients, price, order_limit,
+		image1_file_id, image2_file_id,
+		image3_file_id, image4_file_id, image5_file_id,
+		ingredients, price,
+		order_limit,
 		has_option, stock_qty,
 		shipping_method
 		) VALUES (
@@ -344,54 +515,58 @@
 		#{isExclusive}, #{isVisible}, #{isPlanned},
 		#{category1Id}, #{category2Id}, #{category3Id},
 		#{thumbnailFileId},
-		#{image1FileId}, #{image2FileId}, #{image3FileId}, #{image4FileId}, #{image5FileId},
+		#{image1FileId}, #{image2FileId}, #{image3FileId}, #{image4FileId},
+		#{image5FileId},
 		#{ingredients}, #{price}, #{orderLimit},
-		#{hasOption}, #{stockQty},
+		#{hasOption},
+		#{stockQty},
 		#{shippingMethod}
 		)
 	</insert>
 
 	<!--======================= [브랜드 어드민] 상품 수정 ======================= -->
-<update id="updateProductForBrand" parameterType="productDetail">
-    UPDATE product
-    <set>
-        name = #{name},
-        is_exclusive = #{isExclusive},
-        is_visible = #{isVisible},
-        is_planned = #{isPlanned},
-        category1_id = #{category1Id},
-        category2_id = #{category2Id},
-        category3_id = #{category3Id},
-        ingredients = #{ingredients},
-        price = #{price},
-        order_limit = #{orderLimit},
-        has_option = #{hasOption},
-        stock_qty = #{stockQty},
-        shipping_method = #{shippingMethod},
-        
-        <!-- 이미지: 값이 null이 아닐 때만 업데이트 -->
-        <if test="thumbnailFileId != null">
-            thumbnail_file_id = #{thumbnailFileId},
-        </if>
-        <if test="image1FileId != null">
-            image1_file_id = #{image1FileId},
-        </if>
-        <if test="image2FileId != null">
-            image2_file_id = #{image2FileId},
-        </if>
-        <if test="image3FileId != null">
-            image3_file_id = #{image3FileId},
-        </if>
-        <if test="image4FileId != null">
-            image4_file_id = #{image4FileId},
-        </if>
-        <if test="image5FileId != null">
-            image5_file_id = #{image5FileId},
-        </if>
+	<update id="updateProductForBrand" parameterType="productDetail">
+		UPDATE product
+		<set>
+			name = #{name},
+			is_exclusive = #{isExclusive},
+			is_visible =
+			#{isVisible},
+			is_planned = #{isPlanned},
+			category1_id = #{category1Id},
+			category2_id = #{category2Id},
+			category3_id = #{category3Id},
+			ingredients = #{ingredients},
+			price = #{price},
+			order_limit =
+			#{orderLimit},
+			has_option = #{hasOption},
+			stock_qty = #{stockQty},
+			shipping_method = #{shippingMethod},
 
-        updated_at = NOW()
-    </set>
-    WHERE product_id = #{productId}
-</update>
+			<!-- 이미지: 값이 null이 아닐 때만 업데이트 -->
+			<if test="thumbnailFileId != null">
+				thumbnail_file_id = #{thumbnailFileId},
+			</if>
+			<if test="image1FileId != null">
+				image1_file_id = #{image1FileId},
+			</if>
+			<if test="image2FileId != null">
+				image2_file_id = #{image2FileId},
+			</if>
+			<if test="image3FileId != null">
+				image3_file_id = #{image3FileId},
+			</if>
+			<if test="image4FileId != null">
+				image4_file_id = #{image4FileId},
+			</if>
+			<if test="image5FileId != null">
+				image5_file_id = #{image5FileId},
+			</if>
+
+			updated_at = NOW()
+		</set>
+		WHERE product_id = #{productId}
+	</update>
 
 </mapper>
