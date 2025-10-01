@@ -8,16 +8,18 @@
 	<select id="selectProductOptionsByProductId"
 		parameterType="Long" resultType="dto.ProductOption">
 		SELECT * FROM product_option
-		WHERE product_id = #{productId}
+		WHERE
+		product_id = #{productId}
 		ORDER BY product_option_id
 	</select>
-	
+
 	<!-- =======[소비자용] 주문 결제 페이지(checkout)에서 각 옵션의 상세 정보 조회용 ====== -->
 	<select id="selectProductOptionByOptionId" parameterType="Long"
 		resultType="dto.ProductOption">
 		SELECT
 		product_option_id AS productOptionId,
-		product_id AS productId,
+		product_id AS
+		productId,
 		option_value AS optionValue,
 		price,
 		stock_qty AS stockQty,
@@ -26,6 +28,33 @@
 		FROM product_option
 		WHERE product_option_id = #{optionId}
 	</select>
-	
-	
+
+	<!--======================= [브랜드 어드민] 옵션 등록 ======================= -->
+	<insert id="insertOption" parameterType="productOption">
+		INSERT INTO
+		product_option (product_id, option_value, price, stock_qty)
+		VALUES
+		(#{productId}, #{optionValue}, #{price}, #{stockQty})
+	</insert>
+
+	<!--======================= [브랜드 어드민] 특정 상품 옵션 목록 ======================= -->
+	<select id="selectOptionsByProductId" parameterType="string"
+		resultType="productOption">
+		SELECT product_option_id, product_id, option_value, price,
+		stock_qty,
+		created_at, updated_at
+		FROM product_option
+		WHERE product_id =
+		#{productId}
+		ORDER BY product_option_id DESC
+	</select>
+
+	<!--======================= [브랜드 어드민] 옵션 삭제 ======================= -->
+	<delete id="deleteOption" parameterType="long">
+		DELETE FROM
+		product_option
+		WHERE product_id = #{productId}
+	</delete>
+
+
 </mapper>

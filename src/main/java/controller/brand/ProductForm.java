@@ -1,6 +1,7 @@
 package controller.brand;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -12,10 +13,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import dto.Brand;
 import dto.ProductOption;
+import dto.UploadFile;
 import dto.brand.ProductDetail;
+import service.UploadFileService;
+import service.UploadFileServiceImpl;
 import service.brand.ProductFilterMapService;
 import service.brand.ProductFilterMapServiceImpl;
 import service.brand.ProductOptionService;
@@ -38,6 +44,7 @@ public class ProductForm extends HttpServlet {
 	private final ProductService service = new ProductServiceImpl();
 	private final ProductOptionService optionService = new ProductOptionServiceImpl();
 	private final ProductFilterMapService filterMapService = new ProductFilterMapServiceImpl();
+	private final UploadFileService uploadFileService = new UploadFileServiceImpl();
 
 	public ProductForm() {
 		super();
@@ -191,12 +198,21 @@ public class ProductForm extends HttpServlet {
 
 	/**
 	 * request → ProductDetail DTO 변환
+	 * 
+	 * @throws Exception
 	 */
-	private ProductDetail extractProductFromRequest(HttpServletRequest request) throws IOException, ServletException {
+	private ProductDetail extractProductFromRequest(HttpServletRequest request) throws Exception {
 		ProductDetail product = new ProductDetail();
 
-//		Long brandId = (Long) request.getSession().getAttribute("brandId");
-		Long brandId = (long) 1;
+		HttpSession session = request.getSession(false);
+
+		// 세션 없거나 브랜드 정보 없음
+		if (session == null || session.getAttribute("brand") == null) {
+			throw new RuntimeException("로그인이 필요합니다.");
+		}
+
+		Brand brand = (Brand) session.getAttribute("brand");
+		Long brandId = brand.getBrandId();
 		product.setBrandId(brandId);
 
 		// 상품ID
@@ -215,6 +231,42 @@ public class ProductForm extends HttpServlet {
 		product.setCategory1Id(parseLongSafe(getParam(request, "category1Id")));
 		product.setCategory2Id(parseLongSafe(getParam(request, "category2Id")));
 		product.setCategory3Id(parseLongSafe(getParam(request, "category3Id")));
+
+		// 썸네일 (필수 1장 - 신규 등록일 경우 반드시 있어야 함)
+		Part thumbPart = request.getPart("thumbnail");
+		System.out.println("[DEBUG] thumbnail size = " + (thumbPart != null ? thumbPart.getSize() : "null"));
+		if (thumbPart != null && thumbPart.getSize() > 0) { // 업로드된 경우만 세팅
+			Long thumbFileId = saveFile(thumbPart, request);
+			product.setThumbnailFileId(thumbFileId);
+			System.out.println("[DEBUG] thumbnailFileId = " + thumbFileId);
+		}
+
+		// 추가 이미지 (최대 5장)
+		for (int i = 1; i <= 5; i++) {
+			Part imgPart = request.getPart("image" + i);
+			System.out.println("[DEBUG] image" + i + " size = " + (imgPart != null ? imgPart.getSize() : "null"));
+			if (imgPart != null && imgPart.getSize() > 0) { // 업로드된 경우만 세팅
+				Long imgFileId = saveFile(imgPart, request);
+				System.out.println("[DEBUG] image" + i + " fileId = " + imgFileId);
+				switch (i) {
+				case 1:
+					product.setImage1FileId(imgFileId);
+					break;
+				case 2:
+					product.setImage2FileId(imgFileId);
+					break;
+				case 3:
+					product.setImage3FileId(imgFileId);
+					break;
+				case 4:
+					product.setImage4FileId(imgFileId);
+					break;
+				case 5:
+					product.setImage5FileId(imgFileId);
+					break;
+				}
+			}
+		}
 
 		// 성분
 		product.setIngredients(getParam(request, "ingredients"));
@@ -241,6 +293,47 @@ public class ProductForm extends HttpServlet {
 		product.setHasOption((optionValues != null && !optionValues.isEmpty()) ? 1 : 0);
 
 		return product;
+	}
+
+	private Long saveFile(Part part, HttpServletRequest request) throws Exception {
+		if (part == null || part.getSize() == 0)
+			return null;
+
+		// 저장 경로
+		String savePath = request.getServletContext().getRealPath("/upload");
+		File uploadDir = new File(savePath);
+		if (!uploadDir.exists())
+			uploadDir.mkdirs();
+
+		// 원본 파일명
+		String originalName = part.getSubmittedFileName();
+
+		// 확장자 추출
+		String ext = "";
+		int dot = originalName.lastIndexOf(".");
+		if (dot > -1)
+			ext = originalName.substring(dot);
+
+		// 리네임 파일명 (시간 + 랜덤)
+		String renamed = System.currentTimeMillis() + "_" + (int) (Math.random() * 1000) + ext;
+
+		// 실제 저장
+		part.write(savePath + File.separator + renamed);
+		System.out.println("[DEBUG] File saved: " + savePath + File.separator + renamed);
+
+		// DB 저장
+		UploadFile fileDto = new UploadFile();
+		fileDto.setFileName(originalName);
+		fileDto.setFileRename(renamed);
+		fileDto.setStoragePath("/upload");
+
+		int result = uploadFileService.save_file(fileDto);
+		System.out.println("[DEBUG] upload_file insert result = " + result);
+
+		Long fileId = uploadFileService.select_fileId(renamed); // FK로 넣을 upload_file_id 반환
+		System.out.println("[DEBUG] Generated upload_file_id = " + fileId);
+
+		return fileId;
 	}
 
 	/**

@@ -1,14 +1,24 @@
 package controller.brand;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import dto.Brand;
+import dto.UploadFile;
+import service.UploadFileService;
+import service.UploadFileServiceImpl;
 import service.brand.BrandService;
 import service.brand.BrandServiceImpl;
 
@@ -16,15 +26,17 @@ import service.brand.BrandServiceImpl;
  * Servlet implementation class BrandApply
  */
 @WebServlet("/brand/brandApply")
+@MultipartConfig(fileSizeThreshold = 1024 * 1024, // 1MB 이상이면 디스크에 임시저장
+		maxFileSize = 1024 * 1024 * 10, // 파일 하나 최대 10MB
+		maxRequestSize = 1024 * 1024 * 50 // 요청 전체 최대 50MB
+)
 public class BrandApply extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private final BrandService service = new BrandServiceImpl();
+	private final BrandService brandService = new BrandServiceImpl();
+	private final UploadFileService uploadFileService = new UploadFileServiceImpl();
 
-	public BrandApply() {
-		super();
-	}
-
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.getRequestDispatcher("/brand/brandApply.jsp").forward(request, response);
@@ -33,36 +45,112 @@ public class BrandApply extends HttpServlet {
 	/**
 	 * 브랜드 입점신청 (POST)
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 
-		Long brandId = (Long) request.getSession().getAttribute("brandId");
+		HttpSession session = request.getSession(false);
+		if (session == null || session.getAttribute("brand") == null) {
+			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "로그인이 필요합니다.");
+			return;
+		}
 
-		Brand brand = new Brand();
-		brand.setBrandId(brandId);
-		String logoFileIdStr = request.getParameter("logoFileId");
-		if (logoFileIdStr != null && !logoFileIdStr.isEmpty()) {
-			brand.setLogoFileId(Long.valueOf(logoFileIdStr));
-		}
-		String heroFileIdStr = request.getParameter("heroFileId");
-		if (heroFileIdStr != null && !heroFileIdStr.isEmpty()) {
-			brand.setHeroFileId(Long.valueOf(heroFileIdStr));
-		}
-		brand.setIntro(request.getParameter("intro"));
-		brand.setBank(request.getParameter("bank"));
-		brand.setAccountNumber(request.getParameter("accountNumber"));
-		brand.setAccountHolder(request.getParameter("accountHolder"));
-		brand.setSettlementDate(request.getParameter("settlementDate"));
-		brand.setBrandStatus("APPLY_SUBMITTED"); // 상태 변경
+		Brand brand = (Brand) session.getAttribute("brand");
+		Long brandId = brand.getBrandId();
 
 		try {
-			service.applyForBrand(brand);
+			// 신규 신청 정보 담기
+			Brand newBrand = new Brand();
+			newBrand.setBrandId(brandId);
+
+			// 로고 업로드
+			Part logoPart = request.getPart("upload1");
+			if (logoPart != null && logoPart.getSize() > 0) {
+				Long logoFileId = saveFile(logoPart, request);
+				newBrand.setLogoFileId(logoFileId);
+			}
+
+			// 대표이미지 업로드
+			Part heroPart = request.getPart("upload2");
+			if (heroPart != null && heroPart.getSize() > 0) {
+				Long heroFileId = saveFile(heroPart, request);
+				newBrand.setHeroFileId(heroFileId);
+			}
+
+			// 텍스트 입력 파라미터
+			newBrand.setIntro(getParam(request, "intro"));
+			newBrand.setBank(getParam(request, "bank"));
+			newBrand.setAccountNumber(getParam(request, "accountNumber"));
+			newBrand.setAccountHolder(getParam(request, "accountHolder"));
+			newBrand.setSettlementDate(getParam(request, "settlementDate"));
+
+			// 상태값
+			newBrand.setBrandStatus("APPLY_SUBMITTED");
+
+			// DB 저장
+			brandService.applyForBrand(newBrand);
+
+			// 완료 페이지 이동
 			request.getRequestDispatcher("/brand/brandApplyComplete.jsp").forward(request, response);
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			request.setAttribute("err", "브랜드 신청 처리 중 오류가 발생했습니다.");
+			request.getRequestDispatcher("/brand/brandApply.jsp").forward(request, response);
 		}
 	}
 
+	/**
+	 * multipart/form-data 에서 파라미터 꺼내는 유틸
+	 */
+	private String getParam(HttpServletRequest request, String name) throws IOException, ServletException {
+		Part part = request.getPart(name);
+		if (part == null)
+			return null;
+
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(part.getInputStream(), "UTF-8"))) {
+			return reader.lines().collect(Collectors.joining("\n"));
+		}
+	}
+
+	/**
+	 * 파일 저장 및 DB 기록 후 fileId 반환
+	 */
+	private Long saveFile(Part part, HttpServletRequest request) throws Exception {
+		if (part == null || part.getSize() == 0)
+			return null;
+
+		// 실제 서버 업로드 경로
+		String savePath = request.getServletContext().getRealPath("/upload/brand");
+		File uploadDir = new File(savePath);
+		if (!uploadDir.exists())
+			uploadDir.mkdirs();
+
+		// 원본 파일명
+		String originalName = part.getSubmittedFileName();
+
+		// 확장자
+		String ext = "";
+		int dot = originalName.lastIndexOf(".");
+		if (dot > -1)
+			ext = originalName.substring(dot);
+
+		// 리네임 파일명
+		String renamed = System.currentTimeMillis() + "_" + (int) (Math.random() * 1000) + ext;
+
+		// 실제 파일 저장
+		part.write(savePath + File.separator + renamed);
+
+		// DB 저장
+		UploadFile fileDto = new UploadFile();
+		fileDto.setFileName(originalName);
+		fileDto.setFileRename(renamed);
+		fileDto.setStoragePath("/upload/brand");
+
+		uploadFileService.save_file(fileDto);
+		Long fileId = uploadFileService.select_fileId(renamed);
+
+		return fileId;
+	}
 }

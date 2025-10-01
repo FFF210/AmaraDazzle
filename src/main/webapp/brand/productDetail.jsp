@@ -182,55 +182,34 @@
 					<!-- 대표 이미지 -->
 					<div class="form-group image">
 						<label>대표 이미지 <span class="required">*</span></label>
-						<my:imageBtn name="upload1" />
+						<div class="image-slot">
+							<img
+								src="<c:out value='${not empty product.thumbnailFileId ? ("image?fileId=" += product.thumbnailFileId) : (contextPath += "/img/plus.png")}'/>"
+								id="preview-thumbnail" alt="대표 이미지" width="100px"
+								onclick="document.getElementById('thumbnail').click();" /> <input
+								type="file" id="thumbnail" name="thumbnail" accept="image/*"
+								style="display: none"
+								onchange="readURL(this,'preview-thumbnail');" />
+						</div>
 					</div>
 
 					<!-- 추가 이미지 -->
 					<div class="form-group image">
 						<label>추가 이미지<br>(최대 5개)
 						</label>
-
-						<c:set var="imgCount" value="0" />
-
-						<!-- 등록된 이미지 렌더링 -->
-						<c:if test="${not empty product.image1File}">
-							<my:imageBtn name="image1"
-								value="${product.image1Path}/${product.image1File}" />
-							<c:set var="imgCount" value="${imgCount + 1}" />
-						</c:if>
-						<c:if test="${not empty product.image2File}">
-							<my:imageBtn name="image2"
-								value="${product.image2Path}/${product.image2File}" />
-							<c:set var="imgCount" value="${imgCount + 1}" />
-						</c:if>
-						<c:if test="${not empty product.image3File}">
-							<my:imageBtn name="image3"
-								value="${product.image3Path}/${product.image3File}" />
-							<c:set var="imgCount" value="${imgCount + 1}" />
-						</c:if>
-						<c:if test="${not empty product.image4File}">
-							<my:imageBtn name="image4"
-								value="${product.image4Path}/${product.image4File}" />
-							<c:set var="imgCount" value="${imgCount + 1}" />
-						</c:if>
-						<c:if test="${not empty product.image5File}">
-							<my:imageBtn name="image5"
-								value="${product.image5Path}/${product.image5File}" />
-							<c:set var="imgCount" value="${imgCount + 1}" />
-						</c:if>
-
-						<!-- 이미지 개수에 따라 나머지 슬롯 채우기 -->
-						<c:choose>
-							<c:when test="${imgCount == 0}">
-								<my:imageBtn name="image1" />
-							</c:when>
-							<c:otherwise>
-								<c:forEach var="i" begin="${imgCount + 1}" end="5">
-									<my:imageBtn name="image${i}" />
-								</c:forEach>
-							</c:otherwise>
-						</c:choose>
+						<c:forEach var="i" begin="1" end="5">
+							<div class="image-slot">
+								<img
+									src="<c:out value='${not empty product["image" += i += "FileId"] ? ("image?fileId=" += product["image" += i += "FileId"]) : (contextPath += "/image/plus.png")}'/>"
+									id="preview-image${i}" alt="추가 이미지${i}" width="100px"
+									onclick="document.getElementById('image${i}').click();" /> <input
+									type="file" id="image${i}" name="image${i}" accept="image/*"
+									style="display: none"
+									onchange="readURL(this,'preview-image${i}');" />
+							</div>
+						</c:forEach>
 					</div>
+
 				</section>
 
 				<section class="form-section">
@@ -499,66 +478,15 @@
   /*********************************************************************************************************
    * 이미지 버튼
    *********************************************************************************************************/
-  document.addEventListener("DOMContentLoaded", () => {
-	  const container = document.querySelector(".form-group.image"); // 이미지 그룹 전체
-
-	  // 동적으로 imageBtn 추가하는 함수
-	  function addImageSlot(index) {
-	    const wrapper = document.createElement("div");
-	    wrapper.className = "image-button";
-	    wrapper.innerHTML = `
-	      <input type="file" id="image-${index}" name="image${index}" accept="image/*" hidden />
-	      <label for="image-${index}" class="image-placeholder">
-	        <span class="plus">＋</span>
-	      </label>
-	    `;
-	    container.appendChild(wrapper);
-
-	    const input = wrapper.querySelector("input[type='file']");
-	    input.addEventListener("change", () => handleFileSelect(input, wrapper));
-	  }
-
-	  // 파일 선택 시 미리보기 & 삭제 버튼
-	  function handleFileSelect(input, wrapper) {
+   function readURL(input, previewId) {
 	    if (input.files && input.files[0]) {
 	      const reader = new FileReader();
-	      reader.onload = e => {
-	        wrapper.innerHTML = `
-	          <div class="image-preview">
-	            <img src="${e.target.result}" alt="preview" />
-	            <button type="button" class="remove-btn">&times;</button>
-	          </div>
-	        `;
-	        // 삭제 버튼 이벤트
-	        wrapper.querySelector(".remove-btn").addEventListener("click", () => {
-	          wrapper.remove();
-	          ensureEmptySlot(); // 최소 1개 빈 슬롯 유지
-	        });
-	      };
-	      reader.readAsDataURL(input.files[0]);
-
-	      // 업로드한 후 → 빈 슬롯 추가 (최대 5개까지만)
-	      ensureEmptySlot();
-	    }
-	  }
-
-	  // 빈 슬롯 유지 (항상 마지막에 하나)
-	  function ensureEmptySlot() {
-	    const slots = container.querySelectorAll(".image-button input[type='file']");
-	    const previews = container.querySelectorAll(".image-preview");
-	    const total = slots.length + previews.length;
-
-	    if (total < 5) {
-	      // 이미 빈 슬롯 없으면 추가
-	      if (!container.querySelector(".image-button input[type='file']")) {
-	        addImageSlot(total + 1);
+	      reader.onload = function(e) {
+	        document.getElementById(previewId).src = e.target.result;
 	      }
+	      reader.readAsDataURL(input.files[0]);
 	    }
 	  }
-
-	  // 초기 상태: 최소 1개는 보이도록
-	  ensureEmptySlot();
-	});
 
  /*********************************************************************************************************
   * 옵션 등록 모달 오픈

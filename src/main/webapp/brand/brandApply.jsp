@@ -9,7 +9,6 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="stylesheet" href="../tagcss/reset.css" />
 <link rel="stylesheet" href="../tagcss/button.css" />
-<link rel="stylesheet" href="../tagcss/imageBtn.css" />
 <link rel="stylesheet" href="../tagcss/textInput.css" />
 <link rel="stylesheet" href="../tagcss/textArea.css" />
 <link rel="stylesheet" href="../tagcss/selectbox.css" />
@@ -32,16 +31,18 @@
 		</h2>
 
 		<!-- 입점신청 폼 -->
-		<form action="/brand/brandApply" method="post" class="auth-form">
+		<form action="/brand/brandApply" method="post" class="auth-form" enctype="multipart/form-data">
 			<div class="input-group">
 				<div class="form-group">
 					<label for="upload1">브랜드 로고</label>
-					<my:imageBtn name="upload1" />
+					<input type="file" name="upload1" id="upload1" accept="image/*" />
+					<img id="preview1" src="#" alt="미리보기" style="display:none;"/>
 				</div>
 
 				<div class="form-group">
-					<label for="upload1">대표이미지</label>
-					<my:imageBtn name="upload2" />
+					<label for="upload2">대표 이미지</label>
+					<input type="file" name="upload2" id="upload2" accept="image/*" />
+					<img id="preview2" class="preview-img" src="#" alt="미리보기" style="display:none;"/>
 				</div>
 
 				<div class="form-group">
@@ -96,5 +97,24 @@
       hiddenInput.value = selectEl.value;
     });
   });
+  
+  /*********************************************************************************************************
+   * 이미지 미리보기
+   *********************************************************************************************************/
+   function previewImage(input, previewId) {
+		const file = input.files[0];
+		const preview = document.getElementById(previewId);
+		if(file){
+			const reader = new FileReader();
+			reader.onload = e => {
+				preview.src = e.target.result;
+				preview.style.display = "block";
+			};
+			reader.readAsDataURL(file);
+		}
+	}
+	document.getElementById("upload1").addEventListener("change", function(){ previewImage(this, "preview1"); });
+	document.getElementById("upload2").addEventListener("change", function(){ previewImage(this, "preview2"); });
+});
 </script>
 </html>

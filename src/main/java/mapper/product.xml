@@ -24,7 +24,7 @@
 		LIMIT #{offset}, #{limit}
 	</select>
 
-	<!-- ================[소비자] 카테고리별 상품 목록 조회. Id 수정했음!!!!! ===================-->
+	<!-- ================[소비자] 카테고리별 상품 목록 조회. Id 수정했음!!!!! =================== -->
 	<select id="selectProductByCategory" parameterType="map"
 		resultType="dto.Product">
 		SELECT * FROM product
@@ -107,7 +107,7 @@
 		LIMIT #{offset}, #{limit}
 	</select>
 
-	<!--  상품 재고 확인 -->
+	<!-- 상품 재고 확인 -->
 	<select id="selectStockQty" parameterType="long"
 		resultType="int">
 		SELECT
@@ -196,7 +196,7 @@
 		</foreach>
 		AND is_visible = 1
 	</select>
-	
+
 
 	<!--======================= [브랜드 어드민] 상품 목록 조회 ======================= -->
 	<select id="selectProductListForBrand" parameterType="map"
@@ -405,18 +405,12 @@
 		p.category1_id,
 		p.category2_id,
 		p.category3_id,
-		uf_thumb.storage_path AS thumb_path,
-		uf_thumb.file_rename AS thumb_file,
-		uf1.storage_path AS image1_path,
-		uf1.file_rename AS image1_file,
-		uf2.storage_path AS image2_path,
-		uf2.file_rename AS image2_file,
-		uf3.storage_path AS image3_path,
-		uf3.file_rename AS image3_file,
-		uf4.storage_path AS image4_path,
-		uf4.file_rename AS image4_file,
-		uf5.storage_path AS image5_path,
-		uf5.file_rename AS image5_file,
+		p.thumbnail_file_id,
+		p.image1_file_id,
+		p.image2_file_id,
+		p.image3_file_id,
+		p.image4_file_id,
+		p.image5_file_id,
 		p.ingredients,
 		p.price,
 		p.order_limit,
@@ -425,12 +419,12 @@
 		p.shipping_method,
 		p.discount_type,
 		CASE
-		WHEN
-		p.discount_type = 'RATE'
-		THEN p.price - (p.price * p.discount_value /
-		100)
+		WHEN p.discount_type = 'RATE'
+		THEN p.price -
+		(p.price * p.discount_value / 100)
 		WHEN p.discount_type = 'AMOUNT'
-		THEN p.price - p.discount_value
+		THEN
+		p.price - p.discount_value
 		ELSE p.price
 		END AS sale_price,
 		p.created_at,
@@ -447,75 +441,81 @@
 		THEN CONCAT(cd.code, ':', cd.name) END) AS
 		personal_colors
 		FROM product p
-		LEFT JOIN upload_file uf_thumb ON
-		p.thumbnail_file_id =
-		uf_thumb.upload_file_id
-		LEFT JOIN upload_file uf1
-		ON p.image1_file_id = uf1.upload_file_id
-		LEFT JOIN upload_file uf2 ON
-		p.image2_file_id = uf2.upload_file_id
-		LEFT JOIN upload_file uf3 ON
-		p.image3_file_id = uf3.upload_file_id
-		LEFT JOIN upload_file uf4 ON
-		p.image4_file_id = uf4.upload_file_id
-		LEFT JOIN upload_file uf5 ON
-		p.image5_file_id = uf5.upload_file_id
-		LEFT JOIN product_filter_map pf
-		ON p.product_id = pf.product_id
-		LEFT JOIN code_detail cd ON
-		pf.filter_id = cd.code_detail_id
-		LEFT JOIN code_master cm ON
-		cd.code_master_id = cm.code_master_id
+		LEFT JOIN product_filter_map pf ON
+		p.product_id = pf.product_id
+		LEFT JOIN code_detail cd ON pf.filter_id =
+		cd.code_detail_id
+		LEFT JOIN code_master cm ON cd.code_master_id =
+		cm.code_master_id
 		WHERE p.product_id = #{productId}
-		GROUP BY p.product_id
+		GROUP BY
+		p.product_id
 	</select>
 
 	<!--======================= [브랜드 어드민] 상품 등록 ======================= -->
-	<insert id="insertProductForBrand" parameterType="productDetail" useGeneratedKeys="true" keyProperty="productId">
+	<insert id="insertProductForBrand" parameterType="productDetail"
+		useGeneratedKeys="true" keyProperty="productId">
 		INSERT INTO product (
 		brand_id, name, is_exclusive, is_visible, is_planned,
-		category1_id,
-		category2_id, category3_id,
+		category1_id, category2_id, category3_id,
+		thumbnail_file_id,
+		image1_file_id, image2_file_id, image3_file_id, image4_file_id, image5_file_id,
 		ingredients, price, order_limit,
 		has_option, stock_qty,
 		shipping_method
 		) VALUES (
 		#{brandId}, #{name},
 		#{isExclusive}, #{isVisible}, #{isPlanned},
-		#{category1Id},
-		#{category2Id}, #{category3Id},
-		#{ingredients},
-		#{price}, #{orderLimit},
+		#{category1Id}, #{category2Id}, #{category3Id},
+		#{thumbnailFileId},
+		#{image1FileId}, #{image2FileId}, #{image3FileId}, #{image4FileId}, #{image5FileId},
+		#{ingredients}, #{price}, #{orderLimit},
 		#{hasOption}, #{stockQty},
 		#{shippingMethod}
 		)
 	</insert>
 
 	<!--======================= [브랜드 어드민] 상품 수정 ======================= -->
-	<update id="updateProductForBrand" parameterType="productDetail">
-		UPDATE product
-		SET name
-		= #{name},
-		is_exclusive =
-		#{isExclusive},
-		is_visible = #{isVisible},
-		is_planned = #{isPlanned},
-		category1_id = #{category1Id},
-		category2_id =
-		#{category2Id},
-		category3_id = #{category3Id},
-		ingredients =
-		#{ingredients},
-		price =
-		#{price},
-		order_limit = #{orderLimit},
-		has_option
-		= #{hasOption},
-		stock_qty = #{stockQty},
-		shipping_method =
-		#{shippingMethod},
-		updated_at = NOW()
-		WHERE product_id = #{productId}
-	</update>
+<update id="updateProductForBrand" parameterType="productDetail">
+    UPDATE product
+    <set>
+        name = #{name},
+        is_exclusive = #{isExclusive},
+        is_visible = #{isVisible},
+        is_planned = #{isPlanned},
+        category1_id = #{category1Id},
+        category2_id = #{category2Id},
+        category3_id = #{category3Id},
+        ingredients = #{ingredients},
+        price = #{price},
+        order_limit = #{orderLimit},
+        has_option = #{hasOption},
+        stock_qty = #{stockQty},
+        shipping_method = #{shippingMethod},
+        
+        <!-- 이미지: 값이 null이 아닐 때만 업데이트 -->
+        <if test="thumbnailFileId != null">
+            thumbnail_file_id = #{thumbnailFileId},
+        </if>
+        <if test="image1FileId != null">
+            image1_file_id = #{image1FileId},
+        </if>
+        <if test="image2FileId != null">
+            image2_file_id = #{image2FileId},
+        </if>
+        <if test="image3FileId != null">
+            image3_file_id = #{image3FileId},
+        </if>
+        <if test="image4FileId != null">
+            image4_file_id = #{image4FileId},
+        </if>
+        <if test="image5FileId != null">
+            image5_file_id = #{image5FileId},
+        </if>
+
+        updated_at = NOW()
+    </set>
+    WHERE product_id = #{productId}
+</update>
 
 </mapper>
