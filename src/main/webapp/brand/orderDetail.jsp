@@ -29,7 +29,24 @@
 
 			<!-- breadcrumb -->
 			<div class="page-breadcrumb">
-				<my:breadcrumb items="주문관리:/brand/orderList,주문상세:" />
+				<c:choose>
+					<c:when test="${param.from eq 'order'}">
+						<my:breadcrumb items="주문관리:/brand/orderList,주문상세:" />
+					</c:when>
+					<c:when test="${param.from eq 'shipping'}">
+						<my:breadcrumb
+							items="배송관리:/brand/shippingList,배송상세:/brand/shippingDetail?orderId=${param.orderId}&status=${param.status},주문상세:" />
+					</c:when>
+					<c:when test="${param.from eq 'cancel'}">
+						<my:breadcrumb items="취소관리:/brand/cancelList,주문상세:" />
+					</c:when>
+					<c:when test="${param.from eq 'exchange'}">
+						<my:breadcrumb items="교환관리:/brand/exchangeList,주문상세:" />
+					</c:when>
+					<c:when test="${param.from eq 'return'}">
+						<my:breadcrumb items="반품관리:/brand/returnList,주문상세:" />
+					</c:when>
+				</c:choose>
 			</div>
 
 			<!-- 페이지 헤더 -->
@@ -46,7 +63,7 @@
 					<div class="form-group">
 						<label>주문번호</label>
 						<my:textInput type="readOnly" size="lg"
-							value="${orderDetail.summary.ordersId}" />
+							value="${orderDetail.summary.orderCode}" />
 					</div>
 					<div class="form-group">
 						<label>주문일</label>
@@ -57,33 +74,33 @@
 						<label>주문상태</label>
 						<c:choose>
 							<c:when test="${orderDetail.summary.orderStatus == 'PAID'}">
-								<my:tag color="yellow" size="sm" text="결제완료" />
+								<my:tag color="yellow" size="lg" text="결제완료" />
 							</c:when>
 							<c:when test="${orderDetail.summary.orderStatus == 'PREPARING'}">
-								<my:tag color="yellow" size="sm" text="상품준비중" />
+								<my:tag color="yellow" size="lg" text="상품준비중" />
 							</c:when>
 							<c:when test="${orderDetail.summary.orderStatus == 'SHIPPING'}">
-								<my:tag color="yellow" size="sm" text="배송중" />
+								<my:tag color="yellow" size="lg" text="배송중" />
 							</c:when>
 							<c:when test="${orderDetail.summary.orderStatus == 'DELIVERED'}">
-								<my:tag color="yellow" size="sm" text="배송완료" />
+								<my:tag color="yellow" size="lg" text="배송완료" />
 							</c:when>
 							<c:when test="${orderDetail.summary.orderStatus == 'CONFIRMED'}">
-								<my:tag color="green" size="sm" text="구매확정" />
+								<my:tag color="green" size="lg" text="구매확정" />
 							</c:when>
 							<c:when test="${orderDetail.summary.orderStatus == 'CANCELLED'}">
-								<my:tag color="red" size="sm" text="주문취소" />
+								<my:tag color="red" size="lg" text="주문취소" />
 							</c:when>
 							<c:when test="${orderDetail.summary.orderStatus == 'COLLECTING'}">
-								<my:tag color="gray" size="sm" text="상품회수중" />
+								<my:tag color="red" size="lg" text="상품회수중" />
 							</c:when>
 							<c:when
 								test="${fn:startsWith(orderDetail.summary.orderStatus, 'EXCHANGE')}">
-								<my:tag color="red" size="sm" text="교환" />
+								<my:tag color="red" size="lg" text="교환" />
 							</c:when>
 							<c:when
 								test="${fn:startsWith(orderDetail.summary.orderStatus, 'RETURN')}">
-								<my:tag color="red" size="sm" text="반품" />
+								<my:tag color="red" size="lg" text="반품" />
 							</c:when>
 						</c:choose>
 					</div>
@@ -106,8 +123,7 @@
 					</div>
 					<div class="form-group">
 						<label>쿠폰/포인트 금액</label>
-						<my:textInput type="readOnly" size="lg"
-							value="${fmtUsingPoint}" />
+						<my:textInput type="readOnly" size="lg" value="${fmtUsingPoint}" />
 					</div>
 					<div class="form-group chip-wrapper">
 						<label>쿠폰 내역</label>
@@ -117,8 +133,7 @@
 					</div>
 					<div class="form-group">
 						<label>총 결제 금액</label>
-						<my:textInput type="readOnly" size="lg"
-							value="${fmtTotalAmount}" />
+						<my:textInput type="readOnly" size="lg" value="${fmtTotalAmount}" />
 					</div>
 				</section>
 
@@ -175,6 +190,7 @@
 									<th>수량</th>
 									<th>결제금액</th>
 									<th>상태</th>
+									<th>작업</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -216,6 +232,42 @@
 													<my:tag color="red" size="sm" text="반품" />
 												</c:when>
 											</c:choose></td>
+										<td><div class="actions">
+												<c:choose>
+													<c:when test="${item.itemStatus eq 'SHIPPING'}">
+														<button type="button"
+															class="btn btn-outline btn-sm btn-release"
+															data-product-id="${product.productId}">배송조회</button>
+													</c:when>
+													<c:when test="${item.itemStatus eq 'DELIVERED'}">
+														<button type="button"
+															class="btn btn-outline btn-sm btn-release"
+															data-product-id="${product.productId}">배송조회</button>
+													</c:when>
+													<c:when test="${item.itemStatus eq 'CANCELLED'}">
+														<button type="button"
+															class="btn btn-outline btn-sm btn-release"
+															data-product-id="${product.productId}">취소조회</button>
+													</c:when>
+													<c:when test="${item.itemStatus eq 'COLLECTING'}">
+														<button type="button"
+															class="btn btn-outline btn-sm btn-release"
+															data-product-id="${product.productId}">회수조회</button>
+													</c:when>
+													<c:when
+														test="${fn:startsWith(item.itemStatus, 'EXCHANGE') eq true}">
+														<button type="button"
+															class="btn btn-outline btn-sm btn-release"
+															data-product-id="${product.productId}">교환조회</button>
+													</c:when>
+													<c:when
+														test="${fn:startsWith(item.itemStatus, 'RETURN') eq 'true'}">
+														<button type="button"
+															class="btn btn-outline btn-sm btn-release"
+															data-product-id="${product.productId}">반품조회</button>
+													</c:when>
+												</c:choose>
+											</div></td>
 									</tr>
 								</c:forEach>
 								<c:if test="${empty orderDetail.items}">
@@ -235,6 +287,7 @@
 						<label>송장번호</label>
 						<my:textInput type="default" size="lg"
 							value="${orderDetail.summary.trackingNo}" />
+						<button type="button" class="btn btn-primary btn-xl">등록</button>
 					</div>
 					<div class="form-group">
 						<label>배송 요청사항</label>

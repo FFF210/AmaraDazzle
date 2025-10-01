@@ -22,6 +22,11 @@
 	margin: 0 8px;
 }
 
+.date-row .filter_box {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+}
 .date-row .margin {
 	width: 16px;
 }

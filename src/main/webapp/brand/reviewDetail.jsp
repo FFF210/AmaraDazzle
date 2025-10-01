@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -8,24 +9,28 @@
 <title>리뷰 상세</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="./css/reset.css" />
-<link rel="stylesheet" href="./css/button.css" />
-<link rel="stylesheet" href="./css/form-controls.css" />
-<link rel="stylesheet" href="./css/layout.css" />
-<link rel="stylesheet" href="./css/sidebar.css" />
-<link rel="stylesheet" href="./css/header.css" />
-<link rel="stylesheet" href="./css/rating.css" />
-<link rel="stylesheet" href="./css/textArea.css" />
-<link rel="stylesheet" href="./css/textInput.css" />
-<link rel="stylesheet" href="./css/imageBtn.css" />
-<link rel="stylesheet" href="./css/breadcrumb.css" />
+<link rel="stylesheet" href="../tagcss/reset.css" />
+<link rel="stylesheet" href="../tagcss/button.css" />
+<link rel="stylesheet" href="../tagcss/form-controls.css" />
+<link rel="stylesheet" href="../tagcss/layout.css" />
+<link rel="stylesheet" href="../tagcss/sidebar.css" />
+<link rel="stylesheet" href="../tagcss/brandHeader.css" />
+<link rel="stylesheet" href="../tagcss/rating.css" />
+<link rel="stylesheet" href="../tagcss/textArea.css" />
+<link rel="stylesheet" href="../tagcss/textInput.css" />
+<link rel="stylesheet" href="../tagcss/imageBtn.css" />
+<link rel="stylesheet" href="../tagcss/breadcrumb.css" />
+<link rel="stylesheet" href="../tagcss/alert.css" />
 <link rel="stylesheet" href="./css/contentDetail.css" />
 </head>
 <body>
+	<!-- Toast 알림 컨테이너 -->
+	<div id="toast-container"></div>
+
 	<my:layout>
 		<!-- breadcrumb -->
 		<div class="page-breadcrumb">
-			<my:breadcrumb items="리뷰조회:/order,리뷰상세:" />
+			<my:breadcrumb items="리뷰조회:/brand/reviewList,리뷰상세:" />
 		</div>
 
 		<div class="content-detail-container">
@@ -36,42 +41,48 @@
 				<!-- 이름 -->
 				<div class="content-row">
 					<label class="content-label">이름</label>
-					<my:textInput id="writer" name="writer" value="김철수" type="readOnly"
-						size="lg" state="default" />
+					<my:textInput id="writer" name="writer"
+						value="${review.memberName}" type="readOnly" size="lg"
+						state="default" />
 				</div>
 
 				<!-- 작성일 -->
 				<div class="content-row">
 					<label class="content-label">작성일</label>
-					<my:textInput id="writeDate" name="writeDate" value="2025-08-10"
+					<my:textInput id="writeDate" name="writeDate"
+						value="${review.questionedAt}"
 						type="readOnly" size="lg" state="default" />
 				</div>
 
 				<!-- 별점 -->
 				<div class="content-row rating">
 					<label class="content-label">별점</label>
-					<my:rating rating="5" readonly="true" />
+					<my:rating rating="${review.rating}" readonly="true" />
 				</div>
 
-				<!-- 첨부파일 -->
-				<div class="content-row">
-					<label class="content-label">첨부</label>
-					<div class="content-images">
-						<my:imageBtn name="upload1" />
-						<my:imageBtn name="upload2" />
-						<my:imageBtn name="upload3" />
+				<!-- 첨부파일 (하나라도 있을 때만 출력) -->
+				<c:if
+					test="${not empty review.image1FileId or not empty review.image2FileId or not empty review.image3FileId}">
+					<div class="content-row">
+						<label class="content-label">첨부</label>
+						<div class="content-images">
+							<c:if test="${not empty review.image1FileId}">
+								<my:imageBtn name="upload1" id="${review.image1FileId}" />
+							</c:if>
+							<c:if test="${not empty review.image2FileId}">
+								<my:imageBtn name="upload2" id="${review.image2FileId}" />
+							</c:if>
+							<c:if test="${not empty review.image3FileId}">
+								<my:imageBtn name="upload3" id="${review.image3FileId}" />
+							</c:if>
+						</div>
 					</div>
-				</div>
+				</c:if>
 
 				<!-- 리뷰 본문 -->
 				<div class="content-row textArea-wrapper">
 					<label class="content-label">내용</label>
-					<my:textArea name="readonlyDesc"
-						value="향도 너무 좋고 머리 감은 후에 바로 머릿결이 부드러워진 걸 느낄 수 있어요.
-미용실 클리닉 다 필요없었습니다..
-무엇보다 바르고 따로 기다리는 시간 필요없이 바로 헹궈주면 된다는 점이 너무 좋았어요!!
-반곱슬인데도 불구하고 머리를 말린 이후에도 엄청 차분해진 머릿결을 볼 수 있습니다👍
-같은 라인의 에센스랑 사용했을 때 효과가 두배입니다!"
+					<my:textArea name="readonlyDesc" value="${review.content}"
 						readonly="true" />
 				</div>
 
@@ -86,10 +97,12 @@
 
 				<!-- 상품 정보 -->
 				<div class="product-card">
-					<my:imageBtn name="upload1" />
+					<my:imageBtn name="productThumbnail" id="${review.thumbnailFileId}" />
 					<div class="product-info">
-						<div class="product-name">더블기획 텐더볼륨 향</div>
-						<div class="chip">옵션 정보</div>
+						<div class="product-name">${review.productName}</div>
+						<c:if test="${not empty review.optionName}">
+							<div class="chip">${review.optionName}</div>
+						</c:if>
 					</div>
 				</div>
 
@@ -97,24 +110,55 @@
 				<div class="content-reply">
 					<div class="reply-title">판매자 답변</div>
 
-					<!-- 기존 답변이 있는 경우 readOnly -->
-					<c:if test="${not empty previousReplies}">
-						<c:forEach var="reply" items="${previousReplies}">
-							<my:textArea name="readonlyReply" value="${reply}"
-								readonly="true" />
-						</c:forEach>
+					<form id="replyForm" method="post" action="/brand/reviewReply">
+						<input type="hidden" name="reviewId" value="${review.reviewId}" />
+						<input type="hidden" name="answer" />
+					</form>
+
+					<!-- 기존 답변이 있는 경우 -->
+					<c:if test="${not empty review.answer}">
+						<my:textArea name="readonlyReply" value="${review.answer}" />
+						<div class="form-actions">
+							<button type="button" class="btn btn-primary btn-xl"
+								onclick="submitReply(${review.reviewId})">수정</button>
+						</div>
 					</c:if>
 
-					<!-- 신규 답변 입력 -->
-					<my:textArea name="newReply" placeholder="답변을 입력하세요"
-						maxLength="500" showCount="true" />
-					<div class="form-actions">
-						<button type="button" class="btn btn-primary btn-xl">등록</button>
-					</div>
+					<!-- 신규 답변 입력 (미답변 상태일 때만) -->
+					<c:if test="${review.answerStatus eq 'PENDING'}">
+						<my:textArea name="newReply" placeholder="답변을 입력하세요"
+							maxLength="500" showCount="true" />
+						<div class="form-actions">
+							<button type="button" class="btn btn-primary btn-xl"
+								onclick="submitReply(${review.reviewId})">등록</button>
+						</div>
+					</c:if>
 				</div>
 			</div>
-
 		</div>
 	</my:layout>
 </body>
+<script src="./js/toast.js"></script>
+<script>
+/*********************************************************************************************************
+ * 답변 등록/수정 이벤트
+ *********************************************************************************************************/
+ function submitReply(reviewId) {
+	  const answerField = document.querySelector("textarea[name='newReply'], textarea[name='readonlyReply']");
+	  const answer = answerField ? answerField.value.trim() : "";
+
+	  if (!answer) {
+	    showToast("error","답변 내용을 입력해주세요.");
+	    return;
+	  }
+
+	  // 숨은 폼에 값 채우기
+	  const form = document.getElementById("replyForm");
+	  form.querySelector("input[name='reviewId']").value = reviewId;
+	  form.querySelector("input[name='answer']").value = answer;
+
+	  // 폼 제출 → 서버에서 redirect 처리
+	  form.submit();
+	}
+</script>
 </html>
