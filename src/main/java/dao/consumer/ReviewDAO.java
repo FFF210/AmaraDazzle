@@ -6,6 +6,19 @@ import java.util.Map;
 import dto.Review;
 
 public interface ReviewDAO {
-	 List<Review> selectReviewsByProductId(Long productId) throws Exception;
-	    Map<String, Object> getReviewSummaryByProductId(Long productId) throws Exception;
+	// 리뷰 목록(productDetail 용)
+	List<Review> selectReviewsByProductId(Long productId) throws Exception;
+
+	// 리뷰 요약(productDetail 용)
+	Map<String, Object> getReviewSummaryByProductId(Long productId) throws Exception;
+
+// ================= 마이페이지용 =======================  
+	// 리뷰 작성 가능한 상품 목록 조회 (배송완료 + 리뷰 미작성)
+	List<Map<String, Object>> getReviewableItems(Long memberId) throws Exception;
+
+	// 내가 작성한 리뷰 목록 조회
+	List<Map<String, Object>> getMyReviews(Long memberId) throws Exception;
+
+	// 리뷰 작성
+	void insertReview(Review review) throws Exception;
 }
