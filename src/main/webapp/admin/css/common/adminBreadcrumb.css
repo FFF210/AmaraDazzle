@@ -5,6 +5,10 @@
 /* ==================================== */
 .breadcrumb {
 	margin-left: 15px;
+	padding : 10px 0;
+	position: sticky;
+	top:39px;
+	background-color: var(--base);
 }
 
 .breadcrumb ul {

@@ -18,7 +18,7 @@
 
 <c:set var="crumbList" value="${fn:split(items, ',')}" />
 
-<nav class="breadcrumb">
+<div class="breadcrumb">
 	<ul>
 		<!-- 홈 고정 -->
 		<li class="home"><a href="/"> 홈</a><i
@@ -38,4 +38,4 @@
 				</c:if></li>
 		</c:forEach>
 	</ul>
-</nav>
+</div>

@@ -14,7 +14,6 @@
 <!-- ************************* 판매자 탭 ************************* -->
 <div id="seller" class="tab_content">
 
-
 	<!-- 필터 -->
 	<form class="search_form" id="noticeSellerSearch">
 		<my:adminTableFilter >
@@ -89,20 +88,20 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<th><input type="checkbox" /></th>
+						<th><input type="checkbox" id="all_ck" onclick="ck_all(this.checked);"/></th>
 						<th>#</th>
-						<th>카테고리</th>
-						<th>제목</th>
+						<th class="sortable">카테고리 <i class="bi bi-dash-lg sort-icon"></i></th>
+						<th class="sortable">제목 <i class="bi bi-dash-lg sort-icon"></i></th>
 						<th>작성자</th>
 						<th>작성일</th>
-						<th>조회수</th>
-						<th>노출여부</th>
+						<th class="sortable">조회수 <i class="bi bi-dash-lg sort-icon"></i></th>
+						<th class="sortable">노출여부 <i class="bi bi-dash-lg sort-icon"></i></th>
 						<th>상세보기</th>
 					</tr>
 				</thead>
 				<tbody>
 					<!-- 게시물 개수가 0일 경우 -->
-					<c:if test="${fn:length(noticeList)==0}">
+					<c:if test="${empty noticeList}">
 						<tr>
 							<td colspan="9">등록된 게시물이 없습니다.</td>
 						</tr>
@@ -111,21 +110,18 @@
 					<c:set var="no" value="${noticeCnt-postNo}" />
 					<c:forEach items="${noticeList}" var="noticeList" varStatus="idx">
 						<tr>
-							<td><input type="checkbox" /></td>
+							<td><input type="checkbox" class="n_ch" value="${noticeList.noticeId}" onclick="choice_ck();"/></td>
 							<td>${no-idx.index}</td>
 							<td><c:choose>
-									<c:when
-										test="${noticeList.typeId == '25' || noticeList.typeId == '29'}">
+									<c:when test="${noticeList.typeId == '25' || noticeList.typeId == '29'}">
 										<!-- 카테고리 : 이벤트 -->
 										<my:tag color="pink" size="md" text="${noticeList.name}" />
 									</c:when>
-									<c:when
-										test="${noticeList.typeId == '26' || noticeList.typeId == '28'}">
+									<c:when test="${noticeList.typeId == '26' || noticeList.typeId == '28'}">
 										<!-- 카테고리 : 점검 / 시스템 -->
 										<my:tag color="green" size="md" text="${noticeList.name}" />
 									</c:when>
-									<c:when
-										test="${noticeList.typeId == '27' || noticeList.typeId == '30'}">
+									<c:when test="${noticeList.typeId == '27' || noticeList.typeId == '30'}">
 										<!-- 카테고리 : 기타 -->
 										<my:tag color="blue" size="md" text="${noticeList.name}" />
 									</c:when>
@@ -133,8 +129,9 @@
 							<td class="title_cell"
 								onclick="goNoticeDetail('${noticeList.noticeId}','${noticeList.targetTypeId}');">
 								<c:if test="${fn:length(noticeList.imageFileIds)!=0}">
-									<i class="bi bi-paperclip"></i>
-								</c:if> ${noticeList.title}
+									<i class="bi bi-paperclip"></i>&nbsp;&nbsp;
+								</c:if> 
+								${noticeList.title}
 							</td>
 							<td>Amara Dazzle</td>
 							<td><c:set var="createDate" value="${noticeList.createdAt}" />
@@ -160,17 +157,26 @@
 		</div>
 
 		<!-- 페이지네이션 -->
-		<c:url var="noticeSellerUrl" value="/admin/noticeSellerList">
-    		<c:param name="write_startDate" value="${param.write_startDate}" />
-    		<c:param name="write_endDate" value="${param.write_endDate}" />
-    		<c:param name="q_select" value="${param.q_select}" />
-    		<c:param name="totalSearch" value="${param.totalSearch}" />
-    		<c:param name="keyword" value="${param.keyword}" />
-		</c:url>
+<%-- 		<c:url var="noticeSellerUrl" value="/admin/noticeSellerList"> --%>
+<%--     		<c:param name="write_startDate" value="${param.write_startDate}" /> --%>
+<%--     		<c:param name="write_endDate" value="${param.write_endDate}" /> --%>
+<%--     		<c:param name="q_select" value="${param.q_select}" /> --%>
+<%--     		<c:param name="totalSearch" value="${param.totalSearch}" /> --%>
+<%--     		<c:param name="keyword" value="${param.keyword}" /> --%>
+<%-- 		</c:url> --%>
 
-		<div class="pagination_wrap" >
+		<c:set var="queryString">
+			<c:if test="${not empty param.write_startDate}">write_startDate=${param.write_startDate}&</c:if>
+			<c:if test="${not empty param.write_endDate}">write_endDate=${param.write_endDate}&</c:if>
+			<c:if test="${not empty param.q_select}">q_select=${param.q_select}&</c:if>
+			<c:if test="${not empty param.totalSearch}">totalSearch=${param.totalSearch}&</c:if>
+			<c:if test="${not empty param.keyword}">keyword=${param.keyword}&</c:if>
+			page=
+		</c:set>
+
+		<div class="pagination_wrap page-pagination" >
 			<my:adminPagination currentPage="${paging.pageno}"
-				allPage="${paging.end_pg}" baseUrl="${noticeSellerUrl}" />
+				allPage="${paging.end_pg}" baseUrl="/admin/noticeSellerList?${queryString}" />
 		</div>
 		<!-- 페이지네이션 end -->
 	</div>
@@ -181,4 +187,5 @@
 <script src="../tagjs/selectbox.js"></script>
 <script src="../tagjs/dateInput.js"></script>
 <script src="./js/componant/searchBox.js"></script>
+<script src="./js/componant/table.js"></script>
 

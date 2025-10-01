@@ -83,7 +83,7 @@
 		<div class="part_title">작성자</div>
 		<div class="part_content">
 			<div class="writer_part">
-				<span class="text_readonly" >&nbsp; Amara Dazzle</span>
+				<span>&nbsp; Amara Dazzle</span>
 			</div>
 			<div class="btn_part">
 				<button type="button" class="btn first_btn action_btn">수정</button>
