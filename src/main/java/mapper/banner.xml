@@ -26,13 +26,18 @@
 	<!-- brand2 -->
 
 	<!-- 배너 신청 -->
-	<insert id="insertBannerForm" parameterType="banner" useGeneratedKeys="true" keyProperty="bannerId">
+	<insert id="insertBannerForm" parameterType="banner"
+		useGeneratedKeys="true" keyProperty="bannerId">
 		INSERT INTO banner
-		(brand_id, manager_name, manager_tel, start_date, end_date,
-		banner_name, banner_message, status, brand_url)
+		(brand_id,
+		manager_name, manager_tel, start_date, end_date,
+		banner_name,
+		banner_message, status, brand_url)
 		VALUES
-		(#{brandId}, #{managerName}, #{managerTel}, #{startDate}, #{endDate},
-		#{bannerName}, #{bannerMessage}, #{status}, #{brandUrl})
+		(#{brandId}, #{managerName},
+		#{managerTel}, #{startDate}, #{endDate},
+		#{bannerName},
+		#{bannerMessage}, #{status}, #{brandUrl})
 	</insert>
 
 	<!-- <update id="update" parameterType="banner"> UPDATE banner SET manager_name 
@@ -59,9 +64,16 @@
 		b.is_exposed,
 		b.brand_url,
 		b.state_change,
-		b.admin_id
+		b.admin_id,
+		CASE
+			when ap.payment_id IS NOT NULL THEN 1
+			ELSE 0
+		END AS paid
 		FROM
 		banner b
+		LEFT JOIN admin_payment ap
+			ON ap.banner_id = b.banner_id
+			AND ap.payment_type = 'BANNER_AD'
 		<where>
 			<!-- 상태 필터링 -->
 			<if test="status != null and status != ''">
@@ -122,6 +134,13 @@
 			</if>
 		</where>
 	</select>
+
+	<!-- 결제 완료 후 배너 상태 변경 
+	<update id="updateBannerStatus" parameterType="map">
+		UPDATE banner
+		SET status = #{status}, updated_at = NOW()
+		WHERE banner_id = #{bannerId}
+	</update> -->
 
 	<!-- brand2 -->
 

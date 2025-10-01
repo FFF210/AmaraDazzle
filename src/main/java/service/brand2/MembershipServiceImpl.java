@@ -23,6 +23,14 @@ public class MembershipServiceImpl implements MembershipService {
 			// 신청 목록 조회
 			List<Membership> membershipList = membershipDAO.selectMembershipList(params);
 
+//			db에서 데이터 오는 지 확인
+//			 System.out.println("[Service] selectMembershipList 결과 size = " + (membershipList == null ? "null" : membershipList.size()));
+//			    if (membershipList != null) {
+//			        for (Membership m : membershipList) {
+//			            System.out.println("[Service] membership row = " + m);
+//			        }
+//			    }
+			
 			// 총 멤버십 개수 조회
 			int totalCount = membershipDAO.selectMembershipCount(params);
 

@@ -49,27 +49,23 @@
 	<!-- 멤버십 결제 목록 조회 -->
 	<select id="selectMembershipList" parameterType="map"
 		resultType="membershipList">
-		SELECT m.membership_id, m.start_date, m.end_date, m.status,
-		p.pay_date,
-		p.lastautopay_date, p.payment_type, p.amount,
-		CASE
-		WHEN
-		m.status = 'CANCELLED' THEN p.pay_date
-		ELSE NULL
-		END AS cancel_date,
-		mp.membership_plan_id,
-		mp.plan_period,
-		mp.amount AS plan_amount,
-		mp.membership_explain
+		SELECT
+		m.membership_id AS membershipId,
+		m.start_date AS startDate,
+		m.end_date AS endDate,
+		m.status AS status,
+		p.pay_date AS payDate,
+		CASE WHEN m.status = 'CANCELLED' THEN p.pay_date END AS cancelDate,
+		mp.membership_plan_id AS planId,
+		mp.membership_explain AS planName,
+		p.payment_type AS paymentMethod,
+		(p.lastautopay_date IS NOT NULL) AS autopayFlag
 		FROM membership m
 		LEFT JOIN admin_payment p
-		ON
-		m.plan_id = p.plan_id AND m.brand_id = p.brand_id
-		LEFT JOIN
-		membership_plan mp
+		ON m.plan_id = p.plan_id AND m.brand_id = p.brand_id
+		LEFT JOIN membership_plan mp
 		ON m.plan_id = mp.membership_plan_id
-		ORDER BY
-		p.pay_date DESC
+		ORDER BY p.pay_date DESC
 	</select>
 
 	<!-- 멤버십 결제 개수 조회 -->

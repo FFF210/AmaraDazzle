@@ -6,16 +6,17 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import dao.brand2.AdminPaymentDAO;
 import dao.brand2.BannerDAO;
 import dao.brand2.BannerDAOImpl;
 import dto.Banner;
+import dto.brand2.AdminToss;
 import dto.brand2.BannerForm;
 import util.MybatisSqlSessionFactory;
 
 public class AdbannerServiceImpl implements AdbannerService {
-
 	private BannerDAO bannerDAO;
-//	private AdminPaymentDAO adminPaymentDAO;
+	private AdminPaymentDAO adminPaymentDAO;
 
 	public AdbannerServiceImpl() {
 		// dto 객체 초기화
@@ -65,5 +66,17 @@ public class AdbannerServiceImpl implements AdbannerService {
 		result.put("totalPages", totalPages);
 
 		return result;
+	}
+
+	@Override
+	public void savePayment(AdminToss payment) {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+
+			sqlSession.insert("mapper.adminPayment.insertAdminPayment", payment);
+
+			sqlSession.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
