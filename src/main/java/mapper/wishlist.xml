@@ -3,4 +3,26 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.wishlist">
+	<!-- ================[소비자] 상품 찜 버튼 클릭 =================== -->
+	<insert id="insertWishlist" parameterType="map">
+		INSERT INTO wishlist
+		(member_id, product_id)
+		VALUES (#{memberId}, #{productId})
+	</insert>
+
+
+	<!-- ================[소비자] 이미 찜한 상품인지 확인 =================== -->
+	<select id="existsWishlist" parameterType="map"
+		resultType="Integer">
+		SELECT COUNT(*)
+		FROM wishlist
+		WHERE member_id = #{memberId}
+		AND product_id = #{productId}
+	</select>
+
+	<!-- ================[소비자] 찜 취소 =================== -->
+	<delete id="deleteWishlist" parameterType="map">
+		DELETE FROM wishlist
+		WHERE member_id = #{memberId} AND product_id = #{productId}
+	</delete>
 </mapper>

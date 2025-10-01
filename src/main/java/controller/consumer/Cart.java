@@ -39,7 +39,7 @@ request.setCharacterEncoding("utf-8");
         // 로그인 확인
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("memberId") == null) {
-            response.sendRedirect(request.getContextPath() + "/consumer/login");
+            response.sendRedirect(request.getContextPath() + "/store/login");
             return;
         }
         

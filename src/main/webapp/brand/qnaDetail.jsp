@@ -17,7 +17,6 @@
 <link rel="stylesheet" href="../tagcss/tag.css" />
 <link rel="stylesheet" href="../tagcss/textArea.css" />
 <link rel="stylesheet" href="../tagcss/textInput.css" />
-<link rel="stylesheet" href="../tagcss/imageBtn.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/alert.css" />
 <link rel="stylesheet" href="./css/contentDetail.css" />
@@ -85,17 +84,17 @@
 					test="${not empty qna.image1FileId or not empty qna.image2FileId or not empty qna.image3FileId}">
 					<div class="content-row">
 						<label class="content-label">첨부</label>
-						<div class="content-images">
-							<c:if test="${not empty qna.image1FileId}">
-								<my:imageBtn name="upload1" id="${qna.image1FileId}" />
-							</c:if>
-							<c:if test="${not empty qna.image2FileId}">
-								<my:imageBtn name="upload2" id="${qna.image2FileId}" />
-							</c:if>
-							<c:if test="${not empty qna.image3FileId}">
-								<my:imageBtn name="upload3" id="${qna.image3FileId}" />
-							</c:if>
-						</div>
+						<c:forEach var="i" begin="1" end="3">
+							<div class="content-images">
+								<img
+									src="<c:out value='${not empty qna["image" += i += "FileId"] ? ("image?fileId=" += qna["image" += i += "FileId"]) : (contextPath += "/image/plus.png")}'/>"
+									id="preview-image${i}" alt="추가 이미지${i}" width="100px"
+									onclick="document.getElementById('image${i}').click();" /> <input
+									type="file" id="image${i}" name="image${i}" accept="image/*"
+									style="display: none"
+									onchange="readURL(this,'preview-image${i}');" />
+							</div>
+						</c:forEach>
 					</div>
 				</c:if>
 
@@ -113,7 +112,13 @@
 				<!-- 상품 정보 (상품문의일 경우만 노출) -->
 				<c:if test="${qna.category eq 'PRODUCT'}">
 					<div class="product-card">
-						<my:imageBtn name="productThumbnail" id="${qna.productThumbnail}" />
+						<img
+							src="<c:out value='${not empty qna.productThumbnail ? ("image?fileId=" += qna.productThumbnail) : (contextPath += "/img/plus.png")}'/>"
+							id="preview-thumbnail" alt="대표 이미지" width="100px"
+							onclick="document.getElementById('thumbnail').click();" /> <input
+							type="file" id="thumbnail" name="thumbnail" accept="image/*"
+							style="display: none"
+							onchange="readURL(this,'preview-thumbnail');" />
 						<div class="product-info">
 							<div class="product-name">${qna.productName}</div>
 							<!-- <div class="chip">옵션 정보</div> -->
@@ -178,6 +183,19 @@ function submitReply(qnaId, type) {
   // 폼 제출 → 서버에서 redirect 처리
   form.submit();
 }
+
+/*********************************************************************************************************
+ * 이미지 버튼
+ *********************************************************************************************************/
+ function readURL(input, previewId) {
+	    if (input.files && input.files[0]) {
+	      const reader = new FileReader();
+	      reader.onload = function(e) {
+	        document.getElementById(previewId).src = e.target.result;
+	      }
+	      reader.readAsDataURL(input.files[0]);
+	    }
+	  }
 
 </script>
 </html>

@@ -129,8 +129,8 @@
 
 				<div class="label req">배너 등록 기간</div>
 				<div class="inline date-row">
-					<input id="startDate" class="startDate" type="date"> <span>~</span>
-					<input id="endDate" class="endDate" type="date">
+					<input id="startDate" class="startDate" name="startDate" type="date"> <span>~</span>
+					<input id="endDate" class="endDate" name="endDate" type="date">
 				</div>
 
 				<div class="label">관리자 전달사항</div>
@@ -140,7 +140,7 @@
 				</div>
 				<div class="label">파일 업로드</div>
 				<div class="upload">
-					<my:uploader size="lg" id="uploadFileId" label="Click to upload"
+					<my:uploader size="lg" id="uploadFileId" name="uploadFileId" label="Click to upload"
 						desc="또는 파일을 이 영역으로 드래그하세요" />
 				</div>
 			</div>
@@ -257,7 +257,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       });
   });
-});
 
   </script>
 

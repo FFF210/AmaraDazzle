@@ -13,114 +13,6 @@
 		is_visible = 1
 	</select>
 
-	<!-- ================[소비자] 전체 상품 목록 조회 (페이징)=================== -->
-	<select id="selectAllProducts" parameterType="map"
-		resultType="dto.Product">
-		SELECT * FROM product
-		WHERE is_visible = 1
-		ORDER BY
-		created_at
-		DESC
-		LIMIT #{offset}, #{limit}
-	</select>
-
-	<!-- ================[소비자] 카테고리별 상품 목록 조회. Id 수정했음!!!!! ===================-->
-	<select id="selectProductByCategory" parameterType="map"
-		resultType="dto.Product">
-		SELECT * FROM product
-		WHERE category_id = #{categoryId}
-		AND
-		is_visible = 1
-		ORDER BY created_at DESC
-		LIMIT #{offset}, #{limit}
-	</select>
-
-	<!-- ================[소비자] 브랜드별 상품 목록 조회...필요한가? =================== -->
-	<select id="selectProductByBrand" parameterType="map"
-		resultType="dto.Product">
-		SELECT * FROM product
-		WHERE brand_id = #{brandId}
-		AND
-		is_visible = 1
-		ORDER BY created_at DESC
-		LIMIT #{offset}, #{limit}
-	</select>
-
-	<!-- ================[소비자] 상품 검색 (상품명으로) =================== -->
-	<select id="searchProductByName" parameterType="map"
-		resultType="dto.Product">
-		SELECT * FROM product
-		WHERE name LIKE CONCAT('%',
-		#{keyword},
-		'%')
-		AND is_visible = 1
-		ORDER BY created_at DESC
-		LIMIT
-		#{offset},
-		#{limit}
-	</select>
-
-	<!-- ================[소비자]신상품 목록 조회 (최근 등록순)=================== -->
-	<select id="selectNewProducts" parameterType="map"
-		resultType="dto.Product">
-		SELECT * FROM product
-		WHERE is_visible = 1
-		ORDER BY
-		created_at
-		DESC
-		LIMIT #{limit}
-	</select>
-
-	<!-- ================[소비자] 인기상품 목록 조회 (판매량 기준 - 별도 테이블 조인 필요할 수 있음)=================== -->
-	<select id="selectPopularProducts" parameterType="map"
-		resultType="dto.Product">
-		SELECT p.* FROM product p
-		WHERE p.is_visible = 1
-		ORDER BY
-		p.created_at DESC
-		LIMIT #{limit}
-	</select>
-
-	<!-- ================[소비자] 세일 상품 목록 조회 =================== -->
-	<select id="selectDiscountProducts" parameterType="map"
-		resultType="dto.Product">
-		SELECT * FROM product
-		WHERE is_visible = 1
-		AND discount_type
-		IS NOT NULL
-		AND discount_value > 0
-		AND (start_date IS NULL OR start_date
-		&lt;= NOW())
-		AND (end_date IS NULL OR end_date >= NOW())
-		ORDER BY
-		discount_value DESC
-		LIMIT #{offset}, #{limit}
-	</select>
-
-	<!-- ================[소비자] 기획상품 목록 조회 =================== -->
-	<select id="selectPlannedProducts" parameterType="map"
-		resultType="dto.Product">
-		SELECT * FROM product
-		WHERE is_planned = 1
-		AND is_visible = 1
-		ORDER BY created_at DESC
-		LIMIT #{offset}, #{limit}
-	</select>
-
-	<!--  상품 재고 확인 -->
-	<select id="selectStockQty" parameterType="long"
-		resultType="int">
-		SELECT
-		CASE
-		WHEN has_option = 1 THEN -1 /* 옵션이 있으면 별도 체크 필요
-		*/
-		ELSE stock_qty
-		END as stockQty
-		FROM product
-		WHERE product_id =
-		#{productId}
-	</select>
-
 	<!-- 상품 재고 업데이트 (주문 시) -->
 	<update id="updateStock" parameterType="map">
 		UPDATE product SET
@@ -160,22 +52,6 @@
 		WHERE product_id = #{productId}
 	</select>
 
-	<!-- 상품 목록 총 개수 (페이징용) -->
-	<select id="countAllProducts" resultType="int">
-		SELECT COUNT(*) FROM
-		product
-		WHERE is_visible = 1
-	</select>
-
-	<!-- 검색 결과 총 개수 -->
-	<select id="countSearchResults" parameterType="string"
-		resultType="int">
-		SELECT COUNT(*) FROM product
-		WHERE name LIKE CONCAT('%',
-		#{keyword}, '%')
-		AND is_visible = 1
-	</select>
-
 	<!-- 장바구니/주문용 - 상품 기본 정보 조회 -->
 	<select id="selectForOrder" parameterType="list"
 		resultType="map">
@@ -196,7 +72,174 @@
 		</foreach>
 		AND is_visible = 1
 	</select>
-	
+
+	<!-- ================[소비자] 기획상품 목록 조회 =================== -->
+	<select id="selectPlannedProducts" parameterType="map"
+		resultType="productPlan">
+		SELECT
+		p.product_id AS productId,
+		p.brand_id AS brandId,
+		p.has_option AS hasOption,
+		b.brand_name AS brandName,
+		p.name AS name,
+		p.is_exclusive AS isExclusive,
+		p.is_visible AS isVisible,
+		p.is_planned AS isPlanned,
+		p.category1_id AS category1Id,
+		p.category2_id AS category2Id,
+		p.category3_id AS category3Id,
+		p.thumbnail_file_id AS thumbnailFileId,
+		p.price AS price,
+		p.discount_type AS discountType,
+		p.discount_value AS discountValue,
+		p.start_date AS startDate,
+		p.end_date AS endDate,
+		p.created_at AS createdAt,
+		p.updated_at AS updatedAt,
+
+		IFNULL(s.total_sold, 0) AS totalSold,
+		IFNULL(r.review_count, 0) AS reviewCount,
+		IFNULL(r.avg_rating, 0) AS avgRating,
+		IFNULL(w.wish_count, 0) AS wishCount,
+		(
+		(IFNULL(s.total_sold, 0) * 0.5) +
+		(IFNULL(r.review_count, 0) * 0.2) +
+		(IFNULL(r.avg_rating, 0) * 0.1) +
+		(IFNULL(w.wish_count, 0) * 0.2)
+		) AS popularityScore,
+
+		CASE WHEN uw.wishlist_id IS NOT NULL THEN 1 ELSE 0 END AS isWished
+
+		FROM product p
+		JOIN brand b ON p.brand_id = b.brand_id
+
+		LEFT JOIN (
+		SELECT oi.product_id, SUM(oi.quantity) AS total_sold
+		FROM order_item oi
+		WHERE oi.status IN ('PAID','PREPARING','SHIPPING','DELIVERED','CONFIRMED')
+		AND oi.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY oi.product_id
+		) s ON p.product_id = s.product_id
+
+		LEFT JOIN (
+		SELECT rv.product_id,
+		COUNT(rv.review_id) AS review_count,
+		AVG(rv.rating) AS avg_rating
+		FROM review rv
+		WHERE rv.status = 'PUBLISHED'
+		AND rv.questioned_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY rv.product_id
+		) r ON p.product_id = r.product_id
+
+		LEFT JOIN (
+		SELECT wl.product_id, COUNT(wl.wishlist_id) AS wish_count
+		FROM wishlist wl
+		WHERE wl.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY wl.product_id
+		) w ON p.product_id = w.product_id
+
+		<!-- 현재 로그인한 회원이 찜한 상품 -->
+		LEFT JOIN (
+		SELECT wishlist_id, product_id
+		FROM wishlist
+		WHERE member_id = #{memberId}
+		) uw ON p.product_id = uw.product_id
+
+		WHERE p.is_planned = 1
+		AND p.is_visible = 1
+
+		<if test="category1Id != null">
+			AND p.category1_id = #{category1Id}
+		</if>
+		<if test="category2Id != null">
+			AND p.category2_id = #{category2Id}
+		</if>
+		<if test="category3Id != null">
+			AND p.category3_id = #{category3Id}
+		</if>
+
+		<choose>
+			<when test="sort == 'RECENT'">
+				ORDER BY p.created_at DESC
+			</when>
+			<when test="sort == 'SALES'">
+				ORDER BY totalSold DESC
+			</when>
+			<when test="sort == 'PRICELOW'">
+				ORDER BY p.price ASC
+			</when>
+			<when test="sort == 'PRICEHIGH'">
+				ORDER BY p.price DESC
+			</when>
+			<when test="sort == 'POPULAR'">
+				ORDER BY popularityScore DESC
+			</when>
+			<otherwise>
+				ORDER BY p.created_at DESC
+			</otherwise>
+		</choose>
+
+		LIMIT #{offset}, #{limit}
+	</select>
+
+	<!-- ================[소비자] 기획상품 개수 조회 =================== -->
+	<select id="selectPlannedProductsCount" parameterType="map"
+		resultType="Integer">
+		SELECT COUNT(*)
+		FROM (
+		SELECT p.product_id
+		FROM product p
+		LEFT JOIN (
+		SELECT oi.product_id,
+		SUM(oi.quantity) AS total_sold
+		FROM order_item oi
+		WHERE oi.status IN
+		('PAID','PREPARING','SHIPPING','DELIVERED','CONFIRMED')
+		AND
+		oi.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		oi.product_id
+		) s ON p.product_id = s.product_id
+		LEFT JOIN (
+		SELECT
+		rv.product_id,
+		COUNT(rv.review_id) AS review_count,
+		AVG(rv.rating) AS
+		avg_rating
+		FROM review rv
+		WHERE rv.status = 'PUBLISHED'
+		AND
+		rv.questioned_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		rv.product_id
+		) r ON p.product_id = r.product_id
+		LEFT JOIN (
+		SELECT
+		wl.product_id,
+		COUNT(wl.wishlist_id) AS wish_count
+		FROM wishlist wl
+		WHERE wl.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		wl.product_id
+		) w ON p.product_id = w.product_id
+		WHERE p.is_planned = 1
+		AND p.is_visible = 1
+		<if test="category1Id != null">
+			AND p.category1_id = #{category1Id}
+		</if>
+		<if test="category2Id != null">
+			AND p.category2_id = #{category2Id}
+		</if>
+		<if test="category3Id != null">
+			AND p.category3_id = #{category3Id}
+		</if>
+		GROUP BY p.product_id
+		) AS countTable
+	</select>
+
+
+
+
 
 	<!--======================= [브랜드 어드민] 상품 목록 조회 ======================= -->
 	<select id="selectProductListForBrand" parameterType="map"
@@ -405,18 +448,12 @@
 		p.category1_id,
 		p.category2_id,
 		p.category3_id,
-		uf_thumb.storage_path AS thumb_path,
-		uf_thumb.file_rename AS thumb_file,
-		uf1.storage_path AS image1_path,
-		uf1.file_rename AS image1_file,
-		uf2.storage_path AS image2_path,
-		uf2.file_rename AS image2_file,
-		uf3.storage_path AS image3_path,
-		uf3.file_rename AS image3_file,
-		uf4.storage_path AS image4_path,
-		uf4.file_rename AS image4_file,
-		uf5.storage_path AS image5_path,
-		uf5.file_rename AS image5_file,
+		p.thumbnail_file_id,
+		p.image1_file_id,
+		p.image2_file_id,
+		p.image3_file_id,
+		p.image4_file_id,
+		p.image5_file_id,
 		p.ingredients,
 		p.price,
 		p.order_limit,
@@ -425,12 +462,12 @@
 		p.shipping_method,
 		p.discount_type,
 		CASE
-		WHEN
-		p.discount_type = 'RATE'
-		THEN p.price - (p.price * p.discount_value /
-		100)
+		WHEN p.discount_type = 'RATE'
+		THEN p.price -
+		(p.price * p.discount_value / 100)
 		WHEN p.discount_type = 'AMOUNT'
-		THEN p.price - p.discount_value
+		THEN
+		p.price - p.discount_value
 		ELSE p.price
 		END AS sale_price,
 		p.created_at,
@@ -447,46 +484,42 @@
 		THEN CONCAT(cd.code, ':', cd.name) END) AS
 		personal_colors
 		FROM product p
-		LEFT JOIN upload_file uf_thumb ON
-		p.thumbnail_file_id =
-		uf_thumb.upload_file_id
-		LEFT JOIN upload_file uf1
-		ON p.image1_file_id = uf1.upload_file_id
-		LEFT JOIN upload_file uf2 ON
-		p.image2_file_id = uf2.upload_file_id
-		LEFT JOIN upload_file uf3 ON
-		p.image3_file_id = uf3.upload_file_id
-		LEFT JOIN upload_file uf4 ON
-		p.image4_file_id = uf4.upload_file_id
-		LEFT JOIN upload_file uf5 ON
-		p.image5_file_id = uf5.upload_file_id
-		LEFT JOIN product_filter_map pf
-		ON p.product_id = pf.product_id
-		LEFT JOIN code_detail cd ON
-		pf.filter_id = cd.code_detail_id
-		LEFT JOIN code_master cm ON
-		cd.code_master_id = cm.code_master_id
+		LEFT JOIN product_filter_map pf ON
+		p.product_id = pf.product_id
+		LEFT JOIN code_detail cd ON pf.filter_id =
+		cd.code_detail_id
+		LEFT JOIN code_master cm ON cd.code_master_id =
+		cm.code_master_id
 		WHERE p.product_id = #{productId}
-		GROUP BY p.product_id
+		GROUP BY
+		p.product_id
 	</select>
 
 	<!--======================= [브랜드 어드민] 상품 등록 ======================= -->
-	<insert id="insertProductForBrand" parameterType="productDetail" useGeneratedKeys="true" keyProperty="productId">
+	<insert id="insertProductForBrand" parameterType="productDetail"
+		useGeneratedKeys="true" keyProperty="productId">
 		INSERT INTO product (
-		brand_id, name, is_exclusive, is_visible, is_planned,
-		category1_id,
-		category2_id, category3_id,
-		ingredients, price, order_limit,
+		brand_id,
+		name, is_exclusive, is_visible, is_planned,
+		category1_id, category2_id,
+		category3_id,
+		thumbnail_file_id,
+		image1_file_id, image2_file_id,
+		image3_file_id, image4_file_id, image5_file_id,
+		ingredients, price,
+		order_limit,
 		has_option, stock_qty,
 		shipping_method
 		) VALUES (
 		#{brandId}, #{name},
 		#{isExclusive}, #{isVisible}, #{isPlanned},
-		#{category1Id},
-		#{category2Id}, #{category3Id},
-		#{ingredients},
-		#{price}, #{orderLimit},
-		#{hasOption}, #{stockQty},
+		#{category1Id}, #{category2Id}, #{category3Id},
+		#{thumbnailFileId},
+		#{image1FileId}, #{image2FileId}, #{image3FileId}, #{image4FileId},
+		#{image5FileId},
+		#{ingredients}, #{price}, #{orderLimit},
+		#{hasOption},
+		#{stockQty},
 		#{shippingMethod}
 		)
 	</insert>
@@ -494,27 +527,45 @@
 	<!--======================= [브랜드 어드민] 상품 수정 ======================= -->
 	<update id="updateProductForBrand" parameterType="productDetail">
 		UPDATE product
-		SET name
-		= #{name},
-		is_exclusive =
-		#{isExclusive},
-		is_visible = #{isVisible},
-		is_planned = #{isPlanned},
-		category1_id = #{category1Id},
-		category2_id =
-		#{category2Id},
-		category3_id = #{category3Id},
-		ingredients =
-		#{ingredients},
-		price =
-		#{price},
-		order_limit = #{orderLimit},
-		has_option
-		= #{hasOption},
-		stock_qty = #{stockQty},
-		shipping_method =
-		#{shippingMethod},
-		updated_at = NOW()
+		<set>
+			name = #{name},
+			is_exclusive = #{isExclusive},
+			is_visible =
+			#{isVisible},
+			is_planned = #{isPlanned},
+			category1_id = #{category1Id},
+			category2_id = #{category2Id},
+			category3_id = #{category3Id},
+			ingredients = #{ingredients},
+			price = #{price},
+			order_limit =
+			#{orderLimit},
+			has_option = #{hasOption},
+			stock_qty = #{stockQty},
+			shipping_method = #{shippingMethod},
+
+			<!-- 이미지: 값이 null이 아닐 때만 업데이트 -->
+			<if test="thumbnailFileId != null">
+				thumbnail_file_id = #{thumbnailFileId},
+			</if>
+			<if test="image1FileId != null">
+				image1_file_id = #{image1FileId},
+			</if>
+			<if test="image2FileId != null">
+				image2_file_id = #{image2FileId},
+			</if>
+			<if test="image3FileId != null">
+				image3_file_id = #{image3FileId},
+			</if>
+			<if test="image4FileId != null">
+				image4_file_id = #{image4FileId},
+			</if>
+			<if test="image5FileId != null">
+				image5_file_id = #{image5FileId},
+			</if>
+
+			updated_at = NOW()
+		</set>
 		WHERE product_id = #{productId}
 	</update>
 

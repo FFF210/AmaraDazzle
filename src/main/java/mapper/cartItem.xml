@@ -4,7 +4,7 @@
 
 <mapper namespace="mapper.cartItem">
 
-<!-- =======================소비자용================ -->
+<!-- =======================소비자용===================== -->
 	<!-- 장바구니에 상품 추가 -->
 	<insert id="insertCartItem" parameterType="dto.CartItem"
 		useGeneratedKeys="true" keyProperty="cartItemId">
@@ -15,7 +15,7 @@
 		)
 	</insert>
 
-	<!-- 특정 회원의 장바구니 조회 (상품 정보 포함) -->
+	<!-- 회원의 장바구니 조회 (상품 정보 포함) -->
 	<select id="selectCartItemByMemberId" parameterType="long"
 		resultType="map">
 		SELECT

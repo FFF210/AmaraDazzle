@@ -49,18 +49,6 @@
   document.addEventListener("DOMContentLoaded", () => {
     const sortButtons = document.querySelectorAll(".sort-item");
 
-    if (sortButtons.length > 0) {
-      // 첫 번째 버튼("인기순") 기본 선택
-      const firstBtn = sortButtons[0];
-      firstBtn.classList.add("selected");
-
-      // 초기 진입 시에도 이벤트 발생시키고 싶다면
-      const initEvent = new CustomEvent("sortSelected", {
-        detail: { sort: firstBtn.textContent.trim() }
-      });
-      document.dispatchEvent(initEvent);
-    }
-
     // 버튼 클릭 이벤트 처리
     sortButtons.forEach(btn => {
       btn.addEventListener("click", () => {

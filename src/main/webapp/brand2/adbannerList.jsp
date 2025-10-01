@@ -123,25 +123,34 @@
 											<%-- 승인 대기 --%>
 											<c:when test="${banner.status eq 'PENDING'}">
 												<button type="button" class="btn btn-outline btn-sm"
-													onclick="location.href='/miniProj2/brand2/eventForm.jsp?bannerId=${banner.bannerId}'">
+													onclick="location.href='/brand2/eventForm.jsp?bannerId=${banner.bannerId}'">
 													상세보기</button>
 												<button type="button" class="btn btn-danger btn-sm"
-													onclick="if(confirm('정말 취소하시겠습니까?')) location.href='/miniProj2/brand2/bannerCancel.do?bannerId=${banner.bannerId}'">
+													onclick="if(confirm('정말 취소하시겠습니까?')) location.href='/brand2/bannerCancel.do?bannerId=${banner.bannerId}'">
 													취소</button>
 											</c:when>
 
-											<%-- 승인 완료 --%>
-											<c:when test="${banner.status eq 'APPROVED'}">
-												<button type="button" class="btn btn-success btn-sm"
-													onclick="location.href='/miniProj2/brand2/payment.jsp?bannerId=${banner.bannerId}'">
-													결제하기</button>
+											<%-- 승인 완료 but 미결제 --%>
+											<c:when
+												test="${banner.status eq 'APPROVED' and not banner.paid}">
+												<button type="button" class="btn btn-outline btn-sm" id="payBtn" > 결제하기</button>
+											</c:when>
+
+											<%-- 승인 완료 & 결제 완료 --%>
+											<c:when test="${banner.status eq 'APPROVED' and banner.paid}">
+												<button type="button" class="btn btn-info btn-sm"
+													onclick="location.href='/brand2/bannerDetail.jsp?bannerId=${banner.bannerId}'">
+													상세보기</button>
+												<button type="button" class="btn btn-danger btn-sm"
+													onclick="location.href='/brand2/cancelBanner.do?bannerId=${banner.bannerId}'">
+													취소</button>
 											</c:when>
 
 											<%-- 진행 중 / 완료 / 취소 --%>
 											<c:when
 												test="${banner.status eq 'ONGOING' or banner.status eq 'COMPLETED' or banner.status eq 'CANCELED'}">
 												<button type="button" class="btn btn-outline btn-sm"
-													onclick="location.href='/miniProj2/brand2/eventForm.jsp?bannerId=${banner.bannerId}'">
+													onclick="location.href='/brand2/eventForm.jsp?bannerId=${banner.bannerId}'">
 													상세보기</button>
 											</c:when>
 										</c:choose>
@@ -158,7 +167,7 @@
 			<my:pagination currentPage="${currentPage}"
 				totalPages="${totalPages}"
 				baseUrl="/brand2/adbannerList?${queryString}&page=" />
-
+			<!-- test_ck_XZYkKL4Mrj9eGzWBRNORV0zJwlEW -->
 		</div>
 	</my:layout>
 	<script>
@@ -199,56 +208,97 @@ document.addEventListener("filterChanged", (e) => {
   }
 });
 
-// =============================
-// selectbox 관련 코드 수정 부분
-// =============================
+
+//=============================
+//selectbox 관련 코드 수정 부분
+//=============================
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".custom-select").forEach(select => {
-    const header = select.querySelector(".select-header");
-    const label = select.querySelector(".select-label");
-    const list = select.querySelector(".select-list");
-    const items = select.querySelectorAll(".select-item");
+document.querySelectorAll(".custom-select").forEach(select => {
+ const header = select.querySelector(".select-header");
+ const label = select.querySelector(".select-label");
+ const list = select.querySelector(".select-list");
+ const items = select.querySelectorAll(".select-item");
 
-    // 열기/닫기 토글
-    header.addEventListener("click", () => {
-      select.classList.toggle("open");
-    });
+ // 열기/닫기 토글
+ header.addEventListener("click", () => {
+   select.classList.toggle("open");
+ });
 
-    // 옵션 선택
-    items.forEach(item => {
-      item.addEventListener("click", () => {
-        // 라벨 교체
-        label.textContent = item.textContent;
+ // 옵션 선택
+ items.forEach(item => {
+   item.addEventListener("click", () => {
+     // 라벨 교체
+     label.textContent = item.textContent;
 
-        // active 표시 갱신
-        items.forEach(i => i.classList.remove("active"));
-        item.classList.add("active");
+     // active 표시 갱신
+     items.forEach(i => i.classList.remove("active"));
+     item.classList.add("active");
 
-        // 닫기
-        select.classList.remove("open");
+     // 닫기
+     select.classList.remove("open");
 
-        let mappedValue = item.textContent;
-        if (mappedValue === "광고명") mappedValue = "bannerName";
-        if (mappedValue === "광고담당자") mappedValue = "managerName";
+     let mappedValue = item.textContent;
+     if (mappedValue === "광고명") mappedValue = "bannerName";
+     if (mappedValue === "광고담당자") mappedValue = "managerName";
 
-        // 커스텀 이벤트 발생 (value=DB 값, text=화면 표시 값)
-        const event = new CustomEvent("selectChanged", {
-          detail: {
-            value: mappedValue,      // DB에서 사용할 값
-            text: item.textContent   // 화면에 보이는 값
-          }
-        });
-        document.dispatchEvent(event);
-      });
-    });
+     // 커스텀 이벤트 발생
+     const event = new CustomEvent("selectChanged", {
+       detail: {
+         value: mappedValue,
+         text: item.textContent
+       }
+     });
+     document.dispatchEvent(event);
+   });
+ });
 
-    // 다른 영역 클릭 시 닫기
-    document.addEventListener("click", (e) => {
-      if (!select.contains(e.target)) {
-        select.classList.remove("open");
-      }
-    });
-  });
+ // 다른 영역 클릭 시 닫기
+ document.addEventListener("click", (e) => {
+   if (!select.contains(e.target)) {
+     select.classList.remove("open");
+   }
+ });
+});
+});
+
+
+//------ 클라이언트 키로 객체 초기화 ------
+var clientKey = "test_ck_XZYkKL4Mrj9eGzWBRNORV0zJwlEW";
+var tossPayments = TossPayments(clientKey);
+
+// ------ 결제창 띄우기 ------
+// ------ 버튼 클릭 시 결제창 띄우기 ------
+document.addEventListener("DOMContentLoaded", function() {
+	var button = document.getElementById("payBtn");
+
+	button.addEventListener("click", function() {
+		tossPayments
+			.requestPayment("카드", {
+				// 결제수단 파라미터 (카드, 계좌이체, 가상계좌, 휴대폰 등)
+				// 결제 정보 파라미터
+				// 더 많은 결제 정보 파라미터는 결제창 Javascript SDK에서 확인하세요.
+				// https://docs.tosspayments.com/sdk/payment-js
+				amount: 1, // 결제 금액
+				orderId: 'owxy0ZK_p8jVqcygW9sW2d', // 주문번호(주문번호는 상점에서 직접 만들어주세요.)
+				orderName: "테스트 결제", // 구매상품 (생수 외 1건) 같은 형식
+				customerName: "김토스", // 구매자 이름
+				successUrl: "http://localhost:8080/tossSuccess", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+				failUrl: "http://localhost:8080/tossFail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+			})
+			// ------결제창을 띄울 수 없는 에러 처리 ------
+			// 메서드 실행에 실패해서 reject 된 에러를 처리하는 블록입니다.
+			// 결제창에서 발생할 수 있는 에러를 확인하세요.
+			// https://docs.tosspayments.com/reference/error-codes#결제창공통-sdk-에러
+			.catch(function(error) {
+				if (error.code === "USER_CANCEL") {
+					// 구매자가 결제창을 닫았을 때 에러 처리
+					alert("결제 처리가 취소되었습니다")
+				} else if (error.code === "INVALID_CARD_COMPANY") {
+					// 유효하지 않은 카드 코드에 대한 에러 처리
+					alert("결제 처리 중 오류가 발생했습니다")
+				}
+			});
+	});
 });
 </script>
 

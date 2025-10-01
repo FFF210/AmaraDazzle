@@ -5,7 +5,7 @@
 <mapper namespace="mapper.review">
 
 	<!-- =================소비자=================== -->
-	<!-- 상품 ID로 해당 상품의 리뷰 목록 조회 (공개된 것만) -->
+	<!-- [소비자] 상품 ID로 해당 상품의 리뷰 목록 조회 (공개된 것만) [ProductDetail 용] -->
 	<select id="selectReviewsByProductId" parameterType="Long"
 		resultType="dto.Review">
 		SELECT * FROM review
@@ -16,7 +16,7 @@
 		LIMIT 10
 	</select>
 
-	<!-- 상품의 리뷰 요약 정보 조회 -->
+	<!-- [소비자] 상품의 리뷰 요약 정보 조회 [ProductDetail 용] -->
 	<select id="getReviewSummaryByProductId" parameterType="Long"
 		resultType="java.util.Map">
 		SELECT
@@ -35,6 +35,139 @@
 		WHERE product_id = #{productId}
 		AND status = 'PUBLISHED'
 	</select>
+
+	<!-- ========================== [소비자 마이페이지용] ========================== -->
+	<!-- 리뷰 작성 가능한 상품 목록 조회 (배송완료/구매확정된 상품 중 아직 리뷰를 작성하지 않은 상품들) -->
+	<select id="selectReviewableItems" parameterType="Long"
+		resultType="java.util.Map">
+		SELECT
+		oi.order_item_id,
+		oi.order_id,
+		oi.product_id,
+		oi.option_id AS product_option_id,
+		oi.unit_price,
+		oi.quantity,
+		oi.status
+		AS order_status,
+		o.created_at AS
+		order_date,
+		p.name AS product_name,
+		p.thumbnail_file_id,
+		po.option_value
+		AS option_name
+		FROM order_item oi
+		INNER JOIN orders o ON oi.order_id = o.orders_id
+		INNER JOIN product p
+		ON oi.product_id = p.product_id
+		LEFT JOIN product_option po ON
+		oi.option_id = po.product_option_id
+		LEFT JOIN review r ON
+		oi.order_item_id = r.order_item_id
+		WHERE o.member_id = #{memberId}
+		AND
+		oi.status IN ('DELIVERED', 'CONFIRMED')
+		AND r.review_id IS NULL
+		ORDER BY
+		o.created_at DESC
+	</select>
+
+	<!-- ========= [소비자 마이페이지용] 내가 작성한 리뷰 목록 조회 ======================= -->
+	<select id="selectMyReviews" parameterType="Long"
+		resultType="java.util.Map">
+		SELECT
+		r.review_id,
+		r.order_item_id,
+		r.product_id,
+		r.product_option_id,
+		r.rating,
+		r.content,
+		r.image1_file_id,
+		r.image2_file_id,
+		r.image3_file_id,
+		r.status AS
+		review_status,
+		r.questioned_at AS review_date,
+		r.answer,
+		r.answered_at,
+		oi.order_id,
+		oi.unit_price,
+		oi.quantity,
+		o.created_at AS order_date,
+		p.name AS
+		product_name,
+		p.thumbnail_file_id,
+		po.option_value AS
+		option_name
+		FROM
+		review r
+		INNER JOIN order_item oi ON r.order_item_id = oi.order_item_id
+		INNER JOIN orders o ON oi.order_id = o.orders_id
+		INNER JOIN product p
+		ON r.product_id = p.product_id
+		LEFT JOIN product_option po ON
+		r.product_option_id = po.product_option_id
+		WHERE r.member_id =
+		#{memberId}
+		ORDER BY r.questioned_at DESC
+	</select>
+
+	<!-- ====== [소비자 마이페이지용] 리뷰 작성 ======================= -->
+	<insert id="insertReview" parameterType="dto.Review">
+		INSERT INTO review (
+		member_id,
+		order_item_id,
+		product_id,
+		product_option_id,
+		rating,
+		content,
+		image1_file_id,
+		image2_file_id,
+		image3_file_id,
+		status
+		) VALUES (
+		#{memberId},
+		#{orderItemId},
+		#{productId},
+		#{productOptionId},
+		#{rating},
+		#{content},
+		#{image1FileId},
+		#{image2FileId},
+		#{image3FileId},
+		'PUBLISHED'
+		)
+	</insert>
+
+	<!-- ==== [소비자 마이페이지용] 특정 주문상품에 대한 리뷰 존재 여부 확인 ====================== -->
+	<select id="checkReviewExists" parameterType="Long"
+		resultType="Integer">
+		SELECT COUNT(*)
+		FROM review
+		WHERE order_item_id = #{orderItemId}
+	</select>
+
+	<!-- ==== [소비자 마이페이지용] 리뷰 상세 조회 (수정용) ======================= -->
+	<select id="selectReviewById" parameterType="Long"
+		resultType="dto.Review">
+		SELECT *
+		FROM review
+		WHERE review_id = #{reviewId}
+	</select>
+
+	<!-- ==== [소비자 마이페이지용] 리뷰 수정 ======================= -->
+	<update id="updateReview" parameterType="dto.Review">
+		UPDATE review
+		SET
+		rating = #{rating},
+		content = #{content},
+		image1_file_id = #{image1FileId},
+		image2_file_id = #{image2FileId},
+		image3_file_id = #{image3FileId}
+		WHERE review_id = #{reviewId}
+		AND member_id = #{memberId}
+			가능 -->
+	</update>
+
 
 	<!-- ======================= [브랜드 어드민] 리뷰 목록 조회 ======================= -->
 	<select id="selectReviewListForBrand" parameterType="map"
@@ -177,12 +310,15 @@
 		p.thumbnail_file_id,
 		p.name AS product_name,
 		m.name AS member_name,
-		CASE WHEN r.answer IS NOT NULL THEN 'ANSWERED' ELSE 'PENDING' END AS
+		CASE WHEN r.answer IS NOT
+		NULL THEN 'ANSWERED' ELSE 'PENDING' END AS
 		answer_status
 		FROM review r
 		INNER JOIN product p ON r.product_id = p.product_id
-		LEFT JOIN product_option po ON r.product_option_id = po.product_option_id
-		INNER JOIN member m ON r.member_id = m.member_id
+		LEFT JOIN
+		product_option po ON r.product_option_id = po.product_option_id
+		INNER
+		JOIN member m ON r.member_id = m.member_id
 		WHERE r.review_id = #{value}
 	</select>
 

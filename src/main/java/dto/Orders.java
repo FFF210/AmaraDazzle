@@ -18,7 +18,7 @@ public class Orders {
     private String shipLine1;        // 주소
     private String shipLine2;        // 상세주소
     private String note;             // 배송 요청사항
-    private String usingCoupon;      // 사용 쿠폰 ID (FK → member_coupon.member_coupon_id)
+    private Long usingCoupon;      // 사용 쿠폰 ID (FK → member_coupon.member_coupon_id)
     private Integer usingPoint;      // 사용 포인트
     private Timestamp createdAt;     // 주문 시각 (DEFAULT CURRENT_TIMESTAMP)
 
@@ -123,10 +123,10 @@ public class Orders {
         this.note = note;
     }
 
-    public String getUsingCoupon() {
+    public Long getUsingCoupon() {
         return usingCoupon;
     }
-    public void setUsingCoupon(String usingCoupon) {
+    public void setUsingCoupon(Long usingCoupon) {
         this.usingCoupon = usingCoupon;
     }
 

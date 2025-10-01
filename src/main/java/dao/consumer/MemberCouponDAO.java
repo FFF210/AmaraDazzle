@@ -18,4 +18,15 @@ public interface MemberCouponDAO {
      * @param memberId 회원 ID
      * @return 쿠폰 목록
      */
-    List<Map<String, Object>> selectMemberCouponList(Long memberId) throws Exception;}
+    List<Map<String, Object>> selectMemberCouponList(Long memberId) throws Exception;
+    
+    /**
+     * 사용한 쿠폰 정보 조회
+     * @param memberCouponId 회원 쿠폰 ID
+     * @return 쿠폰 정보 (쿠폰명, 할인금액)
+     */
+    Map<String, Object> getCouponInfoByMemberCouponId(Long memberCouponId) throws Exception;
+    
+}
+
+

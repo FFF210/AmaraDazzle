@@ -15,7 +15,7 @@ import service.consumer.OrderServiceImpl;
 /**
  * Servlet implementation class PaymentSuccess
  */
-@WebServlet("/consumer/paymentSuccess")
+@WebServlet("/store/paymentSuccess")
 public class PaymentSuccess extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -46,7 +46,7 @@ public class PaymentSuccess extends HttpServlet {
 			Long memberId = (Long) session.getAttribute("memberId");
 
 			if (memberId == null) {
-				response.sendRedirect(request.getContextPath() + "/consumer/login");
+				response.sendRedirect(request.getContextPath() + "/store/login");
 				return;
 			}
 
@@ -61,7 +61,7 @@ public class PaymentSuccess extends HttpServlet {
 
 			if (success) {
 				// 5. 주문 완료 페이지로 리다이렉트
-				response.sendRedirect(request.getContextPath() + "/consumer/orderComplete?orderId=" + orderId);
+				response.sendRedirect(request.getContextPath() + "/store/orderComplete?orderId=" + orderId);
 			} else {
 				request.setAttribute("err", "결제 승인에 실패했습니다.");
 				request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);

@@ -81,14 +81,31 @@
 							<tr>
 								<td><input type="checkbox" class="form-check" /></td>
 								<td>${membership.membershipId}</td>
-								<td>결제/취소일</td>
-								<td><my:tag color="green" size="sm" text="결제" /></td>
+								<td><fmt:formatDate value="${membership.payDate}"
+										pattern="yyyy-MM-dd" /> <c:if
+										test="${not empty membership.cancelDate}">
+      / <fmt:formatDate value="${membership.cancelDate}"
+											pattern="yyyy-MM-dd" />
+									</c:if></td>
+								<td><c:choose>
+										<c:when
+											test="${membership.status eq 'EXPIRED' or membership.status eq 'ACTIVE'}">
+											<my:tag color="green" size="sm" text="결제" />
+										</c:when>
+										<c:when test="${membership.status eq 'CANCELLED'}">
+											<my:tag color="red" size="sm" text="취소" />
+										</c:when>
+									</c:choose></td>
+
+
 								<td><fmt:formatDate value="${membership.startDate}"
 										pattern="yyyy-MM-dd" /> ~ <fmt:formatDate
 										value="${membership.endDate}" pattern="yyyy-MM-dd" /></td>
-								<td>멤버십 1개월</td>
-								<td>토스페이/취소</td>
-								<td>정기결제인경우에만</td>
+								<td>${membership.planName}</td>
+								<td>${membership.paymentMethod}</td>
+								<td><c:if test="${membership.autopayFlag}">정기결제</c:if> <c:if
+										test="${!membership.autopayFlag}">단건결제</c:if></td>
+
 							</tr>
 						</c:forEach>
 					</tbody>

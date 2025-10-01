@@ -3,6 +3,7 @@
   width: 237px;
   display: flex;
   flex-direction: column;
+  text-decoration: none;
   gap: 8px;
   font-family: "Noto Sans KR", sans-serif;
 }

@@ -18,7 +18,6 @@ public class BannerForm {
 	private String brandUrl; // 브랜드페이지 URL
 
 	private Long uploadFileId; // 업로드 파일 ID (FK → UploadFile, AUTO_INCREMENT)
-	private Long paymentId; // 결제 내역 고유 ID (FK → AdminPayment, AUTO_INCREMENT)
 
 	public BannerForm() {
 	}
@@ -119,21 +118,12 @@ public class BannerForm {
 		this.uploadFileId = uploadFileId;
 	}
 
-	public Long getPaymentId() {
-		return paymentId;
-	}
-
-	public void setPaymentId(Long paymentId) {
-		this.paymentId = paymentId;
-	}
-
 	@Override
 	public String toString() {
 		return "BannerForm [bannerId=" + bannerId + ", brandId=" + brandId + ", managerName=" + managerName
 				+ ", managerTel=" + managerTel + ", startDate=" + startDate + ", endDate=" + endDate + ", bannerName="
 				+ bannerName + ", bannerMessage=" + bannerMessage + ", status=" + status + ", createdAt=" + createdAt
-				+ ", brandUrl=" + brandUrl + ", uploadFileId=" + uploadFileId + ", paymentId=" + paymentId + "]";
+				+ ", brandUrl=" + brandUrl + ", uploadFileId=" + uploadFileId + "]";
 	}
-
 
 }
