@@ -4,15 +4,32 @@
 
 <mapper namespace="mapper.adminPayment">
 
-	<!-- 결제 성공 후 배너 신청 -->
-	<insert id="insertAdminPay" parameterType="adminPayment">
-		insert into
-		admin_payment (payment_id, payment_type, payment_key, brand_id, amount,
-		plan_id, banner_id, pay_date, lastautopay_date)
-		values(0, #{paymentId},#{paymentType}, #{paymentKey}, #{brandId}, #{amount},
-		#{planId}, #{bannerId}, #{payDate}, #{lastAutopayDate} )
+	<!-- 최고관리자의 승인 시 결제하기 버튼 -->
+
+	<insert id="insertAdminPayment" parameterType="adminToss">
+		INSERT INTO
+		admin_payment (order_id, amount, payment_key, brand_id,
+		created_at)
+		VALUES (#{orderId}, #{amount}, #{paymentKey}, #{brandId}, NOW())
 	</insert>
 
 
+	<update id="updateSuccessByOrderId">
+		UPDATE admin_payment
+		SET payment_key = #{paymentKey},
+		pay_date = #{approvedAt},
+		amount = #{amount}
+		WHERE order_id = #{orderId}
+	</update>
+
+	<update id="updateFailedByOrderId">
+		UPDATE admin_payment
+		SET payment_key = #{paymentKey},
+		WHERE order_id = #{orderId}
+	</update>
+
+	<!-- banner_id로 결제 여부 조회 <select id="selectPaymentByBannerId" parameterType="long" 
+		resultType="adminPayment"> SELECT * FROM admin_payment WHERE banner_id = 
+		#{bannerId} </select> -->
 
 </mapper>

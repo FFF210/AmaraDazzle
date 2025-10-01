@@ -55,6 +55,10 @@ public class MembershipList extends HttpServlet {
 			Map<String, Object> result = service.MembershipListByPage(params);
 
 			// JSP 전달(jsp -> items="${...}", ServiceImpl -> result.put("...", list);)
+			request.setAttribute("membershipList", result.get("membershipList")); // 멤버십 결제 목록
+			request.setAttribute("totalCount", result.get("totalCount")); // 총 개수
+			request.setAttribute("totalPages", result.get("totalPages")); // 총 페이지 수
+			
 			request.getRequestDispatcher("/brand2/membership.jsp").forward(request, response);
 
 			// 로그 출력
