@@ -18,7 +18,7 @@ import service.consumer.CartItemServiceImpl;
 /**
  * Servlet implementation class AddToCart
  */
-@WebServlet("/addToCart")
+@WebServlet("/store/addToCart")
 public class AddToCart extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -57,13 +57,20 @@ public class AddToCart extends HttpServlet {
 			}
 
 			Long memberId = (Long) session.getAttribute("memberId");
-
-			// 파라미터 받기
-			String brandIdStr = request.getParameter("brandId");
-			String productIdStr = request.getParameter("productId");
-			String optionIdStr = request.getParameter("optionId");
-			String quantityStr = request.getParameter("quantity");
-
+			
+			// ✅ 디버깅 로그 추가
+	        String brandIdStr = request.getParameter("brandId");
+	        String productIdStr = request.getParameter("productId");
+	        String optionIdStr = request.getParameter("optionId");
+	        String quantityStr = request.getParameter("quantity");
+	        
+	        System.out.println("=== AddToCart 디버깅 ===");
+	        System.out.println("brandId: " + brandIdStr);
+	        System.out.println("productId: " + productIdStr);
+	        System.out.println("optionId: " + optionIdStr);
+	        System.out.println("quantity: " + quantityStr);
+	        System.out.println("========================");
+	        
 			// 필수 파라미터 검증
 			if (productIdStr == null || productIdStr.trim().isEmpty()) {
 				throw new Exception("상품 정보가 올바르지 않습니다.");

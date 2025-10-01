@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <%
 // 서블릿에서 전달받은 리뷰 요약 데이터 사용
@@ -35,13 +36,16 @@ request.setAttribute("floor", floor);
 <link rel="stylesheet" href="<c:url value='/tagcss/rating.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/selectbox.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
-<link rel="stylesheet" href="<c:url value='/consumer/css/productDetail.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/consumer/css/productDetail.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/reviewSummary.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/reviewCard.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/qna.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/selectedOptionItem.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/tagcss/selectedOptionItem.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
 </head>
 <body>
 	<!-- 헤더 include -->
@@ -114,18 +118,18 @@ request.setAttribute("floor", floor);
 					<c:choose>
 						<c:when
 							test="${product.hasOption == 1 and not empty productOptions}">
-							
 
-						<%-- 옵션이 있는 상품: 실제 옵션들을 문자열로 변환 --%>
-						<c:set var="optionItems" value="상품을 선택해주세요" />
-						<c:forEach var="option" items="${productOptions}">
-							<c:set var="optionItems"
-								value="${optionItems},${option.optionValue} (${option.price.intValue()}원)" />
-						</c:forEach>
 
-						<my:selectbox size="lg" items="${optionItems}"
-							initial="상품을 선택해주세요" />
-						</c:when> 
+							<%-- 옵션이 있는 상품: 실제 옵션들을 문자열로 변환 --%>
+							<c:set var="optionItems" value="상품을 선택해주세요" />
+							<c:forEach var="option" items="${productOptions}">
+								<c:set var="optionItems"
+									value="${optionItems},${option.optionValue} (${option.price.intValue()}원)" />
+							</c:forEach>
+
+							<my:selectbox size="lg" items="${optionItems}"
+								initial="상품을 선택해주세요" />
+						</c:when>
 
 						<c:otherwise>
 							<%-- 옵션이 없는 상품: 단일 상품 표시 --%>
@@ -148,7 +152,7 @@ request.setAttribute("floor", floor);
 							<p class="total-amount" id="totalAmount">옵션을 선택해주세요</p>
 						</c:when>
 						<c:otherwise>
-							<p class="total-amount" id="totalAmount">${product.price}원</p>
+							<p class="total-amount" id="totalAmount"><fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0" groupingUsed="true" />원</p>
 						</c:otherwise>
 					</c:choose>
 				</div>
@@ -295,7 +299,7 @@ request.setAttribute("floor", floor);
 						</div>
 						<div class="pagination-wrapper">
 							<my:pagination currentPage="1" totalPages="1"
-								baseUrl="/consumer/productDetail?productId=${product.productId}&page=" />
+								baseUrl="/store/productDetail?productId=${product.productId}&page=" />
 						</div>
 					</div>
 				</div>
@@ -334,7 +338,7 @@ request.setAttribute("floor", floor);
 
 						<div class="pagination-wrapper">
 							<my:pagination currentPage="1" totalPages="1"
-								baseUrl="/consumer/productDetail?productId=${product.productId}&page=" />
+								baseUrl="/store/productDetail?productId=${product.productId}&page=" />
 						</div>
 					</div>
 				</div>
@@ -347,21 +351,21 @@ request.setAttribute("floor", floor);
 
 
 	<script>
-    const productId = ${product.productId};
-    const productBrandId = '${brand.brandId}';
-    const productPrice = ${product.price.intValue()}; // 단일 상품 가격. intValue() 추가 
-    
-    <c:if test="${product.hasOption == 1}">
-    const productOptionsData = [
-        <c:forEach var="option" items="${productOptions}" varStatus="status">
-            {
-                id: ${option.productOptionId},
-                value: '${option.optionValue}',
-                price: ${option.price.intValue()},  // intValue() 추가
-                stock: ${option.stockQty}
-            }<c:if test="${!status.last}">,</c:if>
-        </c:forEach>
-    ];
+window.productId = ${product.productId};
+window.productBrandId = '${brand.brandId}';
+window.productPrice = ${product.price.intValue()};
+
+<c:if test="${product.hasOption == 1}">
+window.productOptionsData = [
+    <c:forEach var="option" items="${productOptions}" varStatus="status">
+        {
+            id: ${option.productOptionId},
+            value: '${option.optionValue}',
+            price: ${option.price.intValue()},
+            stock: ${option.stockQty}
+        }<c:if test="${!status.last}">,</c:if>
+    </c:forEach>
+];
 </c:if>
 </script>
 	<script src="<c:url value='/consumer/js/tab.js'/>"></script>

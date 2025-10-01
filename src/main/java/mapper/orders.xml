@@ -3,8 +3,8 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.orders">
-	<!-- ===========================소비자용===================== -->
 
+	<!-- ===========================[소비자용]======================= -->
 	<!-- 상품 정보 조회 (상품상세에서 바로 주문하는 경우) -->
 	<!-- 옵션이 없는 상품: product 테이블의 기본 정보만 -->
 	<select id="getProductForDirectOrder" parameterType="Long"
@@ -47,7 +47,7 @@
 		po.product_option_id = #{optionId}
 	</select>
 
-	<!-- 주문 코드 생성 (YYYYMMDD-XXXXXX 형태????) -->
+	<!-- 주문 코드 생성 (YYYYMMDD-01XXXX 형태) -->
 	<select id="generateOrderCode" resultType="String">
 		SELECT CONCAT(
 		DATE_FORMAT(NOW(), '%Y%m%d'),
@@ -62,7 +62,7 @@
 		) as orderCode
 	</select>
 
-	<!-- 새 주문 생성 -->
+	<!-- [소비자용] 새 주문 생성 -->
 	<insert id="createOrder" parameterType="dto.Orders"
 		useGeneratedKeys="true" keyProperty="ordersId">
 		INSERT INTO orders (
@@ -102,7 +102,7 @@
 		)
 	</insert>
 
-	<!-- 주문 상품 추가 -->
+	<!-- [소비자용] 주문 상품 추가 -->
 	<insert id="createOrderItem" parameterType="dto.OrderItem"
 		useGeneratedKeys="true" keyProperty="orderItemId">
 		INSERT INTO order_item (
@@ -130,7 +130,7 @@
 		)
 	</insert>
 
-	<!-- 주문 조회 (주문 완료 후 확인용) -->
+	<!-- [소비자용] 주문 조회 (주문 완료 후 확인용...현재로선 필요없지만 남겨둠) -->
 	<select id="getOrderById" parameterType="Long"
 		resultType="dto.Orders">
 		SELECT
@@ -157,28 +157,58 @@
 		orders_id = #{ordersId}
 	</select>
 
-	<!-- 주문 상품 목록 조회 -->
-	<select id="getOrderItemsByOrderId" parameterType="Long"
-		resultType="dto.OrderItem">
+	<!-- [소비자용] 주문 상품 목록 조회 (join with 주문아이템) (기간 필터, 페이징) [orderList용] -->
+	<select id="getOrderItemsByMemberWithPeriod" parameterType="map"
+		resultType="map">
 		SELECT
-		order_item_id as orderItemId,
-		order_id as orderId,
-		brand_id as brandId,
-		product_id as productId,
-		option_id as optionId,
-		unit_price as unitPrice,
-		quantity,
-		line_subtotal as lineSubtotal,
-		discount,
-		total,
-		tracking_no as trackingNo,
-		carrier_name as carrierName,
-		status
-		FROM order_item
-		WHERE order_id = #{orderId}
+		o.orders_id as ordersId,
+		o.order_code as orderCode,
+		o.created_at as orderDate,
+		oi.order_item_id as orderItemId,
+		oi.product_id as productId,
+		oi.quantity,
+		oi.total,
+		oi.status,
+		oi.tracking_no as trackingNo,
+		oi.carrier_name as carrierName,
+		p.name as
+		productName,
+		b.brand_name as brandName,
+		po.option_value as optionValue
+		FROM orders o
+		JOIN order_item oi ON o.orders_id = oi.order_id
+		JOIN
+		product p ON oi.product_id = p.product_id
+		JOIN brand b ON oi.brand_id =
+		b.brand_id
+		LEFT JOIN product_option po ON oi.option_id =
+		po.product_option_id
+		WHERE o.member_id = #{memberId}
+		<if test="startDate != null">
+			AND o.created_at &gt;= #{startDate}
+		</if>
+		<if test="endDate != null">
+			AND o.created_at &lt;= #{endDate}
+		</if>
+		ORDER BY o.created_at DESC, oi.order_item_id ASC
+		LIMIT #{limit} OFFSET
+		#{offset}
 	</select>
+	
+	<!-- ===== [소비자용] 회원별 주문 상태 통계 조회 orderStatusCard용 =========== -->
+<select id="getOrderStatusCountByMember" parameterType="Long" resultType="map">
+    SELECT 
+        COUNT(*) as orderCount,
+        COUNT(CASE WHEN oi.status = 'PAID' THEN 1 END) as paymentCount,
+        COUNT(CASE WHEN oi.status = 'PREPARING' THEN 1 END) as shippingCount,
+        COUNT(CASE WHEN oi.status = 'SHIPPING' THEN 1 END) as deliveredCount,
+        COUNT(CASE WHEN oi.status = 'DELIVERED' THEN 1 END) as confirmedCount
+    FROM orders o
+    JOIN order_item oi ON o.orders_id = oi.order_id
+    WHERE o.member_id = #{memberId}
+</select>
 
-	<!-- 주문 상품 상세 정보 조회 (상품명, 브랜드명, 옵션명 포함) -->
+	<!-- [소비자] 주문 상품 상세 정보 조회 (상품명, 브랜드명, 옵션명 포함) [orderDetail용] -->
 	<select id="getOrderItemsWithProductInfo" parameterType="Long"
 		resultType="map">
 		SELECT
@@ -206,6 +236,21 @@
 		product_option po ON oi.option_id = po.product_option_id
 		WHERE
 		oi.order_id = #{orderId}
+	</select>
+
+	<!-- [소비자용] 고객의 주문 상품 총 개수 조회 (페이징용) -->
+	<select id="getOrderItemCountByMember" parameterType="map"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM orders o
+		JOIN order_item oi ON o.orders_id = oi.order_id
+		WHERE o.member_id = #{memberId}
+		<if test="startDate != null">
+			AND o.created_at &gt;= #{startDate}
+		</if>
+		<if test="endDate != null">
+			AND o.created_at &lt;= #{endDate}
+		</if>
 	</select>
 
 	<!-- ======================= [브랜드 어드민] 주문 목록 조회 ======================= -->
@@ -365,7 +410,8 @@
 		resultType="Integer">
 		SELECT COUNT(DISTINCT o.orders_id)
 		FROM orders o
-		JOIN order_item oi ON o.orders_id = oi.order_id
+		JOIN order_item oi ON
+		o.orders_id = oi.order_id
 		JOIN member m ON o.member_id = m.member_id
 		<where>
 			oi.brand_id = #{brandId}
@@ -381,10 +427,13 @@
 						AND EXISTS (
 						SELECT 1
 						FROM order_item oi5
-						JOIN product p2 ON oi5.product_id = p2.product_id
-						WHERE oi5.order_id = o.orders_id
+						JOIN product
+						p2 ON oi5.product_id = p2.product_id
+						WHERE oi5.order_id =
+						o.orders_id
 						AND oi5.brand_id = #{brandId}
-						AND p2.name LIKE CONCAT('%', #{searchKeyword}, '%')
+						AND p2.name LIKE
+						CONCAT('%', #{searchKeyword}, '%')
 						)
 					</when>
 				</choose>
@@ -396,25 +445,31 @@
 					<when test="status == 'EXCHANGE'">
 						AND EXISTS (
 						SELECT 1 FROM order_item oi6
-						WHERE oi6.order_id = o.orders_id
+						WHERE
+						oi6.order_id = o.orders_id
 						AND oi6.brand_id = #{brandId}
-						AND oi6.status LIKE 'EXCHANGE%'
+						AND
+						oi6.status LIKE 'EXCHANGE%'
 						)
 					</when>
 					<when test="status == 'RETURN'">
 						AND EXISTS (
 						SELECT 1 FROM order_item oi7
-						WHERE oi7.order_id = o.orders_id
+						WHERE
+						oi7.order_id = o.orders_id
 						AND oi7.brand_id = #{brandId}
-						AND oi7.status LIKE 'RETURN%'
+						AND
+						oi7.status LIKE 'RETURN%'
 						)
 					</when>
 					<otherwise>
 						AND EXISTS (
 						SELECT 1 FROM order_item oi8
-						WHERE oi8.order_id = o.orders_id
+						WHERE
+						oi8.order_id = o.orders_id
 						AND oi8.brand_id = #{brandId}
-						AND oi8.status = #{status}
+						AND
+						oi8.status = #{status}
 						)
 					</otherwise>
 				</choose>

@@ -1,5 +1,15 @@
 @charset "UTF-8";
 
+.page-wrap {
+	display: flex;
+	gap: 30px;
+	flex-direction: row; /* 좌우로 배치 */
+	max-width: 1200px; /* 전체 폭 제한 */
+	margin: 0 auto;
+	padding: 20px;
+}
+
+
 /* ================================
    섹션 공통 스타일
 ================================ */

@@ -2,48 +2,82 @@
 
 .container {
 	display: flex;
-	padding: 40px 210px;
-	justify-content: center;
-	align-items: flex-start;
 	gap: 30px;
-	align-self: stretch;
+	flex-direction: row; /* 좌우로 배치 */
+	max-width: 1200px; /* 전체 폭 제한 */
+	margin: 0 auto;
+	padding: 20px;
+}
+
+.sidebar {
+	width: 250px;
 }
 
 .page-contents {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 30px;
-	flex: 1 0 0;
+	flex: 1;
 }
 
 .user-wrapper {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	align-self: stretch;
+	margin-bottom: 20px;
 }
 
 .box-wrapper {
-	display: flex;
-	justify-content: flex-end;
-	align-items: flex-end;
+	display: block !important;
 	gap: 4px;
-	align-self: stretch;
-	width: 824px;
-	height: 209px;
+	width: 903px;
+	margin-bottom: 20px;
+}
+
+.table-wrapper {
+	width: 100%;
+	overflow-x: auto;
+}
+
+.table {
+	width: 100%;
+	table-layout: fixed; /* 테이블 레이아웃 고정 */
+	border-collapse: collapse;
 }
 
 .order-number-cell {
-	display: flex;
-	width: 150px;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+	vertical-align: top; /* 상단 정렬 */
+	text-align: center; /* 가운데 정렬 */
+	padding: 15px 10px;
 	gap: 1px;
-	align-self: stretch;
 }
 
-.status-button {
-	
+.product-name a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.product-name a:hover {
+	color: #007bff;
+	text-decoration: underline;
+}
+
+.button-vertical {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.button-vertical .btn {
+	width: 100%;
+	min-width: 80px;
+}
+
+.order-status {
+	font-weight: 500;
+	margin-bottom: 8px;
+	color: #333;
+}
+
+.no-action {
+	color: #999;
+	font-size: 14px;
+}
+
+.pagination-wrapper {
+	text-align: center;
 }

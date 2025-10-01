@@ -1,7 +1,6 @@
 package controller.consumer;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +20,7 @@ import service.consumer.OrderServiceImpl;
 /**
  * Servlet implementation class Checkout
  */
-@WebServlet("/consumer/checkout")
+@WebServlet("/store/checkout")
 public class Checkout extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -48,7 +47,7 @@ public class Checkout extends HttpServlet {
 
 			if (memberId == null) {
 				// 로그인이 안 되어 있으면 로그인 페이지로 리다이렉트
-				response.sendRedirect(request.getContextPath() + "/consumer/login");
+				response.sendRedirect(request.getContextPath() + "/store/login");
 				return;
 			}
 
@@ -138,7 +137,7 @@ public class Checkout extends HttpServlet {
 	        Long memberId = (Long) session.getAttribute("memberId");
 
 	        if (memberId == null) {
-	            response.sendRedirect(request.getContextPath() + "/consumer/login");
+	            response.sendRedirect(request.getContextPath() + "/store/login");
 	            return;
 	        }
 

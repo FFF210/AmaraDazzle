@@ -111,7 +111,7 @@
 									style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
 								</td>
 								<td class="product-name"><a
-									href="/consumer/productDetail?productId=${item.productId}">
+									href="${pageContext.request.contextPath}/store/productDetail?productId=${item.productId}">
 										${item.productName} </a> <c:if test="${not empty item.optionName}">
 										<br>
 										<small>옵션: ${item.optionName}</small>
@@ -156,8 +156,8 @@
 	</div>
 	<!-- 선택/삭제 버튼 -->
 	<div class="select-all-container">
-		<button type="button">전체선택 해제</button>
-		<button type="button">선택상품 삭제</button>
+		<button type="button" class="select-all-btn">전체선택</button>
+		<button type="button" class="delete-selected-btn">선택상품 삭제</button>
 	</div>
 
 	<!-- 총 결제 예상 정보 -->
@@ -174,8 +174,8 @@
 
 	<!-- 버튼 -->
 	<div class="button-container">
-		<button class="btn btn-outline btn-lg">선택 주문</button>
-		<button class="btn btn-primary btn-lg">전체 주문</button>
+		<button class="btn btn-outline btn-lg order-selected-btn">선택 주문</button>
+		<button class="btn btn-primary btn-lg order-all-btn">전체 주문</button>
 	</div>
 
 	<!-- 하단 푸터 -->
