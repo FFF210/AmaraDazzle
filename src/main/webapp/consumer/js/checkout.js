@@ -27,6 +27,9 @@ window.onload = function() {
         alert(message);
     }
     
+    // 전화번호 자동 입력
+    fillPhoneNumber();
+    
     calculateTotalAmount();
     initEventListeners();
 };
@@ -69,6 +72,22 @@ function initEventListeners() {
         
         saveOrderDataToSession();
     });
+}
+
+// 전화번호 자동 입력 함수
+function fillPhoneNumber() {
+    const phone = window.checkoutData.memberPhone;
+    if (phone) {
+        const parts = phone.split('-');
+        if (parts.length === 3) {
+            const phoneInputs = document.querySelectorAll('#shipPhone');
+            if (phoneInputs.length >= 3) {
+                phoneInputs[0].value = parts[0];
+                phoneInputs[1].value = parts[1];
+                phoneInputs[2].value = parts[2];
+            }
+        }
+    }
 }
 
 // 폼 유효성 검사
