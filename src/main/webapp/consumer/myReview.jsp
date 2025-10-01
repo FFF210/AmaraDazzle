@@ -82,7 +82,9 @@
 													<c:forEach var="item" items="${reviewableItems}">
 														<tr>
 															<td>
-																<div class="product-info">
+																<div class="product-info"
+																	onclick="goToProduct(${item.product_id})"
+																	style="cursor: pointer;">
 																	<img src="/images/thumbnail/${item.thumbnail_file_id}"
 																		alt="${item.product_name}" class="product-thumb">
 																	<div class="product-details">
@@ -136,7 +138,9 @@
 													<c:forEach var="review" items="${myReviews}">
 														<tr>
 															<td>
-																<div class="product-info">
+																<div class="product-info"
+																	onclick="goToProduct(${review.product_id})"
+																	style="cursor: pointer;">
 																	<img
 																		src="/images/thumbnail/${review.thumbnail_file_id}"
 																		alt="${review.product_name}" class="product-thumb">
@@ -194,7 +198,7 @@
 			</div>
 			<div class="modal-body">
 				<form id="reviewForm" method="post"
-					action="${pageContext.request.contextPath}/mypage/myReview">
+					action="${pageContext.request.contextPath}/store/mypage/myReview">
 					<input type="hidden" id="orderItemId" name="orderItemId"> <input
 						type="hidden" id="productId" name="productId"> <input
 						type="hidden" id="productOptionId" name="productOptionId">
@@ -236,47 +240,57 @@
 	<%-- 푸터 --%>
 	<%@ include file="/consumer/footer.jsp"%>
 	<script src="<c:url value='/consumer/js/tab.js'/>"></script>
-	<script src="<c:url value='/consumer/js/tab.js'/>"></script>
 	<script>
-		// 리뷰 작성 모달 열기
-		function openReviewForm(orderItemId, productId, productOptionId, productName) {
-			document.getElementById('orderItemId').value = orderItemId;
-			document.getElementById('productId').value = productId;
-			document.getElementById('productOptionId').value = productOptionId || '';
-			document.getElementById('productNameDisplay').textContent = productName;
-			
-			// 폼 초기화
-			document.getElementById('reviewForm').reset();
-			document.getElementById('orderItemId').value = orderItemId;
-			document.getElementById('productId').value = productId;
-			document.getElementById('productOptionId').value = productOptionId || '';
-			
-			document.getElementById('reviewModal').style.display = 'block';
-		}
-		
-		// 리뷰 작성 모달 닫기
-		function closeReviewModal() {
-			document.getElementById('reviewModal').style.display = 'none';
-		}
-		
-		// 모달 외부 클릭시 닫기
-		window.onclick = function(event) {
-			const modal = document.getElementById('reviewModal');
-			if (event.target == modal) {
-				modal.style.display = 'none';
-			}
-		}
-		
-		// 닫기 버튼 클릭시 닫기
-		document.addEventListener('DOMContentLoaded', function() {
-    const closeBtn = document.querySelector('.close');
-    if (closeBtn) {
-        closeBtn.onclick = function() {
-            closeReviewModal();
+    // 리뷰 작성 모달 열기
+    function openReviewForm(orderItemId, productId, productOptionId, productName) {
+        document.getElementById('orderItemId').value = orderItemId;
+        document.getElementById('productId').value = productId;
+        document.getElementById('productOptionId').value = productOptionId || '';
+        document.getElementById('productNameDisplay').textContent = productName;
+        
+        // 폼 초기화
+        document.getElementById('reviewForm').reset();
+        document.getElementById('orderItemId').value = orderItemId;
+        document.getElementById('productId').value = productId;
+        document.getElementById('productOptionId').value = productOptionId || '';
+        
+        document.getElementById('reviewModal').style.display = 'block';
+    }
+    
+    // 리뷰 작성 모달 닫기
+    function closeReviewModal() {
+        document.getElementById('reviewModal').style.display = 'none';
+    }
+    
+    // 모달 외부 클릭시 닫기
+    window.onclick = function(event) {
+        const modal = document.getElementById('reviewModal');
+        if (event.target == modal) {
+            modal.style.display = 'none';
         }
     }
-});
-		</script>
-	
+    
+    // 닫기 버튼 클릭시 닫기
+    document.addEventListener('DOMContentLoaded', function() {
+        const closeBtn = document.querySelector('.close');
+        if (closeBtn) {
+            closeBtn.onclick = function() {
+                closeReviewModal();
+            }
+        }
+    });
+    
+    // 상품 상세페이지로 이동
+    function goToProduct(productId) {
+        window.location.href = '${pageContext.request.contextPath}/store/productDetail?productId=' + productId;
+    }
+</script>
+
+	<!-- 성공 메시지 팝업 -->
+	<c:if test="${not empty successMessage}">
+		<script>
+    alert('${successMessage}');
+</script>
+	</c:if>
 </body>
 </html>
