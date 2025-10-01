@@ -438,7 +438,7 @@ public class OrderServiceImpl implements OrderService {
 		}
 		result.put("order", order);
 
-		// 2. 주문 상품 상세 정보 조회 (상품명, 브랜드명, 옵션명 포함)
+		// 2. 주문 상품 상세 정보 조회
 		List<Map<String, Object>> orderItems = orderDAO.getOrderItemsWithProductInfo(orderId);
 		result.put("orderItems", orderItems);
 
@@ -452,28 +452,25 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 		// 4. 쿠폰 정보 조회 및 포맷팅
-		Map<String, Object> couponInfo = new HashMap<>();
 		String couponDisplayText = "0원";
 		if (order.getUsingCoupon() != null) {
 			Map<String, Object> coupon = memberCouponDAO.getCouponInfoByMemberCouponId(order.getUsingCoupon());
 			if (coupon != null) {
 				Integer amount = (Integer) coupon.get("amount");
-				String couponName = (String) coupon.get("cname");
-				couponDisplayText = String.format("%,d원", amount);
-				// 또는 쿠폰명까지 포함하려면:
-				// couponDisplayText = String.format("%,d원 (%s)", amount, couponName);
+				if (amount != null) {
+					couponDisplayText = String.format("%,d원", amount);
+				}
 			}
 		}
 
+		// 5. 결제 정보 포맷팅
 		Map<String, Object> paymentInfo = new HashMap<>();
 		paymentInfo.put("subtotalAmountText", String.format("%,d원", order.getSubtotalAmount().intValue()));
 		paymentInfo.put("discountAmountText", String.format("%,d원", order.getDiscountAmount().intValue()));
 		paymentInfo.put("shippingAmountText", String.format("%,d원", order.getShippingAmount().intValue()));
 		paymentInfo.put("totalAmountText", String.format("%,d원", order.getTotalAmount().intValue()));
 		paymentInfo.put("usingPointText", order.getUsingPoint() + " P");
-
-		//쿠폰 아직 포맷팅 못했음...
-		paymentInfo.put("couponDisplayText", couponDisplayText); // 사용 쿠폰
+		paymentInfo.put("couponDisplayText", couponDisplayText); // 쿠폰 포맷팅 완료
 
 		result.put("paymentInfo", paymentInfo);
 

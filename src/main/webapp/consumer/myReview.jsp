@@ -10,15 +10,15 @@
 <title>마이 리뷰</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="./tagcss/reset.css" />
-<link rel="stylesheet" href="./consumer/css/header.css" />
-<link rel="stylesheet" href="./tagcss/productCard.css" />
-<link rel="stylesheet" href="./consumer/css/mypageMenu.css" />
-<link rel="stylesheet" href="./consumer/css/footer.css" />
-<link rel="stylesheet" href="./consumer/css/tab.css" />
-<link rel="stylesheet" href="./tagcss/table.css" />
-<link rel="stylesheet" href="./consumer/css/myReview.css" />
-<link rel="stylesheet" href="./tagcss/rating.css" />
+<link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/mypageMenu.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/tab.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/myReview.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/table.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/rating.css'/>">
 
 
 </head>
@@ -44,7 +44,7 @@
 			<section class="review-section">
 				<h2>리뷰</h2>
 				<div class="review-tabs-section">
-					<c:import url="/tab.jsp">
+					<c:import url="/consumer/tab.jsp">
 						<c:param name="tabs" value="리뷰작성, 마이리뷰" />
 						<c:param name="activeTab" value="0" />
 						<c:param name="tabId" value="categoryTabs" />
