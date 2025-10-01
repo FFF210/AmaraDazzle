@@ -1,27 +1,26 @@
 .search_form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
 }
 
-
 .search_container {
-    border: 1px solid var(--outerbox);
-    border-radius: 10px;
-    width: 95%;
-    background-color:var (--base);
-    padding: 16px 32px;
-    display: flex;
-    flex-direction: column;
-    margin: 15px;
-    box-sizing: border-box;
+	border: 1px solid var(--outerbox);
+	border-radius: 10px;
+	width: 95%;
+	background-color: var(--base);
+	padding: 16px 32px;
+	display: flex;
+	flex-direction: column;
+	margin: 15px;
+	box-sizing: border-box;
 }
 
 .filter {
 	display: flex;
 	flex-direction: column;
-	gap : 10px;
+	gap: 10px;
 }
 
 /* 타이틀 */
@@ -39,50 +38,42 @@
 	flex: 0 0 160px;
 }
 
-
-
-
-
-.period_box,
-.answer_box,
-.questionType_box,
-.category_box,
-.check_box,
-.totalSearch_box {
-    height: 40px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 10px;
+.period_box, .answer_box, .questionType_box, .category_box, .check_box,
+	.totalSearch_box {
+	height: 40px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 10px;
 }
 
 .filtering_title {
-    min-width: 100px;
+	min-width: 100px;
 }
 
 .filtering_content {
-    display:flex; 
-    align-items: center;
-    gap:10px;
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
 /* 기간 */
 .period_body {
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .period_body span {
-    margin: 0 5px;
-    text-align: center;
+	margin: 0 5px;
+	text-align: center;
 }
 
 .period_body input[type="date"]:first-child {
-    margin-left: 0;
+	margin-left: 0;
 }
 
 .period_body input[type="date"]:last-child {
-    margin-right: 15px;
+	margin-right: 15px;
 }
 
 /* 버튼 그룹 */
@@ -93,34 +84,46 @@
 	overflow: hidden;
 }
 
-.p_choice{
-	margin-left : 15px;
+.period_body .date-input .date-text {
+	box-shadow: 0 0 0 4px rgba(20, 184, 145, 0); /* 투명한 기본 상태 */
+	border-radius: 8px;
+	transition: box-shadow 0.5s ease;
 }
-.p_choice > input[type="button"] {
-    width: 70px;
-    height: 100%;
-    background-color: white;
-    margin: 1px;
-    cursor: pointer;
+
+.period_body .date-input .date-text:focus {
+	box-shadow: 0 0 0 4px rgba(20, 184, 145, 0.25);
+	transition: box-shadow 0.5s ease;
+	border-radius: 8px;
+}
+
+.p_choice {
+	margin-left: 15px;
+}
+
+.p_choice>input[type="button"] {
+	width: 70px;
+	height: 100%;
+	background-color: white;
+	margin: 1px;
+	cursor: pointer;
 }
 
 /* 클릭시 파란불 */
-.p_choice > input[type="button"].active {
-    background-color: var(--primary);
+.p_choice>input[type="button"].active {
+	background-color: var(--primary);
 }
 
-.p_choice > input[type="button"].active {
-    color: white;
+.p_choice>input[type="button"].active {
+	color: white;
 }
 
-.p_choice > input[type="button"]:hover,
-.choice:hover {
-    background-color: var(--mainColor);
+.p_choice>input[type="button"]:hover, .choice:hover {
+	background-color: var(--mainColor);
 }
 
 /* 답변상태 */
 .answer_body {
-    border-radius: 8px;
+	border-radius: 8px;
 }
 
 .filter-btn-group .filter-btn {
@@ -146,58 +149,68 @@
 
 .filter-btn-group .filter-btn.active {
 	background: #F1F9FF;
-	color : #2684FF;
+	color: #2684FF;
 }
-
 
 /* 통합검색 */
 .totalSearch_box {
-    gap: 5px;
-    flex-wrap: nowrap; /* 줄바꿈 방지 */
+	gap: 5px;
+	flex-wrap: nowrap; /* 줄바꿈 방지 */
 }
 
-
-.totalSearch_box > .searchKeyword {
-    width: 90%;
-    height: 38px;
-    border: 1px solid var(--innerbox);
-    border-radius: 8px;
-    padding: 0 5px;
-    display: flex;
-    align-items: center;
+.totalSearch_box .searchKeyword {
+	width: 90%;
+	height: 38px;
+	border: 1px solid var(--innerbox);
+	border-radius: 8px;
+	padding: 0 5px;
+	display: flex;
+	align-items: center;
 }
-.searchKeyword > input {
+
+.totalSearch_box .searchKeyword input {
 	/* textInput은 남은 공간 다 차지 */
-    flex: 1;
-    outline: none;
-    border: none;
-    padding: 0 15px;
+	flex: 1;
+	outline: none;
+	border: none;
+	padding: 0 15px;
 }
 
-
-
-.searchKeyword > input[type="text"]:focus {
-    border: none !important;
-    box-shadow: none !important;
+.totalSearch_box .searchKeyword {
+	box-shadow: 0 0 0 4px rgba(20, 184, 145, 0); /* 투명한 기본 상태 */
+	border-radius: 8px;
+	transition: box-shadow 0.5s ease;
 }
 
-.totalSearch_box > .searchKeyword:focus-within {
-    outline: none !important; 
+.totalSearch_box .searchKeyword:focus-within {
+	outline: none !important;
 	border: 1px solid #1EAE69 !important;
-	box-shadow: 0 0 0 4px rgba(20, 184, 145, 0.25); 
+	box-shadow: 0 0 0 4px rgba(20, 184, 145, 0.25);
+	transition: border-color 0.2s ease, box-shadow 0.5s ease;
 }
 
+.searchKeyword input[type="text"]:focus {
+	border: none !important;
+	box-shadow: none !important;
+}
 
-.custom-select.open .select-header { 
-	outline: none !important; 
+.custom-select .select-header {
+	box-shadow: 0 0 0 4px rgba(20, 184, 145, 0); /* 투명한 기본 상태 */
+	border-radius: 8px;
+	transition: box-shadow 0.5s ease;
+}
+
+.custom-select.open .select-header {
+	outline: none !important;
 	border: 1px solid #1EAE69 !important;
-	box-shadow: 0 0 0 4px rgba(20, 184, 145, 0.25); 
+	box-shadow: 0 0 0 4px rgba(20, 184, 145, 0.25);
+	transition: border-color 0.2s ease, box-shadow 0.5s ease;
 }
 
 /* 버튼 */
 .btn_box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10px;
 }

@@ -55,7 +55,7 @@
 	</c:otherwise>
 </c:choose>
 
-<div class="custom-select ${size}" 
+<div class="custom-select ${size}" data-initial="${initial}"
 	<c:if test="${not empty id}">id="${id}"</c:if> tabindex="0">
 	
 	<div class="select-header" >

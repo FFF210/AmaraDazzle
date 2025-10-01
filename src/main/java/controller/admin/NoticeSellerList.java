@@ -35,26 +35,19 @@ public class NoticeSellerList extends HttpServlet {
 			Paging m_pg = new Paging();
 			NoticeService notice_svc = new NoticeServiceImpl();
 
-			String startDate = request.getParameter("write_startDate");
-			String endDate = request.getParameter("write_endDate");
+			String startDate = request.getParameter("startDate");
+			String endDate = request.getParameter("endDate");
 			String q_select = request.getParameter("q_select");
 			String totalSearch = request.getParameter("totalSearch");
 			String keyword = request.getParameter("keyword");
-
-			Map<String, String> searchContent = new HashMap<>();
-			searchContent.put("startDate", startDate);
-			searchContent.put("endDate", endDate);
-			searchContent.put("q_select", q_select);
-			searchContent.put("totalSearch", totalSearch);
-			searchContent.put("keyword", keyword);
-
+			
 			// 검색 조건이 하나라도 있는지 확인
 		    boolean hasCondition =
-		        (keyword != null && !keyword.trim().isEmpty()) ||
 		        (startDate != null && !startDate.trim().isEmpty()) ||
 		        (endDate != null && !endDate.trim().isEmpty()) ||
-		        (q_select != null && !q_select.trim().isEmpty() && !("공지 카테고리를 선택하세요").equals(q_select.trim())) ||
-		        (totalSearch != null && !totalSearch.trim().isEmpty());
+		        (q_select != null && !q_select.trim().isEmpty()) ||
+		        (totalSearch != null && !totalSearch.trim().isEmpty()) ||
+		        (keyword != null && !keyword.trim().isEmpty());
 		    
 		    List<Notice> noticeSellerList;
 		    Integer sellerNoticeCnt;
@@ -70,6 +63,14 @@ public class NoticeSellerList extends HttpServlet {
 		        
 		    } else {
 		        // 검색조건이 하나라도 있는 경우: 검색 수행
+		    	
+		    	Map<String, String> searchContent = new HashMap<>();
+				searchContent.put("startDate", startDate);
+				searchContent.put("endDate", endDate);
+				searchContent.put("q_select", q_select);
+				searchContent.put("totalSearch", totalSearch);
+				searchContent.put("keyword", keyword);
+				
 		        sellerNoticeCnt = notice_svc.noticeCount(searchContent);
 		        paging = m_pg.page_ea(p_no, sellerNoticeCnt);
 		        noticeSellerList = notice_svc.search_post(searchContent, p_no);

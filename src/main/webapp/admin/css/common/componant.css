@@ -27,7 +27,8 @@ input {
     outline: none;
     margin: 0;
     padding: 0;
-
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    
 }
 
 input:-webkit-autofill,
@@ -58,13 +59,18 @@ input[type="text"] {
     padding: 5px 10px;
     border: 1px solid var(--innerbox);
     border-radius: 5px;
+	color: #333539;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+	box-sizing: border-box;
 }
 
 .text_readonly {
     cursor: default;
     color: gray;
 }
-input[type="text"]:read-only {
+input:read-only {
 	cursor: default;
 }
 

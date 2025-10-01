@@ -4,11 +4,11 @@
 /*	breadcrumb                          */
 /* ==================================== */
 .breadcrumb {
-	margin-left: 15px;
-	padding : 10px 0;
+	padding : 10px 15px;
 	position: sticky;
 	top:39px;
 	background-color: var(--base);
+	z-index : 99999999;
 }
 
 .breadcrumb ul {

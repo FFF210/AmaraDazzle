@@ -15,14 +15,13 @@
 <div id="seller" class="tab_content">
 
 	<!-- 필터 -->
-	<form class="search_form" id="noticeSellerSearch">
+	<form id="searchForm" class="search_form">
 		<my:adminTableFilter >
-			<my:adminFilterPeriod title="작성일" dateCate="write_"/>
-			<my:adminFilterType optList="상품명,카테고리" initial="" name=""/>
-			<my:adminFilterTotal searchItems="상품명,카테고리"/>
+			<my:adminFilterPeriod title="작성일" />
+			<my:adminFilterType optList="시스템,이벤트,기타" initial="문의 유형" name="q_select"/>
+			<my:adminFilterTotal searchItems="내용,제목" />
 		</my:adminTableFilter>
 	</form>
-	
 	<!-- 필터 end -->
 
 	<!-- 버튼 -->
@@ -137,7 +136,9 @@
 							<td><c:set var="createDate" value="${noticeList.createdAt}" />
 								&nbsp; ${fn:substring(createDate,0,19)}</td>
 							<td>${noticeList.viewCnt}</td>
-							<td><c:choose>
+							<td>
+								<span onclick="changeState()">
+								<c:choose>
 									<c:when test="${noticeList.isExposed == '1' }">
 										<!-- 게시여부 : 게시중 -->
 										<my:tag color="yellow" size="md" text="게시중" />
@@ -146,7 +147,9 @@
 										<!-- 게시여부 : 노게시 -->
 										<my:tag color="gray" size="md" text="비공개" />
 									</c:when>
-								</c:choose></td>
+								</c:choose>
+								</span>
+							</td>
 							<td class="detail_cell"
 								onclick="goNoticeDetail('${noticeList.noticeId}','${noticeList.targetTypeId}');"><i
 								class="bi bi-three-dots-vertical"></i></td>
@@ -157,20 +160,22 @@
 		</div>
 
 		<!-- 페이지네이션 -->
-<%-- 		<c:url var="noticeSellerUrl" value="/admin/noticeSellerList"> --%>
-<%--     		<c:param name="write_startDate" value="${param.write_startDate}" /> --%>
-<%--     		<c:param name="write_endDate" value="${param.write_endDate}" /> --%>
-<%--     		<c:param name="q_select" value="${param.q_select}" /> --%>
-<%--     		<c:param name="totalSearch" value="${param.totalSearch}" /> --%>
-<%--     		<c:param name="keyword" value="${param.keyword}" /> --%>
-<%-- 		</c:url> --%>
-
 		<c:set var="queryString">
-			<c:if test="${not empty param.write_startDate}">write_startDate=${param.write_startDate}&</c:if>
-			<c:if test="${not empty param.write_endDate}">write_endDate=${param.write_endDate}&</c:if>
-			<c:if test="${not empty param.q_select}">q_select=${param.q_select}&</c:if>
-			<c:if test="${not empty param.totalSearch}">totalSearch=${param.totalSearch}&</c:if>
-			<c:if test="${not empty param.keyword}">keyword=${param.keyword}&</c:if>
+			<c:if test="${param.startDate != null and param.startDate ne ''}">
+    			startDate=${param.startDate}&
+			</c:if>
+			<c:if test="${param.endDate != null and param.endDate ne ''}">
+			    endDate=${param.endDate}&
+			</c:if>
+			<c:if test="${param.q_select != null and param.q_select ne ''}">
+			    q_select=${param.q_select}&
+			</c:if>
+			<c:if test="${param.totalSearch != null and param.totalSearch ne ''}">
+			    totalSearch=${param.totalSearch}&
+			</c:if>
+			<c:if test="${param.keyword != null and param.keyword ne ''}">
+			    keyword=${param.keyword}&
+			</c:if>
 			page=
 		</c:set>
 
@@ -183,9 +188,34 @@
 </div>
 <!-- 메인부분 -->
 
-<script src="./js/boardNotice.js"></script>
 <script src="../tagjs/selectbox.js"></script>
 <script src="../tagjs/dateInput.js"></script>
-<script src="./js/componant/searchBox.js"></script>
+<script src="./js/boardNotice.js"></script>
 <script src="./js/componant/table.js"></script>
 
+<script>
+/* ****************************************
+	tableFilter 이벤트
+***************************************** */
+document.addEventListener("filterChanged", (e) => {
+	console.log("필터 상태:", e.detail);
+
+	if (e.detail.submit) {
+		const { filters, totalSearch, keyword } = e.detail;
+		const params = new URLSearchParams();
+
+		for (const [key, value] of Object.entries(filters)) {
+			params.append("status", value);
+		}
+
+		if (totalSearch) params.append("totalSearch", totalSearch);
+		if (keyword) params.append("keyword", keyword);
+
+		// 페이지는 1부터 시작
+		params.append("page", 1);
+
+		// 최종 URL로 이동 (GET 요청)
+		window.location.href = "/admin/noticeSellerList?" + params.toString();
+	}
+});
+</script>

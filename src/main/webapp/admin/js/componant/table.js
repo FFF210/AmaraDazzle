@@ -1,5 +1,5 @@
 /* ******************************************
-	  일대일 답변탭 > 상세보기 클릭시 액션     
+	일대일 답변탭 > 상세보기 클릭시 액션     
 ******************************************* */
 document.querySelectorAll("tr[data-main] .reply_view i").forEach((icon) => {
 	icon.addEventListener("click", () => {
@@ -89,4 +89,11 @@ function choice_ck(){
 	}else{
 		all.checked = false;
 	}
+}
+
+/* ******************************************
+  상태변경 
+******************************************* */
+function changeState() {
+	alert("sss");
 }

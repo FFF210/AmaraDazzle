@@ -10,11 +10,11 @@
 
 <!-- 통합검색 -->
 <div class="filter_box totalSearch_box">
-	<my:selectbox size="md" items="${searchItems}" initial="${initial}" name="totalSearch"/>
+	<my:selectbox size="md" items="${searchItems}" initial="${initial}" id="totalSearch"/>
+	<input type="hidden" name="totalSearch" value="${searchContent.totalSearch}">
 	
 	<div class="searchKeyword">
 		&nbsp;<i class="bi bi-search"></i> 
-		<input type="text" placeholder="Search" value="${searchContent.keyword}" name="keyword" />
+		<input type="text" placeholder="Search" value="${searchContent.keyword}" name="keyword" class="search-input" />
 	</div>
 </div>
-

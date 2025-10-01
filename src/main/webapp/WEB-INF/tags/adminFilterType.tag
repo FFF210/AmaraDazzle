@@ -19,7 +19,7 @@
 	<div class="filtering_title">
 		<label>${title} :</label>
 	</div>
-	<my:selectbox size="md" name="${name}" id="${id}" items="${optList}" initial="${initial}" />
+	<my:selectbox size="md" name="${name}" id="${id}" items="${optList}" initial="${initial}"/>
+	<input type="hidden" name="${name}" value="${searchContent[name]}">
 </div>
-
 

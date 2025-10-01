@@ -30,175 +30,102 @@
 	<div class="table-filter filter">
 		<jsp:doBody />
 	</div>
+	
+	<!-- 버튼 -->
 	<div class="filter-actions btn_box ">
-		<input type="submit" class="btn first_btn" id="searchBtn" value="검색" />
-		<input type="reset" class="btn second_btn" value="초기화" />
+		<input type="submit" class="btn first_btn " value="검색" />
+		<input type="button" class="btn second_btn filter-reset" value="초기화" />
 	</div>
+	<!-- 버튼 end -->
 </div>
+
+
 <script>
-(function(){
-	const container = document.currentScript.previousElementSibling;
+document.addEventListener("DOMContentLoaded", () => {
+	//검색입력하지 않으면 URL에 미표시 
+	document.querySelector(".search_form").addEventListener("submit", function(e) {
+		this.querySelectorAll("input").forEach(el => {
+			if (el.value.trim() === "") {
+				el.disabled = true; // 값 없으면 전송 제외
+			}
+		});
+		
+		
+		//검색어 입력시 검색조건과 세트로 채워야 폼전송 
+		const totalSearch = this.querySelector("input[name='totalSearch']");
+		const keyword = this.querySelector("input[name='keyword']");
+
+		// 통합 검색(totalSearch, keyword) 처리
+		const hasTotalSearch = totalSearch.value.trim() !== "";
+		const hasKeyword = keyword.value.trim() !== "";
+
+		// 한쪽만 입력된 경우 막기
+		if ((hasTotalSearch && !hasKeyword) || (!hasTotalSearch && hasKeyword)) {
+			e.preventDefault();
+			alert("통합검색은 검색 조건과 검색어를 모두 입력해야 합니다.");
+			
+			keyword.disabled=false;
+			totalSearch.disabled=false;
+		}
+	});
 	
-	if (!container) {
-	    console.error("table-filter 컨테이너를 찾을 수 없음");
-	    return;
-	  }
+	//검색 후 select란 검색값 유지 
+	document.querySelectorAll(".custom-select").forEach(select => {
+		const label = select.querySelector(".select-label");
+		const items = select.querySelectorAll(".select-item");
+		const hidden = select.parentElement.querySelector("input[type='hidden'][name]");
+
+		// 페이지 로드 시 hidden 값 반영
+		if (hidden && hidden.value) {
+			const matched = Array.from(items).find(li => li.dataset.value === hidden.value);
+			if (matched) {
+				label.textContent = matched.dataset.value;
+				items.forEach(li => li.classList.remove("active"));
+				matched.classList.add("active");
+			}
+		}
+
+		// 클릭 이벤트 시 hidden 갱신
+		items.forEach(item => {
+			item.addEventListener("click", () => {
+				const value = item.dataset.value;
+				label.textContent = value;
+				items.forEach(li => li.classList.remove("active"));
+				item.classList.add("active");
+				if (hidden) hidden.value = value;
+			});
+		});
+	});
 	
-	// URL → 상태 복원
-	window.addEventListener("DOMContentLoaded", () => {
-	    const params = new URLSearchParams(window.location.search);
+	//검색조건 초기화
+	const form = document.querySelector("#searchForm");
+	const resetBtn = form.querySelector(".filter-reset");
 
-	    params.forEach((value, key) => {
-	    	 // 필터 버튼 (status 등)
-	        const btn = container.querySelector(`.filter-btn[data-filter='${key}'][data-value='${value}']`);
-	        if (btn) {
-	          btn.classList.add("active");
-	          state.filters[key] = value;
-	        }
+	resetBtn.addEventListener("click", (e) => {
+		e.preventDefault(); // 기본 reset 막기 
 
-	      // 검색창
-	      if (key === "searchKeyword") {
-	        const searchInput = container.querySelector(".search-input");
-	        if (searchInput) searchInput.value = value;
-	        state.searchKeyword = value;
-	      }
+		// 모든 hidden input 초기화
+		form.querySelectorAll("input[type='hidden'][name]").forEach(hidden => {
+			hidden.value = "";
+		});
 
-	   // 검색조건 (셀렉트박스)
-	      if (key === "searchType") {
-	        const select = container.querySelector(".custom-select");
-	        if (select) {
-	          const label = select.querySelector(".select-label");
-	          const items = select.querySelectorAll(".select-item");
+		// 모든 custom-select 초기화 (라벨/active 되돌리기)
+		form.querySelectorAll(".custom-select").forEach(select => {
+			const label = select.querySelector(".select-label");
+			const items = select.querySelectorAll(".select-item");
 
-	          items.forEach(item => {
-	            if (item.dataset.value === value) {
-	              if (label) label.textContent = item.textContent;
-	              items.forEach(i => i.classList.remove("active"));
-	              item.classList.add("active");
-	            }
-	          });
-	        }
-	        state.searchField = value;
-	      }
+			// "검색조건" 같은 initial 값 가져오기
+			const initial = select.getAttribute("data-initial");
 
-	      // 날짜
-	      if (key === "startDate") {
-	        const start = container.querySelector(".date-start");
-	        if (start) start.value = value;
-	        state.dateStart = value;
-	      }
-	      if (key === "endDate") {
-	        const end = container.querySelector(".date-end");
-	        if (end) end.value = value;
-	        state.dateEnd = value;
-	      }
-	    });
-	  });
+			label.textContent = initial;
+			items.forEach(li => li.classList.remove("active"));
+		});
 
-  const state = {
-    dateStart: "",
-    dateEnd: "",
-    quickRange: "",
-    filters: {},
-    searchField: "",
-    searchKeyword: ""
-  };
-  
-  // 검색 매핑 
-  const searchMap = {
-    "상품명": "NAME",
-    "카테고리": "CATEGORY",
-    "주문자": "MEMBER",
-    "주문상품명": "PRODUCT"
-  };
-
-  // 날짜 빠른 선택
-  container.querySelectorAll(".date-quick")?.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const range = btn.dataset.range;
-      const today = new Date();
-      let start = new Date(), end = new Date();
-
-      if(range === "today") {
-        // 오늘
-      } else if(range === "yesterday") {
-        start.setDate(today.getDate()-1);
-        end.setDate(today.getDate()-1);
-      } else {
-        start.setDate(today.getDate() - parseInt(range));
-      }
-
-      state.dateStart = start.toISOString().slice(0,10);
-      state.dateEnd = end.toISOString().slice(0,10);
-
-      const startInput = container.querySelector(".date-start");
-      const endInput = container.querySelector(".date-end");
-      if(startInput) startInput.value = state.dateStart;
-      if(endInput) endInput.value = state.dateEnd;
-
-      state.quickRange = range;
-      dispatch();
-    });
-  });
-
-//필터 버튼 이벤트
-  container.querySelectorAll(".filter-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      // 공백 제거
-      const key = btn.dataset.filter.trim();
-      const value = btn.dataset.value;
-
-      // 같은 그룹 버튼들 active 제거 (공백 제거해서 비교)
-      container.querySelectorAll(".filter-btn").forEach(b => {
-        if (b.dataset.filter.trim() === key) {
-          b.classList.remove("active");
-        }
-      });
-
-      // 클릭한 버튼에 active 추가
-      btn.classList.add("active");
-
-      // 상태 업데이트
-      state.filters[key] = value;
-
-      dispatch();
-    });
-  });
-
-
-  // 검색 input
-  const searchInput = container.querySelector(".search-input");
-  if(searchInput){
-    searchInput.addEventListener("input", () => {
-      state.searchKeyword = searchInput.value;
-    });
-  }
-
-  // selectbox 이벤트
-  const searchSelect = container.querySelector("#searchSelectBox");
-searchSelect?.addEventListener("selectChanged", (e) => {
-  const label = e.detail.value;
-  state.searchField = searchMap[label] || label;
+		// 일반 input(text) 초기화
+		form.querySelectorAll("input[type='text']").forEach(input => {
+			input.value = "";
+		});
+	});
 });
 
-
-  // 검색 버튼
-  container.querySelector(".filter-submit")?.addEventListener("click", () => {
-	  console.log("검색 버튼 클릭됨");
-    dispatch(true);
-  });
-
-//초기화 버튼
-  container.querySelector(".filter-reset")?.addEventListener("click", () => {
-    // 상태 초기화 대신 URL 파라미터 제거 후 새로고침
-    window.location.href = window.location.pathname;
-  });
-
-  function dispatch(submit=false){
-	    const event = new CustomEvent("filterChanged", {
-	      detail: {...state, submit}
-	    });
-	    document.dispatchEvent(event);
-	  }
-})();
 </script>

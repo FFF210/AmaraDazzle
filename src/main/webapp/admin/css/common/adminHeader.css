@@ -14,6 +14,7 @@
     top: 0;
     background-color: var(--base);
     gap: 5px;
+    z-index : 99999999;
 }
 
 .header .icon-btn {
