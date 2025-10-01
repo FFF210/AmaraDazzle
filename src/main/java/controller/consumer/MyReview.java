@@ -45,7 +45,6 @@ public class MyReview extends HttpServlet {
 			Member loginUser = (Member) session.getAttribute("loginUser");
 
 			if (loginUser == null) {
-				// 로그인되지 않은 경우 로그인 페이지로 리다이렉트
 				response.sendRedirect(request.getContextPath() + "/store/login");
 				return;
 			}
@@ -53,25 +52,29 @@ public class MyReview extends HttpServlet {
 			Long memberId = loginUser.getMemberId();
 			System.out.println("=== 디버깅 시작 ===");
 			System.out.println("Member ID: " + memberId);
-			
+
 			ReviewService service = new ReviewServiceImpl();
 
 			// 리뷰 작성 가능한 상품 목록 조회
 			List<Map<String, Object>> reviewableItems = service.getReviewableItems(memberId);
-			//디버깅용 로그출력
 			System.out.println("Reviewable items count: " + reviewableItems.size());
 
 			// 내가 작성한 리뷰 목록 조회
 			List<Map<String, Object>> myReviews = service.getMyReviews(memberId);
-			//디버깅용 로그출력
 			System.out.println("My reviews count: " + myReviews.size());
 			System.out.println("=== 디버깅 끝 ===");
+
+			// ★★★ success 파라미터 체크 ★★★
+			String success = request.getParameter("success");
+			if ("true".equals(success)) {
+				request.setAttribute("successMessage", "리뷰가 등록되었습니다!");
+			}
 
 			// JSP에 데이터 전달
 			request.setAttribute("reviewableItems", reviewableItems);
 			request.setAttribute("myReviews", myReviews);
 
-			// 마이페이지 리뷰 JSP로 포워드
+			// 마이페이지 리뷰 JSP로 포워드 (이 이후로는 코드가 실행 안됨)
 			request.getRequestDispatcher("/consumer/myReview.jsp").forward(request, response);
 
 		} catch (Exception e) {
@@ -90,25 +93,39 @@ public class MyReview extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 
 		try {
-			// 세션에서 로그인 정보 확인
+			// 디버깅 시작
+			System.out.println("=== 리뷰 작성 디버깅 시작 ===");
+
+			// 세션 확인
 			HttpSession session = request.getSession();
 			Member loginUser = (Member) session.getAttribute("loginUser");
+			System.out.println("로그인 사용자: " + (loginUser != null ? loginUser.getMemberId() : "null"));
 
 			if (loginUser == null) {
-				// 로그인되지 않은 경우 로그인 페이지로 리다이렉트
 				response.sendRedirect(request.getContextPath() + "/store/login");
 				return;
 			}
 
-			// 폼에서 전송된 데이터 받기
-			Long orderItemId = Long.parseLong(request.getParameter("orderItemId"));
-			Long productId = Long.parseLong(request.getParameter("productId"));
+			// 파라미터 받기 및 출력
+			String orderItemIdStr = request.getParameter("orderItemId");
+			String productIdStr = request.getParameter("productId");
 			String productOptionIdStr = request.getParameter("productOptionId");
+			String ratingStr = request.getParameter("rating");
+			String content = request.getParameter("content");
+
+			System.out.println("orderItemId: " + orderItemIdStr);
+			System.out.println("productId: " + productIdStr);
+			System.out.println("productOptionId: " + productOptionIdStr);
+			System.out.println("rating: " + ratingStr);
+			System.out.println("content: " + content);
+
+			// 변환
+			Long orderItemId = Long.parseLong(orderItemIdStr);
+			Long productId = Long.parseLong(productIdStr);
 			Long productOptionId = (productOptionIdStr != null && !productOptionIdStr.isEmpty())
 					? Long.parseLong(productOptionIdStr)
 					: null;
-			Integer rating = Integer.parseInt(request.getParameter("rating"));
-			String content = request.getParameter("content");
+			Integer rating = Integer.parseInt(ratingStr);
 
 			// Review 객체 생성
 			Review review = new Review();
@@ -119,20 +136,21 @@ public class MyReview extends HttpServlet {
 			review.setRating(rating);
 			review.setContent(content);
 
-			// 이미지 파일 ID들 (나중에 파일 업로드 기능 추가할 때 사용)
-			// review.setImage1FileId(image1FileId);
-			// review.setImage2FileId(image2FileId);
-			// review.setImage3FileId(image3FileId);
+			System.out.println("Review 객체: " + review.toString());
 
 			// 리뷰 작성
 			ReviewService service = new ReviewServiceImpl();
 			service.createReview(review);
 
-			// 리뷰 작성 성공 - 마이페이지 리뷰로 리다이렉트
-			response.sendRedirect(request.getContextPath() + "/store/mypage/myReview");
+			System.out.println("리뷰 작성 완료!");
+			System.out.println("=== 리뷰 작성 디버깅 끝 ===");
+
+			// 성공 메시지와 함께 리다이렉트
+			response.sendRedirect(request.getContextPath() + "/store/mypage/myReview?success=true");
 
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("리뷰 작성 중 오류: " + e.getMessage());
 			request.setAttribute("errorMessage", "리뷰 작성 중 오류가 발생했습니다: " + e.getMessage());
 			request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);
 		}
