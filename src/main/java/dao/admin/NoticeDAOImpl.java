@@ -1,6 +1,5 @@
 package dao.admin;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +11,7 @@ import util.MybatisSqlSessionFactory;
 public class NoticeDAOImpl implements NoticeDAO {
 	SqlSession ss = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
 
-	//seller공지 작성 
+	//seller 공지 작성 
 	@Override
 	public Long insertNoticeSeller(Notice notice_DTO) throws Exception {
 		int result = ss.insert("mapper.notice.insertSellerNotice", notice_DTO);
@@ -39,15 +38,33 @@ public class NoticeDAOImpl implements NoticeDAO {
 
 	//seller 공지 총 게시글 수 
 	@Override
-	public Integer noticeCount() {
-		return ss.selectOne("mapper.notice.AllSellerNoticeCnt");
+	public Integer noticeCount(Map<String, String> cntMap) {
+		return ss.selectOne("mapper.notice.SellerNoticeCnt", cntMap);
 	}
 
 	//seller 공지 리스트 
 	@Override
-	public List<Notice> sellerNoticeList(Integer row) {
-		List<Notice> sNoticeList = ss.selectList("mapper.notice.selectAllSellerNotice",row);
-		return sNoticeList;
+	public List<Notice> sellerNoticeList(Map<String, Object> listMap) {
+		return ss.selectList("mapper.notice.selectAllSellerNotice",listMap);
+	}
+
+	//검색된 seller 공지 리스트 
+	@Override
+	public List<Notice> search_nlist( Map<String, Object> searchlistMap) {
+		return ss.selectList("mapper.notice.selectSearchSellerNotice",searchlistMap);
+	}
+
+	//공지 게시글 조회수
+	@Override
+	public void viewCount(int num) {
+		int result = ss.update("mapper.notice.notice_viewcnt",num);
+
+		if(result > 0) {
+			ss.commit();
+			
+		} else {
+			ss.rollback();
+		}
 	}
 	
 	

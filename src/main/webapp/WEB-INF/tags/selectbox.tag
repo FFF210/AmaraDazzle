@@ -30,13 +30,14 @@
 <%@ attribute name="size" required="false"%>
 <%@ attribute name="items" required="false"%>
 <%@ attribute name="initial" required="false"%>
+<%@ attribute name="name" required="false"%>
 
 <%-- 기본값 처리 --%>
 <c:set var="size" value="${empty size ? 'md' : size}" />
 <c:set var="items" value="${empty items ? '' : items}" />
 <c:set var="itemList" value="${fn:split(items, ',')}" />
-<c:set var="selectedValue"
-	value="${empty initial ? itemList[0] : initial}" />
+<c:set var="selectedValue" value="${empty initial ? itemList[0] : initial}" />
+<c:set var="name" value="${name}" />
 
 <%-- id 속성이 있으면 그대로 쓰고, 없으면 자동 생성 --%>
 <c:choose>
@@ -55,16 +56,20 @@
 </c:choose>
 
 
-<div class="custom-select ${size}"
+<div class="custom-select ${size}" 
 	<c:if test="${not empty id}">id="${id}"</c:if> tabindex="0">
-	<div class="select-header">
-		<span class="select-label">${selectedValue}</span> <i
-			class="bi bi-chevron-down"></i>
+	
+	<div class="select-header" >
+		<span class="select-label">${selectedValue}</span> 
+		<i class="bi bi-chevron-down"></i>
 	</div>
 	<ul class="select-list">
 		<c:forEach var="it" items="${itemList}">
 			<li class="select-item ${it eq selectedValue ? 'active' : ''}"
-				data-value="${it}">${it}</li>
+				data-value="${it}" >${it}</li>
 		</c:forEach>
 	</ul>
+	
+	<!-- 실제 서버로 전송할 hidden input -->
+	<input type="hidden" name="${name}" value="${selectedValue}" class="select_hidden" />
 </div>

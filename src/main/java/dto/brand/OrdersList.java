@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 
 public class OrdersList {
 	private Long ordersId; // 주문 ID (PK, orders.orders_id)
+	private String orderCode; // 주문번호 (order_code)
 	private Long memberId; // 주문 회원 ID (FK → member.member_id)
 	private String memberName; // 주문자 이름 (member.name)
 	private BigDecimal totalAmount; // 최종 결제 금액 (orders.total_amount)
@@ -24,6 +25,14 @@ public class OrdersList {
 
 	public void setOrdersId(Long ordersId) {
 		this.ordersId = ordersId;
+	}
+
+	public String getOrderCode() {
+		return orderCode;
+	}
+
+	public void setOrderCode(String orderCode) {
+		this.orderCode = orderCode;
 	}
 
 	public Long getMemberId() {

@@ -258,6 +258,7 @@
 		resultType="ordersList">
 		SELECT DISTINCT
 		o.orders_id,
+		o.order_code,
 		o.member_id,
 		m.name AS member_name,
 		o.total_amount,
@@ -490,6 +491,7 @@
 		resultType="ordersSummary">
 		SELECT
 		o.orders_id,
+		o.order_code,
 		o.created_at,
 		o.using_point,
 		COALESCE(

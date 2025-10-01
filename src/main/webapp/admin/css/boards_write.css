@@ -40,3 +40,7 @@ section.board_write div.part_section.bottom_part .part_content {
     display: flex;
     justify-content: space-between;
 }
+
+select.cate_sb {
+	width: 300px;
+}

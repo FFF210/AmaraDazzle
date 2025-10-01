@@ -147,7 +147,7 @@
 
 		<!-- 페이지네이션 -->
 		<div class="pagination_wrap" id="paginationWrap">
-			<my:adminPagination currentPage="1" totalPages="10" baseUrl="/products?page=" />
+<%-- 			<my:adminPagination currentPage="1" totalPages="10" baseUrl="/products?page=" /> --%>
 		</div>
 		<!-- 페이지네이션 end -->
 	</div>

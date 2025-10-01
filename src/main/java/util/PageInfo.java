@@ -1,11 +1,11 @@
 package util;
 
 public class PageInfo {
-	private Integer curPage;
-	private Integer allPage;
-	private Integer startPage;
-	private Integer endPage;
-	
+	private Integer curPage; //현재 보고있는 페이지 숫자 
+	private Integer allPage;	//전체 페이지 개수 
+	private Integer startPage;	//현재화면의 시작 페이지 
+	private Integer endPage;	//현재화면의 끝 페이지 
+
 	
 	public PageInfo() {}
 	public PageInfo(Integer curPage) {

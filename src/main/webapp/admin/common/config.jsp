@@ -5,17 +5,20 @@
 <head>
 	<meta charset="UTF-8" />
 	
-	<link rel="stylesheet" href="./css/common/container.css?v=2" />
-	<link rel="stylesheet" href="./css/common/adminHeader.css?v=2" />
-	<link rel="stylesheet" href="./css/common/adminBreadcrumb.css?v=2" />
-	<link rel="stylesheet" href="./css/common/adminSidebar.css?v=2" />
-	<link rel="stylesheet" href="./css/common/componant.css?v=2" />
+	<link rel="stylesheet" href="./css/common/container.css" />
+	<link rel="stylesheet" href="./css/common/adminHeader.css" />
+	<link rel="stylesheet" href="./css/common/adminBreadcrumb.css" />
+	<link rel="stylesheet" href="./css/common/adminSidebar.css" />
+	<link rel="stylesheet" href="./css/common/componant.css" />
 	
-	<link rel="stylesheet" href="./css/componant/modal.css?v=2" />
-	<link rel="stylesheet" href="./css/componant/search_box.css?v=2" />
-	<link rel="stylesheet" href="./css/componant/tab.css?v=2" />
-	<link rel="stylesheet" href="./css/componant/table.css?v=2" />
-	<link rel="stylesheet" href="./css/componant/adminPagination.css?v=2" />
+	<link rel="stylesheet" href="../tagcss/selectbox.css" />
+	<link rel="stylesheet" href="./css/componant/modal.css" />
+	<link rel="stylesheet" href="./css/componant/search_box.css" />
+	<link rel="stylesheet" href="./css/componant/tab.css" />
+	<link rel="stylesheet" href="./css/componant/table.css" />
+	<link rel="stylesheet" href="./css/componant/adminPagination.css" />
+	
+	
 
 	<!-- Bootstrap Icons CDN -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />

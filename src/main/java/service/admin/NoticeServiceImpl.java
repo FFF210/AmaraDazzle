@@ -1,12 +1,14 @@
 package service.admin;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import dao.admin.NoticeDAO;
 import dao.admin.NoticeDAOImpl;
 import dto.Notice;
-import util.PageInfo;
+import util.Paging;
 
 public class NoticeServiceImpl implements NoticeService {
 
@@ -14,6 +16,8 @@ public class NoticeServiceImpl implements NoticeService {
 	public NoticeServiceImpl() {
 		n_dao = new NoticeDAOImpl();
 	}
+	
+	private Paging m_pg = new Paging();
 	
 	//seller공지 작성 
 	@Override
@@ -38,41 +42,48 @@ public class NoticeServiceImpl implements NoticeService {
 	//seller 공지 상세보기 
 	@Override
 	public Notice noticeSellerDetail(int num) throws Exception {
-//		n_dao.viewCount(num);
+		n_dao.viewCount(num);
 		Notice notice_DTO = n_dao.noticeSellerDetail(num);
 		
 		return notice_DTO;
 	}
 
+	//seller 공지 게시글 총 개수 
 	@Override
-	public Integer noticeCount() {
-		Integer sellerNoticeCnt = n_dao.noticeCount(); //전체 게시글 수 
+	public Integer noticeCount(String condition, String keyword) {
+		Map<String, String> cntMap = new HashMap<String, String>();
+		
+		if(condition.equals("search")) { //검색어가 있는 경우 
+			cntMap.put("part", "search");
+			cntMap.put("keyword", keyword);
+			
+		}else { // 검색어가 없는 경우 
+			cntMap.put("part", "total");
+		}
+				
+		Integer sellerNoticeCnt = n_dao.noticeCount(cntMap);
 		return sellerNoticeCnt;
 	}
 	
 	//seller 공지 리스트 보기 
 	@Override
-	public List<Notice> sellerNoticeByPage(PageInfo pageInfo) {
-		Integer sellerNoticeCnt = noticeCount();
-		Integer allPage = (int)Math.ceil((double)sellerNoticeCnt / 10) ; //전체 페이지 수
+	public List<Notice> sellerNoticeByPage(int p_no)  {
+		Map<String, Object> listMap = m_pg.paging(p_no); 
 		
-		Integer startPage = (pageInfo.getCurPage()-1)/10*10 +1;
-		
-		Integer endPage = startPage+10 -1;
-		if(endPage > allPage) {
-			endPage = allPage;
-		}
-		
-		pageInfo.setAllPage(allPage);
-		pageInfo.setStartPage(startPage);
-		pageInfo.setEndPage(endPage);
-		
-		Integer row = (pageInfo.getCurPage()-1) *10 +1;
-		
-		List<Notice> sellerNoticeList = n_dao.sellerNoticeList(row-1);
-		
+		List<Notice> sellerNoticeList = n_dao.sellerNoticeList(listMap);
 		return sellerNoticeList;
 	}
+
+	//검색된 seller 공지 리스트 
+	@Override
+	public List<Notice> search_post(String keyword, int p_no) {
+		Map<String, Object> searchlistMap = m_pg.paging(p_no);
+		searchlistMap.put("keyword" , keyword);  //map에 검색어 추가  
+
+		List<Notice> search_nlist = n_dao.search_nlist(searchlistMap);
+		return search_nlist;
+	}
+
 
 	
 	
