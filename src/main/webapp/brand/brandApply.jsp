@@ -31,18 +31,30 @@
 		</h2>
 
 		<!-- 입점신청 폼 -->
-		<form action="/brand/brandApply" method="post" class="auth-form" enctype="multipart/form-data">
+		<form action="/brand/brandApply" method="post" class="auth-form"
+			enctype="multipart/form-data">
 			<div class="input-group">
 				<div class="form-group">
-					<label for="upload1">브랜드 로고</label>
-					<input type="file" name="upload1" id="upload1" accept="image/*" />
-					<img id="preview1" src="#" alt="미리보기" style="display:none;"/>
+					<label for="upload1">브랜드 로고</label> <img
+						src="${contextPath}/image/plus.png" id="preview-thumbnail"
+						alt="대표 이미지" width="100px"
+						onclick="document.getElementById('upload1').click();" /> <input
+						type="file" id="upload1" name="upload1" accept="image/*"
+						style="display: none"
+						onchange="readURL(this,'preview-thumbnail');" /> <img
+						id="preview1" src="#" alt="미리보기" style="display: none;" />
 				</div>
 
 				<div class="form-group">
-					<label for="upload2">대표 이미지</label>
-					<input type="file" name="upload2" id="upload2" accept="image/*" />
-					<img id="preview2" class="preview-img" src="#" alt="미리보기" style="display:none;"/>
+					<label for="upload2">대표 이미지</label> <img
+						src="${contextPath}/image/plus.png" id="preview-thumbnail"
+						alt="대표 이미지" width="100px"
+						onclick="document.getElementById('upload2').click();" /> <input
+						type="file" id="upload2" name="upload2" accept="image/*"
+						style="display: none"
+						onchange="readURL(this,'preview-thumbnail');" /> <img
+						id="preview2" class="preview-img" src="#" alt="미리보기"
+						style="display: none;" />
 				</div>
 
 				<div class="form-group">
@@ -99,22 +111,17 @@
   });
   
   /*********************************************************************************************************
-   * 이미지 미리보기
+   * 이미지 버튼
    *********************************************************************************************************/
-   function previewImage(input, previewId) {
-		const file = input.files[0];
-		const preview = document.getElementById(previewId);
-		if(file){
-			const reader = new FileReader();
-			reader.onload = e => {
-				preview.src = e.target.result;
-				preview.style.display = "block";
-			};
-			reader.readAsDataURL(file);
-		}
-	}
-	document.getElementById("upload1").addEventListener("change", function(){ previewImage(this, "preview1"); });
-	document.getElementById("upload2").addEventListener("change", function(){ previewImage(this, "preview2"); });
+   function readURL(input, previewId) {
+	    if (input.files && input.files[0]) {
+	      const reader = new FileReader();
+	      reader.onload = function(e) {
+	        document.getElementById(previewId).src = e.target.result;
+	      }
+	      reader.readAsDataURL(input.files[0]);
+	    }
+	  }
 });
 </script>
 </html>

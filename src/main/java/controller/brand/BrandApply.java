@@ -26,7 +26,8 @@ import service.brand.BrandServiceImpl;
  * Servlet implementation class BrandApply
  */
 @WebServlet("/brand/brandApply")
-@MultipartConfig(fileSizeThreshold = 1024 * 1024, // 1MB 이상이면 디스크에 임시저장
+@MultipartConfig( // multipart/form-data 처리를 위한 설정
+		fileSizeThreshold = 1024 * 1024, // 1MB 이상이면 디스크에 임시 저장
 		maxFileSize = 1024 * 1024 * 10, // 파일 하나 최대 10MB
 		maxRequestSize = 1024 * 1024 * 50 // 요청 전체 최대 50MB
 )
@@ -66,14 +67,14 @@ public class BrandApply extends HttpServlet {
 
 			// 로고 업로드
 			Part logoPart = request.getPart("upload1");
-			if (logoPart != null && logoPart.getSize() > 0) {
+			if (logoPart != null && logoPart.getSize() > 0) { // 업로드된 경우만 세팅
 				Long logoFileId = saveFile(logoPart, request);
 				newBrand.setLogoFileId(logoFileId);
 			}
 
 			// 대표이미지 업로드
 			Part heroPart = request.getPart("upload2");
-			if (heroPart != null && heroPart.getSize() > 0) {
+			if (heroPart != null && heroPart.getSize() > 0) { // 업로드된 경우만 세팅
 				Long heroFileId = saveFile(heroPart, request);
 				newBrand.setHeroFileId(heroFileId);
 			}
@@ -121,8 +122,8 @@ public class BrandApply extends HttpServlet {
 		if (part == null || part.getSize() == 0)
 			return null;
 
-		// 실제 서버 업로드 경로
-		String savePath = request.getServletContext().getRealPath("/upload/brand");
+		// 저장 경로
+		String savePath = request.getServletContext().getRealPath("/upload");
 		File uploadDir = new File(savePath);
 		if (!uploadDir.exists())
 			uploadDir.mkdirs();
@@ -130,26 +131,27 @@ public class BrandApply extends HttpServlet {
 		// 원본 파일명
 		String originalName = part.getSubmittedFileName();
 
-		// 확장자
+		// 확장자 추출
 		String ext = "";
 		int dot = originalName.lastIndexOf(".");
 		if (dot > -1)
 			ext = originalName.substring(dot);
 
-		// 리네임 파일명
+		// 리네임 파일명 (시간 + 랜덤)
 		String renamed = System.currentTimeMillis() + "_" + (int) (Math.random() * 1000) + ext;
 
-		// 실제 파일 저장
+		// 실제 저장
 		part.write(savePath + File.separator + renamed);
 
 		// DB 저장
 		UploadFile fileDto = new UploadFile();
 		fileDto.setFileName(originalName);
 		fileDto.setFileRename(renamed);
-		fileDto.setStoragePath("/upload/brand");
+		fileDto.setStoragePath("/upload");
 
 		uploadFileService.save_file(fileDto);
-		Long fileId = uploadFileService.select_fileId(renamed);
+
+		Long fileId = uploadFileService.select_fileId(renamed); // FK로 넣을 upload_file_id 반환
 
 		return fileId;
 	}

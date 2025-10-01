@@ -18,7 +18,6 @@
 <link rel="stylesheet" href="../tagcss/rating.css" />
 <link rel="stylesheet" href="../tagcss/textArea.css" />
 <link rel="stylesheet" href="../tagcss/textInput.css" />
-<link rel="stylesheet" href="../tagcss/imageBtn.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/alert.css" />
 <link rel="stylesheet" href="./css/contentDetail.css" />
@@ -50,8 +49,8 @@
 				<div class="content-row">
 					<label class="content-label">작성일</label>
 					<my:textInput id="writeDate" name="writeDate"
-						value="${review.questionedAt}"
-						type="readOnly" size="lg" state="default" />
+						value="${review.questionedAt}" type="readOnly" size="lg"
+						state="default" />
 				</div>
 
 				<!-- 별점 -->
@@ -65,17 +64,17 @@
 					test="${not empty review.image1FileId or not empty review.image2FileId or not empty review.image3FileId}">
 					<div class="content-row">
 						<label class="content-label">첨부</label>
-						<div class="content-images">
-							<c:if test="${not empty review.image1FileId}">
-								<my:imageBtn name="upload1" id="${review.image1FileId}" />
-							</c:if>
-							<c:if test="${not empty review.image2FileId}">
-								<my:imageBtn name="upload2" id="${review.image2FileId}" />
-							</c:if>
-							<c:if test="${not empty review.image3FileId}">
-								<my:imageBtn name="upload3" id="${review.image3FileId}" />
-							</c:if>
-						</div>
+						<c:forEach var="i" begin="1" end="3">
+							<div class="content-images">
+								<img
+									src="<c:out value='${not empty review["image" += i += "FileId"] ? ("image?fileId=" += review["image" += i += "FileId"]) : (contextPath += "/image/plus.png")}'/>"
+									id="preview-image${i}" alt="추가 이미지${i}" width="100px"
+									onclick="document.getElementById('image${i}').click();" /> <input
+									type="file" id="image${i}" name="image${i}" accept="image/*"
+									style="display: none"
+									onchange="readURL(this,'preview-image${i}');" />
+							</div>
+						</c:forEach>
 					</div>
 				</c:if>
 
@@ -97,7 +96,13 @@
 
 				<!-- 상품 정보 -->
 				<div class="product-card">
-					<my:imageBtn name="productThumbnail" id="${review.thumbnailFileId}" />
+					<img
+						src="<c:out value='${not empty review.thumbnailFileId ? ("image?fileId=" += review.thumbnailFileId) : (contextPath += "/img/plus.png")}'/>"
+						id="preview-thumbnail" alt="대표 이미지" width="100px"
+						onclick="document.getElementById('thumbnail').click();" /> <input
+						type="file" id="thumbnail" name="thumbnail" accept="image/*"
+						style="display: none"
+						onchange="readURL(this,'preview-thumbnail');" />
 					<div class="product-info">
 						<div class="product-name">${review.productName}</div>
 						<c:if test="${not empty review.optionName}">

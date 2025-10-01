@@ -184,7 +184,7 @@
 						<label>대표 이미지 <span class="required">*</span></label>
 						<div class="image-slot">
 							<img
-								src="<c:out value='${not empty product.thumbnailFileId ? ("image?fileId=" += product.thumbnailFileId) : (contextPath += "/img/plus.png")}'/>"
+								src="<c:out value='${not empty product.thumbnailFileId ? ("image?fileId=" += product.thumbnailFileId) : (contextPath += "/image/plus.png")}'/>"
 								id="preview-thumbnail" alt="대표 이미지" width="100px"
 								onclick="document.getElementById('thumbnail').click();" /> <input
 								type="file" id="thumbnail" name="thumbnail" accept="image/*"

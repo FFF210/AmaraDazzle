@@ -48,7 +48,6 @@ public class ProductForm extends HttpServlet {
 
 	public ProductForm() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -234,20 +233,16 @@ public class ProductForm extends HttpServlet {
 
 		// 썸네일 (필수 1장 - 신규 등록일 경우 반드시 있어야 함)
 		Part thumbPart = request.getPart("thumbnail");
-		System.out.println("[DEBUG] thumbnail size = " + (thumbPart != null ? thumbPart.getSize() : "null"));
 		if (thumbPart != null && thumbPart.getSize() > 0) { // 업로드된 경우만 세팅
 			Long thumbFileId = saveFile(thumbPart, request);
 			product.setThumbnailFileId(thumbFileId);
-			System.out.println("[DEBUG] thumbnailFileId = " + thumbFileId);
 		}
 
 		// 추가 이미지 (최대 5장)
 		for (int i = 1; i <= 5; i++) {
 			Part imgPart = request.getPart("image" + i);
-			System.out.println("[DEBUG] image" + i + " size = " + (imgPart != null ? imgPart.getSize() : "null"));
 			if (imgPart != null && imgPart.getSize() > 0) { // 업로드된 경우만 세팅
 				Long imgFileId = saveFile(imgPart, request);
-				System.out.println("[DEBUG] image" + i + " fileId = " + imgFileId);
 				switch (i) {
 				case 1:
 					product.setImage1FileId(imgFileId);
@@ -319,7 +314,6 @@ public class ProductForm extends HttpServlet {
 
 		// 실제 저장
 		part.write(savePath + File.separator + renamed);
-		System.out.println("[DEBUG] File saved: " + savePath + File.separator + renamed);
 
 		// DB 저장
 		UploadFile fileDto = new UploadFile();
@@ -327,11 +321,9 @@ public class ProductForm extends HttpServlet {
 		fileDto.setFileRename(renamed);
 		fileDto.setStoragePath("/upload");
 
-		int result = uploadFileService.save_file(fileDto);
-		System.out.println("[DEBUG] upload_file insert result = " + result);
+		uploadFileService.save_file(fileDto);
 
 		Long fileId = uploadFileService.select_fileId(renamed); // FK로 넣을 upload_file_id 반환
-		System.out.println("[DEBUG] Generated upload_file_id = " + fileId);
 
 		return fileId;
 	}

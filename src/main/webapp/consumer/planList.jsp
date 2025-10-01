@@ -2,6 +2,10 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<!-- 서버에서 카테고리 API URL 세팅 -->
+<c:url value="/category" var="categoryUrl"/>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -51,9 +55,9 @@
 	<!-- 컨텐츠 영역 -->
 	<div class="plan-container">
 		<!-- 카테고리 필터 -->
-		<my:categoryFilter
-			categories="전체,스킨케어,마스크팩,클렌징,선케어,립메이크업,베이스메이크업,아이메이크업,헤어케어,바디케어,향수,맨즈케어"
-			columns="15" selected="${param.category1Id}" />
+		<my:categoryFilter selectedLarge="${param.category1Id}"
+			selectedMiddle="${param.category2Id}"
+			selectedSmall="${param.category3Id}" />
 
 		<!-- 정렬 옵션 -->
 		<my:sortList hasSelect="false" />
@@ -101,7 +105,8 @@
 				</c:url>
 
 				<%-- 상품 카드 렌더링 --%>
-				<my:productCard brand="${p.brandName}" productId="${p.productId}" title="${p.name}" isWished="${p.isWished}"
+				<my:productCard brand="${p.brandName}" productId="${p.productId}"
+					title="${p.name}" isWished="${p.isWished}"
 					isSale="${p.discountType ne null}" hasOption="${p.hasOption eq 1}"
 					originPrice="${p.price}" saleRate="${saleRate}"
 					finalPrice="${finalPrice}" href="${detailUrl}">
@@ -138,103 +143,72 @@
 	<%@ include file="./footer.jsp"%>
 
 	<script>
-	/*********************************************************************************************************
-	 * 정렬, 카테고리 옵션 클릭 이벤트
-	 *********************************************************************************************************/
 	 document.addEventListener("DOMContentLoaded", () => {
-		    const sortMap = {
-		        "인기순": "POPULAR",
-		        "최근 등록순": "RECENT",
-		        "판매 수량순": "SALES",
-		        "낮은 가격순": "PRICELOW",
-		        "높은 가격순": "PRICEHIGH",
-		    };
+	/*********************************************************************************************************
+	 * 정렬 옵션 클릭 이벤트
+	 *********************************************************************************************************/
+	 const sortMap = {
+			    "인기순": "POPULAR",
+			    "최근 등록순": "RECENT",
+			    "판매 수량순": "SALES",
+			    "낮은 가격순": "PRICELOW",
+			    "높은 가격순": "PRICEHIGH",
+			  };
 
-		    const currentSort = "${param.sort != null ? param.sort : 'POPULAR'}";
+			  const currentSort = "${param.sort != null ? param.sort : 'POPULAR'}";
 
-		    // 정렬 버튼 이벤트
-		    document.querySelectorAll(".sort-item").forEach(btn => {
-		        const mapped = sortMap[btn.textContent.trim()];
+			  document.querySelectorAll(".sort-item").forEach(btn => {
+			    const mapped = sortMap[btn.textContent.trim()];
 
-		        // 현재 선택된 sort 버튼 강조
-		        if (mapped === currentSort) {
-		            btn.classList.add("selected");
-		        }
+			    // 현재 sort 강조
+			    if (mapped === currentSort) {
+			      btn.classList.add("selected");
+			    }
 
-		        // 클릭 시 서버 요청
-		        btn.addEventListener("click", () => {
-		            const sortKey = sortMap[btn.textContent.trim()];
-		            const url = new URL(window.location.href);
-		            url.searchParams.set("page", 1); // 정렬 바꾸면 첫 페이지부터
-		            url.searchParams.set("sort", sortKey);
-		            location.href = url.toString();
-		        });
-		    });
-
-		    // 카테고리 버튼 이벤트
-		    document.querySelectorAll(".category-item").forEach(btn => {
-		        btn.addEventListener("click", () => {
-		            if (!btn.classList.contains("empty")) {
-		                const categoryId = btn.dataset.categoryid;
-		                const url = new URL(window.location.href);
-		                url.searchParams.set("page", 1); // 카테고리 바꾸면 첫 페이지부터
-		                url.searchParams.set("category1Id", categoryId);
-		                url.searchParams.set("sort", currentSort);
-		                location.href = url.toString();
-		            }
-		        });
-		    });
-		});
+			    // 클릭 시 URL 갱신
+			    btn.addEventListener("click", () => {
+			      const sortKey = sortMap[btn.textContent.trim()];
+			      const url = new URL(window.location.href);
+			      url.searchParams.set("page", 1);
+			      url.searchParams.set("sort", sortKey);
+			      location.href = url.toString();
+			    });
+			  });
 	
 	 /*********************************************************************************************************
 	  * 찜 버튼 클릭 이벤트 (HeartBtn - 카운트 없이)
 	  *********************************************************************************************************/
-	 document.addEventListener("DOMContentLoaded", () => {
-	   document.querySelectorAll(".wishlist-btn .heart-btn").forEach(btn => {
-	     btn.addEventListener("click", (e) => {
-	       e.stopPropagation();
-	       e.preventDefault();
+			  document.querySelectorAll(".wishlist-btn .heart-btn").forEach(btn => {
+				    btn.addEventListener("click", (e) => {
+				      e.stopPropagation();
+				      e.preventDefault();
 
-	       const icon = btn.querySelector("i");
-	       const productId = btn.closest(".product-card").dataset.productid;
+				      const icon = btn.querySelector("i");
+				      const productId = btn.closest(".product-card").dataset.productid;
 
-	       fetch("/store/wishlistToggle", {
-	         method: "POST",
-	         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-	         body: "productId=" + encodeURIComponent(productId)
-	       })
-	       .then(res => res.json())
-	       .then(data => {
-	         if (data.success) {
-	           // DB 반영 결과에 따라 아이콘 토글
-	           if (data.isWished) {
-	             icon.classList.remove("bi-heart");
-	             icon.classList.add("bi-heart-fill", "active");
-	           } else {
-	             icon.classList.remove("bi-heart-fill", "active");
-	             icon.classList.add("bi-heart");
-	           }
-
-	           // 부모 페이지로 이벤트 전달 (선택적)
-	           const event = new CustomEvent("heartToggled", {
-	             detail: { 
-	               productId: productId, 
-	               active: data.isWished 
-	             }
-	           });
-	           document.dispatchEvent(event);
-	         } else {
-	           alert(data.message);
-	         }
-	       })
-	       .catch(err => console.error(err));
-	     });
-	   });
-	 });
-
-
-
-
+				      fetch("/store/wishlistToggle", {
+				        method: "POST",
+				        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+				        body: "productId=" + encodeURIComponent(productId)
+				      })
+				      .then(res => res.json())
+				      .then(data => {
+				        if (data.success) {
+				          if (data.isWished) {
+				            icon.classList.remove("bi-heart");
+				            icon.classList.add("bi-heart-fill", "active");
+				          } else {
+				            icon.classList.remove("bi-heart-fill", "active");
+				            icon.classList.add("bi-heart");
+				          }
+				        } else {
+				          alert(data.message);
+				        }
+				      })
+				      .catch(err => console.error(err));
+				    });
+				  });
+	 			});
 	</script>
 </body>
 </html>
