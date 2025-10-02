@@ -63,7 +63,7 @@ document.querySelectorAll("th.sortable").forEach(th => {
 /* ******************************************
   * 체크박스
 ******************************************* */
-var ob = document.querySelectorAll(".n_ch"); 
+var ob = document.querySelectorAll(".ch_box"); 
 var ea = ob.length;  
 
 //최상단 박스 체크시 모든 체크박스 선택

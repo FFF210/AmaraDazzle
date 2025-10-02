@@ -13,6 +13,8 @@
 	
 	<link rel="stylesheet" href="../tagcss/selectbox.css" />
 	<link rel="stylesheet" href="../tagcss/alert.css" />
+	<link rel="stylesheet" href="../tagcss/tag.css" />
+	<link rel="stylesheet" href="../tagcss/dateInput.css" />
 	<link rel="stylesheet" href="./css/componant/modal.css" />
 	<link rel="stylesheet" href="./css/componant/search_box.css" />
 	<link rel="stylesheet" href="./css/componant/tab.css" />
@@ -27,7 +29,12 @@
 	<!-- JQuery -->
 	<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 	
+	<!-- dateInput.tag 용 cdn -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	
 	<!-- Local/Session Storage에 저장한 값 먼저 실행하는 스크립트 -->
 	<script src="./js/common/setStorage.js"></script>
+	<script src="./js/common/alert.js"></script>
 </head>
 <!-- 헤드부분 -->

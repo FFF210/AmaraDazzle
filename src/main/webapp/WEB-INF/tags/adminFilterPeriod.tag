@@ -16,9 +16,9 @@
 	</div>
 	<div class="period_body">
 		<div class="filtering_content">
-			<my:dateInput type="input" id="${dateCate}startDate" name="${dateCate}startDate" value="${searchContent.startDate}"/>
+			<my:dateInput type="input" id="${dateCate}startDate" name="${dateCate}startDate" value="${searchContent.startDate2}"/>
 			<span> - </span>
-			<my:dateInput type="input" id="${dateCate}endDate" name="${dateCate}endDate" value="${searchContent.endDate}" inputDay="end" />
+			<my:dateInput type="input" id="${dateCate}endDate" name="${dateCate}endDate" value="${searchContent.endDate2}" inputDay="end" />
 			
 			<div class="p_choice">
 				<my:dateInput type="preset" presets="${presets}" />

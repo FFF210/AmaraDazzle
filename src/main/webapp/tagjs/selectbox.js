@@ -34,10 +34,6 @@
 					// 라벨 변경
 					label.textContent = text;
 					
-					// hidden input 값 변경
-					const hiddenInput = select.querySelector(".select_hidden");
-					if (hiddenInput) hiddenInput.value = value;
-
 					// 선택 표시 갱신
 					list.querySelectorAll(".select-item")
 						.forEach(i => i.classList.remove("active"));

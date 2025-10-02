@@ -29,7 +29,7 @@
 					<button type="button">내 정보 수정</button>
 				</div>
 				<div class="logout">
-					<button type="button">로그아웃</button>
+					<button type="button" onclick="admin_logout()">로그아웃</button>
 				</div>
 			</div>
 			<!-- myInfo modal end -->
@@ -45,25 +45,35 @@
 
 <!-- JS소스 -->
 <script>
-// loginInfo 모달 열고닫기 
-const logInfoBtn = document.querySelector(".header .bi-person");
-const loginInfoBox = document.querySelector(".modal.loginInfo");
+	// loginInfo 모달 열고닫기 
+	const logInfoBtn = document.querySelector(".header .bi-person");
+	const loginInfoBox = document.querySelector(".modal.loginInfo");
+	
+	//팝업 열기/닫기 토글
+	logInfoBtn.addEventListener("click", (e) => {
+	    e.stopPropagation(); 
+	    loginInfoBox.classList.toggle("hidden");
+	});
+	
+	// 팝업 내부는 닫힘 방지
+	loginInfoBox.addEventListener("click", (e) => e.stopPropagation());
+	
+	// 문서 아무 곳이나 클릭 → 팝업 닫기
+	document.addEventListener("click", () => {
+	    if (!loginInfoBox.classList.contains("hidden")) {
+	    	loginInfoBox.classList.add("hidden");
+	    }
+	});
 
-//팝업 열기/닫기 토글
-logInfoBtn.addEventListener("click", (e) => {
-    e.stopPropagation(); 
-    loginInfoBox.classList.toggle("hidden");
-});
+	
+	//로그아웃 
+	function admin_logout() {
+		location.href="/admin/logout";
+		
+	}
 
-// 팝업 내부는 닫힘 방지
-loginInfoBox.addEventListener("click", (e) => e.stopPropagation());
 
-// 문서 아무 곳이나 클릭 → 팝업 닫기
-document.addEventListener("click", () => {
-    if (!loginInfoBox.classList.contains("hidden")) {
-    	loginInfoBox.classList.add("hidden");
-    }
-});
+
 </script>
 
 

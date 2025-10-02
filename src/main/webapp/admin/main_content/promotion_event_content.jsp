@@ -11,70 +11,16 @@
 </div>
 
 <!-- ************************* 판매자 탭 ************************* -->
-<div id="seller" class="tab_content">
+<div id="event_ing" class="tab_content">
 	<!-- 필터 -->
-	<form class="search_form">
-		<div class="search_container">
-			<div class="filter">
-				<div class="period_box">
-					<div class="filtering_title">
-						<span class="searchbox_title">등록일 : </span>
-					</div>
-					<div class="period_body">
-						<div>
-							<input type="date" class="btn start_date" /> <span> - </span> <input
-								type="date" class="btn end_date" />
-						</div>
-
-						<div class="p_choice">
-							<input type="button" class="btn" value="오늘" /> <input
-								type="button" class="btn" value="어제" /> <input type="button"
-								class="btn" value="최근7일" /> <input type="button" class="btn"
-								value="최근30일" />
-						</div>
-					</div>
-				</div>
-
-				<div class="period_box">
-					<div class="filtering_title">
-						<span class="searchbox_title">이벤트 기간 : </span>
-					</div>
-					<div class="period_body">
-						<div>
-							<input type="date" class="btn start_date" /> <span> - </span> <input
-								type="date" class="btn end_date" />
-						</div>
-
-						<div class="p_choice">
-							<input type="button" class="btn" value="오늘" /> <input
-								type="button" class="btn" value="어제" /> <input type="button"
-								class="btn" value="최근7일" /> <input type="button" class="btn"
-								value="최근30일" />
-						</div>
-					</div>
-				</div>
-
-				<div class="totalSearch_box">
-					<div class="searchType">
-						<select>
-							<option>이벤트명</option>
-							<option>브랜드명</option>
-							<option></option>
-							<option>검색유형</option>
-						</select>
-					</div>
-					<div class="searchKeyword">
-						<i class="bi bi-search"></i><input type="text" />
-					</div>
-				</div>
-			</div>
-
-			<div class="btn_box">
-				<input type="submit" class="btn first_btn" value="검색" /> <input
-					type="reset" class="btn second_btn" value="초기화" />
-			</div>
-		</div>
+	<form id="searchForm" class="search_form">
+		<my:adminTableFilter>
+			<my:adminFilterPeriod title="등록일" />
+			<my:adminFilterPeriod title="이벤트 기간" dateCate="event_" />
+			<my:adminFilterTotal searchItems="이벤트명,브랜드명" />
+		</my:adminTableFilter>
 	</form>
+	<!-- 필터 end -->
 
 	<!-- 버튼 -->
 	<div class="button_wrap">
@@ -89,7 +35,28 @@
 	<!-- 테이블 -->
 	<div class="whole_table">
 		<div class="table_title">
-			<span class="list_count">[ 검색 결과 ]&nbsp; 총 100건 중 1 - 10 건 </span>
+			<span class="list_count"> <c:if
+					test="${not empty searchContent}">
+						[ 검색 결과 ]
+						</c:if> &nbsp; 총 ${eventCount}건 중 <c:choose>
+					<c:when test="${eventCount == 0}">
+		       					0 건
+		    				</c:when>
+					<c:otherwise>
+	       					${postNo + 1}
+       							<c:choose>
+							<c:when
+								test="${paging.pageno == paging.end_pg && paging.final_post_ea < 10 && paging.final_post_ea != 0}">
+                 					- ${postNo + paging.final_post_ea}
+            						</c:when>
+							<c:otherwise>
+                 					- ${postNo + 10}
+            						</c:otherwise>
+						</c:choose>
+       							건
+    						</c:otherwise>
+				</c:choose>
+			</span>
 		</div>
 		<div class="table_wrap">
 			<table>
@@ -98,7 +65,7 @@
 					<!-- 체크박스 -->
 					<col style="width: 5%" />
 					<!-- 번호 -->
-					<col style="width: 25%" />
+					<col style="width: 20%" />
 					<!-- 이벤트명 -->
 					<col style="width: 15%" />
 					<!-- 브랜드명 -->
@@ -108,6 +75,8 @@
 					<!-- 이벤트기간 -->
 					<col style="width: 10%" />
 					<!-- 등록일 -->
+					<col style="width: 5%" />
+					<!-- 조회수 -->
 					<col style="width: 8%" />
 					<!-- 노출여부 -->
 					<col style="width: 8%" />
@@ -115,82 +84,119 @@
 				</colgroup>
 				<thead>
 					<tr>
-						<th><input type="checkbox" /></th>
+						<th><input type="checkbox" id="all_ck"
+							onclick="ck_all(this.checked);" /></th>
 						<th>#</th>
-						<th>이벤트명</th>
+						<th class="sortable">이벤트명 <i class="bi bi-dash-lg sort-icon"></i></th>
 						<th>브랜드명</th>
-						<th>이벤트종류</th>
+						<th class="sortable">이벤트종류 <i class="bi bi-dash-lg sort-icon"></i></th>
 						<th>이벤트기간</th>
 						<th>등록일</th>
-						<th>노출여부</th>
+						<th>조회수</th>
+						<th class="sortable">노출여부 <i class="bi bi-dash-lg sort-icon"></i></th>
 						<th>상세보기</th>
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td><input type="checkbox" /></td>
-						<td>10</td>
-						<td class="title_cell">발라보고 올영에서 결-정하자</td>
-						<td>클리오 외 10곳</td>
-						<td>할인</td>
-						<td>2025-09-01 ~ 2025-09-21</td>
-						<td>2025-09-01 00:00:00</td>
-						<td>[게시중]</td>
-						<td class="detail_cell"><i class="bi bi-three-dots-vertical"></i></td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" /></td>
-						<td>9</td>
-						<td class="title_cell">발라보고 올영에서 결-정하자</td>
-						<td>클리오 외 10곳</td>
-						<td>할인</td>
-						<td>2025-09-01 ~ 2025-09-21</td>
-						<td>2025-09-01 00:00:00</td>
-						<td>[게시중]</td>
-						<td class="detail_cell"><i class="bi bi-three-dots-vertical"></i></td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" /></td>
-						<td>8</td>
-						<td class="title_cell">발라보고 올영에서 결-정하자</td>
-						<td>클리오 외 10곳</td>
-						<td>할인</td>
-						<td>2025-09-01 ~ 2025-09-21</td>
-						<td>2025-09-01 00:00:00</td>
-						<td>[게시중]</td>
-						<td class="detail_cell"><i class="bi bi-three-dots-vertical"></i></td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" /></td>
-						<td>7</td>
-						<td class="title_cell">발라보고 올영에서 결-정하자</td>
-						<td>클리오 외 10곳</td>
-						<td>할인</td>
-						<td>2025-09-01 ~ 2025-09-21</td>
-						<td>2025-09-01 00:00:00</td>
-						<td>[게시중]</td>
-						<td class="detail_cell"><i class="bi bi-three-dots-vertical"></i></td>
-					</tr>
-					<tr>
-						<td><input type="checkbox" /></td>
-						<td>6</td>
-						<td class="title_cell">발라보고 올영에서 결-정하자</td>
-						<td>클리오 외 10곳</td>
-						<td>할인</td>
-						<td>2025-09-01 ~ 2025-09-21</td>
-						<td>2025-09-01 00:00:00</td>
-						<td>[게시중]</td>
-						<td class="detail_cell"><i class="bi bi-three-dots-vertical"></i></td>
-					</tr>
+					<!-- 게시물 개수가 0일 경우 -->
+					<c:if test="${empty eventList}">
+						<tr>
+							<td colspan="10">등록된 게시물이 없습니다.</td>
+						</tr>
+					</c:if>
+
+					<c:set var="no" value="${eventCount-postNo}" />
+<%-- 					<c:set var="startDate" value="${eventList.startDate}" /> --%>
+<%-- 					<c:set var="endDate" value="${eventList.endDate}" /> --%>
+<%-- 					<c:set var="createDate" value="${eventList.createdAt}" /> --%>
+
+					<c:forEach items="${eventList}" var="eventList" varStatus="idx">
+						<tr>
+							<td><input type="checkbox" class="ch_box" value="${eventList.eventId}" onclick="choice_ck();" /></td>
+							<td>${no-idx.index}</td>
+							<td class="title_cell">${eventList.eventName}</td>
+							<td>${eventList.brandName}</td>
+							<td>
+								<c:choose>
+									<c:when test="${eventList.eventType == 'COUPON'}">
+										<!-- 카테고리 : 이벤트 -->
+										<my:tag color="pink" size="md" text="쿠폰" />
+									</c:when>
+									<c:when test="${eventList.eventType == 'DISCOUNT'}">
+										<!-- 카테고리 : 점검 / 시스템 -->
+										<my:tag color="green" size="md" text="할인" />
+									</c:when>
+									<c:when test="${eventList.eventType == 'EXPERIENCE'}">
+										<!-- 카테고리 : 기타 -->
+										<my:tag color="blue" size="md" text="체험단" />
+									</c:when>
+									<c:when test="${eventList.eventType == 'PICK'}">
+										<!-- 카테고리 : 기타 -->
+										<my:tag color="blue" size="md" text="AD's PICK" />
+									</c:when>
+									<c:when test="${eventList.eventType == 'ETC'}">
+										<!-- 카테고리 : 기타 -->
+										<my:tag color="blue" size="md" text="기타" />
+									</c:when>
+								</c:choose></td>
+<%-- 							<td>${fn:substring(startDate,0,19)} ~ ${fn:substring(endDate,0,19)}</td> --%>
+<%-- 							<td>${fn:substring(createDate,0,19)}</td> --%>
+							<td>${eventList.eventViewCnt}</td>
+							<td>
+								<c:choose>
+									<c:when test="${eventList.isExposed == '1'}">
+										<!-- 게시중 -->
+										<my:tag color="pink" size="md" text="게시중" />
+									</c:when>
+									<c:otherwise>
+										<!-- 노게시 -->
+										<my:tag color="green" size="md" text="비공개" />
+									</c:otherwise>
+								</c:choose>
+							</td>
+							<td class="detail_cell"><i class="bi bi-three-dots-vertical"></i></td>
+						</tr>
+					</c:forEach>
+
 				</tbody>
 			</table>
 		</div>
 
 		<!-- 페이지네이션 -->
-		<div class="pagination_wrap" id="paginationWrap">
-<%-- 			<my:adminPagination currentPage="1" totalPages="10" baseUrl="/products?page=" /> --%>
+		<c:set var="queryString">
+			<c:if test="${param.startDate != null and param.startDate ne ''}">
+    					startDate=${param.startDate}&
+					</c:if>
+			<c:if test="${param.endDate != null and param.endDate ne ''}">
+					    endDate=${param.endDate}&
+					</c:if>
+			<c:if test="${param.startDate2 != null and param.startDate2 ne ''}">
+  					startDate2=${param.startDate2}&
+			</c:if>
+			<c:if test="${param.endDate2 != null and param.endDate2 ne ''}">
+					    endDate2=${param.endDate2}&
+					</c:if>
+			<c:if test="${param.totalSearch != null and param.totalSearch ne ''}">
+					    totalSearch=${param.totalSearch}&
+					</c:if>
+			<c:if test="${param.keyword != null and param.keyword ne ''}">
+					    keyword=${param.keyword}&
+					</c:if>
+					page=
+				</c:set>
+
+		<div class="pagination_wrap page-pagination">
+			<my:adminPagination currentPage="${paging.pageno}"
+				allPage="${paging.end_pg}"
+				baseUrl="/admin/promoEventList?${queryString}" />
 		</div>
 		<!-- 페이지네이션 end -->
 	</div>
 </div>
 <!-- 메인부분 -->
+
+
+	<script src="../tagjs/selectbox.js"></script>
+	<script src="../tagjs/dateInput.js"></script>
+	<script src="./js/componant/table.js"></script>
+	<script src="./js/boardNotice.js"></script>
