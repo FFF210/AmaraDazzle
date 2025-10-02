@@ -41,7 +41,7 @@
 .highlight-sale-container {
 	display: flex;
 	align-items: center;
-	gap: 74px;
+	gap: 10px;
 }
 
 /* 버튼 */
@@ -59,10 +59,15 @@
 }
 
 .highlight-sale-list {
-	flex: 1;
 	display: flex;
-	gap: 64px;
+	transition: transform 0.5s ease;
 	overflow: hidden;
+}
+
+.product-item-wrapper {
+	flex: 0 0 calc(100%/ 3); /* 한 화면에 3개 */
+	box-sizing: border-box;
+	padding: 0 10px;
 }
 
 /* 상품 카드 4열 x 여러 줄 */

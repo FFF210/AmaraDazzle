@@ -39,7 +39,7 @@
 
 /* -------- size = md -------- */
 .product-item.md {
-	width: 376px;
+	min-width: 300px;
 }
 
 .product-item.md .thumbnail img {
