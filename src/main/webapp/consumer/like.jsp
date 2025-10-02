@@ -62,58 +62,56 @@
 								<p>전체 ${wishlistCount}개</p>
 
 								<div class="product-grid">
-									<my:productCard brand="바이오던스" title="상품명1" isSale="true"
-										hasOption="false" originPrice="34000" saleRate="25"
-										finalPrice="25500">
-									</my:productCard>
-									<my:productCard brand="바이오던스" title="상품명2" isSale="true"
-										hasOption="false" originPrice="34000" saleRate="25"
-										finalPrice="25500" />
-									<my:productCard brand="바이오던스" title="상품명3" isSale="true"
-										hasOption="false" originPrice="34000" saleRate="25"
-										finalPrice="25500" />
-								</div>
-
-								<div class="product-grid">
-									<my:productCard brand="바이오던스" title="상품명1" isSale="true"
-										hasOption="false" originPrice="34000" saleRate="25"
-										finalPrice="25500">
-									</my:productCard>
-									<my:productCard brand="바이오던스" title="상품명2" isSale="true"
-										hasOption="false" originPrice="34000" saleRate="25"
-										finalPrice="25500" />
-									<my:productCard brand="바이오던스" title="상품명3" isSale="true"
-										hasOption="false" originPrice="34000" saleRate="25"
-										finalPrice="25500" />
+									<c:choose>
+										<c:when test="${not empty wishlist}">
+											<c:forEach var="item" items="${wishlist}">
+												<my:productCard brand="${item.brandName}"
+													productId="${item.productId}" title="${item.productName}"
+													isSale="${item.discountType != null && item.discountType != 'NONE'}"
+													hasOption="false" originPrice="${item.price}"
+													saleRate="${item.discountValue != null ? item.discountValue : 0}"
+													finalPrice="${item.price}" />
+											</c:forEach>
+										</c:when>
+										<c:otherwise>
+											<p class="empty-message">좋아요 상품이 없습니다.</p>
+										</c:otherwise>
+									</c:choose>
 								</div>
 
 								<!-- 페이지네이션 -->
-								<my:pagination currentPage="1" totalPages="3" baseUrl="" />
+								<c:if test="${wishlistCount > 0}">
+									<my:pagination currentPage="1" totalPages="1" baseUrl="" />
+								</c:if>
 							</div>
 						</div>
 
 						<!-- 관심 브랜드 탭 -->
 						<div class="tab-panel" data-tab="1">
 							<div class="follow-brand-list">
+								<p>전체 ${brandFollowCount}개</p>
+
 								<div class="brand-grid">
-									<my:brandNavCard brandName="바이오던스"
-										logoUrl="https://placehold.co/64x64" likes="500" />
-									<my:brandNavCard brandName="바이오던스"
-										logoUrl="https://placehold.co/64x64" likes="500" />
-									<my:brandNavCard brandName="바이오던스"
-										logoUrl="https://placehold.co/64x64" likes="500" />
-									<my:brandNavCard brandName="바이오던스"
-										logoUrl="https://placehold.co/64x64" likes="500" />
-									<my:brandNavCard brandName="바이오던스"
-										logoUrl="https://placehold.co/64x64" likes="500" />
-									<my:brandNavCard brandName="바이오던스"
-										logoUrl="https://placehold.co/64x64" likes="500" />
+									<c:choose>
+										<c:when test="${not empty brandFollowList}">
+											<c:forEach var="brand" items="${brandFollowList}">
+												<my:brandNavCard brandName="${brand.brandName}"
+													logoUrl="${brand.logoFileId != null ? brand.logoFileId : 'https://placehold.co/64x64'}"
+													likes="500" />
+											</c:forEach>
+										</c:when>
+										<c:otherwise>
+											<p class="empty-message">좋아요 브랜드가 없습니다.</p>
+										</c:otherwise>
+									</c:choose>
 								</div>
 
 								<!-- 페이지네이션 -->
-								<div class="pagination">
-									<my:pagination currentPage="1" totalPages="3" baseUrl="" />
-								</div>
+								<c:if test="${brandFollowCount > 0}">
+									<div class="pagination">
+										<my:pagination currentPage="1" totalPages="1" baseUrl="" />
+									</div>
+								</c:if>
 							</div>
 						</div>
 					</div>
@@ -121,39 +119,94 @@
 			</div>
 		</main>
 	</div>
-
-	<!-- 푸터 include -->
-	<%@ include file="/consumer/footer.jsp"%>
-	<script src="<c:url value='/consumer/js/tab.js'/>"></script>
-
-	<script>
-
-//탭 내용 초기화
-function initTabContent() {
- // 탭 변경 이벤트 리스너
- document.addEventListener('tabChanged', function(e) {
-     if (e.detail.tabId === 'productTabs') {
-         showTabContent(e.detail.activeTabIndex);
-     }
- });
+<!-- 푸터 include -->
+<%@ include file="/consumer/footer.jsp"%>
+<script src="<c:url value='/consumer/js/tab.js'/>"></script>
+<script src="<c:url value='/consumer/js/addTowishlist.js'/>"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabItems = document.querySelectorAll('.tab-item');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+    
+    console.log('탭 패널 정보:');
+    tabPanels.forEach((panel, idx) => {
+        console.log(`패널 ${idx}: data-tab="${panel.dataset.tab}", getAttribute="${panel.getAttribute('data-tab')}"`);
+    });
+    
+    // 직접 이벤트 추가
+    tabItems.forEach((item, index) => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            console.log(`탭 ${index} 클릭 - 찾는 선택자: [data-tab="${index}"]`);
+            
+            // 모든 패널 숨기기
+            tabPanels.forEach(p => {
+                p.classList.remove('active');
+                p.style.display = 'none';
+            });
+            
+            // 인덱스로 직접 접근
+            if (tabPanels[index]) {
+                tabPanels[index].classList.add('active');
+                tabPanels[index].style.display = 'block';
+                console.log('패널 표시 성공:', index);
+            } else {
+                console.error('패널 없음:', index);
+            }
+        });
+    });
+    
+    // 초기 상태
+    setTimeout(function() {
+        if (tabPanels[0]) {
+            tabPanels[0].style.display = 'block';
+        }
+    }, 100);
+});
+//좋아요 토글
+function toggleWishlist(productId, buttonElement) {
+    // AJAX 요청
+    fetch('/store/wishlistToggle', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'productId=' + productId
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.requireLogin) {
+            // 로그인 필요
+            alert('로그인이 필요합니다.');
+            location.href = '/login';
+            return;
+        }
+        
+        if (data.success) {
+            // UI 업데이트
+            const icon = buttonElement.querySelector('i');
+            if (data.isWished) {
+                // 찜 추가됨
+                icon.classList.remove('bi-heart');
+                icon.classList.add('bi-heart-fill');
+                buttonElement.classList.add('active');
+            } else {
+                // 찜 취소됨
+                icon.classList.remove('bi-heart-fill');
+                icon.classList.add('bi-heart');
+                buttonElement.classList.remove('active');
+            }
+        } else {
+            alert('오류가 발생했습니다.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('서버 오류가 발생했습니다.');
+    });
 }
-
-//탭 내용 표시
-function showTabContent(tabIndex) {
- // 모든 탭 패널 숨기기
- const tabPanels = document.querySelectorAll('.tab-panel');
- tabPanels.forEach(panel => {
-     panel.classList.remove('active');
- });
- 
- // 선택된 탭 패널 표시
- const activePanel = document.querySelector(`[data-tab="${tabIndex}"]`);
- if (activePanel) {
-     activePanel.classList.add('active');
- }
-}
-
 </script>
-
 </body>
 </html>
