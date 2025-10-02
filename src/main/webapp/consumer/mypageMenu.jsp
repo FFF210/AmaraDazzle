@@ -19,7 +19,7 @@
       <li><a class="menu-item ${currentMenu eq 'cart' ? 'is-active' : ''}"
              href="<c:url value='/store/mypage/cart'/>">장바구니</a></li>
       <li><a class="menu-item ${currentMenu eq 'likes' ? 'is-active' : ''}"
-             href="<c:url value='store/mypage/wishList'/>">좋아요</a></li>
+             href="<c:url value='/store/mypage/like'/>">좋아요</a></li>
       <li><a class="menu-item ${currentMenu eq 'coupon' ? 'is-active' : ''}"
              href="<c:url value='/store/mypage/myCoupoint'/>">쿠폰/포인트</a></li>
     </ul>

@@ -27,6 +27,7 @@ request.setAttribute("floor", floor);
 <title>${product.name}</title>
 <link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/toast.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>">
@@ -194,8 +195,13 @@ request.setAttribute("floor", floor);
 						onclick="addToCart()">장바구니 담기</button>
 					<button type="button" class="btn btn-primary btn-xl"
 						onclick="buyNow()">바로 구매</button>
+<<<<<<< HEAD
 						</div>
 					<my:heartBtn state="active" onlyIcon="false" hasCount="false" />
+=======
+					<my:heartBtn state="${isWished ? 'active' : 'default'}"
+						onlyIcon="false" hasCount="false" />
+>>>>>>> branch 'main' of https://github.com/2025KostaProject/AmaraDazzle.git
 				</div>
 			</div>
 		</div>
@@ -402,5 +408,6 @@ window.productOptionsData = [
 </script>
 	<script src="<c:url value='/consumer/js/tab.js'/>"></script>
 	<script src="<c:url value='/consumer/js/productDetail.js'/>"></script>
+	<script src="<c:url value='/consumer/js/addToWishlist.js'/>"></script>
 </body>
 </html>

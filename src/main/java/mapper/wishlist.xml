@@ -27,6 +27,7 @@
 	
 	<!-- ========================== [위시리스트 페이지] ========================== -->
     <!-- [소비자] 회원의 위시리스트 전체 조회 (상품 정보 포함) -->
+    <!--  나중에 이미지 경로 추가해야함!!!!!! -->
     <select id="selectWishlistByMemberId" parameterType="Long" resultType="map">
         SELECT
             w.wishlist_id as wishlistId,
@@ -35,7 +36,7 @@
             w.created_at as createdAt,
             p.name as productName,
             p.price as price,
-            p.image_url as imageUrl,
+            p.thumbnail_file_id as thumbnailFileId,
             p.discount_type as discountType,
             p.discount_value as discountValue,
             p.stock_qty as stockQty,
