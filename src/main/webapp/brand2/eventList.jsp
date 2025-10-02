@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +14,7 @@
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/dateInput.css" />
 <link rel="stylesheet" href="../tagcss/form-controls.css" />
-<link rel="stylesheet" href="../tagcss/header.css" />
+<link rel="stylesheet" href="../tagcss/brandHeader.css" />
 <link rel="stylesheet" href="../tagcss/layout.css" />
 <link rel="stylesheet" href="../tagcss/reset.css" />
 <link rel="stylesheet" href="../tagcss/selectbox.css" />
@@ -52,8 +54,7 @@
 </head>
 <body>
 	<my:layout>
-		<my:breadcrumb
-			items="이벤트 관리:/brand2/eventList.jsp" />
+		<my:breadcrumb items="이벤트 관리:/brand2/eventList.jsp" />
 		<div class="filter">
 			<my:tableFilter filters="진행 상황:전체|모집 중|진행 중|완료"
 				searchItems="이벤트 종류,이벤트 담당자" />
@@ -75,106 +76,82 @@
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="i" begin="1" end="10">
+						<c:forEach var="event" items="${eventList}" varStatus="status">
 							<tr>
 								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-07${i}</td>
-								<td>2025-09-07~2025-09-30${i}</td>
-								<td>수분 광채템 기획전</td>
-								<td><my:tag color="green" size="sm" text="진행중" /></td>
-								<td>박길동 대리</td>
-								<td><my:tag color="blue" size="sm" text="참여" /></td>
+								<td>${status.index + 1}</td>
+								<td><fmt:formatDate value="${event.applyDate}"
+										pattern="yyyy-MM-dd" /></td>
+								<td><fmt:formatDate value="${event.startDate}"
+										pattern="yyyy-MM-dd" /> ~ <fmt:formatDate
+										value="${event.endDate}" pattern="yyyy-MM-dd" /></td>
+								<td><c:choose>
+										<c:when test="${not empty event.eventName}">
+                                        ${event.eventName}
+                                    </c:when>
+										<c:otherwise>
+                                        ${event.eventType}
+                                    </c:otherwise>
+									</c:choose></td>
+								<td><c:choose>
+										<c:when test="${event.status eq 'ONGOING'}">
+											<my:tag color="green" size="sm" text="진행중" />
+										</c:when>
+										<c:when test="${event.status eq 'RECRUIT'}">
+											<my:tag color="blue" size="sm" text="모집중" />
+										</c:when>
+										<c:when test="${event.status eq 'FINISHED'}">
+											<my:tag color="gray" size="sm" text="완료" />
+										</c:when>
+										<c:otherwise>
+											<my:tag color="gray" size="sm" text="미참여" />
+										</c:otherwise>
+									</c:choose></td>
+								<td><c:choose>
+										<c:when test="${not empty event.writer}">
+                                        ${event.writer}
+                                    </c:when>
+										<c:otherwise>-</c:otherwise>
+									</c:choose></td>
+								<td><c:choose>
+										<c:when test="${event.participateYn eq '참여'}">
+											<my:tag color="blue" size="sm" text="참여" />
+										</c:when>
+										<c:otherwise>
+											<my:tag color="gray" size="sm" text="미참여" />
+										</c:otherwise>
+									</c:choose></td>
 								<td>
 									<div class="actions">
-										<button type="button" class="btn btn-outline btn-sm" onclick="location.href='/brand2/eventForm.jsp'">상세보기</button>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-07${i}</td>
-								<td>2025-09-07~2025-09-30${i}</td>
-								<td>수분 광채템 기획전</td>
-								<td><my:tag color="green" size="sm" text="진행중" /></td>
-								<td>-</td>
-								<td><my:tag color="gray" size="sm" text="미참여" /></td>
-								<td>
-									<div class="actions">-</div>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-07${i}</td>
-								<td>2025-09-07~2025-09-30${i}</td>
-								<td>수분 광채템 기획전</td>
-								<td><my:tag color="gray" size="sm" text="완료" /></td>
-								<td>-</td>
-								<td><my:tag color="gray" size="sm" text="미참여" /></td>
-								<td>
-									<div class="actions">-</div>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-07${i}</td>
-								<td>2025-09-07~2025-09-30${i}</td>
-								<td>수분 광채템 기획전</td>
-								<td><my:tag color="gray" size="sm" text="완료" /></td>
-								<td>박길동 대리</td>
-								<td><my:tag color="blue" size="sm" text="참여" /></td>
-								<td>
-									<div class="actions">
-										<button type="button" class="btn btn-outline btn-sm" onclick="location.href='/brand2/eventForm.jsp'">상세보기</button>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-07${i}</td>
-								<td>2025-09-07~2025-09-30${i}</td>
-								<td>수분 광채템 기획전</td>
-								<td><my:tag color="green" size="sm" text="모집중" /></td>
-								<td>박길동 대리</td>
-								<td><my:tag color="blue" size="sm" text="참여" /></td>
-								<td>
-									<div class="actions">
-										<button type="button" class="btn btn-outline btn-sm" onclick="location.href='/brand2/eventForm.jsp'">수정</button>
-										<button type="button" class="btn btn-outline btn-sm" onclick="location.href='/brand2/eventForm.jsp'">상세보기</button>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-07${i}</td>
-								<td>2025-09-07~2025-09-30${i}</td>
-								<td>수분 광채템 기획전</td>
-								<td><my:tag color="gray" size="sm" text="미참여" /></td>
-								<td>-</td>
-								<td><my:tag color="gray" size="sm" text="미참여" /></td>
-								<td>
-									<div class="actions">
-										<button type="button" class="btn btn-outline btn-sm" onclick="location.href='/brand2/eventForm.jsp'">신청하기</button>
-									</div>
-								</td>
-							</tr>
-							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
-								<td>${i}</td>
-								<td>2025-09-07${i}</td>
-								<td>2025-09-07~2025-09-30${i}</td>
-								<td>수분 광채템 기획전</td>
-								<td><my:tag color="blue" size="sm" text="모집중" /></td>
-								<td>-</td>
-								<td><my:tag color="gray" size="sm" text="미참여" /></td>
-								<td>
-									<div class="actions">
-										<button type="button" class="btn btn-outline btn-sm" onclick="location.href='/brand2/eventForm.jsp'">신청하기</button>
+										<c:choose>
+											<c:when
+												test="${event.status eq 'ONGOING' and event.participateYn eq '참여'}">
+												<button type="button" class="btn btn-outline btn-sm"
+													onclick="location.href='/brand2/eventForm.jsp?eventId=${event.eventId}'">상세보기</button>
+											</c:when>
+
+											<c:when
+												test="${event.status eq 'RECRUIT' and event.participateYn eq '참여'}">
+												<button type="button" class="btn btn-outline btn-sm"
+													onclick="location.href='/brand2/eventForm.jsp?eventId=${event.eventId}'">수정</button>
+												<button type="button" class="btn btn-outline btn-sm"
+													onclick="location.href='/brand2/eventForm.jsp?eventId=${event.eventId}'">상세보기</button>
+											</c:when>
+
+											<c:when
+												test="${event.status eq 'RECRUIT' and event.participateYn eq '미참여'}">
+												<button type="button" class="btn btn-outline btn-sm"
+													onclick="location.href='/brand2/eventForm.jsp?eventId=${event.eventId}'">신청하기</button>
+											</c:when>
+
+											<c:when
+												test="${event.status eq 'FINISHED' and event.participateYn eq '참여'}">
+												<button type="button" class="btn btn-outline btn-sm"
+													onclick="location.href='/brand2/eventForm.jsp?eventId=${event.eventId}'">상세보기</button>
+											</c:when>
+
+											<c:otherwise>-</c:otherwise>
+										</c:choose>
 									</div>
 								</td>
 							</tr>
