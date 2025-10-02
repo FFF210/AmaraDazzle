@@ -21,4 +21,7 @@ public interface ReviewDAO {
 
 	// 리뷰 작성
 	void insertReview(Review review) throws Exception;
+	
+	// 테스트용 메서드
+	List<Map<String, Object>> testQuery(Long memberId) throws Exception;
 }

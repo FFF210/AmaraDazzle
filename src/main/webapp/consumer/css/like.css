@@ -110,9 +110,10 @@
 /* 브랜드 그리드 */
 .brand-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    margin-bottom: 40px;
+    width: 824px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin: 20px;
 }
 
 .brand-card {
