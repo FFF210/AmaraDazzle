@@ -70,14 +70,20 @@
 	</select>
 
 	<!-- ======================= [브랜드 어드민] 로그인 ======================= -->
-	<select id="selectBrandByPassword" parameterType="string" resultType="brand">
+	<select id="selectBrandByPassword" parameterType="string"
+		resultType="brand">
 		SELECT
-		brand_id, email, password, brn, brand_name, manager_name, phone,
-		brand_status, logo_file_id, hero_file_id, intro, bank,
+		brand_id, email, password, brn, brand_name,
+		manager_name, phone,
+		brand_status, logo_file_id, hero_file_id, intro,
+		bank,
 		account_number, account_holder, settlement_date,
-		created_at, updated_at
+		created_at,
+		updated_at
 		FROM brand
 		WHERE email = #{value}
-		AND brand_status IN ('SIGNUP_COMPLETED', 'APPLY_SUBMITTED', 'APPROVED')
+		AND brand_status IN
+		('SIGNUP_COMPLETED', 'APPLY_SUBMITTED', 'APPROVED')
 	</select>
+
 </mapper>

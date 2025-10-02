@@ -6,7 +6,8 @@
 
 	<!-- ================[소비자] 브랜드 팔로우 =================== -->
 	<insert id="insertBrandFollow" parameterType="map">
-		INSERT INTO brand_follow
+		INSERT INTO
+		brand_follow
 		(member_id, brand_id)
 		VALUES (#{memberId}, #{brandId})
 	</insert>
@@ -16,13 +17,15 @@
 		resultType="Integer">
 		SELECT COUNT(*)
 		FROM brand_follow
-		WHERE member_id = #{memberId}
+		WHERE member_id =
+		#{memberId}
 		AND brand_id = #{brandId}
 	</select>
 
 	<!-- ================[소비자] 브랜드 팔로우 취소 =================== -->
 	<delete id="deleteBrandFollow" parameterType="map">
-		DELETE FROM brand_follow
+		DELETE FROM
+		brand_follow
 		WHERE member_id = #{memberId} AND brand_id = #{brandId}
 	</delete>
 
@@ -32,14 +35,16 @@
 		resultType="map">
 		SELECT
 		bf.brand_follow_id as brandFollowId,
-		bf.member_id as memberId,
+		bf.member_id as
+		memberId,
 		bf.brand_id as brandId,
 		bf.created_at as createdAt,
 		b.brand_name as brandName,
 		b.logo_file_id as logoFileId,
-        b.intro as intro
+		b.intro as intro
 		FROM brand_follow bf
-		LEFT JOIN brand b ON bf.brand_id = b.brand_id
+		LEFT JOIN brand b ON bf.brand_id =
+		b.brand_id
 		WHERE bf.member_id = #{memberId}
 		ORDER BY bf.created_at DESC
 	</select>
@@ -49,6 +54,16 @@
 		resultType="int">
 		SELECT COUNT(*)
 		FROM brand_follow
-		WHERE member_id = #{memberId}
+		WHERE member_id =
+		#{memberId}
 	</select>
+
+	<!-- ===========[brandDetail 용] 브랜드 팔로워 수 조회 ========== -->
+	<select id="countBrandFollowers" parameterType="Long"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM brand_follow
+		WHERE brand_id = #{brandId}
+	</select>
+
 </mapper>

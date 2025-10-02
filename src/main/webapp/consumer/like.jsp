@@ -65,10 +65,13 @@
 									<c:choose>
 										<c:when test="${not empty wishlist}">
 											<c:forEach var="item" items="${wishlist}">
-												<my:productCard brand="${item.brandName}"
-													productId="${item.productId}" title="${item.productName}"
+												<my:productCard 
+												    brand="${item.brandName}"
+													productId="${item.productId}" 
+													title="${item.productName}"
 													isSale="${item.discountType != null && item.discountType != 'NONE'}"
-													hasOption="false" originPrice="${item.price}"
+													hasOption="false" 
+													originPrice="${item.price}"
 													saleRate="${item.discountValue != null ? item.discountValue : 0}"
 													finalPrice="${item.price}" />
 											</c:forEach>
@@ -208,5 +211,6 @@ function toggleWishlist(productId, buttonElement) {
     });
 }
 </script>
+<script src="<c:url value='/consumer/js/addToWishlist.js'/>"></script>
 </body>
 </html>

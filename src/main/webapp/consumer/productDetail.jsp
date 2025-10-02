@@ -95,8 +95,9 @@ request.setAttribute("floor", floor);
 			<div class="product-info-section">
 				<div class="product-info-wrapper">
 					<!-- 브랜드 -->
-					<div class="brand-name">${brand.brandName}</div>
-
+					<div class="brand-name">
+					 <a href="<c:url value='/store/brandDetail?brandId=${brand.brandId}'/>">${brand.brandName}></a>
+					 </div>
 
 					<!-- 상품명 -->
 					<h1 class="product-title">${product.name}</h1>

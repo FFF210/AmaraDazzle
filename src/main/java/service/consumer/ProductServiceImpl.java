@@ -80,6 +80,7 @@ public class ProductServiceImpl implements ProductService {
 
 		return result;
 	}
+	
 
 	// [소비자] 세일상품 목록 조회
 	@Override
@@ -126,5 +127,12 @@ public class ProductServiceImpl implements ProductService {
 		result.put("totalPages", totalPages);
 
 		return result;
+	}
+
+
+	//[brandDetail용] 브랜드 상품 조회
+	@Override
+	public List<Map<String, Object>> getProductsByBrandId(Long brandId) throws Exception {
+		return productDAO.selectProductsByBrandId(brandId);
 	}
 }

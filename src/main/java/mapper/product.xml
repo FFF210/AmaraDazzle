@@ -73,6 +73,22 @@
 		AND is_visible = 1
 	</select>
 
+	<!-- ========== [brandDetail 용도] 브랜드의 상품 목록 조회 ======== -->
+	<select id="selectProductsByBrandId" parameterType="Long"
+		resultType="map">
+		SELECT
+		product_id as productId,
+		name as productName,
+		price,
+		thumbnail_file_id as thumbnailFileId,
+		discount_type as discountType,
+		discount_value as discountValue
+		FROM product
+		WHERE brand_id = #{brandId}
+		AND is_visible = 1
+		ORDER BY created_at DESC
+	</select>
+
 	<!-- ================[소비자] 기획상품 목록 조회 =================== -->
 	<select id="selectPlannedProducts" parameterType="map"
 		resultType="productPlan">

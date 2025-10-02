@@ -36,10 +36,16 @@
             w.created_at as createdAt,
             p.name as productName,
             p.price as price,
+            p.is_exclusive as isExclusive,
+            p.is_visible as isVisible,
+            p.is_planned as isPlanned,
+            p.has_option as hasOption,
             p.thumbnail_file_id as thumbnailFileId,
             p.discount_type as discountType,
             p.discount_value as discountValue,
             p.stock_qty as stockQty,
+            p.start_date as startDate,
+            p.end_date as endDate,
             b.brand_id as brandId,
             b.brand_name as brandName
         FROM wishlist w
