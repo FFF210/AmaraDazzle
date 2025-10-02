@@ -1,4 +1,4 @@
-package controller.brand;
+package controller;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,7 +15,15 @@ import dto.UploadFile;
 import service.UploadFileService;
 import service.UploadFileServiceImpl;
 
-@WebServlet("/brand/image")
+/**
+ * ImageView 서블릿
+ * 
+ * 클라이언트에서 /image?fileId=xxx 요청이 들어오면 - DB에서 해당 fileId에 해당하는 파일 메타정보를 조회하고 - 서버
+ * 로컬 디스크에서 실제 파일을 읽어 - 브라우저로 전송하는 역할을 한다.
+ *
+ * 사용 예시: <img src="/image?fileId=123" />
+ */
+@WebServlet("/image")
 public class ImageView extends HttpServlet {
 
 	private final UploadFileService service = new UploadFileServiceImpl();
@@ -26,6 +34,7 @@ public class ImageView extends HttpServlet {
 
 		request.setCharacterEncoding("utf-8");
 
+		// 1. 요청 파라미터(fileId) 확인
 		String fileIdParam = request.getParameter("fileId");
 		if (fileIdParam == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "fileId required");
@@ -36,6 +45,7 @@ public class ImageView extends HttpServlet {
 		UploadFile filex = null;
 
 		try {
+			// 2. DB에서 파일 메타정보 조회
 			filex = service.selectFileById(fileId);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -46,7 +56,7 @@ public class ImageView extends HttpServlet {
 			return;
 		}
 
-		// 실제 저장된 이름과 경로 사용
+		// 3. 실제 저장된 파일 경로 확인
 		String storagePath = filex.getStoragePath(); // 예: "/upload"
 		String renamed = filex.getFileRename(); // 예: "1728401123_123.png"
 
@@ -58,7 +68,7 @@ public class ImageView extends HttpServlet {
 			return;
 		}
 
-		// MIME 타입
+		// 4. MIME 타입 설정 (없으면 기본 application/octet-stream)
 		String mime = getServletContext().getMimeType(file.getName());
 		if (mime == null)
 			mime = "application/octet-stream";
@@ -66,6 +76,7 @@ public class ImageView extends HttpServlet {
 		response.setContentType(mime);
 		response.setHeader("Content-Length", String.valueOf(file.length()));
 
+		// 5. 파일 내용을 읽어서 응답 스트림으로 출력
 		try (FileInputStream fis = new FileInputStream(file); OutputStream out = response.getOutputStream()) {
 			byte[] buf = new byte[8192];
 			int len;

@@ -42,6 +42,7 @@
 <%@ attribute name="saleRate" required="false"%>
 <%@ attribute name="finalPrice" required="false"%>
 <%@ attribute name="isWished" required="false"%>
+<%@ attribute name="thumbnailFileId" required="false"%>
 <%@ attribute name="href" required="false"%>
 
 <c:set var="brand" value="${empty brand ? '브랜드명' : brand}" />
@@ -58,7 +59,17 @@
 
 	<div class="product-image">
 		<!-- 상품 이미지 -->
-		<img src="https://placehold.co/240x240" alt="상품 이미지" />
+		<img
+			src="<c:choose>
+          <c:when test='${not empty thumbnailFileId}'>
+              ${pageContext.request.contextPath}/image?fileId=${thumbnailFileId}
+          </c:when>
+          <c:otherwise>
+              ${pageContext.request.contextPath}/image/plus.png
+          </c:otherwise>
+       </c:choose>"
+			alt="대표 이미지" width="220px" />
+
 		<!-- 찜 버튼 -->
 		<div class="wishlist-btn">
 			<my:heartBtn state="${heartState}" onlyIcon="true" hasCount="false" />
@@ -78,3 +89,18 @@
 		<%-- 호출자가 <my:tag />를 삽입 가능 --%>
 	</div>
 </a>
+
+<script>
+	/*********************************************************************************************************
+	 * 이미지 버튼
+	 *********************************************************************************************************/
+	function readURL(input, previewId) {
+		if (input.files && input.files[0]) {
+			const reader = new FileReader();
+			reader.onload = function(e) {
+				document.getElementById(previewId).src = e.target.result;
+			}
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
+</script>

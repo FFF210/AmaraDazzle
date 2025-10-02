@@ -136,7 +136,8 @@
 					title="${p.name}" isWished="${p.isWished}"
 					isSale="${p.discountType ne null}" hasOption="${p.hasOption eq 1}"
 					originPrice="${p.price}" saleRate="${saleRate}"
-					finalPrice="${finalPrice}" href="${detailUrl}">
+					finalPrice="${finalPrice}" href="${detailUrl}"
+					thumbnailFileId="${p.thumbnailFileId}">
 
 					<c:if test="${p.discountType ne null}">
 						<my:tag color="red" size="sm" text="세일" />
