@@ -27,6 +27,8 @@
 	font-weight: 500;
 	line-height: 140%;
 	align-items: center;
+	height: 40px;
+    box-sizing: border-box;
 }
 
 .category-item:hover {
