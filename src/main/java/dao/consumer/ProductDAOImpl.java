@@ -52,4 +52,12 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 	}
 
+	// [brandDetail 용도] 브랜드 상품 조회
+	@Override
+	public List<Map<String, Object>> selectProductsByBrandId(Long brandId) {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.product.selectProductsByBrandId", brandId);
+		}
+	}
+
 }

@@ -77,4 +77,10 @@ public class ProductServiceImpl implements ProductService {
 
 		return result;
 	}
+
+	//[brandDetail용] 브랜드 상품 조회
+	@Override
+	public List<Map<String, Object>> getProductsByBrandId(Long brandId) throws Exception {
+		return productDAO.selectProductsByBrandId(brandId);
+	}
 }

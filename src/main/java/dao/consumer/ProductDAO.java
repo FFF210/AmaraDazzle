@@ -21,4 +21,7 @@ public interface ProductDAO {
 
 	// [소비자] 랭킹상품 목록 개수
 	Integer selectRankingProductsCount(Map<String, Object> params) throws Exception;
+	
+	// [brandDetail 용도] 브랜드 상품들 조회
+	List<Map<String, Object>> selectProductsByBrandId(Long brandId);
 }
