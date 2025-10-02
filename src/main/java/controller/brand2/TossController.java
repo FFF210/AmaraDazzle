@@ -9,6 +9,9 @@ import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Base64;
 
 import javax.servlet.ServletException;
@@ -16,12 +19,15 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import dao.brand2.AdminPaymentDAO;
-import dao.brand2.AdminPaymentDAOImpl;
+import dto.AdminPayment;
+import dto.Brand;
+import service.brand2.AdbannerService;
+import service.brand2.AdbannerServiceImpl;
 
 @WebServlet("/tossSuccess")
 public class TossController extends HttpServlet {
@@ -76,57 +82,42 @@ public class TossController extends HttpServlet {
 			System.out.println(result.toJSONString());
 			// 4. 성공 시 DB 저장 (MyBatis 활용)
 			if (isSuccess) {
-
-				String orderIdStr = orderId;
-
-				// Toss 응답에서 필요한 값만 추출
-				Long totalAmount = (Long) result.get("totalAmount"); // amount
-				String approvedAtConfirm = (String) result.get("approvedAt"); // pay_date
-				String paymentKeyConfirm = (String) result.get("paymentKey");
-
-				// DAO 호출
-				AdminPaymentDAO dao = new AdminPaymentDAOImpl();
-				dao.updateSuccessByOrderId(orderIdStr, paymentKeyConfirm,
-						totalAmount != null ? totalAmount.intValue() : null, approvedAtConfirm);
+            	String orderIdConfirm = (String)result.get("orderId");
+            	String paymentKeyConfirm = (String)result.get("paymentKey");
+            	String orderNameConfirm = (String)result.get("orderName");
+            	String methodConfirm = (String)result.get("method");
+            	String approvedAtConfirm = (String)result.get("approvedAt");
+            	Long totalAmount = (Long)result.get("totalAmount");
+            	String receiptUrl = (String)((JSONObject)result.get("receipt")).get("url");
+            	
+            	AdminPayment adminPayment = new AdminPayment();
+            	adminPayment.setAmount(totalAmount.intValue());
+            	adminPayment.setOrderId(orderIdConfirm);
+            	adminPayment.setPaymentKey(paymentKeyConfirm);
+            	LocalDateTime ldt = OffsetDateTime.parse(approvedAtConfirm).toLocalDateTime();
+                Timestamp timestamp = Timestamp.valueOf(ldt);
+            	adminPayment.setPayDate(timestamp);
+            	
+            	HttpSession session = request.getSession();
+            	Brand brand = (Brand)session.getAttribute("brand");
+            	if(brand!=null) {
+            		adminPayment.setBannerId(brand.getBrandId());
+            	}
+            	
+            	AdbannerService service = new AdbannerServiceImpl();
+            	service.savePayment(adminPayment);
+            	request.getRequestDispatcher("/brand2/tossPaymentSuccess.jsp").forward(request, response);
+            	
 			} else {
-				String orderIdStr = orderId;
-				String paymentKeyConfirm = (String) result.get("paymentKey");
-
-				AdminPaymentDAO dao = new AdminPaymentDAOImpl();
-				dao.updateFailedByOrderId(orderIdStr, paymentKeyConfirm);
+				throw new Exception();
 			}
 
-			/*
-			 * String orderIdConfirm = (String)result.get("orderId"); String
-			 * paymentKeyConfirm = (String)result.get("paymentKey"); String orderNameConfirm
-			 * = (String)result.get("orderName"); String methodConfirm =
-			 * (String)result.get("method"); String approvedAtConfirm =
-			 * (String)result.get("approvedAt"); Long totalAmount =
-			 * (Long)result.get("totalAmount"); String receiptUrl =
-			 * (String)((JSONObject)result.get("receipt")).get("url");
-			 * 
-			 * System.out.println(orderIdConfirm); System.out.println(paymentKeyConfirm);
-			 * System.out.println(orderNameConfirm); System.out.println(methodConfirm);
-			 * System.out.println(approvedAtConfirm); System.out.println(totalAmount);
-			 * System.out.println(receiptUrl);
-			 */
-			// 예시: 결제 정보 AdminPayment 테이블에 insert
-			// SqlSession sqlSession =
-			// MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
-			// AdminPaymentDAO dao = sqlSession.getMapper(AdminPaymentDAO.class);
-			// dao.insertAdminPayment(new AdminPayment(orderId, amount, paymentKey,
-			// brandId));
-			// sqlSession.commit();
-			// sqlSession.close();
-
-			// 5. JSON 응답 반환
-			response.setStatus(code);
 			out.print(result.toJSONString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			response.sendRedirect("http://localhost:8080/tossFail");
+			response.sendRedirect("http://localhost:8080/tossPaymentFail");
 
 //            JSONObject err = new JSONObject();
 //            err.put("message", "결제 처리 중 오류가 발생했습니다.");
