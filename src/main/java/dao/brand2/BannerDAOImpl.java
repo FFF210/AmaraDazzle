@@ -12,15 +12,11 @@ public class BannerDAOImpl implements BannerDAO {
 
 	SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
 
+	// 배너 신청
 	@Override
-	public int insertBannerForm(Banner banner) throws Exception {
-		int result = sqlSession.insert("mapper.banner.insertBannerForm", banner);
-		if (result > 0) {
-			sqlSession.commit();
-		} else {
-			sqlSession.rollback();
-		}
-		return result;
+	public void insertBannerForm(Banner banner) throws Exception {
+		sqlSession.insert("mapper.banner.insertBannerForm", banner);
+		sqlSession.commit();
 	}
 
 	// 배너 신청 목록 조회

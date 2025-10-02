@@ -20,22 +20,11 @@ public class Banner {
     private String brandUrl;       // 브랜드페이지 URL
     private String stateChange;    // 배너 게시 상태 (POSTING / OFF)
     private Long adminId;          // 승인 관리자 ID (FK → admin_info.admin_info_id)
-
+    private Long UploadFileId;	   // 업로드 파일 ID (FK → upload_file.upload_file_id)
+    
     public Banner() {
     }
     
-    public Banner(BannerForm form) {
-        this.brandId = form.getBrandId();
-        this.managerName = form.getManagerName();
-        this.managerTel = form.getManagerTel();
-        this.startDate = form.getStartDate();
-        this.endDate = form.getEndDate();
-        this.bannerName = form.getBannerName();
-        this.bannerMessage = form.getBannerMessage();
-        this.brandUrl = form.getBrandUrl();
-        this.status = form.getStatus();
-	}
-
 	public Long getBannerId() {
         return bannerId;
     }
@@ -140,31 +129,18 @@ public class Banner {
     public void setAdminId(Long adminId) {
         this.adminId = adminId;
     }
-
-    @Override
-    public String toString() {
-        return "Banner [bannerId=" + bannerId + ", brandId=" + brandId +
-                ", managerName=" + managerName + ", managerTel=" + managerTel +
-                ", startDate=" + startDate + ", endDate=" + endDate +
-                ", bannerName=" + bannerName + ", bannerMessage=" + bannerMessage +
-                ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt +
-                ", isExposed=" + isExposed + ", brandUrl=" + brandUrl +
-                ", stateChange=" + stateChange + ", adminId=" + adminId + "]";
-    }
-    
-    
-    // brand2 Adbanner 정적 팩토리 메서드
-    public static Banner from(BannerForm form) {
-        Banner b = new Banner();
-        b.setBrandId(form.getBrandId());
-        b.setManagerName(form.getManagerName());
-        b.setManagerTel(form.getManagerTel());
-        b.setStartDate(form.getStartDate());
-        b.setEndDate(form.getEndDate());
-        b.setBannerName(form.getBannerName());
-        b.setBannerMessage(form.getBannerMessage());
-        b.setBrandUrl(form.getBrandUrl());
-        b.setStatus(form.getStatus() != null ? form.getStatus() : "PENDING");
-        return b;
-    }
+	public Long getUploadFileId() {
+		return UploadFileId;
+	}
+	public void setUploadFileId(Long uploadFileId) {
+		UploadFileId = uploadFileId;
+	}
+	@Override
+	public String toString() {
+		return "Banner [bannerId=" + bannerId + ", brandId=" + brandId + ", managerName=" + managerName
+				+ ", managerTel=" + managerTel + ", startDate=" + startDate + ", endDate=" + endDate + ", bannerName="
+				+ bannerName + ", bannerMessage=" + bannerMessage + ", status=" + status + ", createdAt=" + createdAt
+				+ ", updatedAt=" + updatedAt + ", isExposed=" + isExposed + ", brandUrl=" + brandUrl + ", stateChange="
+				+ stateChange + ", adminId=" + adminId + ", UploadFileId=" + UploadFileId + "]";
+	}
 }
