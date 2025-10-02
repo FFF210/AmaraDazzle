@@ -3,4 +3,18 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.membershipPlan">
+
+	<select id="selectMembershipPlans" resultType="membershipPlan">
+		SELECT
+		membership_plan_id, plan_period, amount, membership_explain
+		FROM membership_plan
+		ORDER BY
+		CASE membership_plan_id
+		WHEN 'PLAN_1M' THEN 1
+		WHEN 'PLAN_3M' THEN 2
+		WHEN 'PLAN_6M' THEN 3
+		WHEN 'PLAN_12M' THEN 4
+		WHEN 'PLAN_AUTO' THEN 5
+		END
+	</select>
 </mapper>
