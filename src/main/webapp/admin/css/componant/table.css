@@ -24,8 +24,13 @@
 
 .table_title span.list_count {
     /* padding-right: 15px; */
-    font-size: 10px;
-    font-weight: 500;
+/*     font-size: 10px; */
+/*     font-weight: 500; */
+	color: #939393;
+	font-size: 13px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: normal;
 }
 
 .whole_table .table_wrap {
@@ -59,27 +64,47 @@ table tr {
 
 /* 행에 마우스 hover시 색변환 */
 .whole_table table tbody tr:hover td {
-    background-color: var(--innerbox);
+    background-color: #eee;
 }
 
 table th,
 table td {
     padding: 8px 10px;
     font-size: 14px;
+    text-align: center;
+        
     /* 세로 구분선 */
     border-right: 1px solid #eee;
+    
     /* 가로 구분선 */
     border-bottom: 1px solid #eee;
-    text-align: center;
+
     /* 셀 안에 텍스트 내용 길어질 경우 말줄임표 처리*/
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    
+	vertical-align: middle;
+	background: #fff;
+	box-sizing: border-box;
+	line-height: 20px;
 }
 
 table th {
-    background: #fafafa;
-    font-size: 16px;
+/*     background: #fafafa; */
+/*     font-size: 16px; */
+    background: #FCFCFD;
+	color: #667085;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 18px;
+}
+
+.whole_table table th:first-child
+.whole_table table td:first-child {
+/*     vertical-align: middle; */
+/*     line-height: 44px; */
 }
 
 /* 마지막 열의 오른쪽 선 제거 */
@@ -122,6 +147,30 @@ table td.price_cell {
 table td.detail_cell {
     color: var(--dark);
     cursor: pointer;
+}
+
+
+/* ================================
+   정렬 가능 칼럼
+================================ */
+table th.sortable {
+	cursor: pointer;
+	user-select: none;
+}
+
+.sort-icon {
+	margin-left: 4px;
+	font-size: 14px;
+	color: #667085;
+	vertical-align: middle;
+}
+
+.sortable.asc .sort-icon {
+	color: #667085;
+}
+
+.sortable.desc .sort-icon {
+	color: #667085;
 }
 
 /* ****************************** */

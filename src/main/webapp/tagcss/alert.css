@@ -1,23 +1,12 @@
-#toast-container {
-	position: fixed;
-	top: 20px;
-	right: 20px;
-	z-index: 2000;
-	display: flex;
-	flex-direction: column;
-}
+@charset "UTF-8";
 
 .alert {
 	display: flex;
-	width: 100%;
 	align-items: flex-start;
 	gap: 8px;
 	border-radius: 12px;
-	padding: 16px;
-	box-sizing: border-box;;
-	opacity: 1;
-	transform: translateY(0);
-	transition: opacity 0.3s ease, transform 0.3s ease;
+	padding: 5px 16px;
+	min-width : 300px;
 }
 
 .alert-icon {
@@ -27,30 +16,6 @@
 
 .alert-content {
 	flex: 1;
-}
-
-.alert--success {
-	background: #EAF6EC;
-	border: 1px solid #D8EEDD;
-	color: #267337;
-}
-
-.alert--error {
-	background: #FFF2F2;
-	border: 1px solid #F5C2C7;
-	color: #B02A37;
-}
-
-.alert--warning {
-	background: #FFF3DB;
-	border: 1px solid #FFE0A3;
-	color: #8A5C00;
-}
-
-.alert--info {
-	background: #E7F4FE;
-	border: 1px solid #D3EBFD;
-	color: #096AB3;
 }
 
 .alert-title {
@@ -68,14 +33,34 @@
 	overflow: hidden;
 	color: #1E2124;
 	text-overflow: ellipsis;
-	font-size: 17px;
+	font-size: 14px;
 	font-style: normal;
 	font-weight: 400;
 	line-height: 150%;
 	letter-spacing: 0;
 }
 
-.fade-out {
-	opacity: 0;
-	transform: translateY(-10px);
+/* 유형별 색상 */
+.alert--error {
+	background: #FFF2F2;
+	border: 1px solid #F5C2C7;
+	color: #B02A37;
+}
+
+.alert--warning {
+	background: #FFF3DB;
+	border: 1px solid #FFE0A3;
+	color: #8A5C00;
+}
+
+.alert--success {
+	background: #EAF6EC;
+	border: 1px solid #D8EEDD;
+	color: #267337;
+}
+
+.alert--info {
+	background: #E7F4FE;
+	border: 1px solid #D3EBFD;
+	color: #096AB3;
 }

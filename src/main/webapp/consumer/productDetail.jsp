@@ -75,14 +75,19 @@ request.setAttribute("floor", floor);
 					<!-- 브랜드 -->
 					<div class="brand-name">${brand.brandName}</div>
 
+
 					<!-- 상품명 -->
 					<h1 class="product-title">${product.name}</h1>
+
+					<!-- 가격 포멧팅 -->
+					<fmt:formatNumber value="${product.price}" type="number"
+						maxFractionDigits="0" groupingUsed="true" var="productPrice" />
 
 					<!-- 가격 표시 -->
 					<div class="price-section">
 						<my:price isSale="false" hasOption="${product.hasOption == 1}"
-							size="sm" originPrice="${product.price}" saleRate="0"
-							finalPrice="${product.price}" />
+							size="sm" originPrice="${productPrice}" saleRate="0"
+							finalPrice="${productPrice}" />
 					</div>
 				</div>
 
@@ -152,7 +157,11 @@ request.setAttribute("floor", floor);
 							<p class="total-amount" id="totalAmount">옵션을 선택해주세요</p>
 						</c:when>
 						<c:otherwise>
-							<p class="total-amount" id="totalAmount"><fmt:formatNumber value="${product.price}" type="number" maxFractionDigits="0" groupingUsed="true" />원</p>
+							<p class="total-amount" id="totalAmount">
+								<fmt:formatNumber value="${product.price}" type="number"
+									maxFractionDigits="0" groupingUsed="true" />
+								원
+							</p>
 						</c:otherwise>
 					</c:choose>
 				</div>

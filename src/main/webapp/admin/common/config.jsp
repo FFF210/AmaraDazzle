@@ -12,6 +12,7 @@
 	<link rel="stylesheet" href="./css/common/componant.css" />
 	
 	<link rel="stylesheet" href="../tagcss/selectbox.css" />
+	<link rel="stylesheet" href="../tagcss/alert.css" />
 	<link rel="stylesheet" href="./css/componant/modal.css" />
 	<link rel="stylesheet" href="./css/componant/search_box.css" />
 	<link rel="stylesheet" href="./css/componant/tab.css" />

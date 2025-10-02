@@ -1,0 +1,125 @@
+@charset "UTF-8";
+
+body.login-page {
+	min-height: 100vh;
+	margin: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+/* 토스트 알럿 */
+#toast {
+	position: absolute;
+	top: 5px;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50px); /* 시작 위치: 살짝 위 */
+	opacity: 0;
+	pointer-events: none; /* 클릭 막음 */
+	transition: all 0.5s ease;
+	z-index: 9999;
+}
+
+#toast.show {
+	transform: translateX(-50%) translateY(0); /* 원래 자리 */
+	opacity: 1;
+}
+
+
+/* 공통 컨테이너 */
+.auth-container {
+	max-width: 380px;
+	margin: 0 auto;
+	text-align: center;
+}
+
+/* 로고 */
+.login-logo {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin: 0 0 80px 0;
+}
+
+.login-logo img {
+	width: 100%;
+	height: 100%;
+}
+
+/* 폼 */
+.auth-form .input-group {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 20px;
+	align-self: stretch;
+}
+
+.auth-form .form-group {
+	width: 380px;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 4px;
+	align-self: stretch;
+}
+
+/* 기본 입력 필드 */
+.auth-form .text-input {
+	width: 100%;
+	border: 1px solid #DDE1EB;
+	border-radius: 8px;
+	color: #333539;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+	background-color: #fff;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+	box-sizing: border-box;
+}
+
+.auth-form input[type="text"] {
+	height: 56px;
+	padding: 0 16px;
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+
+
+.auth-form input[type="checkbox"] {
+	accent-color: #0C8CE9;
+	margin-right: 5px;
+}
+
+.auth-form label {
+	color: #000;
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 150%;
+	letter-spacing: 0.091px;
+	display: flex;
+	align-items: center;
+}
+
+/* 옵션 영역 */
+.form-options {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: #464646;
+	text-align: center;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: 150%;
+	letter-spacing: 0.08px;
+	color: #464646;
+}
+
+.btn.login {
+	width: 100%;
+	margin: 56px 0 36px 0;
+}

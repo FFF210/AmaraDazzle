@@ -28,8 +28,7 @@
 <%@ attribute name="searchItems" required="false"%>
 
 <c:set var="hasSearch" value="${empty hasSearch ? 'true' : hasSearch}" />
-<c:set var="searchItems"
-	value="${empty searchItems ? '-' : searchItems}" />
+<c:set var="searchItems" value="${empty searchItems ? '-' : searchItems}" />
 
 <div class="table-filter">
 

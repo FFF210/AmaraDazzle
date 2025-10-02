@@ -47,8 +47,8 @@
 			<!-- user info -->
 			<div class="user-wrapper">
 				<my:userInfo userName="${sessionScope.memberName}"
-					points="${sessionScope.memberPoints}"
-					coupons="${sessionScope.memberCoupons}"
+					points="${memberInfo.pointBalance}"
+					coupons="${couponCount}"
 					notifications="${sessionScope.memberNotifications}" />
 			</div>
 

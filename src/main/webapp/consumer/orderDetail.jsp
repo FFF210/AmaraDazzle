@@ -11,10 +11,12 @@
 <link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
-<link rel="stylesheet" href="<c:url value='/consumer/css/orderDetail.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/consumer/css/orderDetail.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/textInput.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/table.css'/>">
-<link rel="stylesheet" href="<c:url value='/consumer/css/mypageMenu.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/consumer/css/mypageMenu.css'/>">
 
 </head>
 <body>
@@ -32,8 +34,7 @@
 					<h1 class="page-title">주문 상세정보</h1>
 					<div class="order-info">
 						<div class="info-item">
-							<span class="label">주문일자:</span>
-							<span class="value"> <fmt:formatDate
+							<span class="label">주문일자:</span> <span class="value"> <fmt:formatDate
 									value="${orderDetailInfo.order.createdAt}" pattern="yyyy-MM-dd" />
 							</span> <span class="value order-number">${orderDetailInfo.order.orderCode}</span>
 						</div>
@@ -43,7 +44,8 @@
 				<%-- ===== 배송상품 ===== --%>
 				<section class="section">
 					<h2 class="section-title">배송상품</h2>
-					<p class="section-subtitle">총 ${fn:length(orderDetailInfo.orderItems)}건</p>
+					<p class="section-subtitle">총
+						${fn:length(orderDetailInfo.orderItems)}건</p>
 
 					<div class="table-wrapper" style="overflow: auto">
 						<table class="table">
@@ -96,7 +98,7 @@
 													<button type="button" class="action-btn">배송조회</button>
 												</c:when>
 												<c:when test="${item.status == 'DELIVERED'}">
-													<button type="button" class="action-btn">리뷰작성</button>
+													<button onclick="location.href='${pageContext.request.contextPath}/store/mypage/myReview'" type="button" class="action-btn">리뷰작성</button>
 												</c:when>
 											</c:choose>
 										</td>
@@ -116,7 +118,8 @@
 						<div class="row">
 							<div class="label">받는분</div>
 							<div class="input-wrapper">
-								<my:textInput type="readOnly" name="name" value="${orderDetailInfo.order.shipRecipient}" size="lg" />
+								<my:textInput type="readOnly" name="name"
+									value="${orderDetailInfo.order.shipRecipient}" size="lg" />
 							</div>
 						</div>
 
@@ -126,8 +129,8 @@
 							<div class="addr">
 								<!-- 1) 우편번호: 단독 한 줄 -->
 								<div class="addr-row">
-									<my:textInput type="readOnly" name="postcode" value="(${orderDetailInfo.order.shipPostcode})"
-										size="lg" />
+									<my:textInput type="readOnly" name="postcode"
+										value="(${orderDetailInfo.order.shipPostcode})" size="lg" />
 								</div>
 
 								<!-- 2) 도로명 / 지번: 2열 -->
@@ -168,35 +171,44 @@
 						<div class="row">
 							<div class="label">총 주문금액</div>
 							<div class="input-wrapper">
-								<my:textInput type="readOnly" value="<fmt:formatNumber value='${orderDetailInfo.paymentInfo.subtotalAmount}' pattern='#,###'/>원" size="lg" />
+								<my:textInput type="readOnly"
+									value="${orderDetailInfo.paymentInfo.subtotalAmountText}"
+									size="lg" />
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="label">총 할인금액</div>
 							<div class="input-wrapper">
-								<my:textInput type="readOnly" value="<fmt:formatNumber value='${orderDetailInfo.paymentInfo.discountAmount}' pattern='#,###'/>원" size="lg" />
+								<my:textInput type="readOnly"
+									value="${orderDetailInfo.paymentInfo.discountAmountText}"
+									size="lg" />
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="label">쿠폰 할인</div>
 							<div class="input-wrapper">
-								<my:textInput type="readOnly" value="${orderDetailInfo.paymentInfo.couponDisplayText}" size="lg" />
+								<my:textInput type="readOnly"
+									value="${orderDetailInfo.paymentInfo.couponDisplayText}"
+									size="lg" />
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="label">포인트 사용</div>
 							<div class="input-wrapper">
-								<my:textInput type="readOnly" value="${orderDetailInfo.paymentInfo.usingPoint} P" size="lg" />
+								<my:textInput type="readOnly"
+									value="${orderDetailInfo.paymentInfo.usingPointText}" size="lg" />
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="label">총 결제금액</div>
 							<div class="input-wrapper">
-								<my:textInput type="readOnly" value="<fmt:formatNumber value='${orderDetailInfo.paymentInfo.totalAmount}' pattern='#,###'/>원" size="lg" />
+								<my:textInput type="readOnly"
+									value="${orderDetailInfo.paymentInfo.totalAmountText}"
+									size="lg" />
 							</div>
 						</div>
 
@@ -210,7 +222,7 @@
 				</section>
 
 				<div class="page-actions">
-					<a href="${pageContext.request.contextPath}/consumer/orderList"
+					<a href="${pageContext.request.contextPath}/store/mypage/orderList"
 						class="btn-primary">목록</a>
 				</div>
 			</main>

@@ -30,7 +30,7 @@
 			지급대상 <span class="reqired_write">*</span>
 		</div>
 		<div class="part_content">
-			<button type="buton" class="btn action_btn first_btn search_btn">검색</button>
+			<button type="button" class="btn action_btn first_btn search_btn">검색</button>
 			<input type="text" name="coupon_user" placeholder="회원아이디 or 모든회원"
 				style="cursor: default" readonly /> <input type="text"
 				name="coupon_user2" placeholder="회원명 or 등급" style="cursor: default"

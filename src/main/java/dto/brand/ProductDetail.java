@@ -17,19 +17,13 @@ public class ProductDetail {
 	private Long category2Id; // 중분류 카테고리 ID
 	private Long category3Id; // 소분류 카테고리 ID
 
-	private String thumbPath; // 썸네일 저장 경로
-	private String thumbFile; // 썸네일 리네임 파일명
-
-	private String image1Path; // 이미지1 저장 경로
-	private String image1File; // 이미지1 리네임 파일명
-	private String image2Path; // 이미지2 저장 경로
-	private String image2File; // 이미지2 리네임 파일명
-	private String image3Path; // 이미지3 저장 경로
-	private String image3File; // 이미지3 리네임 파일명
-	private String image4Path; // 이미지4 저장 경로
-	private String image4File; // 이미지4 리네임 파일명
-	private String image5Path; // 이미지5 저장 경로
-	private String image5File; // 이미지5 리네임 파일명
+	// 파일 FK만 저장
+	private Long thumbnailFileId;
+	private Long image1FileId;
+	private Long image2FileId;
+	private Long image3FileId;
+	private Long image4FileId;
+	private Long image5FileId;
 
 	private String ingredients; // 전성분
 	private BigDecimal price; // 판매가 (기본가)
@@ -120,100 +114,52 @@ public class ProductDetail {
 		this.category3Id = category3Id;
 	}
 
-	public String getThumbPath() {
-		return thumbPath;
+	public Long getThumbnailFileId() {
+		return thumbnailFileId;
 	}
 
-	public void setThumbPath(String thumbPath) {
-		this.thumbPath = thumbPath;
+	public void setThumbnailFileId(Long thumbnailFileId) {
+		this.thumbnailFileId = thumbnailFileId;
 	}
 
-	public String getThumbFile() {
-		return thumbFile;
+	public Long getImage1FileId() {
+		return image1FileId;
 	}
 
-	public void setThumbFile(String thumbFile) {
-		this.thumbFile = thumbFile;
+	public void setImage1FileId(Long image1FileId) {
+		this.image1FileId = image1FileId;
 	}
 
-	public String getImage1Path() {
-		return image1Path;
+	public Long getImage2FileId() {
+		return image2FileId;
 	}
 
-	public void setImage1Path(String image1Path) {
-		this.image1Path = image1Path;
+	public void setImage2FileId(Long image2FileId) {
+		this.image2FileId = image2FileId;
 	}
 
-	public String getImage1File() {
-		return image1File;
+	public Long getImage3FileId() {
+		return image3FileId;
 	}
 
-	public void setImage1File(String image1File) {
-		this.image1File = image1File;
+	public void setImage3FileId(Long image3FileId) {
+		this.image3FileId = image3FileId;
 	}
 
-	public String getImage2Path() {
-		return image2Path;
+	public Long getImage4FileId() {
+		return image4FileId;
 	}
 
-	public void setImage2Path(String image2Path) {
-		this.image2Path = image2Path;
+	public void setImage4FileId(Long image4FileId) {
+		this.image4FileId = image4FileId;
 	}
 
-	public String getImage2File() {
-		return image2File;
+	public Long getImage5FileId() {
+		return image5FileId;
 	}
 
-	public void setImage2File(String image2File) {
-		this.image2File = image2File;
-	}
-
-	public String getImage3Path() {
-		return image3Path;
-	}
-
-	public void setImage3Path(String image3Path) {
-		this.image3Path = image3Path;
-	}
-
-	public String getImage3File() {
-		return image3File;
-	}
-
-	public void setImage3File(String image3File) {
-		this.image3File = image3File;
-	}
-
-	public String getImage4Path() {
-		return image4Path;
-	}
-
-	public void setImage4Path(String image4Path) {
-		this.image4Path = image4Path;
-	}
-
-	public String getImage4File() {
-		return image4File;
-	}
-
-	public void setImage4File(String image4File) {
-		this.image4File = image4File;
-	}
-
-	public String getImage5Path() {
-		return image5Path;
-	}
-
-	public void setImage5Path(String image5Path) {
-		this.image5Path = image5Path;
-	}
-
-	public String getImage5File() {
-		return image5File;
-	}
-
-	public void setImage5File(String image5File) {
-		this.image5File = image5File;
+	public void setImage5FileId(Long image5FileId) {
+		this.image5FileId = image5FileId;
 	}
 
 	public String getIngredients() {
@@ -320,18 +266,4 @@ public class ProductDetail {
 		this.personalColors = personalColors;
 	}
 
-	@Override
-	public String toString() {
-		return "ProductDetail [productId=" + productId + ", brandId=" + brandId + ", name=" + name + ", isExclusive="
-				+ isExclusive + ", isVisible=" + isVisible + ", isPlanned=" + isPlanned + ", category1Id=" + category1Id
-				+ ", category2Id=" + category2Id + ", category3Id=" + category3Id + ", thumbPath=" + thumbPath
-				+ ", thumbFile=" + thumbFile + ", image1Path=" + image1Path + ", image1File=" + image1File
-				+ ", image2Path=" + image2Path + ", image2File=" + image2File + ", image3Path=" + image3Path
-				+ ", image3File=" + image3File + ", image4Path=" + image4Path + ", image4File=" + image4File
-				+ ", image5Path=" + image5Path + ", image5File=" + image5File + ", ingredients=" + ingredients
-				+ ", price=" + price + ", orderLimit=" + orderLimit + ", hasOption=" + hasOption + ", stockQty="
-				+ stockQty + ", shippingMethod=" + shippingMethod + ", discountType=" + discountType + ", salePrice="
-				+ salePrice + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", skinIssues=" + skinIssues
-				+ ", skinTypes=" + skinTypes + ", personalColors=" + personalColors + "]";
-	}
 }

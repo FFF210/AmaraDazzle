@@ -96,14 +96,14 @@
 										}
 									}
 									%>
-									<my:textInput id="shipPhone1" name="shipPhone1"
-										value="<%=p1%>" type="default" size="sm" state="default" />
+									<my:textInput id="shipPhone1" name="shipPhone1" value="<%=p1%>"
+										type="default" size="sm" state="default" />
 									<span class="dash">-</span>
-									<my:textInput id="shipPhone2" name="shipPhone2"
-										value="<%=p2%>" type="default" size="sm" state="default" />
+									<my:textInput id="shipPhone2" name="shipPhone2" value="<%=p2%>"
+										type="default" size="sm" state="default" />
 									<span class="dash">-</span>
-									<my:textInput id="shipPhone3" name="shipPhone3"
-										value="<%=p3%>" type="default" size="sm" state="default" />
+									<my:textInput id="shipPhone3" name="shipPhone3" value="<%=p3%>"
+										type="default" size="sm" state="default" />
 								</div>
 							</div>
 						</div>
@@ -304,24 +304,29 @@
 			</form>
 		</div>
 	</main>
-	<!-- 푸터 include -->
-	<%@ include file="/consumer/footer.jsp"%>
+
 	<script>
-	// 서버 데이터를 JavaScript로 전달
-    window.checkoutInfo = {
-        subtotal: parseFloat('${checkoutData.subtotalAmount}') || 0,
-        shipping: parseFloat('${checkoutData.shippingFee}') || 0,
-        availablePoint: parseInt('${checkoutData.member.pointBalance}') || 0,
-        productId: '${checkoutData.product.productId}',
-        productName: '${checkoutData.product.name}',
-        brandId: '${checkoutData.brand.brandId}'
-    };
-    console.log('checkoutInfo:', window.checkoutInfo);
+		window.checkoutData = {
+			// 금액 정보
+			subtotal : parseFloat('${checkoutData.subtotalAmount}') || 0,
+			shipping : parseFloat('${checkoutData.shippingFee}') || 0,
+			availablePoint : parseInt('${checkoutData.member.pointBalance}') || 0,
+
+			// 회원 정보
+			memberPhone : '${checkoutData.member.phone}',
+
+			// 상품 정보
+			productId : '${checkoutData.product.productId}',
+			productName : '${checkoutData.product.name}',
+			brandId : '${checkoutData.brand.brandId}'
+		};
+		console.log('checkoutData:', window.checkoutData);
 	</script>
 	<!-- 카카오 우편번호 서비스 -->
 	<script
 		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<script src="/consumer/js/checkout.js"></script>
-
+	<!-- 푸터 include -->
+	<%@ include file="/consumer/footer.jsp"%>
 </body>
 </html>

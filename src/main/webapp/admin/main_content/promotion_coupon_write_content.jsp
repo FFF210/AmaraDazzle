@@ -13,7 +13,7 @@
 		</div>
 		<div class="part_content">
 			<div class="content_btn">
-			<button type="buton" class="btn action_btn first_btn search_btn" id="cName_searchBtn">검색</button>
+			<button type="button" class="btn action_btn first_btn search_btn" id="cName_searchBtn">검색</button>
 			</div>
 			<input type="text" name="coupon_name" placeholder="쿠폰명"
 				style="cursor: default" readonly /> <input type="text"
