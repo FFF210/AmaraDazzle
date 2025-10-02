@@ -58,8 +58,7 @@
 		CASE WHEN m.status = 'CANCELLED' THEN p.pay_date END AS cancelDate,
 		mp.membership_plan_id AS planId,
 		mp.membership_explain AS planName,
-		p.payment_type AS paymentMethod,
-		(p.lastautopay_date IS NOT NULL) AS autopayFlag
+		p.payment_type AS paymentMethod
 		FROM membership m
 		LEFT JOIN admin_payment p
 		ON m.plan_id = p.plan_id AND m.brand_id = p.brand_id

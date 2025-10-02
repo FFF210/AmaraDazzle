@@ -15,7 +15,6 @@
 <link rel="stylesheet" href="<c:url value='/tagcss/dateRangeFilterBox.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/coupon.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
-
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/mypageMenu.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/myCoupoint.css'/>">

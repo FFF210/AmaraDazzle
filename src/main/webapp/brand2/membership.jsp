@@ -3,6 +3,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -103,9 +105,12 @@
 										value="${membership.endDate}" pattern="yyyy-MM-dd" /></td>
 								<td>${membership.planName}</td>
 								<td>${membership.paymentMethod}</td>
-								<td><c:if test="${membership.autopayFlag}">정기결제</c:if> <c:if
-										test="${!membership.autopayFlag}">단건결제</c:if></td>
-
+								<td>
+									<c:if test="${fn:contains(membership.planId, 'AUTO')}"> 
+										<fmt:formatDate value="${membership.nextPayDate}" pattern="yyyy-MM-dd"/>
+										</c:if> 
+        							<c:if test="${not fn:contains(membership.planId, 'AUTO')}">-</c:if>
+        						</td>
 							</tr>
 						</c:forEach>
 					</tbody>

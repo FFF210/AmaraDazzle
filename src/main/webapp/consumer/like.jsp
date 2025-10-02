@@ -11,17 +11,20 @@
 <title>좋아요</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="./tagcss/reset.css" />
-<link rel="stylesheet" href="./consumer/css/header.css" />
-<link rel="stylesheet" href="./tagcss/productCard.css" />
-<link rel="stylesheet" href="./tagcss/tag.css" />
-<link rel="stylesheet" href="./consumer/css/footer.css" />
-<link rel="stylesheet" href="./consumer/css/userInfo.css" />
-<link rel="stylesheet" href="./consumer/css/mypageMenu.css" />
-<link rel="stylesheet" href="./tagcss/pagination.css" />
-<link rel="stylesheet" href="./consumer/css/like.css" />
-<link rel="stylesheet" href="./tagcss/brandNavCard.css" />
-<link rel="stylesheet" href="./consumer/css/tab.css" />
+<link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/brandNavCard.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/table.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/like.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/consumer/css/userInfo.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/consumer/css/mypageMenu.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/tab.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
 </head>
 <body>
 	<!-- 상단 헤더 -->
@@ -44,7 +47,7 @@
 
 				<!-- 관심 상품/관심 브랜드 탭 -->
 				<div class="product-tabs-section">
-					<c:import url="//tab.jsp">
+					<c:import url="/consumer/tab.jsp">
 						<c:param name="tabs" value="상품, 브랜드" />
 						<c:param name="activeTab" value="0" />
 						<c:param name="tabId" value="likeTabs" />
@@ -56,14 +59,12 @@
 						<!-- 관심 상품 탭 -->
 						<div class="tab-panel active" data-tab="0">
 							<div class="wishlist">
-								<p>전체 n개</p>
+								<p>전체 ${wishlistCount}개</p>
 
 								<div class="product-grid">
 									<my:productCard brand="바이오던스" title="상품명1" isSale="true"
 										hasOption="false" originPrice="34000" saleRate="25"
 										finalPrice="25500">
-										<my:tag color="red" size="sm" text="세일" />
-										<my:tag color="yellow" size="sm" text="기획" />
 									</my:productCard>
 									<my:productCard brand="바이오던스" title="상품명2" isSale="true"
 										hasOption="false" originPrice="34000" saleRate="25"
@@ -77,8 +78,6 @@
 									<my:productCard brand="바이오던스" title="상품명1" isSale="true"
 										hasOption="false" originPrice="34000" saleRate="25"
 										finalPrice="25500">
-										<my:tag color="red" size="sm" text="세일" />
-										<my:tag color="yellow" size="sm" text="기획" />
 									</my:productCard>
 									<my:productCard brand="바이오던스" title="상품명2" isSale="true"
 										hasOption="false" originPrice="34000" saleRate="25"
@@ -97,46 +96,18 @@
 						<div class="tab-panel" data-tab="1">
 							<div class="follow-brand-list">
 								<div class="brand-grid">
-									<my:brandNavCard 
-                                     brandName="바이오던스" 
-                                     logoUrl="https://placehold.co/64x64" 
-                                     likes="500" />
-
-									<div class="brand-card">
-										<div class="brand-image">
-											<img src="/images/brand-logo2.jpg" alt="브랜드로고예시2">
-										</div>
-										<div class="brand-info">
-											<h4 class="brand-name">브랜드명예시2가나</h4>
-											<button class="follow-btn active">
-												<i class="bi bi-heart-fill"></i>
-											</button>
-										</div>
-									</div>
-
-									<div class="brand-card">
-										<div class="brand-image">
-											<img src="/images/brand-logo3.jpg" alt="브랜드로고예시3">
-										</div>
-										<div class="brand-info">
-											<h4 class="brand-name">브랜드명예시3가나</h4>
-											<button class="follow-btn active">
-												<i class="bi bi-heart-fill"></i>
-											</button>
-										</div>
-									</div>
-
-									<div class="brand-card">
-										<div class="brand-image">
-											<img src="/images/brand-logo4.jpg" alt="브랜드로고예시4">
-										</div>
-										<div class="brand-info">
-											<h4 class="brand-name">브랜드명예시4가나</h4>
-											<button class="follow-btn active">
-												<i class="bi bi-heart-fill"></i>
-											</button>
-										</div>
-									</div>
+									<my:brandNavCard brandName="바이오던스"
+										logoUrl="https://placehold.co/64x64" likes="500" />
+									<my:brandNavCard brandName="바이오던스"
+										logoUrl="https://placehold.co/64x64" likes="500" />
+									<my:brandNavCard brandName="바이오던스"
+										logoUrl="https://placehold.co/64x64" likes="500" />
+									<my:brandNavCard brandName="바이오던스"
+										logoUrl="https://placehold.co/64x64" likes="500" />
+									<my:brandNavCard brandName="바이오던스"
+										logoUrl="https://placehold.co/64x64" likes="500" />
+									<my:brandNavCard brandName="바이오던스"
+										logoUrl="https://placehold.co/64x64" likes="500" />
 								</div>
 
 								<!-- 페이지네이션 -->
@@ -153,9 +124,9 @@
 
 	<!-- 푸터 include -->
 	<%@ include file="/consumer/footer.jsp"%>
-    <script src="<c:url value='/js/tab.js'/>"></script>
+	<script src="<c:url value='/consumer/js/tab.js'/>"></script>
 
-<script>
+	<script>
 
 //탭 내용 초기화
 function initTabContent() {

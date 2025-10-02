@@ -138,35 +138,57 @@
 		)
 	</insert>
 
-	<!-- ==== [소비자 마이페이지용] 특정 주문상품에 대한 리뷰 존재 여부 확인 ====================== -->
+	<!-- ==== [소비자 마이페이지용] 리뷰 존재 여부 확인 ====================== -->
 	<select id="checkReviewExists" parameterType="Long"
 		resultType="Integer">
 		SELECT COUNT(*)
 		FROM review
-		WHERE order_item_id = #{orderItemId}
+		WHERE order_item_id =
+		#{orderItemId}
 	</select>
 
-	<!-- ==== [소비자 마이페이지용] 리뷰 상세 조회 (수정용) ======================= -->
-	<select id="selectReviewById" parameterType="Long"
-		resultType="dto.Review">
-		SELECT *
-		FROM review
-		WHERE review_id = #{reviewId}
-	</select>
-
-	<!-- ==== [소비자 마이페이지용] 리뷰 수정 ======================= -->
+	<!-- ==== [소비자 마이페이지용] 리뷰 수정...안 할 거 같긴 한데... ======================= -->
 	<update id="updateReview" parameterType="dto.Review">
 		UPDATE review
 		SET
-		rating = #{rating},
+		rating =
+		#{rating},
 		content = #{content},
 		image1_file_id = #{image1FileId},
 		image2_file_id = #{image2FileId},
 		image3_file_id = #{image3FileId}
 		WHERE review_id = #{reviewId}
 		AND member_id = #{memberId}
-			가능 -->
 	</update>
+
+	<!-- 테스트용 쿼리 대체 이거 왜 안 되는 거임 스트레스 받아 -->
+	<select id="testQuery" parameterType="Long"
+		resultType="java.util.Map">
+		SELECT oi.order_item_id, oi.status, o.member_id
+		FROM
+		order_item oi
+		INNER JOIN orders o ON oi.order_id = o.orders_id
+		WHERE
+		o.member_id = #{memberId}
+		AND oi.status IN ('DELIVERED', 'CONFIRMED')
+	</select>
+
+	<!--============ LEFT JOIN 없는 버전으로 테스트 ============-->
+	<select id="testQuery2" parameterType="Long"
+		resultType="java.util.Map">
+		SELECT
+		oi.order_item_id,
+		oi.status,
+		o.member_id,
+		COUNT(r.review_id) as review_count
+		FROM order_item oi
+		INNER JOIN orders o ON oi.order_id = o.orders_id
+		LEFT JOIN review r ON oi.order_item_id = r.order_item_id
+		WHERE o.member_id = #{memberId}
+		AND oi.status IN ('DELIVERED', 'CONFIRMED')
+		GROUP BY oi.order_item_id, oi.status, o.member_id
+		ORDER BY oi.order_item_id
+	</select>
 
 
 	<!-- ======================= [브랜드 어드민] 리뷰 목록 조회 ======================= -->

@@ -5,7 +5,8 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
-import dto.Membership;
+import dto.MembershipPlan;
+import dto.brand2.MembershipList;
 import util.MybatisSqlSessionFactory;
 
 public class MembershipDAOImpl implements MembershipDAO {
@@ -13,7 +14,7 @@ public class MembershipDAOImpl implements MembershipDAO {
 
 	// 멤버십 결제 목록 조회
 	@Override
-	public List<Membership> selectMembershipList(Map<String, Object> params) throws Exception {
+	public List<MembershipList> selectMembershipList(Map<String, Object> params) throws Exception {
 		return sqlSession.selectList("mapper.membership.selectMembershipList", params);
 	}
 
@@ -22,4 +23,11 @@ public class MembershipDAOImpl implements MembershipDAO {
 		return sqlSession.selectOne("mapper.membership.selectMembershipCount", params);
 	}
 
+	@Override
+	public List<MembershipPlan> selectMembershipPlans() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
 }

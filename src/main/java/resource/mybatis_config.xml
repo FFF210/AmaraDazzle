@@ -67,6 +67,7 @@
 		<typeAlias type="dto.brand2.BannerForm" alias="bannerForm" />
 		<typeAlias type="dto.brand2.AdminToss" alias="adminToss" />
 		<typeAlias type="dto.brand2.MembershipList" alias="membershipList" />
+		<typeAlias type="dto.brand2.EventList" alias="eventList" />
 		<!-- type="" : 패키지명.클래스명, alias="" : 별칭 -->
 	</typeAliases>
 
