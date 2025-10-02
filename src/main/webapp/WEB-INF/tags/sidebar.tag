@@ -77,8 +77,8 @@
 				<i class="bi bi-chevron-down submenu-icon"></i>
 			</button>
 			<ul class="submenu">
-				<li><a href="#">이벤트 신청</a></li>
-				<li><a href="#">이벤트 신청 조회</a></li>
+				<li><a href="/brand2/eventList">이벤트 신청</a></li>
+				<li><a href="/brand2/eventList">이벤트 신청 조회</a></li>
 			</ul>
 		</li>
 
@@ -88,8 +88,8 @@
 					광고</span> <i class="bi bi-chevron-down submenu-icon"></i>
 			</button>
 			<ul class="submenu">
-				<li><a href="#">배너 광고 신청</a></li>
-				<li><a href="#">배너 광고 조회</a></li>
+				<li><a href="/brand2/adbanner">배너 광고 신청</a></li>
+				<li><a href="/brand2/adbannerList">배너 광고 조회</a></li>
 			</ul>
 		</li>
 
@@ -124,8 +124,8 @@
 				<i class="bi bi-chevron-down submenu-icon"></i>
 			</button>
 			<ul class="submenu">
-				<li><a href="#">구독</a></li>
-				<li><a href="#">결제 관리·해지</a></li>
+				<li><a href="/brand2/membership">구독</a></li>
+				<li><a href="/brand2/membershipList">결제 관리·해지</a></li>
 			</ul>
 		</li>
 
