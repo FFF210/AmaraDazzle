@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 import dto.Product;
+import dto.consumer.ProductCategory;
 import dto.consumer.ProductPlan;
 import dto.consumer.ProductRank;
 import dto.consumer.ProductSale;
@@ -74,6 +75,22 @@ public class ProductDAOImpl implements ProductDAO {
 	public List<ProductSaleExclusive> selectSaleExclusiveProducts(Long memberId) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
 			return sqlSession.selectList("mapper.product.selectSaleExclusiveProducts", memberId);
+		}
+	}
+
+	// [소비자] 카테고리상품 목록 조회
+	@Override
+	public List<ProductCategory> selectCategoryProducts(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.product.selectCategoryProducts", params);
+		}
+	}
+
+	// [소비자] 카테고리상품 목록 개수
+	@Override
+	public Integer selectCategoryProductsCount(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.product.selectCategoryProductsCount", params);
 		}
 	}
 

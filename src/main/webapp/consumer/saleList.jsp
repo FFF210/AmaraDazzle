@@ -125,7 +125,7 @@
 
 						<div class="product-item-wrapper">
 							<my:productItem size="md" title="${p.name}"
-								isSale="${p.discountType ne null}"
+								productId="${p.productId}" isSale="${p.discountType ne null}"
 								hasOption="${p.hasOption eq 1}" originPrice="${p.price}"
 								saleRate="${saleRate}" finalPrice="${finalPrice}"
 								showTags="true" href="${detailUrl}"

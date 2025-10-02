@@ -7,6 +7,7 @@ import java.util.Map;
 import dao.consumer.ProductDAO;
 import dao.consumer.ProductDAOImpl;
 import dto.Product;
+import dto.consumer.ProductCategory;
 import dto.consumer.ProductPlan;
 import dto.consumer.ProductRank;
 import dto.consumer.ProductSale;
@@ -100,6 +101,27 @@ public class ProductServiceImpl implements ProductService {
 		Map<String, Object> result = new HashMap<>();
 		result.put("productSaleList", productSaleList);
 		result.put("productSaleExclusiveList", productSaleExclusiveList);
+		result.put("totalCount", totalCount);
+		result.put("totalPages", totalPages);
+
+		return result;
+	}
+
+	// [소비자] 카테고리상품 목록 조회
+	@Override
+	public Map<String, Object> productCategoryListByPage(Map<String, Object> params) throws Exception {
+		// 세일상품 목록 조회
+		List<ProductCategory> productCategoryList = productDAO.selectCategoryProducts(params);
+
+		// 총 상품 개수 조회
+		int totalCount = productDAO.selectCategoryProductsCount(params);
+
+		// 총 페이지 수 계산
+		int limit = (int) params.getOrDefault("limit", 16);
+		int totalPages = (int) Math.ceil((double) totalCount / limit);
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("productCategoryList", productCategoryList);
 		result.put("totalCount", totalCount);
 		result.put("totalPages", totalPages);
 

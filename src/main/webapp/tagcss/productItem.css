@@ -3,6 +3,7 @@
 .product-item {
 	display: inline-flex;
 	align-items: center;
+	text-decoration: none;
 	gap: 16px;
 	font-family: "Noto Sans KR", sans-serif;
 }

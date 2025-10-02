@@ -54,6 +54,7 @@
 		<typeAlias type="dto.consumer.ProductRank" alias="productRank" />
 		<typeAlias type="dto.consumer.ProductSale" alias="productSale" />
 		<typeAlias type="dto.consumer.ProductSaleExclusive" alias="productSaleExclusive" />
+		<typeAlias type="dto.consumer.ProductCategory" alias="productCategory" />
 		<typeAlias type="dto.brand.ProductList" alias="productList" />
 		<typeAlias type="dto.brand.ProductDetail" alias="productDetail" />
 		<typeAlias type="dto.brand.OrdersList" alias="ordersList" />

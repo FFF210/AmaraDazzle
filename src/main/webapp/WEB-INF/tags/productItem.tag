@@ -33,6 +33,7 @@
 ================================ --%>
 
 <%@ attribute name="size" required="false"%>
+<%@ attribute name="productId" required="false"%>
 <%@ attribute name="title" required="false"%>
 <%@ attribute name="isSale" required="false"%>
 <%@ attribute name="hasOption" required="false"%>
@@ -52,7 +53,9 @@
 <c:set var="finalPrice" value="${empty finalPrice ? '' : finalPrice}" />
 <c:set var="showTags" value="${empty showTags ? 'false' : showTags}" />
 
-<div class="product-item ${size}">
+<a class="product-item ${size}" data-productid="${productId}"
+	<c:if test="${not empty href}"> href="${href}" </c:if>>
+	
 	<div class="thumbnail">
 		<!-- 상품 이미지 -->
 		<img
@@ -84,19 +87,4 @@
 			</div>
 		</c:if>
 	</div>
-</div>
-
-<script>
-	/*********************************************************************************************************
-	 * 이미지 버튼
-	 *********************************************************************************************************/
-	function readURL(input, previewId) {
-		if (input.files && input.files[0]) {
-			const reader = new FileReader();
-			reader.onload = function(e) {
-				document.getElementById(previewId).src = e.target.result;
-			}
-			reader.readAsDataURL(input.files[0]);
-		}
-	}
-</script>
+</a>

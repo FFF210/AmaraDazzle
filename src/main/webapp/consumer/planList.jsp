@@ -4,6 +4,9 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
+<%-- 오늘 날짜를 JSTL 변수에 저장 --%>
+<jsp:useBean id="now" class="java.util.Date" />
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -136,7 +139,13 @@
 					finalPrice="${finalPrice}" href="${detailUrl}"
 					thumbnailFileId="${p.thumbnailFileId}">
 
-					<c:if test="${p.discountType ne null}">
+					<c:if
+						test="${p.discountType ne null 
+          and p.discountValue ne null 
+          and p.startDate ne null 
+          and p.endDate ne null 
+          and p.startDate.time <= now.time 
+          and now.time <= p.endDate.time}">
 						<my:tag color="red" size="sm" text="세일" />
 					</c:if>
 					<c:if test="${p.isExclusive ne 0}">
