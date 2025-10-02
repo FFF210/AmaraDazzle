@@ -14,4 +14,68 @@
     JOIN coupon c ON mc.coupon_id = c.coupon_id
     WHERE mc.order_id = #{orderId}
 </select>
+
+
+
+
+<!-- ======================= [관리자] ======================= -->
+	<!-- 쿠폰 발행 수  -->
+	<select id="pCouponCnt" resultType="Integer" parameterType="searchCondition">
+		select count(*) from coupon 
+		<where>
+			<if test="startDateTime != null and endDateTime != null">
+			    and (created_at &gt;= #{startDateTime} 
+			    		and created_at &lt; #{endDateTime})
+			</if>
+			<if test="startDateTime2 != null and endDateTime2 != null">
+			    and (start_date &gt;= #{startDateTime2} 
+			    		and end_date &lt; #{endDateTime2})
+			</if>
+			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+				<choose>
+					<when test="totalSearch == '쿠폰명'">
+						and cname like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '사용조건'">
+						and amount_condition like concat('%',#{keyword},'%')
+								
+					</when>
+				</choose>
+			</if>
+		</where>
+	</select>
+	
+	<!-- 쿠폰 발행 리스트 보기  -->
+	<select id="pCouponAllList" resultType="coupon" parameterType="Map">
+		select * from coupon 
+		order by coupon_id desc limit #{start_p},#{post_ea}
+	</select>
+	
+	<!-- 검색된 발행쿠폰 리스트 -->
+	<select id="pCouponSearchList" resultType="coupon" parameterType="searchCondition">
+		select * from coupon 
+		<where>
+			<if test="startDateTime != null and endDateTime != null">
+			    and (created_at &gt;= #{startDateTime} 
+			    		and created_at &lt; #{endDateTime})
+			</if>
+			<if test="startDateTime2 != null and endDateTime2 != null">
+			    and (start_date &gt;= #{startDateTime2} 
+			    		and end_date &lt; #{endDateTime2})
+			</if>
+			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+				<choose>
+					<when test="totalSearch == '쿠폰명'">
+						and cname like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '사용조건'">
+						and amount_condition like concat('%',#{keyword},'%')
+								
+					</when>
+				</choose>
+			</if>
+		</where>
+		order by coupon_id desc limit #{start_p},#{post_ea}
+	</select>
+
 </mapper>
