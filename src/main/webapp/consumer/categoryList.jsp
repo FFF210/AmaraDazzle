@@ -26,6 +26,7 @@
 <link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/breadcrumb.css'/>" />
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>" />
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>" />
 <link rel="stylesheet"
@@ -42,48 +43,166 @@
 
 	<!-- 컨텐츠 영역 -->
 	<div class="category-container">
-		<!-- 카테고리 필터 -->
-		<div class="category-filter">
-			<button
-				class="category-item ${empty param.category1Id ? 'selected' : ''}"
-				onclick="location.href='categoryList'">전체</button>
 
-			<button
-				class="category-item ${param.category1Id eq '1' ? 'selected' : ''}"
-				onclick="location.href='categoryList?category1Id=1'">스킨케어</button>
-
-			<button
-				class="category-item ${param.category1Id eq '8' ? 'selected' : ''}"
-				onclick="location.href='categoryList?category1Id=8'">마스크팩</button>
-
-			<button
-				class="category-item ${param.category1Id eq '14' ? 'selected' : ''}"
-				onclick="location.href='categoryList?category1Id=14'">클렌징</button>
-
-			<button
-				class="category-item ${param.category1Id eq '21' ? 'selected' : ''}"
-				onclick="location.href='categoryList?category1Id=21'">선케어</button>
-
-			<button
-				class="category-item ${param.category1Id eq '26' ? 'selected' : ''}"
-				onclick="location.href='categoryList?category1Id=26'">메이크업</button>
-
-			<button
-				class="category-item ${param.category1Id eq '49' ? 'selected' : ''}"
-				onclick="location.href='categoryList?category1Id=49'">헤어케어</button>
-
-			<button
-				class="category-item ${param.category1Id eq '54' ? 'selected' : ''}"
-				onclick="location.href='categoryList?category1Id=54'">바디케어</button>
-
-			<button
-				class="category-item ${param.category1Id eq '66' ? 'selected' : ''}"
-				onclick="location.href='categoryList?category1Id=66'">향수</button>
-
-			<button
-				class="category-item ${param.category1Id eq '70' ? 'selected' : ''}"
-				onclick="location.href='categoryList?category1Id=70'">맨즈케어</button>
+		<!-- 카테고리 필터 영역 -->
+		<div id="category-filters">
+			<div class="category-filter" id="large-category"></div>
+			<div class="category-filter" id="middle-category"></div>
+			<div class="category-filter" id="small-category"></div>
 		</div>
+
+		<script>
+		document.addEventListener("DOMContentLoaded", () => {
+		  // DOM 요소 가져오기
+		  const largeContainer = document.getElementById("large-category");
+		  const middleContainer = document.getElementById("middle-category");
+		  const smallContainer = document.getElementById("small-category");
+		
+		  // 현재 URL의 파라미터 읽기 (선택된 카테고리 값 유지용)
+		  let selectedCategory1 = new URLSearchParams(location.search).get("category1Id");
+		  let selectedCategory2 = new URLSearchParams(location.search).get("category2Id");
+		  let selectedCategory3 = new URLSearchParams(location.search).get("category3Id");
+		
+		  // 버튼들을 컨테이너에 렌더링하는 함수
+		  function renderButtons(container, categories, type, parentId) {
+		    container.innerHTML = "";
+		    if (!categories) return;
+		
+		    // 항상 "전체" 버튼 추가
+		    const allBtn = document.createElement("button");
+		    allBtn.className = "category-item";
+		    allBtn.textContent = "전체";
+		   
+		   // "전체" 버튼 클릭 시 동작 (대분류, 중분류, 소분류 상황에 따라 URL 달라짐)
+		    allBtn.onclick = () => {
+		      if (type === "large") {
+		        location.href = `/store/categoryList?page=1`;
+		      } else if (type === "middle") {
+		        location.href = `/store/categoryList?page=1&category1Id=\${selectedCategory1}`;
+		      } else if (type === "small") {
+		        location.href = `/store/categoryList?page=1&category1Id=\${selectedCategory1}&category2Id=\${selectedCategory2}`;
+		      }
+		    };
+		
+		   // 현재 선택 상태와 비교해서 "전체" 버튼 강조
+		    if ((type === "large" && !selectedCategory1) ||
+		        (type === "middle" && selectedCategory2 == null) ||
+		        (type === "small" && selectedCategory3 == null)) {
+		      allBtn.classList.add("selected");
+		    }
+		    
+		    container.appendChild(allBtn); // "전체" 버튼 먼저 추가
+		
+		   // 실제 카테고리 버튼 추가
+		    categories.forEach(c => {
+		      const btn = document.createElement("button");
+		      btn.className = "category-item";
+		      btn.textContent = c.name;
+		
+		     // 현재 URL에 선택된 값과 일치하면 "selected" 강조
+		      if ((type === "large" && selectedCategory1 == c.categoryId) ||
+		          (type === "middle" && selectedCategory2 == c.categoryId) ||
+		          (type === "small" && selectedCategory3 == c.categoryId)) {
+		        btn.classList.add("selected");
+		      }
+		
+		     // 버튼 클릭 시 동작
+		      btn.onclick = () => {
+		        if (type === "large") {
+		          selectedCategory1 = c.categoryId;
+		          selectedCategory2 = null;
+		          selectedCategory3 = null;
+		          location.href = `/store/categoryList?page=1&category1Id=\${selectedCategory1}`;
+		
+		        } else if (type === "middle") {
+		          selectedCategory2 = c.categoryId;
+		          selectedCategory3 = null;
+		
+		          // 소분류 존재 여부 확인
+		          fetch(`/category?type=small&parentId=\${selectedCategory2}`)
+		            .then(res => res.json())
+		            .then(data => {
+		              if (data && data.length > 0) {
+		                // 소분류 있으면 → 중+소 목록 로드
+		                location.href = `/store/categoryList?page=1&category1Id=\${selectedCategory1}&category2Id=\${selectedCategory2}&hasSmall=1`;
+		              } else {
+		                // 소분류 없으면 → 중분류까지만
+		                location.href = `/store/categoryList?page=1&category1Id=\${selectedCategory1}&category2Id=\${selectedCategory2}&hasSmall=0`;
+		              }
+		            })
+		            .catch(err => console.error(err));
+		
+		        } else if (type === "small") {
+			      	selectedCategory3 = c.categoryId;
+			        location.href = `/store/categoryList?page=1&category1Id=\${selectedCategory1}&category2Id=\${selectedCategory2}&category3Id=\${selectedCategory3}&hasSmall=1`;
+		         } 
+		      };
+		
+		      container.appendChild(btn); // 버튼 추가
+		    });
+		    
+		    // UI를 10개 또는 15개로 맞추기 (빈칸 추가)
+		    let count = container.querySelectorAll(".category-item").length;
+		    let target = count > 10 ? 15 : 10;
+		
+		    while (count < target) {
+		      const empty = document.createElement("div");
+		      empty.className = "category-item empty";
+		      container.appendChild(empty);
+		      count++;
+		    }
+		  }
+		
+		  // Ajax로 카테고리 목록 불러오기
+		  function loadCategories(type, parentId = null) {
+		    let url = `/category?type=\${type}`;
+		    if (parentId) url += `&parentId=\${parentId}`;
+		
+		    return fetch(url)
+		      .then(res => res.json())
+		      .then(data => {
+		        if (type === "large") renderButtons(largeContainer, data, "large");
+		        else if (type === "middle") renderButtons(middleContainer, data, "middle", parentId);
+		        else if (type === "small" && new URLSearchParams(location.search).get("hasSmall") === "1") renderButtons(smallContainer, data, "small", parentId);
+		      });
+		  }
+		  
+		  const hasSmall = new URLSearchParams(location.search).get("hasSmall");
+			
+		   if (selectedCategory2 && hasSmall === "1") {
+		    // 소분류 있음 → 소분류만 표시
+		    largeContainer.classList.add("none");
+		    middleContainer.classList.add("none");
+		    smallContainer.classList.remove("none");
+
+		    loadCategories("small", selectedCategory2);
+
+		  } else if (selectedCategory2 && hasSmall === "0") {
+		    // 소분류 없음 → 중분류만 표시 유지
+		    largeContainer.classList.add("none");
+		    middleContainer.classList.remove("none");
+		    smallContainer.classList.add("none");
+
+		    loadCategories("middle", selectedCategory1);
+
+		  } else if (selectedCategory1) {
+		    // 대분류 선택됨 → 중분류 표시
+		    largeContainer.classList.add("none");
+		    middleContainer.classList.remove("none");
+		    smallContainer.classList.add("none");
+
+		    loadCategories("middle", selectedCategory1);
+
+		  } else {
+		    // 아무것도 선택 안됨 → 대분류 표시
+		    largeContainer.classList.remove("none");
+		    middleContainer.classList.add("none");
+		    smallContainer.classList.add("none");
+
+		    loadCategories("large");
+		  }
+		});
+		</script>
 
 		<!-- 정렬 옵션 -->
 		<my:sortList hasSelect="false" />
@@ -152,7 +271,8 @@
 		<!-- 페이징 -->
 		<div class="page-pagination">
 			<my:pagination currentPage="${currentPage}"
-				totalPages="${totalPages}" baseUrl="/store/categoryList?${queryString}" />
+				totalPages="${totalPages}"
+				baseUrl="/store/categoryList?${queryString}" />
 		</div>
 	</div>
 

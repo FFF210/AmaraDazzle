@@ -53,6 +53,7 @@ request.setAttribute("floor", floor);
 	<%@ include file="/consumer/header.jsp"%>
 
 	<main class="product-detail-container">
+
 		<div class="product-detail-content">
 			<!-- 상품 이미지 -->
 			<div class="product-image-section">
@@ -88,7 +89,6 @@ request.setAttribute("floor", floor);
 							alt="상품 이미지 5" class="thumbnail" width="80px" />
 					</c:if>
 				</div>
-
 			</div>
 
 			<!-- 상품 정보 -->
@@ -190,18 +190,14 @@ request.setAttribute("floor", floor);
 
 				<!-- 구매 버튼들 -->
 				<div class="purchase-buttons">
-				<div class="action-button">
-					<button type="button" class="btn btn-outline btn-xl"
-						onclick="addToCart()">장바구니 담기</button>
-					<button type="button" class="btn btn-primary btn-xl"
-						onclick="buyNow()">바로 구매</button>
-<<<<<<< HEAD
-						</div>
-					<my:heartBtn state="active" onlyIcon="false" hasCount="false" />
-=======
-					<my:heartBtn state="${isWished ? 'active' : 'default'}"
-						onlyIcon="false" hasCount="false" />
->>>>>>> branch 'main' of https://github.com/2025KostaProject/AmaraDazzle.git
+					<div class="action-button">
+						<button type="button" class="btn btn-outline btn-xl"
+							onclick="addToCart()">장바구니 담기</button>
+						<button type="button" class="btn btn-primary btn-xl"
+							onclick="buyNow()">바로 구매</button>
+						<my:heartBtn state="${isWished ? 'active' : 'default'}"
+							onlyIcon="false" hasCount="false" />
+					</div>
 				</div>
 			</div>
 		</div>

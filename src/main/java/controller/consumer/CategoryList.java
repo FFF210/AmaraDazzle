@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import service.brand.CategoryService;
+import service.brand.CategoryServiceImpl;
 import service.consumer.ProductService;
 import service.consumer.ProductServiceImpl;
 
@@ -22,6 +24,7 @@ public class CategoryList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private final ProductService service = new ProductServiceImpl();
+	private final CategoryService Categoryservice = new CategoryServiceImpl();
 
 	public CategoryList() {
 		super();
@@ -48,6 +51,8 @@ public class CategoryList extends HttpServlet {
 		Map<String, Object> params = new HashMap<>();
 		params.put("memberId", memberId);
 		params.put("category1Id", request.getParameter("category1Id"));
+		params.put("category2Id", request.getParameter("category2Id"));
+		params.put("category3Id", request.getParameter("category3Id"));
 		params.put("sort", request.getParameter("sort"));
 		params.put("limit", limit);
 		params.put("offset", offset);
@@ -55,6 +60,17 @@ public class CategoryList extends HttpServlet {
 		try {
 			// 서비스 호출
 			Map<String, Object> result = service.productCategoryListByPage(params);
+
+			// selectedCategory 세팅
+			String selectedCategory = "전체 상품";
+			if (request.getParameter("category3Id") != null) {
+				selectedCategory = Categoryservice.getCategoryName(Long.parseLong(request.getParameter("category3Id")));
+			} else if (request.getParameter("category2Id") != null) {
+				selectedCategory = Categoryservice.getCategoryName(Long.parseLong(request.getParameter("category2Id")));
+			} else if (request.getParameter("category1Id") != null) {
+				selectedCategory = Categoryservice.getCategoryName(Long.parseLong(request.getParameter("category1Id")));
+			}
+			request.setAttribute("selectedCategory", selectedCategory);
 
 			// JSP로 전달
 			request.setAttribute("productCategoryList", result.get("productCategoryList"));

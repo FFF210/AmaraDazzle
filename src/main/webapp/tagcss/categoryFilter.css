@@ -9,6 +9,10 @@
 	display: grid;
 }
 
+.category-filter.none {
+	display: none;
+}
+
 .category-item {
 	display: flex;
 	justify-content: center;

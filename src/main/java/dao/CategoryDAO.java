@@ -13,4 +13,7 @@ public interface CategoryDAO {
 
 	// 특정 중분류에 속한 소분류 목록 조회
 	List<Category> selectSmallCategories(Long parentId) throws Exception;
+
+	// id로 카테고리 이름 조회
+	String selectCategorieName(Long categoryId) throws Exception;
 }

@@ -29,4 +29,10 @@ public class CategoryDAOImpl implements CategoryDAO {
 		return sqlSession.selectList("mapper.category.selectSmallCategories", parentId);
 	}
 
+	// id로 카테고리 이름 조회
+	@Override
+	public String selectCategorieName(Long categoryId) throws Exception {
+		return sqlSession.selectOne("mapper.category.selectCategorieName", categoryId);
+	}
+
 }

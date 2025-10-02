@@ -33,7 +33,9 @@
 					<c:otherwise>
 						<span>${parts[0]}</span>
 					</c:otherwise>
-				</c:choose> <!-- 마지막 li가 아니면 화살표 아이콘 추가 --> <c:if test="${not status.last}">
+				</c:choose> 
+				<!-- 마지막 li가 아니면 화살표 아이콘 추가 --> 
+				<c:if test="${not status.last}">
 					<i class="bi bi-chevron-right breadcrumb-separator"></i>
 				</c:if></li>
 		</c:forEach>
