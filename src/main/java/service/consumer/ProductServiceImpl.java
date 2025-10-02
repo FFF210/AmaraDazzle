@@ -8,6 +8,7 @@ import dao.consumer.ProductDAO;
 import dao.consumer.ProductDAOImpl;
 import dto.Product;
 import dto.consumer.ProductPlan;
+import dto.consumer.ProductRank;
 
 public class ProductServiceImpl implements ProductService {
 
@@ -56,4 +57,24 @@ public class ProductServiceImpl implements ProductService {
 		return result;
 	}
 
+	// [소비자] 랭킹상품 목록 조회
+	@Override
+	public Map<String, Object> productRankListByPage(Map<String, Object> params) throws Exception {
+		// 랭킹상품 목록 조회
+		List<ProductRank> productRankList = productDAO.selectRankingProducts(params);
+
+		// 총 상품 개수 조회
+		int totalCount = productDAO.selectRankingProductsCount(params);
+
+		// 총 페이지 수 계산
+		int limit = (int) params.getOrDefault("limit", 16);
+		int totalPages = (int) Math.ceil((double) totalCount / limit);
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("productRankList", productRankList);
+		result.put("totalCount", totalCount);
+		result.put("totalPages", totalPages);
+
+		return result;
+	}
 }

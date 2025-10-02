@@ -4,12 +4,12 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Date;
 
-// [소비자] 기획상품 목록 조회
-public class ProductPlan {
+//[소비자] 상품 랭킹 목록 조회
+public class ProductRank {
 	private Long productId; // 고유 식별자 (PK, AUTO_INCREMENT)
 	private Long brandId; // 등록 브랜드 관리자 ID (FK → brand.brand_id)
 	private String name; // 상품명
-	private String brandName; // 브랜드
+	private String brandName; // 브랜드명
 	private Integer isExclusive; // 단독 판매 여부 (tinyint, DEFAULT 0)
 	private Integer isVisible; // 상품 공개 여부 (tinyint, DEFAULT 1)
 
@@ -23,28 +23,44 @@ public class ProductPlan {
 	private Long thumbnailFileId; // 썸네일 파일 ID (FK → upload_file.upload_file_id)
 
 	private BigDecimal price; // 판매가 (기본가)
-	private BigDecimal finalPrice; // 최종가격 (세일가)
+	private BigDecimal finalPrice; // 최종 판매가 (세일 적용가)
 	private String discountType; // 할인 방식 (RATE, AMOUNT)
 	private BigDecimal discountValue; // 할인 값(퍼센트 또는 금액)
 
 	private Date startDate; // 세일 시작 시각
 	private Date endDate; // 세일 종료 시각
-	private Timestamp createdAt; // 생성 시각 (DEFAULT CURRENT_TIMESTAMP)
-	private Timestamp updatedAt; // 수정 시각 (ON UPDATE CURRENT_TIMESTAMP)
+	private Timestamp createdAt; // 생성 시각
+	private Timestamp updatedAt; // 수정 시각
 
-	// 계산된 필드
-	private Integer totalSold;
-	private Integer reviewCount;
-	private Double avgRating;
-	private Integer wishCount;
-	private Double popularityScore;
+	// ====== 계산된 필드 (랭킹 점수 관련) ======
+	private Integer totalSold; // 최근 30일 판매량
+	private Integer reviewCount; // 최근 30일 리뷰 개수
+	private Double avgRating; // 최근 30일 평균 평점
+	private Integer wishCount; // 최근 30일 위시리스트 수
+	private Double popularityScore; // 랭킹 점수 (가중치 기반)
 
-	public BigDecimal getFinalPrice() {
-		return finalPrice;
+	public Integer getIsPlanned() {
+		return isPlanned;
 	}
 
-	public void setFinalPrice(BigDecimal finalPrice) {
-		this.finalPrice = finalPrice;
+	public void setIsPlanned(Integer isPlanned) {
+		this.isPlanned = isPlanned;
+	}
+
+	public Integer getHasOption() {
+		return hasOption;
+	}
+
+	public void setHasOption(Integer hasOption) {
+		this.hasOption = hasOption;
+	}
+
+	public Integer getIsWished() {
+		return isWished;
+	}
+
+	public void setIsWished(Integer isWished) {
+		this.isWished = isWished;
 	}
 
 	public Long getProductId() {
@@ -59,30 +75,6 @@ public class ProductPlan {
 		return brandId;
 	}
 
-	public Integer getHasOption() {
-		return hasOption;
-	}
-
-	public void setHasOption(Integer hasOption) {
-		this.hasOption = hasOption;
-	}
-
-	public String getBrandName() {
-		return brandName;
-	}
-
-	public void setBrandName(String brandName) {
-		this.brandName = brandName;
-	}
-
-	public Integer getIsWished() {
-		return isWished;
-	}
-
-	public void setIsWished(Integer isWished) {
-		this.isWished = isWished;
-	}
-
 	public void setBrandId(Long brandId) {
 		this.brandId = brandId;
 	}
@@ -93,6 +85,14 @@ public class ProductPlan {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getBrandName() {
+		return brandName;
+	}
+
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
 	}
 
 	public Integer getIsExclusive() {
@@ -109,14 +109,6 @@ public class ProductPlan {
 
 	public void setIsVisible(Integer isVisible) {
 		this.isVisible = isVisible;
-	}
-
-	public Integer getIsPlanned() {
-		return isPlanned;
-	}
-
-	public void setIsPlanned(Integer isPlanned) {
-		this.isPlanned = isPlanned;
 	}
 
 	public Long getCategory1Id() {
@@ -157,6 +149,14 @@ public class ProductPlan {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public BigDecimal getFinalPrice() {
+		return finalPrice;
+	}
+
+	public void setFinalPrice(BigDecimal finalPrice) {
+		this.finalPrice = finalPrice;
 	}
 
 	public String getDiscountType() {

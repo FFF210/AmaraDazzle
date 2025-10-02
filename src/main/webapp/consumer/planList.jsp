@@ -4,9 +4,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
-<!-- 서버에서 카테고리 API URL 세팅 -->
-<c:url value="/category" var="categoryUrl" />
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>

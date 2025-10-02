@@ -51,6 +51,7 @@
 		<typeAlias type="dto.Wishlist" alias="wishlist" />
 		<typeAlias type="dto.admin.SearchConditionDTO" alias="searchCondition" />
 		<typeAlias type="dto.consumer.ProductPlan" alias="productPlan" />
+		<typeAlias type="dto.consumer.ProductRank" alias="productRank" />
 		<typeAlias type="dto.brand.ProductList" alias="productList" />
 		<typeAlias type="dto.brand.ProductDetail" alias="productDetail" />
 		<typeAlias type="dto.brand.OrdersList" alias="ordersList" />
