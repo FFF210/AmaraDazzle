@@ -7,8 +7,11 @@ import java.util.Map;
 import dao.consumer.ProductDAO;
 import dao.consumer.ProductDAOImpl;
 import dto.Product;
+import dto.consumer.ProductCategory;
 import dto.consumer.ProductPlan;
 import dto.consumer.ProductRank;
+import dto.consumer.ProductSale;
+import dto.consumer.ProductSaleExclusive;
 
 public class ProductServiceImpl implements ProductService {
 
@@ -77,6 +80,55 @@ public class ProductServiceImpl implements ProductService {
 
 		return result;
 	}
+	
+
+	// [소비자] 세일상품 목록 조회
+	@Override
+	public Map<String, Object> productSaleListByPage(Map<String, Object> params) throws Exception {
+		// 세일상품 목록 조회
+		List<ProductSale> productSaleList = productDAO.selectSaleProducts(params);
+
+		Long memberId = (Long) params.get("memberId");
+		// 세일&단독상품 목록 조회
+		List<ProductSaleExclusive> productSaleExclusiveList = productDAO.selectSaleExclusiveProducts(memberId);
+
+		// 총 상품 개수 조회
+		int totalCount = productDAO.selectSaleProductsCount(params);
+
+		// 총 페이지 수 계산
+		int limit = (int) params.getOrDefault("limit", 16);
+		int totalPages = (int) Math.ceil((double) totalCount / limit);
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("productSaleList", productSaleList);
+		result.put("productSaleExclusiveList", productSaleExclusiveList);
+		result.put("totalCount", totalCount);
+		result.put("totalPages", totalPages);
+
+		return result;
+	}
+
+	// [소비자] 카테고리상품 목록 조회
+	@Override
+	public Map<String, Object> productCategoryListByPage(Map<String, Object> params) throws Exception {
+		// 세일상품 목록 조회
+		List<ProductCategory> productCategoryList = productDAO.selectCategoryProducts(params);
+
+		// 총 상품 개수 조회
+		int totalCount = productDAO.selectCategoryProductsCount(params);
+
+		// 총 페이지 수 계산
+		int limit = (int) params.getOrDefault("limit", 16);
+		int totalPages = (int) Math.ceil((double) totalCount / limit);
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("productCategoryList", productCategoryList);
+		result.put("totalCount", totalCount);
+		result.put("totalPages", totalPages);
+
+		return result;
+	}
+
 
 	//[brandDetail용] 브랜드 상품 조회
 	@Override

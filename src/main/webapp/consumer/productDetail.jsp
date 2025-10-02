@@ -57,17 +57,38 @@ request.setAttribute("floor", floor);
 			<!-- 상품 이미지 -->
 			<div class="product-image-section">
 				<div class="main-image">
-					<img src="<c:url value='/images/product-placeholder.jpg'/>"
-						alt="상품 이미지" id="mainProductImage">
+					<img
+						src="${pageContext.request.contextPath}/image?fileId=${product.thumbnailFileId}"
+						alt="상품 대표 이미지" id="mainProductImage" width="500px" />
 				</div>
 				<div class="thumbnail-images">
-					<img src="<c:url value='/images/product-thumb1.jpg'/>"
-						alt="상품 이미지 1" class="thumbnail active"> <img
-						src="<c:url value='/images/product-thumb2.jpg'/>" alt="상품 이미지 2"
-						class="thumbnail"> <img
-						src="<c:url value='/images/product-thumb3.jpg'/>" alt="상품 이미지 3"
-						class="thumbnail">
+					<c:if test="${not empty product.image1FileId}">
+						<img
+							src="${pageContext.request.contextPath}/image?fileId=${product.image1FileId}"
+							alt="상품 이미지 1" class="thumbnail active" width="80px" />
+					</c:if>
+					<c:if test="${not empty product.image2FileId}">
+						<img
+							src="${pageContext.request.contextPath}/image?fileId=${product.image2FileId}"
+							alt="상품 이미지 2" class="thumbnail" width="80px" />
+					</c:if>
+					<c:if test="${not empty product.image3FileId}">
+						<img
+							src="${pageContext.request.contextPath}/image?fileId=${product.image3FileId}"
+							alt="상품 이미지 3" class="thumbnail" width="80px" />
+					</c:if>
+					<c:if test="${not empty product.image4FileId}">
+						<img
+							src="${pageContext.request.contextPath}/image?fileId=${product.image4FileId}"
+							alt="상품 이미지 4" class="thumbnail" width="80px" />
+					</c:if>
+					<c:if test="${not empty product.image5FileId}">
+						<img
+							src="${pageContext.request.contextPath}/image?fileId=${product.image5FileId}"
+							alt="상품 이미지 5" class="thumbnail" width="80px" />
+					</c:if>
 				</div>
+
 			</div>
 
 			<!-- 상품 정보 -->
@@ -170,12 +191,18 @@ request.setAttribute("floor", floor);
 
 				<!-- 구매 버튼들 -->
 				<div class="purchase-buttons">
+				<div class="action-button">
 					<button type="button" class="btn btn-outline btn-xl"
 						onclick="addToCart()">장바구니 담기</button>
 					<button type="button" class="btn btn-primary btn-xl"
 						onclick="buyNow()">바로 구매</button>
+<<<<<<< HEAD
+						</div>
+					<my:heartBtn state="active" onlyIcon="false" hasCount="false" />
+=======
 					<my:heartBtn state="${isWished ? 'active' : 'default'}"
 						onlyIcon="false" hasCount="false" />
+>>>>>>> branch 'main' of https://github.com/2025KostaProject/AmaraDazzle.git
 				</div>
 			</div>
 		</div>
