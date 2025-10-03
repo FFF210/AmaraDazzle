@@ -29,7 +29,7 @@
 <c:set var="hasButton" value="${empty hasButton ? 'false' : hasButton}" />
 <c:set var="isSearch" value="${empty isSearch ? 'false' : isSearch}" />
 <c:set var="onlyText" value="${empty onlyText ? 'false' : onlyText}" />
-<c:set var="title" value="${empty title ? '페이지명' : title}" />
+<c:set var="title" value="${empty title ? ' ' : title}" />
 <c:set var="description" value="${empty description ? '' : description}" />
 
 <div
