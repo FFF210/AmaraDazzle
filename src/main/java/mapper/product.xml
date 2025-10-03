@@ -89,6 +89,286 @@
 		ORDER BY created_at DESC
 	</select>
 
+	<!-- ================[소비자] 공통 상품 칼럼 =================== -->
+	<sql id="commonProductSelect">
+		p.product_id AS productId,
+		p.brand_id AS brandId,
+		b.brand_name AS brandName,
+		p.name AS name,
+		p.is_exclusive AS
+		isExclusive,
+		p.is_visible AS isVisible,
+		p.is_planned AS isPlanned,
+		p.category1_id AS category1Id,
+		p.category2_id AS category2Id,
+		p.category3_id AS category3Id,
+		p.thumbnail_file_id AS thumbnailFileId,
+		p.price AS price,
+		p.has_option AS hasOption,
+		p.discount_type AS
+		discountType,
+		p.discount_value AS discountValue,
+		p.start_date AS
+		startDate,
+		p.end_date AS endDate,
+		p.created_at AS createdAt,
+		p.updated_at AS updatedAt,
+
+		CASE WHEN uw.wishlist_id IS NOT NULL THEN 1
+		ELSE 0 END AS isWished,
+
+		CASE
+		WHEN p.discount_type = 'RATE' THEN p.price
+		- (p.price * p.discount_value /
+		100)
+		WHEN p.discount_type = 'AMOUNT'
+		THEN p.price - p.discount_value
+		ELSE p.price
+		END AS finalPrice,
+
+		CASE
+		WHEN
+		p.discount_type IS NOT NULL
+		AND p.discount_value > 0
+		AND (p.start_date
+		IS NULL OR p.start_date &lt;= NOW())
+		AND (p.end_date IS NULL OR
+		p.end_date >= NOW())
+		THEN 1 ELSE 0
+		END AS isSale,
+
+		IFNULL(s.total_sold, 0)
+		AS totalSold,
+		IFNULL(r.review_count, 0) AS reviewCount,
+		IFNULL(r.avg_rating, 0) AS avgRating,
+		IFNULL(w.wish_count, 0) AS
+		wishCount,
+
+		(
+		(IFNULL(s.total_sold, 0) * 0.5) +
+		(IFNULL(r.review_count, 0)
+		* 0.2) +
+		(IFNULL(r.avg_rating, 0) * 0.1) +
+		(IFNULL(w.wish_count, 0) *
+		0.2)
+		) AS popularityScore
+	</sql>
+
+
+	<!-- ================[소비자] 메인 페이지 - 나에게 딱 맞는 상품 4개 =================== -->
+	<select id="selectMyFitProductsForMain" parameterType="map"
+		resultType="commonProduct">
+		SELECT
+		<include refid="commonProductSelect" />
+		FROM product p
+		JOIN brand b ON p.brand_id = b.brand_id
+
+		LEFT JOIN (
+		SELECT oi.product_id, SUM(oi.quantity) AS total_sold
+		FROM order_item oi
+		WHERE oi.status IN ('PAID','PREPARING','SHIPPING','DELIVERED','CONFIRMED')
+		AND oi.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY oi.product_id
+		) s ON p.product_id = s.product_id
+
+		LEFT JOIN (
+		SELECT rv.product_id, COUNT(rv.review_id) AS review_count, AVG(rv.rating) AS
+		avg_rating
+		FROM review rv
+		WHERE rv.status = 'PUBLISHED'
+		AND rv.questioned_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY rv.product_id
+		) r ON p.product_id = r.product_id
+
+		LEFT JOIN (
+		SELECT wl.product_id, COUNT(wl.wishlist_id) AS wish_count
+		FROM wishlist wl
+		WHERE wl.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY wl.product_id
+		) w ON p.product_id = w.product_id
+
+		LEFT JOIN (
+		SELECT wishlist_id, product_id
+		FROM wishlist
+		WHERE member_id = #{memberId}
+		) uw ON p.product_id = uw.product_id
+
+		JOIN product_filter_map pfm ON p.product_id = pfm.product_id
+
+		JOIN member m ON m.member_id = #{memberId}
+
+		WHERE p.is_visible = 1
+		AND (
+		pfm.filter_id = m.skin_type_id
+		OR pfm.filter_id = m.personal_color_id
+		OR pfm.filter_id IN (
+		SELECT code_id
+		FROM member_skin_issue
+		WHERE member_id = #{memberId}
+		)
+		)
+		GROUP BY p.product_id
+		ORDER BY COUNT(DISTINCT pfm.filter_id) DESC, p.created_at DESC
+		LIMIT 4
+	</select>
+
+	<!-- ================[소비자] 메인 페이지 - 인기 상품 4개 =================== -->
+	<select id="selectPopularProductsForMain" parameterType="map"
+		resultType="commonProduct">
+		SELECT
+		<include refid="commonProductSelect" />
+		FROM product p
+		JOIN brand b ON p.brand_id = b.brand_id
+		LEFT JOIN (
+		SELECT oi.product_id, SUM(oi.quantity) AS total_sold
+		FROM order_item oi
+		WHERE oi.status IN
+		('PAID','PREPARING','SHIPPING','DELIVERED','CONFIRMED')
+		AND
+		oi.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		oi.product_id
+		) s ON p.product_id = s.product_id
+		LEFT JOIN (
+		SELECT
+		rv.product_id, COUNT(rv.review_id) AS review_count, AVG(rv.rating) AS
+		avg_rating
+		FROM review rv
+		WHERE rv.status = 'PUBLISHED'
+		AND
+		rv.questioned_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		rv.product_id
+		) r ON p.product_id = r.product_id
+		LEFT JOIN (
+		SELECT
+		wl.product_id, COUNT(wl.wishlist_id) AS wish_count
+		FROM wishlist wl
+		WHERE wl.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		wl.product_id
+		) w ON p.product_id = w.product_id
+		LEFT JOIN (
+		SELECT
+		wishlist_id, product_id
+		FROM wishlist
+		WHERE member_id = #{memberId}
+		) uw
+		ON p.product_id = uw.product_id
+		WHERE p.is_visible = 1
+		ORDER BY
+		popularityScore DESC
+		LIMIT 4
+	</select>
+
+
+	<!-- ================[소비자] 메인 페이지 - 세일 상품 4개 =================== -->
+	<select id="selectSaleProductsForMain" parameterType="map"
+		resultType="commonProduct">
+		SELECT
+		<include refid="commonProductSelect" />
+		FROM product p
+		JOIN brand b ON p.brand_id = b.brand_id
+		LEFT JOIN (
+		SELECT oi.product_id, SUM(oi.quantity) AS total_sold
+		FROM order_item oi
+		WHERE oi.status IN
+		('PAID','PREPARING','SHIPPING','DELIVERED','CONFIRMED')
+		AND
+		oi.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		oi.product_id
+		) s ON p.product_id = s.product_id
+		LEFT JOIN (
+		SELECT
+		rv.product_id, COUNT(rv.review_id) AS review_count, AVG(rv.rating) AS
+		avg_rating
+		FROM review rv
+		WHERE rv.status = 'PUBLISHED'
+		AND
+		rv.questioned_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		rv.product_id
+		) r ON p.product_id = r.product_id
+		LEFT JOIN (
+		SELECT
+		wl.product_id, COUNT(wl.wishlist_id) AS wish_count
+		FROM wishlist wl
+		WHERE wl.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		wl.product_id
+		) w ON p.product_id = w.product_id
+		LEFT JOIN (
+		SELECT
+		wishlist_id, product_id
+		FROM wishlist
+		WHERE member_id = #{memberId}
+		) uw
+		ON p.product_id = uw.product_id
+		WHERE p.is_visible = 1
+		AND
+		p.discount_type IS NOT NULL
+		AND p.discount_value > 0
+		AND (p.start_date
+		IS NULL OR p.start_date &lt;= NOW())
+		AND (p.end_date IS NULL OR
+		p.end_date >= NOW())
+		ORDER BY p.created_at DESC
+		LIMIT 4
+	</select>
+
+
+	<!-- ================[소비자] 메인 페이지 - 단독 상품 4개 =================== -->
+	<select id="selectExclusiveProductsForMain" parameterType="map"
+		resultType="commonProduct">
+		SELECT
+		<include refid="commonProductSelect" />
+		FROM product p
+		JOIN brand b ON p.brand_id = b.brand_id
+		LEFT JOIN (
+		SELECT oi.product_id, SUM(oi.quantity) AS total_sold
+		FROM order_item oi
+		WHERE oi.status IN
+		('PAID','PREPARING','SHIPPING','DELIVERED','CONFIRMED')
+		AND
+		oi.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		oi.product_id
+		) s ON p.product_id = s.product_id
+		LEFT JOIN (
+		SELECT
+		rv.product_id, COUNT(rv.review_id) AS review_count, AVG(rv.rating) AS
+		avg_rating
+		FROM review rv
+		WHERE rv.status = 'PUBLISHED'
+		AND
+		rv.questioned_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		rv.product_id
+		) r ON p.product_id = r.product_id
+		LEFT JOIN (
+		SELECT
+		wl.product_id, COUNT(wl.wishlist_id) AS wish_count
+		FROM wishlist wl
+		WHERE wl.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+		GROUP BY
+		wl.product_id
+		) w ON p.product_id = w.product_id
+		LEFT JOIN (
+		SELECT
+		wishlist_id, product_id
+		FROM wishlist
+		WHERE member_id = #{memberId}
+		) uw
+		ON p.product_id = uw.product_id
+		WHERE p.is_visible = 1
+		AND
+		p.is_exclusive = 1
+		ORDER BY p.created_at DESC
+		LIMIT 4
+	</select>
+
+
 	<!-- ================[소비자] 상품 검색 목록 조회 =================== -->
 	<select id="selectSearchProducts" parameterType="map"
 		resultType="productSearch">
@@ -291,7 +571,8 @@
 			AND p.discount_type IS NOT NULL
 			AND p.discount_value &gt; 0
 			AND (p.start_date IS NULL OR p.start_date &lt;= NOW())
-			AND (p.end_date IS NULL OR p.end_date &gt;= NOW())
+			AND (p.end_date
+			IS NULL OR p.end_date &gt;= NOW())
 		</if>
 	</select>
 

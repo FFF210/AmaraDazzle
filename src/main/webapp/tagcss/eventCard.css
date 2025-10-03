@@ -16,7 +16,7 @@
 }
 
 .event-image img.finished {
-  filter: grayscale(80%);
+	filter: grayscale(80%);
 }
 
 .event-image img {

@@ -2,23 +2,21 @@ package service.consumer;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import dao.consumer.MemberDAO;
 import dao.consumer.MemberDAOImpl;
 import dto.Member;
+import dto.consumer.MemberFilter;
 
 public class MemberServiceImpl implements MemberService {
 
@@ -56,51 +54,50 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public void join(Member member) throws Exception {
 
+		// 1. 이메일 중복 체크
+		Member existingEmail = memberDAO.selectByEmail(member.getEmail());
+		if (existingEmail != null) {
+			throw new Exception("이미 사용 중인 이메일입니다.");
+		}
 
-	    // 1. 이메일 중복 체크
-	    Member existingEmail = memberDAO.selectByEmail(member.getEmail());
-	    if (existingEmail != null) {
-	        throw new Exception("이미 사용 중인 이메일입니다.");
-	    }
-	    
-	    // 2. 닉네임 중복 체크
-	    Map<String, Object> nicknameParam = new HashMap<>();
-	    nicknameParam.put("nickname", member.getNickname());
-	    Member existingNickname = memberDAO.selectMember(nicknameParam);
-	    if (existingNickname != null) {
-	        throw new Exception("이미 사용 중인 닉네임입니다.");
-	    }
-	    
-	    // 3. 전화번호 중복 체크
-	    Map<String, Object> phoneParam = new HashMap<>();
-	    phoneParam.put("phone", member.getPhone());
-	    Member existingPhone = memberDAO.selectMember(phoneParam);
-	    if (existingPhone != null) {
-	        throw new Exception("이미 사용 중인 전화번호입니다.");
-	    }
-	    
-	    // 4. 기본값 설정
-	    member.setStatus("ACTIVE");
-	    member.setPointBalance(0);
-	    member.setGrade("NORMAL");
-	    member.setLoginType("EMAIL");
-	    member.setMarketingOpt(0);
-	    
-	    // 5. 회원 등록
-	    memberDAO.insertMember(member);
+		// 2. 닉네임 중복 체크
+		Map<String, Object> nicknameParam = new HashMap<>();
+		nicknameParam.put("nickname", member.getNickname());
+		Member existingNickname = memberDAO.selectMember(nicknameParam);
+		if (existingNickname != null) {
+			throw new Exception("이미 사용 중인 닉네임입니다.");
+		}
+
+		// 3. 전화번호 중복 체크
+		Map<String, Object> phoneParam = new HashMap<>();
+		phoneParam.put("phone", member.getPhone());
+		Member existingPhone = memberDAO.selectMember(phoneParam);
+		if (existingPhone != null) {
+			throw new Exception("이미 사용 중인 전화번호입니다.");
+		}
+
+		// 4. 기본값 설정
+		member.setStatus("ACTIVE");
+		member.setPointBalance(0);
+		member.setGrade("NORMAL");
+		member.setLoginType("EMAIL");
+		member.setMarketingOpt(0);
+
+		// 5. 회원 등록
+		memberDAO.insertMember(member);
 	}
 
-	//이메일 중복확인 (근데 이거 사용 안하려나)
+	// 이메일 중복확인 (근데 이거 사용 안하려나)
 	@Override
 	public boolean checkEmailAvailable(String email) throws Exception {
 		if (email == null || email.trim().isEmpty()) {
-	        return false;  // 빈 이메일은 사용 불가
-	    }
-	    // null이면 사용 가능, null이 아니면 이미 존재하므로 사용 불가
-	    return memberDAO.selectByEmail(email.trim()) == null;
+			return false; // 빈 이메일은 사용 불가
+		}
+		// null이면 사용 가능, null이 아니면 이미 존재하므로 사용 불가
+		return memberDAO.selectByEmail(email.trim()) == null;
 	}
 
-	//회원정보 수정, 상세 조회 할 때
+	// 회원정보 수정, 상세 조회 할 때
 	@Override
 	public Member getMemberInfo(Long memberId) throws Exception {
 		if (memberId == null) {
@@ -115,7 +112,7 @@ public class MemberServiceImpl implements MemberService {
 		return member;
 	}
 
-	//마이페이지 헤더인포용
+	// 마이페이지 헤더인포용
 	@Override
 	public Map<String, Object> getHeaderInfo(Long memberId) throws Exception {
 		if (memberId == null) {
@@ -253,7 +250,7 @@ public class MemberServiceImpl implements MemberService {
 		// 비밀번호 재설정
 		memberDAO.resetPassword(memberId, newPassword);
 	}
-	
+
 // 카카오 로그인 =================================
 	@Override
 	public Member kakaoLogin(String code) throws Exception {
@@ -397,5 +394,15 @@ public class MemberServiceImpl implements MemberService {
 		} catch (Exception e) {
 			throw new Exception("카카오 사용자 정보 조회 실패: " + e.getMessage());
 		}
+	}
+
+	// ================[소비자] 소비자 맞춤 필터링 모두 조회 ===================
+	@Override
+	public MemberFilter getMemberFilters(Long memberId) throws Exception {
+		MemberFilter filter = memberDAO.selectMemberFilters(memberId);
+		List<Long> skinIssues = memberDAO.selectMemberSkinIssues(memberId);
+		filter.setSkinIssueIds(skinIssues);
+
+		return filter;
 	}
 }

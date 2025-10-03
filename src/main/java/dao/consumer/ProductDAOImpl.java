@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 import dto.Product;
+import dto.consumer.CommonProduct;
 import dto.consumer.ProductCategory;
 import dto.consumer.ProductPlan;
 import dto.consumer.ProductRank;
@@ -23,7 +24,7 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 	}
 
-	// [소비자] 기획상품 목록 조회
+	// [소비자] 기획 상품 목록 조회
 	@Override
 	public List<ProductPlan> selectPlannedProducts(Map<String, Object> params) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
@@ -31,7 +32,7 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 	}
 
-	// [소비자] 기획상품 목록 개수
+	// [소비자] 기획 상품 목록 개수
 	@Override
 	public Integer selectPlannedProductsCount(Map<String, Object> params) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
@@ -39,7 +40,7 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 	}
 
-	// [소비자] 랭킹상품 목록 조회
+	// [소비자] 랭킹 상품 목록 조회
 	@Override
 	public List<ProductRank> selectRankingProducts(Map<String, Object> params) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
@@ -47,7 +48,7 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 	}
 
-	// [소비자] 랭킹상품 목록 개수
+	// [소비자] 랭킹 상품 목록 개수
 	@Override
 	public Integer selectRankingProductsCount(Map<String, Object> params) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
@@ -55,7 +56,7 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 	}
 
-	// [소비자] 세일상품 목록 조회
+	// [소비자] 세일 상품 목록 조회
 	@Override
 	public List<ProductSale> selectSaleProducts(Map<String, Object> params) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
@@ -63,7 +64,7 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 	}
 
-	// [소비자] 세일상품 목록 개수
+	// [소비자] 세일 상품 목록 개수
 	@Override
 	public Integer selectSaleProductsCount(Map<String, Object> params) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
@@ -79,7 +80,7 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 	}
 
-	// [소비자] 카테고리상품 목록 조회
+	// [소비자] 카테고리 상품 목록 조회
 	@Override
 	public List<ProductCategory> selectCategoryProducts(Map<String, Object> params) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
@@ -87,7 +88,7 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 	}
 
-	// [소비자] 카테고리상품 목록 개수
+	// [소비자] 카테고리 상품 목록 개수
 	@Override
 	public Integer selectCategoryProductsCount(Map<String, Object> params) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
@@ -103,7 +104,7 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 	}
 
-	// [소비자] 검색상품 목록 조회
+	// [소비자] 검색 상품 목록 조회
 	@Override
 	public List<ProductSearch> selectSearchProducts(Map<String, Object> params) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
@@ -111,11 +112,39 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 	}
 
-	// [소비자] 검색상품 목록 개수
+	// [소비자] 검색 상품 목록 개수
 	@Override
 	public Integer selectSearchProductsCount(Map<String, Object> params) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
 			return sqlSession.selectOne("mapper.product.selectSearchProductsCount", params);
+		}
+	}
+
+	@Override
+	public List<CommonProduct> selectMyFitProductsForMain(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.product.selectMyFitProductsForMain", params);
+		}
+	}
+
+	@Override
+	public List<CommonProduct> selectPopularProductsForMain(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.product.selectPopularProductsForMain", params);
+		}
+	}
+
+	@Override
+	public List<CommonProduct> selectSaleProductsForMain(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.product.selectSaleProductsForMain", params);
+		}
+	}
+
+	@Override
+	public List<CommonProduct> selectExclusiveProductsForMain(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.product.selectExclusiveProductsForMain", params);
 		}
 	}
 

@@ -4,6 +4,7 @@
   width: 100%;   
   height: 430px;  
   overflow: hidden;
+  margin-bottom: 30px;
 }
 
 /* 슬라이드 묶음 */
@@ -53,10 +54,6 @@
 .banner .prev { left: 20px; }
 .banner .next { right: 20px; }
 
-.banner .prev:hover,
-.banner .next:hover {
-  background: rgba(0,0,0,0.5);
-}
 
 /* 인디케이터 (dots) */
 .banner .dots {
@@ -70,8 +67,8 @@
 
 /* dot 스타일 */
 .banner .dot {
-  width: 12px;
-  height: 12px;
+  width: 8px;
+  height: 8px;
   background: #ccc;
   border-radius: 50%;
   cursor: pointer;

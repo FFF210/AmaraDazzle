@@ -37,9 +37,11 @@
 	<%@ include file="./header.jsp"%>
 
 	<!-- 페이지 헤더 -->
-	<div class="page-header-wrapper">
-		<my:pageHeader title="${param.keyword}" isSearch="true" />
-	</div>
+	<c:if test="${not empty fn:trim(param.keyword)}">
+		<div class="page-header-wrapper">
+			<my:pageHeader title="${param.keyword}" isSearch="true" />
+		</div>
+	</c:if>
 
 	<!-- 컨텐츠 영역 -->
 	<div class="search-container">

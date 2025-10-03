@@ -128,4 +128,33 @@
 
 	<!-- brand2 -->
 
+
+	<!-- ================[소비자] 메인페이지 배너 노출 목록 =================== -->
+	<select id="selectBannerListForMain"
+		resultType="banner">
+		SELECT
+		b.banner_id AS bannerId,
+		b.brand_id AS brandId,
+		b.manager_name AS managerName,
+		b.manager_tel AS managerTel,
+		b.start_date AS startDate,
+		b.end_date AS endDate,
+		b.banner_name AS bannerName,
+		b.banner_message AS bannerMessage,
+		b.status AS status,
+		b.created_at AS createdAt,
+		b.updated_at AS updatedAt,
+		b.is_exposed AS isExposed,
+		b.brand_url AS brandUrl,
+		b.state_change AS stateChange,
+		b.admin_id AS adminId,
+		b.upload_file_id AS uploadFileId
+		FROM banner b
+		WHERE b.is_exposed = 1
+		AND b.state_change = 'POSTING'
+		AND b.status IN ('ONGOING')
+		AND NOW() BETWEEN b.start_date AND b.end_date
+		ORDER BY b.created_at DESC
+	</select>
+
 </mapper>
