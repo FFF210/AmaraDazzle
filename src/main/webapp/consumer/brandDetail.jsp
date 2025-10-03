@@ -14,7 +14,8 @@
 <link rel="stylesheet" href="<c:url value='/consumer/css/toast.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/categoryFilter.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/tagcss/categoryFilter.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/sortList.css'/>">
@@ -66,14 +67,17 @@
 
 				<!-- 이벤트 & 브랜드 쿠폰 -->
 				<div class="brand-promotion">
-					<my:eventCard imageUrl="https://placehold.co/320x160"
-						title="올영 뷰티 구매인증 리뷰 이벤트" startDate="2025-09-01"
-						endDate="2025-09-31" />
+					<%-- <my:eventCard thumbnailFileId="${e.thumbnailFileId}"
+						title="${e.eventName}" startDate="${startFmt}" endDate="${endFmt}"
+						href="${detailUrl}" status="${e.status}" /> --%>
 
 					<!-- 쿠폰 다운 -->
 					<div class="coupon-download">
-						<my:coupon amount="2,000" startDate="2025.09.01"
-							endDate="2025.12.31" label="신규 가입 혜택" />
+						<%-- <my:consumerCoupon couponId="${coupon.couponId}"
+							cname="${coupon.cname}" couponLimit="${coupon.couponLimit}"
+							categoryName="${coupon.categoryName}"
+							amountCondition="${amountConditionFmt}"
+							downloaded="${coupon.downloaded}" amount="${amountFmt}" /> --%>
 						<button class="btn btn-primary btn-md">관심 브랜드 등록하고 쿠폰 받기</button>
 					</div>
 				</div>

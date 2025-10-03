@@ -8,28 +8,29 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import service.consumer.WishlistService;
-import service.consumer.WishlistServiceImpl;
+import service.consumer.CouponService;
+import service.consumer.CouponServiceImpl;
 
 /**
- * Servlet implementation class WishlistAdd
+ * Servlet implementation class CouponDownload
  */
-@WebServlet("/store/wishlistToggle")
-public class WishlistToggle extends HttpServlet {
+@WebServlet("/store/couponDownload")
+public class CouponDownload extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	private WishlistService service = new WishlistServiceImpl();
+	private CouponService service = new CouponServiceImpl();
 
-	public WishlistToggle() {
+	public CouponDownload() {
 		super();
 	}
 
 	/**
-	 * 상품 찜하기 토글 (POST)
+	 * 쿠폰 다운 (POST)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		response.setContentType("application/json; charset=UTF-8");
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("application/json;charset=UTF-8");
 
 		Long memberId = (Long) request.getSession().getAttribute("memberId");
 
@@ -39,12 +40,15 @@ public class WishlistToggle extends HttpServlet {
 			return;
 		}
 
-		Long productId = Long.valueOf(request.getParameter("productId"));
+		String couponIdParam = request.getParameter("couponId");
+		Long couponId = Long.valueOf(couponIdParam);
 
 		try {
-			boolean isWished = service.toggleWishlist(memberId, productId);
+			// 서비스 호출
+			service.downloadCoupon(couponId, memberId);
 
-			response.getWriter().write("{\"success\":true, \"isWished\":" + isWished + "}");
+			response.getWriter().write("{\"success\":true, \"message\":\"쿠폰이 발급되었습니다.\"}");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.getWriter().write("{\"success\":false, \"message\":\"서버 오류\"}");

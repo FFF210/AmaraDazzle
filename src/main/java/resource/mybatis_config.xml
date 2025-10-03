@@ -57,6 +57,7 @@
 		<typeAlias type="dto.consumer.ProductCategory" alias="productCategory" />
 		<typeAlias type="dto.consumer.EventDetail" alias="eventDetail" />
 		<typeAlias type="dto.consumer.EventDetailProduct" alias="eventDetailProduct" />
+		<typeAlias type="dto.consumer.CouponList" alias="couponList" />
 		<typeAlias type="dto.brand.ProductList" alias="productList" />
 		<typeAlias type="dto.brand.ProductDetail" alias="productDetail" />
 		<typeAlias type="dto.brand.OrdersList" alias="ordersList" />
