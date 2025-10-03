@@ -91,12 +91,12 @@
 		<my:recommendationSectionTitle title="이벤트" linkUrl="/events" />
 
 		<div class="event-grid">
-			<my:eventCard imageUrl="https://placehold.co/320x160"
+			<my:eventCard thumbnailFileId="https://placehold.co/320x160"
 				title="올영 뷰티 구매인증 리뷰 이벤트" startDate="2025-09-01"
 				endDate="2025-09-31" />
-			<my:eventCard imageUrl="https://placehold.co/320x160"
+			<my:eventCard thumbnailFileId="https://placehold.co/320x160"
 				title="가을 맞이 특별 이벤트" startDate="2025-09-10" endDate="2025-09-30" />
-			<my:eventCard imageUrl="https://placehold.co/320x160"
+			<my:eventCard thumbnailFileId="https://placehold.co/320x160"
 				title="신규 회원가입 이벤트" startDate="2025-09-15" endDate="2025-09-25" />
 		</div>
 	</div>

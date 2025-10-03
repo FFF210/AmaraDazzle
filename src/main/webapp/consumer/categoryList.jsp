@@ -238,10 +238,14 @@
 				<%-- 상품 카드 렌더링 --%>
 				<my:productCard brand="${p.brandName}" productId="${p.productId}"
 					title="${p.name}" isWished="${p.isWished}"
-					isSale="${p.discountType ne null}" hasOption="${p.hasOption eq 1}"
-					originPrice="${p.price}" saleRate="${saleRate}"
-					finalPrice="${finalPrice}" href="${detailUrl}"
-					thumbnailFileId="${p.thumbnailFileId}">
+					isSale="${p.discountType ne null and p.discountValue ne null 
+          and p.startDate ne null 
+          and p.endDate ne null 
+          and p.startDate.time <= now.time 
+          and now.time <= p.endDate.time}"
+					hasOption="${p.hasOption eq 1}" originPrice="${p.price}"
+					saleRate="${saleRate}" finalPrice="${finalPrice}"
+					href="${detailUrl}" thumbnailFileId="${p.thumbnailFileId}">
 
 					<c:if
 						test="${p.discountType ne null 
