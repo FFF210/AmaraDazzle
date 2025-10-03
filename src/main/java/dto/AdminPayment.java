@@ -11,9 +11,11 @@ public class AdminPayment {
 	private Long planId; // 멤버십 요금제 ID (FK → membership_plan.membership_plan_id)
 	private Long bannerId; // 배너 광고 ID (FK → banner.banner_id)
 	private Timestamp payDate; // 결제일 (DEFAULT CURRENT_TIMESTAMP)
-	private Timestamp lastAutopayDate; // 마지막 정기결제일
 	private String orderId; // 토스페이먼츠용
-
+	private String method; // 토스페이먼츠 지불 방식
+	private String orderName; // 토스페이먼츠 구매상품 (생수 외 1건) 같은 형식
+	private String receiptUrl; // 토스페이먼츠 영수증 URL
+	
 	public AdminPayment() {
 	}
 
@@ -81,14 +83,6 @@ public class AdminPayment {
 		this.payDate = payDate;
 	}
 
-	public Timestamp getLastAutopayDate() {
-		return lastAutopayDate;
-	}
-
-	public void setLastAutopayDate(Timestamp lastAutopayDate) {
-		this.lastAutopayDate = lastAutopayDate;
-	}
-
 	public String getOrderId() {
 		return orderId;
 	}
@@ -97,10 +91,37 @@ public class AdminPayment {
 		this.orderId = orderId;
 	}
 
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
+	public String getOrderName() {
+		return orderName;
+	}
+
+	public void setOrderName(String orderName) {
+		this.orderName = orderName;
+	}
+
+	public String getReceiptUrl() {
+		return receiptUrl;
+	}
+
+	public void setReceiptUrl(String receiptUrl) {
+		this.receiptUrl = receiptUrl;
+	}
+
 	@Override
 	public String toString() {
 		return "AdminPayment [paymentId=" + paymentId + ", paymentType=" + paymentType + ", paymentKey=" + paymentKey
 				+ ", brandId=" + brandId + ", amount=" + amount + ", planId=" + planId + ", bannerId=" + bannerId
-				+ ", payDate=" + payDate + ", lastAutopayDate=" + lastAutopayDate + ", orderId=" + orderId + "]";
+				+ ", payDate=" + payDate + ", orderId=" + orderId + ", method=" + method + ", orderName=" + orderName
+				+ ", receiptUrl=" + receiptUrl + "]";
 	}
+	
+	
 }

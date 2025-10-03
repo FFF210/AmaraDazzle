@@ -2,7 +2,7 @@ package dto.brand2;
 
 import java.sql.Timestamp;
 
-public class BannerList {
+public class BannerDetail {
 	private Long bannerId; // 배너 광고 신청 ID
 	private Timestamp createdAt; // 신청일
 	private Timestamp startDate; // 시작일
@@ -11,12 +11,12 @@ public class BannerList {
 	private String status; // 진행상태 (PENDING / ONGOING / COMPLETED / CANCELED)
 	private String managerName; // 담당자명
 	private String managerTel; // 연락처
-	private boolean paid;
+	private Long UploadFileId; // 업로드 파일 ID (FK → upload_file.upload_file_id)
+	private boolean amount; // 결제할 금액
 
-	public BannerList() {
+	public BannerDetail() {
 	}
 
-	// Getters / Setters
 	public Long getBannerId() {
 		return bannerId;
 	}
@@ -81,18 +81,28 @@ public class BannerList {
 		this.managerTel = managerTel;
 	}
 
-	public boolean getpaid() {
-		return paid;
+	public Long getUploadFileId() {
+		return UploadFileId;
 	}
 
-	public void setPaid(boolean paid) {
-		this.paid = paid;
+	public void setUploadFileId(Long uploadFileId) {
+		UploadFileId = uploadFileId;
+	}
+
+	public boolean isAmount() {
+		return amount;
+	}
+
+	public void setAmount(boolean amount) {
+		this.amount = amount;
 	}
 
 	@Override
 	public String toString() {
-		return "BannerList [bannerId=" + bannerId + ", createdAt=" + createdAt + ", startDate=" + startDate
+		return "BannerDetail [bannerId=" + bannerId + ", createdAt=" + createdAt + ", startDate=" + startDate
 				+ ", endDate=" + endDate + ", bannerName=" + bannerName + ", status=" + status + ", managerName="
-				+ managerName + ", managerTel=" + managerTel + ", paid=" + paid + "]";
+				+ managerName + ", managerTel=" + managerTel + ", UploadFileId=" + UploadFileId + ", amount=" + amount
+				+ "]";
 	}
+
 }
