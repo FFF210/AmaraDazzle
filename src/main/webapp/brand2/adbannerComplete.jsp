@@ -100,7 +100,7 @@ h2 {
 				<div class="bold">운영팀이 확인 후 승인 여부를 알림으로 알려드립니다.</div>
 				<div class="b">
 					<button class="btn btn-outline btn-md"
-						onclick="location.href='/brand'">홈으로 돌아가기</button>
+						onclick="location.href='/brand2/adbannerList'">목록 보기</button>
 				</div>
 			</div>
 		</div>

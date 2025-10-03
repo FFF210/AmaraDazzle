@@ -52,7 +52,7 @@ public class TossController extends HttpServlet {
 			obj.put("amount", amount);
 			obj.put("paymentKey", paymentKey);
 
-			String widgetSecretKey = "test_sk_QbgMGZzorz5m714xdBN7Vl5E1em4"; // TODO: 실제 시크릿 키
+			String widgetSecretKey = "toss key"; // TODO: 실제 시크릿 키
 			Base64.Encoder encoder = Base64.getEncoder();
 			byte[] encodedBytes = encoder.encode((widgetSecretKey + ":").getBytes(StandardCharsets.UTF_8));
 			String authorizations = "Basic " + new String(encodedBytes);
@@ -97,13 +97,16 @@ public class TossController extends HttpServlet {
             	LocalDateTime ldt = OffsetDateTime.parse(approvedAtConfirm).toLocalDateTime();
                 Timestamp timestamp = Timestamp.valueOf(ldt);
             	adminPayment.setPayDate(timestamp);
+            	adminPayment.setMethod(methodConfirm);
+            	adminPayment.setBannerId(Long.valueOf(orderNameConfirm));
+            	adminPayment.setReceiptUrl(receiptUrl);
             	
             	HttpSession session = request.getSession();
             	Brand brand = (Brand)session.getAttribute("brand");
             	if(brand!=null) {
-            		adminPayment.setBannerId(brand.getBrandId());
+            		adminPayment.setBrandId(brand.getBrandId());
             	}
-            	
+            	adminPayment.setBrandId(1L);
             	AdbannerService service = new AdbannerServiceImpl();
             	service.savePayment(adminPayment);
             	request.getRequestDispatcher("/brand2/tossPaymentSuccess.jsp").forward(request, response);

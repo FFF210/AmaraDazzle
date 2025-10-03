@@ -172,6 +172,8 @@
     "작성자": "SENDER",
    	"수령인":"RECIPIENT",
    	"송장번호": "TRACKINGNO",
+   	"광고명": "BANNERNAME",
+   	"광고 담당자": "MANAGERNAME"
   };
 
   // 날짜 빠른 선택

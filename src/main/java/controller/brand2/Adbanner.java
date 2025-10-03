@@ -18,6 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+
 import dto.Banner;
 import dto.Brand;
 import dto.UploadFile;
@@ -60,14 +63,19 @@ public class Adbanner extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 
 		try {
+			String path = request.getServletContext().getRealPath("upload");
+			int size = 10 * 1024 * 1024;
+			MultipartRequest multi = new MultipartRequest(request, path, size, "UTF-8", new DefaultFileRenamePolicy());
+			
 			// 폼에서 입력받는 값
 			Banner banner = new Banner();
 			UploadFile uploadFile = new UploadFile();
 			
-			banner.setBannerName(request.getParameter("bannerName")); // 광고명
-			banner.setManagerName(request.getParameter("managerName")); // 담당자
-			banner.setManagerTel(request.getParameter("managerTel")); // 담당연락처
-			banner.setBannerMessage(request.getParameter("bannerMessage")); // 전달사항
+			banner.setBannerName(multi.getParameter("bannerName")); // 광고명
+			banner.setManagerName(multi.getParameter("managerName")); // 담당자
+			banner.setManagerTel(multi.getParameter("managerTel")); // 담당연락처
+			banner.setBannerMessage(multi.getParameter("bannerMessage")); // 전달사항
+//			banner.setUploadFileName(multi.getFilesystemName("uploadFileName")); //파일명
 
 			// 최초 신청은 승인대기 상태
 			banner.setStatus("PENDING");
@@ -76,8 +84,8 @@ public class Adbanner extends HttpServlet {
 			banner.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
 			// 등록기간 날짜 변환 (HTML Form → String → LocalDate → Timestamp)
-			String startDateStr = request.getParameter("startDate"); // "2025-09-26"
-			String endDateStr = request.getParameter("endDate");
+			String startDateStr = multi.getParameter("startDate"); // "2025-09-26"
+			String endDateStr = multi.getParameter("endDate");
 			if (startDateStr == null || endDateStr == null) {
 				throw new IllegalArgumentException("날짜 값이 비어 있습니다.");
 			}
@@ -87,37 +95,14 @@ public class Adbanner extends HttpServlet {
 			banner.setEndDate(Timestamp.valueOf(endLocal.atStartOfDay()));
 
 			// 세션에서 brandId 꺼내기
-			HttpSession session = request.getSession();
-			Brand brand = (Brand) session.getAttribute("brand");
-			if (brand != null) {
-				banner.setBannerId(brand.getBrandId());
-			}
+//			HttpSession session = request.getSession();
+//			Brand brand = (Brand) session.getAttribute("brand");
+//			if (brand != null) {
+//				banner.setBrandId(brand.getBrandId());
+//			} 
+			
+			banner.setBrandId(1L);
 
-			// 파일 업로드 처리 (Collection<Part>)
-//			 FileAttach fileAttach = new FileAttach();
-//	         Map<String, Object> resultMap = fileAttach.file_save(request.getParts(), request);
-//	         controller에서 http요청 : 스트림 데이터로 들어옴, <form enctype="multipart/form-data"> 여러 파트로 분리되어 전송, 서블릿이 Collection<Part>형태로 제공
-//	         HttpServletRequest.getParts() 리턴 타입 Collection<Part>
-
-			// 파일 업로드 처리 (Collection<Part> -> List<Part> 변환)
-			Collection<Part> col = request.getParts(); // @MultipartConfig + enctype 필요
-			List<Part> parts = new ArrayList<>(col);
-
-			FileAttach fileAttach = new FileAttach();
-			Map<String, Object> resultMap = fileAttach.file_save(parts, request);
-
-			boolean saveYN = Boolean.TRUE.equals(resultMap.get("save_YN"));
-			if (saveYN) {
-				@SuppressWarnings("unchecked")
-				List<Long> fileIds = (List<Long>) resultMap.get("fileIds");
-				if (fileIds != null && !fileIds.isEmpty()) {
-					// ✅ BannerForm에 uploadFileId 세팅
-					banner.setUploadFileId(fileIds.get(0));
-				} else {
-					System.out.println("[DEBUG] fileIds가 비어 있음");
-				}
-				System.out.println("[DEBUG] 파일 저장 실패");
-			}
 			AdbannerService service = new AdbannerServiceImpl();
 			service.registerBanner(banner);
 

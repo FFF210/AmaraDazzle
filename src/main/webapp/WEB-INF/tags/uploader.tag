@@ -4,6 +4,7 @@
 <%@ attribute name="name" required="false"%> <!-- file input name -->
 <%@ attribute name="label" required="false"%> <!-- 상단 문구 (기본: Click to upload) -->
 <%@ attribute name="desc" required="false"%> <!-- 하단 문구 (기본: 또는 파일을 이 영역으로 드래그하세요) -->
+<%@ attribute name="multiple" required="false"%>
 
 <%-- ================================
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
@@ -27,7 +28,7 @@
 			<div class="uploader-muted">${empty desc ? "또는 파일을 이 영역으로 드래그하세요" : desc}</div>
 		</div>
 	</div>
-	<input id="fileInput" type="file" name="${name}" class="sr-only" style="display: none" multiple />
+	<input id="fileInput" type="file" name="${name}" class="sr-only" style="display: none" multiple="${empty multiple? 'multiple' : ''}"  />
 
 	<div id="imgPreviewWrapper" class="preview-wrapper hidden">
 		<div id="imgPreviewArea" class="preview-area" aria-live="polite"></div>

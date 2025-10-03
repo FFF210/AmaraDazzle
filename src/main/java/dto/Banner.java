@@ -2,8 +2,6 @@ package dto;
 
 import java.sql.Timestamp;
 
-import dto.brand2.BannerForm;
-
 public class Banner {
     private Long bannerId;         // 배너 광고 신청 ID (PK, AUTO_INCREMENT)
     private Long brandId;          // 브랜드 관리자 ID (FK → brand.brand_id)
@@ -13,7 +11,7 @@ public class Banner {
     private Timestamp endDate;     // 종료일
     private String bannerName;     // 배너 광고명
     private String bannerMessage;  // 관리자 전달사항
-    private String status;         // 진행상황 (PENDING / APPROVED / ONGOING / COMPLETED / CANCELED)
+    private String status;         // 진행상황 (PENDING / APPROVED / ONGOING / COMPLETED / CANCELED, DEFAULT 'PENDING')
     private Timestamp createdAt;   // 신청일 (DEFAULT CURRENT_TIMESTAMP)
     private Timestamp updatedAt;   // 수정일
     private Integer isExposed;     // 노출여부 (tinyint, DEFAULT 1)
