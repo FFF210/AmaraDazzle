@@ -133,9 +133,8 @@
 				<!-- 보배님.. 이게 수정된 카드 데이터 인데.. 우선 노션에 설명은 적겠지만 모르겠으면 바로 저한테 물어보세용ㅜㅜ  -->
 				<!-- forEach 문에서 items 부분(현재 productPlanList)만 백엔드에서 내려오는 데이터 이름으로 바꾸시면 됩니다! -->
 				<!-- 나머지 수정할 필요 없음 !!! -->
-				<%-- <div class="product-grid">
-					<c:forEach var="p" items="${productPlanList}">
-						할인율(saleRate) 계산
+				<div class="product-grid">
+					<%-- <c:forEach var="p" items="${productPlanList}">
 						<c:choose>
 							<c:when test="${p.discountType eq 'RATE'}">
 								<c:set var="saleRateRaw" value="${p.discountValue}" />
@@ -149,7 +148,6 @@
 							</c:otherwise>
 						</c:choose>
 
-						숫자 포맷팅 (소수점 제거, 3자리마다 콤마)
 						<fmt:formatNumber value="${p.finalPrice}" type="number"
 							maxFractionDigits="0" groupingUsed="true" var="finalPrice" />
 
@@ -160,7 +158,10 @@
 							<c:param name="productId" value="${p.productId}" />
 						</c:url>
 
-						상품 카드 렌더링
+						<c:set var="__hasOptionInt" value="${p.hasOption ? 1 : 0}" />
+						<c:set var="__isExclusiveInt" value="${p.isExclusive ? 1 : 0}" />
+						<c:set var="__isPlannedInt" value="${p.isPlanned ? 1 : 0}" />
+
 						<my:productCard brand="${p.brandName}" productId="${p.productId}"
 							title="${p.name}" isWished="${p.isWished}"
 							isSale="${p.discountType ne null and p.discountValue ne null 
@@ -168,7 +169,7 @@
           and p.endDate ne null 
           and p.startDate.time <= now.time 
           and now.time <= p.endDate.time}"
-							hasOption="${p.hasOption eq 1}" originPrice="${p.price}"
+							hasOption="${__hasOptionInt eq 1}" originPrice="${p.price}"
 							saleRate="${saleRate}" finalPrice="${finalPrice}"
 							href="${detailUrl}" thumbnailFileId="${p.thumbnailFileId}">
 
@@ -181,15 +182,15 @@
           and now.time <= p.endDate.time}">
 								<my:tag color="red" size="sm" text="세일" />
 							</c:if>
-							<c:if test="${p.isExclusive ne 0}">
+							<c:if test="${__isExclusiveInt ne 0}">
 								<my:tag color="green" size="sm" text="단독" />
 							</c:if>
-							<c:if test="${p.isPlanned ne 0}">
+							<c:if test="${__isPlannedInt ne 0}">
 								<my:tag color="yellow" size="sm" text="기획" />
 							</c:if>
 						</my:productCard>
-					</c:forEach>
-				</div> --%>
+					</c:forEach> --%>
+				</div>
 			</section>
 
 			<!-- ============================ 4. 장바구니 섹션 ============================ -->
@@ -199,9 +200,8 @@
 					<a href="/store/mypage/cart" class="more-link">더보기 ></a>
 				</div>
 
-				<%-- <div class="product-grid">
-					<c:forEach var="p" items="${productPlanList}">
-						할인율(saleRate) 계산
+				<div class="product-grid">
+					<%-- <c:forEach var="p" items="${productPlanList}">
 						<c:choose>
 							<c:when test="${p.discountType eq 'RATE'}">
 								<c:set var="saleRateRaw" value="${p.discountValue}" />
@@ -215,7 +215,6 @@
 							</c:otherwise>
 						</c:choose>
 
-						숫자 포맷팅 (소수점 제거, 3자리마다 콤마)
 						<fmt:formatNumber value="${p.finalPrice}" type="number"
 							maxFractionDigits="0" groupingUsed="true" var="finalPrice" />
 
@@ -226,7 +225,10 @@
 							<c:param name="productId" value="${p.productId}" />
 						</c:url>
 
-						상품 카드 렌더링
+						<c:set var="__hasOptionInt" value="${p.hasOption ? 1 : 0}" />
+						<c:set var="__isExclusiveInt" value="${p.isExclusive ? 1 : 0}" />
+						<c:set var="__isPlannedInt" value="${p.isPlanned ? 1 : 0}" />
+
 						<my:productCard brand="${p.brandName}" productId="${p.productId}"
 							title="${p.name}" isWished="${p.isWished}"
 							isSale="${p.discountType ne null and p.discountValue ne null 
@@ -234,7 +236,7 @@
           and p.endDate ne null 
           and p.startDate.time <= now.time 
           and now.time <= p.endDate.time}"
-							hasOption="${p.hasOption eq 1}" originPrice="${p.price}"
+							hasOption="${__hasOptionInt eq 1}" originPrice="${p.price}"
 							saleRate="${saleRate}" finalPrice="${finalPrice}"
 							href="${detailUrl}" thumbnailFileId="${p.thumbnailFileId}">
 
@@ -247,15 +249,15 @@
           and now.time <= p.endDate.time}">
 								<my:tag color="red" size="sm" text="세일" />
 							</c:if>
-							<c:if test="${p.isExclusive ne 0}">
+							<c:if test="${__isExclusiveInt ne 0}">
 								<my:tag color="green" size="sm" text="단독" />
 							</c:if>
-							<c:if test="${p.isPlanned ne 0}">
+							<c:if test="${__isPlannedInt ne 0}">
 								<my:tag color="yellow" size="sm" text="기획" />
 							</c:if>
 						</my:productCard>
-					</c:forEach>
-				</div> --%>
+					</c:forEach> --%>
+				</div>
 			</section>
 		</main>
 	</div>

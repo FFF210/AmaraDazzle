@@ -3,6 +3,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+<%-- 오늘 날짜를 JSTL 변수에 저장 --%>
+<jsp:useBean id="now" class="java.util.Date" />
 
 <!DOCTYPE html>
 <html>
@@ -12,9 +16,10 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
-<link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/brandNavCard.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/table.css'/>">
@@ -23,25 +28,63 @@
 	href="<c:url value='/consumer/css/userInfo.css'/>">
 <link rel="stylesheet"
 	href="<c:url value='/consumer/css/mypageMenu.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/tab.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
 </head>
+
 <body>
 	<!-- 상단 헤더 -->
 	<%@ include file="/consumer/header.jsp"%>
 
 	<div class="container">
+
 		<!-- 마이페이지 메뉴 -->
-		<aside class="sidebar">
-			<%@ include file="/consumer/mypageMenu.jsp"%>
-		</aside>
+		<%@ include file="/consumer/mypageMenu.jsp"%>
 
 		<!-- Main Content -->
 		<main class="main-content">
-			<!-- user info -->
-			<my:userInfo userName="홍길동" points="903" coupons="0"
-				notifications="2" />
 
+			<!-- ============================ 1. 사용자 정보 요약 ============================ -->
+			<div class="user-info">
+
+				<div class="user-info__top">
+					<p class="greeting">
+						<span class="name">${sessionScope.memberName}</span> 님 반갑습니다.
+					</p>
+
+					<button class="bell" type="button" aria-label="알림">
+						<i class="bi bi-bell"></i>
+						<c:if test="${notifications ne '0'}">
+							<span class="bell__badge"
+								aria-label="${sessionScope.memberNotifications}개의 새 알림">
+								<c:choose>
+									<c:when test="${sessionScope.memberNotifications gt 99}">99+</c:when>
+									<c:otherwise>${sessionScope.memberNotifications}</c:otherwise>
+								</c:choose>
+							</span>
+						</c:if>
+					</button>
+				</div>
+
+				<!-- 하단 통계 영역 -->
+				<div class="user-info__bottom">
+					<div class="stat">
+						<span class="label">등급</span> <span class="value"><span
+							class="em">임시</span></span>
+					</div>
+					<div class="stat">
+						<span class="label">포인트</span> <span class="value"><span
+							class="em">${sessionScope.memberPoints}</span> p</span>
+					</div>
+					<div class="stat">
+						<span class="label">쿠폰</span> <span class="value"><span
+							class="em">${sessionScope.memberCoupons}</span> 개</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- ============================ 2. 관심 상품/브랜드 섹션 ============================ -->
 			<div class="like-container">
 				<h3>좋아요</h3>
 
@@ -56,24 +99,74 @@
 
 					<!-- 탭 내용 -->
 					<div class="tab-content">
-						<!-- 관심 상품 탭 -->
+						<!-- ============================ 2-1. 관심 상품 탭 ============================ -->
 						<div class="tab-panel active" data-tab="0">
 							<div class="wishlist">
-								<p>전체 ${wishlistCount}개</p>
+								<p class="count">
+									전체 <span class="bold">${wishlistCount}</span>개
+								</p>
+
 
 								<div class="product-grid">
 									<c:choose>
 										<c:when test="${not empty wishlist}">
-											<c:forEach var="item" items="${wishlist}">
-												<my:productCard 
-												    brand="${item.brandName}"
-													productId="${item.productId}" 
-													title="${item.productName}"
-													isSale="${item.discountType != null && item.discountType != 'NONE'}"
-													hasOption="false" 
-													originPrice="${item.price}"
-													saleRate="${item.discountValue != null ? item.discountValue : 0}"
-													finalPrice="${item.price}" />
+											<c:forEach var="p" items="${wishlist}">
+												<c:choose>
+													<c:when test="${p.discountType eq 'RATE'}">
+														<c:set var="saleRateRaw" value="${p.discountValue}" />
+													</c:when>
+													<c:when test="${p.discountType eq 'AMOUNT'}">
+														<c:set var="saleRateRaw"
+															value="${(p.discountValue / p.price) * 100}" />
+													</c:when>
+													<c:otherwise>
+														<c:set var="saleRateRaw" value="0" />
+													</c:otherwise>
+												</c:choose>
+
+												<fmt:formatNumber value="${p.finalPrice}" type="number"
+													maxFractionDigits="0" groupingUsed="true" var="finalPrice" />
+
+												<fmt:formatNumber value="${saleRateRaw}" type="number"
+													maxFractionDigits="0" groupingUsed="true" var="saleRate" />
+
+												<c:url value="/store/productDetail" var="detailUrl">
+													<c:param name="productId" value="${p.productId}" />
+												</c:url>
+
+												<c:set var="__hasOptionInt" value="${p.hasOption ? 1 : 0}" />
+												<c:set var="__isExclusiveInt"
+													value="${p.isExclusive ? 1 : 0}" />
+												<c:set var="__isPlannedInt" value="${p.isPlanned ? 1 : 0}" />
+
+
+												<my:productCard brand="${p.brandName}"
+													productId="${p.productId}" title="${p.name}" isWished="1"
+													isSale="${p.discountType ne null and p.discountValue ne null 
+          and p.startDate ne null 
+          and p.endDate ne null 
+          and p.startDate.time <= now.time 
+          and now.time <= p.endDate.time}"
+													hasOption="${__hasOptionInt eq 1}" originPrice="${p.price}"
+													saleRate="${saleRate}" finalPrice="${finalPrice}"
+													href="${detailUrl}" thumbnailFileId="${p.thumbnailFileId}">
+
+													<c:if
+														test="${p.discountType ne null 
+          and p.discountValue ne null 
+          and p.startDate ne null 
+          and p.endDate ne null 
+          and p.startDate.time <= now.time 
+          and now.time <= p.endDate.time}">
+														<my:tag color="red" size="sm" text="세일" />
+													</c:if>
+													<c:if test="${__isExclusiveInt ne 0}">
+														<my:tag color="green" size="sm" text="단독" />
+													</c:if>
+													<c:if test="${__isPlannedInt ne 0}">
+														<my:tag color="yellow" size="sm" text="기획" />
+													</c:if>
+												</my:productCard>
 											</c:forEach>
 										</c:when>
 										<c:otherwise>
@@ -82,25 +175,29 @@
 									</c:choose>
 								</div>
 
-								<!-- 페이지네이션 -->
-								<c:if test="${wishlistCount > 0}">
-									<my:pagination currentPage="1" totalPages="1" baseUrl="" />
-								</c:if>
+								<!-- 페이징 -->
+								<div class="page-pagination-like">
+									<my:pagination currentPage="${currentPage}"
+										totalPages="${totalPages}"
+										baseUrl="/store/like?${queryString}" />
+								</div>
 							</div>
 						</div>
 
-						<!-- 관심 브랜드 탭 -->
+						<!-- ============================ 2-2. 관심 브랜드 탭 ============================ -->
 						<div class="tab-panel" data-tab="1">
 							<div class="follow-brand-list">
-								<p>전체 ${brandFollowCount}개</p>
+								<p class="count">
+									전체 <span class="bold">${brandFollowCount}</span>개
+								</p>
 
 								<div class="brand-grid">
 									<c:choose>
 										<c:when test="${not empty brandFollowList}">
 											<c:forEach var="brand" items="${brandFollowList}">
-												<my:brandNavCard brandName="${brand.brandName}"
-													logoUrl="${brand.logoFileId != null ? brand.logoFileId : 'https://placehold.co/64x64'}"
-													likes="500" />
+												<my:brandNavCard brandName="${brand.brandName}" brandId="${brand.brandId}"
+													logoFileId="${brand.logoFileId}"
+													isWished="1" href="/store/brandDetail?brandId=${brand.brandId}"/>
 											</c:forEach>
 										</c:when>
 										<c:otherwise>
@@ -109,12 +206,12 @@
 									</c:choose>
 								</div>
 
-								<!-- 페이지네이션 -->
-								<c:if test="${brandFollowCount > 0}">
-									<div class="pagination">
-										<my:pagination currentPage="1" totalPages="1" baseUrl="" />
-									</div>
-								</c:if>
+								<!-- 페이징 -->
+								<div class="page-pagination-like">
+									<my:pagination currentPage="${currentPage}"
+										totalPages="${totalPages}"
+										baseUrl="/store/like?${queryString}" />
+								</div>
 							</div>
 						</div>
 					</div>
@@ -122,11 +219,13 @@
 			</div>
 		</main>
 	</div>
-<!-- 푸터 include -->
-<%@ include file="/consumer/footer.jsp"%>
-<script src="<c:url value='/consumer/js/tab.js'/>"></script>
-<script src="<c:url value='/consumer/js/addTowishlist.js'/>"></script>
-<script>
+
+	<!-- 푸터 include -->
+	<%@ include file="/consumer/footer.jsp"%>
+
+	<script src="<c:url value='/consumer/js/tab.js'/>"></script>
+	<script src="<c:url value='/consumer/js/addTowishlist.js'/>"></script>
+	<script>
 document.addEventListener('DOMContentLoaded', function() {
     const tabItems = document.querySelectorAll('.tab-item');
     const tabPanels = document.querySelectorAll('.tab-panel');
@@ -168,6 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }, 100);
 });
+
 //좋아요 토글
 function toggleWishlist(productId, buttonElement) {
     // AJAX 요청
@@ -211,6 +311,6 @@ function toggleWishlist(productId, buttonElement) {
     });
 }
 </script>
-<script src="<c:url value='/consumer/js/addToWishlist.js'/>"></script>
+	<script src="<c:url value='/consumer/js/addToWishlist.js'/>"></script>
 </body>
 </html>

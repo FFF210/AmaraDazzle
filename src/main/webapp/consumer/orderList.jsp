@@ -109,9 +109,6 @@
 			<div class="order-status-card">
 				<div class="order-status-header">
 					<h3 class="order-status-title">주문/배송 조회</h3>
-					<a class="more-btn" href="/store/mypage/orderList"> <span
-						class="more-text">더보기</span> <span class="more-icon">›</span>
-					</a>
 				</div>
 
 				<div class="order-status-box">
