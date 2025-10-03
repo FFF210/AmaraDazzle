@@ -18,6 +18,7 @@ public class AdminPaymentDAOImpl implements AdminPaymentDAO {
 
 	@Override
 	public void insertAdminPayment(AdminPayment adminPayment) throws Exception {
+		System.out.println(adminPayment);
 		sqlSession.insert("mapper.adminPayment.insertAdminPayment", adminPayment);
 		sqlSession.commit();
 	}

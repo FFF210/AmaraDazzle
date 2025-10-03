@@ -22,7 +22,7 @@ public class AdbannerServiceImpl implements AdbannerService {
 		adminPaymentDAO = new AdminPaymentDAOImpl();
 	}
 
-	//	배너 신청
+	// 배너 신청
 	@Override
 	public void registerBanner(Banner banner) throws Exception {
 //		uploadFileDAO.insertFile(uploadFile); // 파일을 먼저 저장
@@ -51,7 +51,19 @@ public class AdbannerServiceImpl implements AdbannerService {
 		return result;
 	}
 
-	// 배너 결제	
+	// 배너 상세보기 버튼
+	@Override
+	public Banner getBannerById(long bannerId) throws Exception {
+		return bannerDAO.selectBannerById(bannerId);
+	}
+
+	// 배너 취소 버튼
+	@Override
+	public void cancelBanner(Map<String, Object> params) throws Exception {
+	    bannerDAO.updateBannerStatus(params);   // DAO 호출
+	}
+
+	// 배너 결제
 	@Override
 	public void savePayment(AdminPayment adminPayment) throws Exception {
 		adminPaymentDAO.insertAdminPayment(adminPayment);

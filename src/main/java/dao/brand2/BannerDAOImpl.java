@@ -30,4 +30,18 @@ public class BannerDAOImpl implements BannerDAO {
 	public Integer selectAdbannerCount(Map<String, Object> params) throws Exception {
 		return sqlSession.selectOne("mapper.banner.selectAdbannerCount", params);
 	}
+
+	// 배너 상세보기 버튼
+	@Override
+	public Banner selectBannerById(long bannerId) throws Exception {
+		return sqlSession.selectOne("mapper.banner.selectBannerById", bannerId);
+	}
+
+	// 배너 취소 버튼
+	@Override 
+	public void updateBannerStatus(Map<String, Object> params) { 
+		sqlSession.update("mapper.banner.updateBannerStatus", params);
+		sqlSession.commit();
+	}
+	
 }

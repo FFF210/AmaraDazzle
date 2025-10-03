@@ -8,7 +8,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>광고배너 신청</title>
+<title>광고배너 결제 상세보기</title>
 
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/brand2/css/formLayout.css" />
@@ -95,14 +95,16 @@
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://js.tosspayments.com/v1/payment"></script>
 </head>
 <body>
 	<my:layout>
 
 		<my:breadcrumb
-			items="배너광고 관리:/brand2/adbannerList, 배너광고 신청:/brand2/adbannerForm" />
+			items="배너광고 관리:/brand2/adbannerList.jsp, 배너광고 신청:/brand2/adbannerForm.jsp" />
 		<my:brand2formLayout title="배너광고 신청" formId="eventForm"
-			action="/brand2/adbanner" method="post" enctype="multipart/form-data">
+			action="/brand2/adbanner" method="post"
+			enctype="multipart/form-data">
 
 			<div class="grid">
 				<div class="label req">배너 광고명</div>
@@ -126,9 +128,8 @@
 
 				<div class="label req">배너 등록 기간</div>
 				<div class="inline date-row">
-					<input id="startDate" class="startDate" name="startDate"
-						type="date"> <span>~</span> <input id="endDate"
-						class="endDate" name="endDate" type="date">
+					<input id="startDate" class="startDate" name="startDate" type="date"> <span>~</span>
+					<input id="endDate" class="endDate" name="endDate" type="date">
 				</div>
 
 				<div class="label">관리자 전달사항</div>
@@ -138,10 +139,8 @@
 				</div>
 				<div class="label">파일 업로드</div>
 				<div class="upload">
-
-					<my:uploader size="lg" id="uploadFileName" name="uploadFileName"
-						label="Click to upload" desc="또는 파일을 이 영역으로 드래그하세요"
-						multiple="false" />
+					<my:uploader size="lg" id="uploadFileId" name="uploadFileId" label="Click to upload"
+						desc="또는 파일을 이 영역으로 드래그하세요" />
 				</div>
 			</div>
 
@@ -163,50 +162,58 @@
 	</my:layout>
 
 	<script>
-		
-	<%-- 예상 금액 --%>
-		document.addEventListener("DOMContentLoaded",
-				function() {
-					const startInput = document.getElementById("startDate");
-					const endInput = document.getElementById("endDate");
-					const dayCountEl = document.getElementById("dayCount");
-					const totalPriceEl = document.getElementById("totalPrice");
+	
+<%-- 예상 금액 --%>
+	document.addEventListener("DOMContentLoaded", function() {
+		const startInput = document.getElementById("startDate");
+		const endInput = document.getElementById("endDate");
+		const dayCountEl = document.getElementById("dayCount");
+		const totalPriceEl = document.getElementById("totalPrice"); 
+	
+		let currentDayCount = 0;
+		let currentTotalPrice = 0;
+	
+		function updateDayCount() {
+			const startDate = new Date(startInput.value);
+			const endDate = new Date(endInput.value);
+	
+			if (startInput.value && endInput.value && endDate >= startDate) {
+				const diffTime = endDate - startDate;
+				const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+				currentDayCount = diffDays;
+				currentTotalPrice = diffDays * 140000;
+	
+				dayCountEl.innerText = diffDays;
+				totalPriceEl.innerText = "₩" + currentTotalPrice.toLocaleString();
+			} else {
+				currentDayCount = 0;
+				currentTotalPrice = 0;
+				dayCountEl.innerText = 0;
+				totalPriceEl.innerText = "₩0";
+			    }
+		}
+	
+		startInput.addEventListener("change", updateDayCount);
+		endInput.addEventListener("change", updateDayCount);
+	
+		document.getElementById("payBtn").addEventListener("click", function() {
+			let bannerName = document.getElementById("bannerName").value.trim();
+			let managerName = document.getElementById("managerName").value.trim();
+			let managerTel = document.getElementById("managerTel").value.trim();
+	
+			if (!bannerName || !managerName || !managerTel || currentDayCount <= 0) {
+				alert("모든 입력란을 채우고 올바른 기간을 선택하세요.");
+				return;
+			}
+	
+			let totalPrice = parseInt(totalPriceEl.innerText.replace(/[^0-9]/g, ""));
+			console.log("결제 금액:", totalPrice);
+		});
+	});
+<%-- 예상 금액 --%>	
 
-					let currentDayCount = 0;
-					let currentTotalPrice = 0;
+<%-- toss js --%>
 
-					function updateDayCount() {
-						const startDate = new Date(startInput.value);
-						const endDate = new Date(endInput.value);
-
-						if (startInput.value && endInput.value
-								&& endDate >= startDate) {
-							const diffTime = endDate - startDate;
-							const diffDays = Math.floor(diffTime
-									/ (1000 * 60 * 60 * 24)) + 1;
-							currentDayCount = diffDays;
-							currentTotalPrice = diffDays * 140000;
-
-							dayCountEl.innerText = diffDays;
-							totalPriceEl.innerText = "₩"
-									+ currentTotalPrice.toLocaleString();
-						} else {
-							currentDayCount = 0;
-							currentTotalPrice = 0;
-							dayCountEl.innerText = 0;
-							totalPriceEl.innerText = "₩0";
-						}
-					}
-
-					startInput.addEventListener("change", updateDayCount);
-					endInput.addEventListener("change", updateDayCount);
-
-				});
-	<%-- 예상 금액 --%>
-		
-	<%-- toss js --%>
-		
-	<%--
 //------ 클라이언트 키로 객체 초기화 ------
 var clientKey = "test_ck_XZYkKL4Mrj9eGzWBRNORV0zJwlEW";
 var tossPayments = TossPayments(clientKey);
@@ -245,11 +252,9 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 	});
 });
---%>
-		
-	<%-- toss js --%>
-		
-	</script>
+
+<%-- toss js --%>
+  </script>
 
 </body>
 
