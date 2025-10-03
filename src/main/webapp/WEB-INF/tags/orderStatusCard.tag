@@ -81,9 +81,5 @@
             <div class="status-label">배송완료</div>
         </div>
     </div>
-    
-    <!-- 추가 콘텐츠 영역 -->
-    <div class="order-status-body">
-        <jsp:doBody /> <%-- 호출자가 추가 콘텐츠를 삽입 가능 --%>
-    </div>
+   
 </div>
