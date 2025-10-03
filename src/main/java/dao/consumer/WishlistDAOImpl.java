@@ -1,5 +1,6 @@
 package dao.consumer;
 
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
@@ -31,6 +32,22 @@ public class WishlistDAOImpl implements WishlistDAO {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
 			sqlSession.delete("mapper.wishlist.deleteWishlist", params);
 			sqlSession.commit();
+		}
+	}
+
+	// ================[소비자] 위시리스트 목록 조회 ===================
+	@Override
+	public List<Map<String, Object>> selectWishlistByMemberId(Long memberId) {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.wishlist.selectWishlistByMemberId", memberId);
+		}
+	}
+
+	// ================[소비자] 찜 개수 조회 ===================
+	@Override
+	public int countWishlistByMemberId(Long memberId){
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.wishlist.countWishlistByMemberId", memberId);
 		}
 	}
 

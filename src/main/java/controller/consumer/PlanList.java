@@ -48,8 +48,6 @@ public class PlanList extends HttpServlet {
 		Map<String, Object> params = new HashMap<>();
 		params.put("memberId", memberId);
 		params.put("category1Id", request.getParameter("category1Id"));
-		params.put("category2Id", request.getParameter("category2Id"));
-		params.put("category3Id", request.getParameter("category3Id"));
 		params.put("sort", request.getParameter("sort"));
 		params.put("limit", limit);
 		params.put("offset", offset);

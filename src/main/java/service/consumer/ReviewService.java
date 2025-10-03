@@ -21,4 +21,7 @@ public interface ReviewService {
 
 	// 리뷰 작성
 	void createReview(Review review) throws Exception;
+	
+	// 테스트용 메서드 추가
+	List<Map<String, Object>> testQuery(Long memberId) throws Exception;
 }

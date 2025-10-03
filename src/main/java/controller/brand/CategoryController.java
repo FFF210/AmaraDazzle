@@ -60,6 +60,7 @@ public class CategoryController extends HttpServlet {
 			// 결과를 JSON으로 직렬화 후 응답
 			Gson gson = new Gson();
 			String json = gson.toJson(result);
+			System.out.println(json);
 			response.getWriter().write(json);
 		} catch (Exception e) {
 			e.printStackTrace();

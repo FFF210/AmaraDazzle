@@ -27,4 +27,10 @@ private BrandDAO brandDAO;
 	        return brand;
 	}
 
+	//브랜드 팔로워수 세기 (mapper는 brandFollow에서)
+	@Override
+	public int countBrandFollowers(Long brandId) throws Exception {
+		 return brandDAO.countBrandFollowers(brandId);
+	}
+
 }

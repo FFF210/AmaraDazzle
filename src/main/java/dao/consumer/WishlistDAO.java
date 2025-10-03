@@ -1,5 +1,6 @@
 package dao.consumer;
 
+import java.util.List;
 import java.util.Map;
 
 public interface WishlistDAO {
@@ -11,4 +12,10 @@ public interface WishlistDAO {
 
 	// ================[소비자] 찜 취소 ===================
 	void deleteWishlist(Map<String, Object> params) throws Exception;
+
+	// ================[소비자] 위시리스트 목록 조회 ===================
+	List<Map<String, Object>> selectWishlistByMemberId(Long memberId);
+
+	// ================[소비자] 찜 개수 조회 ===================
+	int countWishlistByMemberId(Long memberId);
 }

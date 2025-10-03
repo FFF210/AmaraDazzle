@@ -32,4 +32,10 @@ public class CategoryServiceImpl implements CategoryService {
 		return categoryDAO.selectSmallCategories(parentId);
 	}
 
+	// id로 카테고리 이름 조회
+	@Override
+	public String getCategoryName(Long categoryId) throws Exception {
+		return categoryDAO.selectCategorieName(categoryId);
+	}
+
 }

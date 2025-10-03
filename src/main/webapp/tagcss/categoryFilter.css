@@ -9,6 +9,10 @@
 	display: grid;
 }
 
+.category-filter.none {
+	display: none;
+}
+
 .category-item {
 	display: flex;
 	justify-content: center;
@@ -27,6 +31,8 @@
 	font-weight: 500;
 	line-height: 140%;
 	align-items: center;
+	height: 40px;
+    box-sizing: border-box;
 }
 
 .category-item:hover {

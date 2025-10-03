@@ -27,7 +27,7 @@
 				<!-- 오른쪽: 링크 -->
 				<div class="footer-col footer-links">
 					<h2 class="ft-title links">
-						<a href="<c:url value='/brand/signin'/>">입점문의</a>
+						<a href="<c:url value='/brand/login'/>">입점문의</a>
 					</h2>
 					<ul class="link-list">
 						<li>이용약관법적고지</li>

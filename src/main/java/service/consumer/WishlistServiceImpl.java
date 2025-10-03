@@ -1,6 +1,7 @@
 package service.consumer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import dao.consumer.WishlistDAO;
@@ -28,6 +29,18 @@ public class WishlistServiceImpl implements WishlistService {
 			wishlistDAO.insertWishlist(params);
 			return true; // 찜 추가됨
 		}
+	}
+
+	 // ================[소비자] 위시리스트 목록 조회 ===================
+	@Override
+	public List<Map<String, Object>> getWishlistByMemberId(Long memberId) throws Exception {
+		return wishlistDAO.selectWishlistByMemberId(memberId);
+	}
+
+	// ================[소비자] 찜 개수 조회 ===================
+	@Override
+	public int getWishlistCount(Long memberId) throws Exception {
+		 return wishlistDAO.countWishlistByMemberId(memberId);
 	}
 
 }
