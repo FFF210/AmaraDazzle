@@ -7,7 +7,7 @@
 <%@ attribute name="dateCate" required="false"%>
 <%@ attribute name="presets" required="false"%>
 
-<c:set var="title" value="${empty title ? '기간' : title}" />
+<c:set var="title" value="${empty title ? '' : title}" />
 <c:set var="presets" value="${empty presets ? '오늘,어제,최근 7일,최근 30일' : presets}" />
 
 <div class="filter_box period_box filter-row date-row">

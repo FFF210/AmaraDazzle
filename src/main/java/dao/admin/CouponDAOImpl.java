@@ -29,6 +29,19 @@ public class CouponDAOImpl implements CouponDAO{
 	public List<Coupon> pCouponSearchList(SearchConditionDTO sc_DTO ) {
 		return ss.selectList("mapper.coupon.pCouponSearchList",sc_DTO);
 	}
+
+	//쿠폰 발행
+	@Override
+	public int insertPublCoupon(Coupon pCoupon) {
+		int result = ss.insert("mapper.coupon.insertPublCoupon",pCoupon);
+		if(result > 0) {
+			ss.commit();
+		} else {
+			ss.rollback();
+		}
+		
+		return result;
+	}
 	
 
 }

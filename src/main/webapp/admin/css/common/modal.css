@@ -1,0 +1,358 @@
+@font-face {
+	font-family: "Pretendard";
+	src:
+		url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff")
+		format("woff");
+	font-weight: 100;
+	font-display: swap;
+}
+
+.modal {
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	z-index: 9999;
+	font-family: "Pretendard";
+}
+
+.modal.show {
+	display: block; /* JS에서 .show 클래스를 붙이면 표시됨 */
+}
+
+/* ****************************
+    정보수정 & 로그아웃 팝업
+****************************** */
+.modal.loginInfo {
+	width: 205px;
+	border: 1px solid #d9d9d9;
+	border-radius: 10px;
+	padding: 0 10px 10px;
+	background-color: white;
+	gap: 5px;
+	position: absolute;
+	top: 30px;
+	right :-100px;
+	box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* .modal.loginInfo.show { */
+/* 	display: flex; */
+/* } */
+
+.info {
+	width: 100%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.info .prof_img {
+	width: 40px;
+	aspect-ratio: 1/1;
+	border: 1px solid #e3e3e3;
+	border-radius: 5px;
+	margin: 10px;
+	margin-left: 5px;
+	padding: 2px;
+}
+
+.prof_img img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain; 
+}
+
+.info>span {
+	line-height: 50%;
+	cursor: default;
+}
+
+.modifyInfo, .logout {
+	width: 95%;
+}
+
+.modifyInfo>button {
+	background-color: white;
+	border: 1px solid blue;
+	border-radius: 5px;
+	color: blue;
+	margin-bottom: 5px;
+	padding: 5px;
+	width: 100%;
+	cursor: pointer;
+}
+
+.logout>button {
+	background-color: white;
+	border: 1px solid red;
+	border-radius: 5px;
+	color: red;
+	padding: 5px;
+	width: 100%;
+	cursor: pointer;
+}
+
+.modifyInfo>button:hover, .logout>button:hover {
+	background-color: var(--subColor);
+}
+/* 정보수정 & 로그아웃 팝업 end */
+
+/* ****************************
+    검색창 팝업
+****************************** */
+.modal_search_box {
+	/* display: flex;
+    flex-direction: column;
+    align-items: center; */
+	width: 750px;
+	padding: 10px;
+	gap: 5px;
+	flex-shrink: 0;
+	border-radius: 10px;
+	border: 1px solid #d9d9d9;
+	background: #fff;
+	box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+	position: fixed; /* 부모가 아닌 화면(viewport) 기준 */
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+div.modal.modal_search_box>.modal_title {
+	width: 95%;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	margin: 0 auto;
+}
+
+div.modal.modal_search_box>.search_container {
+	margin: 5px 15px 15px;
+}
+
+div.modal.modal_search_box .whole_table .table_wrap table {
+	min-width: 100%;
+}
+
+
+/* ****************************
+    검색창 팝업
+****************************** */
+.modal.searchModal {
+	position: fixed;
+	inset: 0;
+}
+
+.modal.searchModal.show {
+	display: block; /* JS에서 .show 클래스를 붙이면 표시됨 */
+}
+
+/* 배경 오버레이 (회색 반투명) */
+.modal-overlay {
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.45);
+}
+
+/* 다이얼로그 박스 */
+.modal-content {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	max-width: 500px;
+	background: #fff;
+	border-radius: 16px;
+	padding: 8px 0 0 0;
+	box-shadow: 0 8px 36px rgba(0, 0, 0, 0.16);
+	animation: fadeIn 0.2s ease;
+}
+
+/* 제목 */
+.modal-title {
+	display: flex;
+	padding: 16px 24px 0 24px;
+	flex-direction: column;
+	align-items: center;
+	align-self: stretch;
+	font-size: 19px;
+	font-weight: 700;
+	color: #000;
+}
+
+/* 서브 제목 */
+.modal-subTitle {
+	display: flex;
+	flex-direction: column;
+	padding: 0 24px 8px 24px;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	align-self: stretch;
+	color: rgba(21, 25, 32, 0.50);
+	text-align: center;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 20px;
+}
+
+
+
+/* 본문 */
+.modal-body {
+	display: flex;
+	padding: 8px 24px;
+	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	gap: 16px;
+	align-self: stretch;
+	width : 100%;
+}
+
+/* label + input 세트*/
+.form-row {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 8px;
+	align-self: stretch;
+}
+
+.form-row-label {
+	color: #000;
+	font-size: 13px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+}
+
+.form-row .radio-wrapper {
+	display: flex;
+	gap: 40px;
+}
+.form-row .radio-wrapper label {
+	display: flex;
+	gap: 8px;
+}
+
+.form-row .date-input,
+.form-row .date-input .input-wrapper,
+.form-row .date-input .date-text,
+.form-row .custom-select,
+.form-row .custom-select .select-header,
+.form-row .text-input-wrapper,
+.form-row .text-input-wrapper .text-input-inner input[name="couponPublish"],
+.form-row .text-input-wrapper .text-input-inner input[name="userSearch"]
+ {
+	width: 95%;
+}
+
+
+
+.form-row .text-input-wrapper .text-input-inner input[name="couponAmount"]{
+	width : 100%;
+	text-align: right;
+}
+
+.wrapper {
+	display : flex;
+	align-items: center;
+	width : 80%;
+}
+
+.filter_box .filtering_title,
+.filter_box .filtering_title label {
+	min-width : 80px !important; 
+	width : 80px !important;
+}
+
+.totalSearch_box {
+	gap: 5px;
+	flex-wrap: nowrap; /* 줄바꿈 방지 */
+}
+
+.form-row .searchKeyword {
+	width: 90%;
+	height: 38px;
+	border: 1px solid var(--innerbox);
+	border-radius: 8px;
+	padding: 0 5px;
+	display: flex;
+	align-items: center;
+}
+
+.form-row .searchKeyword input {
+	outline: none;
+	border: none;
+	padding: 0 15px;
+}
+.searchKeyword input[type="text"] {
+	height : 100%;
+}
+
+.form-row .searchKeyword {
+	box-shadow: 0 0 0 4px rgba(20, 184, 145, 0); /* 투명한 기본 상태 */
+	border-radius: 8px;
+	transition: box-shadow 0.5s ease;
+}
+
+.form-row .searchKeyword:focus-within {
+	outline: none !important;
+	border: 1px solid #1EAE69 !important;
+	box-shadow: 0 0 0 4px rgba(20, 184, 145, 0.25);
+	transition: border-color 0.2s ease, box-shadow 0.5s ease;
+}
+
+.searchKeyword input[type="text"]:focus {
+	border: none !important;
+	box-shadow: none !important;
+}
+
+.searchTable {
+	display : none;
+}
+
+
+.searchTable.show {
+	
+	width : 95%;
+}
+
+.searchTable table th,
+.searchTable table td {
+    /* 세로 구분선 */
+    border-right: none;
+    
+    /* 가로 구분선 */
+    border-bottom: 1px solid #eee;
+}
+
+
+
+
+
+/* 버튼 영역 */
+.modal-footer {
+	display: flex;
+	padding: 16px 24px 24px 24px;
+	align-items: center;
+	gap: 8px;
+	align-self: stretch;
+}
+
+.modal-footer .btn {
+	width: 100%;
+	height: 40px;
+}
+
+.modal-footer .first_btn:hover {
+	background : var(--hoverColor);
+	transition: all 0.3s;
+}
+
+.modal-footer .first_btn:active {
+	background : var(--clicked);
+}

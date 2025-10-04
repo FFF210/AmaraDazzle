@@ -2,7 +2,6 @@ package controller.admin;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,6 @@ public class NoticeSellerWrite extends HttpServlet {
 		response.setContentType("application/json;charset=UTF-8");
 
 		try {
-
 			Long targetType = Long.valueOf(request.getParameter("target_type_id"));
 			Long category = Long.valueOf(request.getParameter("type_id"));
 			String title = request.getParameter("title");

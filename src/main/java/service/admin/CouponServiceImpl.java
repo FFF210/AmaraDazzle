@@ -50,4 +50,16 @@ public class CouponServiceImpl implements CouponService{
 	    return cp_dao.pCouponSearchList(sc_DTO);
 	}
 
+	//쿠폰 발행
+	@Override
+	public int insertPublCoupon(Coupon pCoupon) {
+		if(pCoupon.getPch_noRestr() != null && !pCoupon.getPch_noRestr().isEmpty()) { // 사용조건 제한없음 체크된 경우 
+			pCoupon.setAmountCondition("-");
+		}
+		if(pCoupon.getQnt_noRestr() != null && !pCoupon.getQnt_noRestr().isEmpty()) { // 발급수량 제한없음 체크된 경우 
+			pCoupon.setCouponLimit("-");
+		}
+		return cp_dao.insertPublCoupon(pCoupon);
+	}
+
 }

@@ -9,19 +9,17 @@
 	<link rel="stylesheet" href="./css/common/adminHeader.css" />
 	<link rel="stylesheet" href="./css/common/adminBreadcrumb.css" />
 	<link rel="stylesheet" href="./css/common/adminSidebar.css" />
+	<link rel="stylesheet" href="./css/common/adminPagination.css" />
 	<link rel="stylesheet" href="./css/common/componant.css" />
+	<link rel="stylesheet" href="./css/common/toast.css" />
+	<link rel="stylesheet" href="./css/common/modal.css" />
 	
 	<link rel="stylesheet" href="../tagcss/selectbox.css" />
-	<link rel="stylesheet" href="../tagcss/alert.css" />
 	<link rel="stylesheet" href="../tagcss/tag.css" />
 	<link rel="stylesheet" href="../tagcss/dateInput.css" />
-	<link rel="stylesheet" href="./css/componant/modal.css" />
 	<link rel="stylesheet" href="./css/componant/search_box.css" />
 	<link rel="stylesheet" href="./css/componant/tab.css" />
 	<link rel="stylesheet" href="./css/componant/table.css" />
-	<link rel="stylesheet" href="./css/componant/adminPagination.css" />
-	
-	
 
 	<!-- Bootstrap Icons CDN -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
@@ -35,6 +33,6 @@
 	
 	<!-- Local/Session Storage에 저장한 값 먼저 실행하는 스크립트 -->
 	<script src="./js/common/setStorage.js"></script>
-	<script src="./js/common/alert.js"></script>
+	<script src="./js/common/toast.js" defer></script>
 </head>
 <!-- 헤드부분 -->

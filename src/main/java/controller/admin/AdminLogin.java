@@ -43,6 +43,7 @@ public class AdminLogin extends HttpServlet {
 			}else {	//일치하는 값이 있을 떄 
 				//세션 저장 
 				HttpSession session = request.getSession();
+				session.setAttribute("aidx", result.getAdminInfoId());
 				session.setAttribute("aid", result.getAid());
 				session.setAttribute("aname", result.getAname());
 				

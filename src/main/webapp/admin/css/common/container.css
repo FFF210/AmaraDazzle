@@ -2,8 +2,7 @@
 
 @font-face {
 	font-family: "Pretendard";
-	src:
-		url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff")
+	src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Thin.woff")
 		format("woff");
 	font-weight: 100;
 	font-display: swap;
@@ -18,6 +17,7 @@
 	--footer: #999; /* 푸터 폰트 색상 : 진한 회색 */
 	--mainColor: #0C8CE9; /*  파란색 primary */
 	--subColor: #F4F9FD; /* 연하늘 */
+	--hoverColor : #0080DD;
 	--clicked: #0c63c2; /* 진한 파란색 */
 	--innerbox: #e3e3e3;
 	--outerbox: #d9d9d9;

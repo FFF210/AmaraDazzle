@@ -3,15 +3,14 @@ div.part_section .part_content {
     align-items: center;
 }
 
-section.board_write div.part_section.name_part .part_content input[name="coupon_amount"],
-section.board_write div.part_section.name_part .part_content input[name="coupon_user2"] {
+input[name="couponAmount"] {
     width: 30%;
 }
-section.board_write div.part_section.name_part .part_content input[name="coupon_name"],
-section.board_write div.part_section.condition_part .part_content input[name="coupon_condition"],
-section.board_write div.part_section.name_part .part_content input[name="coupon_user"],
-section.board_write div.part_section.condition_part .part_content input[name="coupon_quantity"] {
-    width: 50%;
+
+.part_content input[name="couponName"],
+.part_content input[name="couponExp"],
+.part_content input[name="couponCondition"],
+.part_content input[name="couponQuantity"] {
     margin-right: 5px;
 }
 
@@ -23,6 +22,47 @@ div.part_section.writer_part {
     gap: 15px;
 }
 
+.custom-select.md {
+	width : 100px !important;
+}
+.custom-select.disabled {
+  pointer-events: none; /* 클릭, hover 다 막음 */
+  opacity: 0.5;         /* 비활성화된 느낌 */
+}
 
 
+/* 버튼 그룹 */
+.filter-btn-group {
+	display: inline-flex;
+	border: 1px solid #DDE1EB;
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+/* 개별 버튼 */
+.filter-btn-group .filter-btn {
+	border: none;
+	border-right: 1px solid #DDE1EB;
+	background: #fff;
+	padding: 0 20px;
+	height: 40px;
+	font-size: 14px;
+	font-weight: 500;
+	color: #000;
+	cursor: pointer;
+}
+
+/* 마지막 버튼은 구분선 제거 */
+.filter-btn-group .filter-btn:last-child {
+	border-right: none;
+}
+
+.filter-btn-group .filter-btn:hover {
+	background: #f7f7f9;
+}
+
+.filter-btn-group .filter-btn.active {
+	background: #F1F9FF;
+	font-weight: 700;
+}
 

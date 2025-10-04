@@ -15,47 +15,43 @@
 			</div>
 		</div>
 		<!-- 헤더 end -->
-		
+
 		<!-- 메뉴 리스트 -->
 		<div class="menus">
-		
+
 			<!-- 단일 메뉴 -->
 			<div class="menu-item" data-menu="menu1">
-				<a href="/admin/home" class="menu-link">
-					<i class="bi bi-house-fill"></i>
-					<span class="menu-text">홈</span>
+				<a href="/admin/home" class="menu-link"> <i
+					class="bi bi-house-fill"></i> <span class="menu-text">홈</span>
 				</a>
 			</div>
-			
+
 			<!-- 단일 메뉴 -->
 			<div class="menu-item" data-menu="menu2">
-				<a href="#" class="menu-link">
-					<i class="bi bi-journal-check"></i>
+				<a href="#" class="menu-link"> <i class="bi bi-journal-check"></i>
 					<span class="menu-text">오늘의 할 일</span>
 				</a>
 			</div>
-			
+
 			<!-- 단일 메뉴 -->
 			<div class="menu-item" data-menu="menu3">
-				<a href="/admin/sellerList" class="menu-link">
-					<i class="bi bi-people"></i>
-					<span class="menu-text">회원</span>
+				<a href="/admin/sellerList" class="menu-link"> <i
+					class="bi bi-people"></i> <span class="menu-text">회원</span>
 				</a>
 			</div>
-			
+
 			<!-- 단일 메뉴 -->
 			<div class="menu-item" data-menu="menu4">
-				<a href="/admin/qnaSellerList" class="menu-link">
-					<i class="bi bi-chat-right-text"></i>
-					<span class="menu-text">일대일 문의</span>
+				<a href="/admin/qnaSellerList" class="menu-link"> <i
+					class="bi bi-chat-right-text"></i> <span class="menu-text">일대일
+						문의</span>
 				</a>
 			</div>
 
 			<!-- 서브메뉴 포함 -->
 			<div class="menu-item has-submenu" data-menu="menu5">
 				<button class="menu-link">
-					<i class="bi bi-clipboard2-check"></i>
-					<span class="menu-text">게시판</span> 
+					<i class="bi bi-clipboard2-check"></i> <span class="menu-text">게시판</span>
 					<i class="bi bi-chevron-down submenu-icon"></i>
 				</button>
 				<div class="submenu">
@@ -67,13 +63,12 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<!-- 서브메뉴 포함 -->
 			<div class="menu-item has-submenu" data-menu="menu6">
 				<button class="menu-link">
-<!-- 					<i class="bi bi-coin"></i> -->
-					<i class="bi bi-calculator"></i>
-					<span class="menu-text">주문/정산</span> 
+					<!-- 					<i class="bi bi-coin"></i> -->
+					<i class="bi bi-calculator"></i> <span class="menu-text">주문/정산</span>
 					<i class="bi bi-chevron-down submenu-icon"></i>
 				</button>
 				<div class="submenu">
@@ -85,13 +80,12 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<!-- 서브메뉴 포함 -->
 			<div class="menu-item has-submenu" data-menu="menu7">
 				<button class="menu-link">
-					<i class="bi bi-stars"></i>
-					<span class="menu-text">프로모션</span> 
-					<i class="bi bi-chevron-down submenu-icon"></i>
+					<i class="bi bi-stars"></i> <span class="menu-text">프로모션</span> <i
+						class="bi bi-chevron-down submenu-icon"></i>
 				</button>
 				<div class="submenu">
 					<div data-submenu="menu7_sub1" onclick="setHeader('프로필 > 정보수정')">
@@ -108,13 +102,12 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<!-- 서브메뉴 포함 -->
 			<div class="menu-item has-submenu" data-menu="menu8">
 				<button class="menu-link">
-					<i class="bi bi-gear"></i></i> 
-					<span class="menu-text">설정</span> 
-					<i class="bi bi-chevron-down submenu-icon"></i>
+					<i class="bi bi-gear"></i> <span class="menu-text">설정</span> <i
+						class="bi bi-chevron-down submenu-icon"></i>
 				</button>
 				<div class="submenu">
 					<div data-submenu="menu8_sub1" onclick="setHeader('프로필 > 정보수정')">
@@ -218,10 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     const menuItems = document.querySelectorAll(".menu-item");
 
-    //콘솔에 몇 개 뜨는지 확인(디버깅)
-    console.log("menuItems count:", menuItems.length, "sidebar:", !!sidebar);
-
-    menuItems.forEach((menu) => {
+    menuItems.forEach(menu => {
         const link = menu.querySelector(".menu-link");
         const submenu = menu.querySelector(".submenu");
 
@@ -248,12 +238,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 서브영역에 마우스 들어오면 hover 유지
         if (submenu) {
-            submenu.querySelectorAll("a").forEach((a) => {
-                a.addEventListener("click", () => setActiveMenu(menu, a));
-            });
-        } else {
-            link.addEventListener("click", () => setActiveMenu(menu, null));
-        }
+	        submenu.querySelectorAll("a").forEach(a => {
+	            a.addEventListener("click", () => {
+	                setActiveMenu(menu, a);
+	            });
+	        });
+	    } else if (link) {
+	        link.addEventListener("click", () => {
+	            setActiveMenu(menu, null);
+	        });
+	    }
     });
 
     // 사이드바를 완전히 벗어나면 hover 제거하고 마지막 클릭 메뉴 복원
@@ -270,27 +264,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 메뉴 활성화 함수
     function setActiveMenu(menuEl, subEl) {
-        console.log("Setting active menu:", menuEl);
-        console.log("Setting active smenu:", subEl);
 
-        // 모든 대메뉴/서브 a 초기화
-        menuItems.forEach((m) => m.classList.remove("active", "open"));
-        document.querySelectorAll(".submenu a").forEach((a) => a.classList.remove("active"));
-
-        // 요소 그대로 저장
-        lastClickedMenu = menuEl;
-        lastClickedSubItem = subEl;
-
-        // 클릭한 메뉴만 active 추가
+        // 기존 active 제거
+        document.querySelectorAll(".menu-item.active").forEach(m => m.classList.remove("active", "open"));
+        document.querySelectorAll(".submenu a.active").forEach(a => a.classList.remove("active"));
+        
+    	// 클릭한 메뉴만 active 추가
         // 대메뉴 강조
         menuEl.classList.add("active", "open");
-
-        // 서브메뉴 클릭 시 해당 a만 강조
+    	// 서브메뉴 클릭 시 해당 a만 강조
         if (subEl) subEl.classList.add("active");
 
         //새고해도 메뉴 열린 채로 있도록 세션스토리지에 저장
         sessionStorage.setItem("openedMenu", menuEl.dataset.menu);
-        sessionStorage.setItem("openedSubMenu", subEl ? subEl.parentElement.dataset.submenu : "");
+        if (subEl) {
+            sessionStorage.setItem("openedSubMenu", subEl.closest("[data-submenu]").dataset.submenu);
+        } else {
+            sessionStorage.removeItem("openedSubMenu");
+        }
+        
+        // 요소 그대로 저장
+        lastClickedMenu = menuEl;
+        lastClickedSubItem = subEl;
     }
 });
 

@@ -37,7 +37,7 @@
 .table-filter .search-row .custom-select {
 	flex: 0 0 160px;
 }
-
+.filter_box,
 .period_box, .answer_box, .questionType_box, .category_box, .check_box,
 	.totalSearch_box {
 	height: 40px;
