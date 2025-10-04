@@ -3,10 +3,6 @@ package controller.brand2;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,18 +11,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import dto.Banner;
-import dto.Brand;
 import dto.UploadFile;
+import service.brand2.UploadFileService;
+import service.brand2.UploadFileServiceImpl;
 import service.brand2.AdbannerService;
 import service.brand2.AdbannerServiceImpl;
-import util.FileAttach;
 
 /**
  * Servlet implementation class AdbannerList
@@ -63,25 +57,39 @@ public class Adbanner extends HttpServlet {
 		request.setCharacterEncoding("utf-8");
 
 		try {
+			// 업로드 설정
 			String path = request.getServletContext().getRealPath("upload");
 			int size = 10 * 1024 * 1024;
 			MultipartRequest multi = new MultipartRequest(request, path, size, "UTF-8", new DefaultFileRenamePolicy());
 			
+			 // =================== 업로드 파일 저장 ===================
+            String fileName = multi.getFilesystemName("uploadFileName"); // 실제 저장된 파일명
+            String fileRename = multi.getFilesystemName("uploadFileName");   // 서버에 저장된 이름
+            String storagePath = "/upload/" + fileRename;                    // 저장 경로
+            
+            UploadFile uploadFile = new UploadFile();
+            uploadFile.setFileName(fileName);
+            uploadFile.setFileRename(fileRename);
+            uploadFile.setStoragePath(storagePath);
+            
+            
+            UploadFileService uploadFileService = new UploadFileServiceImpl();
+            uploadFileService.registerUploadFile(uploadFile); // insertUploadFileWithAuto 사용
+            Long uploadFileId = uploadFile.getUploadFileId(); // PK 값 자동 주입됨
+            
+            // =================== 배너 저장 ===================
 			// 폼에서 입력받는 값
 			Banner banner = new Banner();
-			UploadFile uploadFile = new UploadFile();
+			
+			// Banner DTO에 FK 세팅
+			banner.setUploadFileId(uploadFileId);
 			
 			banner.setBannerName(multi.getParameter("bannerName")); // 광고명
 			banner.setManagerName(multi.getParameter("managerName")); // 담당자
 			banner.setManagerTel(multi.getParameter("managerTel")); // 담당연락처
 			banner.setBannerMessage(multi.getParameter("bannerMessage")); // 전달사항
-//			banner.setUploadFileName(multi.getFilesystemName("uploadFileName")); //파일명
-
-			// 최초 신청은 승인대기 상태
-			banner.setStatus("PENDING");
-
-			// 신청일
-			banner.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+			banner.setStatus("PENDING"); // 최초 신청은 승인대기 상태
+			banner.setCreatedAt(new Timestamp(System.currentTimeMillis())); // 신청일
 
 			// 등록기간 날짜 변환 (HTML Form → String → LocalDate → Timestamp)
 			String startDateStr = multi.getParameter("startDate"); // "2025-09-26"
@@ -103,6 +111,9 @@ public class Adbanner extends HttpServlet {
 			
 			banner.setBrandId(1L);
 
+			 // (3) upload_file FK 세팅
+            banner.setUploadFileId(uploadFileId);
+			
 			AdbannerService service = new AdbannerServiceImpl();
 			service.registerBanner(banner);
 

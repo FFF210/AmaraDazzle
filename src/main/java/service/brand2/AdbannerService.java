@@ -4,6 +4,7 @@ import java.util.Map;
 
 import dto.AdminPayment;
 import dto.Banner;
+import dto.UploadFile;
 
 public interface AdbannerService {
 	
@@ -21,4 +22,7 @@ public interface AdbannerService {
 	
 	// AdminToss 결제 저장
 	void savePayment(AdminPayment adminPayment) throws Exception;
+	
+	// 파일 저장
+	void registerUploadFile(UploadFile uploadFile);
 }

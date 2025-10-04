@@ -9,10 +9,14 @@ public class UploadFileDAOImpl implements UploadFileDAO {
 	SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
 
 	@Override
-	public void insertUploadFile(UploadFile uploadFile) throws Exception {
+    public void insertUploadFileWithAuto(UploadFile uploadFile) {
+			sqlSession.insert("mapper.uploadFile.insertUploadFileWithAuto", uploadFile);
+    }
 
-		sqlSession.insert("mapper.uploadFile.insertUploadFile", uploadFile);
-		sqlSession.commit();
-	}
-
+    @Override
+    public UploadFile selectUploadFileById(Long uploadFileId) {
+    	try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+            return sqlSession.selectOne("mapper.uploadFile.selectUploadFileById", uploadFileId);
+        }
+    }
 }

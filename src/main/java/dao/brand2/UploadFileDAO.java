@@ -4,5 +4,6 @@ import dto.UploadFile;
 
 public interface UploadFileDAO {
 	
-	public void insertUploadFile(UploadFile uploadFile) throws Exception;
+	void insertUploadFileWithAuto(UploadFile uploadFile);
+    UploadFile selectUploadFileById(Long uploadFileId);
 }

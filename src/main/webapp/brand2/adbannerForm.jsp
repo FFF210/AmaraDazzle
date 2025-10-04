@@ -101,65 +101,103 @@
 
 		<my:breadcrumb
 			items="배너광고 관리:/brand2/adbannerList, 배너광고 신청:/brand2/adbannerForm" />
-		<my:brand2formLayout title="배너광고 신청" formId="eventForm"
-			action="/brand2/adbanner" method="post" enctype="multipart/form-data">
 
-			<div class="grid">
-				<div class="label req">배너 광고명</div>
-				<div>
-					<my:textInput id="bannerName" name="bannerName"
-						placeholder="광고명을 입력하세요." type="default" size="sm" state="default" />
-				</div>
-				<div class="label req">광고 담당자</div>
-				<div>
-					<my:textInput id="managerName" name="managerName"
-						placeholder="담당자 성함을 입력하세요." type="default" size="sm"
-						state="default" />
-				</div>
+		<div class="wrap">
+			<section class="card">
+				<div class="head">배너광고 신청</div>
+				<div class="body">
+					<main>
+						<form id="eventForm" action="/brand2/adbanner" method="post"
+							enctype="multipart/form-data" novalidate>
 
-				<div class="label req">담당 연락처</div>
-				<div>
-					<my:textInput id="managerTel" name="managerTel"
-						placeholder="담당연락처를 입력하세요." type="default" size="sm"
-						state="default" />
-				</div>
+							<!-- ============================================= -->
+							<div class="grid">
+								<div class="label req">배너 광고명</div>
+								<div>
+									<my:textInput id="bannerName" name="bannerName"
+										placeholder="광고명을 입력하세요." type="default" size="sm"
+										state="default" />
+								</div>
+								<div class="label req">광고 담당자</div>
+								<div>
+									<my:textInput id="managerName" name="managerName"
+										placeholder="담당자 성함을 입력하세요." type="default" size="sm"
+										state="default" />
+								</div>
 
-				<div class="label req">배너 등록 기간</div>
-				<div class="inline date-row">
-					<input id="startDate" class="startDate" name="startDate"
-						type="date"> <span>~</span> <input id="endDate"
-						class="endDate" name="endDate" type="date">
-				</div>
+								<div class="label req">담당 연락처</div>
+								<div>
+									<my:textInput id="managerTel" name="managerTel"
+										placeholder="담당연락처를 입력하세요." type="default" size="sm"
+										state="default" />
+								</div>
 
-				<div class="label">관리자 전달사항</div>
-				<div>
-					<my:textArea id="bannerMessage" name="bannerMessage"
-						placeholder="관리자에게 문의&참고할 사항 전달" />
-				</div>
-				<div class="label">파일 업로드</div>
-				<div class="upload">
+								<div class="label req">배너 등록 기간</div>
+								<div class="inline date-row">
+									<input id="startDate" class="startDate" name="startDate"
+										type="date"> <span>~</span> <input id="endDate"
+										class="endDate" name="endDate" type="date">
+								</div>
 
-					<my:uploader size="lg" id="uploadFileName" name="uploadFileName"
-						label="Click to upload" desc="또는 파일을 이 영역으로 드래그하세요"
-						multiple="false" />
-				</div>
-			</div>
+								<div class="label">관리자 전달사항</div>
+								<div>
+									<my:textArea id="bannerMessage" name="bannerMessage"
+										placeholder="관리자에게 문의&참고할 사항 전달" />
+								</div>
+								<div class="label">파일 업로드</div>
+								<div class="upload">
 
-			<div class="footer">
-				<div class="pay-box">
-					<div class="summary">
-						<span>총 <strong id="dayCount">0</strong>일
-						</span> <span>1일 ₩140,000</span> <span>예상 결제 금액 <strong
-							id="totalPrice" class="highlight">₩0</strong></span>
-					</div>
-					<div class="actions">
-						<button type="button" class="btn btn-outline btn-sm" id="btnClose"
-							onclick="location.href='/brand2/adbannerList.jsp'">닫기</button>
-						<button type="submit" class="btn btn-outline btn-sm" id="payBtn">신청하기</button>
-					</div>
+									<!-- uploaer.tag -->
+									<div class="fileAttatch">
+										<div id="fileDropper" class="uploader uploader-lg"
+											tabindex="0" role="button" aria-label="파일 업로드 영역">
+											<div class="hint">
+												<div class="uploader-title">Click to upload</div>
+												<div class="uploader-muted">또는 파일을 이 영역으로 드래그하세요</div>
+											</div>
+										</div>
+
+										<!-- 여기서 name="uploadFileName" 으로 지정 -->
+										<input id="uploadFileName" type="file" name="uploadFileName"
+											class="sr-only" style="display: none" />
+
+										<div id="imgPreviewWrapper" class="preview-wrapper hidden">
+											<div id="imgPreviewArea" class="preview-area"
+												aria-live="polite"></div>
+										</div>
+										<div id="docPreviewWrapper" class="preview-wrapper hidden">
+											<div id="docPreviewArea" class="preview-area"
+												aria-live="polite"></div>
+										</div>
+									</div>
+									<!-- uploaer.tag -->
+
+								</div>
+							</div>
+
+							<div class="footer">
+								<div class="pay-box">
+									<div class="summary">
+										<span>총 <strong id="dayCount">0</strong>일
+										</span> <span>1일 ₩140,000</span> <span>예상 결제 금액 <strong
+											id="totalPrice" class="highlight">₩0</strong></span>
+									</div>
+									<div class="actions">
+										<button type="button" class="btn btn-outline btn-sm"
+											id="btnClose"
+											onclick="location.href='/brand2/adbannerList.jsp'">닫기</button>
+										<button type="submit" class="btn btn-outline btn-sm"
+											id="payBtn">신청하기</button>
+									</div>
+								</div>
+							</div>
+							<!-- =========================================== -->
+
+						</form>
+					</main>
 				</div>
-			</div>
-		</my:brand2formLayout>
+			</section>
+		</div>
 	</my:layout>
 
 	<script>
@@ -250,6 +288,96 @@ document.addEventListener("DOMContentLoaded", function() {
 	<%-- toss js --%>
 		
 	</script>
+
+	<%-- uploader.tag의 js --%>
+	<script>
+(function() {
+    const dropper = document.getElementById("fileDropper");
+    const input = document.getElementById("uploadFileName");
+    const preview = document.getElementById("imgPreviewArea");
+    const imgWrapper = document.getElementById("imgPreviewWrapper");
+
+    let previews = [];
+    let idSeq = 0;
+
+    // 파일 미리보기 추가 (1개만 허용)
+function addFiles(files) {
+    if (files.length > 1) {
+        alert("파일은 1개만 업로드할 수 있습니다.");
+        return;
+    }
+    const file = files[0];
+    const url = URL.createObjectURL(file);
+    previews = [{ id: idSeq++, url, file }];
+
+    // ⬇️ 이 두 줄이 핵심 수정
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    input.files = dt.files;
+
+    render();
+}
+
+    // 미리보기 렌더링
+    function render() {
+        preview.innerHTML = "";
+        if (previews.length > 0) {
+            imgWrapper.classList.remove("hidden");
+            previews.forEach((p) => {
+                const card = document.createElement("div");
+                card.className = "preview-card";
+
+                const img = document.createElement("img");
+                img.className = "preview-thumb";
+                img.src = p.url;
+                img.alt = p.file.name;
+
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "remove-btn";
+                btn.title = "파일첨부 삭제";
+                btn.innerHTML = '<i class="bi bi-x"></i>';
+                btn.addEventListener("click", () => {
+                    URL.revokeObjectURL(p.url);
+                    previews = [];
+                    imgWrapper.classList.add("hidden");
+                    preview.innerHTML = "";
+                    input.value = "";
+                });
+
+                card.append(img, btn);
+                preview.appendChild(card);
+            });
+        } else {
+            imgWrapper.classList.add("hidden");
+        }
+    }
+
+    // 클릭으로 파일 선택
+    dropper.addEventListener("click", () => {
+        input.value = "";
+        input.click();
+    });
+    input.addEventListener("change", (e) => {
+        if (e.target.files.length) addFiles(e.target.files);
+    });
+
+    // 드래그앤드롭
+    dropper.addEventListener("dragenter", (e) => {
+        e.preventDefault();
+        dropper.classList.add("dragover");
+    });
+    dropper.addEventListener("dragover", (e) => e.preventDefault());
+    dropper.addEventListener("dragleave", (e) => {
+        if (e.target === dropper) dropper.classList.remove("dragover");
+    });
+    dropper.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropper.classList.remove("dragover");
+        if (e.dataTransfer.files.length) addFiles(e.dataTransfer.files);
+    });
+})();
+</script>
 
 </body>
 
