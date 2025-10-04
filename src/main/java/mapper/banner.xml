@@ -15,14 +15,14 @@
 		manager_tel, start_date, end_date,
 		banner_name,
 		banner_message, status,
-		brand_url, upload_file_name)
+		brand_url, upload_file_id)
 		VALUES
 		(#{brandId},
 		#{managerName},
 		#{managerTel}, #{startDate},
 		#{endDate},
 		#{bannerName},
-		#{bannerMessage}, #{status}, #{brandUrl}, #{uploadFileName})
+		#{bannerMessage}, #{status}, #{brandUrl}, #{uploadFileId})
 	</insert>
 
 	<!-- <update id="update" parameterType="banner"> UPDATE banner SET manager_name 
