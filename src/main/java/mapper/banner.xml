@@ -4,40 +4,25 @@
 
 <mapper namespace="mapper.banner">
 
-	<!-- <id property="bannerId" column="banner_id" /> 배너 광고 신청 ID (PK) -->
-	<!-- <result property="brandId" column="brand_id" /> 브랜드 관리자 ID (FK → brand.brand_id) -->
-	<!-- <result property="managerName" column="manager_name" /> 담당자명 -->
-	<!-- <result property="managerTel" column="manager_tel" /> 연락처 -->
-	<!-- <result property="startDate" column="start_date" /> 시작일 -->
-	<!-- <result property="endDate" column="end_date" /> 종료일 -->
-	<!-- <result property="bannerName" column="banner_name" /> 배너 광고명 -->
-	<!-- <result property="bannerMessage" column="banner_message" /> 관리자 전달사항 -->
-	<!-- <result property="status" column="status" /> 진행상황 (PENDING/APPROVED/ONGOING/COMPLETED/CANCELED) -->
-	<!-- <result property="createdAt" column="created_at" /> 신청일 (DEFAULT CURRENT_TIMESTAMP) -->
-	<!-- <result property="updatedAt" column="updated_at" /> 수정일 -->
-	<!-- <result property="isExposed" column="is_exposed" /> 노출 여부 (TINYINT, 
-		DEFAULT 1) -->
-	<!-- <result property="brandUrl" column="brand_url" /> 브랜드 페이지 URL -->
-	<!-- <result property="stateChange" column="state_change" /> 배너 게시 상태 (POSTING 
-		/ OFF) -->
-	<!-- <result property="adminId" column="admin_id" /> 승인 관리자 ID (FK → admin_info.admin_info_id) -->
-
-
 	<!-- brand2 -->
 
 	<!-- 배너 신청 -->
-	<insert id="insertBannerForm" parameterType="banner"
-		useGeneratedKeys="true" keyProperty="bannerId">
+	<insert id="insertBannerForm" parameterType="banner">
 		INSERT INTO banner
-		(brand_id,
-		manager_name, manager_tel, start_date, end_date,
+		(
+		brand_id,
+		manager_name,
+		manager_tel, start_date, end_date,
 		banner_name,
-		banner_message, status, brand_url)
+		banner_message, status,
+		brand_url, upload_file_name)
 		VALUES
-		(#{brandId}, #{managerName},
-		#{managerTel}, #{startDate}, #{endDate},
+		(#{brandId},
+		#{managerName},
+		#{managerTel}, #{startDate},
+		#{endDate},
 		#{bannerName},
-		#{bannerMessage}, #{status}, #{brandUrl})
+		#{bannerMessage}, #{status}, #{brandUrl}, #{uploadFileName})
 	</insert>
 
 	<!-- <update id="update" parameterType="banner"> UPDATE banner SET manager_name 
@@ -51,7 +36,6 @@
 	<select id="selectAdbannerList" parameterType="map" resultType="bannerList">
 		SELECT
 		b.banner_id,
-		b.brand_id,
 		b.manager_name,
 		b.manager_tel,
 		b.start_date,
@@ -66,34 +50,47 @@
 		b.state_change,
 		b.admin_id,
 		CASE
-			when ap.payment_id IS NOT NULL THEN 1
-			ELSE 0
+		when ap.payment_id IS NOT NULL THEN 1
+		ELSE 0
 		END AS paid
 		FROM
 		banner b
 		LEFT JOIN admin_payment ap
-			ON ap.banner_id = b.banner_id
-			AND ap.payment_type = 'BANNER_AD'
+		ON ap.banner_id = b.banner_id
+		AND
+		ap.payment_type = 'BANNER_AD'
 		<where>
 			<!-- 상태 필터링 -->
 			<if test="status != null and status != ''">
-				AND b.status = #{status}
+				<choose>
+					<when test="status=='PENDING'">
+						AND status = 'PENDING'
+					</when>
+					<when test="status=='APPROVED'">
+						AND status = 'APPROVED'
+					</when>
+					<when test="status=='ONGOING'">
+						AND status = 'ONGOING'
+					</when>
+					<when test="status=='CANCELED'">
+						AND status = 'CANCELED'
+					</when>
+					<when test="status=='COMPLETED'">
+						AND status = 'COMPLETED'
+					</when>
+				</choose>
 			</if>
 
-			<!-- 검색 유형 : 이름/연락처/광고명 -->
+			<!-- 검색 유형 : 광고명, 광고담당자 -->
 			<if
 				test="searchType != null and searchKeyword != null and searchKeyword != ''">
 				<choose>
-					<when test="searchType eq 'managerName'">
-						AND b.manager_name LIKE CONCAT('%',
-						#{searchKeyword}, '%')
-					</when>
-					<when test="searchType eq 'managerTel'">
-						AND b.manager_tel LIKE CONCAT('%',
-						#{searchKeyword}, '%')
-					</when>
-					<when test="searchType eq 'bannerName'">
+					<when test="searchType eq 'BANNERNAME'">
 						AND b.banner_name LIKE CONCAT('%',
+						#{searchKeyword}, '%')
+					</when>
+					<when test="searchType eq 'MANAGERNAME'">
+						AND b.manager_name LIKE CONCAT('%',
 						#{searchKeyword}, '%')
 					</when>
 				</choose>
@@ -107,39 +104,14 @@
 	<select id="selectAdbannerCount" parameterType="map" resultType="int">
 		SELECT COUNT(*)
 		FROM banner b
-		<where>
-			<!-- 상태 필터링 (예: 진행중, 대기, 취소 등) -->
-			<if test="status != null and status != ''">
-				AND b.status = #{status}
-			</if>
-
-			<!-- 검색 유형 : 이름/연락처/광고명 등 -->
-			<if
-				test="searchType != null and searchKeyword != null and searchKeyword != ''">
-				<choose>
-					<when test="searchType eq 'managerName'">
-						AND b.manager_name LIKE CONCAT('%',
-						#{searchKeyword}, '%')
-					</when>
-					<when test="searchType eq 'managerTel'">
-						AND b.manager_tel LIKE CONCAT('%',
-						#{searchKeyword}, '%')
-					</when>
-					<when test="searchType eq 'bannerName'">
-						AND b.banner_name LIKE CONCAT('%',
-						#{searchKeyword}, '%')
-					</when>
-				</choose>
-			</if>
-		</where>
 	</select>
 
-	<!-- 결제 완료 후 배너 상태 변경 
-	<update id="updateBannerStatus" parameterType="map">
-		UPDATE banner
-		SET status = #{status}, updated_at = NOW()
-		WHERE banner_id = #{bannerId}
-	</update> -->
+	<!-- 결제 완료 후 배너 상태 변경 <update id="updateBannerStatus" parameterType="map"> 
+		UPDATE banner SET status = #{status}, updated_at = NOW() WHERE banner_id 
+		= #{bannerId} </update> -->
+
+	<!-- adbannerList 상세보기 버튼 -->
+
 
 	<!-- brand2 end -->
 	
@@ -228,6 +200,64 @@
 			</if>
 		</where>
 		order by bn.banner_id desc limit #{start_p},#{post_ea}
+	</select>
+
+
+	<!-- ================[소비자] 메인페이지 배너 노출 목록 =================== -->
+	<select id="selectBannerListForMain"
+		resultType="banner">
+		SELECT
+		b.banner_id AS bannerId,
+		b.brand_id AS brandId,
+		b.manager_name AS managerName,
+		b.manager_tel AS managerTel,
+		b.start_date AS startDate,
+		b.end_date AS endDate,
+		b.banner_name AS bannerName,
+		b.banner_message AS bannerMessage,
+		b.status AS status,
+		b.created_at AS createdAt,
+		b.updated_at AS updatedAt,
+		b.is_exposed AS isExposed,
+		b.brand_url AS brandUrl,
+		b.state_change AS stateChange,
+		b.admin_id AS adminId,
+		b.upload_file_id AS uploadFileId
+		FROM banner b
+		WHERE b.is_exposed = 1
+		AND b.state_change = 'POSTING'
+		AND b.status IN ('ONGOING')
+		AND NOW() BETWEEN b.start_date AND b.end_date
+		ORDER BY b.created_at DESC
+	</select>
+
+
+	<!-- ================[소비자] 메인페이지 배너 노출 목록 =================== -->
+	<select id="selectBannerListForMain"
+		resultType="banner">
+		SELECT
+		b.banner_id AS bannerId,
+		b.brand_id AS brandId,
+		b.manager_name AS managerName,
+		b.manager_tel AS managerTel,
+		b.start_date AS startDate,
+		b.end_date AS endDate,
+		b.banner_name AS bannerName,
+		b.banner_message AS bannerMessage,
+		b.status AS status,
+		b.created_at AS createdAt,
+		b.updated_at AS updatedAt,
+		b.is_exposed AS isExposed,
+		b.brand_url AS brandUrl,
+		b.state_change AS stateChange,
+		b.admin_id AS adminId,
+		b.upload_file_id AS uploadFileId
+		FROM banner b
+		WHERE b.is_exposed = 1
+		AND b.state_change = 'POSTING'
+		AND b.status IN ('ONGOING')
+		AND NOW() BETWEEN b.start_date AND b.end_date
+		ORDER BY b.created_at DESC
 	</select>
 
 </mapper>

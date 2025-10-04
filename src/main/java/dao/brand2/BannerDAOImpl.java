@@ -13,15 +13,11 @@ public class BannerDAOImpl implements BannerDAO {
 
 	SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
 
+	// 배너 신청
 	@Override
-	public int insertBannerForm(Banner banner) throws Exception {
-		int result = sqlSession.insert("mapper.banner.insertBannerForm", banner);
-		if (result > 0) {
-			sqlSession.commit();
-		} else {
-			sqlSession.rollback();
-		}
-		return result;
+	public void insertBannerForm(Banner banner) throws Exception {
+		sqlSession.insert("mapper.banner.insertBannerForm", banner);
+		sqlSession.commit();
 	}
 
 	// 배너 신청 목록 조회
@@ -35,7 +31,19 @@ public class BannerDAOImpl implements BannerDAO {
 	public Integer selectAdbannerCount(Map<String, Object> params) throws Exception {
 		return sqlSession.selectOne("mapper.banner.selectAdbannerCount", params);
 	}
+	// 배너 상세보기 버튼
+	@Override
+	public Banner selectBannerById(long bannerId) throws Exception {
+		return sqlSession.selectOne("mapper.banner.selectBannerById", bannerId);
+	}
 
+	// 배너 취소 버튼
+	@Override 
+	public void updateBannerStatus(Map<String, Object> params) { 
+		sqlSession.update("mapper.banner.updateBannerStatus", params);
+		sqlSession.commit();
+	}
+	
 	
 	// ***ADMIN********************************************************
 	

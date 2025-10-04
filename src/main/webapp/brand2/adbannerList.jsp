@@ -52,16 +52,15 @@
 </style>
 <!-- TossPayments SDK -->
 <script src="https://js.tosspayments.com/v1/payment"></script>
+<!-- tag -->
+<script src="../tagjs/selectbox.js"></script>
 </head>
 <body>
 	<my:layout>
-		<my:breadcrumb items="배너광고 관리:/brand2/adbannerList.jsp" />
-
-		<div class="filter">
-			<my:tableFilter
-				filters="진행 상황:ALL=전체|PENDING=승인 대기|APPROVED=승인 완료|ONGOING=진행 중|COMPLETED=완료|CANCELED=취소"
-				searchItems="광고명,광고담당자" />
-		</div>
+		<my:breadcrumb items="배너광고 관리:/brand2/adbannerList, 배너광고 신청:/brand2/adbanner" />
+		<my:tableFilter
+			filters="status|진행상황:PENDING=승인대기|APPROVED=승인완료|ONGOING=진행중|COMPLETED=완료|CANCELED=취소"
+			hasDate="false" searchItems="광고 담당자,광고명" />
 
 		<div class="tcontainer">
 			<div class="table-wrapper">
@@ -77,23 +76,21 @@
 							<th>광고 담당자</th>
 							<th>결제 금액</th>
 							<th>담당 연락처</th>
-							<th>관리</th>
+							<th></th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="banner" items="${bannerList }">
+						<c:forEach var="banner" items="${bannerList}">
 							<tr>
 								<td><input type="checkbox" class="form-check" /></td>
-								<td>${banner.bannerId }</td>
-								<td><fmt:formatDate value="${banner.createdAt }"
+								<td>${banner.bannerId}</td>
+								<td><fmt:formatDate value="${banner.createdAt}"
 										pattern="yyyy-MM-dd" /></td>
 								<td><fmt:formatDate value="${banner.startDate}"
 										pattern="yyyy-MM-dd" /> ~ <fmt:formatDate
 										value="${banner.endDate}" pattern="yyyy-MM-dd" /></td>
-
-								<td>
-									<p class="product-name">${banner.bannerName }</p>
-								</td>
+								<td><p class="product-name">${banner.bannerName}</p></td>
 								<td><c:choose>
 										<c:when test="${banner.status eq 'PENDING'}">
 											<my:tag color="blue" size="sm" text="승인 대기" />
@@ -111,197 +108,106 @@
 											<my:tag color="red" size="sm" text="취소" />
 										</c:when>
 									</c:choose></td>
-
-								<td>${banner.managerName }</td>
+								<td>${banner.managerName}</td>
 								<td>미구현</td>
-								<td>${banner.managerTel }</td>
+								<td>${banner.managerTel}</td>
+
+								<!-- 상세보기 버튼 전용 열 -->
+								<td><c:choose>
+										<c:when test="${banner.status eq 'PENDING'}">
+											<button type="button" class="btn btn-outline btn-sm"
+												onclick="location.href='/brand2/adbannerDetail?bannerId=${banner.bannerId}'">상세보기</button>
+										</c:when>
+										<c:when test="${banner.status eq 'APPROVED'}">
+											<button type="button" class="btn btn-outline btn-sm"
+												onclick="location.href='/brand2/adbannerDetail?bannerId=${banner.bannerId}'">상세보기</button>
+										</c:when>
+										<c:when
+											test="${banner.status eq 'ONGOING' or banner.status eq 'COMPLETED' or banner.status eq 'CANCELED'}">
+											<button type="button" class="btn btn-outline btn-sm"
+												onclick="location.href='/brand2/adbannerDetail?bannerId=${banner.bannerId}'">상세보기</button>
+										</c:when>
+									</c:choose></td>
 
 
-								<td>
-									<div class="actions">
-										<c:choose>
-											<%-- 승인 대기 --%>
-											<c:when test="${banner.status eq 'PENDING'}">
-												<button type="button" class="btn btn-outline btn-sm"
-													onclick="location.href='/brand2/eventForm.jsp?bannerId=${banner.bannerId}'">
-													상세보기</button>
-												<button type="button" class="btn btn-danger btn-sm"
-													onclick="if(confirm('정말 취소하시겠습니까?')) location.href='/brand2/bannerCancel.do?bannerId=${banner.bannerId}'">
-													취소</button>
-											</c:when>
-
-											<%-- 승인 완료 but 미결제 --%>
-											<c:when
-												test="${banner.status eq 'APPROVED' and not banner.paid}">
-												<button type="button" class="btn btn-outline btn-sm" id="payBtn" > 결제하기</button>
-											</c:when>
-
-											<%-- 승인 완료 & 결제 완료 --%>
-											<c:when test="${banner.status eq 'APPROVED' and banner.paid}">
-												<button type="button" class="btn btn-info btn-sm"
-													onclick="location.href='/brand2/bannerDetail.jsp?bannerId=${banner.bannerId}'">
-													상세보기</button>
-												<button type="button" class="btn btn-danger btn-sm"
-													onclick="location.href='/brand2/cancelBanner.do?bannerId=${banner.bannerId}'">
-													취소</button>
-											</c:when>
-
-											<%-- 진행 중 / 완료 / 취소 --%>
-											<c:when
-												test="${banner.status eq 'ONGOING' or banner.status eq 'COMPLETED' or banner.status eq 'CANCELED'}">
-												<button type="button" class="btn btn-outline btn-sm"
-													onclick="location.href='/brand2/eventForm.jsp?bannerId=${banner.bannerId}'">
-													상세보기</button>
-											</c:when>
-										</c:choose>
-									</div>
-								</td>
+								<!-- 취소 버튼 전용 열 -->
+								<td><c:choose>
+										<c:when test="${banner.status eq 'PENDING'}">
+											<button type="button" class="btn btn-danger btn-sm"
+												onclick="if(confirm('정말 취소하시겠습니까?')) location.href='/brand2/adbannerDetail?action=cancel&bannerId=${banner.bannerId}'">
+												취소</button>
+										</c:when>
+										<c:when test="${banner.status eq 'APPROVED'}">
+											<button type="button" class="btn btn-danger btn-sm"
+												onclick="if(confirm('정말 취소하시겠습니까?')) location.href='/brand2/adbannerDetail?action=cancel&bannerId=${banner.bannerId}'">
+												취소</button>
+										</c:when>
+										<c:otherwise>
+											<button type="button" class="btn btn-danger btn-sm" disabled>취소</button>
+										</c:otherwise>
+									</c:choose></td>
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
 			</div>
 		</div>
+
+		<%--
+		status/button
+		승인 대기 : 상세보기/취소
+		승인 완료 : 상세보기/취소
+		진행 중 : 상세보기
+		완료 : 상세보기
+		취소 : 상세보기
+		 --%>
+
+		<c:set var="queryString">
+			<c:if test="${not empty param.status}">status=${param.status}&</c:if>
+			<c:if test="${not empty param.searchType}">searchType=${param.searchType}&</c:if>
+			<c:if test="${not empty param.searchKeyword}">searchKeyword=${param.searchKeyword}&</c:if>
+				page=
+			</c:set>
 		<!-- 페이징 -->
 		<div class="page-pagination">
 			<my:pagination currentPage="${currentPage}"
 				totalPages="${totalPages}"
-				baseUrl="/brand2/adbannerList?${queryString}&page=" />
-			<!-- test_ck_XZYkKL4Mrj9eGzWBRNORV0zJwlEW -->
+				baseUrl="/brand2/adbannerList?${queryString}" />
 		</div>
+
 	</my:layout>
+	
 	<script>
-document.addEventListener("filterChanged", (e) => {
-  console.log("필터 상태:", e.detail);
+	  /*********************************************************************************************************
+	   * tableFilter 이벤트
+	   * tag에 추가 필요
+	   *********************************************************************************************************/
+	  document.addEventListener("filterChanged", (e) => {
+	  console.log("필터 상태:", e.detail);
 
-  if (e.detail.submit) {
-    const { filters, searchField, searchKeyword } = e.detail;
-    const params = new URLSearchParams();
+	  if (e.detail.submit) {
+	    const { filters, searchField, searchKeyword } = e.detail;
+	    const params = new URLSearchParams();
 
-    // 진행상황 필터 처리
-    for (const [key, value] of Object.entries(filters)) {
-      if (key === "진행 상황" && value && value !== "전체") {
-        // 한글 상태 → DB 코드 변환
-        switch (value) {
-          case "대기": params.append("status", "PENDING"); break;
-          case "진행 중": params.append("status", "ONGOING"); break;
-          case "완료": params.append("status", "COMPLETED"); break;
-          case "취소": params.append("status", "CANCELED"); break;
-        }
-      }
-    }
+	    // 진행 상황
+	    for (const [key, value] of Object.entries(filters)) {
+	    	  params.append("status", value);
+	    	}
 
-    // 검색 항목 (광고명 / 광고담당자)
-    if (searchField) {
-      params.append("searchType", searchField);
-    }
+	    // 검색 조건
+	    if (searchField) params.append("searchType", searchField);
+	    if (searchKeyword) params.append("searchKeyword", searchKeyword);
 
-    if (searchKeyword !== undefined && searchKeyword !== null) {
-    	  params.append("searchKeyword", searchKeyword);
-    	}
+	    // 페이지는 1부터 시작
+	    params.append("page", 1);
 
-    // 페이지는 항상 1부터 시작
-    params.append("page", 1);
-
-    // 최종 URL로 이동 (GET 요청)
-    window.location.href = "/brand2/adbannerList?" + params.toString();
-  }
-});
-
-
-//=============================
-//selectbox 관련 코드 수정 부분
-//=============================
-document.addEventListener("DOMContentLoaded", () => {
-document.querySelectorAll(".custom-select").forEach(select => {
- const header = select.querySelector(".select-header");
- const label = select.querySelector(".select-label");
- const list = select.querySelector(".select-list");
- const items = select.querySelectorAll(".select-item");
-
- // 열기/닫기 토글
- header.addEventListener("click", () => {
-   select.classList.toggle("open");
- });
-
- // 옵션 선택
- items.forEach(item => {
-   item.addEventListener("click", () => {
-     // 라벨 교체
-     label.textContent = item.textContent;
-
-     // active 표시 갱신
-     items.forEach(i => i.classList.remove("active"));
-     item.classList.add("active");
-
-     // 닫기
-     select.classList.remove("open");
-
-     let mappedValue = item.textContent;
-     if (mappedValue === "광고명") mappedValue = "bannerName";
-     if (mappedValue === "광고담당자") mappedValue = "managerName";
-
-     // 커스텀 이벤트 발생
-     const event = new CustomEvent("selectChanged", {
-       detail: {
-         value: mappedValue,
-         text: item.textContent
-       }
-     });
-     document.dispatchEvent(event);
-   });
- });
-
- // 다른 영역 클릭 시 닫기
- document.addEventListener("click", (e) => {
-   if (!select.contains(e.target)) {
-     select.classList.remove("open");
-   }
- });
-});
-});
-
-
-//------ 클라이언트 키로 객체 초기화 ------
-var clientKey = "test_ck_XZYkKL4Mrj9eGzWBRNORV0zJwlEW";
-var tossPayments = TossPayments(clientKey);
-
-// ------ 결제창 띄우기 ------
-// ------ 버튼 클릭 시 결제창 띄우기 ------
-document.addEventListener("DOMContentLoaded", function() {
-	var button = document.getElementById("payBtn");
-
-	button.addEventListener("click", function() {
-		tossPayments
-			.requestPayment("카드", {
-				// 결제수단 파라미터 (카드, 계좌이체, 가상계좌, 휴대폰 등)
-				// 결제 정보 파라미터
-				// 더 많은 결제 정보 파라미터는 결제창 Javascript SDK에서 확인하세요.
-				// https://docs.tosspayments.com/sdk/payment-js
-				amount: 1, // 결제 금액
-				orderId: 'owxy0ZK_p8jVqcygW9sW2d', // 주문번호(주문번호는 상점에서 직접 만들어주세요.)
-				orderName: "테스트 결제", // 구매상품 (생수 외 1건) 같은 형식
-				customerName: "김토스", // 구매자 이름
-				successUrl: "http://localhost:8080/tossSuccess", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
-				failUrl: "http://localhost:8080/tossFail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
-			})
-			// ------결제창을 띄울 수 없는 에러 처리 ------
-			// 메서드 실행에 실패해서 reject 된 에러를 처리하는 블록입니다.
-			// 결제창에서 발생할 수 있는 에러를 확인하세요.
-			// https://docs.tosspayments.com/reference/error-codes#결제창공통-sdk-에러
-			.catch(function(error) {
-				if (error.code === "USER_CANCEL") {
-					// 구매자가 결제창을 닫았을 때 에러 처리
-					alert("결제 처리가 취소되었습니다")
-				} else if (error.code === "INVALID_CARD_COMPANY") {
-					// 유효하지 않은 카드 코드에 대한 에러 처리
-					alert("결제 처리 중 오류가 발생했습니다")
-				}
-			});
+	    // 최종 URL로 이동 (GET 요청)
+	    window.location.href = "/brand2/adbannerList?" + params.toString();
+	  }
 	});
-});
+	  
+	
+	
 </script>
-
-
 </body>
 </html>

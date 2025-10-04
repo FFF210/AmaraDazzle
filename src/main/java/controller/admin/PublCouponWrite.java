@@ -76,8 +76,12 @@ public class PublCouponWrite extends HttpServlet {
 
 			CouponService coupon_svc = new CouponServiceImpl();
 			int result = coupon_svc.insertPublCoupon(pCoupon);
+			
 			System.out.println(result);
-//			Long noticePk = notice_svc.noticeSellerWrite(notice); //DB에 데이터 저장과 함께 생성된 pk값 받아옴 
+			
+			if(result > 0) {  //DB 입력 성공시
+				
+			}
 			
 //			String json = null;
 //			if (noticePk != null && noticePk > 0) {

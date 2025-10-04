@@ -1,19 +1,34 @@
 @charset "UTF-8";
 
 .event-card {
-	display: flex;
-	width: 320px;
+	display: block;
+	width: 324px;
 	flex-direction: column;
+	text-decoration: none;
 	align-items: flex-start;
 	gap: 16px;
 	font-family: "Noto Sans KR", sans-serif;
 }
 
 /* 이미지 영역 */
-.event-card .event-image img {
-	width: 100%;
-	height: auto;
+.event-image {
+	position: relative;
+}
+
+.event-image img.finished {
+	filter: grayscale(80%);
+}
+
+.event-image img {
 	display: block;
+	border-radius: 6px;
+}
+
+.event-tag {
+	position: absolute;
+	top: 8px;
+	left: 8px;
+	z-index: 2;
 }
 
 /* 정보 영역 */
@@ -25,6 +40,7 @@
 	align-items: center;
 	gap: 10px;
 	align-self: stretch;
+	margin-top: 16px;
 }
 
 /* 이벤트 제목 */

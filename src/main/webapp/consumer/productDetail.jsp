@@ -27,6 +27,7 @@ request.setAttribute("floor", floor);
 <title>${product.name}</title>
 <link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/toast.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>">
@@ -52,20 +53,41 @@ request.setAttribute("floor", floor);
 	<%@ include file="/consumer/header.jsp"%>
 
 	<main class="product-detail-container">
+
 		<div class="product-detail-content">
 			<!-- 상품 이미지 -->
 			<div class="product-image-section">
 				<div class="main-image">
-					<img src="<c:url value='/images/product-placeholder.jpg'/>"
-						alt="상품 이미지" id="mainProductImage">
+					<img
+						src="${pageContext.request.contextPath}/image?fileId=${product.thumbnailFileId}"
+						alt="상품 대표 이미지" id="mainProductImage" width="500px" />
 				</div>
 				<div class="thumbnail-images">
-					<img src="<c:url value='/images/product-thumb1.jpg'/>"
-						alt="상품 이미지 1" class="thumbnail active"> <img
-						src="<c:url value='/images/product-thumb2.jpg'/>" alt="상품 이미지 2"
-						class="thumbnail"> <img
-						src="<c:url value='/images/product-thumb3.jpg'/>" alt="상품 이미지 3"
-						class="thumbnail">
+					<c:if test="${not empty product.image1FileId}">
+						<img
+							src="${pageContext.request.contextPath}/image?fileId=${product.image1FileId}"
+							alt="상품 이미지 1" class="thumbnail active" width="80px" />
+					</c:if>
+					<c:if test="${not empty product.image2FileId}">
+						<img
+							src="${pageContext.request.contextPath}/image?fileId=${product.image2FileId}"
+							alt="상품 이미지 2" class="thumbnail" width="80px" />
+					</c:if>
+					<c:if test="${not empty product.image3FileId}">
+						<img
+							src="${pageContext.request.contextPath}/image?fileId=${product.image3FileId}"
+							alt="상품 이미지 3" class="thumbnail" width="80px" />
+					</c:if>
+					<c:if test="${not empty product.image4FileId}">
+						<img
+							src="${pageContext.request.contextPath}/image?fileId=${product.image4FileId}"
+							alt="상품 이미지 4" class="thumbnail" width="80px" />
+					</c:if>
+					<c:if test="${not empty product.image5FileId}">
+						<img
+							src="${pageContext.request.contextPath}/image?fileId=${product.image5FileId}"
+							alt="상품 이미지 5" class="thumbnail" width="80px" />
+					</c:if>
 				</div>
 			</div>
 
@@ -73,8 +95,9 @@ request.setAttribute("floor", floor);
 			<div class="product-info-section">
 				<div class="product-info-wrapper">
 					<!-- 브랜드 -->
-					<div class="brand-name">${brand.brandName}</div>
-
+					<div class="brand-name">
+					 <a href="<c:url value='/store/brandDetail?brandId=${brand.brandId}'/>">${brand.brandName}></a>
+					 </div>
 
 					<!-- 상품명 -->
 					<h1 class="product-title">${product.name}</h1>
@@ -168,11 +191,14 @@ request.setAttribute("floor", floor);
 
 				<!-- 구매 버튼들 -->
 				<div class="purchase-buttons">
-					<button type="button" class="btn btn-outline btn-xl"
-						onclick="addToCart()">장바구니 담기</button>
-					<button type="button" class="btn btn-primary btn-xl"
-						onclick="buyNow()">바로 구매</button>
-					<my:heartBtn state="active" onlyIcon="false" hasCount="false" />
+					<div class="action-button">
+						<button type="button" class="btn btn-outline btn-xl"
+							onclick="addToCart()">장바구니 담기</button>
+						<button type="button" class="btn btn-primary btn-xl"
+							onclick="buyNow()">바로 구매</button>
+						<my:heartBtn state="${isWished ? 'active' : 'default'}"
+							onlyIcon="false" hasCount="false" />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -379,5 +405,6 @@ window.productOptionsData = [
 </script>
 	<script src="<c:url value='/consumer/js/tab.js'/>"></script>
 	<script src="<c:url value='/consumer/js/productDetail.js'/>"></script>
+	<script src="<c:url value='/consumer/js/addToWishlist.js'/>"></script>
 </body>
 </html>

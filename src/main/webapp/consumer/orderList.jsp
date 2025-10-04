@@ -4,6 +4,31 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+
+<%-- 오늘 날짜를 JSTL 변수에 저장 --%>
+<jsp:useBean id="now" class="java.util.Date" />
+
+<fmt:formatDate value="${now}" pattern="yyyy" var="__todayY" />
+<fmt:formatDate value="${now}" pattern="M" var="__todayM" />
+<fmt:formatDate value="${now}" pattern="d" var="__todayD" />
+
+<c:set var="__submit" value="${empty submitLabel ? '조회' : submitLabel}" />
+<c:set var="__periods" value="${empty periods ? '1,3,6,12' : periods}" />
+<c:set var="__prefix" value="${empty namePrefix ? 'drf' : namePrefix}" />
+<c:set var="__size" value="${empty size ? 'md' : size}" />
+<%-- 기본값 md --%>
+
+<c:set var="__yFrom"
+	value="${empty yearsFrom ? __todayY - 5 : yearsFrom}" />
+<c:set var="__yTo" value="${empty yearsTo   ? __todayY      : yearsTo}" />
+
+<c:set var="__startY" value="${empty startY ? __todayY : startY}" />
+<c:set var="__startM" value="${empty startM ? __todayM : startM}" />
+<c:set var="__startD" value="${empty startD ? __todayD : startD}" />
+<c:set var="__endY" value="${empty endY   ? __todayY : endY}" />
+<c:set var="__endM" value="${empty endM   ? __todayM : endM}" />
+<c:set var="__endD" value="${empty endD   ? __todayD : endD}" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,10 +37,12 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
-<link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/table.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/tagcss/dateRangeFilterBox.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
 <link rel="stylesheet"
 	href="<c:url value='/consumer/css/mypageMenu.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
@@ -23,13 +50,9 @@
 	href="<c:url value='/consumer/css/orderStatusCard.css'/>">
 <link rel="stylesheet"
 	href="<c:url value='/consumer/css/userInfo.css'/>">
-<link rel="stylesheet"
-	href="<c:url value='/tagcss/dateRangeFilterBox.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet"
 	href="<c:url value='/consumer/css/orderList.css'/>">
-
-
 </head>
 <body>
 
@@ -37,37 +60,151 @@
 	<%@ include file="/consumer/header.jsp"%>
 
 	<div class="container">
-		<!-- Sidebar -->
-		<aside class="sidebar">
-			<!-- 마이페이지 메뉴 -->
-			<%@ include file="/consumer/mypageMenu.jsp"%>
-		</aside>
+
+		<!-- 마이페이지 메뉴 -->
+		<%@ include file="/consumer/mypageMenu.jsp"%>
 
 		<div class="page-contents">
-			<!-- user info -->
-			<div class="user-wrapper">
-				<my:userInfo userName="${sessionScope.memberName}"
-					points="${memberInfo.pointBalance}"
-					coupons="${couponCount}"
-					notifications="${sessionScope.memberNotifications}" />
+
+			<!-- ============================ 1. 사용자 정보 요약 ============================ -->
+			<div class="user-info">
+
+				<div class="user-info__top">
+					<p class="greeting">
+						<span class="name">${sessionScope.memberName}</span> 님 반갑습니다.
+					</p>
+
+					<button class="bell" type="button" aria-label="알림">
+						<i class="bi bi-bell"></i>
+						<c:if test="${notifications ne '0'}">
+							<span class="bell__badge"
+								aria-label="${sessionScope.memberNotifications}개의 새 알림">
+								<c:choose>
+									<c:when test="${sessionScope.memberNotifications gt 99}">99+</c:when>
+									<c:otherwise>${sessionScope.memberNotifications}</c:otherwise>
+								</c:choose>
+							</span>
+						</c:if>
+					</button>
+				</div>
+
+				<!-- 하단 통계 영역 -->
+				<div class="user-info__bottom">
+					<div class="stat">
+						<span class="label">등급</span> <span class="value"><span
+							class="em">임시</span></span>
+					</div>
+					<div class="stat">
+						<span class="label">포인트</span> <span class="value"><span
+							class="em">${sessionScope.memberPoints}</span> p</span>
+					</div>
+					<div class="stat">
+						<span class="label">쿠폰</span> <span class="value"><span
+							class="em">${sessionScope.memberCoupons}</span> 개</span>
+					</div>
+				</div>
 			</div>
 
-			<my:orderStatusCard title="주문/배송 조회"
-				orderCount="${orderSummary.orderCount}"
-				paymentCount="${orderSummary.paymentCount}"
-				shippingCount="${orderSummary.shippingCountt}"
-				deliveredCount="${orderSummary.deliveredCount}"
-				confirmedCount="${orderSummary.confirmedCount}"
-				activeStatus="delivered" />
+			<!-- ============================ 2. 주문/배송 조회 ============================ -->
+			<div class="order-status-card">
+				<div class="order-status-header">
+					<h3 class="order-status-title">주문/배송 조회</h3>
+				</div>
 
-			<div class="box-wrapper">
-				<form action="<c:url value='/store/mypage/orderList'/>" method="get">
-					<my:dateRangeFilterBox periods="1,3,6,12" submitLabel="조회"
-						size="sm" />
-				</form>
+				<div class="order-status-box">
+					<div class="status-item ${activeStatus eq 'order' ? 'active' : ''}">
+						<div class="status-count">${orderSummary.orderCount}</div>
+						<div class="status-label">주문접수</div>
+					</div>
+
+					<div
+						class="status-item ${activeStatus eq 'payment' ? 'active' : ''}">
+						<div class="status-count">${orderSummary.paymentCount}</div>
+						<div class="status-label">결제완료</div>
+					</div>
+
+					<div
+						class="status-item ${activeStatus eq 'shipping' ? 'active' : ''}">
+						<div class="status-count">${orderSummary.shippingCountt}</div>
+						<div class="status-label">배송준비중</div>
+					</div>
+
+					<div
+						class="status-item ${activeStatus eq 'delivered' ? 'active' : ''}">
+						<div class="status-count">${orderSummary.deliveredCount}</div>
+						<div class="status-label">배송중</div>
+					</div>
+
+					<div
+						class="status-item ${activeStatus eq 'confirmed' ? 'active' : ''}">
+						<div class="status-count">${orderSummary.confirmedCount}</div>
+						<div class="status-label">배송완료</div>
+					</div>
+				</div>
 			</div>
 
+			<!-- ============================ 3. 기간 조회 박스 ============================ -->
+			<div class="drf-wrap drf-${__size}">
+				<div class="drf-box">
+					<div class="drf-header">
+						<div class="drf-label">구매기간</div>
+						<div class="drf-periods">
+							<c:forTokens items="${__periods}" delims="," var="p"
+								varStatus="st">
+								<button type="button"
+									class="drf-chip ${st.first ? 'is-active' : ''}"
+									data-months="${p}">${p}개월</button>
+							</c:forTokens>
+						</div>
+					</div>
 
+					<div class="drf-dates">
+						<div class="since-drf-date">
+							<select class="drf-select" name="${__prefix}StartY"
+								data-role="start-y">
+								<c:forEach var="y" begin="${__yFrom}" end="${__yTo}">
+									<option value="${y}" ${y == __startY ? 'selected' : ''}>${y}</option>
+								</c:forEach>
+							</select><span class="drf-suffix">년</span> <select class="drf-select"
+								name="${__prefix}StartM" data-role="start-m">
+								<c:forEach var="m" begin="1" end="12">
+									<option value="${m}" ${m == __startM ? 'selected' : ''}>${m}</option>
+								</c:forEach>
+							</select><span class="drf-suffix">월</span> <select class="drf-select"
+								name="${__prefix}StartD" data-role="start-d">
+								<c:forEach var="d" begin="1" end="31">
+									<option value="${d}" ${d == __startD ? 'selected' : ''}>${d}</option>
+								</c:forEach>
+							</select><span class="drf-suffix">일</span>
+						</div>
+
+						<div class="drf-tilde">~</div>
+
+						<div class="until-drf-date">
+							<select class="drf-select" name="${__prefix}EndY"
+								data-role="end-y">
+								<c:forEach var="y" begin="${__yFrom}" end="${__yTo}">
+									<option value="${y}" ${y == __endY ? 'selected' : ''}>${y}</option>
+								</c:forEach>
+							</select><span class="drf-suffix">년</span> <select class="drf-select"
+								name="${__prefix}EndM" data-role="end-m">
+								<c:forEach var="m" begin="1" end="12">
+									<option value="${m}" ${m == __endM ? 'selected' : ''}>${m}</option>
+								</c:forEach>
+							</select><span class="drf-suffix">월</span> <select class="drf-select"
+								name="${__prefix}EndD" data-role="end-d">
+								<c:forEach var="d" begin="1" end="31">
+									<option value="${d}" ${d == __endD ? 'selected' : ''}>${d}</option>
+								</c:forEach>
+							</select><span class="drf-suffix">일</span>
+						</div>
+					</div>
+				</div>
+
+				<button class="drf-submit" type="submit">${__submit}</button>
+			</div>
+
+			<!-- ============================ 4. 상품 목록 테이블 ============================ -->
 			<div class="table-wrapper">
 				<table class="table">
 					<thead>
@@ -205,14 +342,17 @@
 					</tbody>
 				</table>
 			</div>
-			<div class=pagination-wrapper>
-			<my:pagination currentPage="${orderResult.currentPage}"
-				baseUrl="/store/mypage/orderList" totalPages="${orderResult.totalPages}" />
+			<!-- 페이징 -->
+			<div class="page-pagination">
+				<my:pagination currentPage="${currentPage}"
+					totalPages="${totalPages}" baseUrl="/store/planList?${queryString}" />
 			</div>
 		</div>
 	</div>
+
 	<!-- 하단 푸터 -->
 	<%@ include file="/consumer/footer.jsp"%>
+
 	<script>
 	function cancelOrder(orderItemId) {
 	    if(confirm('주문을 취소하시겠습니까?')) {
@@ -243,6 +383,50 @@
 	function requestReturn(orderItemId) {
 	    location.href = '/consumer/requestReturn?orderItemId=' + orderItemId;
 	}
+	
+	(function(){
+		  // 태그 바로 뒤 script 기준: 이전 형제가 루트
+		  const wrap = document.currentScript && document.currentScript.previousElementSibling;
+		  if(!wrap || !wrap.classList.contains('drf-wrap')) return;
+
+		  const $  = (s,ctx=wrap)=>ctx.querySelector(s);
+		  const $$ = (s,ctx=wrap)=>Array.from(ctx.querySelectorAll(s));
+
+		  const sY=$('[data-role="start-y"]'), sM=$('[data-role="start-m"]'), sD=$('[data-role="start-d"]');
+		  const eY=$('[data-role="end-y"]'),   eM=$('[data-role="end-m"]'),   eD=$('[data-role="end-d"]');
+
+		  const clamp=(y,m,d)=>Math.min(d, new Date(y, m, 0).getDate());
+		  const setSel=(sel,v)=>{ const t=String(parseInt(v,10)); for(const o of sel.options){ if(String(parseInt(o.value,10))===t){ o.selected=true; break; } } };
+		  const getDate=(Y,M,D)=>new Date(parseInt(Y.value,10), parseInt(M.value,10)-1, parseInt(D.value,10));
+		  const setDate=(dt,start)=>{ const y=dt.getFullYear(), m=dt.getMonth()+1, d=dt.getDate();
+		    if(start){ setSel(sY,y); setSel(sM,m); setSel(sD,clamp(y,m,d)); }
+		    else     { setSel(eY,y); setSel(eM,m); setSel(eD,clamp(y,m,d)); }
+		  };
+		  const minusMonths=(base,months)=>{
+		    let y=base.getFullYear(), m=base.getMonth()+1, d=base.getDate();
+		    let nm=m-months; while(nm<=0){ nm+=12; y--; }
+		    return new Date(y, nm-1, clamp(y,nm,d));
+		  };
+
+		  // 개월 버튼
+		  $$('.drf-chip').forEach(btn=>{
+		    btn.addEventListener('click', ()=>{
+		      const months=parseInt(btn.dataset.months,10)||1;
+		      const end=getDate(eY,eM,eD);
+		      const start=minusMonths(end, months);
+		      setDate(start,true);
+
+		      $$('.drf-chip').forEach(b=>b.classList.remove('is-active'));
+		      btn.classList.add('is-active');
+		    });
+		  });
+
+		  // 종료 연/월 변경 시 day 정리
+		  [eY,eM].forEach(sel=> sel.addEventListener('change', ()=>{
+		    const end=getDate(eY,eM,eD); setDate(end,false);
+		    const st =getDate(sY,sM,sD); setDate(new Date(st.getFullYear(), st.getMonth(), clamp(st.getFullYear(), st.getMonth()+1, st.getDate())), true);
+		  }));
+		})();
 	</script>
 </body>
 </html>

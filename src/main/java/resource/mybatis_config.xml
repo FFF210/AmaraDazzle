@@ -51,6 +51,17 @@
 		<typeAlias type="dto.Wishlist" alias="wishlist" />
 		<typeAlias type="dto.admin.SearchConditionDTO" alias="searchCondition" />
 		<typeAlias type="dto.consumer.ProductPlan" alias="productPlan" />
+		<typeAlias type="dto.consumer.ProductRank" alias="productRank" />
+		<typeAlias type="dto.consumer.ProductSale" alias="productSale" />
+		<typeAlias type="dto.consumer.ProductSaleExclusive" alias="productSaleExclusive" />
+		<typeAlias type="dto.consumer.ProductCategory" alias="productCategory" />
+		<typeAlias type="dto.consumer.ProductSearch" alias="productSearch" />
+		<typeAlias type="dto.consumer.EventDetail" alias="eventDetail" />
+		<typeAlias type="dto.consumer.EventDetailProduct" alias="eventDetailProduct" />
+		<typeAlias type="dto.consumer.CouponList" alias="couponList" />
+		<typeAlias type="dto.consumer.CommonProduct" alias="commonProduct" />
+		<typeAlias type="dto.consumer.MembershipBrand" alias="membershipBrand" />
+		<typeAlias type="dto.consumer.MemberFilter" alias="memberFilter" />
 		<typeAlias type="dto.brand.ProductList" alias="productList" />
 		<typeAlias type="dto.brand.ProductDetail" alias="productDetail" />
 		<typeAlias type="dto.brand.OrdersList" alias="ordersList" />
@@ -62,10 +73,10 @@
 		<typeAlias type="dto.brand.ReviewList" alias="reviewList" />
 		<typeAlias type="dto.brand.ShippingList" alias="shippingList" />
 		<typeAlias type="dto.brand.ShippingDetailItem" alias="shippingDetailItem" />
-		<typeAlias type="dto.brand2.BannerList" alias="bannerList" />
-		<typeAlias type="dto.brand2.BannerForm" alias="bannerForm" />
+		<typeAlias type="dto.brand2.BannerDetail" alias="bannerDetail" />
 		<typeAlias type="dto.brand2.AdminToss" alias="adminToss" />
 		<typeAlias type="dto.brand2.MembershipList" alias="membershipList" />
+		<typeAlias type="dto.brand2.EventList" alias="eventList" />
 		<!-- type="" : 패키지명.클래스명, alias="" : 별칭 -->
 	</typeAliases>
 

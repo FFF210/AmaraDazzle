@@ -1,12 +1,15 @@
 @charset "UTF-8";
+
 .sort-list {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  border-top: 4px solid rgba(0, 0, 0, 0.10);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.10);
-  padding: 4px 0 8px 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	border-top: 4px solid rgba(0, 0, 0, 0.10);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.10);
+	padding: 4px 0 8px 0;
+	height: 50px;
+	box-sizing: border-box;
 }
 
 /* 좌측 버튼들 */
@@ -26,7 +29,6 @@
 	background: none;
 	transition: color 0.2s ease;
 	border-right: 1px solid rgba(0, 0, 0, 0.10);
-	
 	font-family: 'Noto Sans KR', sans-serif;
 	color: #666;
 	text-align: center;
@@ -46,6 +48,6 @@
 }
 
 .sort-item.selected {
-  color: #111;
-  font-weight: 700;
+	color: #111;
+	font-weight: 700;
 }

@@ -1,11 +1,13 @@
 package dao.consumer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
 import dto.Member;
+import dto.consumer.MemberFilter;
 import util.MybatisSqlSessionFactory;
 
 public class MemberDAOImpl implements MemberDAO {
@@ -106,7 +108,7 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("mapper.member.selectByKakaoId", kakaoId);
 	}
 
-	//마이페이지용 - 회원의 기본 정보만 조회
+	// 마이페이지용 - 회원의 기본 정보만 조회
 	@Override
 	public Map<String, Object> selectMemberInfo(Long memberId) throws Exception {
 		return sqlSession.selectOne("mapper.member.selectMemberInfo", memberId);
@@ -165,6 +167,18 @@ public class MemberDAOImpl implements MemberDAO {
 		params.put("usingPoint", usingPoint);
 
 		return sqlSession.selectOne("mapper.member.checkPointAvailable", params);
+	}
+
+	// ================[소비자] 회원 맞춤 필터 조회 ===================
+	@Override
+	public MemberFilter selectMemberFilters(Long memberId) throws Exception {
+		return sqlSession.selectOne("mapper.member.selectMemberFilters", memberId);
+	}
+
+	// ================[소비자] 피부 고민(다중값) 조회 ===================
+	@Override
+	public List<Long> selectMemberSkinIssues(Long memberId) throws Exception {
+		return sqlSession.selectList("mapper.member.selectMemberSkinIssues", memberId);
 	}
 
 }

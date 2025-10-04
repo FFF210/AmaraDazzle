@@ -95,17 +95,14 @@
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<!-- <script src="https://js.tosspayments.com/v2"></script> -->
-<script src="https://js.tosspayments.com/v1/payment"></script>
 </head>
 <body>
 	<my:layout>
 
 		<my:breadcrumb
-			items="배너광고 관리:/brand2/adbannerList.jsp, 배너광고 신청:/brand2/adbannerForm.jsp" />
+			items="배너광고 관리:/brand2/adbannerList, 배너광고 신청:/brand2/adbannerForm" />
 		<my:brand2formLayout title="배너광고 신청" formId="eventForm"
-			action="/brand2/adbanner" method="post"
-			enctype="multipart/form-data">
+			action="/brand2/adbanner" method="post" enctype="multipart/form-data">
 
 			<div class="grid">
 				<div class="label req">배너 광고명</div>
@@ -129,8 +126,9 @@
 
 				<div class="label req">배너 등록 기간</div>
 				<div class="inline date-row">
-					<input id="startDate" class="startDate" name="startDate" type="date"> <span>~</span>
-					<input id="endDate" class="endDate" name="endDate" type="date">
+					<input id="startDate" class="startDate" name="startDate"
+						type="date"> <span>~</span> <input id="endDate"
+						class="endDate" name="endDate" type="date">
 				</div>
 
 				<div class="label">관리자 전달사항</div>
@@ -140,8 +138,10 @@
 				</div>
 				<div class="label">파일 업로드</div>
 				<div class="upload">
-					<my:uploader size="lg" id="uploadFileId" name="uploadFileId" label="Click to upload"
-						desc="또는 파일을 이 영역으로 드래그하세요" />
+
+					<my:uploader size="lg" id="uploadFileName" name="uploadFileName"
+						label="Click to upload" desc="또는 파일을 이 영역으로 드래그하세요"
+						multiple="false" />
 				</div>
 			</div>
 
@@ -157,108 +157,99 @@
 							onclick="location.href='/brand2/adbannerList.jsp'">닫기</button>
 						<button type="submit" class="btn btn-outline btn-sm" id="payBtn">신청하기</button>
 					</div>
-
-
-					<%-- <button type="button" class="pay-button" id="payBtn">
-						<img
-							src="${pageContext.request.contextPath}/brand2/images/TossPay_Logo_Primary.png"
-							width="280px" alt="토스페이결제하기">
-					</button> --%>
-					<!-- 
-					결제 UI
-					<div id="payment-method"></div>
-					이용약관 UI
-					<div id="agreement"></div>
-					결제하기 버튼
-					<button class="button" id="payment-button" style="margin-top: 30px">결제하기</button>
-
- -->
 				</div>
 			</div>
 		</my:brand2formLayout>
 	</my:layout>
 
-
 	<script>
+		
+	<%-- 예상 금액 --%>
+		document.addEventListener("DOMContentLoaded",
+				function() {
+					const startInput = document.getElementById("startDate");
+					const endInput = document.getElementById("endDate");
+					const dayCountEl = document.getElementById("dayCount");
+					const totalPriceEl = document.getElementById("totalPrice");
+
+					let currentDayCount = 0;
+					let currentTotalPrice = 0;
+
+					function updateDayCount() {
+						const startDate = new Date(startInput.value);
+						const endDate = new Date(endInput.value);
+
+						if (startInput.value && endInput.value
+								&& endDate >= startDate) {
+							const diffTime = endDate - startDate;
+							const diffDays = Math.floor(diffTime
+									/ (1000 * 60 * 60 * 24)) + 1;
+							currentDayCount = diffDays;
+							currentTotalPrice = diffDays * 140000;
+
+							dayCountEl.innerText = diffDays;
+							totalPriceEl.innerText = "₩"
+									+ currentTotalPrice.toLocaleString();
+						} else {
+							currentDayCount = 0;
+							currentTotalPrice = 0;
+							dayCountEl.innerText = 0;
+							totalPriceEl.innerText = "₩0";
+						}
+					}
+
+					startInput.addEventListener("change", updateDayCount);
+					endInput.addEventListener("change", updateDayCount);
+
+				});
+	<%-- 예상 금액 --%>
+		
+	<%-- toss js --%>
+		
+	<%--
+//------ 클라이언트 키로 객체 초기화 ------
+var clientKey = "test_ck_XZYkKL4Mrj9eGzWBRNORV0zJwlEW";
+var tossPayments = TossPayments(clientKey);
+
+//------ 결제창 띄우기 ------
+//------ 버튼 클릭 시 결제창 띄우기 ------
 document.addEventListener("DOMContentLoaded", function() {
-  const startInput = document.getElementById("startDate");
-  const endInput = document.getElementById("endDate");
-  const dayCountEl = document.getElementById("dayCount");
-  const totalPriceEl = document.getElementById("totalPrice"); 
+	var button = document.getElementById("payBtn");
 
-  let currentDayCount = 0;
-  let currentTotalPrice = 0;
-
-  function updateDayCount() {
-    const startDate = new Date(startInput.value);
-    const endDate = new Date(endInput.value);
-
-    if (startInput.value && endInput.value && endDate >= startDate) {
-      const diffTime = endDate - startDate;
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-      currentDayCount = diffDays;
-      currentTotalPrice = diffDays * 140000;
-
-      dayCountEl.innerText = diffDays;
-      totalPriceEl.innerText = "₩" + currentTotalPrice.toLocaleString();
-    } else {
-      currentDayCount = 0;
-      currentTotalPrice = 0;
-      dayCountEl.innerText = 0;
-      totalPriceEl.innerText = "₩0";
-    }
-  }
-
-  startInput.addEventListener("change", updateDayCount);
-  endInput.addEventListener("change", updateDayCount);
-
-  document.getElementById("payBtn").addEventListener("click", function() {
-    let bannerName = document.getElementById("bannerName").value.trim();
-    let managerName = document.getElementById("managerName").value.trim();
-    let managerTel = document.getElementById("managerTel").value.trim();
-
-    if (!bannerName || !managerName || !managerTel || currentDayCount <= 0) {
-      alert("모든 입력란을 채우고 올바른 기간을 선택하세요.");
-      return;
-    }
-
-    let totalPrice = parseInt(totalPriceEl.innerText.replace(/[^0-9]/g, ""));
-    console.log("결제 금액:", totalPrice);
-
-    // ------ 클라이언트 키로 객체 초기화 ------
-    var clientKey = "test_ck_XZYkKL4Mrj9eGzWBRNORV0zJwlEW";
-    var tossPayments = TossPayments(clientKey);
-
-    // ------ 결제창 띄우기 ------
-    tossPayments
-      .requestPayment("카드", {
-        // 결제수단 파라미터 (카드, 계좌이체, 가상계좌, 휴대폰 등)
-        // 결제 정보 파라미터
-        // 더 많은 결제 정보 파라미터는 결제창 Javascript SDK에서 확인하세요.
-        // https://docs.tosspayments.com/sdk/payment-js
-        amount: 1, // 결제 금액
-        orderId: 'owxy0ZK_p8jVqCygWlsWWC', // 주문번호(주문번호는 상점에서 직접 만들어주세요.)
-        orderName: "테스트 결제", // 구매상품
-        customerName: "김토스", // 구매자 이름
-        successUrl: "http://localhost:8080/tossSuccess", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
-        failUrl: "http://localhost:8080/tossFail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
-      })
-      // ------결제창을 띄울 수 없는 에러 처리 ------
-      // 메서드 실행에 실패해서 reject 된 에러를 처리하는 블록입니다.
-      // 결제창에서 발생할 수 있는 에러를 확인하세요.
-      // https://docs.tosspayments.com/reference/error-codes#결제창공통-sdk-에러
-      .catch(function (error) {
-        if (error.code === "USER_CANCEL") {
-          // 구매자가 결제창을 닫았을 때 에러 처리
-          alert("결제 처리가 취소되었습니다")
-        } else if (error.code === "INVALID_CARD_COMPANY") {
-          // 유효하지 않은 카드 코드에 대한 에러 처리
-            alert("결제 처리 중 오류가 발생했습니다")
-        }
-      });
-  });
-
-  </script>
+	button.addEventListener("click", function() {
+		tossPayments
+			.requestPayment("카드", {
+				// 결제수단 파라미터 (카드, 계좌이체, 가상계좌, 휴대폰 등)
+				// 결제 정보 파라미터
+				// 더 많은 결제 정보 파라미터는 결제창 Javascript SDK에서 확인하세요.
+				// https://docs.tosspayments.com/sdk/payment-js
+				amount: 1, // 결제 금액
+				orderId: "ORDER-" + new Date().getTime(), // 주문번호(주문번호는 상점에서 직접 만들어주세요.)
+				orderName: "테스트 결제", // 구매상품 (생수 외 1건) 같은 형식
+				customerName: "김토스", // 구매자 이름
+				successUrl: "http://localhost:8080/tossSuccess", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+				failUrl: "http://localhost:8080/tossFail", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
+			})
+		// ------결제창을 띄울 수 없는 에러 처리 ------
+		// 메서드 실행에 실패해서 reject 된 에러를 처리하는 블록입니다.
+		// 결제창에서 발생할 수 있는 에러를 확인하세요.
+		// https://docs.tosspayments.com/reference/error-codes#결제창공통-sdk-에러
+		.catch(function(error) {
+			if (error.code === "USER_CANCEL") {
+				// 구매자가 결제창을 닫았을 때 에러 처리
+				alert("결제 처리가 취소되었습니다")
+			} else if (error.code === "INVALID_CARD_COMPANY") {
+				// 유효하지 않은 카드 코드에 대한 에러 처리
+				alert("결제 처리 중 오류가 발생했습니다")
+			}
+		});
+	});
+});
+--%>
+		
+	<%-- toss js --%>
+		
+	</script>
 
 </body>
 

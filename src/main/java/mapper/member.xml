@@ -97,7 +97,7 @@
 		= #{phone}
 		AND status = 'ACTIVE'
 	</select>
-	
+
 	<!-- findAccount 비밀번호 재설정 -->
 	<update id="updatePassword" parameterType="map">
 		UPDATE member SET
@@ -118,7 +118,8 @@
 		line2,
 		point_balance as pointBalance
 		FROM member
-		WHERE member_id = #{memberId}
+		WHERE member_id =
+		#{memberId}
 		AND status = 'ACTIVE'
 	</select>
 
@@ -127,7 +128,8 @@
 		resultType="Integer">
 		SELECT point_balance
 		FROM member
-		WHERE member_id = #{memberId}
+		WHERE member_id =
+		#{memberId}
 		AND status = 'ACTIVE'
 	</select>
 
@@ -135,8 +137,10 @@
 	<!-- 주문 시 포인트 사용할 때 -->
 	<update id="useMemberPoint" parameterType="map">
 		UPDATE member
-		SET point_balance = point_balance - #{usingPoint}
-		WHERE member_id = #{memberId}
+		SET
+		point_balance = point_balance - #{usingPoint}
+		WHERE member_id =
+		#{memberId}
 		AND point_balance >= #{usingPoint}
 		AND status = 'ACTIVE'
 	</update>
@@ -152,11 +156,12 @@
 		END
 		FROM member
 		WHERE member_id = #{memberId}
-		AND status = 'ACTIVE'
+		AND status =
+		'ACTIVE'
 	</select>
 
 
-    <!-- ========소비자 마이페이지용 ======= -->
+	<!-- ========소비자 마이페이지용 ======= -->
 	<!-- 회원 정보 수정 -->
 	<update id="updateMember" parameterType="dto.Member">
 		UPDATE member SET
@@ -226,5 +231,26 @@
 		WHERE member_id = #{memberId}
 		AND status = 'ACTIVE'
 	</select>
+
+	<!-- ================[소비자] 회원 맞춤 필터 조회 =================== -->
+	<select id="selectMemberFilters" parameterType="long"
+		resultType="memberFilter">
+		SELECT
+		m.member_id AS memberId,
+		m.skin_type_id AS skinTypeId,
+		m.personal_color_id AS personalColorId
+		FROM member m
+		WHERE m.member_id = #{value}
+	</select>
+
+	<!-- ================[소비자] 피부 고민(다중값) 조회 =================== -->
+	<select id="selectMemberSkinIssues" parameterType="long"
+		resultType="long">
+		SELECT code_id
+		FROM member_skin_issue
+		WHERE member_id =
+		#{value}
+	</select>
+
 
 </mapper>

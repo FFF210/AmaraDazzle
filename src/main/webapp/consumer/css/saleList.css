@@ -1,0 +1,84 @@
+@charset "UTF-8";
+
+.page-header-wrapper {
+	background: #F2EBF1;
+}
+
+.page-header-wrapper>* {
+	width: 1020px;
+	margin: 0 auto;
+}
+
+.sale-container {
+	width: 1020px;
+	padding: 20px 0 40px 0;
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+	margin: 0 auto;
+}
+
+/* 주목할 만한 세일 상품 섹션 */
+.highlight-sale-section {
+	width: 100%;
+}
+
+.section-title {
+	display: flex;
+	padding: 20px 0;
+	align-items: center;
+	gap: 10px;
+	align-self: stretch;
+	color: #333;
+	font-size: 22px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: 150%;
+	letter-spacing: 0.125px;
+}
+
+/* 버튼 + 리스트 감싸는 컨테이너 */
+.highlight-sale-container {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+/* 버튼 */
+.nav-btn {
+	border: none;
+	background: transparent;
+	font-size: 32px;
+	cursor: pointer;
+	color: #cdcdcd;
+	flex-shrink: 0;
+}
+
+.nav-btn:hover {
+	color: #000;
+}
+
+.highlight-sale-list {
+	display: flex;
+	transition: transform 0.5s ease;
+	overflow: hidden;
+}
+
+.product-item-wrapper {
+	flex: 0 0 calc(100%/ 3); /* 한 화면에 3개 */
+	box-sizing: border-box;
+	padding: 0 10px;
+}
+
+/* 상품 카드 4열 x 여러 줄 */
+.product-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	column-gap: 46px;
+	row-gap: 60px;
+}
+
+.page-pagination {
+	display: flex;
+	justify-content: center;
+}

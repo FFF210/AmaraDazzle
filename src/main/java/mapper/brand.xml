@@ -11,6 +11,23 @@
 		SELECT * FROM brand WHERE brand_id = #{brandId}
 	</select>
 
+	<!-- ================[소비자] 멤버십 가입 브랜드 조회 =================== -->
+	<select id="selectActiveMembershipBrands" parameterType="Integer"
+		resultType="membershipBrand">
+		SELECT
+		m.membership_id AS membershipId,
+		m.brand_id AS brandId,
+		b.brand_name AS brandName,
+		b.logo_file_id AS logoFileId,
+		b.hero_file_id AS heroFileId,
+		b.intro AS intro
+		FROM membership m
+		INNER JOIN brand b ON m.brand_id = b.brand_id
+		WHERE m.status = 'ACTIVE'
+		ORDER BY m.created_at DESC
+		LIMIT #{value}
+	</select>
+
 	<!--======================= [브랜드 어드민] 회원가입 ======================= -->
 	<insert id="insertBrand" parameterType="brand"
 		useGeneratedKeys="true" keyProperty="brandId">
@@ -70,14 +87,20 @@
 	</select>
 
 	<!-- ======================= [브랜드 어드민] 로그인 ======================= -->
-	<select id="selectBrandByPassword" parameterType="string" resultType="brand">
+	<select id="selectBrandByPassword" parameterType="string"
+		resultType="brand">
 		SELECT
-		brand_id, email, password, brn, brand_name, manager_name, phone,
-		brand_status, logo_file_id, hero_file_id, intro, bank,
+		brand_id, email, password, brn, brand_name,
+		manager_name, phone,
+		brand_status, logo_file_id, hero_file_id, intro,
+		bank,
 		account_number, account_holder, settlement_date,
-		created_at, updated_at
+		created_at,
+		updated_at
 		FROM brand
 		WHERE email = #{value}
-		AND brand_status IN ('SIGNUP_COMPLETED', 'APPLY_SUBMITTED', 'APPROVED')
+		AND brand_status IN
+		('SIGNUP_COMPLETED', 'APPLY_SUBMITTED', 'APPROVED')
 	</select>
+
 </mapper>

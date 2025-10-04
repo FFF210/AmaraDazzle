@@ -117,6 +117,7 @@ public class ProductForm extends HttpServlet {
 
 				// product 테이블 업데이트
 				service.updateProduct(product);
+
 				Long productId = product.getProductId();
 
 				// product_option 테이블 업데이트 (기존 → 삭제, 신규 → 등록)

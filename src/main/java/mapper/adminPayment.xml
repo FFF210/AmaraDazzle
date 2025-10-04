@@ -6,15 +6,14 @@
 
 	<!-- 최고관리자의 승인 시 결제하기 버튼 -->
 
-	<insert id="insertAdminPayment" parameterType="adminToss">
+	<insert id="insertAdminPayment" parameterType="adminPayment">
 		INSERT INTO
-		admin_payment (order_id, amount, payment_key, brand_id,
-		created_at)
-		VALUES (#{orderId}, #{amount}, #{paymentKey}, #{brandId}, NOW())
+		admin_payment (banner_id, brand_id, order_id, amount, payment_key, pay_date, method, order_name, receipt_url)
+		VALUES (#{bannerId}, #{brandId}, #{orderId}, #{amount}, #{paymentKey},#{payDate},#{method},#{orderName},#{receiptUrl} )
 	</insert>
 
 
-	<update id="updateSuccessByOrderId">
+	<update id="updateSuccessByOrderId"  parameterType="adminPayment">
 		UPDATE admin_payment
 		SET payment_key = #{paymentKey},
 		pay_date = #{approvedAt},
@@ -22,11 +21,7 @@
 		WHERE order_id = #{orderId}
 	</update>
 
-	<update id="updateFailedByOrderId">
-		UPDATE admin_payment
-		SET payment_key = #{paymentKey},
-		WHERE order_id = #{orderId}
-	</update>
+
 
 	<!-- banner_id로 결제 여부 조회 <select id="selectPaymentByBannerId" parameterType="long" 
 		resultType="adminPayment"> SELECT * FROM admin_payment WHERE banner_id = 

@@ -12,16 +12,21 @@ public class ProductPlan {
 	private String brandName; // 브랜드
 	private Integer isExclusive; // 단독 판매 여부 (tinyint, DEFAULT 0)
 	private Integer isVisible; // 상품 공개 여부 (tinyint, DEFAULT 1)
+
 	private Integer isPlanned; // 기획 상품 여부 (tinyint, DEFAULT 0)
 	private Integer hasOption; // 옵션 존재 여부
 	private Integer isWished; // 1: 찜했음, 0: 안함
+
 	private Long category1Id; // 대분류 카테고리 ID (FK → category.category_id)
 	private Long category2Id; // 중분류 카테고리 ID (FK → category.category_id)
 	private Long category3Id; // 소분류 카테고리 ID (FK → category.category_id)
 	private Long thumbnailFileId; // 썸네일 파일 ID (FK → upload_file.upload_file_id)
+
 	private BigDecimal price; // 판매가 (기본가)
+	private BigDecimal finalPrice; // 최종가격 (세일가)
 	private String discountType; // 할인 방식 (RATE, AMOUNT)
 	private BigDecimal discountValue; // 할인 값(퍼센트 또는 금액)
+
 	private Date startDate; // 세일 시작 시각
 	private Date endDate; // 세일 종료 시각
 	private Timestamp createdAt; // 생성 시각 (DEFAULT CURRENT_TIMESTAMP)
@@ -33,6 +38,14 @@ public class ProductPlan {
 	private Double avgRating;
 	private Integer wishCount;
 	private Double popularityScore;
+
+	public BigDecimal getFinalPrice() {
+		return finalPrice;
+	}
+
+	public void setFinalPrice(BigDecimal finalPrice) {
+		this.finalPrice = finalPrice;
+	}
 
 	public Long getProductId() {
 		return productId;

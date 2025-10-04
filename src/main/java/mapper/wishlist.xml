@@ -10,7 +10,6 @@
 		VALUES (#{memberId}, #{productId})
 	</insert>
 
-
 	<!-- ================[소비자] 이미 찜한 상품인지 확인 =================== -->
 	<select id="existsWishlist" parameterType="map"
 		resultType="Integer">
@@ -25,4 +24,43 @@
 		DELETE FROM wishlist
 		WHERE member_id = #{memberId} AND product_id = #{productId}
 	</delete>
+	
+	<!-- ========================== [위시리스트 페이지] ========================== -->
+    <!-- [소비자] 회원의 위시리스트 전체 조회 (상품 정보 포함) -->
+    <!--  나중에 이미지 경로 추가해야함!!!!!! -->
+    <select id="selectWishlistByMemberId" parameterType="Long" resultType="map">
+        SELECT
+            w.wishlist_id as wishlistId,
+            w.member_id as memberId,
+            w.product_id as productId,
+            w.created_at as createdAt,
+            p.name as productName,
+            p.price as price,
+            p.is_exclusive as isExclusive,
+            p.is_visible as isVisible,
+            p.is_planned as isPlanned,
+            p.has_option as hasOption,
+            p.thumbnail_file_id as thumbnailFileId,
+            p.discount_type as discountType,
+            p.discount_value as discountValue,
+            p.stock_qty as stockQty,
+            p.start_date as startDate,
+            p.end_date as endDate,
+            b.brand_id as brandId,
+            b.brand_name as brandName
+        FROM wishlist w
+        LEFT JOIN product p ON w.product_id = p.product_id
+        LEFT JOIN brand b ON p.brand_id = b.brand_id
+        WHERE w.member_id = #{memberId}
+        AND p.is_visible = 1
+        ORDER BY w.created_at DESC
+    </select>
+
+    <!-- [소비자] 위시리스트 총 개수 조회 -->
+    <select id="countWishlistByMemberId" parameterType="Long" resultType="int">
+        SELECT COUNT(*)
+        FROM wishlist
+        WHERE member_id = #{memberId}
+    </select>
+	
 </mapper>

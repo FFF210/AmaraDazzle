@@ -2,9 +2,10 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
-<!-- 서버에서 카테고리 API URL 세팅 -->
-<c:url value="/category" var="categoryUrl"/>
+<%-- 오늘 날짜를 JSTL 변수에 저장 --%>
+<jsp:useBean id="now" class="java.util.Date" />
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -40,9 +41,10 @@
 	}
 	request.setAttribute("recentList", recentList);
 	%>
-
 	<!-- 최근 본 상품 모달 -->
 	<my:modalRecent recentList="${recentList}" />
+
+
 
 	<!-- 상단 헤더 -->
 	<%@ include file="./header.jsp"%>
@@ -54,10 +56,49 @@
 
 	<!-- 컨텐츠 영역 -->
 	<div class="plan-container">
+
 		<!-- 카테고리 필터 -->
-		<my:categoryFilter selectedLarge="${param.category1Id}"
-			selectedMiddle="${param.category2Id}"
-			selectedSmall="${param.category3Id}" />
+		<div class="category-filter">
+			<button
+				class="category-item ${empty param.category1Id ? 'selected' : ''}"
+				onclick="location.href='planList'">전체</button>
+
+			<button
+				class="category-item ${param.category1Id eq '1' ? 'selected' : ''}"
+				onclick="location.href='planList?category1Id=1'">스킨케어</button>
+
+			<button
+				class="category-item ${param.category1Id eq '8' ? 'selected' : ''}"
+				onclick="location.href='planList?category1Id=8'">마스크팩</button>
+
+			<button
+				class="category-item ${param.category1Id eq '14' ? 'selected' : ''}"
+				onclick="location.href='planList?category1Id=14'">클렌징</button>
+
+			<button
+				class="category-item ${param.category1Id eq '21' ? 'selected' : ''}"
+				onclick="location.href='planList?category1Id=21'">선케어</button>
+
+			<button
+				class="category-item ${param.category1Id eq '26' ? 'selected' : ''}"
+				onclick="location.href='planList?category1Id=26'">메이크업</button>
+
+			<button
+				class="category-item ${param.category1Id eq '49' ? 'selected' : ''}"
+				onclick="location.href='planList?category1Id=49'">헤어케어</button>
+
+			<button
+				class="category-item ${param.category1Id eq '54' ? 'selected' : ''}"
+				onclick="location.href='planList?category1Id=54'">바디케어</button>
+
+			<button
+				class="category-item ${param.category1Id eq '66' ? 'selected' : ''}"
+				onclick="location.href='planList?category1Id=66'">향수</button>
+
+			<button
+				class="category-item ${param.category1Id eq '70' ? 'selected' : ''}"
+				onclick="location.href='planList?category1Id=70'">맨즈케어</button>
+		</div>
 
 		<!-- 정렬 옵션 -->
 		<my:sortList hasSelect="false" />
@@ -79,22 +120,8 @@
 					</c:otherwise>
 				</c:choose>
 
-				<%-- 최종 가격(finalPrice) 계산 --%>
-				<c:choose>
-					<c:when test="${p.discountType eq 'RATE'}">
-						<c:set var="finalPriceRaw"
-							value="${p.price - (p.price * p.discountValue / 100)}" />
-					</c:when>
-					<c:when test="${p.discountType eq 'AMOUNT'}">
-						<c:set var="finalPriceRaw" value="${p.price - p.discountValue}" />
-					</c:when>
-					<c:otherwise>
-						<c:set var="finalPriceRaw" value="${p.price}" />
-					</c:otherwise>
-				</c:choose>
-
 				<%-- 숫자 포맷팅 (소수점 제거, 3자리마다 콤마) --%>
-				<fmt:formatNumber value="${finalPriceRaw}" type="number"
+				<fmt:formatNumber value="${p.finalPrice}" type="number"
 					maxFractionDigits="0" groupingUsed="true" var="finalPrice" />
 
 				<fmt:formatNumber value="${saleRateRaw}" type="number"
@@ -107,11 +134,22 @@
 				<%-- 상품 카드 렌더링 --%>
 				<my:productCard brand="${p.brandName}" productId="${p.productId}"
 					title="${p.name}" isWished="${p.isWished}"
-					isSale="${p.discountType ne null}" hasOption="${p.hasOption eq 1}"
-					originPrice="${p.price}" saleRate="${saleRate}"
-					finalPrice="${finalPrice}" href="${detailUrl}">
+					isSale="${p.discountType ne null and p.discountValue ne null 
+          and p.startDate ne null 
+          and p.endDate ne null 
+          and p.startDate.time <= now.time 
+          and now.time <= p.endDate.time}"
+					hasOption="${p.hasOption eq 1}" originPrice="${p.price}"
+					saleRate="${saleRate}" finalPrice="${finalPrice}"
+					href="${detailUrl}" thumbnailFileId="${p.thumbnailFileId}">
 
-					<c:if test="${p.discountType ne null}">
+					<c:if
+						test="${p.discountType ne null 
+          and p.discountValue ne null 
+          and p.startDate ne null 
+          and p.endDate ne null 
+          and p.startDate.time <= now.time 
+          and now.time <= p.endDate.time}">
 						<my:tag color="red" size="sm" text="세일" />
 					</c:if>
 					<c:if test="${p.isExclusive ne 0}">
@@ -127,8 +165,6 @@
 		<c:set var="queryString">
 			<c:if test="${not empty param.sort}">sort=${param.sort}&</c:if>
 			<c:if test="${not empty param.category1Id}">category1Id=${param.category1Id}&</c:if>
-			<c:if test="${not empty param.category2Id}">category2Id=${param.category2Id}&</c:if>
-			<c:if test="${not empty param.category3Id}">category3Id=${param.category3Id}&</c:if>
 				page=
 			</c:set>
 
@@ -176,7 +212,7 @@
 			  });
 	
 	 /*********************************************************************************************************
-	  * 찜 버튼 클릭 이벤트 (HeartBtn - 카운트 없이)
+	  * 찜 버튼 클릭 이벤트
 	  *********************************************************************************************************/
 			  document.querySelectorAll(".wishlist-btn .heart-btn").forEach(btn => {
 				    btn.addEventListener("click", (e) => {
@@ -193,14 +229,17 @@
 				      })
 				      .then(res => res.json())
 				      .then(data => {
-				        if (data.success) {
-				          if (data.isWished) {
-				            icon.classList.remove("bi-heart");
-				            icon.classList.add("bi-heart-fill", "active");
-				          } else {
-				            icon.classList.remove("bi-heart-fill", "active");
-				            icon.classList.add("bi-heart");
-				          }
+				    	  if (!data.success && data.requireLogin) {
+				    		    window.location.href = "/store/login"; // 로그인 페이지로 이동
+				    		  }
+				    	  else if (data.success) {
+					          if (data.isWished) {
+					            icon.classList.remove("bi-heart");
+					            icon.classList.add("bi-heart-fill", "active");
+					          } else {
+					            icon.classList.remove("bi-heart-fill", "active");
+					            icon.classList.add("bi-heart");
+					          }
 				        } else {
 				          alert(data.message);
 				        }

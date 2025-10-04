@@ -1,0 +1,58 @@
+package controller.consumer;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import service.consumer.BrandFollowService;
+import service.consumer.BrandFollowServiceImpl;
+
+/**
+ * Servlet implementation class BrandFollowToggle
+ */
+@WebServlet("/store/brandFollowToggle")
+public class BrandFollowToggle extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	private BrandFollowService service = new BrandFollowServiceImpl();
+
+	/**
+	 * @see HttpServlet#HttpServlet()
+	 */
+	public BrandFollowToggle() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("application/json; charset=UTF-8");
+
+		Long memberId = (Long) request.getSession().getAttribute("memberId");
+
+		// 로그인 여부 체크
+		if (memberId == null) {
+			response.getWriter().write("{\"success\":false, \"requireLogin\":true}");
+			return;
+		}
+
+		Long brandId = Long.valueOf(request.getParameter("brandId"));
+
+		try {
+			boolean isFollowing = service.toggleBrandFollow(memberId, brandId);
+			response.getWriter().write("{\"success\":true, \"isFollowing\":" + isFollowing + "}");
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.getWriter().write("{\"success\":false, \"message\":\"서버 오류\"}");
+		}
+	}
+
+}

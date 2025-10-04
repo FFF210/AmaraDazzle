@@ -58,6 +58,10 @@ public class MyReview extends HttpServlet {
 			// 리뷰 작성 가능한 상품 목록 조회
 			List<Map<String, Object>> reviewableItems = service.getReviewableItems(memberId);
 			System.out.println("Reviewable items count: " + reviewableItems.size());
+			
+			// ★★★ 여기에 테스트 쿼리 추가 ★★★
+			List<Map<String, Object>> testResult = service.testQuery(memberId);
+			System.out.println("테스트 쿼리 결과: " + testResult.size());
 
 			// 내가 작성한 리뷰 목록 조회
 			List<Map<String, Object>> myReviews = service.getMyReviews(memberId);
@@ -83,6 +87,8 @@ public class MyReview extends HttpServlet {
 			request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);
 		}
 	}
+	
+	
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse

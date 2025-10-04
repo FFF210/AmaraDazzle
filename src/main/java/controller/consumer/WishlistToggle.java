@@ -32,9 +32,14 @@ public class WishlistToggle extends HttpServlet {
 		response.setContentType("application/json; charset=UTF-8");
 
 		Long memberId = (Long) request.getSession().getAttribute("memberId");
-		Long productId = Long.valueOf(request.getParameter("productId"));
 
-		response.setContentType("application/json;charset=UTF-8");
+		// 로그인 여부 체크
+		if (memberId == null) {
+			response.getWriter().write("{\"success\":false, \"requireLogin\":true}");
+			return;
+		}
+
+		Long productId = Long.valueOf(request.getParameter("productId"));
 
 		try {
 			boolean isWished = service.toggleWishlist(memberId, productId);

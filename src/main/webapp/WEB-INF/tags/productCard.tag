@@ -42,6 +42,7 @@
 <%@ attribute name="saleRate" required="false"%>
 <%@ attribute name="finalPrice" required="false"%>
 <%@ attribute name="isWished" required="false"%>
+<%@ attribute name="thumbnailFileId" required="false"%>
 <%@ attribute name="href" required="false"%>
 
 <c:set var="brand" value="${empty brand ? '브랜드명' : brand}" />
@@ -53,12 +54,23 @@
 <c:set var="finalPrice" value="${empty finalPrice ? '' : finalPrice}" />
 <c:set var="heartState" value="${isWished == 1 ? 'active' : 'default'}" />
 
+<c:choose>
+  <c:when test="${not empty thumbnailFileId}">
+    <c:set var="thumbnailUrl" value="${pageContext.request.contextPath}/image?fileId=${thumbnailFileId}" />
+  </c:when>
+  <c:otherwise>
+    <c:set var="thumbnailUrl" value="${pageContext.request.contextPath}/image/placeholder.png" />
+  </c:otherwise>
+</c:choose>
+
+
 <a class="product-card" data-productid="${productId}"
 	<c:if test="${not empty href}"> href="${href}" </c:if>>
 
 	<div class="product-image">
 		<!-- 상품 이미지 -->
-		<img src="https://placehold.co/240x240" alt="상품 이미지" />
+		<img src="${thumbnailUrl}" alt="대표 이미지" width="220px" />
+
 		<!-- 찜 버튼 -->
 		<div class="wishlist-btn">
 			<my:heartBtn state="${heartState}" onlyIcon="true" hasCount="false" />

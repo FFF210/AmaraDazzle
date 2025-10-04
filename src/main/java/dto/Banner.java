@@ -2,8 +2,6 @@ package dto;
 
 import java.sql.Timestamp;
 
-import dto.brand2.BannerForm;
-
 public class Banner {
     private Long bannerId;         // 배너 광고 신청 ID (PK, AUTO_INCREMENT)
     private Long brandId;          // 브랜드 관리자 ID (FK → brand.brand_id)
@@ -13,14 +11,15 @@ public class Banner {
     private Timestamp endDate;     // 종료일
     private String bannerName;     // 배너 광고명
     private String bannerMessage;  // 관리자 전달사항
-    private String status;         // 진행상황 (PENDING / APPROVED / ONGOING / COMPLETED / CANCELED)
+    private String status;         // 진행상황 (PENDING / APPROVED / ONGOING / COMPLETED / CANCELED, DEFAULT 'PENDING')
     private Timestamp createdAt;   // 신청일 (DEFAULT CURRENT_TIMESTAMP)
     private Timestamp updatedAt;   // 수정일
     private Integer isExposed;     // 노출여부 (tinyint, DEFAULT 1)
     private String brandUrl;       // 브랜드페이지 URL
     private String stateChange;    // 배너 게시 상태 (POSTING / OFF)
     private Long adminId;          // 승인 관리자 ID (FK → admin_info.admin_info_id)
-
+    private Long UploadFileId;	   // 업로드 파일 ID (FK → upload_file.upload_file_id)
+    
     //조인용 컬럼 
     private String brandName;	//브랜드명 
     private String aName; //관리자명 
@@ -28,18 +27,6 @@ public class Banner {
     public Banner() {
     }
     
-    public Banner(BannerForm form) {
-        this.brandId = form.getBrandId();
-        this.managerName = form.getManagerName();
-        this.managerTel = form.getManagerTel();
-        this.startDate = form.getStartDate();
-        this.endDate = form.getEndDate();
-        this.bannerName = form.getBannerName();
-        this.bannerMessage = form.getBannerMessage();
-        this.brandUrl = form.getBrandUrl();
-        this.status = form.getStatus();
-	}
-
 	public Long getBannerId() {
         return bannerId;
     }
@@ -162,17 +149,22 @@ public class Banner {
 	public void setaName(String aName) {
 		this.aName = aName;
 	}
+	
+	public Long getUploadFileId() {
+		return UploadFileId;
+	}
+	public void setUploadFileId(Long uploadFileId) {
+		UploadFileId = uploadFileId;
+	}
 
 	@Override
-    public String toString() {
-        return "Banner [bannerId=" + bannerId + ", brandId=" + brandId +
-                ", managerName=" + managerName + ", managerTel=" + managerTel +
-                ", startDate=" + startDate + ", endDate=" + endDate +
-                ", bannerName=" + bannerName + ", bannerMessage=" + bannerMessage +
-                ", status=" + status + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt +
-                ", isExposed=" + isExposed + ", brandUrl=" + brandUrl +
-                ", stateChange=" + stateChange + ", adminId=" + adminId + "]";
-    }
+	public String toString() {
+		return "Banner [bannerId=" + bannerId + ", brandId=" + brandId + ", managerName=" + managerName
+				+ ", managerTel=" + managerTel + ", startDate=" + startDate + ", endDate=" + endDate + ", bannerName="
+				+ bannerName + ", bannerMessage=" + bannerMessage + ", status=" + status + ", createdAt=" + createdAt
+				+ ", updatedAt=" + updatedAt + ", isExposed=" + isExposed + ", brandUrl=" + brandUrl + ", stateChange="
+				+ stateChange + ", adminId=" + adminId + ", UploadFileId=" + UploadFileId + "]";
+	}
     
     
     // brand2 Adbanner 정적 팩토리 메서드

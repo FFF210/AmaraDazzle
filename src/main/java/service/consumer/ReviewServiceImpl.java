@@ -39,7 +39,13 @@ public class ReviewServiceImpl implements ReviewService {
 	// 리뷰 작성 가능한 상품 목록 조회
 	@Override
 	public List<Map<String, Object>> getReviewableItems(Long memberId) throws Exception {
-		return reviewDAO.getReviewableItems(memberId);
+		System.out.println("Service - getReviewableItems 호출됨");
+		System.out.println("Service - memberId: " + memberId);
+
+		List<Map<String, Object>> result = reviewDAO.getReviewableItems(memberId);
+		System.out.println("Service - DAO 호출 완료, 결과 개수: " + result.size());
+
+		return result;
 	}
 
 	// 내가 작성한 리뷰 가져오기
@@ -55,5 +61,11 @@ public class ReviewServiceImpl implements ReviewService {
 			throw new IllegalArgumentException("리뷰 내용을 입력해주세요.");
 		}
 		reviewDAO.insertReview(review);
+	}
+	
+	@Override
+	public List<Map<String, Object>> testQuery(Long memberId) throws Exception {
+	    System.out.println("Service - testQuery 호출");
+	    return reviewDAO.testQuery(memberId);
 	}
 }

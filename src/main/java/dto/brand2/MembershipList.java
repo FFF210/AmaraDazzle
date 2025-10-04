@@ -15,7 +15,7 @@ public class MembershipList {
     private String planName;          // 요금제명 (멤버십 1개월, 3개월 ...)
     
     private String paymentMethod;     // 결제수단 (TOSS, CARD, ...)
-    private Boolean autopayFlag;      // 정기결제 여부 (true/false)
+    private Timestamp nextPayDate;
     
     public MembershipList() {
     }
@@ -74,17 +74,19 @@ public class MembershipList {
 	public void setPaymentMethod(String paymentMethod) {
 		this.paymentMethod = paymentMethod;
 	}
-	public Boolean getAutopayFlag() {
-		return autopayFlag;
+	public Timestamp getNextPayDate() {
+		return nextPayDate;
 	}
-	public void setAutopayFlag(Boolean autopayFlag) {
-		this.autopayFlag = autopayFlag;
+	public void setNextPayDate(Timestamp nextPayDate) {
+		this.nextPayDate = nextPayDate;
 	}
 
 	@Override
 	public String toString() {
 		return "MembershipList [membershipId=" + membershipId + ", startDate=" + startDate + ", endDate=" + endDate
 				+ ", payDate=" + payDate + ", cancelDate=" + cancelDate + ", status=" + status + ", planId=" + planId
-				+ ", planName=" + planName + ", paymentMethod=" + paymentMethod + ", autopayFlag=" + autopayFlag + "]";
+				+ ", planName=" + planName + ", paymentMethod=" + paymentMethod + ", nextPayDate=" + nextPayDate + "]";
 	}
+
+
 }
