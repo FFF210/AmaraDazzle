@@ -174,6 +174,7 @@
    	"송장번호": "TRACKINGNO",
    	"광고명": "BANNERNAME",
    	"광고 담당자": "MANAGERNAME"
+   	"주문번호": "ORDER",
   };
 
   // 날짜 빠른 선택

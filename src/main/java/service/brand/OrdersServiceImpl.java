@@ -8,6 +8,7 @@ import dao.brand.CouponDAO;
 import dao.brand.CouponDAOImpl;
 import dao.brand.OrdersDAO;
 import dao.brand.OrdersDAOImpl;
+import dto.brand.CancelOrderList;
 import dto.brand.OrdersCoupon;
 import dto.brand.OrdersItemDetail;
 import dto.brand.OrdersList;
@@ -23,7 +24,7 @@ public class OrdersServiceImpl implements OrdersService {
 		couponDAO = new CouponDAOImpl();
 	}
 
-	// 주문 목록 조회 (브랜드별)
+	// 주문 목록 조회
 	@Override
 	public Map<String, Object> ordersListByPage(Map<String, Object> params) throws Exception {
 		// 주문 목록 조회
@@ -84,6 +85,27 @@ public class OrdersServiceImpl implements OrdersService {
 		// 주문 사용 쿠폰
 		List<OrdersCoupon> coupons = ordersCouponDetail(orderId);
 		result.put("coupons", coupons);
+
+		return result;
+	}
+
+	// 취소 주문 목록 조회
+	@Override
+	public Map<String, Object> cancelOrderListByPage(Map<String, Object> params) throws Exception {
+		// 주문 목록 조회
+		List<CancelOrderList> cancelOrderList = ordersDAO.selectCancelledOrdersList(params);
+
+		// 총 상품 개수 조회
+		int totalCount = ordersDAO.selectCancelledOrdersCount(params);
+
+		// 총 페이지 수 계산
+		int limit = (int) params.getOrDefault("limit", 10);
+		int totalPages = (int) Math.ceil((double) totalCount / limit);
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("cancelOrderList", cancelOrderList);
+		result.put("totalCount", totalCount);
+		result.put("totalPages", totalPages);
 
 		return result;
 	}

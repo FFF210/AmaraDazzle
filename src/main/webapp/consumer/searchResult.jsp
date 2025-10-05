@@ -45,11 +45,12 @@
 
 	<!-- 컨텐츠 영역 -->
 	<div class="search-container">
-		<!-- 브랜드 매칭 영역 (예: 검색어가 브랜드명과 일치할 경우) -->
+		<%-- <!-- 브랜드 매칭 영역 (예: 검색어가 브랜드명과 일치할 경우) -->
 		<c:if test="${keyword eq '바이오던스'}">
-			<my:brandNavCard brandName="바이오던스"
-				logoUrl="https://placehold.co/64x64" likes="500" />
-		</c:if>
+			<my:brandNavCard brandName="${brand.brandName}"
+				brandId="${brand.brandId}" logoFileId="${brand.logoFileId}"
+				isWished="1" href="/store/brandDetail?brandId=${brand.brandId}" />
+		</c:if> --%>
 
 		<!-- 검색 필터 -->
 		<div class="search-filter">
