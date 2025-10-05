@@ -33,8 +33,7 @@ public class CouponServiceImpl implements CouponService{
 	public List<Coupon> pCouponAllList(int p_no) {
 		Map<String, Object> listMap = m_pg.paging(p_no);
 
-		List<Coupon> pCouponAllList = cp_dao.pCouponAllList(listMap);
-		return pCouponAllList;
+		return cp_dao.pCouponAllList(listMap);
 	}
 
 	// 검색된 발행쿠폰 리스트

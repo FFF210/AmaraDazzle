@@ -24,8 +24,7 @@ public class Banner {
     private String brandName;	//브랜드명 
     private String aName; //관리자명 
     
-    public Banner() {
-    }
+    public Banner() {}
     
 	public Long getBannerId() {
         return bannerId;
@@ -165,20 +164,7 @@ public class Banner {
 				+ ", updatedAt=" + updatedAt + ", isExposed=" + isExposed + ", brandUrl=" + brandUrl + ", stateChange="
 				+ stateChange + ", adminId=" + adminId + ", UploadFileId=" + UploadFileId + "]";
 	}
+	
     
-    
-    // brand2 Adbanner 정적 팩토리 메서드
-    public static Banner from(BannerForm form) {
-        Banner b = new Banner();
-        b.setBrandId(form.getBrandId());
-        b.setManagerName(form.getManagerName());
-        b.setManagerTel(form.getManagerTel());
-        b.setStartDate(form.getStartDate());
-        b.setEndDate(form.getEndDate());
-        b.setBannerName(form.getBannerName());
-        b.setBannerMessage(form.getBannerMessage());
-        b.setBrandUrl(form.getBrandUrl());
-        b.setStatus(form.getStatus() != null ? form.getStatus() : "PENDING");
-        return b;
-    }
+   
 }

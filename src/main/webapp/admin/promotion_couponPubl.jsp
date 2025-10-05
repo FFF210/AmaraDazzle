@@ -9,7 +9,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>정산내역 상세보기</title>
+<title>발행쿠폰 리스트</title>
 
 <link rel="stylesheet" href="./css/myApplications.css" />
 <link rel="stylesheet" href="./css/accounts.css" />
@@ -119,6 +119,8 @@
 							</c:if>
 
 							<c:set var="no" value="${pCouponCnt-postNo}" />
+<%-- 							<c:set var="createDate" value="${pCouponList.createdAt}" /> --%>
+<%-- 							<c:out value="${pCouponList.createdAt}"></c:out> --%>
 							<c:forEach items="${pCouponList}" var="pCouponList"
 								varStatus="idx">
 								<tr>
@@ -128,7 +130,7 @@
 									<td>${pCouponList.cname}</td>
 									<td class="price_cell">${pCouponList.amount}</td>
 									<td>${pCouponList.createdAt}</td>
-									<td>${pCouponList.startDate} ~ ${pCouponList.endDate}</td>
+									<td></td>
 									<td></td>
 									<td>${pCouponList.couponLimit}</td>
 									<td class="detail_cell"><i
