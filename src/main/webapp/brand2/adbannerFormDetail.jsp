@@ -94,8 +94,16 @@
 
 		<my:breadcrumb
 			items="배너광고 관리:/brand2/adbannerList" />
-		<my:brand2formLayout title="배너광고 상세보기" formId="eventForm"
-			action="/brand2/adbanner" method="post" submit="return false;">
+			
+		<div class="wrap">
+			<section class="card">
+				<div class="head">배너광고 신청</div>
+				<div class="body">
+					<main>
+						<form id="eventForm" action="/brand2/adbanner" method="post"
+							enctype="multipart/form-data" novalidate>
+			
+			<!-- ============================================= -->
 			<div class="grid">
 				<div class="label req">배너 광고명</div>
 				<div>
@@ -133,7 +141,7 @@
 				<div class="upload">
 					<div id="imgPreviewWrapper" class="preview-wrapper">
 						<div id="imgPreviewArea" class="preview-area" aria-live="polite">
-							<img src="${pageContext.request.contextPath}/brand2/image?fileName=${banner.uploadFileName}" width="300px"/>
+							<img src="${pageContext.request.contextPath}/brand2/image?uploadFileId=${banner.uploadFileId}" width="300px"/>
 						</div>
 					</div>
 				</div>
@@ -154,7 +162,12 @@
 					</div>
 				</div>
 			</div>
-		</my:brand2formLayout>
+			<!-- ============================================= -->
+					</form>
+					</main>
+				</div>
+			</section>
+		</div>
 	</my:layout>
 
 	<script>
@@ -211,9 +224,9 @@ document.addEventListener("DOMContentLoaded", function() {
 				// 결제 정보 파라미터
 				// 더 많은 결제 정보 파라미터는 결제창 Javascript SDK에서 확인하세요.
 				// https://docs.tosspayments.com/sdk/payment-js
-				amount: 100,//${banner.period*140000}, // 결제 금액
-				orderId: "KOSTA5-" + `${banner.bannerId}`, // 주문번호(주문번호는 상점에서 직접 만들어주세요.)
-				orderName: `${banner.bannerId}`, // 구매상품 (생수 외 1건) 같은 형식
+				amount: `${banner.period*140000}`, // 결제 금액
+				orderId: "adbanner-" + `${banner.bannerId}`, // 주문번호(주문번호는 상점에서 직접 만들어주세요.)
+				orderName: `광고배너 ${banner.period}일 이용`, // 구매상품 (생수 외 1건) 같은 형식
 				customerName: `${banner.managerName}`, // 구매자 이름
 				successUrl: "http://localhost:8080/tossSuccess", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
 				failUrl: "http://localhost:8080/tossSuccess", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
