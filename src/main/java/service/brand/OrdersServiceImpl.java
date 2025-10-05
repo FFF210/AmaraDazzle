@@ -13,6 +13,7 @@ import dto.brand.OrdersCoupon;
 import dto.brand.OrdersItemDetail;
 import dto.brand.OrdersList;
 import dto.brand.OrdersSummary;
+import dto.brand.ReturnOrderList;
 
 public class OrdersServiceImpl implements OrdersService {
 
@@ -92,7 +93,6 @@ public class OrdersServiceImpl implements OrdersService {
 	// 취소 주문 목록 조회
 	@Override
 	public Map<String, Object> cancelOrderListByPage(Map<String, Object> params) throws Exception {
-		// 주문 목록 조회
 		List<CancelOrderList> cancelOrderList = ordersDAO.selectCancelledOrdersList(params);
 
 		// 총 상품 개수 조회
@@ -104,6 +104,26 @@ public class OrdersServiceImpl implements OrdersService {
 
 		Map<String, Object> result = new HashMap<>();
 		result.put("cancelOrderList", cancelOrderList);
+		result.put("totalCount", totalCount);
+		result.put("totalPages", totalPages);
+
+		return result;
+	}
+
+	// 반품 주문 목록 조회
+	@Override
+	public Map<String, Object> returnOrderListByPage(Map<String, Object> params) throws Exception {
+		List<ReturnOrderList> returnOrderList = ordersDAO.selectReturnedOrdersList(params);
+
+		// 총 상품 개수 조회
+		int totalCount = ordersDAO.selectReturnedOrdersCount(params);
+
+		// 총 페이지 수 계산
+		int limit = (int) params.getOrDefault("limit", 10);
+		int totalPages = (int) Math.ceil((double) totalCount / limit);
+
+		Map<String, Object> result = new HashMap<>();
+		result.put("returnOrderList", returnOrderList);
 		result.put("totalCount", totalCount);
 		result.put("totalPages", totalPages);
 

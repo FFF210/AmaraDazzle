@@ -9,20 +9,26 @@
 <title>상품 목록</title>
 
 <!-- Pretendard 폰트 (CDN) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
 <!-- flatpickr 기본 테마 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
 
 <!-- 한글화 & 커스텀 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
 
 <!-- flatpickr 및 tableFilter.js -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
 <script src="./js/selectbox.js"></script>
 
 <link rel="stylesheet"
@@ -264,7 +270,7 @@
 					</table>
 				</div>
 			</div>
-			
+
 			<c:set var="queryString">
 				<c:if test="${not empty param.status}">status=${param.status}&</c:if>
 				<c:if test="${not empty param.searchType}">searchType=${param.searchType}&</c:if>

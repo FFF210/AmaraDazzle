@@ -25,4 +25,7 @@ public interface OrdersService {
 
 	// 취소 주문 목록 조회
 	Map<String, Object> cancelOrderListByPage(Map<String, Object> params) throws Exception;
+
+	// 반품 주문 목록 조회
+	Map<String, Object> returnOrderListByPage(Map<String, Object> params) throws Exception;
 }

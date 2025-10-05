@@ -21,16 +21,7 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js">
-<link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
-
-<!-- flatpickr 및 tableFilter.js -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
-<script src="./js/selectbox.js"></script>
 
 <link rel="stylesheet" href="../tagcss/tag.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
@@ -58,7 +49,7 @@
 }
 
 .breadcrumb {
-margin: 8px 0 8px 24px;
+	margin: 8px 0 8px 24px;
 }
 
 .filter {
@@ -71,8 +62,7 @@ margin: 8px 0 8px 24px;
 </style>
 <!-- TossPayments SDK -->
 <script src="https://js.tosspayments.com/v1/payment"></script>
-<!-- tag -->
-<script src="../tagjs/selectbox.js"></script>
+
 </head>
 <body>
 	<my:layout>
@@ -199,6 +189,13 @@ margin: 8px 0 8px 24px;
 		</div>
 
 	</my:layout>
+	
+	<!-- flatpickr 및 tableFilter.js -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/selectbox.js"></script>
 
 	<script>
 	  /*********************************************************************************************************
@@ -206,8 +203,6 @@ margin: 8px 0 8px 24px;
 	   * tag에 추가 필요
 	   *********************************************************************************************************/
 	  document.addEventListener("filterChanged", (e) => {
-	  console.log("필터 상태:", e.detail);
-
 	  if (e.detail.submit) {
 	    const { filters, searchField, searchKeyword } = e.detail;
 	    const params = new URLSearchParams();
@@ -228,9 +223,7 @@ margin: 8px 0 8px 24px;
 	    window.location.href = "/brand2/adbannerList?" + params.toString();
 	  }
 	});
-	  
+	</script>
 	
-	
-</script>
 </body>
 </html>
