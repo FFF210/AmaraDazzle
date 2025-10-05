@@ -190,9 +190,4 @@ public class Banner {
 				+ stateChange + ", adminId=" + adminId + ", UploadFileId=" + UploadFileId + ", period=" + period + "]";
 	}
 
-    
-   
-
-
 }
-
