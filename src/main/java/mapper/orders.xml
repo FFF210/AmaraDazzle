@@ -267,6 +267,198 @@
 		</if>
 	</select>
 
+
+
+
+
+	<!-- ======================= [브랜드 어드민] 반품 목록 조회 ======================= -->
+	<select id="selectReturnedOrdersList" parameterType="map"
+		resultType="returnOrderList">
+		SELECT
+		MAX(oi.updated_at) AS updated_at,
+		o.orders_id,
+		o.order_code,
+		o.member_id,
+		m.name AS member_name,
+		(SELECT p.name
+		FROM order_item oi2
+		JOIN product p ON oi2.product_id = p.product_id
+		WHERE oi2.order_id =
+		o.orders_id
+		AND oi2.status LIKE 'RETURN%'
+		LIMIT 1) AS product_name,
+		(SELECT GROUP_CONCAT(DISTINCT p.name SEPARATOR ',
+		')
+		FROM order_item oi3
+		JOIN product p ON oi3.product_id = p.product_id
+		WHERE oi3.order_id =
+		o.orders_id
+		AND oi3.status LIKE 'RETURN%') AS product_names,
+		SUM(oi.total) AS total,
+		oi.status AS orderStatus,
+		r.return_tracking_no AS
+		return_tracking_no
+		FROM orders o
+		JOIN order_item oi ON o.orders_id =
+		oi.order_id
+		JOIN member m ON o.member_id = m.member_id
+		LEFT JOIN returns
+		r ON r.order_item_id = oi.order_item_id
+		WHERE oi.status LIKE 'RETURN%'
+		AND oi.brand_id = #{brandId}
+
+		<if
+			test="searchType != null and searchKeyword != null and searchKeyword != ''">
+			<choose>
+				<when test="searchType == 'MEMBER'">
+					AND m.name LIKE CONCAT('%', #{searchKeyword}, '%')
+				</when>
+				<when test="searchType == 'PRODUCT'">
+					AND EXISTS (
+					SELECT 1
+					FROM order_item oi4
+					JOIN product
+					p2 ON
+					oi4.product_id = p2.product_id
+					WHERE oi4.order_id = o.orders_id
+					AND
+					oi4.status LIKE 'RETURN%'
+					AND p2.name LIKE CONCAT('%',
+					#{searchKeyword}, '%')
+					)
+				</when>
+				<when test="searchType == 'ORDER'">
+					AND o.order_code LIKE CONCAT('%', #{searchKeyword},
+					'%')
+				</when>
+				<when test="searchType == 'TRACKINGNO'">
+					AND r.return_tracking_no LIKE CONCAT('%',
+					#{searchKeyword}, '%')
+				</when>
+			</choose>
+		</if>
+
+		<if test="status != null and status != '' and status != 'ALL'">
+			<choose>
+				<when test="status == 'REQUESTED'">
+					AND oi.status = 'RETURN_REQUESTED'
+				</when>
+				<when test="status == 'APPROVED'">
+					AND oi.status = 'RETURN_APPROVED'
+				</when>
+				<when test="status == 'REFUNDING'">
+					AND oi.status = 'RETURN_REFUNDING'
+				</when>
+				<when test="status == 'REJECTED'">
+					AND oi.status = 'RETURN_REJECTED'
+				</when>
+				<when test="status == 'COMPLETED'">
+					AND oi.status = 'RETURN_COMPLETED'
+				</when>
+			</choose>
+		</if>
+
+		<if test="startDate != null and startDate != ''">
+			AND oi.updated_at &gt;= #{startDate}
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND oi.updated_at &lt;= #{endDate}
+		</if>
+
+		GROUP BY o.orders_id, o.order_code, o.member_id, m.name,
+		r.return_tracking_no
+
+		<choose>
+			<when test="sortColumn == 'date'">
+				ORDER BY MAX(oi.updated_at)
+			</when>
+			<when test="sortColumn == 'total'">
+				ORDER BY SUM(oi.total)
+			</when>
+			<otherwise>
+				ORDER BY MAX(oi.updated_at) DESC
+			</otherwise>
+		</choose>
+
+		<if test="sortDirection != null and sortDirection != ''">
+			${sortDirection}
+		</if>
+
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<!-- ======================= [브랜드 어드민] 반품 개수 조회 ======================= -->
+	<select id="selectReturnedOrdersCount" parameterType="map"
+		resultType="Integer">
+		SELECT COUNT(DISTINCT o.orders_id)
+		FROM orders o
+		JOIN order_item oi ON
+		o.orders_id = oi.order_id
+		JOIN member m ON o.member_id = m.member_id
+		LEFT JOIN returns r ON r.order_item_id = oi.order_item_id
+		WHERE
+		oi.status LIKE 'RETURN%'
+		AND oi.brand_id = #{brandId}
+
+		<if
+			test="searchType != null and searchKeyword != null and searchKeyword != ''">
+			<choose>
+				<when test="searchType == 'MEMBER'">
+					AND m.name LIKE CONCAT('%', #{searchKeyword}, '%')
+				</when>
+				<when test="searchType == 'PRODUCT'">
+					AND EXISTS (
+					SELECT 1
+					FROM order_item oi4
+					JOIN product
+					p2 ON
+					oi4.product_id = p2.product_id
+					WHERE oi4.order_id = o.orders_id
+					AND
+					oi4.status LIKE 'RETURN%'
+					AND p2.name LIKE CONCAT('%',
+					#{searchKeyword}, '%')
+					)
+				</when>
+				<when test="searchType == 'ORDER'">
+					AND o.order_code LIKE CONCAT('%', #{searchKeyword},
+					'%')
+				</when>
+				<when test="searchType == 'TRACKINGNO'">
+					AND r.return_tracking_no LIKE CONCAT('%',
+					#{searchKeyword}, '%')
+				</when>
+			</choose>
+		</if>
+
+		<if test="status != null and status != '' and status != 'ALL'">
+			<choose>
+				<when test="status == 'REQUESTED'">
+					AND oi.status = 'RETURN_REQUESTED'
+				</when>
+				<when test="status == 'APPROVED'">
+					AND oi.status = 'RETURN_APPROVED'
+				</when>
+				<when test="status == 'REFUNDING'">
+					AND oi.status = 'RETURN_REFUNDING'
+				</when>
+				<when test="status == 'REJECTED'">
+					AND oi.status = 'RETURN_REJECTED'
+				</when>
+				<when test="status == 'COMPLETED'">
+					AND oi.status = 'RETURN_COMPLETED'
+				</when>
+			</choose>
+		</if>
+
+		<if test="startDate != null and startDate != ''">
+			AND oi.updated_at &gt;= #{startDate}
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND oi.updated_at &lt;= #{endDate}
+		</if>
+	</select>
+
 	<!-- ======================= [브랜드 어드민] 주문 취소 목록 조회 ======================= -->
 	<select id="selectCancelledOrdersList" parameterType="map"
 		resultType="cancelOrderList">
@@ -403,8 +595,6 @@
 			AND oi.updated_at &lt;= #{endDate}
 		</if>
 	</select>
-
-
 
 	<!-- ======================= [브랜드 어드민] 주문 목록 조회 ======================= -->
 	<select id="selectOrdersListForBrand" parameterType="map"

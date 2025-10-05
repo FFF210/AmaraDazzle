@@ -9,6 +9,7 @@ import dto.brand.CancelOrderList;
 import dto.brand.OrdersItemDetail;
 import dto.brand.OrdersList;
 import dto.brand.OrdersSummary;
+import dto.brand.ReturnOrderList;
 import util.MybatisSqlSessionFactory;
 
 public class OrdersDAOImpl implements OrdersDAO {
@@ -49,6 +50,18 @@ public class OrdersDAOImpl implements OrdersDAO {
 	@Override
 	public Integer selectCancelledOrdersCount(Map<String, Object> params) throws Exception {
 		return sqlSession.selectOne("mapper.orders.selectCancelledOrdersCount", params);
+	}
+
+	// 반품 주문 목록 조회
+	@Override
+	public List<ReturnOrderList> selectReturnedOrdersList(Map<String, Object> params) throws Exception {
+		return sqlSession.selectList("mapper.orders.selectReturnedOrdersList", params);
+	}
+
+	// 반품 주문 개수 조회
+	@Override
+	public Integer selectReturnedOrdersCount(Map<String, Object> params) throws Exception {
+		return sqlSession.selectOne("mapper.orders.selectReturnedOrdersCount", params);
 	}
 
 }
