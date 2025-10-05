@@ -9,6 +9,29 @@
 <meta charset="UTF-8">
 <title>배너광고 조회</title>
 
+<!-- Pretendard 폰트 (CDN) -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+
+<!-- flatpickr 기본 테마 -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
+
+<!-- 한글화 & 커스텀 CSS -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
+
+<!-- flatpickr 및 tableFilter.js -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
+<script src="./js/selectbox.js"></script>
+
 <link rel="stylesheet" href="../tagcss/tag.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/dateInput.css" />
@@ -26,9 +49,6 @@
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <style>
 .pagination {
@@ -38,8 +58,7 @@
 }
 
 .breadcrumb {
-	margin-top: 8px;
-	margin-left: 24px;
+margin: 8px 0 8px 24px;
 }
 
 .filter {
@@ -57,10 +76,14 @@
 </head>
 <body>
 	<my:layout>
-		<my:breadcrumb items="배너광고 관리:/brand2/adbannerList, 배너광고 신청:/brand2/adbanner" />
-		<my:tableFilter
-			filters="status|진행상황:PENDING=승인대기|APPROVED=승인완료|ONGOING=진행중|COMPLETED=완료|CANCELED=취소"
-			hasDate="false" searchItems="광고 담당자,광고명" />
+		<my:breadcrumb
+			items="배너광고 관리:/brand2/adbannerList, 배너광고 신청:/brand2/adbanner" />
+
+		<div class="page-tableFilter">
+			<my:tableFilter
+				filters="status|진행상황:PENDING=승인대기|APPROVED=승인완료|ONGOING=진행중|COMPLETED=완료|CANCELED=취소"
+				hasDate="true" searchItems="광고 담당자,광고명" />
+		</div>
 
 		<div class="tcontainer">
 			<div class="table-wrapper">
@@ -176,7 +199,7 @@
 		</div>
 
 	</my:layout>
-	
+
 	<script>
 	  /*********************************************************************************************************
 	   * tableFilter 이벤트

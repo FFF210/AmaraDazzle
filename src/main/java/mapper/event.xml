@@ -170,6 +170,7 @@
 		WHERE p.event_id = #{eventId}
 		AND p.is_visible = 1
 	</select>
+	
 	<!-- event 게시글 총 개수 -->
 	<select id="eventCount" resultType="Integer" parameterType="searchCondition">
 		select count(*) from event e
