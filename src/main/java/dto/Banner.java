@@ -3,6 +3,7 @@ package dto;
 import java.sql.Timestamp;
 
 public class Banner {
+
     private Long bannerId;         // 배너 광고 신청 ID (PK, AUTO_INCREMENT)
     private Long brandId;          // 브랜드 관리자 ID (FK → brand.brand_id)
     private String managerName;    // 담당자명
@@ -20,120 +21,134 @@ public class Banner {
     private Long adminId;          // 승인 관리자 ID (FK → admin_info.admin_info_id)
     private Long UploadFileId;	   // 업로드 파일 ID (FK → upload_file.upload_file_id)
     
+    private int period; //기간 (계산용)
+    
     //조인용 컬럼 
     private String brandName;	//브랜드명 
     private String aName; //관리자명 
     
-    public Banner() {
-    }
+    public Banner() {}
     
 	public Long getBannerId() {
-        return bannerId;
-    }
-    public void setBannerId(Long bannerId) {
-        this.bannerId = bannerId;
-    }
+		return bannerId;
+	}
 
-    public Long getBrandId() {
-        return brandId;
-    }
-    public void setBrandId(Long brandId) {
-        this.brandId = brandId;
-    }
+	public void setBannerId(Long bannerId) {
+		this.bannerId = bannerId;
+	}
 
-    public String getManagerName() {
-        return managerName;
-    }
-    public void setManagerName(String managerName) {
-        this.managerName = managerName;
-    }
+	public Long getBrandId() {
+		return brandId;
+	}
 
-    public String getManagerTel() {
-        return managerTel;
-    }
-    public void setManagerTel(String managerTel) {
-        this.managerTel = managerTel;
-    }
+	public void setBrandId(Long brandId) {
+		this.brandId = brandId;
+	}
 
-    public Timestamp getStartDate() {
-        return startDate;
-    }
-    public void setStartDate(Timestamp startDate) {
-        this.startDate = startDate;
-    }
+	public String getManagerName() {
+		return managerName;
+	}
 
-    public Timestamp getEndDate() {
-        return endDate;
-    }
-    public void setEndDate(Timestamp endDate) {
-        this.endDate = endDate;
-    }
+	public void setManagerName(String managerName) {
+		this.managerName = managerName;
+	}
 
-    public String getBannerName() {
-        return bannerName;
-    }
-    public void setBannerName(String bannerName) {
-        this.bannerName = bannerName;
-    }
+	public String getManagerTel() {
+		return managerTel;
+	}
 
-    public String getBannerMessage() {
-        return bannerMessage;
-    }
-    public void setBannerMessage(String bannerMessage) {
-        this.bannerMessage = bannerMessage;
-    }
+	public void setManagerTel(String managerTel) {
+		this.managerTel = managerTel;
+	}
 
-    public String getStatus() {
-        return status;
-    }
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public Timestamp getStartDate() {
+		return startDate;
+	}
 
-    public Timestamp getCreatedAt() {
-        return createdAt;
-    }
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
+	public void setStartDate(Timestamp startDate) {
+		this.startDate = startDate;
+	}
 
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
-    }
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+	public Timestamp getEndDate() {
+		return endDate;
+	}
 
-    public Integer getIsExposed() {
-        return isExposed;
-    }
-    public void setIsExposed(Integer isExposed) {
-        this.isExposed = isExposed;
-    }
+	public void setEndDate(Timestamp endDate) {
+		this.endDate = endDate;
+	}
 
-    public String getBrandUrl() {
-        return brandUrl;
-    }
-    public void setBrandUrl(String brandUrl) {
-        this.brandUrl = brandUrl;
-    }
+	public String getBannerName() {
+		return bannerName;
+	}
 
-    public String getStateChange() {
-        return stateChange;
-    }
-    public void setStateChange(String stateChange) {
-        this.stateChange = stateChange;
-    }
+	public void setBannerName(String bannerName) {
+		this.bannerName = bannerName;
+	}
 
-    public Long getAdminId() {
-        return adminId;
-    }
-    public void setAdminId(Long adminId) {
-        this.adminId = adminId;
-    }
+	public String getBannerMessage() {
+		return bannerMessage;
+	}
 
-    
-    
+	public void setBannerMessage(String bannerMessage) {
+		this.bannerMessage = bannerMessage;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Integer getIsExposed() {
+		return isExposed;
+	}
+
+	public void setIsExposed(Integer isExposed) {
+		this.isExposed = isExposed;
+	}
+
+	public String getBrandUrl() {
+		return brandUrl;
+	}
+
+	public void setBrandUrl(String brandUrl) {
+		this.brandUrl = brandUrl;
+	}
+
+	public String getStateChange() {
+		return stateChange;
+	}
+
+	public void setStateChange(String stateChange) {
+		this.stateChange = stateChange;
+	}
+
+	public Long getAdminId() {
+		return adminId;
+	}
+
+	public void setAdminId(Long adminId) {
+		this.adminId = adminId;
+	}
+
     public String getBrandName() {
 		return brandName;
 	}
@@ -153,8 +168,17 @@ public class Banner {
 	public Long getUploadFileId() {
 		return UploadFileId;
 	}
+
 	public void setUploadFileId(Long uploadFileId) {
 		UploadFileId = uploadFileId;
+	}
+
+	public int getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(int period) {
+		this.period = period;
 	}
 
 	@Override
@@ -163,22 +187,7 @@ public class Banner {
 				+ ", managerTel=" + managerTel + ", startDate=" + startDate + ", endDate=" + endDate + ", bannerName="
 				+ bannerName + ", bannerMessage=" + bannerMessage + ", status=" + status + ", createdAt=" + createdAt
 				+ ", updatedAt=" + updatedAt + ", isExposed=" + isExposed + ", brandUrl=" + brandUrl + ", stateChange="
-				+ stateChange + ", adminId=" + adminId + ", UploadFileId=" + UploadFileId + "]";
+				+ stateChange + ", adminId=" + adminId + ", UploadFileId=" + UploadFileId + ", period=" + period + "]";
 	}
-    
-    
-    // brand2 Adbanner 정적 팩토리 메서드
-    public static Banner from(BannerForm form) {
-        Banner b = new Banner();
-        b.setBrandId(form.getBrandId());
-        b.setManagerName(form.getManagerName());
-        b.setManagerTel(form.getManagerTel());
-        b.setStartDate(form.getStartDate());
-        b.setEndDate(form.getEndDate());
-        b.setBannerName(form.getBannerName());
-        b.setBannerMessage(form.getBannerMessage());
-        b.setBrandUrl(form.getBrandUrl());
-        b.setStatus(form.getStatus() != null ? form.getStatus() : "PENDING");
-        return b;
-    }
+
 }

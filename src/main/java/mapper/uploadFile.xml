@@ -35,6 +35,14 @@
 		FROM upload_file
 		WHERE upload_file_id = #{uploadFileId}
 	</select>
+	
+	<!-- brand2 -->
+	    <!-- insert (PK 자동 반환) -->
+    <insert id="insertUploadFileWithAuto" parameterType="dto.UploadFile"
+            useGeneratedKeys="true" keyProperty="uploadFileId">
+        INSERT INTO upload_file (file_name, file_rename, storage_path)
+        VALUES (#{fileName}, #{fileRename}, #{storagePath})
+    </insert>
 
 
 </mapper>
