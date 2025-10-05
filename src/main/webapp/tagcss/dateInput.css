@@ -3,15 +3,14 @@
 /* Input 타입 */
 .date-input .input-wrapper {
 	position: relative;
-	display: inline-flex;
-	align-items: center;
-	width: 159px;
-	flex-shrink: 0;
+	display: inline-block;
+	width: 160px;
+	vertical-align: middle;
 }
 
 .date-input .date-text {
 	height: 36px;
-	padding: 0 0 0 8px;
+	padding: 0 20px 0 8px;
 	color: #555E67;
 	font-size: 12px;
 	font-weight: 500;
@@ -31,7 +30,7 @@
 .date-input .calendar-icon-wrapper {
 	position: absolute;
 	top: 50%;
-	right: 4px;
+	right: 6px;
 	transform: translateY(-50%);
 	width: 34px;
 	height: 34px;

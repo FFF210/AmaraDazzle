@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
 <html>
@@ -180,7 +181,7 @@
 									<div class="summary">
 										<span>총 <strong id="dayCount">0</strong>일
 										</span> <span>1일 ₩140,000</span> <span>예상 결제 금액 <strong
-											id="totalPrice" class="highlight">₩0</strong></span>
+											id="totalPrice" class="highlight">₩ <fmt:formatNumber value="${banner.period*140000}" type="number" /></strong></span>
 									</div>
 									<div class="actions">
 										<button type="button" class="btn btn-outline btn-sm"
@@ -246,7 +247,7 @@
 		
 	<%--
 //------ 클라이언트 키로 객체 초기화 ------
-var clientKey = "test_ck_XZYkKL4Mrj9eGzWBRNORV0zJwlEW";
+var clientKey = "key";
 var tossPayments = TossPayments(clientKey);
 
 //------ 결제창 띄우기 ------

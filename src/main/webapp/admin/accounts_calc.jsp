@@ -28,7 +28,6 @@
 
 
 	<!-- JS부분 -->
-	<%@ include file="./js/common/adminHeader.js"%>
 	<!-- JS부분 end -->
 
 </body>

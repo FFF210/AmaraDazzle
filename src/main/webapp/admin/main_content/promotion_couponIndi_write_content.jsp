@@ -26,32 +26,37 @@
 		<div class="part_title">
 			유효기간 <span class="reqired_write">*</span>
 		</div>
-		<div class="part_content">
-			<div class="period_box">
-				<div class="period_body">
-					<div>
-						<input type="date" class="btn start_date" /> <span> - </span> <input
-							type="date" class="btn end_date" />
-					</div>
-
-					<div class="p_choice">
-						<input type="button" class="btn" value="1주일" /> <input
-							type="button" class="btn" value="1개월" /> <input type="button"
-							class="btn" value="1년" />
-					</div>
-				</div>
+		<div class="part_content couponExp">
+			<div class="filter_box"> 
+				<my:dateInput type="input" name="startDate" value="2025-09-02" />
+				<span> - </span>
+				<my:dateInput type="input" name="endDate" value="2025-09-20" inputDay="end"/>
+				<my:dateInput type="preset" presets="1주일,1개월,1년" />
 			</div>
 		</div>
 	</div>
 
 	<div class="part_section condition_part">
 		<div class="part_title">
+			카테고리 <span class="reqired_write"></span>
+		</div>
+		<div class="part_content select_cate">
+			<my:selectbox  size="sm" items="" initial="대분류" />
+			<my:selectbox  size="sm" items="" initial="중분류" />
+			<my:selectbox  size="sm" items="" initial="소분류" />
+			<div>
+				<span>&nbsp;&nbsp;구매시 사용가능&nbsp;&nbsp;&nbsp;&nbsp;</span>
+			</div>
+		</div>
+	</div>
+	
+	<div class="part_section condition_part">
+		<div class="part_title">
 			사용조건 <span class="reqired_write">*</span>
 		</div>
 		<div class="part_content">
-			<button type="buton" class="btn action_btn first_btn search_btn">검색</button>
-			<input type="text" name="coupon_condition" placeholder="사용조건"
-				style="cursor: default" readonly />
+<!-- 			<button type="button" class="btn action_btn first_btn search_btn">검색</button> -->
+			<input type="text" name="coupon_condition" placeholder="사용조건" style="cursor: default" />
 			<div>
 				<span>&nbsp;구매시 사용가능&nbsp;&nbsp;&nbsp;&nbsp;</span>
 			</div>
@@ -66,7 +71,7 @@
 			지급대상 <span class="reqired_write">*</span>
 		</div>
 		<div class="part_content">
-			<button type="buton" class="btn action_btn first_btn search_btn">검색</button>
+			<button type="button" class="btn action_btn first_btn search_btn" id="user_searchBtn">검색</button>
 			<input type="text" name="coupon_user" placeholder="회원아이디 or 모든회원"
 				style="cursor: default" readonly /> <input type="text"
 				name="coupon_user2" placeholder="회원명 or 등급" style="cursor: default"
@@ -124,3 +129,4 @@
 	</div>
 </section>
 <!-- *********************************메인부분 end********************************* -->
+

@@ -9,6 +9,8 @@
 
 <title>메인배너 리스트</title>
 <link rel="stylesheet" href="./css/banner.css" />
+<link rel="stylesheet" href="../tagcss/tag.css" />
+<link rel="stylesheet" href="../tagcss/dateInput.css" />
 <!-- 헤드부분 -->
 
 <body>

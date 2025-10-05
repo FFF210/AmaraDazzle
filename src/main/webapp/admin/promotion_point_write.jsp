@@ -9,7 +9,7 @@
 
 <title>포인트 지급</title>
 <link rel="stylesheet" href="./css/boards_write.css?v=1" />
-<link rel="stylesheet" href="./css/coupon.css?v=1" />
+<link rel="stylesheet" href="./css/point.css" />
 <!-- 헤드부분 -->
 
 <body>
@@ -21,9 +21,6 @@
 	<!-- 레이아웃 + 메인컨텐츠 end -->
 
 
-	<!-- 정보수정 & 로그아웃 팝업 -->
-	<%@ include file="./modals/login_popup.jsp"%>
-	<!-- 정보수정 & 로그아웃 팝업 end -->
 
 
 	<!-- JS부분 -->

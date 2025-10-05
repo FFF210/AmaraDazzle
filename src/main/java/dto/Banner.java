@@ -3,27 +3,33 @@ package dto;
 import java.sql.Timestamp;
 
 public class Banner {
-	private Long bannerId; // 배너 광고 신청 ID (PK, AUTO_INCREMENT)
-	private Long brandId; // 브랜드 관리자 ID (FK → brand.brand_id)
-	private String managerName; // 담당자명
-	private String managerTel; // 연락처
-	private Timestamp startDate; // 시작일
-	private Timestamp endDate; // 종료일
-	private String bannerName; // 배너 광고명
-	private String bannerMessage; // 관리자 전달사항
-	private String status; // 진행상황 (PENDING / APPROVED / ONGOING / COMPLETED / CANCELED, DEFAULT 'PENDING')
-	private Timestamp createdAt; // 신청일 (DEFAULT CURRENT_TIMESTAMP)
-	private Timestamp updatedAt; // 수정일
-	private Integer isExposed; // 노출여부 (tinyint, DEFAULT 1)
-	private String brandUrl; // 브랜드페이지 URL
-	private String stateChange; // 배너 게시 상태 (POSTING / OFF)
-	private Long adminId; // 승인 관리자 ID (FK → admin_info.admin_info_id)
-	private Long UploadFileId; // 업로드 파일 ID (FK → upload_file.upload_file_id)
-	private int period;
 
-	public Banner() {
-	}
-
+    private Long bannerId;         // 배너 광고 신청 ID (PK, AUTO_INCREMENT)
+    private Long brandId;          // 브랜드 관리자 ID (FK → brand.brand_id)
+    private String managerName;    // 담당자명
+    private String managerTel;     // 연락처
+    private Timestamp startDate;   // 시작일
+    private Timestamp endDate;     // 종료일
+    private String bannerName;     // 배너 광고명
+    private String bannerMessage;  // 관리자 전달사항
+    private String status;         // 진행상황 (PENDING / APPROVED / ONGOING / COMPLETED / CANCELED, DEFAULT 'PENDING')
+    private Timestamp createdAt;   // 신청일 (DEFAULT CURRENT_TIMESTAMP)
+    private Timestamp updatedAt;   // 수정일
+    private Integer isExposed;     // 노출여부 (tinyint, DEFAULT 1)
+    private String brandUrl;       // 브랜드페이지 URL
+    private String stateChange;    // 배너 게시 상태 (POSTING / OFF)
+    private Long adminId;          // 승인 관리자 ID (FK → admin_info.admin_info_id)
+    private Long UploadFileId;	   // 업로드 파일 ID (FK → upload_file.upload_file_id)
+    
+    private int period; //기간 (계산용)
+    
+    //조인용 컬럼 
+    private String brandName;	//브랜드명 
+    private String aName; //관리자명 
+    
+    public Banner() {
+    }
+    
 	public Long getBannerId() {
 		return bannerId;
 	}
@@ -144,6 +150,22 @@ public class Banner {
 		this.adminId = adminId;
 	}
 
+    public String getBrandName() {
+		return brandName;
+	}
+
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
+	}
+
+	public String getaName() {
+		return aName;
+	}
+
+	public void setaName(String aName) {
+		this.aName = aName;
+	}
+	
 	public Long getUploadFileId() {
 		return UploadFileId;
 	}
@@ -168,5 +190,4 @@ public class Banner {
 				+ ", updatedAt=" + updatedAt + ", isExposed=" + isExposed + ", brandUrl=" + brandUrl + ", stateChange="
 				+ stateChange + ", adminId=" + adminId + ", UploadFileId=" + UploadFileId + ", period=" + period + "]";
 	}
-
 }

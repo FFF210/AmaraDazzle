@@ -8,7 +8,7 @@ import dto.brand.OrdersItemDetail;
 import dto.brand.OrdersSummary;
 
 public interface OrdersService {
-	// 주문 목록 조회 (브랜드별)
+	// 주문 목록 조회
 	Map<String, Object> ordersListByPage(Map<String, Object> params) throws Exception;
 
 	// 주문 요약 조회 (단건)
@@ -22,4 +22,7 @@ public interface OrdersService {
 
 	// 주문 상세 (요약 + 상품 + 쿠폰) 종합 조회
 	Map<String, Object> ordersDetail(Long brandId, Long orderId) throws Exception;
+
+	// 취소 주문 목록 조회
+	Map<String, Object> cancelOrderListByPage(Map<String, Object> params) throws Exception;
 }

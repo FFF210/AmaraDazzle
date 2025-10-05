@@ -9,29 +9,29 @@ body.login-page {
 	flex-direction: column;
 }
 
-/* 토스트 알럿 */
-#toast {
-	position: absolute;
-	top: 5px;
-	left: 50%;
-	transform: translateX(-50%) translateY(-50px); /* 시작 위치: 살짝 위 */
-	opacity: 0;
-	pointer-events: none; /* 클릭 막음 */
-	transition: all 0.5s ease;
-	z-index: 9999;
-}
-
-#toast.show {
-	transform: translateX(-50%) translateY(0); /* 원래 자리 */
-	opacity: 1;
-}
-
-
 /* 공통 컨테이너 */
 .auth-container {
 	max-width: 380px;
 	margin: 0 auto;
 	text-align: center;
+}
+
+#overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.45);
+	z-index: 9998;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	display: none;
+}
+
+#overlay.active {
+	display: block;
+	opacity: 1;
 }
 
 /* 로고 */
@@ -86,8 +86,6 @@ body.login-page {
 	font-size: 14px;
 	line-height: 1.4;
 }
-
-
 
 .auth-form input[type="checkbox"] {
 	accent-color: #0C8CE9;

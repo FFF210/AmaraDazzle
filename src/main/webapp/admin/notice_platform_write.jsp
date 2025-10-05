@@ -16,7 +16,7 @@
 
 	<!-- 레이아웃 + 메인컨텐츠 -->
 	<my:adminLayout>
-		<%@ include file="./main_content/notice_pf_write_content.jsp"%>
+		<%@ include file="./main_content/notice_platform_write_content.jsp"%>
 	</my:adminLayout>
 	<!-- 레이아웃 + 메인컨텐츠 end -->
 

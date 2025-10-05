@@ -3,7 +3,6 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.event">
-
 	<!-- 이벤트 목록 조회 -->
 	<select id="selectEventList" parameterType="map"
 		resultType="eventList">
@@ -171,7 +170,74 @@
 		WHERE p.event_id = #{eventId}
 		AND p.is_visible = 1
 	</select>
+	
+	<!-- event 게시글 총 개수 -->
+	<select id="eventCount" resultType="Integer" parameterType="searchCondition">
+		select count(*) from event e
+		join event_application ea on (e.event_id = ea.event_id)
+		join brand b on (ea.brand_id = b.brand_id)
+		<where>
+			<if test="startDateTime != null and endDateTime != null">
+			    and (e.created_at &gt;= #{startDateTime} 
+			    		and e.created_at &lt; #{endDateTime})
+			</if>
+			<if test="startDateTime2 != null and endDateTime2 != null">
+			    and (e.start_date &gt;= #{startDateTime2} 
+			    		and e.end_date &lt; #{endDateTime2})
+			</if>
+			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+				<choose>
+					<when test="totalSearch == '이벤트명'">
+						and e.event_name like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '브랜드명'">
+						and b.brand_name like concat('%',#{keyword},'%')
+					</when>
+				</choose>
+			</if>
+		</where>
+	</select>
+	
+	<!-- event 리스트 보기 -->
+	<select id="allEventList" resultType="banner" parameterType="Map">
+		select e.*, b.brand_name from event e
+		join event_application ea on (e.event_id = ea.event_id)
+		join brand b on (ea.brand_id = b.brand_id)
+		order by e.event_id desc limit #{start_p},#{post_ea}
+	</select>
+	
+	<!-- 검색된 event 리스트 -->
+	<select id="searchEventList" resultType="banner" parameterType="searchCondition">
+		select e.*, b.brand_name from event e
+		join event_application ea on (e.event_id = ea.event_id)
+		join brand b on (ea.brand_id = b.brand_id)
+		<where>
+			<if test="startDateTime != null and endDateTime != null">
+			    and (e.created_at &gt;= #{startDateTime} 
+			    		and e.created_at &lt; #{endDateTime})
+			</if>
+			<if test="startDateTime2 != null and endDateTime2 != null">
+			    and (e.start_date &gt;= #{startDateTime2} 
+			    		and e.end_date &lt; #{endDateTime2})
+			</if>
+			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+				<choose>
+					<when test="totalSearch == '이벤트명'">
+						and e.event_name like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '브랜드명'">
+						and b.brand_name like concat('%',#{keyword},'%')
+					</when>
+				</choose>
+			</if>
+		</where>
+		order by e.event_id desc limit #{start_p},#{post_ea}
+	</select>
 
 
-
+	<!-- event 게시글 조회수 -->
+	<update id="eventViewCnt" parameterType="Integer">
+		update event set view_cnt = view_cnt+1 where event_id=#{num}
+	</update>
+	
 </mapper>

@@ -52,7 +52,7 @@ public class TossController extends HttpServlet {
 			obj.put("amount", amount);
 			obj.put("paymentKey", paymentKey);
 
-			String widgetSecretKey = "toss key"; // TODO: 실제 시크릿 키
+			String widgetSecretKey = "SecretKey"; // TODO: 실제 시크릿 키
 			Base64.Encoder encoder = Base64.getEncoder();
 			byte[] encodedBytes = encoder.encode((widgetSecretKey + ":").getBytes(StandardCharsets.UTF_8));
 			String authorizations = "Basic " + new String(encodedBytes);

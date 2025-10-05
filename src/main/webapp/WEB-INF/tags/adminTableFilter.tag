@@ -44,10 +44,10 @@
 document.addEventListener("DOMContentLoaded", () => {
 	//검색입력하지 않으면 URL에 미표시 
 	document.querySelector(".search_form").addEventListener("submit", function(e) {
-		this.querySelectorAll("input").forEach(el => {
-			if (el.value.trim() === "") {
-				el.disabled = true; // 값 없으면 전송 제외
-			}
+		this.querySelectorAll("input:not([type='hidden'])").forEach(el => {
+		    if (el.value.trim() === "") {
+		        el.disabled = true;
+		    }
 		});
 		
 		
@@ -62,14 +62,48 @@ document.addEventListener("DOMContentLoaded", () => {
 		// 한쪽만 입력된 경우 막기
 		if ((hasTotalSearch && !hasKeyword) || (!hasTotalSearch && hasKeyword)) {
 			e.preventDefault();
-			alert("통합검색은 검색 조건과 검색어를 모두 입력해야 합니다.");
+			alert("검색어 입력시 검색 조건과 검색어를 모두 입력해야 합니다.");
 			
 			keyword.disabled=false;
 			totalSearch.disabled=false;
 		}
 	});
 	
-	//검색 후 select란 검색값 유지 
+	//middleFilter 선택
+	document.querySelectorAll(".filter-btn-group").forEach(group => {
+	    const hidden = group.nextElementSibling; // group 바로 다음 hidden input
+	    
+	    // 페이지 로드 시 UI 반영
+	    if (hidden && hidden.value) {
+	        const matched = group.querySelector(`.filter-btn[data-value="${hidden.value}"]`);
+	        if (matched) {
+	            matched.classList.add("active");
+	        }
+	    } else {
+	        // 값 없으면 기본 '전체' 활성화
+	        const firstBtn = group.querySelector(".filter-btn");
+	        if (firstBtn) {
+	            firstBtn.classList.add("active");
+	            if (hidden) hidden.value = firstBtn.dataset.value;
+	        }
+	    }
+	
+	    // 버튼 클릭 이벤트
+	    group.querySelectorAll(".filter-btn").forEach(btn => {
+	        btn.addEventListener("click", () => {
+	            const value = btn.dataset.value;
+	
+	            // hidden 값 갱신
+	            if (hidden) hidden.value = value;
+	
+	            // active 표시 갱신
+	            group.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+	            btn.classList.add("active");
+	        });
+	    });
+	});
+	
+	//검색시 hidden input에 value매핑 + 검색 후 select란 검색값 유지 
 	document.querySelectorAll(".custom-select").forEach(select => {
 		const label = select.querySelector(".select-label");
 		const items = select.querySelectorAll(".select-item");

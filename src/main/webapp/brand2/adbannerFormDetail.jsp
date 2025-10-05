@@ -226,7 +226,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				// https://docs.tosspayments.com/sdk/payment-js
 				amount: `${banner.period*140000}`, // 결제 금액
 				orderId: "adbanner-" + `${banner.bannerId}`, // 주문번호(주문번호는 상점에서 직접 만들어주세요.)
-				orderName: `광고배너 ${banner.period}일 이용`, // 구매상품 (생수 외 1건) 같은 형식
+				orderName: "광고배너 ${banner.period}일 이용", // 구매상품 (생수 외 1건) 같은 형식
 				customerName: `${banner.managerName}`, // 구매자 이름
 				successUrl: "http://localhost:8080/tossSuccess", // 결제 성공 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)
 				failUrl: "http://localhost:8080/tossSuccess", // 결제 실패 시 이동할 페이지(이 주소는 예시입니다. 상점에서 직접 만들어주세요.)

@@ -11,5 +11,25 @@
 }
 
 input[type="text"]{
-	height : 30px;
+/* 	 width: 100%; */
+	height : 44px;
+}
+.part_content .filter_box {
+	display: flex;
+	align-items: center;
+	gap : 5px;
+}
+.part_content.couponExp .filter_box .date-text {
+	 width: 98%;
+	 
+}
+
+.preset-buttons {
+	gap:5px;
+}
+
+.select_cate {
+	display : flex; 
+	align-items: center;
+	gap : 5px;
 }

@@ -14,7 +14,7 @@
 	top: 0;
 	background-color: var(--base);
 	gap: 5px;
-	z-index: 9999;
+	z-index: 9995;
 	align-self: stretch;
 }
 
@@ -52,6 +52,9 @@
 .header .icon-btn:hover i {
 	color: var(--mainColor);
 }
+.aname b {
+	letter-spacing: 5px;
+}
 
 /* 사이트 바로가기 버튼 */
 .header button.link-btn {
@@ -75,4 +78,23 @@
 	background: var(--clicked);
 	border: 1px solid var(--clicked);
 	color: var(--base);
+}
+
+/* 오버레이 */
+#overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.45);
+	z-index: 9998;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	display: none;
+}
+
+#overlay.active {
+	display: block;
+	opacity: 1;
 }
