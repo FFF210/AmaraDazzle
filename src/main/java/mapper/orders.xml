@@ -405,6 +405,7 @@
 	</select>
 
 
+
 	<!-- ======================= [브랜드 어드민] 주문 목록 조회 ======================= -->
 	<select id="selectOrdersListForBrand" parameterType="map"
 		resultType="ordersList">

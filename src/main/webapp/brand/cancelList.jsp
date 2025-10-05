@@ -9,11 +9,28 @@
 <head>
 <meta charset="UTF-8" />
 <title>취소 관리</title>
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<!-- Pretendard 폰트 (CDN) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+
+<!-- flatpickr 기본 테마 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
+
+<!-- 한글화 & 커스텀 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
+
+<!-- flatpickr 및 tableFilter.js -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
+<script src="./js/selectbox.js"></script>
+
+
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
 <link rel="stylesheet" href="../tagcss/reset.css" />
 <link rel="stylesheet" href="../tagcss/button.css" />
 <link rel="stylesheet" href="../tagcss/form-controls.css" />
@@ -84,14 +101,13 @@
 											</p>
 										</div>
 									</td>
-									<td><fmt:formatNumber value="${order.total}"
-											type="number" maxFractionDigits="0" groupingUsed="true" /></td>
+									<td><fmt:formatNumber value="${order.total}" type="number"
+											maxFractionDigits="0" groupingUsed="true" /></td>
 									<td>토스페이</td>
 									<td><my:tag color="green" size="sm" text="취소완료" /></td>
 									<td>
 										<div class="actions">
-											<button type="button"
-												class="btn btn-outline btn-sm">상세</button>
+											<button type="button" class="btn btn-outline btn-sm">상세</button>
 										</div>
 									</td>
 								</tr>
@@ -117,10 +133,8 @@
 			</div>
 		</div>
 	</my:layout>
-
-	<script src="./js/selectbox.js"></script>
-	<script>
 	
+	<script>	
 	/*********************************************************************************************************
 	 * tableFilter 이벤트
 	 *********************************************************************************************************/
