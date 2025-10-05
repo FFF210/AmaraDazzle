@@ -1,6 +1,7 @@
 package controller.admin;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Timestamp;
 
 import javax.servlet.ServletException;
@@ -27,7 +28,9 @@ public class PublCouponWrite extends HttpServlet {
 	// POST
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
-		response.setContentType("application/json;charset=UTF-8");
+		response.setContentType("application/json; charset=UTF-8");
+		
+		PrintWriter pw = response.getWriter();
 
 		try {
 			String cp_name = request.getParameter("couponName"); //쿠폰명
@@ -43,9 +46,7 @@ public class PublCouponWrite extends HttpServlet {
 			String cp_reason = request.getParameter("couponReason"); //지급 사유 
 			String cp_quantity = request.getParameter("couponQuantity"); //발급수량
 			String qnt_noRestr = request.getParameter("qnt_noRestr"); // 발급수량 제한없음 
-//			String no_dupl = request.getParameter("noDupl"); // 중복발급여부 (on:중복발급 불가)  
 			Long cp_writer = Long.parseLong(request.getParameter("cpWriter")); // 발행한 관리자 코드
-//			String cp_writer = request.getParameter("cpWriter");
 			
 			System.out.println("cp_name : " + cp_name);
 			System.out.println("cp_amount : " + cp_amount);
@@ -60,7 +61,6 @@ public class PublCouponWrite extends HttpServlet {
 			System.out.println("coupon_reason : " + cp_reason);
 			System.out.println("coupon_quantity : " + cp_quantity);
 			System.out.println("qnt_noRestr : " + qnt_noRestr);
-//			System.out.println("no_dupl : " + no_dupl);
 			System.out.println("cp_writer : " + cp_writer);
 
 			Long cateIdx = null;
@@ -77,26 +77,22 @@ public class PublCouponWrite extends HttpServlet {
 			CouponService coupon_svc = new CouponServiceImpl();
 			int result = coupon_svc.insertPublCoupon(pCoupon);
 			
-			System.out.println(result);
-			
 			if(result > 0) {  //DB 입력 성공시
-				
+				pw.print("{\"status\":\"ok\",\"title\":\"쿠폰 발행 완료\",\"message\":\"쿠폰 등록이 완료되었습니다.\"}");
+					
+			} else {
+				pw.print("{\"status\":\"fail\",\"title\":\"쿠폰 발행 실패\",\"message\":\"시스템 문제로 쿠폰 등록에 실패했습니다.\"}");
 			}
-			
-//			String json = null;
-//			if (noticePk != null && noticePk > 0) {
-//				json = "{\"status\":\"ok\", \"id\":" + noticePk + "}";
-//				response.getWriter().print(json);
-//
-//			} else {
-//				json = "{\"status\":\"fail\"}";
-//				response.getWriter().write(json);
-//			}
 
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("err", "시스템 오류로 공지 작성에 실패했습니다.");
 			request.getRequestDispatcher("error.jsp").forward(request, response);
+			
+		} finally {
+			pw.flush();
+			pw.close();
 		}
 
 	}

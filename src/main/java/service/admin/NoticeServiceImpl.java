@@ -22,7 +22,7 @@ public class NoticeServiceImpl implements NoticeService {
 	private Paging m_pg = new Paging();
 	private SearchUtil search = new SearchUtil();
 	
-	// seller공지 작성
+	// seller 공지 작성
 	@Override
 	public Long noticeSellerWrite(Notice notice_DTO) throws Exception {
 		// 파일 pk 리스트가 null 이면 빈 리스트로 처리(NPE 방지)

@@ -61,6 +61,7 @@ public class PublCouponList extends HttpServlet {
 				pCouponCnt = coupon_svc.pCouponCnt(new HashMap<String, String>()); // 전체 카운트
 		        paging = m_pg.page_ea(p_no, pCouponCnt); // 페이징Map
 		        pCouponAllList = coupon_svc.pCouponAllList(p_no);
+		        
 		    } else {
 		        // 검색조건이 하나라도 있는 경우: 검색 수행
 		    	
