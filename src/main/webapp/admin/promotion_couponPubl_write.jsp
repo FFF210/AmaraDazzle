@@ -73,7 +73,7 @@
 						<input type="text" name="couponCondition" id="couponCondition" placeholder="사용조건" class="price_input" /> 
 						<span>&nbsp;&nbsp;원 이상 구매시 사용가능&nbsp;&nbsp;&nbsp;&nbsp;</span>
 						<div class="no_condition">
-							<label><input type="checkbox" id="pch_noRestr" /> 제한 없음</label>
+							<label><input type="checkbox" id="pch_noRestr" name="pch_noRestr"/> 제한 없음</label>
 						</div>
 					</div>
 				</div>
@@ -102,7 +102,7 @@
 				<div class="part_section amount_part">
 					<div class="part_title">발급 수량 <span class="reqired_write">*</span></div>
 					<div class="part_content">
-						<input type="text" name="couponQuantity" id="couponQuantity" placeholder="쿠폰 최대 발급 수량 입력" /> 
+						<input type="text" name="couponQuantity" id="couponQuantity" placeholder="쿠폰 최대 발급 수량 입력" class="price_input" /> 
 						<span>&nbsp;매 한정&nbsp;&nbsp;&nbsp;&nbsp;</span>
 						<div class="no_condition">
 							<label><input type="checkbox" id="qnt_noRestr" name="qnt_noRestr"/> 제한 없음</label>
@@ -147,35 +147,6 @@
 	<script src="./js/couponP.js"></script>
 
 	<script>
-	//커스텀select 선택시 hidden Input에 값 넣기 
-	document.querySelectorAll(".custom-select").forEach(select => {
-		const label = select.querySelector(".select-label");
-		const items = select.querySelectorAll(".select-item");
-		const hidden = select.parentElement.querySelector("input[type='hidden'][name]");
-
-		// 페이지 로드 시 hidden 값 반영
-		if (hidden && hidden.value) {
-			const matched = Array.from(items).find(li => li.dataset.value === hidden.value);
-			if (matched) {
-				label.textContent = matched.dataset.value;
-				items.forEach(li => li.classList.remove("active"));
-				matched.classList.add("active");
-			}
-		}
-
-		// 클릭 이벤트 시 hidden 갱신
-		items.forEach(item => {
-			item.addEventListener("click", () => {
-				const value = item.dataset.value;
-				label.textContent = value;
-				items.forEach(li => li.classList.remove("active"));
-				item.classList.add("active");
-				if (hidden) hidden.value = value;
-			});
-		});
-	});
-	
-	
 	// --- 프리셋 버튼 이벤트 ---
 	document.querySelectorAll(".date-input .preset-btn").forEach(btn => {
 		btn.addEventListener("click", () => {

@@ -12,12 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dto.Banner;
-import service.brand2.AdbannerService;
-import service.brand2.AdbannerServiceImpl;
+import service.admin.BannerService;
+import service.admin.BannerServiceImpl;
 import util.Paging;
 
 @WebServlet("/admin/promoBannerList")
-public class PromoBanner extends HttpServlet {
+public class PromoBannerList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,7 +32,7 @@ public class PromoBanner extends HttpServlet {
 			}
 
 			Paging m_pg = new Paging();
-			AdbannerService banner_svc = new AdbannerServiceImpl();
+			BannerService banner_svc = new BannerServiceImpl();
 
 			String startDate = request.getParameter("startDate");
 			String endDate = request.getParameter("endDate");
@@ -89,8 +89,6 @@ public class PromoBanner extends HttpServlet {
 				
 				request.setAttribute("searchContent", searchContent); // 검색어 map
 			}
-			System.out.println("bannerCnt : " + bannerAllCnt);
-			System.out.println("bannerList : " + bannerAllList);
 			
 			request.setAttribute("postNo", postNo); // 페이지번호 클릭시 나오는 게시글 일련번호
 			request.setAttribute("paging", paging); // 페이징Map

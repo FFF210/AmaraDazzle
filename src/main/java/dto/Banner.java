@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class Banner {
 
     private Long bannerId;         // 배너 광고 신청 ID (PK, AUTO_INCREMENT)
-    private Long brandId;          // 브랜드 관리자 ID (FK → brand.brand_id)
+    private Long brandId;          // 브랜드 관리자 ID 
     private String managerName;    // 담당자명
     private String managerTel;     // 연락처
     private Timestamp startDate;   // 시작일
@@ -14,8 +14,7 @@ public class Banner {
     private String bannerMessage;  // 관리자 전달사항
     private String status;         // 진행상황 (PENDING / APPROVED / ONGOING / COMPLETED / CANCELED, DEFAULT 'PENDING')
     private Timestamp createdAt;   // 신청일 (DEFAULT CURRENT_TIMESTAMP)
-    private Timestamp updatedAt;   // 수정일
-    private Integer isExposed;     // 노출여부 (tinyint, DEFAULT 1)
+    private Timestamp changedAt;   // 수정일
     private String brandUrl;       // 브랜드페이지 URL
     private String stateChange;    // 배너 게시 상태 (POSTING / OFF)
     private Long adminId;          // 승인 관리자 ID (FK → admin_info.admin_info_id)
@@ -29,6 +28,18 @@ public class Banner {
     
     public Banner() {}
     
+
+	public Banner(Timestamp startDate, Timestamp endDate, String bannerName, String brandUrl,
+			Long adminId, Long uploadFileId) {
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.bannerName = bannerName;
+		this.brandUrl = brandUrl;
+		this.adminId = adminId;
+		this.UploadFileId = uploadFileId;
+	}
+
+
 	public Long getBannerId() {
 		return bannerId;
 	}
@@ -109,20 +120,12 @@ public class Banner {
 		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdatedAt() {
-		return updatedAt;
+	public Timestamp getChangedAt() {
+		return changedAt;
 	}
 
-	public void setUpdatedAt(Timestamp updatedAt) {
-		this.updatedAt = updatedAt;
-	}
-
-	public Integer getIsExposed() {
-		return isExposed;
-	}
-
-	public void setIsExposed(Integer isExposed) {
-		this.isExposed = isExposed;
+	public void setChangedAt(Timestamp changedAt) {
+		this.changedAt = changedAt;
 	}
 
 	public String getBrandUrl() {
@@ -149,22 +152,6 @@ public class Banner {
 		this.adminId = adminId;
 	}
 
-    public String getBrandName() {
-		return brandName;
-	}
-
-	public void setBrandName(String brandName) {
-		this.brandName = brandName;
-	}
-
-	public String getaName() {
-		return aName;
-	}
-
-	public void setaName(String aName) {
-		this.aName = aName;
-	}
-	
 	public Long getUploadFileId() {
 		return UploadFileId;
 	}
@@ -181,13 +168,31 @@ public class Banner {
 		this.period = period;
 	}
 
+	public String getBrandName() {
+		return brandName;
+	}
+
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
+	}
+
+	public String getaName() {
+		return aName;
+	}
+
+	public void setaName(String aName) {
+		this.aName = aName;
+	}
+
 	@Override
 	public String toString() {
 		return "Banner [bannerId=" + bannerId + ", brandId=" + brandId + ", managerName=" + managerName
 				+ ", managerTel=" + managerTel + ", startDate=" + startDate + ", endDate=" + endDate + ", bannerName="
 				+ bannerName + ", bannerMessage=" + bannerMessage + ", status=" + status + ", createdAt=" + createdAt
-				+ ", updatedAt=" + updatedAt + ", isExposed=" + isExposed + ", brandUrl=" + brandUrl + ", stateChange="
-				+ stateChange + ", adminId=" + adminId + ", UploadFileId=" + UploadFileId + ", period=" + period + "]";
+				+ ", changedAt=" + changedAt + ", brandUrl=" + brandUrl + ", stateChange=" + stateChange + ", adminId="
+				+ adminId + ", UploadFileId=" + UploadFileId + ", period=" + period + ", brandName=" + brandName
+				+ ", aName=" + aName + "]";
 	}
-
+    
+	
 }

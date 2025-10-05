@@ -215,3 +215,8 @@
 	align-items: center;
 	margin-top: 10px;
 }
+
+
+.part_content.couponExp .filter_box input[type="text"].date-text {
+	 width: 98%;
+}

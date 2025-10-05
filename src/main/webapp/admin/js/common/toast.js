@@ -1,5 +1,7 @@
 //알럿띄우기 
+console.log("showAlert 호출!!!!");
 function showAlert(type, title, message) {
+	console.log("showAlert 호출");
 	const icons = {
 		error: '<i class="bi bi-x-circle-fill"></i>',
 		warning: '<i class="bi bi-exclamation-triangle-fill"></i>',
@@ -20,6 +22,6 @@ function showAlert(type, title, message) {
 
 	setTimeout(() => {
 		toast.classList.remove("show");
-	}, 2000);
+	}, 3000);
 }
 

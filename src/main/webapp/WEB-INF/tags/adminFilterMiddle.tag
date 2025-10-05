@@ -30,7 +30,7 @@
 		</div>
 		
 		
-		<input type="hidden" name="${name}" value="${searchContent[name] }" />
+		<input type="hidden" name="${name}" value="${searchContent[name]}" />
 	</div>
 </c:forEach>
 

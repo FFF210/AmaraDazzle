@@ -233,6 +233,16 @@
 		</where>
 		order by bn.banner_id desc limit #{start_p},#{post_ea}
 	</select>
+	
+	<!-- 어드민 배너 등록 -->
+	<insert id="adminBannerWrite" parameterType="banner">
+		insert into banner 
+			(banner_id, start_date, end_date, banner_name, 
+			brand_url, admin_id, upload_file_id, created_at)
+		values 
+			(0, #{startDate}, #{endDate}, #{bannerName},
+			#{brandUrl},#{adminId}, #{UploadFileId}, now())
+	</insert>
 
 
 	<!-- ================[소비자] 메인페이지 배너 노출 목록 =================== -->

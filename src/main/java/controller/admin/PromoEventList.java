@@ -17,7 +17,7 @@ import service.admin.EventServiceImpl;
 import util.Paging;
 
 @WebServlet("/admin/promoEventList")
-public class PromoEvent extends HttpServlet {
+public class PromoEventList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

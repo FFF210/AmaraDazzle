@@ -20,9 +20,10 @@ import service.admin.NoticeServiceImpl;
 import util.FileAttach;
 
 @WebServlet("/admin/noticeSellerWrite")
-@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 메모리 저장 임계값 (2MB)
-		maxFileSize = 1024 * 1024 * 10, // 개별 파일 최대 크기 (10MB)
-		maxRequestSize = 1024 * 1024 * 50 // 전체 요청 최대 크기 (50MB)
+@MultipartConfig(
+	fileSizeThreshold = 1024 * 1024 * 2, // 메모리 저장 임계값 (2MB)
+	maxFileSize = 1024 * 1024 * 10, // 개별 파일 최대 크기 (10MB)
+	maxRequestSize = 1024 * 1024 * 50 // 전체 요청 최대 크기 (50MB)
 )
 public class NoticeSellerWrite extends HttpServlet {
 	private static final long serialVersionUID = 1L;
