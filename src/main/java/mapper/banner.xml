@@ -46,7 +46,7 @@
 		manager_tel AS managerTel,
 		created_at AS createdAt,
 		banner_message AS bannerMessage,
-		upload_file_name AS uploadFileName,
+		upload_file_id AS uploadFileId,
 		DATEDIFF(end_date, start_date) AS period
 		FROM banner
 		WHERE banner_id = #{bannerId}
