@@ -16,4 +16,9 @@ public class UploadFileServiceImpl implements UploadFileService {
 	public UploadFile getUploadFile(Long uploadFileId) {
 		return uploadFileDao.selectUploadFileById(uploadFileId);
 	}
+	
+	@Override
+    public UploadFile getFileById(Long uploadFileId) throws Exception {
+        return uploadFileDao.selectFileById(uploadFileId);
+    }
 }
