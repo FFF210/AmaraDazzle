@@ -70,7 +70,10 @@
 		<typeAlias type="dto.brand.OrdersDetail" alias="ordersDetail" />
 		<typeAlias type="dto.brand.OrdersCoupon" alias="ordersCoupon" />
 		<typeAlias type="dto.brand.CancelOrderList" alias="cancelOrderList" />
+		<typeAlias type="dto.brand.CancelOrderItemDetail" alias="cancelOrderItemDetail" />
+		<typeAlias type="dto.brand.CancelOrderSummary" alias="cancelOrderSummary" />
 		<typeAlias type="dto.brand.ReturnOrderList" alias="returnOrderList" />
+		<typeAlias type="dto.brand.ExchangeOrderList" alias="exchangeOrderList" />
 		<typeAlias type="dto.brand.MemberQnaList" alias="memberQnaList" />
 		<typeAlias type="dto.brand.ReviewList" alias="reviewList" />
 		<typeAlias type="dto.brand.ShippingList" alias="shippingList" />

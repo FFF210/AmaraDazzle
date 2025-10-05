@@ -3,6 +3,7 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -35,10 +36,18 @@
 					</c:when>
 					<c:when test="${param.from eq 'shipping'}">
 						<my:breadcrumb
+							items="배송관리:/brand/shippingList,주문상세:" />
+					</c:when>
+					<c:when test="${param.from eq 'shippingDetail'}">
+						<my:breadcrumb
 							items="배송관리:/brand/shippingList,배송상세:/brand/shippingDetail?orderId=${param.orderId}&status=${param.status},주문상세:" />
 					</c:when>
 					<c:when test="${param.from eq 'cancel'}">
 						<my:breadcrumb items="취소관리:/brand/cancelList,주문상세:" />
+					</c:when>
+					<c:when test="${param.from eq 'cancelDetail'}">
+						<my:breadcrumb
+							items="취소관리:/brand/cancelList,취소상세:/brand/cancelDetail?orderId=${param.orderId},주문상세:" />
 					</c:when>
 					<c:when test="${param.from eq 'exchange'}">
 						<my:breadcrumb items="교환관리:/brand/exchangeList,주문상세:" />
@@ -199,7 +208,7 @@
 									<tr>
 										<td>${loop.index + 1}</td>
 										<td>${item.productName}</td>
-										<td><c:out value="${item.optionName}" /></td>
+										<td>${item.optionName}</td>
 										<td>${item.quantity}</td>
 										<td><fmt:formatNumber value="${item.total}" type="number"
 												maxFractionDigits="0" groupingUsed="true" /></td>
@@ -247,7 +256,8 @@
 													<c:when test="${item.itemStatus eq 'CANCELLED'}">
 														<button type="button"
 															class="btn btn-outline btn-sm btn-release"
-															data-product-id="${product.productId}">취소조회</button>
+															data-product-id="${product.productId}"
+															onclick="location.href='/brand/cancelDetail?orderId=${orderDetail.summary.ordersId}'">취소조회</button>
 													</c:when>
 													<c:when test="${item.itemStatus eq 'COLLECTING'}">
 														<button type="button"
@@ -270,11 +280,6 @@
 											</div></td>
 									</tr>
 								</c:forEach>
-								<c:if test="${empty orderDetail.items}">
-									<tr>
-										<td colspan="6">주문 상품이 없습니다.</td>
-									</tr>
-								</c:if>
 							</tbody>
 						</table>
 					</div>
