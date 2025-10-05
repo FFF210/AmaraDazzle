@@ -51,12 +51,10 @@ public class AdbannerDetail extends HttpServlet {
 			// ============= 상세보기 버튼 =============
 			
 			Banner detail = service.getBannerById(bannerId);
-			System.out.println(detail);
 			request.setAttribute("banner", detail);
 			request.getRequestDispatcher("/brand2/adbannerFormDetail.jsp").forward(request, response);
 			
 			// ============= 상세보기 버튼 =============
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

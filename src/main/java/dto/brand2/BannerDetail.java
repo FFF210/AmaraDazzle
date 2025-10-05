@@ -3,106 +3,166 @@ package dto.brand2;
 import java.sql.Timestamp;
 
 public class BannerDetail {
-	private Long bannerId; // 배너 광고 신청 ID
-	private Timestamp createdAt; // 신청일
-	private Timestamp startDate; // 시작일
-	private Timestamp endDate; // 종료일
-	private String bannerName; // 배너 광고명
-	private String status; // 진행상태 (PENDING / ONGOING / COMPLETED / CANCELED)
-	private String managerName; // 담당자명
-	private String managerTel; // 연락처
-	private Long UploadFileId; // 업로드 파일 ID (FK → upload_file.upload_file_id)
-	private boolean amount; // 결제할 금액
+    private Long bannerId;         // 배너 광고 신청 ID (PK, AUTO_INCREMENT)
+    private Long brandId;          // 브랜드 관리자 ID (FK → brand.brand_id)
+    private String managerName;    // 담당자명
+    private String managerTel;     // 연락처
+    private Timestamp startDate;   // 시작일
+    private Timestamp endDate;     // 종료일
+    private String bannerName;     // 배너 광고명
+    private String bannerMessage;  // 관리자 전달사항
+    private String status;         // 진행상황 (PENDING / APPROVED / ONGOING / COMPLETED / CANCELED)
+    private Timestamp createdAt;   // 신청일 (DEFAULT CURRENT_TIMESTAMP)
+    private Timestamp updatedAt;   // 수정일
+    private Integer isExposed;     // 노출여부 (tinyint, DEFAULT 1)
+    private String brandUrl;       // 브랜드페이지 URL
+    private String stateChange;    // 배너 게시 상태 (POSTING / OFF)
+    private Long adminId;          // 승인 관리자 ID (FK → admin_info.admin_info_id)
+    private Long UploadFileId;	   // 업로드 파일 ID (FK → upload_file.upload_file_id)
+    private Integer period;
+    private String uploadFileName;
+    
+    public BannerDetail() {
+    }
+    
+	public String getUploadFileName() {
+		return uploadFileName;
+	}
 
-	public BannerDetail() {
+	public void setUploadFileName(String uploadFileName) {
+		this.uploadFileName = uploadFileName;
+	}
+
+	public Integer getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(Integer period) {
+		this.period = period;
 	}
 
 	public Long getBannerId() {
-		return bannerId;
-	}
+        return bannerId;
+    }
+    public void setBannerId(Long bannerId) {
+        this.bannerId = bannerId;
+    }
 
-	public void setBannerId(Long bannerId) {
-		this.bannerId = bannerId;
-	}
+    public Long getBrandId() {
+        return brandId;
+    }
+    public void setBrandId(Long brandId) {
+        this.brandId = brandId;
+    }
 
-	public Timestamp getCreatedAt() {
-		return createdAt;
-	}
+    public String getManagerName() {
+        return managerName;
+    }
+    public void setManagerName(String managerName) {
+        this.managerName = managerName;
+    }
 
-	public void setCreatedAt(Timestamp createdAt) {
-		this.createdAt = createdAt;
-	}
+    public String getManagerTel() {
+        return managerTel;
+    }
+    public void setManagerTel(String managerTel) {
+        this.managerTel = managerTel;
+    }
 
-	public Timestamp getStartDate() {
-		return startDate;
-	}
+    public Timestamp getStartDate() {
+        return startDate;
+    }
+    public void setStartDate(Timestamp startDate) {
+        this.startDate = startDate;
+    }
 
-	public void setStartDate(Timestamp startDate) {
-		this.startDate = startDate;
-	}
+    public Timestamp getEndDate() {
+        return endDate;
+    }
+    public void setEndDate(Timestamp endDate) {
+        this.endDate = endDate;
+    }
 
-	public Timestamp getEndDate() {
-		return endDate;
-	}
+    public String getBannerName() {
+        return bannerName;
+    }
+    public void setBannerName(String bannerName) {
+        this.bannerName = bannerName;
+    }
 
-	public void setEndDate(Timestamp endDate) {
-		this.endDate = endDate;
-	}
+    public String getBannerMessage() {
+        return bannerMessage;
+    }
+    public void setBannerMessage(String bannerMessage) {
+        this.bannerMessage = bannerMessage;
+    }
 
-	public String getBannerName() {
-		return bannerName;
-	}
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public void setBannerName(String bannerName) {
-		this.bannerName = bannerName;
-	}
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public Integer getIsExposed() {
+        return isExposed;
+    }
+    public void setIsExposed(Integer isExposed) {
+        this.isExposed = isExposed;
+    }
 
-	public String getManagerName() {
-		return managerName;
-	}
+    public String getBrandUrl() {
+        return brandUrl;
+    }
+    public void setBrandUrl(String brandUrl) {
+        this.brandUrl = brandUrl;
+    }
 
-	public void setManagerName(String managerName) {
-		this.managerName = managerName;
-	}
+    public String getStateChange() {
+        return stateChange;
+    }
+    public void setStateChange(String stateChange) {
+        this.stateChange = stateChange;
+    }
 
-	public String getManagerTel() {
-		return managerTel;
-	}
-
-	public void setManagerTel(String managerTel) {
-		this.managerTel = managerTel;
-	}
-
+    public Long getAdminId() {
+        return adminId;
+    }
+    public void setAdminId(Long adminId) {
+        this.adminId = adminId;
+    }
 	public Long getUploadFileId() {
 		return UploadFileId;
 	}
-
 	public void setUploadFileId(Long uploadFileId) {
 		UploadFileId = uploadFileId;
 	}
-
-	public boolean isAmount() {
-		return amount;
-	}
-
-	public void setAmount(boolean amount) {
-		this.amount = amount;
-	}
+	
 
 	@Override
 	public String toString() {
-		return "BannerDetail [bannerId=" + bannerId + ", createdAt=" + createdAt + ", startDate=" + startDate
-				+ ", endDate=" + endDate + ", bannerName=" + bannerName + ", status=" + status + ", managerName="
-				+ managerName + ", managerTel=" + managerTel + ", UploadFileId=" + UploadFileId + ", amount=" + amount
-				+ "]";
+		return "Banner [bannerId=" + bannerId + ", brandId=" + brandId + ", managerName=" + managerName
+				+ ", managerTel=" + managerTel + ", startDate=" + startDate + ", endDate=" + endDate + ", bannerName="
+				+ bannerName + ", bannerMessage=" + bannerMessage + ", status=" + status + ", createdAt=" + createdAt
+				+ ", updatedAt=" + updatedAt + ", isExposed=" + isExposed + ", brandUrl=" + brandUrl + ", stateChange="
+				+ stateChange + ", adminId=" + adminId + ", UploadFileId=" + UploadFileId + ", period=" + period
+				+ ", uploadFileName=" + uploadFileName + "]";
 	}
+
+
 
 }

@@ -82,7 +82,7 @@ margin: 8px 0 8px 24px;
 		<div class="page-tableFilter">
 			<my:tableFilter
 				filters="status|진행상황:PENDING=승인대기|APPROVED=승인완료|ONGOING=진행중|COMPLETED=완료|CANCELED=취소"
-				hasDate="true" searchItems="광고 담당자,광고명" />
+				hasDate="false" searchItems="광고 담당자,광고명" />
 		</div>
 
 		<div class="tcontainer">
