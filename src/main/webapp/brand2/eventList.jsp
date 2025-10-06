@@ -22,16 +22,7 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js">
-<link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
-
-<!-- flatpickr 및 tableFilter.js -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
-<script src="./js/selectbox.js"></script>
 
 <link rel="stylesheet" href="../tagcss/tag.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
@@ -181,12 +172,61 @@
 				</table>
 			</div>
 		</div>
-		<div class="pagination">
-			<my:pagination currentPage="1" totalPages="10"
-				baseUrl="/products?page=" />
-		</div>
-	</my:layout>
 
+		<c:set var="queryString">
+			<c:if test="${not empty param.status}">status=${param.status}&</c:if>
+			<c:if test="${not empty param.searchType}">searchType=${param.searchType}&</c:if>
+			<c:if test="${not empty param.searchKeyword}">searchKeyword=${param.searchKeyword}&</c:if>
+			<c:if test="${not empty param.startDate}">startDate=${param.startDate}&</c:if>
+			<c:if test="${not empty param.endDate}">endDate=${param.endDate}&</c:if>
+				page=
+		</c:set>
+
+		<!-- 페이징 -->
+		<div class="page-pagination">
+			<my:pagination currentPage="${currentPage}"
+				totalPages="${totalPages}"
+				baseUrl="/brand2/eventList?${queryString}" />
+		</div>
+
+	</my:layout>
+	<!-- flatpickr 및 tableFilter.js -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/selectbox.js"></script>
+
+	<script>
+	/*********************************************************************************************************
+	 * tableFilter 이벤트
+	 *********************************************************************************************************/
+	 document.addEventListener("filterChanged", (e) => {
+	  if (e.detail.submit) {
+	    const { filters, searchField, searchKeyword, dateStart, dateEnd } = e.detail;
+	    const params = new URLSearchParams();
+
+	    // 이벤트 상태
+	    for (const [key, value] of Object.entries(filters)) {
+	      params.append("status", value);
+	    }
+
+	    // 검색 조건
+	    if (searchField) params.append("searchType", searchField);
+	    if (searchKeyword) params.append("searchKeyword", searchKeyword);
+
+	    // 날짜 조건
+	    if (dateStart) params.append("startDate", dateStart);
+	    if (dateEnd) params.append("endDate", dateEnd);
+
+	    // 페이지는 1부터 시작
+	    params.append("page", 1);
+
+	    // 최종 URL로 이동 (GET 요청)
+	    window.location.href = "/brand2/eventList?" + params.toString();
+	  }
+	});
+</script>
 </body>
 
 </html>

@@ -240,7 +240,8 @@
 		m.skin_type_id AS skinTypeId,
 		m.personal_color_id AS personalColorId
 		FROM member m
-		WHERE m.member_id = #{value}
+		WHERE m.member_id =
+		#{value}
 	</select>
 
 	<!-- ================[소비자] 피부 고민(다중값) 조회 =================== -->
@@ -252,5 +253,18 @@
 		#{value}
 	</select>
 
+	<!-- ======== 회원 피부고민 관련 ======== -->
+	<!-- 회원의 피부고민 전체 삭제 -->
+	<delete id="deleteMemberSkinIssues" parameterType="Long">
+		DELETE FROM member_skin_issue
+		WHERE member_id = #{memberId}
+	</delete>
+
+	<!-- 피부고민 1개 추가 -->
+	<insert id="insertMemberSkinIssue"
+		parameterType="dto.MemberSkinIssue">
+		INSERT INTO member_skin_issue (member_id, code_id)
+		VALUES (#{memberId}, #{codeId})
+	</insert>
 
 </mapper>

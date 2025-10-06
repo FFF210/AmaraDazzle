@@ -59,4 +59,11 @@ public class EventDAOImpl implements EventDAO {
 		}
 	}
 	
+	// 이벤트 개수 조회
+	@Override
+	public Integer selectEventCount(Map<String, Object> params) {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.event.selectEventCount", params);
+		}
+	}
 }

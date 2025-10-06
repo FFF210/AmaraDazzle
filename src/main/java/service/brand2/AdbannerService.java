@@ -1,9 +1,7 @@
 package service.brand2;
 
-import java.util.List;
 import java.util.Map;
 
-import dto.Banner;
 import dto.AdminPayment;
 import dto.Banner;
 import dto.UploadFile;
@@ -28,14 +26,7 @@ public interface AdbannerService {
 	// 파일 저장
 	void registerUploadFile(UploadFile uploadFile);
 
-	//전체 배너 개수 
-	Integer bannerAllCnt(Map<String, String> searchContent) throws Exception;
-
-	//전체 배너 신청 리스트 
-	List<Banner> bannerAllList(Integer p_no) throws Exception;
-
-	//전체 배너 중 검색 리스트
-	List<Banner> bannerSearchList(Map<String, String> searchContent, Integer p_no) throws Exception;
+	
 	
 	
 }

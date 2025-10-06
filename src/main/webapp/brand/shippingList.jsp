@@ -84,8 +84,10 @@
 							<c:forEach var="shipping" items="${shippingList}"
 								varStatus="loop">
 								<tr>
-									<td><fmt:formatDate value="${shipping.orderDate}" pattern="yyyy-MM-dd" /></td>
-									<td>${shipping.orderCode}</td>
+									<td><fmt:formatDate value="${shipping.orderDate}" pattern="yyyy-MM-dd HH:mm" /></td>
+									<td><a
+										href="/brand/orderDetail?orderId=${shipping.orderId}&from=shipping"><c:out
+												value="${shipping.orderCode}" /></a></td>
 									<td>${shipping.shipRecipient}</td>
 									<td>
 										<div class="product-name">

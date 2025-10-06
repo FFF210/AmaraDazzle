@@ -9,21 +9,30 @@
 <title>상품 목록</title>
 
 <!-- Pretendard 폰트 (CDN) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
 <!-- flatpickr 기본 테마 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
 
 <!-- 한글화 & 커스텀 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
 
 <!-- flatpickr 및 tableFilter.js -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
 <script src="./js/selectbox.js"></script>
+
+<script src="${pageContext.request.contextPath}/resources/js/toast.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/dialog.js"></script>
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -41,7 +50,7 @@
 <link rel="stylesheet" href="../tagcss/textInput.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/pagination.css" />
-<link rel="stylesheet" href="../tagcss/alert.css" />
+<link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="../tagcss/tableFilter.css" />
 </head>
 <body>
@@ -264,7 +273,7 @@
 					</table>
 				</div>
 			</div>
-			
+
 			<c:set var="queryString">
 				<c:if test="${not empty param.status}">status=${param.status}&</c:if>
 				<c:if test="${not empty param.searchType}">searchType=${param.searchType}&</c:if>
@@ -283,10 +292,7 @@
 		</div>
 	</my:layout>
 
-	<script src="./js/dialog.js"></script>
-	<script src="./js/toast.js"></script>
 	<script>
-	
   /*********************************************************************************************************
    * tableFilter 이벤트
    *********************************************************************************************************/

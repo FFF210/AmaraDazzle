@@ -1,6 +1,11 @@
 (function() {
 
-	document.addEventListener("DOMContentLoaded", () => {
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", initFilter);
+	} else {
+		initFilter();
+	}
+	function initFilter() {
 
 		// flatpickr가 로드되지 않은 경우 안내
 		if (typeof flatpickr === "undefined") {
@@ -42,7 +47,8 @@
 				"송장번호": "TRACKINGNO",
 				"광고명": "BANNERNAME",
 				"광고 담당자": "MANAGERNAME",
-				"주문번호": "ORDER"
+				"주문번호": "ORDER",
+				"회수운송장번호": "TRACKINGNO"
 			};
 
 			// ===============================
@@ -101,13 +107,22 @@
 					if (select) {
 						const label = select.querySelector(".select-label");
 						const items = select.querySelectorAll(".select-item");
+
+						// 역매핑 (영문 → 한글)
+						const reverseMap = Object.fromEntries(
+							Object.entries(searchMap).map(([k, v]) => [v, k])
+						);
+						const displayLabel = reverseMap[value] || value;
+
 						items.forEach(item => {
-							if (item.dataset.value === value) {
+							// 한글 라벨과 일치하는 항목 찾기
+							if (item.textContent.trim() === displayLabel) {
 								item.classList.add("active");
 								if (label) label.textContent = item.textContent;
 							}
 						});
 					}
+
 					state.searchField = value;
 				}
 
@@ -166,7 +181,7 @@
 
 					params.set("startDate", startStr);
 					params.set("endDate", endStr);
-					params.set("preset", range); 
+					params.set("preset", range);
 
 					window.location.href = url.pathname + "?" + params.toString();
 				});
@@ -207,6 +222,20 @@
 			if (searchInput) {
 				searchInput.addEventListener("input", () => {
 					state.searchKeyword = searchInput.value;
+				});
+
+				// Enter 키 입력 시 검색 버튼 클릭과 동일하게 처리
+				searchInput.addEventListener("keydown", (e) => {
+					if (e.key === "Enter") {
+						e.preventDefault(); // form submit 방지
+						const searchBtn = container.querySelector(".filter-submit");
+						if (searchBtn) {
+							searchBtn.click(); // 검색 버튼 클릭 트리거
+						} else {
+							// 검색 버튼이 없을 경우 fallback
+							dispatch(container, true);
+						}
+					}
 				});
 			}
 
@@ -250,6 +279,6 @@
 				document.dispatchEvent(event);
 			}
 		});
-	});
+	};
 
 })();

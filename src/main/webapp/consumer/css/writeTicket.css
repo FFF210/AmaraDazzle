@@ -1,5 +1,7 @@
 @charset "UTF-8";
 
+.page-header h2 {}
+
 .main-content {
 	display: flex;
 	padding: 40px 210px;
@@ -24,6 +26,7 @@
 	width: 497px;
 	height: 54px;
 	align-items: center;
+	margin-bottom: 30px;
 }
 
 .write-form {

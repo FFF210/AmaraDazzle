@@ -9,8 +9,8 @@
 <title>공지 작성</title>
 
 <link rel="stylesheet" href="../tagcss/uploader.css" />
-<link rel="stylesheet" href="./css/myApplications.css" />
 <link rel="stylesheet" href="./css/boards_write.css" />
+<link rel="stylesheet" href="./css/myApplications.css" />
 
 <!-- toast editor CDN -->
 <link rel="stylesheet"
@@ -62,7 +62,7 @@
 					<div class="part_title">첨부파일</div>
 					<div class="part_content">
 						<my:uploader size="md" name="noticeFile" label="Click to upload"
-							desc="또는 파일을 이 영역으로 드래그하세요" />
+							desc="또는 파일을 이 영역으로 드래그하세요" multiple="multiple" />
 					</div>
 				</div>
 
@@ -82,8 +82,8 @@
 					</div>
 					<div class="part_content">
 						<div class="writer_part">
-							<input type="text" class="text_readonly" id="noticeWriter"
-								name="noticeWriter" readonly />
+							<input type="text" class="text_readonly" value="${aname}"  readonly />
+							<input type="hidden" id="noticeWriter" name="noticeWriter" value="${aidx}">
 						</div>
 						<div class="btn_part">
 							<button type="button" class="btn second_btn action_btn"

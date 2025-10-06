@@ -19,10 +19,6 @@ input[type="text"]{
 	align-items: center;
 	gap : 5px;
 }
-.part_content.couponExp .filter_box .date-text {
-	 width: 98%;
-	 
-}
 
 .preset-buttons {
 	gap:5px;

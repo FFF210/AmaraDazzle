@@ -22,11 +22,15 @@ public class FileAttach {
 	String fileRename = null;
 	long filesize = 0;
 
+	//multiple 파일 첨부 메소드
 	public Map<String, Object> file_save(List<Part> parts, HttpServletRequest req) throws Exception {
 		UploadFileService file_svc = new UploadFileServiceImpl();
 
 		String savePath = req.getServletContext().getRealPath("/upload_file/");
 		File uploadDir = new File(savePath);
+		if (!uploadDir.exists()) { //해당 경로가 없을경우
+			uploadDir.mkdirs(); // 폴더 생성
+		}
 		if (!uploadDir.exists() && !uploadDir.mkdirs()) { //저장경로가 없고 경로 생성에 실패한 경우 
 			throw new IOException("업로드 폴더 생성 실패: " + savePath);
 		}
@@ -71,6 +75,50 @@ public class FileAttach {
 		resultMap.put("fileIds", fileIds);
 
 		return resultMap;
+	}
+	
+	//단일 파일첨부 저장 메소드
+	public Long file_saveOne(Part parts, HttpServletRequest req) throws Exception {
+		System.out.println("parts : " + parts);
+		UploadFile file_dto = null;
+		UploadFileService file_svc = new UploadFileServiceImpl();
+
+		String savePath = req.getServletContext().getRealPath("/upload_file/");
+		File uploadDir = new File(savePath);
+		if (!uploadDir.exists()) { //해당 경로가 없을경우
+			uploadDir.mkdirs(); // 폴더 생성
+		}
+		if (!uploadDir.exists() && !uploadDir.mkdirs()) { //저장경로가 없고 경로 생성에 실패한 경우 
+			throw new IOException("업로드 폴더 생성 실패: " + savePath);
+		}
+
+		String originalName = parts.getSubmittedFileName();
+//		if (originalName == null || parts.getSize() <= 0)
+//			continue;
+
+		// 새 이름 생성 
+		String renamed = file_rename(originalName); //원래파일명 리네임메소드에 전달 
+		long size = parts.getSize();
+		Long fileId = null;
+
+		// 10MB 제한
+		if (renamed != null && size <= 10 * 1024 * 1024) {
+			//파일경로에 첨부파일 저장 
+			parts.write(savePath + File.separator + renamed);
+
+			// DB에저장 
+			file_dto = new UploadFile();
+			file_dto.setFileName(originalName);
+			file_dto.setFileRename(renamed);
+			file_dto.setStoragePath("/upload_file/");
+
+			int result = file_svc.save_file(file_dto);
+			if (result > 0) {
+				fileId = file_svc.select_fileId(renamed); //file pk 가져오기 
+			}
+		}
+		
+		return fileId;
 	}
 
 	// 파일 리네임 메소드

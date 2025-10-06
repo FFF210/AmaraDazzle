@@ -10,7 +10,7 @@
 
 .date-input .date-text {
 	height: 36px;
-	padding: 0 20px 0 8px;
+	padding: 0 5px 0 8px;
 	color: #555E67;
 	font-size: 12px;
 	font-weight: 500;
@@ -30,7 +30,7 @@
 .date-input .calendar-icon-wrapper {
 	position: absolute;
 	top: 50%;
-	right: 6px;
+	right: 0;
 	transform: translateY(-50%);
 	width: 34px;
 	height: 34px;

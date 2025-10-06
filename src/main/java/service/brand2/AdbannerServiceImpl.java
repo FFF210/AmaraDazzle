@@ -12,7 +12,6 @@ import dao.brand2.UploadFileDAO;
 import dto.AdminPayment;
 import dto.Banner;
 import dto.UploadFile;
-import dto.admin.SearchConditionDTO;
 import util.Paging;
 import util.SearchUtil;
 
@@ -84,34 +83,4 @@ public class AdbannerServiceImpl implements AdbannerService {
 	}
 	    
 	
-	// ***ADMIN********************************************************
-	
-	//전체 배너 총 개수 
-	@Override
-	public Integer bannerAllCnt(Map<String, String> cntMap) throws Exception {
-		SearchConditionDTO sc_DTO = search.buildSearchDTO(cntMap);
-	    return bannerDAO.bannerAllCount(sc_DTO);
-	}
-
-	//전체 배너 신청 리스트 
-	@Override
-	public List<Banner> bannerAllList(Integer p_no) throws Exception {
-		Map<String, Object> listMap = m_pg.paging(p_no);
-
-		List<Banner> bannerAllList = bannerDAO.bannerAllList(listMap);
-		return bannerAllList;
-	}
-
-	//전체 배너 중 검색 리스트
-	@Override
-	public List<Banner> bannerSearchList(Map<String, String> searchContent, Integer p_no) throws Exception {
-		Map<String, Object> searchlistMap = m_pg.paging(p_no);
-	    SearchConditionDTO sc_DTO = search.buildSearchDTO(searchContent);
-
-	    // 페이징 추가 정보 세팅
-	    sc_DTO.setStart_p((Integer) searchlistMap.get("start_p"));
-	    sc_DTO.setPost_ea((Integer) searchlistMap.get("post_ea"));
-
-	    return bannerDAO.bannerSearchList(sc_DTO);
-	}
 }

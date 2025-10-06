@@ -16,6 +16,7 @@ import org.json.simple.parser.JSONParser;
 import dao.consumer.MemberDAO;
 import dao.consumer.MemberDAOImpl;
 import dto.Member;
+import dto.MemberSkinIssue;
 import dto.consumer.MemberFilter;
 
 public class MemberServiceImpl implements MemberService {
@@ -395,6 +396,42 @@ public class MemberServiceImpl implements MemberService {
 			throw new Exception("카카오 사용자 정보 조회 실패: " + e.getMessage());
 		}
 	}
+
+	//피부 고민 ===============================
+	@Override
+	public List<Long> getMemberSkinIssues(Long memberId) throws Exception {
+		return memberDAO.selectMemberSkinIssues(memberId);
+	}
+
+	//회원정보수정
+	@Override
+	public void updateMemberProfile(Member member, List<Long> skinIssueIds) throws Exception {
+		 if (member == null || member.getMemberId() == null) {
+	            throw new Exception("회원 정보가 올바르지 않습니다.");
+	        }
+	        
+	        Member existingMember = memberDAO.selectById(member.getMemberId());
+	        if (existingMember == null) {
+	            throw new Exception("존재하지 않는 회원입니다.");
+	        }
+	        
+	        // 1. 회원 기본 정보 수정
+	        memberDAO.updateMember(member);
+	        
+	        // 2. 기존 피부고민 삭제
+	        memberDAO.deleteMemberSkinIssues(member.getMemberId());
+	        
+	        // 3. 새 피부고민 추가
+	        if (skinIssueIds != null && !skinIssueIds.isEmpty()) {
+	            for (Long codeId : skinIssueIds) {
+	                MemberSkinIssue skinIssue = new MemberSkinIssue();
+	                skinIssue.setMemberId(member.getMemberId());
+	                skinIssue.setCodeId(codeId);
+	                memberDAO.insertMemberSkinIssue(skinIssue);
+	            }
+	        }
+	        }
+		
 
 	// ================[소비자] 소비자 맞춤 필터링 모두 조회 ===================
 	@Override

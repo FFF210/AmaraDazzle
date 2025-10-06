@@ -5,11 +5,10 @@ import java.util.Map;
 
 import dto.Event;
 import dto.brand2.EventApplicationForm;
-import dto.brand2.EventList;
 
 public interface EventService {
 	// 이벤트 목록 조회
-    List<EventList> getEventList(Map<String, Object> params);
+	Map<String, Object> getEventList(Map<String, Object> params);
 
     /**
      * 이벤트 신청 + 상품 등록 + 쿠폰 발급까지 처리

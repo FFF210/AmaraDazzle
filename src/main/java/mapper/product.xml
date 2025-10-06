@@ -1323,8 +1323,7 @@
 		WHEN p.is_visible = 0 THEN
 		'STOP_SALE'
 		WHEN p.stock_qty > 0 THEN 'SALE'
-		WHEN p.stock_qty = 0 THEN
-		'SOLD_OUT'
+		WHEN p.stock_qty = 0 OR p.stock_qty IS NULL THEN 'SOLD_OUT'
 		END AS status,
 		IFNULL(oi.sales_qty, 0) AS sales_qty,
 		IFNULL(r.review_count, 0) AS
@@ -1362,7 +1361,7 @@
 					</when>
 					<when test="status == 'SOLD_OUT'">
 						AND p.is_visible = 1
-						AND p.stock_qty = 0
+						AND (p.stock_qty = 0 OR p.stock_qty IS NULL)
 					</when>
 					<when test="status == 'STOP_SALE'">
 						AND p.is_visible = 0

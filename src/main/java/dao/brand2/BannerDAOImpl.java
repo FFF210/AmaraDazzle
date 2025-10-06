@@ -44,24 +44,4 @@ public class BannerDAOImpl implements BannerDAO {
 		sqlSession.commit();
 	}
 	
-	
-	// ***ADMIN********************************************************
-	
-	//전체 배너 총 개수 
-	@Override
-	public Integer bannerAllCount(SearchConditionDTO sc_DTO) throws Exception {
-		return sqlSession.selectOne("mapper.banner.BannerAllCnt", sc_DTO);
-	}
-
-	//전체 배너 신청 리스트 
-	@Override
-	public List<Banner> bannerAllList(Map<String, Object> listMap) throws Exception {
-		return sqlSession.selectList("mapper.banner.selectAllBannerList",listMap);
-	}
-
-	//전체 배너 중 검색 리스트
-	@Override
-	public List<Banner> bannerSearchList(SearchConditionDTO sc_DTO) throws Exception {
-		return sqlSession.selectList("mapper.banner.selectSearchBannerList",sc_DTO);
-	}
 }

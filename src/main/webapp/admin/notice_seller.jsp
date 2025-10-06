@@ -209,7 +209,7 @@
 	
 	<script src="../tagjs/selectbox.js"></script>
 	<script src="../tagjs/dateInput.js"></script>
-	<script src="./js/componant/table.js"></script>
+	<script src="./js/common/table.js"></script>
 	<script src="./js/boardNotice.js"></script>
 
 </body>

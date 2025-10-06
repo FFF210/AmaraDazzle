@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="./css/header.css" />
 <link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="./css/breadcrumb.css" />
+<link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="./css/todoDashboard.css" />
 </head>
 <body>

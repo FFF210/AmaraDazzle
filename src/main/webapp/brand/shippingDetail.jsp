@@ -44,7 +44,7 @@
 						<label>주문번호</label>
 						<my:textInput type="link" state="default" size="lg"
 							value="${shippingDetail.summary.orderCode}"
-							link="/brand/orderDetail?orderId=${shippingDetail.summary.orderId}&from=shipping&status=${shippingDetail.summary.status}" />
+							link="/brand/orderDetail?orderId=${shippingDetail.summary.orderId}&from=shippingDetail&status=${shippingDetail.summary.status}" />
 					</div>
 					<div class="form-group">
 						<label>운송장번호</label>

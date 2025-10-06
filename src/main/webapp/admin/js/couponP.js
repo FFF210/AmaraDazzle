@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 	}
 
-	/* ************* 폼전손 + 유효성검사 ************* */
+	/* ************* 폼전송 + 유효성검사 ************* */
 	const frm = document.getElementById("pCouponForm");
 	const submitBtn = document.getElementById("pCouponBtn");
 	const couponCondition = document.getElementById("couponCondition");
@@ -99,7 +99,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			
 //			frm.method="POST"
 //			frm.submit();.
-//			const frm = document.getElementById("pCouponForm");
 			const formData = new FormData(frm);
 			
 			fetch("/admin/pCouponWrite", {
@@ -108,9 +107,24 @@ document.addEventListener("DOMContentLoaded", function() {
 			})
 			.then(res => res.json()) 
 			.then(data => {
-			  console.log(data);
+				console.log(data);
+				if (data.status == "ok") {
+					// 오버레이 표시
+					document.getElementById("overlay").classList.add("active");
+							
+					//로그인 성공 알럿 표시
+					showAlert("success", data.title, data.message); // 2초간 토스트
+					
+					setTimeout(() => {
+						location.href = "/admin/pCouponList"; // 리스트로 이동
+					}, 3000);
+					
+					
+				} else if (data.status == "fail") {
+					showAlert("error", data.title, data.message); // 2초간 토스트
+				}
 			})
-			.catch(err => console.error(err));
+			.catch(err => console.log(err));
 			
 		}
 	});

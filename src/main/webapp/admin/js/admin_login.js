@@ -63,7 +63,10 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
 						
 				//로그인 성공 알럿 표시
 				showAlert("success", result.title, result.message); // 2초간 토스트
-				location.href = "/admin/home"; // 메인으로 이동
+				
+				setTimeout(() => {
+					location.href = "/admin/home"; // 메인으로 이동
+				}, 3000);
 				
 			} else if (result.status == "fail") {
 				showAlert("error", result.title, result.message); // 2초간 토스트

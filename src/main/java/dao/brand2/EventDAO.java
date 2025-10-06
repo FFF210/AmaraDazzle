@@ -26,4 +26,6 @@ public interface EventDAO {
     
     // 이벤트명
     List<Event> selectEventNamesByType(String type);
+	// 이벤트 개수 조회
+	public Integer selectEventCount(Map<String, Object> params);
 }

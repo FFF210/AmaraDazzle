@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 import dto.Member;
+import dto.MemberSkinIssue;
 import dto.consumer.MemberFilter;
 import util.MybatisSqlSessionFactory;
 
@@ -169,6 +170,21 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("mapper.member.checkPointAvailable", params);
 	}
 
+
+	//피부 고민 (회원정보수정) ===========================
+
+	@Override
+	public void deleteMemberSkinIssues(Long memberId) throws Exception {
+		sqlSession.delete("mapper.member.deleteMemberSkinIssues", memberId);
+        sqlSession.commit();		
+	}
+
+	@Override
+	public void insertMemberSkinIssue(MemberSkinIssue skinIssue) throws Exception {
+		sqlSession.insert("mapper.member.insertMemberSkinIssue", skinIssue);
+        sqlSession.commit();
+	}
+
 	// ================[소비자] 회원 맞춤 필터 조회 ===================
 	@Override
 	public MemberFilter selectMemberFilters(Long memberId) throws Exception {
@@ -179,6 +195,6 @@ public class MemberDAOImpl implements MemberDAO {
 	@Override
 	public List<Long> selectMemberSkinIssues(Long memberId) throws Exception {
 		return sqlSession.selectList("mapper.member.selectMemberSkinIssues", memberId);
-	}
+		}
 
 }
