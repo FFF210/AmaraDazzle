@@ -13,7 +13,9 @@ import dto.brand.ExchangeOrderList;
 import dto.brand.OrdersItemDetail;
 import dto.brand.OrdersList;
 import dto.brand.OrdersSummary;
+import dto.brand.ReturnItemDetail;
 import dto.brand.ReturnOrderList;
+import dto.brand.ReturnSummary;
 import util.MybatisSqlSessionFactory;
 
 public class OrdersDAOImpl implements OrdersDAO {
@@ -96,6 +98,61 @@ public class OrdersDAOImpl implements OrdersDAO {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
 			return sqlSession.selectOne("mapper.orders.selectReturnedOrdersCount", params);
 		}
+	}
+
+	// 반품 요약 조회
+	@Override
+	public ReturnSummary selectReturnSummaryForBrand(Long returnId) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.orders.selectReturnSummaryForBrand", returnId);
+		}
+	}
+
+	// 반품 상품 상세 조회
+	@Override
+	public List<ReturnItemDetail> selectReturnItemsForBrand(Long returnId) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.orders.selectReturnItemsForBrand", returnId);
+		}
+	}
+
+	// 반품 상태 변경
+	@Override
+	public void updateReturnStatus(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			sqlSession.update("mapper.orders.updateReturnStatus", params);
+			sqlSession.commit();
+		}
+
+	}
+
+	// 반품 거절 처리
+	@Override
+	public void updateReturnRejection(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			sqlSession.update("mapper.orders.updateReturnRejection", params);
+			sqlSession.commit();
+		}
+
+	}
+
+	// 반품 송장 업데이트
+	@Override
+	public void updateReturnTrackingNo(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			sqlSession.update("mapper.orders.updateReturnTrackingNo", params);
+			sqlSession.commit();
+		}
+	}
+
+	// 반품 완료 처리
+	@Override
+	public void autoCompleteReturn(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			sqlSession.update("mapper.orders.autoCompleteReturn", params);
+			sqlSession.commit();
+		}
+
 	}
 
 	// 교환 주문 목록 조회

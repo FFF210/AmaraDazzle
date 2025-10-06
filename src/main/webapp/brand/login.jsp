@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="../tagcss/reset.css" />
 <link rel="stylesheet" href="../tagcss/button.css" />
 <link rel="stylesheet" href="../tagcss/textInput.css" />
-<link rel="stylesheet" href="../tagcss/alert.css" />
+<link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="./css/auth.css" />
 </head>
 <body class="login-page">

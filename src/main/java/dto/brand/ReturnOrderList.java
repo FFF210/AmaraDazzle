@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 public class ReturnOrderList {
 	private Timestamp updatedAt; // << 반품 처리 시각 (order_item.updated_at)
 	private Long ordersId; // << 주문 ID (orders.orders_id)
+	private Long returnId; // 반품 ID
 	private String orderCode; // << 주문 코드 (예: 20250915-001478)
 	private Long memberId; // << 회원 ID
 	private String memberName; // << 회원 이름 (member.name)
@@ -14,6 +15,14 @@ public class ReturnOrderList {
 	private BigDecimal total; // << 반품 총 금액 (SUM(order_item.total))
 	private String orderStatus; // << 반품 상태 (RETURN 등)
 	private String returnTrackingNo; // << 회송 운송장 번호 (returns.return_tracking_no)
+
+	public Long getReturnId() {
+		return returnId;
+	}
+
+	public void setReturnId(Long returnId) {
+		this.returnId = returnId;
+	}
 
 	public Timestamp getUpdatedAt() {
 		return updatedAt;

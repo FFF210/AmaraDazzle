@@ -9,6 +9,8 @@ import dto.brand.ExchangeDetail;
 import dto.brand.OrdersCoupon;
 import dto.brand.OrdersItemDetail;
 import dto.brand.OrdersSummary;
+import dto.brand.ReturnItemDetail;
+import dto.brand.ReturnSummary;
 
 public interface OrdersService {
 	// 주문 목록 조회
@@ -44,6 +46,27 @@ public interface OrdersService {
 
 	// 반품 주문 목록 조회
 	Map<String, Object> returnOrderListByPage(Map<String, Object> params) throws Exception;
+
+	// 반품 주문 요약 조회 (단건)
+	ReturnSummary returnSummaryDetail(Long orderId) throws Exception;
+
+	// 반품 상품 목록 조회
+	List<ReturnItemDetail> returnItemDetail(Long orderId) throws Exception;
+
+	// 반품 주문 상세 (요약 + 상품) 종합 조회
+	Map<String, Object> returnDetail(Long orderId) throws Exception;
+
+	// 반품 승인 (RETURN_APPROVED)
+	void approveReturn(Long returnId) throws Exception;
+
+	// 반품 거절
+	void rejectReturn(Long returnId, String reason) throws Exception;
+
+	// 반품 배송중 처리 (RETURN_SHIPPING)
+	void shipReturn(Long returnId) throws Exception;
+
+	// 자동 반품 완료 (RETURN_COMPLETED)
+	void autoCompleteReturn(Long returnId) throws Exception;
 
 	// ================================================================================================
 

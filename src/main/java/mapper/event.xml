@@ -44,6 +44,25 @@
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
+	<!-- [brand2] -->
+	<select id="selectEventTypes" resultType="string">
+		SELECT DISTINCT
+		event_type
+		FROM event
+		WHERE expose_YN = 1
+		ORDER BY event_type
+	</select>
+
+	<select id="selectEventNamesByType" parameterType="string"
+	resultType="event">
+	SELECT event_id AS eventId,
+	event_name AS eventName
+	FROM event
+	WHERE event_type = #{type}
+	AND expose_YN = 1
+	ORDER BY start_date DESC
+	</select>
+	
 	<!-- ======================= 이벤트 개수 조회 ======================= -->
 	<select id="selectEventCount" parameterType="map"
 		resultType="int">
@@ -66,7 +85,6 @@
 
 		</where>
 	</select>
-
 
 
 	<!-- ================[소비자] 이벤트 목록 조회 =================== -->

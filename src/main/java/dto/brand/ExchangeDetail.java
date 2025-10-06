@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class ExchangeDetail {
-	private Long orderId;
-	private Long exchangeId;
+	private Long orderId; // 주문 ID
+	private Long exchangeId; // 교환 ID
 	private String orderCode; // 주문번호
 	private Timestamp exchangeRequestDate; // 교환 요청일
 	private String exchangeStatus; // 교환 상태

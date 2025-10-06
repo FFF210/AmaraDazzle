@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="./css/layout.css" />
 <link rel="stylesheet" href="./css/sidebar.css" />
 <link rel="stylesheet" href="./css/header.css" />
+<link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="./css/settlementDashboard.css" />
 </head>
 <body>

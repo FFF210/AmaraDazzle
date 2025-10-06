@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="../tagcss/tag.css" />
 <link rel="stylesheet" href="../tagcss/textInput.css" />
 <link rel="stylesheet" href="../tagcss/table.css" />
+<link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="./css/detailForm.css" />
 </head>
 
@@ -59,7 +60,7 @@
 						<my:breadcrumb items="반품관리:/brand/returnList,주문상세:" />
 					</c:when>
 					<c:when test="${param.from eq 'returnDetail'}">
-						<my:breadcrumb items="반품관리:/brand/returnList,반품상세:/brand/returnDetail?orderId=${param.orderId},주문상세:" />
+						<my:breadcrumb items="반품관리:/brand/returnList,반품상세:/brand/returnDetail?returnId=${param.returnId},주문상세:" />
 					</c:when>
 				</c:choose>
 			</div>

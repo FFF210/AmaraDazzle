@@ -282,29 +282,38 @@
 		e.exchange_id,
 		m.name AS member_name,
 		(SELECT p.name
-		FROM order_item oi2
+		FROM
+		order_item oi2
 		JOIN product p ON oi2.product_id = p.product_id
-		WHERE oi2.order_id =
+		WHERE
+		oi2.order_id =
 		o.orders_id
 		AND oi2.status LIKE 'EXCHANGE%'
-		LIMIT 1) AS product_name,
+		LIMIT 1) AS
+		product_name,
 		(SELECT GROUP_CONCAT(DISTINCT p.name SEPARATOR ', ')
-		FROM order_item
+		FROM
+		order_item
 		oi3
 		JOIN product p ON oi3.product_id = p.product_id
-		WHERE oi3.order_id =
+		WHERE
+		oi3.order_id =
 		o.orders_id
-		AND oi3.status LIKE 'EXCHANGE%') AS product_names,
+		AND oi3.status LIKE 'EXCHANGE%') AS
+		product_names,
 		SUM(oi.total) AS total,
 		oi.status AS orderStatus,
 		e.return_tracking_no
 		AS return_tracking_no,
-		e.shipping_tracking_no AS shipping_tracking_no
+		e.shipping_tracking_no AS
+		shipping_tracking_no
 		FROM orders o
-		JOIN order_item oi ON o.orders_id = oi.order_id
+		JOIN order_item oi ON o.orders_id =
+		oi.order_id
 		JOIN
 		member m ON o.member_id = m.member_id
-		LEFT JOIN exchange e ON
+		LEFT JOIN exchange
+		e ON
 		e.order_item_id = oi.order_item_id
 		WHERE oi.status LIKE 'EXCHANGE%'
 		AND
@@ -476,7 +485,8 @@
 		oi.status AS exchange_status,
 		e.shipping_cost_payer,
 		e.shipping_cost,
-		CONCAT(e.return_carrier_name, ' ', e.return_tracking_no) AS return_invoice,
+		CONCAT(e.return_carrier_name, '
+		', e.return_tracking_no) AS return_invoice,
 		CONCAT(e.shipping_carrier_name, ' ', e.shipping_tracking_no) AS
 		exchange_invoice,
 
@@ -495,7 +505,8 @@
 		e.exchange_id,
 
 		CASE
-		WHEN po2.stock_qty &gt;= 0 THEN '재고없음'
+		WHEN po2.stock_qty &gt;= 0 THEN
+		'재고없음'
 		ELSE '재고있음'
 		END AS stock_status,
 
@@ -504,13 +515,17 @@
 		FROM exchange e
 		JOIN orders o ON
 		e.order_id = o.orders_id
-		JOIN order_item oi ON e.order_item_id =
+		JOIN order_item oi ON
+		e.order_item_id =
 		oi.order_item_id
-		JOIN product p ON oi.product_id = p.product_id
+		JOIN product p ON oi.product_id =
+		p.product_id
 		LEFT
-		JOIN product_option po ON oi.option_id = po.product_option_id
+		JOIN product_option po ON oi.option_id =
+		po.product_option_id
 		LEFT JOIN
-		product_option po2 ON e.product_option_id =
+		product_option po2 ON e.product_option_id
+		=
 		po2.product_option_id
 		WHERE
 		e.exchange_id = #{exchangeId}
@@ -519,29 +534,35 @@
 
 	<!-- ======================= [브랜드 어드민] 교환 거절 처리 ======================= -->
 	<update id="updateExchangeRejection" parameterType="map">
-		UPDATE exchange e
+		UPDATE
+		exchange e
 		JOIN order_item oi ON
 		e.order_item_id = oi.order_item_id
 		SET
 		e.rejection_reason =
 		#{rejectionReason},
-		oi.status = 'EXCHANGE_REJECTED',
+		oi.status =
+		'EXCHANGE_REJECTED',
 		e.updated_at =
 		NOW(),
 		oi.updated_at =
 		NOW()
-		WHERE e.exchange_id = #{exchangeId}
+		WHERE
+		e.exchange_id = #{exchangeId}
 	</update>
 
 	<!-- ======================= [브랜드 어드민] 교환 승인 처리 ======================= -->
 	<update id="updateExchangeApprove" parameterType="map">
-		UPDATE exchange e
+		UPDATE exchange
+		e
 		JOIN order_item oi ON
 		e.order_item_id = oi.order_item_id
 		SET
 		e.return_carrier_name = 'CJ대한통운',
-		e.return_tracking_no = LPAD(FLOOR(RAND() * 1000000000), 10, '0'),
-		oi.status = 'EXCHANGE_APPROVED',
+		e.return_tracking_no =
+		LPAD(FLOOR(RAND() * 1000000000), 10, '0'),
+		oi.status =
+		'EXCHANGE_APPROVED',
 		e.updated_at = NOW()
 		WHERE e.exchange_id =
 		#{exchangeId}
@@ -549,30 +570,35 @@
 
 	<!-- ======================= [브랜드 어드민] 교환 배송 처리 ======================= -->
 	<update id="updateExchangeShipping" parameterType="map">
-		UPDATE exchange e
+		UPDATE
+		exchange e
 		JOIN order_item oi ON
 		e.order_item_id = oi.order_item_id
 		SET
 		e.shipping_carrier_name =
 		'CJ대한통운',
-		e.shipping_tracking_no = #{shippingTrackingNo},
+		e.shipping_tracking_no =
+		#{shippingTrackingNo},
 		oi.status =
 		'EXCHANGE_SHIPPING',
-		e.updated_at = NOW()
+		e.updated_at =
+		NOW()
 		WHERE e.exchange_id =
 		#{exchangeId}
 	</update>
 
 	<!-- ======================= [브랜드 어드민] 교환 자동 완료 ======================= -->
 	<update id="updateExchangeCompleted" parameterType="map">
-		UPDATE exchange e
+		UPDATE
+		exchange e
 		JOIN order_item oi ON
 		e.order_item_id = oi.order_item_id
 		SET
 		oi.status =
 		'EXCHANGE_COMPLETED',
 		e.updated_at = NOW()
-		WHERE e.exchange_id =
+		WHERE
+		e.exchange_id =
 		#{exchangeId}
 		AND oi.status = 'EXCHANGE_SHIPPING'
 	</update>
@@ -588,30 +614,40 @@
 		o.orders_id,
 		o.order_code,
 		o.member_id,
+		r.returns_id AS returnId,
 		m.name AS member_name,
-		(SELECT p.name
+		(SELECT
+		p.name
 		FROM order_item oi2
-		JOIN product p ON oi2.product_id = p.product_id
+		JOIN product p ON oi2.product_id =
+		p.product_id
 		WHERE oi2.order_id =
 		o.orders_id
-		AND oi2.status LIKE 'RETURN%'
+		AND oi2.status LIKE
+		'RETURN%'
 		LIMIT 1) AS product_name,
-		(SELECT GROUP_CONCAT(DISTINCT p.name SEPARATOR ',
+		(SELECT GROUP_CONCAT(DISTINCT p.name
+		SEPARATOR ',
 		')
 		FROM order_item oi3
-		JOIN product p ON oi3.product_id = p.product_id
+		JOIN product p ON oi3.product_id =
+		p.product_id
 		WHERE oi3.order_id =
 		o.orders_id
-		AND oi3.status LIKE 'RETURN%') AS product_names,
+		AND oi3.status LIKE
+		'RETURN%') AS product_names,
 		SUM(oi.total) AS total,
-		oi.status AS orderStatus,
+		oi.status AS
+		orderStatus,
 		r.return_tracking_no
 		AS
 		return_tracking_no
 		FROM orders o
-		JOIN order_item oi ON o.orders_id =
+		JOIN
+		order_item oi ON o.orders_id =
 		oi.order_id
-		JOIN member m ON o.member_id = m.member_id
+		JOIN member m ON o.member_id
+		= m.member_id
 		LEFT JOIN returns
 		r ON r.order_item_id = oi.order_item_id
 		WHERE oi.status LIKE 'RETURN%'
@@ -768,6 +804,169 @@
 			AND oi.updated_at &lt;= #{endDate}
 		</if>
 	</select>
+
+	<!-- ======================= [브랜드 어드민] 반품 요약 조회 ======================= -->
+	<select id="selectReturnSummaryForBrand" parameterType="long"
+		resultType="returnSummary">
+		SELECT
+		r.returns_id AS returnId,
+		r.member_id AS memberId,
+		m.name AS memberName,
+		o.orders_id AS orderId,
+		o.order_code AS orderCode,
+		o.total_amount AS
+		totalAmount,
+		o.using_point AS usingPoint,
+		c.amount AS
+		couponAmount,
+		CONCAT(
+		FORMAT(c.amount_condition, 0), '원 이상 구매 시 ',
+		FORMAT(c.amount,
+		0), '원 할인'
+		) AS couponName,
+		COALESCE(SUM(oi.total), 0)
+		AS
+		cancelledTotal,
+
+		CASE
+		WHEN (o.total_amount - COALESCE(SUM(oi.total),
+		0))
+		> c.amount_condition
+		THEN COALESCE(SUM(oi.total), 0) - c.amount
+		ELSE
+		COALESCE(SUM(oi.total), 0)
+		END AS actualCancelAmount,
+
+		r.reason AS
+		reason,
+		r.shipping_cost AS shippingCost,
+		r.shipping_cost_payer AS
+		shippingCostPayer,
+		CONCAT(r.return_carrier_name, ' ',
+		r.return_tracking_no)
+		AS returnInvoice,
+		r.rejection_reason AS
+		rejectionReason,
+		r.image1_file_id AS
+		image1FileId,
+		r.image2_file_id AS
+		image2FileId,
+		r.image3_file_id AS
+		image3FileId,
+		r.updated_at AS
+		updatedAt,
+		r.updated_at AS
+		returnRequestDate,
+		oi.status AS returnStatus,
+		r.rejection_reason AS
+		rejectionReason
+		FROM returns r
+		JOIN order_item oi
+		ON r.order_item_id =
+		oi.order_item_id
+		JOIN orders o ON oi.order_id =
+		o.orders_id
+		JOIN member
+		m ON r.member_id = m.member_id
+		LEFT JOIN
+		member_coupon mc ON
+		o.using_coupon = mc.member_coupon_id
+		LEFT JOIN
+		coupon c ON mc.coupon_id
+		= c.coupon_id
+		WHERE r.returns_id = #{value}
+		GROUP BY
+		r.returns_id,
+		r.member_id, m.name, o.order_code,
+		o.total_amount, o.using_point,
+		c.amount, c.amount_condition,
+		r.reason,
+		r.shipping_cost,
+		r.shipping_cost_payer,
+		r.return_carrier_name,
+		r.return_tracking_no,
+		r.image1_file_id, r.image2_file_id,
+		r.image3_file_id,
+		oi.status,
+		r.rejection_reason, r.updated_at
+	</select>
+
+	<!-- ======================= [브랜드 어드민] 반품 상품 상세 조회 ======================= -->
+	<select id="selectReturnItemsForBrand" parameterType="long"
+		resultType="returnItemDetail">
+		SELECT
+		oi.order_item_id AS orderItemId,
+		p.product_id AS
+		productId,
+		p.name AS productName,
+		po.option_value AS optionName,
+		oi.quantity AS quantity,
+		oi.total AS total
+		FROM returns r
+		JOIN
+		order_item
+		oi ON r.order_item_id = oi.order_item_id
+		JOIN product p ON
+		oi.product_id = p.product_id
+		LEFT JOIN product_option po ON
+		oi.option_id = po.product_option_id
+		WHERE r.returns_id = #{value}
+		ORDER
+		BY oi.updated_at DESC
+	</select>
+
+	<!-- ======================= [브랜드 어드민] 반품 상태 변경 ======================= -->
+	<update id="updateReturnStatus" parameterType="map">
+		UPDATE returns r
+		JOIN order_item oi ON r.order_item_id = oi.order_item_id
+		SET
+		oi.status=#{status},
+		r.updated_at = NOW(),
+		oi.updated_at = NOW()
+		WHERE r.returns_id =
+		#{returnId}
+	</update>
+
+	<!-- ======================= [브랜드 어드민] 반품 거절 처리 ======================= -->
+	<update id="updateReturnRejection" parameterType="map">
+		UPDATE returns
+		r
+		JOIN order_item oi ON r.order_item_id = oi.order_item_id
+		SET
+		r.rejection_reason = #{reason},
+		oi.status = 'RETURN_REJECTED',
+		r.updated_at = NOW(),
+		oi.updated_at = NOW()
+		WHERE r.returns_id =
+		#{returnId}
+	</update>
+
+	<!-- ======================= [브랜드 어드민] 반품 송장 업데이트 ======================= -->
+	<update id="updateReturnTrackingNo">
+		UPDATE returns
+		SET
+		return_carrier_name = 'CJ대한통운',
+		return_tracking_no =
+		LPAD(FLOOR(RAND() * 1000000000), 10,
+		'0'),
+		updated_at = NOW()
+		WHERE returns_id = #{returnId}
+	</update>
+
+	<!-- ======================= [브랜드 어드민] 자동 반품 완료 ======================= -->
+	<update id="autoCompleteReturn" parameterType="map">
+		UPDATE returns r
+		JOIN order_item oi ON r.order_item_id = oi.order_item_id
+		SET
+		oi.status='RETURN_COMPLETED',
+		r.updated_at = NOW(),
+		oi.updated_at = NOW()
+		WHERE r.returns_id=#{returnId}
+		AND oi.status = 'RETURN_REFUNDING'
+	</update>
+
+
+
 
 	<!-- ======================= [브랜드 어드민] 주문 취소 목록 조회 ======================= -->
 	<select id="selectCancelledOrdersList" parameterType="map"
@@ -981,6 +1180,9 @@
 		ORDER BY
 		oi.updated_at DESC
 	</select>
+
+
+
 
 
 	<!-- ======================= [브랜드 어드민] 주문 목록 조회 ======================= -->

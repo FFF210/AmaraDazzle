@@ -12,7 +12,7 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="stylesheet" href="../tagcss/reset.css" />
-<link rel="stylesheet" href="../tagcss/alert.css" />
+<link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="../tagcss/button.css" />
 <link rel="stylesheet" href="../tagcss/form-controls.css" />
 <link rel="stylesheet" href="../tagcss/layout.css" />
@@ -71,7 +71,7 @@
 				<h2>교환 상세</h2>
 			</div>
 
-			<!-- 교환  상세 폼 -->
+			<!-- 교환 상세 폼 -->
 			<form class="product-form">
 
 				<section class="form-section">
@@ -152,17 +152,17 @@
 								<c:if test="${not empty exchangeDetail.image1FileId}">
 									<img
 										src="${pageContext.request.contextPath}/image?fileId=${exchangeDetail.image1FileId}"
-										alt="교환 사유 이미지" width="120px" />
+										alt="교환 사유 이미지" width="120px" height="120px"/>
 								</c:if>
 								<c:if test="${not empty exchangeDetail.image2FileId}">
 									<img
 										src="${pageContext.request.contextPath}/image?fileId=${exchangeDetail.image2FileId}"
-										alt="교환 사유 이미지" width="120px" />
+										alt="교환 사유 이미지" width="120px" height="120px"/>
 								</c:if>
 								<c:if test="${not empty exchangeDetail.image3FileId}">
 									<img
 										src="${pageContext.request.contextPath}/image?fileId=${exchangeDetail.image3FileId}"
-										alt="교환 사유 이미지" width="120px" />
+										alt="교환 사유 이미지" width="120px" height="120px"/>
 								</c:if>
 							</div>
 						</div>

@@ -131,7 +131,7 @@
 										</td>
 									<td>
 										<div class="actions">
-											<button type="button" class="btn btn-outline btn-sm">상세</button>
+											<button type="button" class="btn btn-outline btn-sm" onclick="location.href='/brand/returnDetail?returnId=${order.returnId}'">상세</button>
 										</div>
 									</td>
 								</tr>

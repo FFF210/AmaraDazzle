@@ -43,6 +43,7 @@
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/pagination.css" />
 <link rel="stylesheet" href="../tagcss/tableFilter.css" />
+<link rel="stylesheet" href="./css/alert.css" />
 </head>
 <body>
 	<my:layout>

@@ -37,7 +37,7 @@
 <body>
 	<my:layout>
 		<my:breadcrumb
-			items="멤버십 관리:/brand2/membership.jsp, 멤버십 결제:/brand2/membershipPay.jsp" />
+			items="멤버십 관리:/brand2/membership, 멤버십 결제:/brand2/membershipPay" />
 		<div class="membershipPayContainer">
 			<div class="notice">멤버십 가입 시 발송한 마케팅 메일과 메인 이벤트의 매출·클릭·구매 성과
 				지표를 확인할 수 있으며, 요금제별 월 발송 건수가 지원됩니다.</div>
@@ -114,13 +114,13 @@
 		        successUrl: "http://localhost:8080/tossSuccess", 
 		        failUrl: "http://localhost:8080/tossFail"
 		      })
-		      .catch(function (error) {
+/* 		      .catch(function (error) {
 		        if (error.code === "USER_CANCEL") {
 		          alert("결제가 취소되었습니다.");
 		        } else {
 		          alert("결제 처리 중 오류가 발생했습니다. (" + error.code + ")");
 		        }
-		      });
+		      }); */
 		  });
 		});
 
