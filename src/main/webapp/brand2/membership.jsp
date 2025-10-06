@@ -43,7 +43,7 @@
 
 
 		<my:breadcrumb
-			items="멤버십 관리:/brand2/membership.jsp, 멤버십 결제:/brand2/membershipPay.jsp" />
+			items="멤버십 관리:/brand2/membership, 멤버십 결제:/brand2/membershipPay" />
 		<!-- 멤버십 상태 영역 -->
 		<div class="membership-status">
 			<!-- 멤버십 없음 -->

@@ -1,63 +1,72 @@
-// 토스트 메시지 함수
-function showToast(message) {
-  const toast = document.getElementById("toast");
-  toast.textContent = message;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 2500);
-}
+document.addEventListener("DOMContentLoaded", function() {
+	const input = document.getElementById("productInput");
+	const addBtn = document.getElementById("addProduct");
+	const chipsBox = document.getElementById("productChips");
+	const hiddenBox = document.getElementById("productHiddenInputs");
 
-// 상품코드 칩 추가/삭제
-const addProductBtn = document.getElementById("addProduct");
-const productInput = document.getElementById("productInput");
-const productChips = document.getElementById("productChips");
+	addBtn.addEventListener("click", () => {
+		const val = input.value.trim();
+		if (!val) return;
 
-addProductBtn.addEventListener("click", () => {
-  const value = productInput.value.trim();
-  if (!value) return;
+		// chip UI 생성
+		const chip = document.createElement("div");
+		chip.className = "chip";
+		chip.textContent = val;
+		const closeBtn = document.createElement("span");
+		closeBtn.textContent = "×";
+		closeBtn.className = "chip-close";
+		closeBtn.onclick = () => {
+			chipsBox.removeChild(chip);
+			hiddenBox.removeChild(hiddenInput);
+		};
+		chip.appendChild(closeBtn);
+		chipsBox.appendChild(chip);
 
-  const chip = document.createElement("div");
-  chip.className = "chip";
-  chip.textContent = value;
+		// hidden input 생성
+		const hiddenInput = document.createElement("input");
+		hiddenInput.type = "hidden";
+		hiddenInput.name = "productIds";   // ✅ 배열 파라미터
+		hiddenInput.value = val;
+		hiddenBox.appendChild(hiddenInput);
 
-  const removeBtn = document.createElement("span");
-  removeBtn.textContent = "×";
-  removeBtn.className = "remove";
-  removeBtn.addEventListener("click", () => chip.remove());
-
-  chip.appendChild(removeBtn);
-  productChips.appendChild(chip);
-  productInput.value = "";
+		input.value = "";
+	});
 });
+// ========== 이벤트 종류 선택 시 이벤트명 목록 불러오기 ==========
+document.querySelectorAll("#eventTypeSelect .select-item").forEach(item => {
+	item.addEventListener("click", function() {
+		const type = this.dataset.value;
 
-// 쿠폰 발급 여부 라디오에 따라 쿠폰 입력 활성/비활성
-const couponBox = document.getElementById("couponBox");
-document.querySelectorAll("input[name='couponIssue']").forEach(radio => {
-  radio.addEventListener("change", () => {
-    const disabled = radio.value === "N";
-    couponBox.querySelectorAll("input").forEach(el => {
-      el.disabled = disabled;
-    });
-    couponBox.classList.toggle("disabled", disabled);
-  });
-});
+		// 선택한 라벨 표시
+		document.querySelector("#eventTypeSelect .select-label").textContent = this.textContent;
+		document.getElementById("eventTypeInput").value = type;
 
-// 신청하기 버튼
-document.getElementById("btnSubmit").addEventListener("click", () => {
-  const form = document.getElementById("eventForm");
-  let valid = true;
+		// Ajax 요청
+		fetch(`/brand2/eventNames?type=${encodeURIComponent(type)}`)
+			.then(res => res.json())
+			.then(list => {
+				const ul = document.getElementById("eventNameList");
+				ul.innerHTML = ""; // 기존 항목 삭제
+				list.forEach(ev => {
+					const li = document.createElement("li");
+					li.className = "select-item";
+					li.dataset.value = ev.eventId;
+					li.textContent = ev.eventName;
 
-  // 필수값 체크 (required 속성이 붙은 input/select만)
-  form.querySelectorAll("[required]").forEach(el => {
-    if (!el.value.trim()) {
-      valid = false;
-    }
-  });
+					// 클릭 이벤트 (이벤트명 선택 시 input 값 세팅)
+					li.addEventListener("click", function() {
+						document.querySelector("#eventNameSelect .select-label").textContent = this.textContent;
+						document.getElementById("eventIdInput").value = this.dataset.value;
+					});
 
-  if (!valid) {
-    showToast("모든 입력사항을 입력해야 신청 가능합니다.");
-    return;
-  }
-
-  // 실제 서비스에서는 서버에 등록 요청 후 성공 응답 시 이동
-  window.location.href = "eventComplete.jsp";
+					ul.appendChild(li);
+				});
+				// 이벤트명 selectbox 라벨 초기화
+				document.querySelector("#eventNameSelect .select-label").textContent = "이벤트명 선택";
+				document.getElementById("eventIdInput").value = "";
+			})
+			.catch(err => {
+				console.error("이벤트명 불러오기 실패:", err);
+			});
+	});
 });
