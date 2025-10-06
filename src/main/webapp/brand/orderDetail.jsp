@@ -52,8 +52,14 @@
 					<c:when test="${param.from eq 'exchange'}">
 						<my:breadcrumb items="교환관리:/brand/exchangeList,주문상세:" />
 					</c:when>
+					<c:when test="${param.from eq 'exchangeDetail'}">
+						<my:breadcrumb items="교환관리:/brand/exchangeList,교환상세:/brand/exchangeDetail?exchangeId=${param.exchangeId},주문상세:" />
+					</c:when>
 					<c:when test="${param.from eq 'return'}">
 						<my:breadcrumb items="반품관리:/brand/returnList,주문상세:" />
+					</c:when>
+					<c:when test="${param.from eq 'returnDetail'}">
+						<my:breadcrumb items="반품관리:/brand/returnList,반품상세:/brand/returnDetail?orderId=${param.orderId},주문상세:" />
 					</c:when>
 				</c:choose>
 			</div>

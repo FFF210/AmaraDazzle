@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import dto.brand.CancelOrderItemDetail;
 import dto.brand.CancelOrderList;
 import dto.brand.CancelOrderSummary;
+import dto.brand.ExchangeDetail;
 import dto.brand.ExchangeOrderList;
 import dto.brand.OrdersItemDetail;
 import dto.brand.OrdersList;
@@ -110,6 +111,50 @@ public class OrdersDAOImpl implements OrdersDAO {
 	public Integer selectExchangeOrdersCount(Map<String, Object> params) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
 			return sqlSession.selectOne("mapper.orders.selectExchangeOrdersCount", params);
+		}
+	}
+
+	// 교환 상세 조회
+	@Override
+	public ExchangeDetail selectExchangeDetailForBrand(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.orders.selectExchangeDetailForBrand", params);
+		}
+	}
+
+	// 교환 거절
+	@Override
+	public void updateExchangeRejection(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			sqlSession.update("mapper.orders.updateExchangeRejection", params);
+			sqlSession.commit();
+		}
+	}
+
+	// 교환 승인
+	@Override
+	public void updateExchangeApprove(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			sqlSession.update("mapper.orders.updateExchangeApprove", params);
+			sqlSession.commit();
+		}
+	}
+
+	// 교환 배송
+	@Override
+	public void updateExchangeShipping(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			sqlSession.update("mapper.orders.updateExchangeShipping", params);
+			sqlSession.commit();
+		}
+	}
+
+	// 교환 완료
+	@Override
+	public void updateExchangeCompleted(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			sqlSession.update("mapper.orders.updateExchangeCompleted", params);
+			sqlSession.commit();
 		}
 	}
 

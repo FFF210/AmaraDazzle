@@ -7,6 +7,7 @@ public class ExchangeOrderList {
 	private Long ordersId; // 주문 ID
 	private String orderCode; // 주문 코드
 	private Long memberId; // 회원 ID
+	private Long exchangeId; // 교환 ID
 	private String memberName; // 회원 이름
 	private String productName; // 대표 상품명
 	private String productNames; // 전체 상품 목록
@@ -15,6 +16,14 @@ public class ExchangeOrderList {
 	private String returnTrackingNo; // 회수 운송장번호
 	private String shippingTrackingNo; // 교환 발송 운송장번호
 	private Timestamp updatedAt; // 수정일
+
+	public Long getExchangeId() {
+		return exchangeId;
+	}
+
+	public void setExchangeId(Long exchangeId) {
+		this.exchangeId = exchangeId;
+	}
 
 	public Long getOrdersId() {
 		return ordersId;

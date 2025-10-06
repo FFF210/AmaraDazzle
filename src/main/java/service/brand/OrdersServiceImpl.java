@@ -11,6 +11,7 @@ import dao.brand.OrdersDAOImpl;
 import dto.brand.CancelOrderItemDetail;
 import dto.brand.CancelOrderList;
 import dto.brand.CancelOrderSummary;
+import dto.brand.ExchangeDetail;
 import dto.brand.ExchangeOrderList;
 import dto.brand.OrdersCoupon;
 import dto.brand.OrdersItemDetail;
@@ -181,6 +182,44 @@ public class OrdersServiceImpl implements OrdersService {
 		result.put("totalPages", totalPages);
 
 		return result;
+	}
+
+	// 교환 상세 조회
+	@Override
+	public ExchangeDetail exchangeDetail(Long exchangeId) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+		params.put("exchangeId", exchangeId);
+		return ordersDAO.selectExchangeDetailForBrand(params);
+	}
+
+	@Override
+	public void rejectExchange(Long exchangeId, String rejectionReason) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+		params.put("exchangeId", exchangeId);
+		params.put("rejectionReason", rejectionReason);
+		ordersDAO.updateExchangeRejection(params);
+	}
+
+	@Override
+	public void approveExchange(Long exchangeId) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+		params.put("exchangeId", exchangeId);
+		ordersDAO.updateExchangeApprove(params);
+	}
+
+	@Override
+	public void shipExchange(Long exchangeId, String shippingTrackingNo) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+		params.put("exchangeId", exchangeId);
+		params.put("shippingTrackingNo", shippingTrackingNo);
+		ordersDAO.updateExchangeShipping(params);
+	}
+
+	@Override
+	public void autoCompleteExchange(Long exchangeId) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+		params.put("exchangeId", exchangeId);
+		ordersDAO.updateExchangeCompleted(params);
 	}
 
 }
