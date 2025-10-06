@@ -210,7 +210,7 @@
 	<script src="../tagjs/selectbox.js"></script>
 	<script src="../tagjs/dateInput.js"></script>
 	<script src="./js/common/table.js"></script>
-	<script src="./js/boardNotice.js"></script>
+	<script src="./js/notice.js"></script>
 
 </body>
 </html>
