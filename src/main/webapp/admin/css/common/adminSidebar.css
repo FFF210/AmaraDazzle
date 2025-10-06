@@ -178,7 +178,7 @@
 }
 
 /* 열릴 때 아이콘 회전 */
-.menu-item.open>.menu-link .submenu-icon {
+.menu-item.open .menu-link .submenu-icon {
 	transform: rotate(180deg);
 }
 
@@ -223,14 +223,14 @@
 .menu-item:hover .menu-link, 
 .menu-item>.menu-link a:hover, 
 .menu-item>.menu-link a.active,
-.menu-item.active>.menu-link a, 
+.menu-item.active .menu-link a, 
 .menu-item .submenu a:hover, 
 .menu-item .submenu a.active,
-.has-submenu.hover>.menu-link, 
-.menu-item.hover>.menu-link .menu-text,
-.menu-item.active>.menu-link,
-.menu-item.active>.menu-link i,
-.menu-item.active>.menu-link 
+.has-submenu.hover .menu-link, 
+.menu-item.hover .menu-link .menu-text,
+.menu-item.active .menu-link,
+.menu-item.active .menu-link i,
+.menu-item.active .menu-link 
 .menu-text {
 	color: var(--hoversubfont);
 }

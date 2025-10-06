@@ -4,6 +4,7 @@
 <%@ attribute name="name" required="false"%> <!-- file input name -->
 <%@ attribute name="label" required="false"%> <!-- 상단 문구 (기본: Click to upload) -->
 <%@ attribute name="desc" required="false"%> <!-- 하단 문구 (기본: 또는 파일을 이 영역으로 드래그하세요) -->
+<%@ attribute name="multiple" required="false"%>
 
 <%-- ================================
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
@@ -27,7 +28,7 @@
 			<div class="uploader-muted">${empty desc ? "또는 파일을 이 영역으로 드래그하세요" : desc}</div>
 		</div>
 	</div>
-	<input id="fileInput" type="file" name="${name}" class="sr-only" style="display: none" multiple />
+	<input id="fileInput" type="file" name="${name}" class="sr-only" style="display: none" ${not empty multiple ? 'multiple="multiple"' : ''} />
 
 	<div id="imgPreviewWrapper" class="preview-wrapper hidden">
 		<div id="imgPreviewArea" class="preview-area" aria-live="polite"></div>
@@ -50,27 +51,38 @@
 // ------------------ 공통 처리 ------------------
 	//파일 미리보기 추가
 	function addFiles(files) {
-		const MAX = 5;
+		const MAX = 3;
 
 	    // 현재 미리보기 개수
 	    const current = previews.length;
 	    const incoming = files.length;
 	    const remain = MAX - current;
+	    
+	    //multiple 여부 
+	    const isMultiple = input.hasAttribute("multiple");
+	    
+	 	// multiple이 아닐 때는 기존 파일 모두 제거하고 새로 교체
+		if (!isMultiple) {
+			// 기존 미리보기 제거
+			previews.forEach(p => URL.revokeObjectURL(p.url));
+			previews = [];
+			idSeq = 0; // ID도 초기화
+		}
 	
-	    // 이미 5개 이상 첨부된 경우
-	    if (current >= MAX) {
+	    // 이미 3개 이상 첨부된 경우
+	    if (current >= MAX && isMultiple) {
 	        alert(`최대 ${MAX}개까지만 첨부할 수 있습니다.`);
 	        return;
 	    }
 	
 	    // 이번에 추가하려는 파일이 남은 개수보다 많을 때
-	    if (incoming > remain) {
+	    if (incoming > remain && isMultiple) {
 	        alert(`최대 ${MAX}개까지만 첨부할 수 있습니다.`);
 	    }
 	
 	    // 남은 개수만큼만 추가
 	    Array.from(files)
-	        .slice(0, remain)
+	        .slice(0, isMultiple ? remain : 1) // 단일 모드에서는 한 개만 추가
 	        .forEach((file) => {
 	            const url = URL.createObjectURL(file);
 	            previews.push({ id: idSeq++, url, file });
@@ -133,7 +145,7 @@
 	
 // ------------------ 클릭으로 파일 선택 ------------------
 	dropper.addEventListener("click", () => {
-		input.value = "";
+// 		input.value = "";
 		input.click();
 	});
 // 		dropper.addEventListener("keydown", (e) => {
@@ -142,8 +154,24 @@
 // 				input.click();
 // 			}
 // 		});
+
 	input.addEventListener("change", (e) => {
-		if (e.target.files.length) addFiles(e.target.files);
+// 		if (e.target.files.length) addFiles(e.target.files);
+		
+		const isMultiple = input.hasAttribute("multiple");
+		const files = e.target.files;
+
+		if(files.length) {
+			addFiles(files);
+	
+			// 단일 첨부 모드일 때는 실제 input.files도 교체
+			if (!isMultiple) {
+				const dt = new DataTransfer();
+				dt.items.add(files[0]);
+				input.files = dt.files; // input에 실제 파일 1개만 유지
+			}
+		}
+		
 	});
 	
 // ------------------ 드래그앤드롭 ------------------

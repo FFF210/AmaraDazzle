@@ -1,10 +1,6 @@
 package service.admin;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,6 +9,7 @@ import dao.admin.NoticeDAOImpl;
 import dto.Notice;
 import dto.admin.SearchConditionDTO;
 import util.Paging;
+import util.SearchUtil;
 
 public class NoticeServiceImpl implements NoticeService {
 
@@ -23,8 +20,9 @@ public class NoticeServiceImpl implements NoticeService {
 	}
 
 	private Paging m_pg = new Paging();
-
-	// seller공지 작성
+	private SearchUtil search = new SearchUtil();
+	
+	// seller 공지 작성
 	@Override
 	public Long noticeSellerWrite(Notice notice_DTO) throws Exception {
 		// 파일 pk 리스트가 null 이면 빈 리스트로 처리(NPE 방지)
@@ -56,7 +54,7 @@ public class NoticeServiceImpl implements NoticeService {
 	// seller 공지 게시글 총 개수
 	@Override
 	public Integer noticeCount(Map<String, String> cntMap) {
-	    SearchConditionDTO sc_DTO = buildSearchDTO(cntMap);
+	    SearchConditionDTO sc_DTO = search.buildSearchDTO(cntMap);
 	    return n_dao.noticeCount(sc_DTO);
 	}
 
@@ -73,7 +71,7 @@ public class NoticeServiceImpl implements NoticeService {
 	@Override
 	public List<Notice> search_post(Map<String, String> searchContent, int p_no) {
 	    Map<String, Object> searchlistMap = m_pg.paging(p_no);
-	    SearchConditionDTO sc_DTO = buildSearchDTO(searchContent);
+	    SearchConditionDTO sc_DTO = search.buildSearchDTO(searchContent);
 
 	    // 페이징 추가 정보 세팅
 	    sc_DTO.setStart_p((Integer) searchlistMap.get("start_p"));
@@ -82,42 +80,5 @@ public class NoticeServiceImpl implements NoticeService {
 	    return n_dao.search_nlist(sc_DTO);
 	}
 
-	//검색조건 DTO에 담기 
-	private SearchConditionDTO buildSearchDTO(Map<String, String> paramMap) {
-	    SearchConditionDTO sc_DTO = new SearchConditionDTO();
-
-	    String s = paramMap.get("startDate");
-	    String e = paramMap.get("endDate");
-
-	    if ((s != null && !s.isEmpty()) && (e != null && !e.isEmpty())) {
-	        Map<String, Timestamp> result = dateConversion(s, e);
-	        sc_DTO.setStartDateTime(result.get("startLdt"));
-	        sc_DTO.setEndDateTime(result.get("endExclusiveLdt"));
-	    }
-
-	    sc_DTO.setqCate_select(paramMap.get("q_select"));
-	    sc_DTO.setTotalSearch(paramMap.get("totalSearch"));
-	    sc_DTO.setKeyword(paramMap.get("keyword"));
-
-	    return sc_DTO;
-	}
 	
-	// 날짜 변환
-	public Map<String, Timestamp> dateConversion(String s, String e) {
-	    Map<String, Timestamp> map = new HashMap<>();
-	    if ((s != null && !s.isEmpty()) && (e != null && !e.isEmpty())) {
-	        LocalDate start = LocalDate.parse(s);
-	        LocalDate end = LocalDate.parse(e);
-
-	        LocalDateTime startLdt = start.atStartOfDay();
-	        LocalDateTime endExclusiveLdt = end.plusDays(1).atStartOfDay();
-
-	        map.put("startLdt", Timestamp.valueOf(startLdt));
-	        map.put("endExclusiveLdt", Timestamp.valueOf(endExclusiveLdt));
-	    } else {
-	        map.put("startLdt", null);
-	        map.put("endExclusiveLdt", null);
-	    }
-	    return map;
-	}
 }

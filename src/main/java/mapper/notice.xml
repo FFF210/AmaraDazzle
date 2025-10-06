@@ -75,8 +75,7 @@
 
 
 	<!-- 공지(seller) 리스트 -->
-	<select id="selectAllSellerNotice" resultType="notice"
-		parameterType="Map">
+	<select id="selectAllSellerNotice" resultType="notice" parameterType="Map">
 		select n.*, c.name
 		from notice n
 		join code_detail c on (n.type_id = c.code_detail_id)

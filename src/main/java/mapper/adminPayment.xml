@@ -8,8 +8,8 @@
 
 	<insert id="insertAdminPayment" parameterType="adminPayment">
 		INSERT INTO
-		admin_payment (order_id, amount, payment_key, pay_date)
-		VALUES (#{orderId}, #{amount}, #{paymentKey},#{payDate} )
+		admin_payment (banner_id, brand_id, order_id, amount, payment_key, pay_date, method, order_name, receipt_url)
+		VALUES (#{bannerId}, #{brandId}, #{orderId}, #{amount}, #{paymentKey},#{payDate},#{method},#{orderName},#{receiptUrl} )
 	</insert>
 
 

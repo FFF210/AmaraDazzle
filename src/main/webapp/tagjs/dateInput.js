@@ -24,16 +24,18 @@ document.addEventListener("DOMContentLoaded", () => {
 				allowInput: false,
 				onChange: function(selectedDates, dateStr, instance) {
 					if (input.classList.contains("end_date")) {
-						const to_day = new Date();
-						to_day.setHours(0, 0, 0, 0);
+						const pickedStartDate = selectedDates[0];
+						const pickedendtDate = selectedDates[0];
+						
+						if (pickedStartDate && pickedendtDate) {
+							
+							pickedStartDate.setHours(0, 0, 0, 0);
+							pickedendtDate.setHours(0, 0, 0, 0);
 
-						const pickedDate = selectedDates[0];
-						if (pickedDate) {
-							pickedDate.setHours(0, 0, 0, 0);
-
-							if (pickedDate > to_day) {
-								alert("기간의 마지막은 오늘 이후의 날짜를 선택할 수 없습니다.");
-								instance.clear(); // 잘못 선택한 날짜 지우기
+							if (pickedendtDate > pickedStartDate) {
+								alert("기간의 마지막은 시작일 이후의 날짜를 선택할 수 없습니다.");
+								instance.clear(); 
+								// 잘못 선택한 날짜 지우기
 							}
 						}
 					}

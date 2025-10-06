@@ -1,30 +1,22 @@
 @charset "UTF-8";
 
 .container {
+	width: 1020px;
+	margin: 40px auto 0;
 	display: flex;
 	gap: 30px;
-	flex-direction: row; /* 좌우로 배치 */
-	max-width: 1200px; /* 전체 폭 제한 */
-	margin: 0 auto;
-	padding: 20px;
-}
-
-.sidebar {
-	width: 250px;
+	align-items: flex-start;
 }
 
 .page-contents {
-	flex: 1;
+flex: 1;
+	width: 824px;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch; /* 자식 요소들이 전체 너비를 차지하도록 */
 }
 
 .user-wrapper {
-	margin-bottom: 20px;
-}
-
-.box-wrapper {
-	display: block !important;
-	gap: 4px;
-	width: 903px;
 	margin-bottom: 20px;
 }
 

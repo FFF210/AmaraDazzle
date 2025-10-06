@@ -14,6 +14,8 @@
 <link rel="stylesheet" href="<c:url value='/consumer/css/toast.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/tagcss/categoryFilter.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/sortList.css'/>">
@@ -43,8 +45,6 @@
 					<div class="brand-title">
 						<h1>${brand.brandName}</h1>
 
-
-
 						<!-- 하트버튼 -->
 						<div class="brand-favorite" data-brandid="${brand.brandId}">
 							<my:heartBtn state="${isFollowing ? 'active' : 'default'}"
@@ -67,14 +67,17 @@
 
 				<!-- 이벤트 & 브랜드 쿠폰 -->
 				<div class="brand-promotion">
-					<my:eventCard imageUrl="https://placehold.co/320x160"
-						title="올영 뷰티 구매인증 리뷰 이벤트" startDate="2025-09-01"
-						endDate="2025-09-31" />
+					<%-- <my:eventCard thumbnailFileId="${e.thumbnailFileId}"
+						title="${e.eventName}" startDate="${startFmt}" endDate="${endFmt}"
+						href="${detailUrl}" status="${e.status}" /> --%>
 
 					<!-- 쿠폰 다운 -->
 					<div class="coupon-download">
-						<my:coupon amount="2,000" startDate="2025.09.01"
-							endDate="2025.12.31" label="신규 가입 혜택" />
+						<%-- <my:consumerCoupon couponId="${coupon.couponId}"
+							cname="${coupon.cname}" couponLimit="${coupon.couponLimit}"
+							categoryName="${coupon.categoryName}"
+							amountCondition="${amountConditionFmt}"
+							downloaded="${coupon.downloaded}" amount="${amountFmt}" /> --%>
 						<button class="btn btn-primary btn-md">관심 브랜드 등록하고 쿠폰 받기</button>
 					</div>
 				</div>
@@ -84,8 +87,46 @@
 			<!-- 브랜드 상품존 -->
 			<div class="product-section">
 				<div class="filter-boxes">
-					<div class="category-wrapper">
-						<!-- 카테고리 필터 자리 -->
+					<div class="category-filter">
+						<button
+							class="category-item ${empty param.category1Id ? 'selected' : ''}"
+							onclick="location.href='brandDetail?brandId=${brand.brandId}'">전체</button>
+
+						<button
+							class="category-item ${param.category1Id eq '1' ? 'selected' : ''}"
+							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=1'">스킨케어</button>
+
+						<button
+							class="category-item ${param.category1Id eq '8' ? 'selected' : ''}"
+							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=8'">마스크팩</button>
+
+						<button
+							class="category-item ${param.category1Id eq '14' ? 'selected' : ''}"
+							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=14'">클렌징</button>
+
+						<button
+							class="category-item ${param.category1Id eq '21' ? 'selected' : ''}"
+							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=21'">선케어</button>
+
+						<button
+							class="category-item ${param.category1Id eq '26' ? 'selected' : ''}"
+							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=26'">메이크업</button>
+
+						<button
+							class="category-item ${param.category1Id eq '49' ? 'selected' : ''}"
+							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=49'">헤어케어</button>
+
+						<button
+							class="category-item ${param.category1Id eq '54' ? 'selected' : ''}"
+							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=54'">바디케어</button>
+
+						<button
+							class="category-item ${param.category1Id eq '66' ? 'selected' : ''}"
+							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=66'">향수</button>
+
+						<button
+							class="category-item ${param.category1Id eq '70' ? 'selected' : ''}"
+							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=70'">맨즈케어</button>
 					</div>
 					<div class="sortlist-wrapper">
 						<my:sortList hasSelect="false" />

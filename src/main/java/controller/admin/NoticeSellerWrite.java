@@ -2,7 +2,6 @@ package controller.admin;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -21,9 +20,10 @@ import service.admin.NoticeServiceImpl;
 import util.FileAttach;
 
 @WebServlet("/admin/noticeSellerWrite")
-@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 메모리 저장 임계값 (2MB)
-		maxFileSize = 1024 * 1024 * 10, // 개별 파일 최대 크기 (10MB)
-		maxRequestSize = 1024 * 1024 * 50 // 전체 요청 최대 크기 (50MB)
+@MultipartConfig(
+	fileSizeThreshold = 1024 * 1024 * 2, // 메모리 저장 임계값 (2MB)
+	maxFileSize = 1024 * 1024 * 10, // 개별 파일 최대 크기 (10MB)
+	maxRequestSize = 1024 * 1024 * 50 // 전체 요청 최대 크기 (50MB)
 )
 public class NoticeSellerWrite extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -39,7 +39,6 @@ public class NoticeSellerWrite extends HttpServlet {
 		response.setContentType("application/json;charset=UTF-8");
 
 		try {
-
 			Long targetType = Long.valueOf(request.getParameter("target_type_id"));
 			Long category = Long.valueOf(request.getParameter("type_id"));
 			String title = request.getParameter("title");

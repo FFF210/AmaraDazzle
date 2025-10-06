@@ -58,13 +58,16 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
 
 		}).then(function(result) {
 			if (result.status == "ok") {
+				// 오버레이 표시
+				document.getElementById("overlay").classList.add("active");
+						
+				//로그인 성공 알럿 표시
 				showAlert("success", result.title, result.message); // 2초간 토스트
-
-				//메인으로 이동
+				
 				setTimeout(() => {
-					location.href = "home"; // 1초 후 메인으로 이동
-				}, 2000);
-
+					location.href = "/admin/home"; // 메인으로 이동
+				}, 3000);
+				
 			} else if (result.status == "fail") {
 				showAlert("error", result.title, result.message); // 2초간 토스트
 			}
@@ -82,30 +85,7 @@ document.getElementById("loginForm").addEventListener("submit", (e) => {
 });
 
 
-//알럿띄우기 
-function showAlert(type, title, message) {
-	const icons = {
-		error: '<i class="bi bi-x-circle-fill"></i>',
-		warning: '<i class="bi bi-exclamation-triangle-fill"></i>',
-		success: '<i class="bi bi-check-circle-fill"></i>',
-		info: '<i class="bi bi-info-circle-fill"></i>'
-	};
-	const toast = document.getElementById("toast");
-	toast.innerHTML = `
-	    <div class="alert alert--${type}">
-	      <div class="alert-icon">${icons[type] || ""}</div>
-	      <div class="alert-content">
-	        ${title ? `<div class="alert-title">${title}</div>` : ""}
-	        <div class="alert-message">${message}</div>
-	      </div>
-	    </div> `;
 
-	toast.classList.add("show");
-
-	setTimeout(() => {
-		toast.classList.remove("show");
-	}, 2000);
-}
 
 
 

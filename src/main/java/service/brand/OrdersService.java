@@ -3,12 +3,14 @@ package service.brand;
 import java.util.List;
 import java.util.Map;
 
+import dto.brand.CancelOrderItemDetail;
+import dto.brand.CancelOrderSummary;
 import dto.brand.OrdersCoupon;
 import dto.brand.OrdersItemDetail;
 import dto.brand.OrdersSummary;
 
 public interface OrdersService {
-	// 주문 목록 조회 (브랜드별)
+	// 주문 목록 조회
 	Map<String, Object> ordersListByPage(Map<String, Object> params) throws Exception;
 
 	// 주문 요약 조회 (단건)
@@ -22,4 +24,22 @@ public interface OrdersService {
 
 	// 주문 상세 (요약 + 상품 + 쿠폰) 종합 조회
 	Map<String, Object> ordersDetail(Long brandId, Long orderId) throws Exception;
+
+	// 취소 주문 목록 조회
+	Map<String, Object> cancelOrderListByPage(Map<String, Object> params) throws Exception;
+
+	// 취소 주문 요약 조회 (단건)
+	CancelOrderSummary cancelOrderSummaryDetail(Long orderId) throws Exception;
+
+	// 취소 상품 목록 조회
+	List<CancelOrderItemDetail> cancelOrderItemDetail(Long orderId) throws Exception;
+
+	// 취소 주문 상세 (요약 + 상품) 종합 조회
+	Map<String, Object> cancelOrderDetail(Long orderId) throws Exception;
+
+	// 반품 주문 목록 조회
+	Map<String, Object> returnOrderListByPage(Map<String, Object> params) throws Exception;
+
+	// 교환 주문 목록 조회
+	Map<String, Object> exchangeOrderListByPage(Map<String, Object> params) throws Exception;
 }

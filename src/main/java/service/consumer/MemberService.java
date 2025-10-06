@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import dto.Member;
+import dto.consumer.MemberFilter;
 
 public interface MemberService {
-	
 
     /**
      * 로그인 처리
@@ -105,8 +105,7 @@ public interface MemberService {
     List<Long> getMemberSkinIssues(Long memberId) throws Exception;
     
     void updateMemberProfile(Member member, List<Long> skinIssueIds) throws Exception;
-        
+
+	// ================[소비자] 소비자 맞춤 필터링 모두 조회 ===================
+	MemberFilter getMemberFilters(Long memberId) throws Exception;
 }
-
-
-

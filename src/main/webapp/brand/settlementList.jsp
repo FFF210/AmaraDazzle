@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="../tagcss/textInput.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/pagination.css" />
-<link rel="stylesheet" href="./css/table.css" />
+<link rel="stylesheet" href="../tagcss/table.css" />
 </head>
 <body>
 

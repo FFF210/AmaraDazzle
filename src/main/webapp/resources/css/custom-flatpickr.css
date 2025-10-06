@@ -1,0 +1,97 @@
+/* 기본 폰트 & 박스 여백 */
+.flatpickr-calendar {
+	font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+	background: #ffffff;
+	border-radius: 14px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+	border: 1px solid #e4e9f0;
+	padding: 12px 10px;
+	width: fit-content;
+}
+
+/* 헤더(월/년도 영역) */
+.flatpickr-months {
+	background-color: #f8fbff;
+	border-radius: 8px 8px 0 0;
+}
+
+.flatpickr-months .flatpickr-month {
+	color: #007bff;
+	font-weight: 600;
+	font-size: 15px;
+}
+
+.flatpickr-next-month, .flatpickr-prev-month {
+	transform: translateY(15%);
+}
+
+/* 네비게이션 화살표 */
+.flatpickr-prev-month svg, .flatpickr-next-month svg {
+	fill: #007bff;
+	width: 18px;
+	height: 18px;
+	transition: transform 0.2s ease;
+}
+
+.flatpickr-prev-month:hover svg, .flatpickr-next-month:hover svg {
+	transform: scale(1.2);
+	fill: #339cff;
+}
+
+/* 요일 헤더 */
+.flatpickr-weekday {
+	color: #007bff;
+	font-weight: 600;
+	font-size: 13px;
+	padding: 6px 0;
+	letter-spacing: -0.2px;
+}
+
+/* 날짜 셀 기본 */
+.flatpickr-day {
+	border-radius: 8px;
+	font-size: 13px;
+	color: #333;
+	transition: all 0.15s ease-in-out;
+	margin: 2px;
+}
+
+/* Hover */
+.flatpickr-day:hover {
+	background-color: rgba(0, 123, 255, 0.1);
+	color: #007bff;
+}
+
+/* 오늘 날짜 */
+.flatpickr-day.today {
+	border: 1px solid #66c2ff;
+	background-color: #e9f6ff;
+	color: #007bff;
+}
+
+/* 선택된 날짜 */
+.flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange
+	{
+	background-color: #0099ff;
+	color: #fff !important;
+	border: none;
+	font-weight: 600;
+}
+
+/* 주말 색상 (선택적) */
+.flatpickr-day:nth-child(6), .flatpickr-day:nth-child(7) {
+	color: #ff6666;
+}
+
+/* 하단 닫기버튼 (있을 경우) */
+.flatpickr-confirm {
+	background-color: #0099ff;
+	color: white;
+	border-radius: 6px;
+}
+
+/* 스크롤 대비 */
+.flatpickr-days {
+	padding: 6px 0;
+	border: none;
+}

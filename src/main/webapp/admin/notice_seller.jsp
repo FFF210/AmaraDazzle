@@ -10,12 +10,7 @@
 <%@ include file="./common/config.jsp"%>
 
 <title>공지게시판</title>
-<link rel="stylesheet" href="../tagcss/tag.css" />
-<link rel="stylesheet" href="../tagcss/dateInput.css" />
 
-<!-- dateInput.tag 용 cdn -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <!-- 헤드부분 end -->
 
 <body>
@@ -129,7 +124,7 @@
 							<c:set var="no" value="${noticeCnt-postNo}" />
 							<c:forEach items="${noticeList}" var="noticeList" varStatus="idx">
 								<tr>
-									<td><input type="checkbox" class="n_ch" value="${noticeList.noticeId}" onclick="choice_ck();" /></td>
+									<td><input type="checkbox" class="ch_box" value="${noticeList.noticeId}" onclick="choice_ck();" /></td>
 									<td>${no-idx.index}</td>
 									<td>
 										<c:choose>
@@ -211,10 +206,10 @@
 		<!-- 메인부분 -->
 	</my:adminLayout>
 	<!-- 레이아웃 + 메인컨텐츠 end -->
-
+	
 	<script src="../tagjs/selectbox.js"></script>
 	<script src="../tagjs/dateInput.js"></script>
-	<script src="./js/componant/table.js"></script>
+	<script src="./js/common/table.js"></script>
 	<script src="./js/boardNotice.js"></script>
 
 </body>

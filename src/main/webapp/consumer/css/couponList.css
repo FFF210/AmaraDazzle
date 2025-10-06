@@ -1,27 +1,43 @@
 @charset "UTF-8";
 
 .page-header-wrapper {
-  background: #F2EBF1;
-}
-.page-header-wrapper > * {
-  width: 1020px; 
-  margin: 0 auto; 
+	background: #F2EBF1;
+	padding: 0 210px;
+	margin-bottom: 30px;
 }
 
-/* 카테고리 컨테이너 */
-.category-container {
-  width: 1020px;
-  padding: 20px 0 40px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-  margin: 0 auto;
+.page-header-wrapper>* {
+	width: 1020px;
+	margin: 0 auto;
 }
 
-/* 상품 카드 4열 x 여러 줄 */
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  column-gap: 24px; 
-  row-gap: 60px;  
+/* 브랜드 타이틀 */
+.brand-title {
+	display: flex;
+	align-items: center;
+	text-decoration: none;
+	gap: 12px;
+	font-size: 22px;
+	font-weight: 700;
+	color: #222;
+	width: 1020px;
+	margin: 10px 210px;
+	padding: 20px;
+	font-family: 'Noto Sans KR', sans-serif;
+	background: linear-gradient(90deg, #fef6f8 0%, #ffffff 100%);
+}
+
+/* 브랜드 로고 */
+.brand-title img {
+	width: 40px;
+	height: auto;
+	object-fit: contain;
+}
+
+.brand-coupon-list {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	column-gap: 60px;
+	row-gap: 60px;
+	padding: 30px 210px;
 }

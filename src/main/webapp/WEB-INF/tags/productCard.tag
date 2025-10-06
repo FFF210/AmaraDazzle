@@ -54,21 +54,22 @@
 <c:set var="finalPrice" value="${empty finalPrice ? '' : finalPrice}" />
 <c:set var="heartState" value="${isWished == 1 ? 'active' : 'default'}" />
 
+<c:choose>
+  <c:when test="${not empty thumbnailFileId}">
+    <c:set var="thumbnailUrl" value="${pageContext.request.contextPath}/image?fileId=${thumbnailFileId}" />
+  </c:when>
+  <c:otherwise>
+    <c:set var="thumbnailUrl" value="${pageContext.request.contextPath}/image/placeholder.png" />
+  </c:otherwise>
+</c:choose>
+
+
 <a class="product-card" data-productid="${productId}"
 	<c:if test="${not empty href}"> href="${href}" </c:if>>
 
 	<div class="product-image">
 		<!-- 상품 이미지 -->
-		<img
-			src="<c:choose>
-          <c:when test='${not empty thumbnailFileId}'>
-              ${pageContext.request.contextPath}/image?fileId=${thumbnailFileId}
-          </c:when>
-          <c:otherwise>
-              ${pageContext.request.contextPath}/image/plus.png
-          </c:otherwise>
-       </c:choose>"
-			alt="대표 이미지" width="220px" />
+		<img src="${thumbnailUrl}" alt="대표 이미지" width="220px" />
 
 		<!-- 찜 버튼 -->
 		<div class="wishlist-btn">

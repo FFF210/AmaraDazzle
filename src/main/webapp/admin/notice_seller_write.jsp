@@ -9,22 +9,101 @@
 <title>공지 작성</title>
 
 <link rel="stylesheet" href="../tagcss/uploader.css" />
-<link rel="stylesheet" href="./css/myApplications.css" />
 <link rel="stylesheet" href="./css/boards_write.css" />
+<link rel="stylesheet" href="./css/myApplications.css" />
 
 <!-- toast editor CDN -->
-<link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
+<link rel="stylesheet"
+	href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 
+<style>
+	.uploader {padding: 5px;}
+	.uploader-md { width: 98%; }
+</style>
 <!-- 헤드부분 -->
 
 <body>
 
 	<!-- 레이아웃 + 메인컨텐츠 -->
 	<my:adminLayout>
-		<%@ include file="./main_content/notice_seller_write_content.jsp"%>
+		<!-- *********************************메인부분********************************* -->
+		<form id="noticeForm" method="post" enctype="multipart/form-data">
+			<section class="board_write">
+
+				<input type="hidden" id="noticeTargetType" name="noticeTargetType"
+					value="5" />
+
+				<div class="part_section cate_part">
+					<div class="part_title">
+						카테고리 <span class="reqired_write">*</span>
+					</div>
+					<div class="part_content">
+						<select class="cate_sb" id="noticeCate" name="noticeCate">
+							<option value="">공지 카테고리를 선택하세요</option>
+							<option value="28">시스템</option>
+							<option value="29">이벤트</option>
+							<option value="30">기타</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="part_section title_part">
+					<div class="part_title">
+						제목 <span class="reqired_write">*</span>
+					</div>
+					<div class="part_content">
+						<input type="text" id="noticeTitle" name="noticeTitle"
+							placeholder="제목을 입력하세요 (최대 150자까지 입력가능)" maxlength="150" />
+					</div>
+				</div>
+
+				<div class="part_section">
+					<div class="part_title">첨부파일</div>
+					<div class="part_content">
+						<my:uploader size="md" name="noticeFile" label="Click to upload"
+							desc="또는 파일을 이 영역으로 드래그하세요" multiple="multiple" />
+					</div>
+				</div>
+
+				<div class="part_section content_part">
+					<div class="part_title">
+						내용 <span class="reqired_write">*</span>
+					</div>
+					<div class="part_content">
+						<!-- toast editor 삽입 -->
+						<div id="editContent"></div>
+					</div>
+				</div>
+
+				<div class="part_section bottom_part">
+					<div class="part_title">
+						작성자 <span class="reqired_write">*</span>
+					</div>
+					<div class="part_content">
+						<div class="writer_part">
+							<input type="text" class="text_readonly" value="${aname}"  readonly />
+							<input type="hidden" id="noticeWriter" name="noticeWriter" value="${aidx}">
+						</div>
+						<div class="btn_part">
+							<button type="button" class="btn second_btn action_btn"
+								id="previewBtn">미리보기</button>
+							<button type="button" class="btn first_btn action_btn"
+								id="writeBtn">등록</button>
+						</div>
+					</div>
+				</div>
+			</section>
+		</form>
+		<!-- *********************************메인부분 end********************************* -->
+
 	</my:adminLayout>
 	<!-- 레이아웃 + 메인컨텐츠 end -->
+
+
+	<!-- JS부분 -->
+	<script src="./js/boardNoticeWrite.js"></script>
+	<!-- JS부분 end -->
 
 </body>
 </html>

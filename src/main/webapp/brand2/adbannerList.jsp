@@ -9,6 +9,20 @@
 <meta charset="UTF-8">
 <title>배너광고 조회</title>
 
+<!-- Pretendard 폰트 (CDN) -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+
+<!-- flatpickr 기본 테마 -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
+
+<!-- 한글화 & 커스텀 CSS -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
+
 <link rel="stylesheet" href="../tagcss/tag.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/dateInput.css" />
@@ -26,9 +40,6 @@
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 
 <style>
 .pagination {
@@ -38,8 +49,7 @@
 }
 
 .breadcrumb {
-	margin-top: 8px;
-	margin-left: 24px;
+	margin: 8px 0 8px 24px;
 }
 
 .filter {
@@ -52,16 +62,18 @@
 </style>
 <!-- TossPayments SDK -->
 <script src="https://js.tosspayments.com/v1/payment"></script>
-<!-- tag -->
-<script src="../tagjs/selectbox.js"></script>
+
 </head>
 <body>
 	<my:layout>
-		<my:breadcrumb items="배너광고 관리:/brand2/adbannerList.jsp" />
+		<my:breadcrumb
+			items="배너광고 관리:/brand2/adbannerList, 배너광고 신청:/brand2/adbanner" />
 
-		<my:tableFilter
-			filters="status|판매상태:ALL=전체|SALE=판매중|SOLD_OUT=품절|STOP_SALE=판매중지"
-			hasDate="false" searchItems="상품명,카테고리" />
+		<div class="page-tableFilter">
+			<my:tableFilter
+				filters="status|진행상황:PENDING=승인대기|APPROVED=승인완료|ONGOING=진행중|COMPLETED=완료|CANCELED=취소"
+				hasDate="false" searchItems="광고 담당자,광고명" />
+		</div>
 
 		<div class="tcontainer">
 			<div class="table-wrapper">
@@ -117,32 +129,30 @@
 								<td><c:choose>
 										<c:when test="${banner.status eq 'PENDING'}">
 											<button type="button" class="btn btn-outline btn-sm"
-												onclick="location.href='/brand2/bannerDetail?bannerId=${banner.bannerId}'">
-												상세보기</button>
+												onclick="location.href='/brand2/adbannerDetail?bannerId=${banner.bannerId}'">상세보기</button>
 										</c:when>
-										<c:when test="${banner.status eq 'APPROVED' and banner.paid}">
-											<button type="button" class="btn btn-info btn-sm"
-												onclick="location.href='/brand2/bannerDetail?bannerId=${banner.bannerId}'">
-												상세보기</button>
+										<c:when test="${banner.status eq 'APPROVED'}">
+											<button type="button" class="btn btn-outline btn-sm"
+												onclick="location.href='/brand2/adbannerDetail?bannerId=${banner.bannerId}'">상세보기</button>
 										</c:when>
 										<c:when
 											test="${banner.status eq 'ONGOING' or banner.status eq 'COMPLETED' or banner.status eq 'CANCELED'}">
 											<button type="button" class="btn btn-outline btn-sm"
-												onclick="location.href='/brand2/bannerDetail?bannerId=${banner.bannerId}'">
-												상세보기</button>
+												onclick="location.href='/brand2/adbannerDetail?bannerId=${banner.bannerId}'">상세보기</button>
 										</c:when>
 									</c:choose></td>
+
 
 								<!-- 취소 버튼 전용 열 -->
 								<td><c:choose>
 										<c:when test="${banner.status eq 'PENDING'}">
 											<button type="button" class="btn btn-danger btn-sm"
-												onclick="if(confirm('정말 취소하시겠습니까?')) location.href='/brand2/서블릿?bannerId=${banner.bannerId}'">
+												onclick="if(confirm('정말 취소하시겠습니까?')) location.href='/brand2/adbannerDetail?action=cancel&bannerId=${banner.bannerId}'">
 												취소</button>
 										</c:when>
-										<c:when test="${banner.status eq 'APPROVED' and banner.paid}">
+										<c:when test="${banner.status eq 'APPROVED'}">
 											<button type="button" class="btn btn-danger btn-sm"
-												onclick="location.href='/brand2/서블릿?bannerId=${banner.bannerId}'">
+												onclick="if(confirm('정말 취소하시겠습니까?')) location.href='/brand2/adbannerDetail?action=cancel&bannerId=${banner.bannerId}'">
 												취소</button>
 										</c:when>
 										<c:otherwise>
@@ -169,75 +179,40 @@
 			<c:if test="${not empty param.status}">status=${param.status}&</c:if>
 			<c:if test="${not empty param.searchType}">searchType=${param.searchType}&</c:if>
 			<c:if test="${not empty param.searchKeyword}">searchKeyword=${param.searchKeyword}&</c:if>
-			<c:if test="${not empty param.startDate}">startDate=${param.startDate}&</c:if>
-			<c:if test="${not empty param.endDate}">endDate=${param.endDate}&</c:if>
 				page=
 			</c:set>
 		<!-- 페이징 -->
 		<div class="page-pagination">
 			<my:pagination currentPage="${currentPage}"
 				totalPages="${totalPages}"
-				baseUrl="/brand/productList?${queryString}" />
+				baseUrl="/brand2/adbannerList?${queryString}" />
 		</div>
 
 	</my:layout>
-	<!-- test_ck_XZYkKL4Mrj9eGzWBRNORV0zJwlEW -->
+	
+	<!-- flatpickr 및 tableFilter.js -->
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/js/selectbox.js"></script>
 
 	<script>
-	<%-- 검색 필터 구현 중 --%>
-	document.addEventListener("filterChanged", (e) => {
-	  console.log("필터 상태:", e.detail);
-	
-	  if (e.detail.submit) {
-	    const { filters, searchField, searchKeyword } = e.detail;
-	    const params = new URLSearchParams();
-	
-	    // 진행상황 필터 처리
-	    for (const [key, value] of Object.entries(filters)) {
-	      if (key === "진행 상황" && value && value !== "전체") {
-	        // 한글 상태 → DB 코드 변환
-	        switch (value) {
-	          case "대기": params.append("status", "PENDING"); break;
-	          case "진행 중": params.append("status", "ONGOING"); break;
-	          case "완료": params.append("status", "COMPLETED"); break;
-	          case "취소": params.append("status", "CANCELED"); break;
-	        }
-	      }
-	    }
-	
-	    // 검색 항목 (광고명 / 광고담당자)
-	    if (searchField) {
-	      params.append("searchType", searchField);
-	    }
-	
-	    if (searchKeyword !== undefined && searchKeyword !== null) {
-	    	  params.append("searchKeyword", searchKeyword);
-	    	}
-	
-	    // 페이지는 항상 1부터 시작
-	    params.append("page", 1);
-	
-	    // 최종 URL로 이동 (GET 요청)
-	    window.location.href = "/brand2/adbannerList?" + params.toString();
-	  }
-	});
-	<%-- 검색 필터 구현 중 --%>
-	
 	  /*********************************************************************************************************
 	   * tableFilter 이벤트
+	   * tag에 추가 필요
 	   *********************************************************************************************************/
 	  document.addEventListener("filterChanged", (e) => {
-	  console.log("필터 상태:", e.detail);
-
 	  if (e.detail.submit) {
 	    const { filters, searchField, searchKeyword } = e.detail;
 	    const params = new URLSearchParams();
 
-	    // 판매상태
+	    // 진행 상황
 	    for (const [key, value] of Object.entries(filters)) {
 	    	  params.append("status", value);
 	    	}
 
+	    // 검색 조건
 	    if (searchField) params.append("searchType", searchField);
 	    if (searchKeyword) params.append("searchKeyword", searchKeyword);
 
@@ -245,10 +220,10 @@
 	    params.append("page", 1);
 
 	    // 최종 URL로 이동 (GET 요청)
-	    window.location.href = "/brand/productList?" + params.toString();
+	    window.location.href = "/brand2/adbannerList?" + params.toString();
 	  }
 	});
+	</script>
 	
-</script>
 </body>
 </html>

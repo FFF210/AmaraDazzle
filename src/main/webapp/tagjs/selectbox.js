@@ -34,10 +34,6 @@
 					// 라벨 변경
 					label.textContent = text;
 					
-					// hidden input 값 변경
-					const hiddenInput = select.querySelector(".select_hidden");
-					if (hiddenInput) hiddenInput.value = value;
-
 					// 선택 표시 갱신
 					list.querySelectorAll(".select-item")
 						.forEach(i => i.classList.remove("active"));
@@ -61,3 +57,30 @@
 		});
 	});
 })();
+
+document.querySelectorAll(".custom-select").forEach(select => {
+	const label = select.querySelector(".select-label");
+	const items = select.querySelectorAll(".select-item");
+	const hidden = select.parentElement.querySelector("input[type='hidden'][name]");
+
+	// 페이지 로드 시 hidden 값 반영
+	if (hidden && hidden.value) {
+		const matched = Array.from(items).find(li => li.dataset.value === hidden.value);
+		if (matched) {
+			label.textContent = matched.dataset.value;
+			items.forEach(li => li.classList.remove("active"));
+			matched.classList.add("active");
+		}
+	}
+
+	// 클릭 이벤트 시 hidden 갱신
+	items.forEach(item => {
+		item.addEventListener("click", () => {
+			const value = item.dataset.value;
+			label.textContent = value;
+			items.forEach(li => li.classList.remove("active"));
+			item.classList.add("active");
+			if (hidden) hidden.value = value;
+		});
+	});
+});

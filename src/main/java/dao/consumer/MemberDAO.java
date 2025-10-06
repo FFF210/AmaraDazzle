@@ -5,6 +5,7 @@ import java.util.Map;
 
 import dto.Member;
 import dto.MemberSkinIssue;
+import dto.consumer.MemberFilter;
 
 public interface MemberDAO {
 	// 회원가입 (회원등록) //
@@ -33,6 +34,7 @@ public interface MemberDAO {
 
 	/**
 	 * 회원 ID로 회원 조회 (마이페이지, 주문 등에서 사용)
+	 * 
 	 * @param memberId 회원 ID
 	 * @return 조회된 회원 정보, 없으면 null
 	 */
@@ -41,6 +43,8 @@ public interface MemberDAO {
 	/**
 	 * 이메일과 휴대폰으로 회원 ID 찾기 (비밀번호 재설정용)
 	 * @param email 이메일, phone 휴대폰 번호
+	 * @param email 이메일
+	 * @param phone 휴대폰 번호
 	 * @return 회원 ID (없으면 null)
 	 */
 	Long selectIdByEmailAndPhone(String email, String phone) throws Exception;
@@ -50,18 +54,21 @@ public interface MemberDAO {
 
 	/**
 	 * 비밀번호 변경
+	 * 
 	 * @param memberId 회원 ID, newPassword 새 비밀번호
 	 */
 	void updatePassword(Long memberId, String newPassword) throws Exception;
 
 	/**
 	 * 포인트 업데이트 (적립, 사용)
+	 * 
 	 * @param memberId 회원 ID, pointChange 포인트 변경량 (양수: 적립, 음수: 사용)
 	 */
 	void updatePoints(Long memberId, int pointChange) throws Exception;
 
 	/**
 	 * 회원 등급 업데이트
+	 * 
 	 * @param memberId 회원 ID
 	 * @param grade    새 등급 (NORMAL, SILVER, GOLD, VIP)
 	 */
@@ -69,12 +76,14 @@ public interface MemberDAO {
 
 	/**
 	 * 회원 탈퇴 (실제 삭제가 아닌 상태 변경)
+	 * 
 	 * @param memberId 회원 ID
 	 */
 	void deleteMember(Long memberId) throws Exception;
 
 	/**
 	 * 카카오 ID로 회원 조회 (카카오 로그인용)
+	 * 
 	 * @param kakaoId 카카오 고유 식별자
 	 * @return 조회된 회원 정보, 없으면 null
 	 */
@@ -82,6 +91,7 @@ public interface MemberDAO {
 
 	/**
 	 * 마이페이지용 - 회원의 기본 정보만 조회
+	 * 
 	 * @param memberId 회원 ID
 	 * @return 기본 정보 Map (memberId, email, name, nickname, phone, pointBalance,
 	 *         grade, joinDate)
@@ -131,9 +141,13 @@ public interface MemberDAO {
 	boolean checkPointAvailable(Long memberId, int usingPoint) throws Exception;
 
 	// 피부 고민 ==========================
-	List<Long> selectMemberSkinIssues(Long memberId) throws Exception;
-
 	void deleteMemberSkinIssues(Long memberId) throws Exception;
 
 	void insertMemberSkinIssue(MemberSkinIssue skinIssue) throws Exception;
+	
+	// ================[소비자] 회원 맞춤 필터 조회 ===================
+	MemberFilter selectMemberFilters(Long memberId) throws Exception;
+
+	// ================[소비자] 피부 고민(다중값) 조회 ===================
+	List<Long> selectMemberSkinIssues(Long memberId) throws Exception;
 }

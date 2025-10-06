@@ -41,8 +41,6 @@ public class WishlistToggle extends HttpServlet {
 
 		Long productId = Long.valueOf(request.getParameter("productId"));
 
-		response.setContentType("application/json;charset=UTF-8");
-
 		try {
 			boolean isWished = service.toggleWishlist(memberId, productId);
 

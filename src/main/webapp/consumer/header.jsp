@@ -84,7 +84,7 @@ request.setAttribute("loginUser", loginUser);
 							<a href="<c:url value='/store/cart'/>" class="cart-link">장바구니</a>
 						</c:otherwise>
 					</c:choose>
-					<!-- ✅ 최근 본 상품: 토글 버튼 -->
+					<!-- 최근 본 상품: 토글 버튼 -->
 					<button type="button" class="recent-toggle"
 						aria-controls="recent-drawer" aria-expanded="false">최근 본
 						상품</button>
