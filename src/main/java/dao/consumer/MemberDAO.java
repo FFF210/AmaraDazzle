@@ -1,8 +1,10 @@
 package dao.consumer;
 
+import java.util.List;
 import java.util.Map;
 
 import dto.Member;
+import dto.MemberSkinIssue;
 
 public interface MemberDAO {
 	// 회원가입 (회원등록) //
@@ -10,7 +12,6 @@ public interface MemberDAO {
 
 	/**
 	 * 회원 조회 (내가 이걸 왜 만들었더라...)
-	 * 
 	 * @param params 조회 조건 (memberId, email, nickname, phone, kakaoId 등)
 	 * @return 조회된 회원 정보, 없으면 null
 	 */
@@ -18,7 +19,6 @@ public interface MemberDAO {
 
 	/**
 	 * 로그인 - 이메일과 비밀번호로 회원 조회
-	 * 
 	 * @param email 이메일, password 비밀번호
 	 * @return 조회된 회원 정보, 없으면 null
 	 */
@@ -26,7 +26,6 @@ public interface MemberDAO {
 
 	/**
 	 * 이메일로 회원 조회 (중복 체크, 아이디 찾기 등)
-	 * 
 	 * @param email 조회할 이메일
 	 * @return 조회된 회원 정보, 없으면 null
 	 */
@@ -41,8 +40,7 @@ public interface MemberDAO {
 
 	/**
 	 * 이메일과 휴대폰으로 회원 ID 찾기 (비밀번호 재설정용)
-	 * @param email 이메일
-	 * @param phone 휴대폰 번호
+	 * @param email 이메일, phone 휴대폰 번호
 	 * @return 회원 ID (없으면 null)
 	 */
 	Long selectIdByEmailAndPhone(String email, String phone) throws Exception;
@@ -92,7 +90,6 @@ public interface MemberDAO {
 
 	/**
 	 * 헤더용 - 로그인한 회원의 기본 정보 (이름, 포인트)
-	 * 
 	 * @param memberId 회원 ID
 	 * @return 헤더 표시용 기본 정보
 	 */
@@ -107,7 +104,6 @@ public interface MemberDAO {
 	// 체크아웃(주문/결제)용======================================
 	/**
 	 * 체크아웃 페이지용 회원 정보 조회- 이름, 전화번호, 주소, 포인트 정보만 조회
-	 * 
 	 * @param memberId 회원 ID
 	 * @return Member 객체 (필요한 정보만)
 	 */
@@ -115,7 +111,6 @@ public interface MemberDAO {
 
 	/**
 	 * 회원 포인트 잔액 조회 - 현재 보유 포인트만 조회
-	 * 
 	 * @param memberId 회원 ID
 	 * @return 포인트 잔액
 	 */
@@ -123,7 +118,6 @@ public interface MemberDAO {
 
 	/**
 	 * 회원 포인트 사용 (차감) - 주문 시 포인트 사용할 때
-	 * 
 	 * @param memberId 회원 ID, param usingPoint 사용할 포인트
 	 * @return 성공 시 1, 실패 시 0 (포인트 부족 시 포함)
 	 */
@@ -131,9 +125,15 @@ public interface MemberDAO {
 
 	/**
 	 * 포인트 사용 가능 여부 확인 - 포인트 사용 전 잔액 확인
-	 * 
 	 * @param memberId 회원 ID, usingPoint 사용하려는 포인트
 	 * @return true: 사용 가능, false: 잔액 부족
 	 */
 	boolean checkPointAvailable(Long memberId, int usingPoint) throws Exception;
+
+	// 피부 고민 ==========================
+	List<Long> selectMemberSkinIssues(Long memberId) throws Exception;
+
+	void deleteMemberSkinIssues(Long memberId) throws Exception;
+
+	void insertMemberSkinIssue(MemberSkinIssue skinIssue) throws Exception;
 }

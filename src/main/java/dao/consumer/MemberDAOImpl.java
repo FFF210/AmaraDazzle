@@ -1,11 +1,13 @@
 package dao.consumer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
 import dto.Member;
+import dto.MemberSkinIssue;
 import util.MybatisSqlSessionFactory;
 
 public class MemberDAOImpl implements MemberDAO {
@@ -165,6 +167,24 @@ public class MemberDAOImpl implements MemberDAO {
 		params.put("usingPoint", usingPoint);
 
 		return sqlSession.selectOne("mapper.member.checkPointAvailable", params);
+	}
+
+	//피부 고민 (회원정보수정) ===========================
+	@Override
+	public List<Long> selectMemberSkinIssues(Long memberId) throws Exception {
+		 return sqlSession.selectList("mapper.member.selectMemberSkinIssues", memberId);
+	}
+
+	@Override
+	public void deleteMemberSkinIssues(Long memberId) throws Exception {
+		sqlSession.delete("mapper.member.deleteMemberSkinIssues", memberId);
+        sqlSession.commit();		
+	}
+
+	@Override
+	public void insertMemberSkinIssue(MemberSkinIssue skinIssue) throws Exception {
+		sqlSession.insert("mapper.member.insertMemberSkinIssue", skinIssue);
+        sqlSession.commit();
 	}
 
 }

@@ -2,23 +2,21 @@ package service.consumer;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import dao.consumer.MemberDAO;
 import dao.consumer.MemberDAOImpl;
 import dto.Member;
+import dto.MemberSkinIssue;
 
 public class MemberServiceImpl implements MemberService {
 
@@ -397,5 +395,40 @@ public class MemberServiceImpl implements MemberService {
 		} catch (Exception e) {
 			throw new Exception("카카오 사용자 정보 조회 실패: " + e.getMessage());
 		}
+	}
+
+	//피부 고민 ===============================
+	@Override
+	public List<Long> getMemberSkinIssues(Long memberId) throws Exception {
+		return memberDAO.selectMemberSkinIssues(memberId);
+	}
+
+	@Override
+	public void updateMemberProfile(Member member, List<Long> skinIssueIds) throws Exception {
+		 if (member == null || member.getMemberId() == null) {
+	            throw new Exception("회원 정보가 올바르지 않습니다.");
+	        }
+	        
+	        Member existingMember = memberDAO.selectById(member.getMemberId());
+	        if (existingMember == null) {
+	            throw new Exception("존재하지 않는 회원입니다.");
+	        }
+	        
+	        // 1. 회원 기본 정보 수정
+	        memberDAO.updateMember(member);
+	        
+	        // 2. 기존 피부고민 삭제
+	        memberDAO.deleteMemberSkinIssues(member.getMemberId());
+	        
+	        // 3. 새 피부고민 추가
+	        if (skinIssueIds != null && !skinIssueIds.isEmpty()) {
+	            for (Long codeId : skinIssueIds) {
+	                MemberSkinIssue skinIssue = new MemberSkinIssue();
+	                skinIssue.setMemberId(member.getMemberId());
+	                skinIssue.setCodeId(codeId);
+	                memberDAO.insertMemberSkinIssue(skinIssue);
+	            }
+	        }
+		
 	}
 }
