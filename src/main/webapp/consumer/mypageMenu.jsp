@@ -30,7 +30,7 @@
 			</ul>
 		</section>
 
-<<<<<<< HEAD
+
   <!-- 그룹 2: 마이 활동 -->
   <section class="menu-group">
     <h3 class="menu-group_title">마이 활동</h3>
@@ -41,20 +41,6 @@
              href="<c:url value='/store/mypage/myReview'/>">리뷰</a></li>
     </ul>
   </section>
-=======
-		<!-- 그룹 2: 마이 활동 -->
-		<section class="menu-group">
-			<h3 class="menu-group_title">마이 활동</h3>
-			<ul class="menu-list">
-				<li><a
-					class="menu-item ${currentMenu eq 'tickets' ? 'is-active' : ''}"
-					href="<c:url value='/store/mypage/tickets'/>">1:1 문의내역</a></li>
-				<li><a
-					class="menu-item ${currentMenu eq 'reviews' ? 'is-active' : ''}"
-					href="<c:url value='/store/mypage/myReview'/>">리뷰</a></li>
-			</ul>
-		</section>
->>>>>>> branch 'main' of https://github.com/2025KostaProject/AmaraDazzle.git
 
 		<!-- 그룹 3: 마이 정보 -->
 		<section class="menu-group">

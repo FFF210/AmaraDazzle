@@ -12,11 +12,12 @@
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/pageHeader.css'/>">
-<link rel="stylesheet" href="<c:url value='/consumer/css/writeInquiry.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/writeTicket.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/selectbox.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/textArea.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/textInput.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/imageBtn.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 </head>
 <body>
 <%-- 헤더 --%>
@@ -54,13 +55,10 @@
             <my:textInput 
                 id="orderCode" 
                 name="orderCode" 
-                placeholder="주문번호를 입력하세요 (예: 20250104-010001)" 
+                placeholder="주문 시 발급받은 주문번호를 입력해주세요 (예: 20250104-010001)" 
                 type="default" 
                 size="lg" 
                 state="default" />
-            <small style="color: #6c757d; margin-top: 5px; display: block;">
-                주문 시 발급받은 주문번호를 입력해주세요
-            </small>
         </div>
 
         <!-- 내용 -->

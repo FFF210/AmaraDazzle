@@ -1,0 +1,49 @@
+@charset "UTF-8";
+
+body {
+	font-size: 14px;
+	color: #000;
+	background-color: #fff;
+}
+
+/* 기본 form-row 스타일 */
+.form-row {
+	display: flex;
+	width: 100%;
+	min-height: 88px;
+	gap: 8px;
+	align-items: stretch;
+}
+
+.editProfile-content {
+	display: flex;
+	flex-direction: column;
+	gap: 30px;
+	width: 815px;
+	align-items: flex-start;
+	gap: 67px;
+	flex-shrink: 0;
+}
+
+.label {
+	display: flex;
+	width: 170px;
+	padding: 16px;
+	align-items: center;
+	gap: 4px;
+	flex-shrink: 0;
+	background: #D9D2D7;
+	font-size: 16px;
+	font-weight: 600;
+	color: #000;
+	align-self: stretch;
+}
+
+ .input-area {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	justify-content: center;
+	gap: 8px;
+	background: white;
+} 
