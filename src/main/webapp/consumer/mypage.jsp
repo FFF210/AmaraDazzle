@@ -96,7 +96,7 @@
 
 					<div
 						class="status-item ${activeStatus eq 'shipping' ? 'active' : ''}">
-						<div class="status-count">${orderSummary.shippingCountt}</div>
+						<div class="status-count">${orderSummary.shippingCount}</div>
 						<div class="status-label">배송준비중</div>
 					</div>
 
@@ -125,7 +125,7 @@
 				<!-- forEach 문에서 items 부분(현재 productPlanList)만 백엔드에서 내려오는 데이터 이름으로 바꾸시면 됩니다! -->
 				<!-- 나머지 수정할 필요 없음 !!! -->
 				<div class="product-grid">
-					<%-- <c:forEach var="p" items="${wishlist}">
+					 <c:forEach var="p" items="${wishlist}">
 						<c:choose>
 							<c:when test="${p.discountType eq 'RATE'}">
 								<c:set var="saleRateRaw" value="${p.discountValue}" />
@@ -180,7 +180,7 @@
 								<my:tag color="yellow" size="sm" text="기획" />
 							</c:if>
 						</my:productCard>
-					</c:forEach> --%>
+					</c:forEach>
 				</div>
 			</section>
 
@@ -192,7 +192,7 @@
 				</div>
 
 				<div class="product-grid">
-					<%-- <c:forEach var="p" items="${cartItems}">
+					<c:forEach var="p" items="${cartItems}">
 						<c:choose>
 							<c:when test="${p.discountType eq 'RATE'}">
 								<c:set var="saleRateRaw" value="${p.discountValue}" />
@@ -247,7 +247,7 @@
 								<my:tag color="yellow" size="sm" text="기획" />
 							</c:if>
 						</my:productCard>
-					</c:forEach> --%>
+					</c:forEach>
 				</div>
 			</section>
 		</main>
