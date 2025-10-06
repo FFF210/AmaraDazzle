@@ -1,6 +1,12 @@
 package dao.brand;
 
+import java.util.List;
+
 import dto.Brand;
+import dto.brand.DashboardSummary;
+import dto.brand.DashboardTodo;
+import dto.brand.EventAlert;
+import dto.brand.TopProduct;
 
 public interface BrandDAO {
 	// 회원가입
@@ -20,4 +26,16 @@ public interface BrandDAO {
 
 	// 로그인
 	Brand selectBrandByPassword(String email) throws Exception;
+
+	// 메인 대시보드 요약 정보
+	DashboardSummary selectDashboardSummary(Long brandId) throws Exception;
+
+	// 메인 대시보드 오늘 할 일
+	DashboardTodo selectDashboardTodo(Long brandId) throws Exception;
+
+	// 메인 대시보드 이벤트 정보
+	List<EventAlert> selectEventAlerts(long brandId) throws Exception;
+
+	// 메인 대시보드 이번 주 인기 상품 Top3
+	List<TopProduct> selectWeeklyTop3Products(long brandId) throws Exception;
 }

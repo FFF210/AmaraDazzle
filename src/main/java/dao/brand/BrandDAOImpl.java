@@ -1,8 +1,14 @@
 package dao.brand;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 
 import dto.Brand;
+import dto.brand.DashboardSummary;
+import dto.brand.DashboardTodo;
+import dto.brand.EventAlert;
+import dto.brand.TopProduct;
 import util.MybatisSqlSessionFactory;
 
 public class BrandDAOImpl implements BrandDAO {
@@ -57,6 +63,38 @@ public class BrandDAOImpl implements BrandDAO {
 	public Brand selectBrandByPassword(String email) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
 			return sqlSession.selectOne("mapper.brand.selectBrandByPassword", email);
+		}
+	}
+
+	// 메인 대시보드 요약 정보
+	@Override
+	public DashboardSummary selectDashboardSummary(Long brandId) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.brand.selectDashboardSummary", brandId);
+		}
+	}
+
+	// 메인 대시보드 오늘 할 일
+	@Override
+	public DashboardTodo selectDashboardTodo(Long brandId) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.brand.selectDashboardTodo", brandId);
+		}
+	}
+
+	// 메인 대시보드 이벤트 정보
+	@Override
+	public List<EventAlert> selectEventAlerts(long brandId) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.brand.selectEventAlerts", brandId);
+		}
+	}
+
+	// 메인 대시보드 이번 주 인기 상품 Top3
+	@Override
+	public List<TopProduct> selectWeeklyTop3Products(long brandId) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.brand.selectWeeklyTop3Products", brandId);
 		}
 	}
 }
