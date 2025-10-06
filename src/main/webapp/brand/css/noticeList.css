@@ -14,6 +14,10 @@
 	justify-content: space-between;
 }
 
+.notice-row:hover {
+  background-color: #f9fafc;
+}
+
 .notice-title {
 	flex: 1;
 	margin: 0 12px;

@@ -1,32 +1,31 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
 <title>공지사항</title>
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="./css/reset.css" />
-<link rel="stylesheet" href="./css/button.css" />
-<link rel="stylesheet" href="./css/form-controls.css" />
-<link rel="stylesheet" href="./css/layout.css" />
-<link rel="stylesheet" href="./css/sidebar.css" />
-<link rel="stylesheet" href="./css/header.css" />
-<link rel="stylesheet" href="./css/table.css" />
-<link rel="stylesheet" href="./css/dialog.css" />
-<link rel="stylesheet" href="./css/tag.css" />
-<link rel="stylesheet" href="./css/selectbox.css" />
-<link rel="stylesheet" href="./css/dateInput.css" />
-<link rel="stylesheet" href="./css/textInput.css" />
-<link rel="stylesheet" href="./css/productList.css" />
-<link rel="stylesheet" href="./css/breadcrumb.css" />
-<link rel="stylesheet" href="./css/pagination.css" />
-<link rel="stylesheet" href="./css/tableFilter.css" />
+<link rel="stylesheet" href="../tagcss/reset.css" />
+<link rel="stylesheet" href="../tagcss/button.css" />
+<link rel="stylesheet" href="../tagcss/form-controls.css" />
+<link rel="stylesheet" href="../tagcss/layout.css" />
+<link rel="stylesheet" href="../tagcss/sidebar.css" />
+<link rel="stylesheet" href="../tagcss/brandHeader.css" />
+<link rel="stylesheet" href="../tagcss/table.css" />
+<link rel="stylesheet" href="../tagcss/dialog.css" />
+<link rel="stylesheet" href="../tagcss/tag.css" />
+<link rel="stylesheet" href="../tagcss/selectbox.css" />
+<link rel="stylesheet" href="../tagcss/dateInput.css" />
+<link rel="stylesheet" href="../tagcss/textInput.css" />
+<link rel="stylesheet" href="../tagcss/breadcrumb.css" />
+<link rel="stylesheet" href="../tagcss/pagination.css" />
+<link rel="stylesheet" href="../tagcss/tableFilter.css" />
 <link rel="stylesheet" href="./css/noticeList.css" />
 </head>
 <body>
@@ -40,7 +39,7 @@
 
 			<!-- 총 건수 -->
 			<div class="page-totalCount">
-				<p>총 200 건</p>
+				<p>총 ${totalCount} 건</p>
 			</div>
 
 			<!-- 결과 테이블 -->
@@ -50,22 +49,26 @@
 						<thead>
 							<tr>
 								<th class="sortable">번호 <i class="bi bi-dash-lg sort-icon"></i></th>
-								<th>작성일</th>
 								<th>공지유형</th>
 								<th>제목</th>
+								<th>작성일</th>
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach var="i" begin="1" end="5">
-								<tr>
-									<td>1</td>
-									<td>2025-09-10</td>
-									<td><my:tag color="green" size="sm" text="label" /></td>
+							<c:forEach var="notice" items="${noticeList}" varStatus="loop">
+								<tr class="notice-row" data-id="${notice.noticeId}"
+									style="cursor: pointer;">
+									<td style="width: 100px">${totalCount - ((currentPage - 1) * 7 + loop.index)}</td>
+									<td style="width: 100px"><my:tag
+											color="${notice.typeName eq '시스템' ? 'green' : (notice.typeName eq '이벤트' ? 'blue' : 'gray')}"
+											size="sm" text="${notice.typeName}" /></td>
 									<td>
 										<div class="product-name">
-											<p>공지 제목이 들어갑니다.</p>
+											<p>${notice.title}</p>
 										</div>
 									</td>
+									<td style="width: 160px"><fmt:formatDate value="${notice.createdAt}"
+											pattern="yyyy-MM-dd" /></td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -75,32 +78,48 @@
 
 			<!-- 상세 영역 -->
 			<div class="notice-detail-container" id="noticeDetail">
-				<div class="notice-detail-header">
-					<my:tag color="green" size="sm" text="시스템" />
-					<span class="notice-title">공지사항입니다. 필독</span> <span
-						class="notice-date">2025.09.04</span>
-				</div>
-				<div class="notice-detail-body">여기는 공지사항 내용이 작성됩니다. 선택된 공지의 상세
-					본문이 이곳에 표시됩니다.</div>
-
-				<!-- 첨부파일 -->
-				<div class="notice-attachments">
-					<ul>
-						<li><a href="/files/manual.pdf" download>매뉴얼.pdf</a></li>
-						<li><a href="/files/guide.docx" download>사용자_가이드.docx</a></li>
-					</ul>
-				</div>
+				<p class="text-muted"></p>
 			</div>
+
+
+			<c:set var="queryString"> page=</c:set>
 
 			<!-- 페이징 -->
 			<div class="page-pagination">
-				<my:pagination currentPage="1" totalPages="5"
-					baseUrl="/products?page=" />
+				<my:pagination currentPage="${currentPage}"
+					totalPages="${totalPages}"
+					baseUrl="/brand/noticeList?${queryString}" />
 			</div>
 		</div>
 	</my:layout>
 
 	<script>
+	document.querySelectorAll(".notice-row").forEach(row => {
+		  row.addEventListener("click", async () => {
+		    const id = row.dataset.id;
+
+		    // 선택된 행 하이라이트 효과 (선택사항)
+		    document.querySelectorAll(".notice-row").forEach(r => r.classList.remove("selected"));
+		    row.classList.add("selected");
+
+		    // Ajax 요청
+		    const response = await fetch(`/brand/noticeDetailFragment?noticeId=\${id}`);
+		    if (!response.ok) {
+		      document.getElementById("noticeDetail").innerHTML = "<p>상세 내용을 불러오지 못했습니다.</p>";
+		      return;
+		    }
+
+		    // JSP fragment HTML 받아서 교체
+		    const html = await response.text();
+		    document.getElementById("noticeDetail").innerHTML = html;
+
+		    // URL 파라미터 동기화 (새로고침 없이 주소만 변경)
+		    const url = new URL(window.location);
+		    url.searchParams.set("id", id);
+		    window.history.pushState({}, "", url);
+		  });
+		});
+	
   // 테이블 정렬
   document.querySelectorAll(".table th.sortable").forEach(th => {
 	  th.addEventListener("click", () => {

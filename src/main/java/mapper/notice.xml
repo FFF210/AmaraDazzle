@@ -7,14 +7,20 @@
 	<!-- 공지(seller) 글쓰기 저장 -->
 	<insert id="insertSellerNotice" parameterType="notice"
 		useGeneratedKeys="true" keyProperty="noticeId">
-		insert into notice 
-			(notice_id, type_id, title, content, 
-			image1_file_id, image2_file_id, image3_file_id, doc_file_id, 
-			writer, view_cnt, target_type_id, is_exposed, created_at, updated_at)
-		values 
-			(0, #{typeId}, #{title}, #{content},
-			#{image1FileId},#{image2FileId}, #{image3FileId},#{docFileId}, 
-			#{writer}, 0, #{targetTypeId}, 1, now(), null)
+		insert into notice
+		(notice_id,
+		type_id, title, content,
+		image1_file_id, image2_file_id,
+		image3_file_id, doc_file_id,
+		writer, view_cnt, target_type_id,
+		is_exposed, created_at, updated_at)
+		values
+		(0, #{typeId}, #{title},
+		#{content},
+		#{image1FileId},#{image2FileId},
+		#{image3FileId},#{docFileId},
+		#{writer}, 0, #{targetTypeId}, 1, now(),
+		null)
 	</insert>
 
 
@@ -24,29 +30,39 @@
 		select n.*, c.name,
 		f1.file_name AS image1FileName,
 		f1.file_rename AS image1FileRename,
-		f1.storage_path AS image1StoragePath,
+		f1.storage_path AS
+		image1StoragePath,
 		f2.file_name AS image2FileName,
-		f2.file_rename AS image2FileRename,
+		f2.file_rename AS
+		image2FileRename,
 		f2.storage_path AS image2StoragePath,
-		f3.file_name AS image3FileName,
+		f3.file_name AS
+		image3FileName,
 		f3.file_rename AS image3FileRename,
-		f3.storage_path AS image3StoragePath
+		f3.storage_path AS
+		image3StoragePath
 		from notice n
-		join code_detail c on (n.type_id = c.code_detail_id)
-		LEFT JOIN upload_file f1 ON (n.image1_file_id = f1.upload_file_id)
-		LEFT JOIN upload_file f2 ON (n.image2_file_id = f2.upload_file_id)
-		LEFT JOIN upload_file f3 ON (n.image3_file_id = f3.upload_file_id)
+		join code_detail c on (n.type_id =
+		c.code_detail_id)
+		LEFT JOIN upload_file f1 ON (n.image1_file_id =
+		f1.upload_file_id)
+		LEFT JOIN upload_file f2 ON (n.image2_file_id =
+		f2.upload_file_id)
+		LEFT JOIN upload_file f3 ON (n.image3_file_id =
+		f3.upload_file_id)
 		where n.notice_id = #{num}
 	</select>
 
 
 	<!-- 공지(seller) 게시글 수 -->
-	<select id="SellerNoticeCnt" resultType="Integer" parameterType="searchCondition">
+	<select id="SellerNoticeCnt" resultType="Integer"
+		parameterType="searchCondition">
 		select count(*) from notice
 		where target_type_id = 5
 		<if test="startDateTime != null and endDateTime != null">
-		    and (created_at &gt;= #{startDateTime} 
-		    		and created_at &lt; #{endDateTime})
+			and (created_at &gt;= #{startDateTime}
+			and created_at &lt;
+			#{endDateTime})
 		</if>
 		<if test="q_select != null and q_select != ''">
 			<choose>
@@ -61,7 +77,8 @@
 				</when>
 			</choose>
 		</if>
-		<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+		<if
+			test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
 			<choose>
 				<when test="totalSearch == '제목'">
 					and title like concat('%',#{keyword},'%')
@@ -75,24 +92,30 @@
 
 
 	<!-- 공지(seller) 리스트 -->
-	<select id="selectAllSellerNotice" resultType="notice" parameterType="Map">
+	<select id="selectAllSellerNotice" resultType="notice"
+		parameterType="Map">
 		select n.*, c.name
 		from notice n
-		join code_detail c on (n.type_id = c.code_detail_id)
+		join code_detail c on
+		(n.type_id = c.code_detail_id)
 		where target_type_id = 5
-		order by notice_id desc limit #{start_p},#{post_ea}
+		order by
+		notice_id desc limit #{start_p},#{post_ea}
 	</select>
 
 
 	<!-- 공지(seller) 게시글 검색 리스트 -->
-	<select id="selectSearchSellerNotice" resultType="notice" parameterType="searchCondition">
+	<select id="selectSearchSellerNotice" resultType="notice"
+		parameterType="searchCondition">
 		select n.*, c.name
 		from notice n
-		join code_detail c on (n.type_id = c.code_detail_id)
+		join code_detail c on (n.type_id =
+		c.code_detail_id)
 		where n.target_type_id = 5
 		<if test="startDateTime != null and endDateTime != null">
-		    and (n.created_at &gt;= #{startDateTime} 
-		    	and n.created_at &lt; #{endDateTime})
+			and (n.created_at &gt;= #{startDateTime}
+			and n.created_at
+			&lt; #{endDateTime})
 		</if>
 		<if test="q_select != null and q_select != ''">
 			<choose>
@@ -123,8 +146,75 @@
 
 	<!-- 공지 게시글 조회수 -->
 	<update id="notice_viewcnt" parameterType="Integer">
-		update notice set view_cnt = view_cnt+1 where notice_id=#{num}
+		update notice set
+		view_cnt = view_cnt+1 where notice_id=#{num}
 	</update>
+
+
+
+
+
+
+	<!-- [브랜드 어드민] 공지사항 전체 조회 -->
+	<select id="selectNoticeList" parameterType="map"
+		resultType="noticeList">
+		SELECT
+		n.notice_id,
+		n.type_id,
+		cd.name AS type_name,
+		n.title,
+		n.content,
+		n.image1_file_id,
+		n.image2_file_id,
+		n.image3_file_id,
+		n.doc_file_id,
+		n.writer,
+		n.target_type_id,
+		n.view_cnt,
+		n.is_exposed,
+		n.created_at,
+		n.updated_at
+		FROM notice n
+		LEFT JOIN code_detail cd
+		ON
+		n.type_id = cd.code_detail_id
+		WHERE n.target_type_id = 5
+		ORDER BY
+		n.created_at DESC
+		LIMIT #{limit} OFFSET #{offset}
+	</select>
+
+	<!-- [브랜드 어드민] 공지사항 전체 개수 -->
+	<select id="selectNoticeCount" resultType="int">
+		SELECT COUNT(*)
+		FROM
+		notice
+		WHERE target_type_id = 5
+	</select>
+
+	<!-- [브랜드 어드민] 공지사항 단일 조회 -->
+	<select id="selectNoticeById" parameterType="long"
+		resultType="noticeList">
+		SELECT
+		n.notice_id,
+		n.type_id,
+		cd.name AS type_name,
+		n.title,
+		n.content,
+		n.image1_file_id,
+		n.image2_file_id,
+		n.image3_file_id,
+		n.doc_file_id,
+		n.writer,
+		n.view_cnt,
+		n.is_exposed,
+		n.created_at,
+		n.updated_at
+		FROM notice n
+		LEFT JOIN code_detail cd ON n.type_id = cd.code_detail_id
+		WHERE n.notice_id = #{value}
+	</select>
+
 
 
 </mapper>
