@@ -251,8 +251,10 @@ function updateTotalPrice() {
 	if (selectedOptions.length === 0) {
 		const totalAmountElement = document.getElementById('totalAmount');
 		console.log('totalAmountElement 찾음:', totalAmountElement);
-		if (typeof window.productOptionsData !== 'undefined') {
-			totalAmountElement.textContent = '옵션을 선택해주세요';
+		
+		// 옵션 선택 전에는 기본 상품 가격 표시
+		if (totalAmountElement) {
+			totalAmountElement.textContent = window.productPrice.toLocaleString() + '원';
 		}
 		return;
 	}

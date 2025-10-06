@@ -4,12 +4,15 @@ body {
 	font-size: 14px;
 	color: #000;
 	background-color: #fff;
+	min-width: 1240px;    /* 패딩 포함한 최소 너비 */
+    overflow-x: auto;
 }
 
 .page-wrap {
-    max-width: 1200px;  /* 최대 너비 설정 */
+    width: 1200px;  /* 최대 너비 설정 */
     margin: 0 auto;     /* 좌우 자동 마진 */
     padding: 20px;
+    min-width: 1200px;
 }
 
 h1 {
@@ -21,6 +24,7 @@ h1 {
 	flex-direction: column;
 	gap: 30px;
 	width: 815px;
+	margin: 0 auto;  
 	align-items: flex-start;
 	gap: 67px;
 	flex-shrink: 0;
@@ -139,4 +143,11 @@ h1 {
 
 .delete-account {
 	margin-bottom:30px;
+}
+
+.button-container {
+	text-align:center;
+	margin-bottom:40px;
+	width: 100%;         
+    display: block; 
 }

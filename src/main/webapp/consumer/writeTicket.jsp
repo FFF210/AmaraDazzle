@@ -84,7 +84,7 @@
         </div>
 
         <!-- 답변 주체 (hidden, 기본값 ADMIN) -->
-        <input type="hidden" name="recieverType" value="ADMIN">
+        <input type="hidden" name="recieverType" id="recieverTypeInput" value="ADMIN">
 
         <!-- 버튼 -->
         <div class="action-button">

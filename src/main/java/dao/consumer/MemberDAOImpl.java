@@ -115,6 +115,7 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("mapper.member.selectMemberInfo", memberId);
 	}
 
+	//이거...헤더인포용으로 만들어놓고 안 썼네...지워도 될 것 같은데
 	@Override
 	public Map<String, Object> selectHeaderInfo(Long memberId) throws Exception {
 		return sqlSession.selectOne("mapper.member.selectMemberInfo", memberId);

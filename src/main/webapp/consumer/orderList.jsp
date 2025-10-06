@@ -125,7 +125,7 @@
 
 					<div
 						class="status-item ${activeStatus eq 'shipping' ? 'active' : ''}">
-						<div class="status-count">${orderSummary.shippingCountt}</div>
+						<div class="status-count">${orderSummary.shippingCount}</div>
 						<div class="status-label">배송준비중</div>
 					</div>
 
