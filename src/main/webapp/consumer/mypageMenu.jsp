@@ -48,7 +48,7 @@
 			<ul class="menu-list">
 				<li><a
 					class="menu-item ${currentMenu eq 'profile' ? 'is-active' : ''}"
-					href="<c:url value='/store/mypage/profile'/>">회원정보수정</a></li>
+					href="<c:url value='/store/mypage/editProfile'/>">회원정보수정</a></li>
 			</ul>
 		</section>
 	</section>

@@ -57,7 +57,7 @@
 	<!-- 주문번호로 주문 ID 조회 -->
 	<select id="selectOrderIdByOrderCode" parameterType="string"
 		resultType="long">
-		SELECT order_id
+		SELECT orders_id
 		FROM orders
 		WHERE order_code = #{orderCode}
 	</select>
