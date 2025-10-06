@@ -3,5 +3,63 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.ticket">
-	
+
+	<!-- 문의 등록 -->
+	<insert id="insertTicket" parameterType="dto.Ticket">
+		INSERT INTO ticket (
+		sender_type,
+		sender_id,
+		order_id,
+		reciever_type,
+		reciever_id,
+		category,
+		question,
+		image1_file_id,
+		image2_file_id,
+		image3_file_id,
+		exposure_status,
+		questioned_at
+		) VALUES (
+		#{senderType},
+		#{senderId},
+		#{orderId},
+		#{recieverType},
+		#{recieverId},
+		#{category},
+		#{question},
+		#{image1FileId},
+		#{image2FileId},
+		#{image3FileId},
+		#{exposureStatus},
+		CURRENT_TIMESTAMP
+		)
+	</insert>
+
+	<!-- 내 문의 목록 조회 (최신순) -->
+	<select id="selectTicketsBySenderId" parameterType="map"
+		resultType="dto.Ticket">
+		SELECT * FROM ticket
+		WHERE sender_id = #{senderId}
+		AND sender_type = #{senderType}
+		<if test="startDate != null and endDate != null">
+			AND questioned_at BETWEEN #{startDate} AND #{endDate}
+		</if>
+		ORDER BY questioned_at DESC
+	</select>
+
+	<!-- 문의 상세 조회 -->
+	<select id="selectTicketById" parameterType="long"
+		resultType="dto.Ticket">
+		SELECT * FROM ticket
+		WHERE ticket_id = #{ticketId}
+	</select>
+
+	<!-- 주문번호로 주문 ID 조회 -->
+	<select id="selectOrderIdByOrderCode" parameterType="string"
+		resultType="long">
+		SELECT order_id
+		FROM orders
+		WHERE order_code = #{orderCode}
+	</select>
+
 </mapper>
