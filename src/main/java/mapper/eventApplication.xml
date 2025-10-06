@@ -4,42 +4,52 @@
 
 <mapper namespace="mapper.eventApplication">
 
-<!-- ========= [brand2] 이벤트 신청하기 ========= -->
-<!-- 이벤트종류, 이벤트명, 광고담당자, 담당연락처, 상품코드, 쿠폰설정, 관리자전달사항 -->
+	<!-- ========= [brand2] 이벤트 신청하기 ========= -->
+	<!-- 이벤트종류, 이벤트명, 광고담당자, 담당연락처, 상품코드, 쿠폰설정, 관리자전달사항 -->
 
-    <!-- 1. event_application 저장 -->
-    <insert id="insertEventApplication" parameterType="eventApplication" useGeneratedKeys="true" keyProperty="applicationId">
-        INSERT INTO event_application (event_id, manager_name, manager_tel, note)
-        VALUES (#{eventId}, #{managerName}, #{managerTel}, #{note})
-    </insert>
-    
-    <!-- 2. event_product 여러 개 저장 -->
-    <insert id="insertEventProducts" parameterType="map">
-        INSERT INTO event_product (application_id, product_id)
-        VALUES
-        <foreach collection="productIds" item="pid" separator=",">
-            (#{applicationId}, #{pid})
-        </foreach>
-    </insert>
-    
-    <!-- 3. coupon 저장 (application_id FK 대신 reason에 기록) -->
-    <insert id="insertCoupon" parameterType="coupon" useGeneratedKeys="true" keyProperty="couponId">
-        INSERT INTO coupon (cname, start_date, end_date, amount_condition, amount, reason, provision, writer_type, writer_id)
-        VALUES (
-            #{cname},
-            #{startDate},
-            #{endDate},
-            #{amountCondition},
-            #{amount},
-            CONCAT('event_application:', #{applicationId}),
-            #{provision},
-            #{writerType},
-            #{writerId}
-        )
-    </insert>
-    <!--  CONCAT('event_application:', #{applicationId}) : 신청ID를 reason에 기록  -->
-    
-    <!-- ========= [brand2] 이벤트 신청하기 ========= -->
-    
-    
+	<!-- 1. event_application 저장 -->
+	<insert id="insertEventApplication"
+		parameterType="eventApplication" useGeneratedKeys="true"
+		keyProperty="eventApplicationId">
+		INSERT INTO event_application (
+		event_id, brand_id,
+		manager_name, manager_tel, note
+		)
+		VALUES (
+		#{eventId}, #{brandId},
+		#{managerName}, #{managerTel}, #{note}
+		)
+	</insert>
+
+	<!-- 2. event_product 여러 개 저장 -->
+	<insert id="insertEventProducts" parameterType="map">
+		INSERT INTO event_product (application_id, product_id)
+		VALUES
+		<foreach collection="productIds" item="pid" separator=",">
+			(#{applicationId}, #{pid})
+		</foreach>
+	</insert>
+
+	<!-- 3. coupon 저장 (application_id FK 대신 reason에 기록) -->
+	<insert id="insertCoupon" parameterType="coupon"
+		useGeneratedKeys="true" keyProperty="couponId">
+		INSERT INTO coupon (cname,
+		start_date, end_date, amount_condition, amount,
+		reason, provision,
+		writer_type, writer_id)
+		VALUES (
+		#{cname},
+		#{startDate},
+		#{endDate},
+		#{amountCondition},
+		#{amount},
+		CONCAT('event_application:',
+		#{applicationId}),
+		#{provision},
+		#{writerType},
+		#{writerId}
+		)
+	</insert>
+	<!-- CONCAT('event_application:', #{applicationId}) : 신청ID를 reason에 기록 -->
+
 </mapper>
