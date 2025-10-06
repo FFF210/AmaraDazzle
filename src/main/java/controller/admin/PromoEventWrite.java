@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import dto.Event;
+import service.admin.BannerService;
+import service.admin.BannerServiceImpl;
+import service.admin.EventService;
+import service.admin.EventServiceImpl;
 import util.FileAttach;
 
 @WebServlet("/admin/promoEventWrite")
@@ -59,24 +65,19 @@ public class PromoEventWrite extends HttpServlet {
 			}
 			
 			// 파일첨부파트 추출
-			List<Part> fileParts = new ArrayList<>();
-			for (Part part : request.getParts()) {
-				if ("noticeFile".equals(part.getName()) && part.getSize() > 0) { // 전달된 Part중 name이 noticeFile 이면서 용량이 있는 Part가 있는지 확인
-					fileParts.add(part);
-				}
+			String[] fileNames = {"eventThumbImg", "eventDetailImg"};
+			FileAttach fileAttach = new FileAttach();
+			Map<String, Long> filePkMap = new HashMap<>();
+			for (String name : fileNames) {
+			    Part part = request.getPart(name);
+			    if (part != null && part.getSize() > 0) {
+			        Long pk = fileAttach.file_saveOne(part, request);
+			        filePkMap.put(name, pk);
+			    }
 			}
-			List<Long> fileIds = Collections.emptyList();
-			if (!fileParts.isEmpty()) { // 파일첨부를 한 경우
-				FileAttach fileAttach = new FileAttach(); // 파일첨부 클래스 소환
-				Map<String, Object> result = fileAttach.file_save(fileParts, request);
-
-				boolean saveYN = Boolean.TRUE.equals(result.get("save_YN"));
-				List<Long> uploaded = (List<Long>) result.get("fileIds");
-
-				if (saveYN && uploaded != null) {
-					fileIds = uploaded; // 성공 시에만 세팅
-				}
-			}
+			
+			Long thumbPk = filePkMap.get("eventThumbImg");
+			Long detailPk = filePkMap.get("eventDetailImg");
 
 			System.out.println("eventType : " + eventType);
 			System.out.println("startDate : " + startDate);
@@ -88,13 +89,24 @@ public class PromoEventWrite extends HttpServlet {
 			System.out.println("eventName : " + eventName);
 			System.out.println("evtContent : " + evtContent);
 			System.out.println("eventWriter : " + eventWriter);
-			System.out.println("fileIds List : " + fileIds);
+			System.out.println("thumbPk : " + thumbPk);
+			System.out.println("detailPk : " + detailPk);
 			
-
+			Event event = new Event(eventType, startDate, endDate, eventName, filePkMap.get("eventThumbImg"), filePkMap.get("eventDetailImg"), cateIdx, evtContent, eventWriter);
+			EventService event_svc = new EventServiceImpl();
 			
+			int result = event_svc.adminEventWrite(event); 
+			if(result > 0 ) {
+				pw.print("{\"status\":\"ok\",\"title\":\"이벤트 등록 완료\",\"message\":\"등록 후 게시 상태를 변경해야 메뉴에 올라갑니다.\"}");
+				
+			}else {
+				pw.print("{\"status\":\"fail\",\"title\":\"이벤트 등록 실패\",\"message\":\"시스템 문제로 이벤트 등록에 실패했습니다.\"}");
+			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			request.setAttribute("err", "시스템 오류로 공지 작성에 실패했습니다.");
+			request.getRequestDispatcher("error.jsp").forward(request, response);
 		}
 	}
 

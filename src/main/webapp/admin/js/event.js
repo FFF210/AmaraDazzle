@@ -29,10 +29,12 @@ document.addEventListener("DOMContentLoaded", function() {
 			}
 		});
 	});
-	document.querySelectorAll("#eventType .select-item").forEach(select => {
-		select.addEventListener("click", function() {
-			if (frm.eventType.value.trim() != "") {
-				evtType.classList.remove("state_error");
+	document.querySelectorAll(".select-item").forEach(select => {
+		select.addEventListener("click", function(e) {
+			const customSelect = e.currentTarget.closest(".custom-select")
+			const hiddenSelect = customSelect.nextElementSibling;
+			if (hiddenSelect && hiddenSelect.value.trim() !== "") {
+				customSelect.classList.remove("state_error");
 			}
 		});
 	});
@@ -49,35 +51,33 @@ document.addEventListener("DOMContentLoaded", function() {
 				method: "POST",
 				body: formData
 			})
-				.then(res => res.json())
-				.then(data => {
-					console.log(data);
-					if (data.status == "ok") {
-						// 오버레이 표시
-						document.getElementById("overlay").classList.add("active");
+			.then(res => res.json())
+			.then(data => {
+				console.log(data);
+				if (data.status == "ok") {
+					// 오버레이 표시
+					document.getElementById("overlay").classList.add("active");
 
-						//등록 성공 알럿 표시
-						showAlert("success", data.title, data.message); // 2초간 토스트
+					//등록 성공 알럿 표시
+					showAlert("success", data.title, data.message); // 2초간 토스트
 
-						setTimeout(() => {
-							location.href = "/admin/promoBannerList"; // 리스트로 이동
-						}, 3000);
+					setTimeout(() => {
+						location.href = "/admin/promoBannerList"; // 리스트로 이동
+					}, 3000);
 
 
-					} else if (data.status == "fail") {
-						showAlert("error", data.title, data.message); // 2초간 토스트
-					}
-				})
-				.catch(err => console.log(err));
+				} else if (data.status == "fail") {
+					showAlert("error", data.title, data.message); // 2초간 토스트
+				}
+			})
+			.catch(err => console.log(err));
 		}
 	});
 
 	//필수입력 유효성 검사 
 	submitBtn.addEventListener("click", () => {
 		const eventImg = document.querySelector('input[name="eventImg"]');
-		const uploader = document.querySelector("#fileDropper");
-		const files = eventImg.files;
-		const maxSize = 10 * 1024 * 1024; // 10MB 제한
+//		const uploader = document.querySelector("#fileDropper");
 
 		//이벤트종류
 		if (frm.eventType.value.trim() == "") {
@@ -90,13 +90,13 @@ document.addEventListener("DOMContentLoaded", function() {
 		//진행기간
 		if (frm.startDate.value.trim() === "") {
 			showAlert("error", " ", "이벤트 진행기간 시작일을 입력하세요.");
-			frm.startDate.classList.add("state_error");
+//			frm.startDate.classList.add("state_error");
 			frm.startDate.focus();
 			return;
 		}
 		if (frm.endDate.value.trim() === "") {
 			showAlert("error", " ", "이벤트 진행기간 마지막일을 입력하세요.");
-			frm.endDate.classList.add("state_error");
+//			frm.endDate.classList.add("state_error");
 			frm.endDate.focus();
 			return;
 		}
@@ -116,20 +116,6 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 
 		//파일첨부 시
-		if (files && files.length > 0) { //첨부파일이 하나라도 있을 경우 
-			let hasError = false;
-			for (const file of files) { //모든 파일 순회하며 검사 
-				if (file.size > maxSize) {
-					hasError = true;
-					showAlert("error", " ", "파일첨부 용량은 10MB 이하만 가능합니다.");
-					uploader.classList.add("error");
-					break; //제한용량을 넘으면 검사 멈춤
-				}
-			}
-			if (!hasError) {  //모든 파일이 제한 용량에 맞는 파일로 변경된 경우 
-				uploader.classList.remove("error");
-			}
-		}
 
 		//내용
 		if (editor.getMarkdown() == "") {
@@ -143,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			return;
 		}
 
-		// 유효성 통과 → 모달 열기
+		// 유효성 통과 -> 모달 열기
 		openDialog("submitCkDialog");
 	});
 

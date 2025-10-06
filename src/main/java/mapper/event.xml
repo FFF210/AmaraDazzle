@@ -229,6 +229,7 @@
 		AND p.is_visible = 1
 	</select>
 
+	<!-- ================ ADMIN =================== -->
 	<!-- event 게시글 총 개수 -->
 	<select id="eventCount" resultType="Integer"
 		parameterType="searchCondition">
@@ -308,5 +309,17 @@
 		update event set
 		view_cnt = view_cnt+1 where event_id=#{num}
 	</update>
+	
+	<!-- 어드민 배너 등록 -->
+	<insert id="adminEventWrite" parameterType="event">
+		insert into event 
+			(event_id, event_type, start_date, end_date, 
+			event_name, thumbnail_file_id, detail_file_id, category_id,
+			content, writer, created_at)
+		values 
+			(0, #{eventType}, #{startDate}, #{endDate},
+			#{eventName},#{thumbnailFileId}, #{detailFileId}, #{categoryId},
+			#{content}, #{writer}, now())
+	</insert>
 
 </mapper>

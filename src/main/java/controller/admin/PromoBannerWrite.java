@@ -55,7 +55,7 @@ public class PromoBannerWrite extends HttpServlet {
 				FileAttach fileAttach = new FileAttach(); // 파일첨부 클래스 소환
 				filePk = fileAttach.file_saveOne(fileParts, request);
 			}
-			System.out.println("filePk : " + filePk);
+//			System.out.println("filePk : " + filePk);
 //			System.out.println("bannerName : " + bannerName);
 //			System.out.println("startDate : " + startDate);
 //			System.out.println("endDate : " + endDate);
@@ -76,7 +76,9 @@ public class PromoBannerWrite extends HttpServlet {
 			
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			request.setAttribute("err", "시스템 오류로 공지 작성에 실패했습니다.");
+			request.getRequestDispatcher("error.jsp").forward(request, response);
 		}
 	}
 

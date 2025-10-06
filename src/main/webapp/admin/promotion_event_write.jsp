@@ -10,11 +10,12 @@
 <%@ include file="./common/config.jsp"%>
 
 <title>이벤트 페이지 생성</title>
+<link rel="stylesheet" href="../tagcss/imageBtn.css" />
 <link rel="stylesheet" href="../tagcss/uploader.css" />
 <link rel="stylesheet" href="./css/boards_write.css" />
 <style>
 	.uploader {padding: 5px;}
-	.uploader-md { width: 98%; }
+	.uploader-sm { width: 98%; }
 </style>
 
 <!-- toast editor CDN -->
@@ -71,9 +72,16 @@
 			</div>
 
 			<div class="part_section">
-				<div class="part_title">첨부파일</div>
+				<div class="part_title">썸네일</div>
 				<div class="part_content">
-					<my:uploader size="md" name="eventImg" label="Click to upload" desc="또는 파일을 이 영역으로 드래그하세요" multiple="multiple"/>
+					<my:imageBtn name="eventThumbImg" />
+				</div>
+			</div>
+			
+			<div class="part_section">
+				<div class="part_title">메인 이미지</div>
+				<div class="part_content">
+					<my:uploader size="sm" name="eventDetailImg"/>
 				</div>
 			</div>
 
@@ -110,6 +118,7 @@
 	<!-- JS부분 -->
 	<script src="../tagjs/selectbox.js"></script>
 	<script src="../tagjs/dateInput.js"></script>
+	<script src="../tagjs/imageBtn.js"></script>
 	<script src="./js/common/modal.js"></script>
 	<script src="./js/common/category.js"></script>
 	<script src="./js/event.js"></script>
