@@ -81,6 +81,11 @@
 		<typeAlias type="dto.brand.ReviewList" alias="reviewList" />
 		<typeAlias type="dto.brand.ShippingList" alias="shippingList" />
 		<typeAlias type="dto.brand.ShippingDetailItem" alias="shippingDetailItem" />
+		<typeAlias type="dto.brand.DashboardSummary" alias="dashboardSummary" />
+		<typeAlias type="dto.brand.DashboardTodo" alias="dashboardTodo" />
+		<typeAlias type="dto.brand.EventAlert" alias="eventAlert" />
+		<typeAlias type="dto.brand.TopProduct" alias="topProduct" />
+		<typeAlias type="dto.brand.NoticeList" alias="noticeList" />
 		<typeAlias type="dto.brand2.BannerDetail" alias="bannerDetail" />
 		<typeAlias type="dto.brand2.AdminToss" alias="adminToss" />
 		<typeAlias type="dto.brand2.MembershipList" alias="membershipList" />

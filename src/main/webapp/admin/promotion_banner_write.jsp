@@ -41,7 +41,7 @@
 						<my:dateInput type="input" name="startDate" />
 						<span> - </span>
 						<my:dateInput type="input" name="endDate" inputDay="end"/>
-						<my:dateInput type="preset" presets="1주일,1개월,1년" />
+						<my:dateInput type="preset" presets="1주일,1개월,3개월" />
 					</div>
 				</div>
 			</div>

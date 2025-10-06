@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
-
+<c:set var="contextPath" value="${pageContext.request.contextPath}"/> 
 
 <!DOCTYPE html>
 <html>
@@ -23,7 +23,7 @@
 			<my:adminTableFilter>
 				<my:adminFilterPeriod title="등록일" />
 				<my:adminFilterPeriod title="전시 기간" dateCate="post_" />
-				<my:adminFilterMiddle filters="게시 상태:ALL=전체|OFF=게시종료|POSTING=게시중" name="middleFilter" />
+				<my:adminFilterMiddle filters="게시 상태:ALL=전체|OFF=비공개|POSTING=게시중" name="middleFilter" />
 				<my:adminFilterTotal searchItems="브랜드명,제목" />
 			</my:adminTableFilter>
 		</form>
@@ -32,7 +32,7 @@
 		<!-- 버튼 -->
 		<div class="button_wrap">
 			<button type="button" class="btn second_btn action_btn" onclick="goWriteBanner()">배너등록</button>
-			<button type="button" class="btn first_btn action_btn">게시</button>
+			<button type="button" class="btn first_btn action_btn">승인</button>
 		</div>
 		<!-- 버튼 end -->
 		<!-- 테이블 -->
@@ -74,13 +74,15 @@
 						<!-- 제목 -->
 						<col style="width: 10%" />
 						<!-- 브랜드명 -->
-						<col style="width: 15%" />
+						<col style="width: 11%" />
 						<!-- 전시기간 -->
 						<col style="width: 10%" />
 						<!-- 등록일 -->
-						<col style="width: 10%" />
+						<col style="width: 8%" />
+						<!-- 관리자 승인여부 -->
+						<col style="width: 8%" />
 						<!-- 노출여부 -->
-						<col style="width: 15%" />
+						<col style="width: 10%" />
 						<!-- 게시일 -->
 						<col style="width: 8%" />
 						<!-- 상세보기 -->
@@ -94,8 +96,9 @@
 							<th class="sortable">브랜드명 <i class="bi bi-dash-lg sort-icon"></i></th>
 							<th>전시기간</th>
 							<th class="sortable">등록일 <i class="bi bi-dash-lg sort-icon"></i></th>
+							<th class="sortable">승인여부 <i class="bi bi-dash-lg sort-icon"></i></th>
 							<th class="sortable">게시여부 <i class="bi bi-dash-lg sort-icon"></i></th>
-							<th class="sortable">게시일 <i class="bi bi-dash-lg sort-icon"></i></th>
+							<th class="sortable">승인일 <i class="bi bi-dash-lg sort-icon"></i></th>
 							<th>상세보기</th>
 						</tr>
 					</thead>
@@ -112,15 +115,39 @@
 							<c:set var="startDate" value="${bannerList.startDate}" /> 
 							<c:set var="endDate" value="${bannerList.endDate}" /> 
 							<c:set var="createDate" value="${bannerList.createdAt}" /> 
-							<c:set var="updatedAt" value="${bannerList.updatedAt}" /> 
+							<c:set var="changedAt" value="${bannerList.changedAt}" /> 
 							<tr>
 								<td><input type="checkbox" class="ch_box" value="${bannerList.bannerId}" onclick="choice_ck();" /></td>
 								<td>${no-idx.index}</td>
-								<td class="img_cell"><img src="/image/no-image.svg" /></td>
-								<td class="title_cell">${bannerList.bannerName}</td>
-								<td>${bannerList.brandName}</td>
+								<td class="img_cell">
+									<img src="${contextPath}/upload_file/${bannerList.fileRename}">
+								</td>
+								<td class="title_cell" onclick="goBannerDetail('${bannerList.bannerId}');">${bannerList.bannerName}</td>
+								<td>
+									<c:if test="${bannerList.brandName eq null}">Amara Dazzle</c:if>
+									<c:if test="${bannerList.brandName ne null}">${bannerList.brandName}</c:if>
+								</td>
 								<td>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</td>
 								<td>${fn:substring(createDate,0,19)}</td>
+								<td>
+									<c:choose>
+										<c:when test="${bannerList.status == 'PENDING' }">
+											<my:tag color="red" size="md" text="승인대기" />
+										</c:when>
+										<c:when test="${bannerList.status == 'APPROVED'}">
+											<my:tag color="blue" size="md" text="승인완료" />
+										</c:when>
+										<c:when test="${bannerList.status == 'ONGOING' }">
+											<my:tag color="yellow" size="md" text="진행중" />
+										</c:when>
+										<c:when test="${bannerList.status == 'COMPLETED' }">
+											<my:tag color="green" size="md" text="완료" />
+										</c:when>
+										<c:when test="${bannerList.status == 'CANCELED' }">
+											<my:tag color="gray" size="md" text="취소" />
+										</c:when>
+									</c:choose>
+								</td>
 								<td><span onclick="changeState()"> 
 									<c:choose>
 										<c:when test="${bannerList.stateChange == 'POSTING' }">
@@ -133,8 +160,11 @@
 										</c:when>
 									</c:choose>
 								</span></td>
-								<td>${fn:substring(updatedAt,0,19)}</td>
-								<td class="detail_cell">
+								<td>
+									<c:if test="${changedAt eq null}">-</c:if>
+									<c:if test="${changedAt ne null}">${fn:substring(changedAt,0,19)}</c:if>
+								</td>
+								<td class="detail_cell" onclick="goBannerDetail('${bannerList.bannerId}');">
 									<i class="bi bi-three-dots-vertical"></i>
 								</td>
 							</tr>

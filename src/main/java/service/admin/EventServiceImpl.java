@@ -49,4 +49,23 @@ public class EventServiceImpl implements EventService {
 	    return e_dao.searchEventList(sc_DTO);
 	}
 
+	//event 등록 
+	@Override
+	public int adminEventWrite(Event event) {
+		String type = event.getEventType().trim();
+		if(type == "쿠폰") {
+			event.setEventType("COUPON");
+		}else if(type == "할인") {
+			event.setEventType("DISCOUNT");
+		}else if(type == "체험단") {
+			event.setEventType("EXPERIENCE");
+		}else if(type == "AD's PICK") {
+			event.setEventType("PICK");
+		} else {
+			event.setEventType("ETC");
+		}
+
+		return e_dao.adminEventWrite(event);
+	}
+
 }

@@ -96,8 +96,9 @@ request.setAttribute("floor", floor);
 				<div class="product-info-wrapper">
 					<!-- 브랜드 -->
 					<div class="brand-name">
-					 <a href="<c:url value='/store/brandDetail?brandId=${brand.brandId}'/>">${brand.brandName}></a>
-					 </div>
+						<a
+							href="<c:url value='/store/brandDetail?brandId=${brand.brandId}'/>">${brand.brandName}></a>
+					</div>
 
 					<!-- 상품명 -->
 					<h1 class="product-title">${product.name}</h1>
@@ -129,64 +130,49 @@ request.setAttribute("floor", floor);
 					</div>
 				</div>
 
-				<!-- 디버깅용 정보 -->
-				<%-- <div
-					style="background: #f0f0f0; padding: 10px; margin: 10px 0; font-size: 12px;">
-					<strong>디버깅 정보:</strong><br> product.hasOption:
-					${product.hasOption}<br> product.hasOption == 1:
-					${product.hasOption == 1}<br> productOptions 개수:
-					${productOptions != null ? productOptions.size() : 'null'}<br>
-					<c:if test="${not empty productOptions}">
-                     첫 번째 옵션: ${productOptions[0].optionValue}<br>
-					</c:if>
-				</div> --%>
+				<!-- 옵션 선택 (옵션이 있는 상품만 표시) -->
+				<c:if test="${product.hasOption == 1 and not empty productOptions}">
+					<div class="option-section">
+						<%-- 옵션이 있는 상품: 실제 옵션들을 문자열로 변환 --%>
+						<c:set var="optionItems" value="상품을 선택해주세요" />
+						<c:forEach var="option" items="${productOptions}">
+							<c:set var="optionItems"
+								value="${optionItems},${option.optionValue} (${option.price.intValue()}원)" />
+						</c:forEach>
 
-				<!-- 옵션 선택 -->
-				<div class="option-section">
-					<c:choose>
-						<c:when
-							test="${product.hasOption == 1 and not empty productOptions}">
+						<my:selectbox size="lg" items="${optionItems}"
+							initial="상품을 선택해주세요" />
+					</div>
+				</c:if>
 
+				<!-- 옵션 선택 (옵션이 있는 상품만 표시) -->
+				<c:if test="${product.hasOption == 1 and not empty productOptions}">
+					<div class="option-section">
+						<%-- 옵션이 있는 상품: 실제 옵션들을 문자열로 변환 --%>
+						<c:set var="optionItems" value="상품을 선택해주세요" />
+						<c:forEach var="option" items="${productOptions}">
+							<c:set var="optionItems"
+								value="${optionItems},${option.optionValue} (${option.price.intValue()}원)" />
+						</c:forEach>
 
-							<%-- 옵션이 있는 상품: 실제 옵션들을 문자열로 변환 --%>
-							<c:set var="optionItems" value="상품을 선택해주세요" />
-							<c:forEach var="option" items="${productOptions}">
-								<c:set var="optionItems"
-									value="${optionItems},${option.optionValue} (${option.price.intValue()}원)" />
-							</c:forEach>
-
-							<my:selectbox size="lg" items="${optionItems}"
-								initial="상품을 선택해주세요" />
-						</c:when>
-
-						<c:otherwise>
-							<%-- 옵션이 없는 상품: 단일 상품 표시 --%>
-							<my:selectbox size="lg" items="단일 상품 (재고: ${product.stockQty}개)"
-								initial="단일 상품" />
-						</c:otherwise>
-					</c:choose>
-				</div>
+						<my:selectbox size="lg" items="${optionItems}"
+							initial="상품을 선택해주세요" />
+					</div>
+				</c:if>
 
 				<!-- 선택된 옵션 리스트 -->
 				<div class="selected-options" id="selectedOptions">
-					<!-- JavaScript로 동적 생성됨........ -->
+					<!-- JavaScript로 동적 생성됨 -->
 				</div>
 
 				<!-- 총 가격 -->
 				<div class="total-price-section">
 					<p class="total-label">총 상품 금액</p>
-					<c:choose>
-						<c:when test="${product.hasOption == 1}">
-							<p class="total-amount" id="totalAmount">옵션을 선택해주세요</p>
-						</c:when>
-						<c:otherwise>
-							<p class="total-amount" id="totalAmount">
-								<fmt:formatNumber value="${product.price}" type="number"
-									maxFractionDigits="0" groupingUsed="true" />
-								원
-							</p>
-						</c:otherwise>
-					</c:choose>
+					<p class="total-amount" id="totalAmount">
+						<fmt:formatNumber value="${product.price}" type="number"
+							maxFractionDigits="0" groupingUsed="true" />
+						원
+					</p>
 				</div>
 
 				<!-- 구매 버튼들 -->
@@ -265,7 +251,7 @@ request.setAttribute("floor", floor);
 								</li>
 							</ul>
 							<p>
-								본 제품에 이상이 있을 경우 공정거래위원회 고시 ‘소비자 분쟁 해결 기준’에 의해 보상해 드립니다.<br>
+								본 제품에 이상이 있을 경우 공정거래위원회 고시 '소비자 분쟁 해결 기준'에 의해 보상해 드립니다.<br>
 								<span style="color: red;">고객센터(소비자 상담 부정판매): 080-080-8440</span>
 							</p>
 						</div>
@@ -383,7 +369,6 @@ request.setAttribute("floor", floor);
 
 	<!-- 푸터 include -->
 	<%@ include file="/consumer/footer.jsp"%>
-
 
 	<script>
 window.productId = ${product.productId};

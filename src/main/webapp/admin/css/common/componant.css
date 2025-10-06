@@ -57,6 +57,7 @@ input[type="radio"] {
 
 input[type="text"] {
     padding: 5px 10px;
+    height : 44px;
     border: 1px solid var(--innerbox);
     border-radius: 5px;
 	color: #333539;

@@ -43,4 +43,10 @@ public class BannerDAOImpl implements BannerDAO {
 		return result;
 	}
 
+	//배너 상세보기
+	@Override
+	public Banner bannerDetail(int num) {
+		return ss.selectOne("mapper.banner.bannerDetail",num);
+	}
+
 }

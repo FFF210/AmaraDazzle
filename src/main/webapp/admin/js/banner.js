@@ -3,6 +3,13 @@ function goWriteBanner() {
 	location.href = "promoBannerWrite"
 }
 
+
+//배너 상세 페이지로 이동
+function goBannerDetail(num) {
+	location.href="promoBannerDetail?num="+num
+}
+
+
 document.addEventListener("DOMContentLoaded", function() {
 
 	/* ************* 폼전송 + 유효성검사 ************* */

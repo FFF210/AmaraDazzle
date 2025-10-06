@@ -84,7 +84,7 @@
         </div>
 
         <!-- 답변 주체 (hidden, 기본값 ADMIN) -->
-        <input type="hidden" name="recieverType" value="ADMIN">
+        <input type="hidden" name="recieverType" id="recieverTypeInput" value="ADMIN">
 
         <!-- 버튼 -->
         <div class="action-button">
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// ========== selectbox 값 변경 시 처리 ==========
+//========== selectbox 값 변경 시 처리 ==========
 document.addEventListener("selectChanged", (e) => {
     const selectedText = e.detail.text;
     
@@ -166,6 +166,19 @@ document.addEventListener("selectChanged", (e) => {
     
     // hidden input에 저장
     document.getElementById('categoryInput').value = categoryCode;
+    
+    // ========== 카테고리별 recieverType 설정 ==========
+    const recieverTypeInput = document.getElementById('recieverTypeInput');
+    
+    // 상품/브랜드 관련 → BRAND_ADMIN
+    // 플랫폼/결제/사이트 관련 → ADMIN
+    if (categoryCode === 'ORDER' || categoryCode === 'CANCEL' || 
+        categoryCode === 'REFUND' || categoryCode === 'EXCHANGE' || 
+        categoryCode === 'DELIVERY') {
+        recieverTypeInput.value = 'BRAND_ADMIN';  // 브랜드 관리자
+    } else {
+        recieverTypeInput.value = 'ADMIN';  // 플랫폼 관리자
+    }
     
     // 주문 관련 체크
     const orderRelated = ['ORDER', 'CANCEL', 'REFUND', 'EXCHANGE', 'DELIVERY', 'PAYMENT'];

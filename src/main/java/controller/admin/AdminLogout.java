@@ -28,9 +28,8 @@ public class AdminLogout extends HttpServlet {
 			HttpSession session = request.getSession(false); /*기존 세션이 없으면 새로 만들지말것*/
 			if (session != null) { //세션이 있을때만 실행
 			    session.invalidate(); //세션에 저장된 정보들 파기 
+			    pw.print("{\"status\":\"ok\",\"title\":\"로그아웃\",\"message\":\"로그아웃 되었습니다.\"}");
 			}
-			
-			pw.print("{\"status\":\"ok\",\"title\":\"로그아웃\",\"message\":\"로그아웃 되었습니다.\"}");
 			
 		} catch (Exception e) {
 			e.printStackTrace();

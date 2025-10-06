@@ -13,15 +13,27 @@ public class Event {
     private Long detailFileId;    // 상세페이지 이미지 파일 ID (FK → upload_file.upload_file_id)
     private Long categoryId;      // 상품 카테고리
     private String content;       // 내용
-    private String writer;        // 작성자 (FK → admin_info.admin_info_id)
+    private Long writer;        // 작성자 (FK → admin_info.admin_info_id)
     private Integer exposeYn;     // 노출 여부 (DEFAULT 0)
     private Timestamp createdAt;  // 생성 시각 (DEFAULT CURRENT_TIMESTAMP)
     private Timestamp updatedAt;  // 수정 시각
 
-    public Event() {
-    }
+    public Event() {}
+    public Event(String eventType, Timestamp startDate, Timestamp endDate, String eventName,
+			Long thumbnailFileId, Long detailFileId, Long categoryId, String content, Long writer) {
+		this.eventType = eventType;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.eventName = eventName;
+		this.thumbnailFileId = thumbnailFileId;
+		this.detailFileId = detailFileId;
+		this.categoryId = categoryId;
+		this.content = content;
+		this.writer = writer;
+	}
 
-    public Long getEventId() {
+
+	public Long getEventId() {
         return eventId;
     }
     public void setEventId(Long eventId) {
@@ -91,10 +103,10 @@ public class Event {
         this.content = content;
     }
 
-    public String getWriter() {
+    public Long getWriter() {
         return writer;
     }
-    public void setWriter(String writer) {
+    public void setWriter(Long writer) {
         this.writer = writer;
     }
 

@@ -153,7 +153,7 @@
 }
 
 /* ========== 1:1 문의하기 버튼 ========== */
-.inquiry-button-wrapper {
+.inquiry-button-section {
     display: flex;
     justify-content: center;
     margin-top: 40px;
@@ -183,28 +183,3 @@
     transform: translateY(0);
 }
 
-/* ========== 반응형 ========== */
-@media (max-width: 768px) {
-    .main-content {
-        padding: 20px 10px;
-    }
-    
-    .ticket-table {
-        font-size: 13px;
-    }
-    
-    .ticket-table thead th,
-    .ticket-table tbody td {
-        padding: 12px 8px;
-    }
-    
-    .category-badge {
-        font-size: 11px;
-        padding: 3px 8px;
-    }
-    
-    .inquiry-btn {
-        padding: 12px 30px;
-        font-size: 14px;
-    }
-}

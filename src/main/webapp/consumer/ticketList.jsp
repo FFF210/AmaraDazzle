@@ -57,7 +57,7 @@
                 
                 <%-- 문의 내역이 있을 때 --%>
                 <c:forEach var="ticket" items="${ticketList}" varStatus="status">
-                    <tr onclick="location.href='<c:url value='/ticket/detail'/>?ticketId=${ticket.ticketId}'" 
+                    <tr onclick="location.href='<c:url value='store/mypage/ticketDetail'/>?ticketId=${ticket.ticketId}'" 
                         style="cursor: pointer;">
                         <td>${status.count}</td>
                         <td>
@@ -120,13 +120,13 @@
 
     <!-- 1:1 문의하기 버튼 -->
     <div class="inquiry-button-section">
-        <button class="inquiry-btn" onclick="location.href='<c:url value='/store/mypage/ticketCreate'/>'">
+        <button class="inquiry-btn" onclick="location.href='<c:url value='/store/mypage/writeTicket'/>'">
             1:1 문의하기
         </button>
     </div>
 
     <!-- pagination (나중에 추가 가능) -->
-    <%-- <my:pagination currentPage="${currentPage}" totalPages="${totalPages}" baseUrl="/ticket/list" /> --%>
+    <%-- <my:pagination currentPage="${currentPage}" totalPages="${totalPages}" baseUrl="/store/mypage/ticketList" /> --%>
 </main>
 
 <%-- footer --%>

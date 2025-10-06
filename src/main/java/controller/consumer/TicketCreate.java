@@ -16,7 +16,7 @@ import service.consumer.TicketServiceImpl;
 /**
  * Servlet implementation class TicketCreate
  */
-@WebServlet("/store/mypage/ticketCreate")
+@WebServlet("/store/mypage/writeTicket")
 public class TicketCreate extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -107,7 +107,7 @@ public class TicketCreate extends HttpServlet {
 			service.createTicket(ticket, orderCode);
 
 			// 성공 시 목록으로 리다이렉트
-			response.sendRedirect(request.getContextPath() + "/store/ticketList");
+			response.sendRedirect(request.getContextPath() + "/store/mypage/ticketList");
 
 		} catch (Exception e) {
 			e.printStackTrace();

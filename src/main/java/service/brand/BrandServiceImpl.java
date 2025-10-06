@@ -1,11 +1,16 @@
 package service.brand;
 
+import java.util.List;
 import java.util.Objects;
 
 import dao.brand.BrandDAO;
 import dao.brand.BrandDAOImpl;
 import dto.Brand;
+import dto.brand.DashboardSummary;
+import dto.brand.DashboardTodo;
+import dto.brand.EventAlert;
 import dto.brand.LoginResult;
+import dto.brand.TopProduct;
 
 public class BrandServiceImpl implements BrandService {
 
@@ -70,6 +75,30 @@ public class BrandServiceImpl implements BrandService {
 		result.setSuccess(true);
 		result.setBrand(brand);
 		return result;
+	}
+
+	// 메인 대시보드 요약 정보
+	@Override
+	public DashboardSummary getDashboardSummary(long brandId) throws Exception {
+		return brandDAO.selectDashboardSummary(brandId);
+	}
+
+	// 메인 대시보드 오늘 할 일
+	@Override
+	public DashboardTodo getDashboardTodo(long brandId) throws Exception {
+		return brandDAO.selectDashboardTodo(brandId);
+	}
+
+	// 메인 대시보드 이벤트 정보
+	@Override
+	public List<EventAlert> getEventAlerts(long brandId) throws Exception {
+		return brandDAO.selectEventAlerts(brandId);
+	}
+
+	// 메인 대시보드 이번 주 인기 상품 Top3
+	@Override
+	public List<TopProduct> getWeeklyTop3Products(long brandId) throws Exception {
+		return brandDAO.selectWeeklyTop3Products(brandId);
 	}
 
 }
