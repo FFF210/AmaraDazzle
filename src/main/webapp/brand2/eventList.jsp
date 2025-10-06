@@ -77,8 +77,8 @@
 		<my:breadcrumb items="이벤트 관리:/brand2/eventList.jsp" />
 		<div class="filter">
 			<my:tableFilter
-				filters="status|진행상황:ALL=전체|RECRUIT=모집중|ONGOING=진행중|FINISHED=종료"
-				hasDate="true" searchItems="이벤트 종류,이벤트 담당자" />
+				filters="status|진행상황:RECRUIT=모집중|ONGOING=진행중|FINISHED=종료"
+				hasDate="false" searchItems="이벤트 종류,이벤트 담당자" />
 		</div>
 		<div class="tcontainer">
 			<div class="table-wrapper">
