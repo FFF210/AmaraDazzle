@@ -57,14 +57,12 @@
 		r.return_carrier_name,
 		r.return_tracking_no,
 		r.updated_at,
-		/* 주문 상품 정보 */
 		oi.brand_id,
 		oi.product_id,
 		oi.option_id,
 		oi.unit_price,
 		oi.quantity,
 		oi.status,
-		/* 주문 정보 */
 		o.order_code
 		FROM returns r
 		INNER JOIN order_item oi ON r.order_item_id = oi.order_item_id
