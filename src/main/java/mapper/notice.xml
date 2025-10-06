@@ -5,8 +5,7 @@
 <mapper namespace="mapper.notice">
 
 	<!-- 공지(seller) 글쓰기 저장 -->
-	<insert id="insertSellerNotice" parameterType="notice"
-		useGeneratedKeys="true" keyProperty="noticeId">
+	<insert id="insertSellerNotice" parameterType="notice" useGeneratedKeys="true" keyProperty="noticeId">
 		insert into notice 
 			(notice_id, type_id, title, content, 
 			image1_file_id, image2_file_id, image3_file_id, doc_file_id, 
@@ -19,8 +18,7 @@
 
 
 	<!-- 공지(seller) 상세보기 -->
-	<select id="selectSellerNoticeOne" resultType="notice"
-		parameterType="int">
+	<select id="selectSellerNoticeOne" resultType="notice" parameterType="int">
 		select n.*, c.name,
 		f1.file_name AS image1FileName,
 		f1.file_rename AS image1FileRename,

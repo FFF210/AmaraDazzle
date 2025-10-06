@@ -3,10 +3,6 @@ package controller.admin;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -17,12 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import dto.Banner;
-import dto.Notice;
-import dto.UploadFile;
 import service.admin.BannerService;
 import service.admin.BannerServiceImpl;
-import service.admin.NoticeService;
-import service.admin.NoticeServiceImpl;
 import util.FileAttach;
 
 
@@ -53,7 +45,6 @@ public class PromoBannerWrite extends HttpServlet {
 			String bannerName = request.getParameter("bannerName"); //배너명
 			Timestamp startDate = Timestamp.valueOf(request.getParameter("startDate")+ " 00:00:00"); //배너 전시 시작일
 			Timestamp endDate =  Timestamp.valueOf(request.getParameter("endDate")+ " 23:59:59"); //배너 전시 마지막일
-			String bannerThumb = request.getParameter("bannerThumb"); //배너 이미지
 			String bannerLink = request.getParameter("bannerLink"); // 배너 url 
 			Long bnWriter = Long.valueOf(request.getParameter("bnWriter")); //등록한 관리자 코드 
 			
@@ -64,7 +55,7 @@ public class PromoBannerWrite extends HttpServlet {
 				FileAttach fileAttach = new FileAttach(); // 파일첨부 클래스 소환
 				filePk = fileAttach.file_saveOne(fileParts, request);
 			}
-			System.out.println("filePk : " + filePk);
+//			System.out.println("filePk : " + filePk);
 //			System.out.println("bannerName : " + bannerName);
 //			System.out.println("startDate : " + startDate);
 //			System.out.println("endDate : " + endDate);
@@ -85,7 +76,9 @@ public class PromoBannerWrite extends HttpServlet {
 			
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
+			request.setAttribute("err", "시스템 오류로 공지 작성에 실패했습니다.");
+			request.getRequestDispatcher("error.jsp").forward(request, response);
 		}
 	}
 

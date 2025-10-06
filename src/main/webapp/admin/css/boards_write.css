@@ -1,42 +1,80 @@
-section.board_write{
-    width: 750px; /* 50% */
-    border: 1px solid var(--outerbox);
-    border-radius: 10px;
-    background: white;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    padding: 30px;
-    display: grid;
-    gap: 15px;
+.content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.content section.main_content {
+	width: 80%;
+	display: grid;
+	gap: 15px;
+}
+
+section.board_write {
+	width: 750px; /* 50% */
+	border: 1px solid var(--outerbox);
+	border-radius: 10px;
+	background: white;
+	box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+	padding: 30px;
+	display: grid;
+	gap: 15px;
 }
 
 section.board_write div.part_section {
-    width: 100%;
-    display: flex;
-    align-items: center;
+	width: 100%;
+	display: flex;
+	align-items: center;
 }
 
 section.board_write div.part_content {
-    width: 580px;
+	width: 580px;
 }
 
 section.board_write div.part_section .part_title {
-    /* font-size: 16px; */
-    width: 170px;
+	/* font-size: 16px; */
+	width: 170px;
 }
 
-
 section.board_write div.part_section .part_content .content_part {
-    border: 1px solid var(--outerbox);
-    border-radius: 5px;
-    width: 100%;
-    height: 500px;
+	border: 1px solid var(--outerbox);
+	border-radius: 5px;
+	width: 100%;
+	height: 500px;
 }
 
 section.board_write div.part_section.bottom_part .part_content {
-    display: flex;
-    justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 }
 
 select.cate_sb {
 	width: 300px;
+}
+
+.part_content .filter_box {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.preset-buttons {
+	gap: 5px;
+}
+
+.select_cate {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.custom-select.disabled {
+	pointer-events: none; /* 클릭, hover 다 막음 */
+	opacity: 0.5; /* 비활성화된 느낌 */
+}
+
+.custom-select.state_error {
+	border: 1px solid #DC3545 !important;
+	border-radius: 8px;
+	box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.25);
 }

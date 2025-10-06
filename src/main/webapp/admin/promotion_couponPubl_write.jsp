@@ -11,7 +11,6 @@
 
 <title>쿠폰 생성</title>
 <link rel="stylesheet" href="./css/boards_write.css" />
-<link rel="stylesheet" href="./css/myApplications.css" />
 <link rel="stylesheet" href="./css/coupon.css" />
 <!-- 헤드부분 -->
 

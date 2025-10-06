@@ -11,9 +11,6 @@
 <%@ include file="./common/config.jsp"%>
 
 <title>발행쿠폰 리스트</title>
-
-<link rel="stylesheet" href="./css/myApplications.css" />
-
 <!-- 헤드부분 -->
 
 <body>

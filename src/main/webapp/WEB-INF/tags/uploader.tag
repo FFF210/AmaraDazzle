@@ -118,8 +118,10 @@
 	    // 첨부 파일이 있으면 wrapper 보이기, 없으면 숨기기
 	    if (previews.length > 0) {
 	    	imgWrapper.classList.remove("hidden");
+	    	dropper.classList.add("hidden");
 	    } else {
 	    	imgWrapper.classList.add("hidden");
+	    	dropper.classList.remove("hidden");
 	    }
 	
 	    previews.forEach((p) => {

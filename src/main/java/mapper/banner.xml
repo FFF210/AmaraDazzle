@@ -140,11 +140,9 @@
 
 	<!-- admin -->
 	<!-- banner 전체 개수 -->
-	<select id="BannerAllCnt" resultType="Integer"
-		parameterType="searchCondition">
+	<select id="BannerAllCnt" resultType="Integer" parameterType="searchCondition">
 		select count(*) from banner bn
-		join brand b on (bn.brand_id =
-		b.brand_id)
+		left join brand b on (bn.brand_id = b.brand_id)
 		join admin_info a on (bn.admin_id = a.admin_info_id)
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
@@ -152,8 +150,8 @@
 				and bn.created_at &lt; #{endDateTime})
 			</if>
 			<if test="startDateTime2 != null and endDateTime2 != null">
-				and (bn.updated_at &gt;= #{startDateTime2}
-				and bn.updated_at &lt; #{endDateTime2})
+				and (bn.changed_at &gt;= #{startDateTime2}
+				and bn.changed_at &lt; #{endDateTime2})
 			</if>
 			<if test="middleFilter != null and middleFilter != ''">
 				<choose>
@@ -180,34 +178,30 @@
 	</select>
 
 	<!-- 전체 배너 리스트 -->
-	<select id="selectAllBannerList" resultType="banner"
-		parameterType="Map">
-		select bn.*, b.brand_name, a.aname
+	<select id="selectAllBannerList" resultType="banner" parameterType="Map">
+		select bn.*, b.brand_name, a.aname, f.file_rename
 		from banner bn
-		join
-		brand b on (bn.brand_id = b.brand_id)
-		join admin_info a on (bn.admin_id
-		= a.admin_info_id)
+		left join brand b on (bn.brand_id = b.brand_id)
+		join admin_info a on (bn.admin_id = a.admin_info_id)
+		join upload_file f on (bn.upload_file_id = f.upload_file_id)
 		order by banner_id desc limit #{start_p},#{post_ea}
 	</select>
 
 	<!-- 배너 검색 리스트 -->
-	<select id="selectSearchBannerList" resultType="banner"
-		parameterType="searchCondition">
-		select bn.*, b.brand_name, a.aname
+	<select id="selectSearchBannerList" resultType="banner" parameterType="searchCondition">
+		select bn.*, b.brand_name, a.aname, f.file_rename
 		from banner bn
-		join brand b on
-		(bn.brand_id = b.brand_id)
-		join admin_info a on (bn.admin_id =
-		a.admin_info_id)
+		left join brand b on (bn.brand_id = b.brand_id)
+		join admin_info a on (bn.admin_id = a.admin_info_id)
+		join upload_file f on (bn.upload_file_id = f.upload_file_id)
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
 				and (bn.created_at &gt;= #{startDateTime}
 				and bn.created_at &lt; #{endDateTime})
 			</if>
 			<if test="startDateTime2 != null and endDateTime2 != null">
-				and (bn.updated_at &gt;= #{startDateTime2}
-				and bn.updated_at &lt; #{endDateTime2})
+				and (bn.changed_at &gt;= #{startDateTime2}
+				and bn.changed_at &lt; #{endDateTime2})
 			</if>
 			<if test="middleFilter != null and middleFilter != ''">
 				<choose>
@@ -243,6 +237,17 @@
 			(0, #{startDate}, #{endDate}, #{bannerName},
 			#{brandUrl},#{adminId}, #{UploadFileId}, now())
 	</insert>
+	
+	<!-- 배너 게시물 상세보기 -->
+	<select id="bannerDetail" resultType="banner" parameterType="int" >
+		select bn.*, b.brand_name, p.amount as payAmount, a.aname, f.file_name, f.file_rename
+		from banner bn
+		left join brand b on (bn.brand_id = b.brand_id)
+		left join admin_payment p on (bn.banner_id = p.banner_id)
+		join admin_info a on (bn.admin_id = a.admin_info_id)
+		join upload_file f on (bn.upload_file_id = f.upload_file_id)
+		where bn.banner_id = #{num}
+	</select>
 
 
 	<!-- ================[소비자] 메인페이지 배너 노출 목록 =================== -->

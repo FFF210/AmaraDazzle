@@ -263,11 +263,11 @@ div.modal.modal_search_box .whole_table .table_wrap table {
 	width : 80%;
 }
 
-.filter_box .filtering_title,
-.filter_box .filtering_title label {
-	min-width : 80px !important; 
-	width : 80px !important;
-}
+/* .filter_box .filtering_title, */
+/* .filter_box .filtering_title label { */
+/* 	min-width : 80px !important;  */
+/* 	width : 80px !important; */
+/* } */
 
 .totalSearch_box {
 	gap: 5px;
