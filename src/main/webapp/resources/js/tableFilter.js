@@ -48,7 +48,9 @@
 				"광고명": "BANNERNAME",
 				"광고 담당자": "MANAGERNAME",
 				"주문번호": "ORDER",
-				"회수운송장번호": "TRACKINGNO"
+				"회수운송장번호": "TRACKINGNO",
+				"이벤트명": "EVENTNAME",
+				"이벤트 담당자": "EVENTMANAGERNAME"
 			};
 
 			// ===============================
