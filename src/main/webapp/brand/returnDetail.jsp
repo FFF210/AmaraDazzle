@@ -439,6 +439,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
 
                 showToast("success", "환불이 자동 완료되었습니다.");
+                
+                location.reload();
               } else {
                 showToast("error", "환불 자동 완료 실패");
               }
