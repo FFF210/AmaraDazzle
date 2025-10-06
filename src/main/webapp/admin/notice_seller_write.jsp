@@ -10,7 +10,6 @@
 
 <link rel="stylesheet" href="../tagcss/uploader.css" />
 <link rel="stylesheet" href="./css/boards_write.css" />
-<link rel="stylesheet" href="./css/myApplications.css" />
 
 <!-- toast editor CDN -->
 <link rel="stylesheet"
@@ -53,8 +52,7 @@
 						제목 <span class="reqired_write">*</span>
 					</div>
 					<div class="part_content">
-						<input type="text" id="noticeTitle" name="noticeTitle"
-							placeholder="제목을 입력하세요 (최대 150자까지 입력가능)" maxlength="150" />
+						<input type="text" id="noticeTitle" name="noticeTitle" placeholder="제목을 입력하세요 (최대 150자까지 입력가능)" maxlength="150" style="width: 100%;" />
 					</div>
 				</div>
 
@@ -102,7 +100,7 @@
 
 
 	<!-- JS부분 -->
-	<script src="./js/boardNoticeWrite.js"></script>
+	<script src="./js/notice.js"></script>
 	<!-- JS부분 end -->
 
 </body>

@@ -43,4 +43,17 @@ public class EventDAOImpl implements EventDAO {
 		}
 	}
 
+	//이벤트 등록
+	@Override
+	public int adminEventWrite(Event event) {
+		int result = ss.insert("mapper.event.adminEventWrite",event);
+		if(result > 0) {
+			ss.commit();
+		} else {
+			ss.rollback();
+		}
+		
+		return result;
+	}
+
 }

@@ -7,6 +7,7 @@
 <html>
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp" %>
+
 <title>홈</title>
 <link rel="stylesheet" href="./css/dashboard.css" />
 
@@ -23,13 +24,12 @@
 	<!-- 레이아웃 + 메인컨텐츠 end -->
 
 
-	<!-- 정보수정 & 로그아웃 팝업 -->
-	<%@ include file="./modals/login_popup.jsp"%>
-	<!-- 정보수정 & 로그아웃 팝업 end -->
+	
+
 
 
 	<!-- JS부분 -->
-<%-- 	<%@ include file="../js/admin/common/adminHeader.js"%> --%>
+	<script src="./js/dashboard.js"></script>
 	<!-- JS부분 end -->
 
 </body>

@@ -12,5 +12,6 @@ public interface BannerDAO {
 	List<Banner> bannerAllList(Map<String, Object> listMap) throws Exception;	//전체 배너 신청 리스트
 	List<Banner> bannerSearchList(SearchConditionDTO sc_DTO) throws Exception;	//전체 배너 중 검색 리스트
 	int adminBannerWrite(Banner banner); //어드민 배너 등록
+	Banner bannerDetail(int num); //배너 상세보기
 
 }

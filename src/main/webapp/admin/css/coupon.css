@@ -25,10 +25,6 @@ div.part_section.writer_part {
 .custom-select.md {
 	width : 100px !important;
 }
-.custom-select.disabled {
-  pointer-events: none; /* 클릭, hover 다 막음 */
-  opacity: 0.5;         /* 비활성화된 느낌 */
-}
 
 
 /* 버튼 그룹 */

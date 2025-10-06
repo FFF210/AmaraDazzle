@@ -41,39 +41,35 @@ letter-spacing: -0.48px;
   color: var(--ui-text-strong);
 }
 
-/* 벨 아이콘 */
-.user-info .bell {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border: none;
-  background: transparent;
-  padding: 0;
-  cursor: pointer;
+/* 등급 뱃지 기본 스타일 */
+.greeting .grade {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 8px;
+    margin-left: 6px;
+    border-radius: 10px;
+    color: white;
+    vertical-align: middle;
 }
 
-.user-info .bell__icon {
-  fill: #000;
-  display: block;
+/* 등급별 색상 */
+.greeting .grade.vip {
+    background: #FFD700;
+    color: #333;
 }
 
-/* 알림 뱃지 */
-.user-info .bel__badge {
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  border-radius: 8px;
-  background: var(--ui-accent);
-  color: #fff;
-  font: 700 10px/16px "Inter", "Noto Sans KR", sans-serif;
-  text-align: center;
-  box-shadow: 0 0 0 1px #fff;
+.greeting .grade.gold {
+    background: #FFA500;
+}
+
+.greeting .grade.silver {
+    background: #C0C0C0;
+    color: #333;
+}
+
+.greeting .grade.normal {
+    background: #999;
 }
 
 /* 하단(통계 영역) */

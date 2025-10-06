@@ -6,6 +6,10 @@
 	position: relative;
 }
 
+.hidden {
+	display : none;
+}
+
 .image-button .image-placeholder {
 	width: 100%;
 	height: 100%;

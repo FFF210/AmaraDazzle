@@ -56,4 +56,10 @@ public class BannerServiceImpl implements BannerService {
 		return bn_dao.adminBannerWrite(banner);
 	}
 
+	//배너 상세보기
+	@Override
+	public Banner bannerDetail(int num) {
+		return bn_dao.bannerDetail(num);
+	}
+
 }
