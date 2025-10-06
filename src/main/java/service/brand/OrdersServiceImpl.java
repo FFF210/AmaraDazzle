@@ -17,7 +17,9 @@ import dto.brand.OrdersCoupon;
 import dto.brand.OrdersItemDetail;
 import dto.brand.OrdersList;
 import dto.brand.OrdersSummary;
+import dto.brand.ReturnItemDetail;
 import dto.brand.ReturnOrderList;
+import dto.brand.ReturnSummary;
 
 public class OrdersServiceImpl implements OrdersService {
 
@@ -162,6 +164,71 @@ public class OrdersServiceImpl implements OrdersService {
 		result.put("totalPages", totalPages);
 
 		return result;
+	}
+
+	// 반품 주문 요약 조회 (단건)
+	@Override
+	public ReturnSummary returnSummaryDetail(Long orderId) throws Exception {
+		return ordersDAO.selectReturnSummaryForBrand(orderId);
+	}
+
+	// 반품 상품 목록 조회
+	@Override
+	public List<ReturnItemDetail> returnItemDetail(Long orderId) throws Exception {
+		return ordersDAO.selectReturnItemsForBrand(orderId);
+	}
+
+	// 반품 주문 상세 (요약 + 상품) 종합 조회
+	@Override
+	public Map<String, Object> returnDetail(Long orderId) throws Exception {
+		Map<String, Object> result = new HashMap<>();
+
+		ReturnSummary summary = returnSummaryDetail(orderId);
+		result.put("summary", summary);
+
+		List<ReturnItemDetail> items = returnItemDetail(orderId);
+		result.put("items", items);
+
+		return result;
+	}
+
+	// 반품 승인 (RETURN_APPROVED)
+	@Override
+	public void approveReturn(Long returnId) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+		params.put("returnId", returnId);
+		params.put("status", "RETURN_APPROVED");
+		ordersDAO.updateReturnStatus(params);
+	}
+
+	// 반품 거절
+	@Override
+	public void rejectReturn(Long returnId, String reason) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+		params.put("returnId", returnId);
+		params.put("reason", reason);
+		ordersDAO.updateReturnRejection(params);
+	}
+
+	// 반품 배송중 처리 (RETURN_SHIPPING)
+	@Override
+	public void shipReturn(Long returnId) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+		params.put("returnId", returnId);
+		ordersDAO.updateReturnTrackingNo(params);
+
+		Map<String, Object> params2 = new HashMap<>();
+		params2.put("returnId", returnId);
+		params2.put("status", "RETURN_REFUNDING");
+		ordersDAO.updateReturnStatus(params2);
+	}
+
+	// 자동 반품 완료 (RETURN_COMPLETED)
+	@Override
+	public void autoCompleteReturn(Long returnId) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+		params.put("returnId", returnId);
+		ordersDAO.autoCompleteReturn(params);
 	}
 
 	// 교환 주문 목록 조회

@@ -11,7 +11,9 @@ import dto.brand.ExchangeOrderList;
 import dto.brand.OrdersItemDetail;
 import dto.brand.OrdersList;
 import dto.brand.OrdersSummary;
+import dto.brand.ReturnItemDetail;
 import dto.brand.ReturnOrderList;
+import dto.brand.ReturnSummary;
 
 public interface OrdersDAO {
 	// 주문 목록 조회
@@ -47,6 +49,24 @@ public interface OrdersDAO {
 
 	// 반품 주문 개수 조회
 	Integer selectReturnedOrdersCount(Map<String, Object> params) throws Exception;
+
+	// 반품 요약 조회
+	ReturnSummary selectReturnSummaryForBrand(Long returnId) throws Exception;
+
+	// 반품 상품 상세 조회
+	List<ReturnItemDetail> selectReturnItemsForBrand(Long returnId) throws Exception;
+
+	// 반품 상태 변경
+	void updateReturnStatus(Map<String, Object> params) throws Exception;
+
+	// 반품 거절 처리
+	void updateReturnRejection(Map<String, Object> params) throws Exception;
+
+	// 반품 송장 업데이트
+	void updateReturnTrackingNo(Map<String, Object> params) throws Exception;
+
+	// 반품 완료 처리
+	void autoCompleteReturn(Map<String, Object> params) throws Exception;
 
 	// ================================================================================================
 
