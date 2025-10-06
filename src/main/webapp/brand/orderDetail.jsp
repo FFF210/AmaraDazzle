@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="../tagcss/tag.css" />
 <link rel="stylesheet" href="../tagcss/textInput.css" />
 <link rel="stylesheet" href="../tagcss/table.css" />
+<link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="./css/detailForm.css" />
 </head>
 

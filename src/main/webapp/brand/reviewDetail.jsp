@@ -19,7 +19,7 @@
 <link rel="stylesheet" href="../tagcss/textArea.css" />
 <link rel="stylesheet" href="../tagcss/textInput.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
-<link rel="stylesheet" href="../tagcss/alert.css" />
+<link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="./css/contentDetail.css" />
 </head>
 <body>

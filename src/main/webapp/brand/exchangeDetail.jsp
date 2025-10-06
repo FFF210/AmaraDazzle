@@ -12,7 +12,7 @@
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="stylesheet" href="../tagcss/reset.css" />
-<link rel="stylesheet" href="../tagcss/alert.css" />
+<link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="../tagcss/button.css" />
 <link rel="stylesheet" href="../tagcss/form-controls.css" />
 <link rel="stylesheet" href="../tagcss/layout.css" />

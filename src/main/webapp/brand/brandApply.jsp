@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="../tagcss/textInput.css" />
 <link rel="stylesheet" href="../tagcss/textArea.css" />
 <link rel="stylesheet" href="../tagcss/selectbox.css" />
-<link rel="stylesheet" href="../tagcss/alert.css" />
+<link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="./css/auth.css" />
 </head>
 <body class="signup-page">

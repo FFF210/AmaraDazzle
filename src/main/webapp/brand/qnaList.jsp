@@ -40,7 +40,7 @@
 <link rel="stylesheet" href="../tagcss/pagination.css" />
 <link rel="stylesheet" href="../tagcss/tableFilter.css" />
 <link rel="stylesheet" href="../tagcss/dateInput.css" />
-<link rel="stylesheet" href="../tagcss/alert.css" />
+<link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="../tagcss/table.css" />
 </head>
 <body>

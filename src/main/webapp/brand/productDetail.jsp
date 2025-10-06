@@ -28,7 +28,7 @@
 <link rel="stylesheet" href="../tagcss/textArea.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/uploader.css" />
-<link rel="stylesheet" href="../tagcss/alert.css" />
+<link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="./css/detailForm.css" />
 </head>
 
