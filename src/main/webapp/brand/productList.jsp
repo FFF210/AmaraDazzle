@@ -31,6 +31,9 @@
 	src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
 <script src="./js/selectbox.js"></script>
 
+<script src="${pageContext.request.contextPath}/resources/js/toast.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/dialog.js"></script>
+
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="stylesheet" href="../tagcss/reset.css" />
@@ -289,10 +292,7 @@
 		</div>
 	</my:layout>
 
-	<script src="./js/dialog.js"></script>
-	<script src="./js/toast.js"></script>
 	<script>
-	
   /*********************************************************************************************************
    * tableFilter 이벤트
    *********************************************************************************************************/
