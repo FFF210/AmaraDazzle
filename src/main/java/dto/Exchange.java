@@ -7,7 +7,12 @@ public class Exchange {
     private Long exchangeId;          // 교환 ID (PK, AUTO_INCREMENT)
     private Long memberId;            // 회원 ID (FK → member.member_id)
     private Long orderId;             // 주문 ID (FK → orders.order_id)
-    private Long ordersItemId;        // 주문 상품 ID (FK → order_item.order_item_id)
+    private Long orderItemId;         // 주문 상품 ID (FK → order_item.order_item_id)
+    private Long productOptionId;     // 교환할 새 옵션 ID (다른 색상/사이즈로 교환)
+    private Long image1FileId;        // 입증 이미지 1 (상품 하자 증빙)
+    private Long image2FileId;        // 입증 이미지 2
+    private Long image3FileId;        // 입증 이미지 3
+    private String rejectionReason;   // 교환 거부 사유 (브랜드가 거부할 때)
     private String reason;            // 교환 사유
     private BigDecimal shippingCost;  // 배송비
     private String shippingCostPayer; // 배송비 부담 주체 (member, brand)
@@ -42,14 +47,54 @@ public class Exchange {
         this.orderId = orderId;
     }
 
-    public Long getOrdersItemId() {
-        return ordersItemId;
+    public Long getOrderItemId() {
+        return orderItemId;
     }
-    public void setOrdersItemId(Long ordersItemId) {
-        this.ordersItemId = ordersItemId;
+    public void setOrderItemId(Long ordersItemId) {
+        this.orderItemId = ordersItemId;
     }
 
-    public String getReason() {
+    public Long getProductOptionId() {
+		return productOptionId;
+	}
+
+	public void setProductOptionId(Long productOptionId) {
+		this.productOptionId = productOptionId;
+	}
+
+	public Long getImage1FileId() {
+		return image1FileId;
+	}
+
+	public void setImage1FileId(Long image1FileId) {
+		this.image1FileId = image1FileId;
+	}
+
+	public Long getImage2FileId() {
+		return image2FileId;
+	}
+
+	public void setImage2FileId(Long image2FileId) {
+		this.image2FileId = image2FileId;
+	}
+
+	public Long getImage3FileId() {
+		return image3FileId;
+	}
+
+	public void setImage3FileId(Long image3FileId) {
+		this.image3FileId = image3FileId;
+	}
+
+	public String getRejectionReason() {
+		return rejectionReason;
+	}
+
+	public void setRejectionReason(String rejectionReason) {
+		this.rejectionReason = rejectionReason;
+	}
+
+	public String getReason() {
         return reason;
     }
     public void setReason(String reason) {
@@ -115,7 +160,12 @@ public class Exchange {
     @Override
     public String toString() {
         return "Exchange [exchangeId=" + exchangeId + ", memberId=" + memberId +
-                ", orderId=" + orderId + ", ordersItemId=" + ordersItemId +
+                ", orderId=" + orderId + ", orderItemId=" + orderItemId +
+                ", productOptionId=" + productOptionId + 
+                ", image1FileId=" + image1FileId +        
+                ", image2FileId=" + image2FileId +       
+                ", image3FileId=" + image3FileId +        
+                ", rejectionReason=" + rejectionReason +  
                 ", reason=" + reason + ", shippingCost=" + shippingCost +
                 ", shippingCostPayer=" + shippingCostPayer + ", note=" + note +
                 ", returnCarrierName=" + returnCarrierName +

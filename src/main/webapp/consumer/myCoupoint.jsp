@@ -39,10 +39,10 @@
 
 			<!-- user info -->
 			<my:userInfo 
-            userName="${memberInfo.name}" 
+            userName="${memberInfo.name}"
+            grade="${memberInfo.grade}" 
             points="${memberInfo.pointBalance}" 
-            coupons="${couponCount}" 
-            notifications="${sessionScope.memberNotifications}" />
+            coupons="${couponCount}"  />
 
 			<!-- 쿠폰 섹션 -->
 			<section class="coupon-section">
