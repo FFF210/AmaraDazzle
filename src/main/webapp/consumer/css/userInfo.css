@@ -2,6 +2,9 @@
 
 /* 루트 래퍼 */
 .user-info {
+  width: 824px;
+  height: 115px;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -10,7 +13,7 @@
   border-radius: 2px;
   background: #fff;
 
-  /* 강조 색 커스텀 가능 */
+  /* 강조 색 커스텀 */
   --ui-accent: #9C2EF5;
   --ui-accent-weak: rgba(156, 46, 245, 0.10);
   --ui-text-strong: #000;

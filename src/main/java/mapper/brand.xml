@@ -30,6 +30,11 @@
 		LIMIT #{value}
 	</select>
 
+
+
+
+
+
 	<!--======================= [브랜드 어드민] 회원가입 ======================= -->
 	<insert id="insertBrand" parameterType="brand"
 		useGeneratedKeys="true" keyProperty="brandId">
@@ -105,7 +110,32 @@
 		('SIGNUP_COMPLETED', 'APPLY_SUBMITTED', 'APPROVED')
 	</select>
 
+	<!-- ======================= [브랜드 어드민] 브랜드 정보 수정 ======================= -->
+	<select id="selectBrandInfo" parameterType="long"
+		resultType="brand">
+		SELECT *
+		FROM brand
+		WHERE brand_id = #{brandId}
+	</select>
 
+	<!-- ======================= [브랜드 어드민] 브랜드 정보 수정 ======================= -->
+	<update id="updateBrandInfo" parameterType="brand">
+		UPDATE brand
+		<set>
+			<if test="managerName != null">manager_name = #{managerName},</if>
+			<if test="phone != null">phone = #{phone},</if>
+			<if test="logoFileId != null">logo_file_id = #{logoFileId},</if>
+			<if test="heroFileId != null">hero_file_id = #{heroFileId},</if>
+			<if test="intro != null">intro = #{intro},</if>
+			<if test="bank != null">bank = #{bank},</if>
+			<if test="accountNumber != null">account_number = #{accountNumber},</if>
+			<if test="accountHolder != null">account_holder = #{accountHolder},</if>
+			updated_at = CURRENT_TIMESTAMP
+		</set>
+		WHERE
+		brand_id =
+		#{brandId}
+	</update>
 
 	<!-- [브랜드 어드민] 오늘 할 일 대시보드 - 요약 정보 -->
 	<select id="selectDashboardSummary" parameterType="long"
@@ -150,10 +180,12 @@
 		FROM product p
 		WHERE p.brand_id =
 		#{brandId}
-		AND p.has_option = 0
+		AND
+		p.has_option = 0
 		AND p.stock_qty &lt;= 10
 		UNION ALL
-		SELECT po.product_option_id
+		SELECT
+		po.product_option_id
 		FROM product p
 		JOIN product_option po ON
 		p.product_id = po.product_id
@@ -276,18 +308,22 @@
 		p.name AS productName,
 		p.thumbnail_file_id AS thumbnailFileId,
 		SUM(oi.quantity) AS totalSold,
-		DATE_SUB(CURDATE(), INTERVAL (DAYOFWEEK(CURDATE()) - 2) DAY) AS weekStartDate,
+		DATE_SUB(CURDATE(), INTERVAL (DAYOFWEEK(CURDATE()) - 2) DAY) AS
+		weekStartDate,
 		CURDATE() AS baseDate
 		FROM order_item oi
-		JOIN product p ON oi.product_id =
+		JOIN product p ON
+		oi.product_id =
 		p.product_id
 		WHERE
 		oi.brand_id = #{brandId}
-		AND oi.status IN ('PAID', 'PREPARING',
+		AND oi.status
+		IN ('PAID', 'PREPARING',
 		'SHIPPING', 'DELIVERED',
 		'CONFIRMED')
-		AND YEARWEEK(oi.updated_at, 1) =
-		YEARWEEK(CURDATE(), 1) 
+		AND
+		YEARWEEK(oi.updated_at, 1) =
+		YEARWEEK(CURDATE(), 1)
 		GROUP BY
 		p.product_id, p.name,
 		p.thumbnail_file_id

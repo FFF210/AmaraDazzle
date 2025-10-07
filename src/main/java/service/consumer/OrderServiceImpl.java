@@ -476,5 +476,25 @@ public class OrderServiceImpl implements OrderService {
 
 		return result;
 	}
+	
+	// ================[소비자] 취소/교환/반품 통합 목록 조회 ===================
+	@Override
+	public List<Map<String, Object>> getCancelExchangeReturnList(Long memberId, String startDate, String endDate)
+			throws Exception {
+		 if (memberId == null) {
+		        throw new Exception("회원 ID가 필요합니다.");
+		    }
+		    
+		    Map<String, Object> params = new HashMap<>();
+		    params.put("memberId", memberId);
+		    
+		    // 날짜 필터 (선택적)
+		    if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
+		        params.put("startDate", startDate);
+		        params.put("endDate", endDate);
+		    }
+		    
+		    return orderDAO.selectCancelExchangeReturnList(params);
+	}
 
 }

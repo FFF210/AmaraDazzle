@@ -27,6 +27,12 @@ public interface BrandDAO {
 	// 로그인
 	Brand selectBrandByPassword(String email) throws Exception;
 
+	// 브랜드 정보 조회
+	Brand selectBrandInfo(long brandId) throws Exception;
+
+	// 브랜드 정보 수정
+	void updateBrandInfo(Brand brand) throws Exception;
+
 	// 메인 대시보드 요약 정보
 	DashboardSummary selectDashboardSummary(Long brandId) throws Exception;
 

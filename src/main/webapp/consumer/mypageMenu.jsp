@@ -17,7 +17,7 @@
 					href="<c:url value='/store/mypage/orderList'/>">주문/배송 조회</a></li>
 				<li><a
 					class="menu-item ${currentMenu eq 'returns' ? 'is-active' : ''}"
-					href="<c:url value='/store/mypage/history'/>">취소/반품/교환 내역</a></li>
+					href="<c:url value='/store/mypage/exchangeReturnCancelList'/>">취소/반품/교환 내역</a></li>
 				<li><a
 					class="menu-item ${currentMenu eq 'cart' ? 'is-active' : ''}"
 					href="<c:url value='/store/mypage/cart'/>">장바구니</a></li>

@@ -72,20 +72,7 @@
 				<div class="user-info__top">
 					<p class="greeting">
 						<span class="name">${sessionScope.memberName}</span> 님 반갑습니다.
-					</p>
-
-					<button class="bell" type="button" aria-label="알림">
-						<i class="bi bi-bell"></i>
-						<c:if test="${notifications ne '0'}">
-							<span class="bell__badge"
-								aria-label="${sessionScope.memberNotifications}개의 새 알림">
-								<c:choose>
-									<c:when test="${sessionScope.memberNotifications gt 99}">99+</c:when>
-									<c:otherwise>${sessionScope.memberNotifications}</c:otherwise>
-								</c:choose>
-							</span>
-						</c:if>
-					</button>
+					</p>			
 				</div>
 
 				<!-- 하단 통계 영역 -->
