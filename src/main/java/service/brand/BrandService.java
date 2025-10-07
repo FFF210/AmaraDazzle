@@ -28,6 +28,12 @@ public interface BrandService {
 	// 로그인
 	public LoginResult loginBrand(String email, String password) throws Exception;
 
+	// 브랜드 정보 조회
+	public Brand getBrandInfo(long brandId) throws Exception;
+
+	// 브랜드 정보 수정
+	public void editBrandInfo(Brand brand) throws Exception;
+
 	// 메인 대시보드 요약 정보
 	public DashboardSummary getDashboardSummary(long brandId) throws Exception;
 

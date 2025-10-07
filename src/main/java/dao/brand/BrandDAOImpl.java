@@ -66,6 +66,23 @@ public class BrandDAOImpl implements BrandDAO {
 		}
 	}
 
+	// 브랜드 정보 조회
+	@Override
+	public Brand selectBrandInfo(long brandId) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.brand.selectBrandInfo", brandId);
+		}
+	}
+
+	// 브랜드 정보 수정
+	@Override
+	public void updateBrandInfo(Brand brand) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			sqlSession.update("mapper.brand.updateBrandInfo", brand);
+			sqlSession.commit();
+		}
+	}
+
 	// 메인 대시보드 요약 정보
 	@Override
 	public DashboardSummary selectDashboardSummary(Long brandId) throws Exception {

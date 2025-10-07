@@ -62,6 +62,8 @@ public class BrandLogin extends HttpServlet {
 				HttpSession session = request.getSession();
 				session.setAttribute("brand", brand);
 				session.setAttribute("brandId", brand.getBrandId());
+				session.setAttribute("brandName", brand.getBrandName());
+				session.setAttribute("logoFileId", brand.getLogoFileId());
 
 				// 쿠키 설정
 				Cookie cookie1 = null;

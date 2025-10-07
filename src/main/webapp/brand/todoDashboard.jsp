@@ -19,8 +19,12 @@
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="./css/todoDashboard.css" />
+<script src="${pageContext.request.contextPath}/resources/js/toast.js"></script>
 </head>
 <body>
+	<!-- Toast 알림 컨테이너 -->
+	<div id="toast-container"></div>
+	
 	<my:layout>
 		<!-- breadcrumb -->
 		<div class="page-breadcrumb">
@@ -129,7 +133,7 @@
 						<fmt:formatDate value="${baseDate}" pattern="yyyy-MM-dd"
 							var="endFmt" />
 
-						<p style="margin-left: 20px; color: #555;">${startFmt} ~
+						<p style="margin-left: 20px; color: #555;">${startFmt}~
 							${endFmt}</p>
 					</c:if>
 
@@ -165,5 +169,16 @@
 			</section>
 		</div>
 	</my:layout>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const toastData = localStorage.getItem("toast");
+  if (toastData) {
+    const { type, message } = JSON.parse(toastData);
+    showToast(type, message); // 프로젝트에서 이미 사용 중인 showToast 함수 호출
+    localStorage.removeItem("toast"); // 한번 띄운 후 바로 제거
+  }
+});
+</script>
+
 </body>
 </html>

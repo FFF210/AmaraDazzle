@@ -77,6 +77,18 @@ public class BrandServiceImpl implements BrandService {
 		return result;
 	}
 
+	// 브랜드 정보 조회
+	@Override
+	public Brand getBrandInfo(long brandId) throws Exception {
+		return brandDAO.selectBrandInfo(brandId);
+	}
+
+	// 브랜드 정보 수정
+	@Override
+	public void editBrandInfo(Brand brand) throws Exception {
+		brandDAO.updateBrandInfo(brand);
+	}
+
 	// 메인 대시보드 요약 정보
 	@Override
 	public DashboardSummary getDashboardSummary(long brandId) throws Exception {
