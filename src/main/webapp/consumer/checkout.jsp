@@ -49,8 +49,8 @@
     </c:if>
 </div> --%>
 
-	<main class="checkout-container">
-		<div class="checkout-content">
+	<main class="main-container">
+		<div class="main-content">
 
 			<form method="post" action="checkout">
 

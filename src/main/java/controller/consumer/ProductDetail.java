@@ -1,6 +1,9 @@
 package controller.consumer;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +83,47 @@ public class ProductDetail extends HttpServlet {
 
 			// 상품 정보 조회
 			Product product = productService.getProductDetail(productId);
+			
+			// 세일 계산 로직
+			boolean isSale = false;
+	        BigDecimal finalPrice = product.getPrice(); // 기본값은 원가
+	        BigDecimal saleRate = BigDecimal.ZERO;
+	        
+	        // 세일 여부 체크
+	        if (product.getDiscountType() != null && product.getDiscountValue() != null) {
+	            Date now = new Date();
+	            Date startDate = product.getStartDate();
+	            Date endDate = product.getEndDate();
+	            
+	            // 시작일이 없거나 현재가 시작일 이후 && 종료일이 없거나 현재가 종료일 이전
+	            boolean isInPeriod = (startDate == null || !now.before(startDate)) 
+	                              && (endDate == null || !now.after(endDate));
+	            
+	            if (isInPeriod) {
+	                isSale = true;
+	                
+	                // 할인가 계산
+	                if ("RATE".equals(product.getDiscountType())) {
+	                    // 정율 할인 (예: 10% 할인)
+	                    saleRate = product.getDiscountValue();
+	                    finalPrice = product.getPrice()
+	                        .multiply(BigDecimal.ONE.subtract(product.getDiscountValue().divide(new BigDecimal("100"))))
+	                        .setScale(0, RoundingMode.HALF_UP);
+	                } else if ("AMOUNT".equals(product.getDiscountType())) {
+	                    // 정액 할인 (예: 5,000원 할인)
+	                    BigDecimal discountAmount = product.getDiscountValue();
+	                    finalPrice = product.getPrice().subtract(discountAmount);
+	                    // 할인율 계산 (정액 할인도 %로 표시하기 위해)
+	                    saleRate = discountAmount.divide(product.getPrice(), 4, RoundingMode.HALF_UP)
+	                        .multiply(new BigDecimal("100"))
+	                        .setScale(0, RoundingMode.HALF_UP);
+	                }
+	            }
+	        }
+	        
+	        boolean isExclusive = (product.getIsExclusive() != null && product.getIsExclusive() == 1);
+	        boolean isPlanned = (product.getIsPlanned() != null && product.getIsPlanned() == 1);
+	        
 			// 상품 옵션 조회
 			List<ProductOption> productOptions = productOptionService
 					.getProductOptionsByProductId(product.getProductId());
@@ -112,6 +156,11 @@ public class ProductDetail extends HttpServlet {
 
 			// JSP로 데이터 전달
 			request.setAttribute("product", product);
+			request.setAttribute("isSale", isSale);              // 세일 여부
+	        request.setAttribute("finalPrice", finalPrice);      // 최종가
+	        request.setAttribute("saleRate", saleRate);          // 할인율
+	        request.setAttribute("isExclusive", isExclusive);    // 독점 여부
+	        request.setAttribute("isPlanned", isPlanned);        // 기획 여부
 			request.setAttribute("brand", brand);
 			request.setAttribute("category1", category1);
 			request.setAttribute("category2", category2);

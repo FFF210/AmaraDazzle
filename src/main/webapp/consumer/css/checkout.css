@@ -6,11 +6,11 @@ body {
 	background-color: #fff;
 }
 
-.checkout-content form {
+.main-content form {
     display: contents;
 }
 
-.checkout-container {
+.main-container {
 	margin: 0 auto;
 	padding: 20px;
 	background-color: white;
@@ -21,7 +21,7 @@ body {
 	gap: 6px;
 }
 
-.checkout-content {
+.main-content {
 	display: flex;
 	flex-direction: column;
 	gap: 30px;
