@@ -45,13 +45,13 @@
 
 			<!-- ============================ 1. 사용자 정보 요약 ============================ -->
 			<div class="user-info">
-				<my:userInfo userName="${memberInfo.name}"
+				<%-- 이 부분 tag 수정해서 그걸로 교체했었는데 grade가 이건 그냥 일반으로 나와요 --%>
+				<%--<my:userInfo userName="${memberInfo.name}"
 					grade="${memberInfo.grade}" 
 					points="${memberInfo.pointBalance}"
-					coupons="${couponCount}" />
+					coupons="${couponCount}" />--%>
 
-				<%-- 이 부분 tag 수정해서 그걸로 교체했는데 만약 tag 불편하시면 다시 이걸로 교체해주세요! --%>
-				<%-- <div class="user-info__top">
+				<div class="user-info__top">
 					<p class="greeting">
 						<span class="name">${memberInfo.name}</span> 님 반갑습니다.
 					</p>					
@@ -71,7 +71,7 @@
 						<span class="label">쿠폰</span> <span class="value"><span
 							class="em">${couponCount}</span> 개</span>
 					</div>
-				</div> --%>
+				</div> 
 			</div>
 
 			<!-- ============================ 2. 주문/배송 조회 ============================ -->
