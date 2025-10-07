@@ -7,6 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <title>마이 쿠폰 / 포인트</title>
+<link rel="stylesheet" href="<c:url value='/tagcss/modalRecent.css'/>" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/table.css'/>">

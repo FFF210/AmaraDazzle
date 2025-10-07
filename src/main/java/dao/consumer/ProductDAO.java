@@ -5,6 +5,7 @@ import java.util.Map;
 
 import dto.Product;
 import dto.consumer.CommonProduct;
+import dto.consumer.ModalProduct;
 import dto.consumer.ProductCategory;
 import dto.consumer.ProductPlan;
 import dto.consumer.ProductRank;
@@ -62,4 +63,7 @@ public interface ProductDAO {
 
 	// [brandDetail 용도] 브랜드 상품들 조회
 	List<Map<String, Object>> selectProductsByBrandId(Long brandId);
+
+	// [소비자] 최근 본 상품 조회
+	List<ModalProduct> getProductsByIds(List<Long> productIds, Long memberId) throws Exception;
 }

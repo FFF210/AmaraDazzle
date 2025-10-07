@@ -57,6 +57,7 @@ public class AdbannerDetail extends HttpServlet {
 			// ============= 상세보기 버튼 =============
 		} catch (Exception e) {
 			e.printStackTrace();
+			response.sendRedirect(request.getContextPath() + "/error.jsp");
 		}
 
 		

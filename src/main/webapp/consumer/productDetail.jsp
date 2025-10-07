@@ -25,18 +25,20 @@ request.setAttribute("floor", floor);
 <head>
 <meta charset="UTF-8">
 <title>${product.name}</title>
-<link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/modalRecent.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>" />
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/toast.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/tab.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/sortList.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/rating.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/selectbox.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
 <link rel="stylesheet"
 	href="<c:url value='/consumer/css/productDetail.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/reviewSummary.css'/>">
@@ -387,6 +389,39 @@ window.productOptionsData = [
     </c:forEach>
 ];
 </c:if>
+
+/*****************************************************************
+ * 상품 상세 페이지 진입 시 로컬 스토리지에 저장 - 최근 본 상품
+ *****************************************************************/
+document.addEventListener("DOMContentLoaded", () => {
+	  // 현재 상품 ID 가져오기 (URL 파라미터 기준)
+	  const params = new URLSearchParams(window.location.search);
+	  const productId = params.get("productId");
+	  if (!productId) return;
+
+	  // 로컬스토리지 키 설정
+	  const KEY = "recentProductIds";
+
+	  // 기존 리스트 가져오기
+	  let ids = [];
+	  try {
+	    ids = JSON.parse(localStorage.getItem(KEY)) || [];
+	  } catch {
+	    ids = [];
+	  }
+
+	  // 이미 존재하면 중복 제거
+	  ids = ids.filter(id => id !== productId);
+
+	  // 맨 앞(최근 본 상품이 가장 앞으로)
+	  ids.unshift(productId);
+
+	  // 최대 20개까지만 유지
+	  if (ids.length > 20) ids = ids.slice(0, 20);
+
+	  // 다시 저장
+	  localStorage.setItem(KEY, JSON.stringify(ids));
+	});
 </script>
 	<script src="<c:url value='/consumer/js/tab.js'/>"></script>
 	<script src="<c:url value='/consumer/js/productDetail.js'/>"></script>

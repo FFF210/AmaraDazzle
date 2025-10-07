@@ -45,6 +45,10 @@
 	margin-top: 8px;
 	margin-left: 24px;
 }
+
+.chips {
+	margin-top:6px;
+}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -60,39 +64,23 @@
 			<div class="grid">
 				<!-- 이벤트 ID (숨김) -->
 				<input type="hidden" id="eventId" name="eventId"
-					value="${param.eventId}" />
+					value="${event.eventId}" />
 
-				<!-- selectbox.tag -->
+				<!-- 이벤트 종류 -->
 				<div class="label req">이벤트 종류</div>
-				<div class="custom-select lg" id="eventTypeSelect">
-					<div class="select-header">
-						<span class="select-label">이벤트 선택 </span> <i
-							class="bi bi-chevron-down"></i>
-					</div>
-					<ul class="select-list">
-						<c:forEach var="t" items="${eventTypes}">
-							<li class="select-item" data-value="${t}">${t}</li>
-						</c:forEach>
-					</ul>
-					<!-- 서버로 넘길 값 -->
-					<input type="hidden" name="eventId"
-						value="${selectedEvent.eventId}" />
+				<div>
+					<my:textInput id="eventType" name="eventType" type="readOnly"
+						size="sm" state="default" value="${event.eventType}" />
 				</div>
-				<!-- selectbox.tag -->
+
 				<!-- 이벤트명 -->
 				<div class="label req">이벤트명</div>
-				<div class="custom-select lg" id="eventNameSelect">
-					<div class="select-header">
-						<span class="select-label">이벤트명 선택</span> <i
-							class="bi bi-chevron-down"></i>
-					</div>
-					<ul class="select-list" id="eventNameList">
-						<!-- Ajax 결과로 채워짐 -->
-					</ul>
-					<input type="hidden" name="eventId" id="eventIdInput" />
+				<div>
+					<my:textInput id="eventName" name="eventName" type="readOnly"
+						size="sm" state="default" value="${event.eventName}" />
 				</div>
 
-				<div class="label req">광고담당자</div>
+				<div class="label req">이벤트 담당자</div>
 				<div>
 					<my:textInput id="managerName" name="managerName"
 						placeholder="담당자 성함을 입력하세요." type="default" size="sm"
@@ -135,9 +123,8 @@
 
 							<div class="label req">기간</div>
 							<div class="inline date-row">
-								<input id="couponFrom" name="startDate" type="date">
-								<span>~</span> <input id="couponTo" name="endDate"
-									type="date">
+								<input id="couponFrom" name="startDate" type="date"> <span>~</span>
+								<input id="couponTo" name="endDate" type="date">
 							</div>
 
 
@@ -145,9 +132,9 @@
 							<div class="inline">
 								<div class="text-input-wrapper size--sm state--default">
 									<div class="text-input-inner default">
-										<input id="couponMin" name="amountCondition" type="number" min="0" step="100"
-											placeholder="0" class="text-input"> <span
-											class="muted">원 이상 구매 시</span>
+										<input id="couponMin" name="amountCondition" type="number"
+											min="0" step="100" placeholder="0" class="text-input">
+										<span class="muted">원 이상 구매 시</span>
 									</div>
 								</div>
 							</div>
@@ -182,16 +169,40 @@
 		</my:brand2formLayout>
 	</my:layout>
 
+	<script> 
+	document.addEventListener("DOMContentLoaded", ()=> {
+	    const addBtn = document.getElementById("addProduct");
+	    const input = document.getElementById("productInput");
+	    const chips = document.getElementById("productChips");
 
-	<!-- Toast -->
-	<div id="toast" class="toast" role="status" aria-live="polite"></div>
+	    addBtn.addEventListener("click", () => {
+	        const val = input.value.trim();
+	        if (val !== "") {
+	            // chip 생성
+	            const chip = document.createElement("span");
+	            chip.classList.add("chip");
+	            chip.textContent = val;
 
-	<script src="./js/eventForm.js"></script>
-	<script>
-      document.addEventListener("selectChanged", (e) => {
-        console.log("선택된 값:", e.detail.value); // 실제 값
-        console.log("선택된 텍스트:", e.detail.text); // 표시되는 텍스트
-      });
-    </script>
+	            // 삭제 버튼
+	            const removeBtn = document.createElement("button");
+	            removeBtn.type = "button";
+	            removeBtn.textContent = "×";
+	            removeBtn.onclick = () => chip.remove();
+
+	            chip.appendChild(removeBtn);
+	            chips.appendChild(chip);
+
+	            // hidden input 생성 (배열로 서버 전송)
+	            const hidden = document.createElement("input");
+	            hidden.type = "hidden";
+	            hidden.name = "productIds"; // 여러 개 전달됨
+	            hidden.value = val;
+	            chip.appendChild(hidden);
+
+	            input.value = ""; // 입력 초기화
+	        }
+	    });
+	});
+</script>
 </body>
 </html>

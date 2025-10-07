@@ -25,7 +25,8 @@
 		participateYn,
 		CASE
 		WHEN e.status = 'RECRUIT'
-		AND CURRENT_DATE &lt;= DATE_SUB(e.start_date, INTERVAL 1 DAY)
+		AND CURRENT_DATE &lt;=
+		DATE_SUB(e.start_date, INTERVAL 1 DAY)
 		THEN 'Y'
 		ELSE 'N'
 		END AS canApply
@@ -60,27 +61,6 @@
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
-	<!-- ====== [brand2] ====== -->
-	<select id="selectEventTypes" resultType="string">
-		SELECT DISTINCT
-		event_type
-		FROM event
-		WHERE expose_YN = 1
-		ORDER BY event_type
-	</select>
-
-	<select id="selectEventNamesByType" parameterType="string"
-		resultType="event">
-		SELECT event_id AS eventId,
-		event_name AS eventName
-		FROM
-		event
-		WHERE event_type = #{type}
-		AND expose_YN = 1
-		ORDER BY start_date
-		DESC
-	</select>
-
 	<!-- ====== [brand2] 이벤트 개수 조회 ====== -->
 	<select id="selectEventCount" parameterType="map"
 		resultType="int">
@@ -105,14 +85,77 @@
 		</where>
 	</select>
 
-	<!-- ====== [brand2] 이벤트 신청 상세보기 버튼 ====== -->
+	<!-- ====== [brand2] 이벤트 신청하기 버튼 ====== -->
+	<select id="selectEventById" parameterType="long"
+		resultType="event">
+		SELECT
+		event_id AS eventId,
+		event_type AS eventType,
+		start_date AS startDate,
+		end_date AS endDate,
+		event_name AS eventName,
+		status,
+		content,
+		writer,
+		expose_YN AS exposeYn,
+		created_at AS createdAt,
+		updated_at AS updatedAt
+		FROM event
+		WHERE event_id = #{eventId}
+	</select>
 
-	<!-- ========= [brand2] 이벤트 신청 삭세하기 버튼 ========= -->
+	<!-- ====== [brand2] 이벤트 신청 상세보기 버튼 ====== -->
+	<select id="selectEventDetailById" parameterType="long"
+		resultType="dto.brand2.EventDetail">
+		SELECT
+		e.event_id AS eventId,
+		e.event_type AS eventType,
+		e.event_name AS eventName,
+		e.status AS status,
+		e.start_date AS
+		startDate,
+		e.end_date AS endDate,
+
+		a.manager_name AS managerName,
+		a.manager_tel AS managerTel,
+		a.note AS note,
+
+		c.cname AS cname,
+		c.start_date AS couponStartDate,
+		c.end_date AS couponEndDate,
+		c.amount
+		AS amount,
+		c.amount_condition AS amountCondition,
+
+		GROUP_CONCAT(p.product_id) AS productIds
+
+		FROM event e
+		LEFT JOIN event_application a ON e.event_id = a.event_id
+		LEFT JOIN coupon c ON c.reason = CONCAT('event_application:',
+		a.event_application_id)
+		LEFT JOIN product p ON e.event_id = p.event_id
+		WHERE e.event_id = #{eventId}
+		GROUP BY e.event_id, e.event_type, e.event_name, e.status,
+		e.start_date, e.end_date,
+		a.manager_name, a.manager_tel, a.note,
+		c.cname, c.start_date, c.end_date, c.amount, c.amount_condition
+	</select>
+
+
+
+	<!-- ========= [brand2] 이벤트 신청 삭제하기 버튼 ========= -->
 	<delete id="updateEventApplication" parameterType="long">
 		DELETE FROM
 		event_application WHERE event_application_id =
 		#{eventApplicationId}
 	</delete>
+
+	<!-- ====== [brand2] 이벤트 종료 시 상품 event_id 해제 ====== -->
+	<update id="resetProductsForEvent" parameterType="long">
+		UPDATE product
+		SET event_id = NULL
+		WHERE event_id = #{eventId}
+	</update>
 
 
 	<!-- ================[소비자] 이벤트 목록 조회 =================== -->
@@ -341,17 +384,19 @@
 		update event set
 		view_cnt = view_cnt+1 where event_id=#{num}
 	</update>
-	
+
 	<!-- 어드민 배너 등록 -->
 	<insert id="adminEventWrite" parameterType="event">
-		insert into event 
-			(event_id, event_type, start_date, end_date, 
-			event_name, thumbnail_file_id, detail_file_id, category_id,
-			content, writer, created_at)
-		values 
-			(0, #{eventType}, #{startDate}, #{endDate},
-			#{eventName},#{thumbnailFileId}, #{detailFileId}, #{categoryId},
-			#{content}, #{writer}, now())
+		insert into event
+		(event_id, event_type, start_date, end_date,
+		event_name,
+		thumbnail_file_id, detail_file_id, category_id,
+		content, writer,
+		created_at)
+		values
+		(0, #{eventType}, #{startDate}, #{endDate},
+		#{eventName},#{thumbnailFileId}, #{detailFileId}, #{categoryId},
+		#{content}, #{writer}, now())
 	</insert>
 
 </mapper>

@@ -4,7 +4,8 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public class EventApplicationForm {	
-
+/* ======= insert/update 용 ======= */
+	
     // event_application
     private Long brandId;
     private Long eventId;
@@ -24,6 +25,8 @@ public class EventApplicationForm {
     private String provision;
     private String writerType;
     private Long writerId;
+    
+    
 	public Long getBrandId() {
 		return brandId;
 	}

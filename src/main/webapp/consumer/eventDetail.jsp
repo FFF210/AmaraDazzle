@@ -14,7 +14,7 @@
 <title>이벤트 상세</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
+<link rel="stylesheet" href="<c:url value='/tagcss/modalRecent.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/pageHeader.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>" />

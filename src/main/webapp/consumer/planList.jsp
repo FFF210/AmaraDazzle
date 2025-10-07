@@ -32,20 +32,6 @@
 	href="<c:url value='/consumer/css/planList.css'/>" />
 </head>
 <body>
-
-	<!-- 최근 본 상품 모달 mock 데이터 -->
-	<%
-	java.util.List<String> recentList = new java.util.ArrayList<>();
-	for (int i = 1; i <= 8; i++) {
-		recentList.add("테스트 상품 " + i);
-	}
-	request.setAttribute("recentList", recentList);
-	%>
-	<!-- 최근 본 상품 모달 -->
-	<my:modalRecent recentList="${recentList}" />
-
-
-
 	<!-- 상단 헤더 -->
 	<%@ include file="./header.jsp"%>
 

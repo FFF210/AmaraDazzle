@@ -1,9 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ page import="dto.Member"%>
 
-<%-- //JSP 처리 로직// --%>
+<%-- 
+==============================
+ JSP 처리 로직 (상단 서버사이드 로직)
+============================== 
+--%>
+
 <%
 // 세션에서 로그인 사용자 정보 가져오기
 Member loginUser = (Member) session.getAttribute("loginUser");
@@ -25,26 +31,32 @@ request.setAttribute("loginUser", loginUser);
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AMARA DAZZLE</title>
-<link rel="stylesheet" href="<c:url value='/css/header.css'/>">
-<!-- search 돋보기 아이콘 cdn 방식 -->
+
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 </head>
+
 <body>
+	<!-- 전체 헤더 영역 배경 컨테이너 -->
 	<div class="header-background">
 		<header class="header">
-			<!-- 상단 영역 -->
+
+			<!-- ========== 상단 헤더 영역 (로고 + 검색 + 사용자 메뉴) ========== -->
 			<div class="header-top">
+
 				<!-- 검색 영역 -->
 				<div class="search-area">
 					<form action="<c:url value='/productList'/>" method="get"
 						style="display: flex; width: 100%;">
 						<!-- 숨김 라벨 -->
 						<label for="keyword" class="sr-only">검색어</label>
+
 						<div class="search-input-wrapper">
+							<!-- 돋보기 버튼 -->
 							<button class="search-btn" aria-label="검색">
 								<i class="bi bi-search" aria-hidden="true"></i>
 							</button>
+							<!-- 검색어 입력창 -->
 							<input id="keyword" type="text" name="keyword"
 								class="search-input" placeholder="상품, 브랜드 검색"
 								value="${param.keyword}">
@@ -52,7 +64,7 @@ request.setAttribute("loginUser", loginUser);
 					</form>
 				</div>
 
-				<!-- 로고 -->
+				<!-- 브랜드 로고 -->
 				<div class="logo">
 					<a href="<c:url value='/store/main'/>"> <img
 						src="<c:url value='/image/logo_black.svg'/>" alt="AD 로고">
@@ -66,8 +78,6 @@ request.setAttribute("loginUser", loginUser);
 							<!-- 로그인 상태 -->
 							<span class="username">${loginUser.name}님</span>
 							<a href="<c:url value='/store/logout'/>">로그아웃</a>
-
-							<!-- 마이페이지 -->
 							<a href="<c:url value='/store/mypage'/>">마이페이지</a>
 
 							<!-- 장바구니 (배지 포함) -->
@@ -81,18 +91,18 @@ request.setAttribute("loginUser", loginUser);
 							<!-- 비로그인 상태 -->
 							<a href="<c:url value='/store/join'/>">회원가입</a>
 							<a href="<c:url value='/store/login'/>">로그인</a>
-							<a href="<c:url value='/store/cart'/>" class="cart-link">장바구니</a>
+							<a href="<c:url value='/store/mypage/cart'/>" class="cart-link">장바구니</a>
 						</c:otherwise>
 					</c:choose>
+
 					<!-- 최근 본 상품: 토글 버튼 -->
-					<button type="button" class="recent-toggle"
-						aria-controls="recent-drawer" aria-expanded="false">최근 본
-						상품</button>
+					<button id="recent-btn" type="button" class="recent-toggle">최근
+						본 상품</button>
 				</div>
 			</div>
 
 
-			<!-- 네비게이션 영역 -->
+			<!-- ========== 하단 네비게이션 영역 ========== -->
 			<div class="tab-navigation" style="display: flex !important;">
 				<!-- 메인 카테고리 -->
 				<ul class="main-nav">
@@ -113,126 +123,41 @@ request.setAttribute("loginUser", loginUser);
 					<li><a href="<c:url value='/store/couponList'/>">쿠폰</a></li>
 				</ul>
 			</div>
-
-			<!-- ✅ 최근 본 상품 드로어 -->
-			<!--  <div id="recent-overlay" class="recent-overlay" hidden></div>
-
-       <section id="recent-drawer" class="recent-drawer" aria-hidden="true" >
-          <div class="drawer-head">
-           <strong>최근 본 상품<span id="recent-count"></span></strong>
-           <div class="actions">
-             <button id="recent-clear" type="button" class="link-btn">전체 삭제</button>
-             <button id="recent-close" type="button" class="close-btn" aria-label="닫기">×</button>
-           </div>
-        </div>
-        <div id="recent-grid" class="recent-grid">JS가 카드 렌더링</div>
-       </section>  -->
-
 		</header>
+		<!-- 최근 본 상품 모달 include -->
+			<my:modalRecent />
 	</div>
 
 	<script>
-// 검색 기능 향상 - 엔터로 제출
-document.querySelector('.search-input').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        this.closest('form').submit();
-    }
-});
-
-//===== 최근 본 상품 드로어 =====
-const BASE = '<c:url value="/"/>';          // 컨텍스트 패스 안전하게
-const KEY  = 'recentProductIds';
-const MAX  = 4;
-
-const btnToggle = document.querySelector('.recent-toggle');
-const drawer    = document.getElementById('recent-drawer');
-const overlay   = document.getElementById('recent-overlay');
-const grid      = document.getElementById('recent-grid');
-const countEl   = document.getElementById('recent-count');
-const btnClose  = document.getElementById('recent-close');
-const btnClear  = document.getElementById('recent-clear');
-
-function openDrawer(){
-	 drawer.classList.add('open');
-	  drawer.setAttribute('aria-hidden','false');
-	  overlay.classList.add('show');
-	  renderRecent(); // ← 여기서 목록 렌더
-}
-function closeDrawer(){
-//   drawer.classList.remove('open');
-//   drawer.setAttribute('aria-hidden','true');
-//   drawer.style.display = "none";  
-//   overlay.setAttribute('hidden','');
-	drawer.classList.remove('open');
-	  drawer.setAttribute('aria-hidden','true');
-	  overlay.classList.remove('show');
-}
-
-btnToggle?.addEventListener('click', () => {
-  drawer.classList.contains('open') ? closeDrawer() : openDrawer();
-});
-btnClose?.addEventListener('click', closeDrawer);
-overlay?.addEventListener('click', closeDrawer);
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
-
-function getIds(){
-  try { return JSON.parse(localStorage.getItem(KEY) || '[]'); }
-  catch { return []; }
-}
-function setIds(ids){ localStorage.setItem(KEY, JSON.stringify(ids)); }
-
-btnClear?.addEventListener('click', () => { setIds([]); renderRecent(); });
-
-function renderRecent(){
-  const ids = getIds().slice(0, 20);
-  countEl.textContent = ids.length ? `(${ids.length})` : '';
-  if (!ids.length){
-    grid.innerHTML = '<div class="empty">최근 본 상품이 없습니다.</div>';
-    return;
-  }
-
-  // 1) API 없을 때: 임시 카드(링크만)
-  grid.innerHTML = ids.map(id => `
-    <a class="card" href="${BASE}productDetail?id=${id}">
-      <div class="thumb"><img src="${BASE}images/placeholder.png" alt="상품 #${id}"></div>
-      <div class="name">상품 #${id}</div>
-    </a>`).join('');
-
-  // 2) API 있으면 이걸로 교체
-  // fetch(`${BASE}api/products/mini?ids=${ids.join(',')}`)
-  //   .then(r => r.json())
-  //   .then(list => {
-  //     grid.innerHTML = list.map(it => `
-  //       <a class="card" href="${BASE}productDetail?id=${it.id}">
-  //         <div class="thumb"><img src="${it.thumbUrl}" alt="${it.name}"></div>
-  //         <div class="name">${it.name}</div>
-  //         <div class="price">${it.priceFormatted}</div>
-  //       </a>`).join('');
-  //   });
-}
-
-// 장바구니 개수 업데이트 함수 (다른 페이지에서 호출 가능)
-function updateCartCount() {
-    <c:if test="${not empty loginUser}">
-    fetch('/api/cart/count')
-        .then(response => response.json())
-        .then(data => {
-            const countElement = document.querySelector('.cart-count');
-            if (data.count > 0) {
-                if (countElement) {
-                    countElement.textContent = data.count;
-                } else {
-                    // 카운트 엘리먼트가 없으면 생성
-                    const cartLink = document.querySelector('.cart-link');
-                    const countSpan = document.createElement('span');
-                    countSpan.className = 'cart-count';
-                    countSpan.textContent = data.count;
-                    cartLink.appendChild(countSpan);
-                }
-            } else if (countElement) {
-                countElement.remove();
-            }
-        });
-    </c:if>
-}
+	// 검색창: Enter키 입력 시 폼 제출
+	document.querySelector('.search-input').addEventListener('keypress', function(e) {
+	    if (e.key === 'Enter') {
+	        this.closest('form').submit();
+	    }
+	});
+	
+	// 장바구니 개수 업데이트 함수 (다른 페이지에서 호출 가능)
+	function updateCartCount() {
+	    <c:if test="${not empty loginUser}">
+	    fetch('/api/cart/count')
+	        .then(response => response.json())
+	        .then(data => {
+	            const countElement = document.querySelector('.cart-count');
+	            if (data.count > 0) {
+	                if (countElement) {
+	                    countElement.textContent = data.count;
+	                } else {
+	                    // 카운트 엘리먼트가 없으면 생성
+	                    const cartLink = document.querySelector('.cart-link');
+	                    const countSpan = document.createElement('span');
+	                    countSpan.className = 'cart-count';
+	                    countSpan.textContent = data.count;
+	                    cartLink.appendChild(countSpan);
+	                }
+	            } else if (countElement) {
+	                countElement.remove();
+	            }
+	        });
+	    </c:if>
+	}
 </script>

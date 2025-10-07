@@ -9,13 +9,15 @@
 <title>이벤트 목록</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
 <link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/modalRecent.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/pageHeader.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/eventCard.css'/>" />
-<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>" />
-<link rel="stylesheet" href="<c:url value='/tagcss/modalRecent.css'/>" />
-<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>" />
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>" />
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>" />
 <link rel="stylesheet"
@@ -46,9 +48,8 @@
 					var="endFmt" />
 
 				<my:eventCard thumbnailFileId="${e.thumbnailFileId}"
-					title="${e.eventName}" startDate="${startFmt}"
-					endDate="${endFmt}" href="${detailUrl}" 
-					status="${e.status}"/>
+					title="${e.eventName}" startDate="${startFmt}" endDate="${endFmt}"
+					href="${detailUrl}" status="${e.status}" />
 			</c:forEach>
 		</div>
 

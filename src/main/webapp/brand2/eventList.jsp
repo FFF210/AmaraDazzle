@@ -145,7 +145,7 @@
 								<td><c:choose>
 										<c:when test="${event.participateYn eq '참여'}">
 											<button type="button" class="btn btn-outline btn-sm"
-												onclick="location.href='/brand2/eventDetail?eventId=${event.eventId}'">상세보기</button>
+												onclick="location.href='/brand2/eventFormDetail?eventId=${event.eventId}'">상세보기</button>
 										</c:when>
 										<c:otherwise>
 											<button type="button" class="btn btn-outline btn-sm" disabled>상세보기</button>

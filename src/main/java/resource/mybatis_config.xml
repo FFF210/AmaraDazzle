@@ -62,6 +62,7 @@
 		<typeAlias type="dto.consumer.CommonProduct" alias="commonProduct" />
 		<typeAlias type="dto.consumer.MembershipBrand" alias="membershipBrand" />
 		<typeAlias type="dto.consumer.MemberFilter" alias="memberFilter" />
+		<typeAlias type="dto.consumer.ModalProduct" alias="modalProduct" />
 		<typeAlias type="dto.brand.ProductList" alias="productList" />
 		<typeAlias type="dto.brand.ProductDetail" alias="productDetail" />
 		<typeAlias type="dto.brand.OrdersList" alias="ordersList" />

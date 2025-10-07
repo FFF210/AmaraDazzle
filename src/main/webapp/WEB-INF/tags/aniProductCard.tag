@@ -66,7 +66,7 @@
 </c:choose>
 
 
-<a class="product-card" data-productid="${productId}"
+<a class="ani-product-card" data-productid="${productId}"
 	<c:if test="${not empty href}"> href="${href}" </c:if>>
 
 	<div class="product-image">
