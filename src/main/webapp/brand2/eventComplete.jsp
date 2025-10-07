@@ -19,7 +19,7 @@
 
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-	
+
 <style>
 .breadcrumb {
 	margin-top: 8px;
@@ -79,17 +79,16 @@ h2 {
 }
 
 .b {
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 }
+</style>
 
-</style>	
-	
 </head>
 <body>
 	<my:layout>
-	<my:breadcrumb
-			items="이벤트 관리:/brand2/eventList.jsp, 이벤트 신청:/brand2/eventForm.jsp" />
+		<my:breadcrumb
+			items="이벤트 관리:/brand2/eventList" />
 	
 		<div class="CompleteWrapper">
 			<div class="CompleteContainer">
@@ -100,11 +99,10 @@ h2 {
 				<div class="bold">이벤트 페이지에서 확인 가능합니다.</div>
 				<div class="b">
 					<button class="btn btn-outline btn-md"
-						onclick="location.href='/brand'">홈으로 돌아가기</button>
+						onclick="location.href='/brand2/eventList'">목록 보기</button>
 				</div>
 			</div>
 		</div>
-
 	</my:layout>
 
 

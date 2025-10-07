@@ -34,24 +34,16 @@
 		</foreach>
 	</update>
 
-	<!-- 3. coupon 저장 (application_id FK 대신 reason에 기록) -->
+	<!-- 3. coupon 저장 -->
 	<insert id="insertCoupon" parameterType="coupon"
 		useGeneratedKeys="true" keyProperty="couponId">
-		INSERT INTO coupon (cname,
-		start_date, end_date, amount_condition, amount,
-		reason, provision,
-		writer_type, writer_id)
+		INSERT INTO coupon (
+		cname, start_date, end_date, amount_condition, amount,
+		reason, provision, writer_type, writer_id
+		)
 		VALUES (
-		#{cname},
-		#{startDate},
-		#{endDate},
-		#{amountCondition},
-		#{amount},
-		CONCAT('event_application:',
-		#{applicationId}),
-		#{provision},
-		#{writerType},
-		#{writerId}
+		#{cname}, #{startDate}, #{endDate}, #{amountCondition}, #{amount},
+		#{reason}, #{provision}, #{writerType}, #{writerId}
 		)
 	</insert>
 	<!-- CONCAT('event_application:', #{applicationId}) : 신청ID를 reason에 기록 -->

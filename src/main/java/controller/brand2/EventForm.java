@@ -24,22 +24,15 @@ import service.brand2.EventServiceImpl;
 public class EventForm extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
 	public EventForm() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
 		EventService eventService = new EventServiceImpl();
+		
 		try {
             // 파라미터에서 eventId 가져오기
             String eventIdParam = request.getParameter("eventId");

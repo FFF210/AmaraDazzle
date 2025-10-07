@@ -43,24 +43,31 @@ public class EventList extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 
+		// 세션에서 brandId 꺼내기
+//		HttpSession session = request.getSession();
+//		Brand brand = (Brand) session.getAttribute("brand");
+//		if (brand != null) {
+//			banner.setBrandId(brand.getBrandId());
+//		} 
+
+
+		Map<String, Object> params = new HashMap<>();
+
+		// 페이지네이션
+		int page = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
+		int limit = 10; // 한 페이지당 개수
+		int offset = (page - 1) * limit;
+
+		params.put("brandId", 1L);
+		params.put("status", request.getParameter("status")); // 이벤트 진행 상황
+		params.put("searchType", request.getParameter("searchType")); // 검색 키워드
+		params.put("searchKeyword", request.getParameter("searchKeyword"));
+		params.put("startDate", request.getParameter("startDate")); // 날짜 // 시작일
+		params.put("endDate", request.getParameter("endDate")); // 종료일
+		params.put("limit", limit);
+		params.put("offset", offset);
+
 		try {
-			Long brandId = 1L;
-
-			Map<String, Object> params = new HashMap<>();
-
-			// 페이지네이션
-			int page = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
-			int limit = 10; // 한 페이지당 개수
-			int offset = (page - 1) * limit;
-
-			params.put("brandId", brandId);
-			params.put("status", request.getParameter("status")); // 이벤트 진행 상황
-			params.put("searchType", request.getParameter("searchType")); // 검색 키워드
-			params.put("searchKeyword", request.getParameter("searchKeyword"));
-			params.put("startDate", request.getParameter("startDate")); // 날짜 // 시작일
-			params.put("endDate", request.getParameter("endDate")); // 종료일
-			params.put("limit", limit);
-			params.put("offset", offset);
 
 			// 서비스 호출
 			Map<String, Object> result = eventService.getEventList(params);

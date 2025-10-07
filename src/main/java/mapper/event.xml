@@ -14,6 +14,7 @@
 		endDate,
 		e.event_name AS eventName,
 		e.status AS status,
+		a.brand_id AS brandId,
 		a.apply_date AS
 		applyDate,
 		a.manager_name AS managerName,
