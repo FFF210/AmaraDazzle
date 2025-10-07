@@ -6,3 +6,9 @@ function showTab(tabId) {
     document.querySelector(".tab[onclick=\"showTab('" + tabId + "')\"]").classList.add("active");
     document.getElementById(tabId).style.display = "block";
 }
+
+
+//브랜드 상세보기 페이지 이동 
+function goSellerDetail(num){
+	location.href = "sellerDetail?num=" + num
+}

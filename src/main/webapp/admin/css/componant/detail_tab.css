@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+/* ********************* */
+/* 상세보기 화면 탭        */
+/* ********************* */
+.content > .info_tab > .tabs {
+    width: 100%;
+    border-bottom: 1px solid var(--mainColor);
+}
+
+.content > .info_tab > .tabs > .tab {
+    width: 100%;
+    text-align: center;
+    color : var(--mainColor);
+}
+
+.content > .info_tab > .tabs > .tab.active {
+    border-bottom: none;
+    font-weight: bold;
+    background-color: var(--subColor);
+    color : var(--mainColor);
+}

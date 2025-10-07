@@ -39,5 +39,11 @@ public class BrandServiceImpl implements BrandService{
 	    return b_dao.brandSearchList(sc_DTO);
 	}
 	
+	//브랜드 회원 정보 상세보기 
+	@Override
+	public Brand selectBrandDetail(int num) {
+		return b_dao.selectBrandDetail(num);
+	}
+	
 
 }

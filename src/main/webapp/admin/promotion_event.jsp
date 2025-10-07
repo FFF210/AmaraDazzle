@@ -126,7 +126,7 @@
 								<tr>
 									<td><input type="checkbox" class="ch_box" value="${eventList.eventId}" onclick="choice_ck();" /></td>
 									<td>${no-idx.index}</td>
-									<td class="title_cell">${eventList.eventName}</td>
+									<td class="title_cell" onclick="goEventDetail()">${eventList.eventName}</td>
 									<td>${eventList.brandName}</td>
 									<td>
 										<c:choose>

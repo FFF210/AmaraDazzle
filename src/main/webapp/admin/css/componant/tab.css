@@ -35,21 +35,4 @@ section.tab_content {
     flex-direction: column;
     align-items: center;
 }
-/* ********************* */
-/* 상세보기 화면 탭        */
-/* ********************* */
-.content > .info_tab > .tabs {
-    width: 100%;
-    border-bottom: 1px solid #d63384;
-}
 
-.content > .info_tab > .tabs > .tab {
-    width: 100%;
-    text-align: center;
-}
-
-.content > .info_tab > .tabs > .tab.active {
-    border-bottom: none;
-    font-weight: bold;
-    background-color: #d6338454;
-}

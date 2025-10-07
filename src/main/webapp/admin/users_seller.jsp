@@ -11,7 +11,7 @@
 <%@ include file="./common/config.jsp"%>
 
 <title>Users 사업자회원</title>
-<link rel="stylesheet" href="../css/admin/user_seller.css" />
+<link rel="stylesheet" href="./css/user_seller.css" />
 <!-- 헤드부분 -->
 
 <body>
@@ -20,15 +20,14 @@
 	<my:adminLayout>
 		<!-- 메인부분 -->
 		<div class="tabs">
-			<div class="tab active" onclick="showTab('seller')">판매자 회원
-				(${sellerAllCnt})</div>
+			<div class="tab active" onclick="">판매자 회원 (${sellerAllCnt})</div>
 			<div class="tab">일반회원 회원 (${sellerAllCnt})</div>
 		</div>
 
 		<!-- ************************* 판매자 탭 ************************* -->
 		<div id="seller" class="tab_content">
 			<!-- 필터 -->
-			<form id="sellerSearchForm" method="GET" class="search_form">
+			<form id="sellerSearchForm" class="search_form">
 				<my:adminTableFilter>
 					<my:adminFilterPeriod title="가입일" />
 					<my:adminFilterMiddle filters="게시 상태:ALL=전체|APPLY_SUBMITTED=승인대기|APPROVED=승인완료|SIGNUP_COMPLETED=가입완료" name="sellerStatus" />
@@ -36,7 +35,6 @@
 				</my:adminTableFilter>
 			</form>
 			<!-- 필터 end -->
-			${searchContent.middleFilter}
 			<!-- 사업자회원 테이블 -->
 			<div class="whole_table" style="display: ${searched eq 'searched' ? 'block' : 'none'};">
 				<div class="table_title">
@@ -105,38 +103,38 @@
 							<c:forEach items="${sellerList}" var="sellerList" varStatus="idx">
 								<c:set var="createDate" value="${sellerList.createdAt}" />
 								<tr>
-									<td><input type="checkbox" class="ch_box"
-										value="${sellerList.brandId}" onclick="choice_ck();" /></td>
+									<td><input type="checkbox" class="ch_box" value="${sellerList.brandId}" onclick="choice_ck();" /></td>
 									<td>${no-idx.index}</td>
-									<td class="img_cell"><c:if
-											test="${sellerList.logoFileId eq null}">
+									<td class="img_cell">
+										<c:if test="${sellerList.logoFileId eq null}">
 											<img src="../image/no-image.svg">
 										</c:if> <c:if test="${sellerList.logoFileId ne null}">
-											<img
-												src="${contextPath}/upload_file/${sellerList.fileRename}">
-										</c:if></td>
+											<img src="${contextPath}/upload_file/${sellerList.fileRename}">
+										</c:if>
+									</td>
 									<td class="title_cell"
 										onclick="goSellerDetail('${sellerList.brandId}');">${sellerList.brandName}</td>
 									<td>${sellerList.managerName}</td>
 									<td>${fn:substring(createDate,0,19)}</td>
 									<td></td>
-									<td><span onclick="changeState()"> <c:choose>
-												<c:when
-													test="${sellerList.brandStatus == 'APPLY_SUBMITTED' }">
-													<my:tag color="gray" size="md" text="승인대기" />
-												</c:when>
-												<c:when test="${sellerList.brandStatus == 'APPROVED'}">
-													<my:tag color="blue" size="md" text="승인완료" />
-												</c:when>
-												<c:when
-													test="${sellerList.brandStatus == 'SIGNUP_COMPLETED'}">
-													<my:tag color="yellow" size="md" text="가입완료" />
-												</c:when>
-											</c:choose>
-									</span></td>
-									<td class="detail_cell"
-										onclick="goSellerDetail('${sellerList.brandId}');"><i
-										class="bi bi-three-dots-vertical"></i></td>
+									<td>
+										<span onclick="changeState()"> 
+										<c:choose>
+											<c:when test="${sellerList.brandStatus == 'APPLY_SUBMITTED' }">
+												<my:tag color="gray" size="md" text="승인대기" />
+											</c:when>
+											<c:when test="${sellerList.brandStatus == 'APPROVED'}">
+												<my:tag color="blue" size="md" text="승인완료" />
+											</c:when>
+											<c:when test="${sellerList.brandStatus == 'SIGNUP_COMPLETED'}">
+												<my:tag color="yellow" size="md" text="가입완료" />
+											</c:when>
+										</c:choose>
+										</span>
+									</td>
+									<td class="detail_cell" onclick="goSellerDetail('${sellerList.brandId}');">
+										<i class="bi bi-three-dots-vertical"></i>
+									</td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -179,6 +177,7 @@
 	<script src="../tagjs/selectbox.js"></script>
 	<script src="../tagjs/dateInput.js"></script>
 	<script src="./js/common/table.js"></script>
+	<script src="./js/users.js"></script>
 	<!-- JS부분 end -->
 
 </body>

@@ -33,7 +33,7 @@
 	
 	<!-- 버튼 -->
 	<div class="filter-actions btn_box ">
-		<input type="submit" class="btn first_btn " value="검색" />
+		<input type="submit" class="btn first_btn filter-submit" value="검색" />
 		<input type="button" class="btn second_btn filter-reset" value="초기화" />
 	</div>
 	<!-- 버튼 end -->

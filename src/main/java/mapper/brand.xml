@@ -333,7 +333,7 @@
 	</select>
 
 	<!-- ======================= ADMIN ======================= -->
-	<!-- 가입한 브랜드 전체 수 -->
+	<!-- 가입한 브랜드 수 -->
 	<select id="brandAllCnt" resultType="Integer" parameterType="searchCondition">
 		select count(*) from brand b
 		<where>
@@ -414,6 +414,14 @@
 			</if>
 		</where>
 		order by b.brand_id desc limit #{start_p},#{post_ea}
+	</select>
+	
+	<!-- 브랜드 회원 정보 상세보기 -->
+	<select id="selectBrandDetail" resultType="brand" parameterType="int" >
+		select b.*, f.file_name, f.file_rename
+		from brand b
+		left join upload_file f on (b.logo_file_id = f.upload_file_id)
+		where b.brand_id = #{num}
 	</select>
 
 </mapper>
