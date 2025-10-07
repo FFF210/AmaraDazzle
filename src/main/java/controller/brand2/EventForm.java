@@ -12,13 +12,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import dto.Event;
 import dto.brand2.EventApplicationForm;
 import service.brand2.EventService;
 import service.brand2.EventServiceImpl;
-
 
 /**
  * Servlet implementation class Event
@@ -43,109 +40,106 @@ public class EventForm extends HttpServlet {
 			throws ServletException, IOException {
 
 		EventService eventService = new EventServiceImpl();
-
-		// Ajax: 이벤트명 목록 조회
-		String action = request.getParameter("action");
-		if ("names".equals(action)) {
-			String type = request.getParameter("type");
-			List<Event> eventNames = eventService.getEventNamesByType(type);
-
-			response.setContentType("application/json; charset=UTF-8");
-			JSONArray arr = new JSONArray();
-			for (Event ev : eventNames) {
-				JSONObject obj = new JSONObject();
-				obj.put("eventId", ev.getEventId());
-				obj.put("eventName", ev.getEventName());
-				arr.add(obj);
-			}
-			response.getWriter().print(arr.toJSONString());
-			return;
-		}
-
-		// DB에서 이벤트 종류 조회
-		List<String> eventTypes = eventService.getEventTypes();
-
-		request.setAttribute("eventTypes", eventTypes);
-
-		// 이벤트 신청 페이지 이동
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/brand2/eventForm.jsp");
-		dispatcher.forward(request, response);
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
 		try {
+            // 파라미터에서 eventId 가져오기
+            String eventIdParam = request.getParameter("eventId");
+            if (eventIdParam == null || eventIdParam.isBlank()) {
+                response.sendRedirect(request.getContextPath() + "/brand2/eventList");
+                return;
+            }
 
-			// 1. 폼 데이터 수집
-			EventApplicationForm form = new EventApplicationForm();
+            Long eventId = Long.parseLong(eventIdParam);
 
-			// event_application
-			form.setEventId(Long.parseLong(request.getParameter("eventId")));
+            // 단일 이벤트 정보 조회 (eventService → EventDAO.selectEventNamesByType)
+            // 모든 이벤트명 중에서 해당 eventId 찾음
+            Event selectedEvent = eventService.getEventById(eventId);
 
-			// 세션에서 brandId 꺼내기
-//			HttpSession session = request.getSession();
-//			Brand brand = (Brand) session.getAttribute("brand");
-//			if (brand != null) {
-//				form.setBrandId(brand.getBrandId());
-//			} 
-			form.setBrandId(1L);
+            if (selectedEvent == null) {
+                response.sendRedirect(request.getContextPath() + "/brand2/eventList");
+                return;
+            }
 
-			form.setManagerName(request.getParameter("managerName"));
-			form.setManagerTel(request.getParameter("managerTel"));
-			form.setNote(request.getParameter("note"));
+            request.setAttribute("event", selectedEvent);
 
-			// productIds (상품코드 여러 개)
-			String[] productArr = request.getParameterValues("productIds");
-			if (productArr != null) {
-				List<Long> productIds = new java.util.ArrayList<>();
-				for (String pid : productArr) {
-					productIds.add(Long.parseLong(pid));
-				}
-				form.setProductIds(productIds);
-			}
+            // 신청 폼 페이지로 forward
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/brand2/eventForm.jsp");
+            dispatcher.forward(request, response);
 
-			
-			form.setCname(request.getParameter("couponName"));
-			
-			
-			// 쿠폰 기간 (HTML input[type=date] → Timestamp 변환)
-			String startDateStr = request.getParameter("startDate"); // "2025-09-26"
-			String endDateStr = request.getParameter("endDate");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/brand2/eventList?error=1");
+        }
+    }
 
-			if (startDateStr == null || endDateStr == null || startDateStr.isBlank() || endDateStr.isBlank()) {
-				throw new IllegalArgumentException("쿠폰 기간 값이 비어 있습니다.");
-			}
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
-			LocalDate startLocal = LocalDate.parse(startDateStr);
-			LocalDate endLocal = LocalDate.parse(endDateStr);
+        try {
+            request.setCharacterEncoding("UTF-8");
 
-			form.setStartDateCoupon(Timestamp.valueOf(startLocal.atStartOfDay()));
-			form.setEndDateCoupon(Timestamp.valueOf(endLocal.atTime(23, 59, 59)));
-			// 끝나는 날은 보통 하루 끝(23:59:59)까지 포함시키는 경우가 많음
+            // 1. 폼 데이터 수집
+            EventApplicationForm form = new EventApplicationForm();
 
-			form.setAmount(Integer.parseInt(request.getParameter("amount")));
-			form.setAmountCondition(request.getParameter("amountCondition"));
-			form.setProvision("개별지급"); // 기본값
-			form.setWriterType("BRAND_ADMIN");
-			form.setWriterId(form.getBrandId());
+            form.setEventId(Long.parseLong(request.getParameter("eventId")));
+            form.setBrandId(1L); // ★ 세션 연동 필요시 교체
 
-			// 2. 서비스 호출
-			EventService eventService = new EventServiceImpl();
-			eventService.applyEvent(form);
+            form.setManagerName(request.getParameter("managerName"));
+            form.setManagerTel(request.getParameter("managerTel"));
+            form.setNote(request.getParameter("note"));
 
-			// 3. 신청 완료 후 목록으로 리다이렉트
-			request.getRequestDispatcher("/brand2/eventComplete.jsp").forward(request, response);
+            // 상품코드 여러개
+            String[] productArr = request.getParameterValues("productIds");
+            if (productArr != null) {
+                List<Long> productIds = new java.util.ArrayList<>();
+                for (String pid : productArr) {
+                    if (pid != null && !pid.isBlank()) {
+                        productIds.add(Long.parseLong(pid));
+                    }
+                }
+                form.setProductIds(productIds);
+            }
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			response.sendRedirect(request.getContextPath() + "/brand2/eventList.jsp?error=1");
-		}
+            // 쿠폰 입력값
+            form.setCname(request.getParameter("couponName"));
 
-	}
+            String startDateStr = request.getParameter("startDate");
+            String endDateStr = request.getParameter("endDate");
+            if (startDateStr != null && !startDateStr.isBlank()
+                    && endDateStr != null && !endDateStr.isBlank()) {
 
+                LocalDate startLocal = LocalDate.parse(startDateStr);
+                LocalDate endLocal = LocalDate.parse(endDateStr);
+
+                form.setStartDateCoupon(Timestamp.valueOf(startLocal.atStartOfDay()));
+                form.setEndDateCoupon(Timestamp.valueOf(endLocal.atTime(23, 59, 59)));
+            }
+
+            // 숫자값 처리
+            String amount = request.getParameter("amount");
+            if (amount != null && !amount.isBlank()) {
+                form.setAmount(Integer.parseInt(amount));
+            }
+
+            String amountCondition = request.getParameter("amountCondition");
+            if (amountCondition != null && !amountCondition.isBlank()) {
+                form.setAmountCondition(amountCondition);
+            }
+
+            form.setProvision("개별지급"); 
+            form.setWriterType("BRAND_ADMIN");
+            form.setWriterId(form.getBrandId());
+
+            // 2. 서비스 호출
+            EventService eventService = new EventServiceImpl();
+            eventService.applyEvent(form);
+
+            // 3. 완료 페이지
+            request.getRequestDispatcher("/brand2/eventComplete.jsp").forward(request, response);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/brand2/eventList?error=1");
+        }
+    }
 }
