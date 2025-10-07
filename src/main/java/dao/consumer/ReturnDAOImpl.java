@@ -29,7 +29,7 @@ public class ReturnDAOImpl implements ReturnDAO {
 
 	// ================[소비자] 반품 상세 조회 ===================
 	@Override
-	public Returns selectReturnsById(Long returnsId) {
+	public Map<String, Object> selectReturnsById(Long returnsId) {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
             return sqlSession.selectOne("mapper.returns.selectReturnsById", returnsId);
         }

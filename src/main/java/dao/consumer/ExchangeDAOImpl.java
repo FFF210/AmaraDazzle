@@ -29,10 +29,10 @@ public class ExchangeDAOImpl implements ExchangeDAO {
 
 	// ================[소비자] 교환 상세 조회 ===================
 	@Override
-	public Exchange selectExchangeById(Long exchangeId) {
-		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-            return sqlSession.selectOne("mapper.exchange.selectExchangeById", exchangeId);
-        }
+	public Map<String, Object> selectExchangeById(Long exchangeId) {
+		 try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+		        return sqlSession.selectOne("mapper.exchange.selectExchangeById", exchangeId);
+		    }
 	}
 	
 	// ================[소비자] 주문 상품 상태 변경 ===================

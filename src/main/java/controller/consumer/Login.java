@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import dto.Member;
+import service.consumer.MemberCouponService;
+import service.consumer.MemberCouponServiceImpl;
 import service.consumer.MemberService;
 import service.consumer.MemberServiceImpl;
 
@@ -49,16 +51,21 @@ public class Login extends HttpServlet {
         try {
             // 로그인 시도
 			MemberService service = new MemberServiceImpl();
-			Member member = service.login(email, password);            
+			Member member = service.login(email, password); 
+			
+			MemberCouponService couponService = new MemberCouponServiceImpl();
+			int couponCount = couponService.getAvailableCouponCount(member.getMemberId());			
             // 로그인 성공 - 세션에 저장
             HttpSession session = request.getSession();
             session.setAttribute("loginUser", member);
             
-            //이건 저장 굳이 안 해도 되는듯 하지만...
+            // 개별 저장...
             session.setAttribute("memberId", member.getMemberId());
             session.setAttribute("memberName", member.getName());
             session.setAttribute("memberEmail", member.getEmail());
             session.setAttribute("memberGrade", member.getGrade());
+            session.setAttribute("memberPoints", member.getPointBalance());
+            session.setAttribute("memberCoupons", couponCount);
             
             response.sendRedirect(request.getContextPath() + "/store/main");              
             

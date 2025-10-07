@@ -14,7 +14,7 @@ public interface ReturnService {
     List<Map<String, Object>> getReturnsListByMemberId(Long memberId) throws Exception;
     
     // ================[소비자] 반품 상세 조회 ===================
-    Returns getReturnsById(Long returnsId) throws Exception;
+    Map<String, Object> getReturnsById(Long returnsId) throws Exception;
     
     // ================[소비자] 반품 신청 가능 여부 확인 (중복 체크) ===================
     boolean canApplyReturns(Long orderItemId) throws Exception;

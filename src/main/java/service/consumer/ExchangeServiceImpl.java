@@ -38,12 +38,12 @@ public class ExchangeServiceImpl implements ExchangeService {
 
 	// ================[소비자] 교환 상세 조회 ===================
 	@Override
-	public Exchange getExchangeById(Long exchangeId) throws Exception {
-		Exchange exchange = exchangeDAO.selectExchangeById(exchangeId);
-        if (exchange == null) {
-            throw new Exception("교환 정보를 찾을 수 없습니다.");
-        }
-        return exchange;
+	public Map<String, Object> getExchangeById(Long exchangeId) throws Exception {
+	    Map<String, Object> exchange = exchangeDAO.selectExchangeById(exchangeId);
+	    if (exchange == null) {
+	        throw new Exception("교환 정보를 찾을 수 없습니다.");
+	    }
+	    return exchange;
 	}
 
 	// ================[소비자] 교환 신청 가능 여부 확인 (중복 체크) ===================

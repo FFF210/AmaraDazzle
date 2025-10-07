@@ -94,28 +94,38 @@
         용도: 교환 상세 페이지에서 1건의 교환 정보 조회
         화면: 이미지2, 이미지4 - 교환 상세정보 페이지
     -->
-    <select id="selectExchangeById" parameterType="long" resultType="dto.Exchange">
-        SELECT 
-            exchange_id AS exchangeId,
-            member_id AS memberId,
-            order_id AS orderId,
-            order_item_id AS orderItemId,
-            product_option_id AS productOptionId,
-            image1_file_id AS image1FileId,
-            image2_file_id AS image2FileId,
-            image3_file_id AS image3FileId,
-            rejection_reason AS rejectionReason,
-            reason,
-            shipping_cost AS shippingCost,
-            shipping_cost_payer AS shippingCostPayer,
-            note,
-            return_carrier_name AS returnCarrierName,
-            return_tracking_no AS returnTrackingNo,
-            shipping_carrier_name AS shippingCarrierName,
-            shipping_tracking_no AS shippingTrackingNo,
-            updated_at AS updatedAt
-        FROM exchange
-        WHERE exchange_id = #{exchangeId}
+    <select id="selectExchangeById" parameterType="long" resultType="map">
+        SELECT
+        e.exchange_id AS exchangeId,
+        e.member_id AS memberId,
+        e.order_id AS orderId,
+        e.order_item_id AS orderItemId,
+        e.product_option_id AS productOptionId,
+        e.image1_file_id AS image1FileId,
+        e.image2_file_id AS image2FileId,
+        e.image3_file_id AS image3FileId,
+        e.rejection_reason AS rejectionReason,
+        e.reason,
+        e.shipping_cost AS shippingCost,
+        e.shipping_cost_payer AS shippingCostPayer,
+        e.note,
+        e.return_carrier_name AS returnCarrierName,
+        e.return_tracking_no AS returnTrackingNo,
+        e.shipping_carrier_name AS shippingCarrierName,
+        e.shipping_tracking_no AS shippingTrackingNo,
+        e.updated_at AS updatedAt,
+        b.brand_name AS brandName,
+        p.name AS productName,
+        po.option_value AS optionValue,
+        oi.quantity,
+        oi.unit_price AS unitPrice,
+        oi.total
+    FROM exchange e
+    INNER JOIN order_item oi ON e.order_item_id = oi.order_item_id
+    LEFT JOIN brand b ON oi.brand_id = b.brand_id
+    LEFT JOIN product p ON oi.product_id = p.product_id
+    LEFT JOIN product_option po ON oi.option_id = po.product_option_id
+    WHERE e.exchange_id = #{exchangeId}
     </select>
 
     <!-- ============================================ -->

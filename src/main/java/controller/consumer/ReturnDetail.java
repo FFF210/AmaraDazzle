@@ -1,6 +1,7 @@
 package controller.consumer;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import dto.Returns;
+import dto.Member;
+import service.consumer.MemberService;
+import service.consumer.MemberServiceImpl;
 import service.consumer.ReturnService;
 import service.consumer.ReturnServiceImpl;
 
@@ -53,17 +56,23 @@ request.setCharacterEncoding("utf-8");
 		
 		try {
 			ReturnService returnService = new ReturnServiceImpl();
-			Returns returns = returnService.getReturnsById(Long.parseLong(returnsId));
+			Map<String, Object> returns = returnService.getReturnsById(Long.parseLong(returnsId));
 			
 			// 본인의 반품 내역인지 확인
-			if (!returns.getMemberId().equals(memberId)) {
-				request.setAttribute("err", "접근 권한이 없습니다.");
-				request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);
-				return;
+			Long returnMemberId = ((Number) returns.get("memberId")).longValue();
+			if (!returnMemberId.equals(memberId)) {
+			    request.setAttribute("err", "접근 권한이 없습니다.");
+			    request.getRequestDispatcher("/error.jsp").forward(request, response);
+			    return;
 			}
+			
+			//회원 정보 가져오기
+			MemberService memberService = new MemberServiceImpl();
+			Member member = memberService.getMemberInfo(memberId);
 			
 			// JSP로 데이터 전달
 			request.setAttribute("returns", returns);
+			request.setAttribute("member", member);
 			request.getRequestDispatcher("/consumer/returnDetail.jsp").forward(request, response);
 			
 		} catch (Exception e) {
