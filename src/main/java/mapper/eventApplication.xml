@@ -21,21 +21,13 @@
 		)
 	</insert>
 
-	<!-- 2-1. event_product 여러 개 저장 -->
-	<insert id="insertEventProducts" parameterType="map">
-		INSERT INTO event_product (brand_id, product_id)
-		VALUES
-		<foreach collection="productIds" item="pid" separator=",">
-			(#{brandId}, #{pid})
-		</foreach>
-	</insert>
-
 	<!--2-2. product 테이블에 event_id 세팅 -->
 	<update id="updateProductsEvent" parameterType="map">
 		UPDATE product
 		SET event_id = #{eventId}
 		WHERE brand_id = #{brandId}
-		AND product_id IN
+		AND
+		product_id IN
 		<foreach collection="productIds" item="pid" open="("
 			separator="," close=")">
 			#{pid}
