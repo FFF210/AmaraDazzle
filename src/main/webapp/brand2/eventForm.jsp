@@ -80,7 +80,7 @@
 						size="sm" state="default" value="${event.eventName}" />
 				</div>
 
-				<div class="label req">광고담당자</div>
+				<div class="label req">이벤트 담당자</div>
 				<div>
 					<my:textInput id="managerName" name="managerName"
 						placeholder="담당자 성함을 입력하세요." type="default" size="sm"

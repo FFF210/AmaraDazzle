@@ -10,6 +10,7 @@ import dto.Coupon;
 import dto.Event;
 import dto.EventApplication;
 import dto.brand2.EventApplicationForm;
+import dto.brand2.EventDetail;
 import dto.brand2.EventList;
 
 public class EventServiceImpl implements EventService {
@@ -22,7 +23,7 @@ public class EventServiceImpl implements EventService {
 
 	/* ===== eventList ===== */
 	@Override
-	public Map<String, Object> getEventList(Map<String, Object> params) {
+	public Map<String, Object> getEventList(Map<String, Object> params) throws Exception {
 		// 1. 이벤트 목록 조회
 		List<EventList> eventList = eventDAO.selectEventList(params);
 
@@ -44,7 +45,7 @@ public class EventServiceImpl implements EventService {
 
 	/* ===== eventForm ===== */
 	@Override
-	public void applyEvent(EventApplicationForm form) {
+	public void applyEvent(EventApplicationForm form) throws Exception {
 		// 1. 이벤트 신청 저장
 		EventApplication application = new EventApplication();
 		application.setEventId(form.getEventId());
@@ -60,7 +61,7 @@ public class EventServiceImpl implements EventService {
 			map.put("eventId", form.getEventId());
 			map.put("brandId", form.getBrandId());
 			map.put("productIds", form.getProductIds());
-			eventDAO.insertEventProducts(map); // event_product: brand_id, product_id
+			//eventDAO.insertEventProducts(map); // event_product: brand_id, product_id
 			eventDAO.updateProductsEvent(map); // product.event_id = eventId
 		}
 
@@ -84,8 +85,20 @@ public class EventServiceImpl implements EventService {
 
 	// 신청하기 버튼 (단일 이벤트 조회)
 	@Override
-	public Event getEventById(Long eventId) {
+	public Event getEventById(Long eventId) throws Exception {
 		return eventDAO.selectEventById(eventId);
 	}
+	
+	@Override
+	public void resetProductsForEvent(Long eventId) throws Exception {
+	    eventDAO.resetProductsForEvent(eventId);
+	}
+
+	// 상세보기 버튼
+	@Override
+	public EventDetail getEventDetailById(Long eventId) throws Exception {
+	    return eventDAO.selectEventDetailById(eventId);
+	}
+
 
 }
