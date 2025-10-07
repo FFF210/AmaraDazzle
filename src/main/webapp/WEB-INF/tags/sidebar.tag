@@ -136,7 +136,7 @@
 			</button>
 			<ul class="submenu">
 				<li><a href="/brand/noticeList">공지사항</a></li>
-				<li><a href="/brand/inquiryList">문의하기</a></li>
+				<!-- <li><a href="/brand/inquiryList">문의하기</a></li> -->
 			</ul>
 		</li>
 	</ul>

@@ -62,6 +62,8 @@ public class BrandLogin extends HttpServlet {
 				HttpSession session = request.getSession();
 				session.setAttribute("brand", brand);
 				session.setAttribute("brandId", brand.getBrandId());
+				session.setAttribute("brandName", brand.getBrandName());
+				session.setAttribute("logoFileId", brand.getLogoFileId());
 
 				// 쿠키 설정
 				Cookie cookie1 = null;
@@ -89,7 +91,7 @@ public class BrandLogin extends HttpServlet {
 				response.addCookie(cookie2);
 				response.addCookie(cookie3);
 
-				response.sendRedirect("/brand/productList");
+				response.sendRedirect("/brand/todoDashboard");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

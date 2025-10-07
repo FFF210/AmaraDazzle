@@ -4,6 +4,14 @@ html, body {
 	overflow: hidden;
 }
 
+.page-breadcrumb {
+	display: flex;
+    padding: 8px 24px;
+    flex-direction: column;
+    align-items: flex-start;
+    align-self: stretch;
+}
+
 /* 대시보드 컨테이너 */
 .dashboard-container {
 	display: grid;
@@ -11,7 +19,7 @@ html, body {
 	grid-template-rows: 1fr 1fr 1fr 1fr;
 	grid-gap: 24px;
 	height: 100%;
-	padding: 24px;
+	padding: 8px 24px 24px 24px;
 	box-sizing: border-box;
 }
 
@@ -153,3 +161,42 @@ html, body {
 	align-items: flex-start;
 	gap: 8px;
 }
+
+
+.top3-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 25px;
+    margin: 30px 0;
+}
+.top3-card {
+    width: 180px;
+    text-align: center;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    padding: 15px;
+    position: relative;
+}
+.rank-badge {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f9c74f;
+    color: #000;
+    font-weight: bold;
+    border-radius: 12px;
+    padding: 3px 10px;
+    font-size: 0.9em;
+}
+.top3-card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.top3-card .name { margin-top: 10px; font-size: 1em; font-weight: 600; color: #333; }
+.top3-card .sold { font-size: 0.9em; color: #666; }
+.top3-card:nth-child(2) { transform: scale(1.1); } /* 중앙(1위) 강조 */

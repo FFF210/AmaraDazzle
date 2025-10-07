@@ -21,7 +21,7 @@
 <nav class="breadcrumb">
 	<ul>
 		<!-- 홈 고정 -->
-		<li class="home"><a href="/"> 홈</a><i
+		<li class="home"><a href="/brand/todoDashboard"> 홈</a><i
 			class="bi bi-chevron-right breadcrumb-separator"></i></li>
 
 		<c:forEach var="it" items="${crumbList}" varStatus="status">

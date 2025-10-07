@@ -31,3 +31,57 @@
 .admin-header .icon-btn:hover i {
 	color: #0C8CE9;
 }
+
+/* 드롭다운 스타일 */
+.profile-wrapper {
+	position: relative;
+	display: inline-block;
+}
+
+.profile-dropdown {
+	display: none;
+	position: absolute;
+	top: 40px;
+	right: -100px;
+	z-index: 10;
+}
+
+.profile-dropdown.active {
+	display: block;
+}
+
+.profile-box {
+	width: 220px;
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+	padding: 8px 16px;
+	box-sizing: border-box;
+}
+
+.profile-info {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	align-self: stretch;
+	margin-bottom: 8px;
+}
+
+.brand-name {
+	color: #202020;
+	text-align: right;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 600;
+	line-height: 150%; 
+}
+
+.profile-action-btn {
+	width: 100%;
+	margin-bottom: 4px;
+}
+
+.logout-btn {
+	    width: 100%;
+}

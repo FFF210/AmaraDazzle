@@ -65,12 +65,13 @@
 </head>
 <body>
 	<my:layout>
-		<my:breadcrumb items="이벤트 관리:/brand2/eventList.jsp" />
+		<my:breadcrumb items="이벤트 관리:/brand2/eventList" />
 		<div class="filter">
 			<my:tableFilter
 				filters="status|진행상황:RECRUIT=모집중|ONGOING=진행중|FINISHED=종료"
-				hasDate="false" searchItems="이벤트 종류,이벤트 담당자" />
+				hasDate="false" searchItems="이벤트명,이벤트 담당자" />
 		</div>
+		<!-- searchItmes는 tableFilter.js 수정, xml 수정 -->
 		<div class="tcontainer">
 			<div class="table-wrapper">
 				<table class="table">
@@ -80,31 +81,31 @@
 							<th class="sortable">번호 <i class="bi bi-dash-lg sort-icon"></i></th>
 							<th>신청일</th>
 							<th>이벤트 기간</th>
-							<th>이벤트 종류</th>
+							<th>이벤트명</th>
 							<th>이벤트 진행</th>
 							<th>이벤트 담당자</th>
 							<th>참여 여부</th>
-							<th>관리</th>
+							<th></th>
+							<th></th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach var="event" items="${eventList}" varStatus="status">
+						<c:forEach var="event" items="${eventList}">
 							<tr>
+								<!-- 번호 -->
 								<td><input type="checkbox" class="form-check" /></td>
-								<td>${status.index + 1}</td>
+								<td>${event.eventId}</td>
+								<!-- 신청일 -->
 								<td><fmt:formatDate value="${event.applyDate}"
 										pattern="yyyy-MM-dd" /></td>
+								<!-- 이벤트 기간 -->
 								<td><fmt:formatDate value="${event.startDate}"
 										pattern="yyyy-MM-dd" /> ~ <fmt:formatDate
 										value="${event.endDate}" pattern="yyyy-MM-dd" /></td>
-								<td><c:choose>
-										<c:when test="${not empty event.eventName}">
-                                        ${event.eventName}
-                                    </c:when>
-										<c:otherwise>
-                                        ${event.eventType}
-                                    </c:otherwise>
-									</c:choose></td>
+								<!-- 이벤트명 -->
+								<td>${event.eventName}</td>
+								<!-- 이벤트 진행 -->
 								<td><c:choose>
 										<c:when test="${event.status eq 'ONGOING'}">
 											<my:tag color="green" size="sm" text="진행중" />
@@ -115,16 +116,9 @@
 										<c:when test="${event.status eq 'FINISHED'}">
 											<my:tag color="gray" size="sm" text="완료" />
 										</c:when>
-										<c:otherwise>
-											<my:tag color="gray" size="sm" text="미참여" />
-										</c:otherwise>
 									</c:choose></td>
-								<td><c:choose>
-										<c:when test="${not empty event.writer}">
-                                        ${event.writer}
-                                    </c:when>
-										<c:otherwise>-</c:otherwise>
-									</c:choose></td>
+								<!-- 이벤트 담당자 -->
+								<td>${event.managerName }</td>
 								<td><c:choose>
 										<c:when test="${event.participateYn eq '참여'}">
 											<my:tag color="blue" size="sm" text="참여" />
@@ -133,39 +127,42 @@
 											<my:tag color="gray" size="sm" text="미참여" />
 										</c:otherwise>
 									</c:choose></td>
-								<td>
-									<div class="actions">
-										<c:choose>
-											<c:when
-												test="${event.status eq 'ONGOING' and event.participateYn eq '참여'}">
-												<button type="button" class="btn btn-outline btn-sm"
-													onclick="location.href='/brand2/eventForm.jsp?eventId=${event.eventId}'">상세보기</button>
-											</c:when>
+								<!-- 신청하기 -->
+								<td><c:choose>
+										<c:when
+											test="${event.canApply eq 'Y' and event.participateYn eq '미참여'}">
+											<button type="button" class="btn btn-outline btn-sm"
+												onclick="location.href='/brand2/event?eventId=${event.eventId}'">
+												신청하기</button>
+										</c:when>
+										<c:otherwise>
+											<button type="button" class="btn btn-outline btn-sm" disabled>
+												신청하기</button>
+										</c:otherwise>
+									</c:choose></td>
 
-											<c:when
-												test="${event.status eq 'RECRUIT' and event.participateYn eq '참여'}">
-												<button type="button" class="btn btn-outline btn-sm"
-													onclick="location.href='/brand2/eventForm.jsp?eventId=${event.eventId}'">수정</button>
-												<button type="button" class="btn btn-outline btn-sm"
-													onclick="location.href='/brand2/eventForm.jsp?eventId=${event.eventId}'">상세보기</button>
-											</c:when>
+								<!-- 상세보기 -->
+								<td><c:choose>
+										<c:when test="${event.participateYn eq '참여'}">
+											<button type="button" class="btn btn-outline btn-sm"
+												onclick="location.href='/brand2/eventDetail?eventId=${event.eventId}'">상세보기</button>
+										</c:when>
+										<c:otherwise>
+											<button type="button" class="btn btn-outline btn-sm" disabled>상세보기</button>
+										</c:otherwise>
+									</c:choose></td>
 
-											<c:when
-												test="${event.status eq 'RECRUIT' and event.participateYn eq '미참여'}">
-												<button type="button" class="btn btn-outline btn-sm"
-													onclick="location.href='/brand2/eventForm.jsp?eventId=${event.eventId}'">신청하기</button>
-											</c:when>
-
-											<c:when
-												test="${event.status eq 'FINISHED' and event.participateYn eq '참여'}">
-												<button type="button" class="btn btn-outline btn-sm"
-													onclick="location.href='/brand2/eventForm.jsp?eventId=${event.eventId}'">상세보기</button>
-											</c:when>
-
-											<c:otherwise>-</c:otherwise>
-										</c:choose>
-									</div>
-								</td>
+								<!-- 취소하기 -->
+								<td><c:choose>
+										<c:when
+											test="${event.status eq 'RECRUIT' and event.participateYn eq '참여'}">
+											<button type="button" class="btn btn-danger btn-sm"
+												onclick="if(confirm('정말 취소하시겠습니까?')) location.href='/brand2/eventDetail?eventId=${event.eventId}'">취소</button>
+										</c:when>
+										<c:otherwise>
+											<button type="button" class="btn btn-outline btn-sm" disabled>취소</button>
+										</c:otherwise>
+									</c:choose></td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -195,7 +192,8 @@
 	<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/js/selectbox.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/selectbox.js"></script>
 
 	<script>
 	/*********************************************************************************************************
@@ -211,14 +209,14 @@
 	      params.append("status", value);
 	    }
 
-	    // 검색 조건
+	    // 진행 상황
 	    if (searchField) params.append("searchType", searchField);
 	    if (searchKeyword) params.append("searchKeyword", searchKeyword);
-
+<%--
 	    // 날짜 조건
 	    if (dateStart) params.append("startDate", dateStart);
 	    if (dateEnd) params.append("endDate", dateEnd);
-
+--%>
 	    // 페이지는 1부터 시작
 	    params.append("page", 1);
 

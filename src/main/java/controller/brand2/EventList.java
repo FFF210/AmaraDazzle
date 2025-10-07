@@ -53,17 +53,12 @@ public class EventList extends HttpServlet {
 			int limit = 10; // 한 페이지당 개수
 			int offset = (page - 1) * limit;
 
-			// 이벤트 진행 상황
-			params.put("status", request.getParameter("status"));
-
-			// 검색 키워드
-			params.put("searchType", request.getParameter("searchType"));
+			params.put("brandId", brandId);
+			params.put("status", request.getParameter("status")); // 이벤트 진행 상황
+			params.put("searchType", request.getParameter("searchType")); // 검색 키워드
 			params.put("searchKeyword", request.getParameter("searchKeyword"));
-
-			// 날짜
-			params.put("startDate", request.getParameter("startDate")); // 시작일
+			params.put("startDate", request.getParameter("startDate")); // 날짜 // 시작일
 			params.put("endDate", request.getParameter("endDate")); // 종료일
-
 			params.put("limit", limit);
 			params.put("offset", offset);
 
