@@ -17,6 +17,10 @@ public class Event {
     private Integer exposeYn;     // 노출 여부 (DEFAULT 0)
     private Timestamp createdAt;  // 생성 시각 (DEFAULT CURRENT_TIMESTAMP)
     private Timestamp updatedAt;  // 수정 시각
+    private Long viewCnt;    		// 조회수 
+    
+    //조인용 컬럼
+    private String brandName; // 브랜드명
 
     public Event() {}
     public Event(String eventType, Timestamp startDate, Timestamp endDate, String eventName,
@@ -130,8 +134,21 @@ public class Event {
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
-
-    @Override
+    
+    public String getBrandName() {
+		return brandName;
+	}
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
+	}
+	
+	public Long getViewCnt() {
+		return viewCnt;
+	}
+	public void setViewCnt(Long viewCnt) {
+		this.viewCnt = viewCnt;
+	}
+	@Override
     public String toString() {
         return "Event [eventId=" + eventId + ", eventType=" + eventType +
                 ", startDate=" + startDate + ", endDate=" + endDate +

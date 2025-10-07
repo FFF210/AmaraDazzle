@@ -33,7 +33,7 @@
 	
 	<!-- 버튼 -->
 	<div class="filter-actions btn_box ">
-		<input type="submit" class="btn first_btn " value="검색" />
+		<input type="submit" class="btn first_btn filter-submit" value="검색" />
 		<input type="button" class="btn second_btn filter-reset" value="초기화" />
 	</div>
 	<!-- 버튼 end -->
@@ -46,7 +46,12 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.querySelector(".search_form").addEventListener("submit", function(e) {
 		this.querySelectorAll("input:not([type='hidden'])").forEach(el => {
 		    if (el.value.trim() === "") {
-		        el.disabled = true;
+		        el.disabled = true; //disabled처리하면 BE로 안날아감
+		    }
+		});
+		this.querySelectorAll("input[type='hidden']").forEach(el => {
+		    if (el.value.trim() === "") {
+		    	el.removeAttribute('name');
 		    }
 		});
 		
@@ -71,16 +76,17 @@ document.addEventListener("DOMContentLoaded", () => {
 	
 	//middleFilter 선택
 	document.querySelectorAll(".filter-btn-group").forEach(group => {
-	    const hidden = group.nextElementSibling; // group 바로 다음 hidden input
-	    
-	    // 페이지 로드 시 UI 반영
+		const hidden = group.nextElementSibling;
+		const val = hidden.value.trim();
+		const matched = group.querySelector(".filter-btn[data-value='" + val + "']");
+    	
+	    // 검색 후 검색한 btn 유지 
 	    if (hidden && hidden.value) {
-	        const matched = group.querySelector(`.filter-btn[data-value="${hidden.value}"]`);
 	        if (matched) {
 	            matched.classList.add("active");
 	        }
 	    } else {
-	        // 값 없으면 기본 '전체' 활성화
+	        // 값 없으면 기본 '전체'버튼 활성화
 	        const firstBtn = group.querySelector(".filter-btn");
 	        if (firstBtn) {
 	            firstBtn.classList.add("active");
@@ -132,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	});
 	
 	//검색조건 초기화
-	const form = document.querySelector("#searchForm");
+	const form = document.querySelector(".search_form");
 	const resetBtn = form.querySelector(".filter-reset");
 
 	resetBtn.addEventListener("click", (e) => {

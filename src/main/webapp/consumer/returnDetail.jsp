@@ -38,7 +38,7 @@
 							</span>
 						</div>
 						<div class="info-item">
-							<span class="label">신청번호:</span> <span class="value order-number">Y${returns.returnsId}</span>
+							<span class="label">주문번호:</span> <span class="value order-number">${returns.orderCode}</span>
 						</div>
 					</div>
 				</section>
@@ -61,13 +61,13 @@
 								<tr>
 									<td>
 										<div class="product-info">
-											<span class="brand">[브랜드명]</span><br> <span
-												class="product-name">[상품명]</span>
+											<span class="brand">${item.brand_name}</span><br> <span
+												class="product-name">${item.name}</span>
 										</div>
 									</td>
-									<td>30,000원</td>
+									<td>${item.price}</td>
 									<td>1</td>
-									<td class="price-highlight">30,000원</td>
+									<td class="price-highlight">${item.price}</td>
 								</tr>
 							</tbody>
 						</table>

@@ -105,15 +105,34 @@ request.setAttribute("floor", floor);
 					<!-- 상품명 -->
 					<h1 class="product-title">${product.name}</h1>
 
+					<!--  태그 표시를 여기다 하나...? 실험을 위해 넣어본 거니 자유롭게 수정해주세요 -->
+					<div class="product-tags">
+						<c:if test="${isExclusive}">
+							<my:tag color="red" size="md" text="단독" />
+						</c:if>
+						<c:if test="${isPlanned}">
+							<my:tag color="green" size="md" text="기획" />
+						</c:if>
+						<c:if test="${isSale}">
+							<my:tag color="yellow" size="md" text="세일" />
+						</c:if>
+					</div>
+
 					<!-- 가격 포멧팅 -->
 					<fmt:formatNumber value="${product.price}" type="number"
 						maxFractionDigits="0" groupingUsed="true" var="productPrice" />
 
+					<!-- 최종가 포멧팅 (세일가) -->
+					<fmt:formatNumber value="${finalPrice}" type="number"
+						maxFractionDigits="0" groupingUsed="true"
+						var="formattedFinalPrice" />
+
 					<!-- 가격 표시 -->
 					<div class="price-section">
-						<my:price isSale="false" hasOption="${product.hasOption == 1}"
-							size="sm" originPrice="${productPrice}" saleRate="0"
-							finalPrice="${productPrice}" />
+						<my:price isSale="${isSale}" hasOption="${product.hasOption == 1}"
+							size="sm" originPrice="${productPrice}"
+							saleRate="${saleRate.intValue()}"
+							finalPrice="${formattedFinalPrice}" />
 					</div>
 				</div>
 
@@ -121,7 +140,7 @@ request.setAttribute("floor", floor);
 				<div class="delivery-info">
 					<div class="info-row">
 						<p>포인트</p>
-						최대&nbsp;<span class="value">2,100</span>원 적립
+						최대&nbsp;<span class="value">10</span>% 적립
 					</div>
 					<div class="info-row">
 						<p>배송일</p>
@@ -131,21 +150,6 @@ request.setAttribute("floor", floor);
 						</div>
 					</div>
 				</div>
-
-				<!-- 옵션 선택 (옵션이 있는 상품만 표시) -->
-				<c:if test="${product.hasOption == 1 and not empty productOptions}">
-					<div class="option-section">
-						<%-- 옵션이 있는 상품: 실제 옵션들을 문자열로 변환 --%>
-						<c:set var="optionItems" value="상품을 선택해주세요" />
-						<c:forEach var="option" items="${productOptions}">
-							<c:set var="optionItems"
-								value="${optionItems},${option.optionValue} (${option.price.intValue()}원)" />
-						</c:forEach>
-
-						<my:selectbox size="lg" items="${optionItems}"
-							initial="상품을 선택해주세요" />
-					</div>
-				</c:if>
 
 				<!-- 옵션 선택 (옵션이 있는 상품만 표시) -->
 				<c:if test="${product.hasOption == 1 and not empty productOptions}">

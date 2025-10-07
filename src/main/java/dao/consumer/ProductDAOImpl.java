@@ -19,6 +19,7 @@ import util.MybatisSqlSessionFactory;
 
 public class ProductDAOImpl implements ProductDAO {
 
+	// productDetail 용도
 	@Override
 	public Product selectProductByProductId(Long productId) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {

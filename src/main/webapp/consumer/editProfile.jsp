@@ -30,7 +30,6 @@
 		<main class="editProfile-content">
 			<h1>회원정보 수정</h1>
 
-			<!-- ⭐ form 태그 추가 -->
 			<form method="post" action="${pageContext.request.contextPath}/store/mypage/editProfile">
 
 				<section class="basic-info">
@@ -42,7 +41,7 @@
 						</div>
 					</div>
 					
-					<!-- 비밀번호 (기존 값 안 보여줌) -->
+					<!-- 비밀번호 -->
 					<div class="form-row password-row">
 						<div class="label">비밀번호</div>
 						<div class="input-wrapper">
