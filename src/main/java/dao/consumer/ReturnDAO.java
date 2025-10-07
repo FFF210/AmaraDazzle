@@ -13,7 +13,7 @@ public interface ReturnDAO {
     List<Map<String, Object>> selectReturnsListByMemberId(Long memberId);
     
     // ================[소비자] 반품 상세 조회 ===================
-    Returns selectReturnsById(Long returnsId);
+    Map<String, Object> selectReturnsById(Long returnsId);
     
     // ================[소비자] 주문 상품 상태 변경 ===================
     void updateOrderItemStatus(Map<String, Object> params);

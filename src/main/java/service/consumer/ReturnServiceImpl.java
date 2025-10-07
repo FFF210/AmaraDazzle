@@ -39,8 +39,8 @@ public class ReturnServiceImpl implements ReturnService {
 
 	// ================[소비자] 반품 상세 조회 ===================
 	@Override
-	public Returns getReturnsById(Long returnsId) throws Exception {
-		 Returns returns = returnDAO.selectReturnsById(returnsId);
+	public Map<String, Object> getReturnsById(Long returnsId) throws Exception {
+		Map<String, Object> returns = returnDAO.selectReturnsById(returnsId);
 	        if (returns == null) {
 	            throw new Exception("반품 정보를 찾을 수 없습니다.");
 	        }

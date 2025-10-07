@@ -283,3 +283,24 @@
 	border-color: #e5e7eb !important;
 	box-shadow: none !important;
 }
+
+/* 이미지 갤러리 */
+.image-gallery {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.evidence-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.evidence-image:hover {
+    transform: scale(1.05);
+}

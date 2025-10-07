@@ -1,6 +1,7 @@
 package controller.consumer;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,9 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import dto.Exchange;
+import dto.Member;
 import service.consumer.ExchangeService;
 import service.consumer.ExchangeServiceImpl;
+import service.consumer.MemberService;
+import service.consumer.MemberServiceImpl;
 
 /**
  * Servlet implementation class ExchangeDetail
@@ -52,18 +55,24 @@ request.setCharacterEncoding("utf-8");
 		}
 		
 		try {
-			ExchangeService service = new ExchangeServiceImpl();
-			Exchange exchange = service.getExchangeById(Long.parseLong(exchangeId));
+			ExchangeService exchangeService = new ExchangeServiceImpl();
+			Map<String, Object> exchange = exchangeService.getExchangeById(Long.parseLong(exchangeId));
 			
 			// 본인의 교환 내역인지 확인
-			if (!exchange.getMemberId().equals(memberId)) {
-				request.setAttribute("err", "접근 권한이 없습니다.");
-				request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);
-				return;
-			}
+			Long exchangeMemberId = ((Number) exchange.get("memberId")).longValue();
+		    if (!exchangeMemberId.equals(memberId)) {
+		        request.setAttribute("err", "접근 권한이 없습니다.");
+		        request.getRequestDispatcher("/error.jsp").forward(request, response);
+		        return;
+		    }
+			
+			// 회원 정보 가져오기
+			MemberService memberService = new MemberServiceImpl();
+			Member member = memberService.getMemberInfo(memberId);
 			
 			// JSP로 데이터 전달
 			request.setAttribute("exchange", exchange);
+			request.setAttribute("member", member);
 			request.getRequestDispatcher("/consumer/exchangeDetail.jsp").forward(request, response);
 			
 		} catch (Exception e) {

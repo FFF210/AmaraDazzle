@@ -81,7 +81,7 @@
 				<div class="user-info__bottom">
 					<div class="stat">
 						<span class="label">등급</span> <span class="value"><span
-							class="em">임시</span></span>
+							class="em">${sessionScope.memberGrade}</span></span>
 					</div>
 					<div class="stat">
 						<span class="label">포인트</span> <span class="value"><span
@@ -96,7 +96,7 @@
 
 			<!-- ============================ 2. 기간 조회 박스 ============================ -->
 			<form
-				action="${pageContext.request.contextPath}/store/cancelExchangeReturnList"
+				action="${pageContext.request.contextPath}/store/mypage/cancelExchangeReturnList"
 				method="get">
 				<div class="drf-wrap drf-${__size}">
 					<div class="drf-box">
@@ -226,12 +226,12 @@
 											<div style="display: flex; align-items: center; gap: 12px;">
 												<div class="product-image">이미지</div>
 												<div class="product-info">
-													<div class="product-brand">[브랜드명]</div>
+													<div class="product-brand">${item.brand_name}</div>
 													<div class="product-name">
 														<a
 															href="${pageContext.request.contextPath}/store/productDetail?productId=${item.product_id}">
-															[상품명] <c:if test="${not empty item.option_id}">
-																(옵션)
+															${item.name} <c:if test="${not empty item.option_id}">
+																(${item.option_value})
 															</c:if>
 														</a>
 													</div>

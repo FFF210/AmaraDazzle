@@ -14,7 +14,7 @@ public interface ExchangeService {
     List<Map<String, Object>> getExchangeListByMemberId(Long memberId) throws Exception;
     
     // ================[소비자] 교환 상세 조회 ===================
-    Exchange getExchangeById(Long exchangeId) throws Exception;
+    Map<String, Object> getExchangeById(Long exchangeId) throws Exception;
     
     // ================[소비자] 교환 신청 가능 여부 확인 (중복 체크) ===================
     boolean canApplyExchange(Long orderItemId) throws Exception;

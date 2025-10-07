@@ -289,7 +289,7 @@
 		o.orders_id,
 		o.order_code,
 		b.brand_name,
-		p.product_name,
+		p.name,
 		e.exchange_id,
 		r.returns_id
 		FROM order_item oi
@@ -307,7 +307,7 @@
 		'EXCHANGE_COMPLETED'
 		)
 		<if test="startDate != null and endDate != null">
-			AND oi.updated_at BETWEEN #{startDate} AND #{endDate}
+			AND DATE(oi.updated_at) BETWEEN #{startDate} AND #{endDate}
 		</if>
 		ORDER BY oi.updated_at DESC
 	</select>

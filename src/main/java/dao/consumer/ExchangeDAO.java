@@ -14,7 +14,7 @@ public interface ExchangeDAO {
     List<Map<String, Object>> selectExchangeListByMemberId(Long memberId);
     
     // ================[소비자] 교환 상세 조회 ===================
-    Exchange selectExchangeById(Long exchangeId);
+    Map<String, Object> selectExchangeById(Long exchangeId);
     
     // ================[소비자] 주문 상품 상태 변경 ===================
     void updateOrderItemStatus(Map<String, Object> params);

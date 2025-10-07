@@ -77,23 +77,34 @@
 	<!-- 용도: 반품 상세 페이지에서 1건의 반품 정보 조회 
 	     반품 상세정보 페이지 -->
 	<select id="selectReturnsById" parameterType="long"
-		resultType="dto.Returns">
+		resultType="map">
 		SELECT
-		returns_id AS returnsId,
-		member_id AS memberId,
-		order_item_id AS orderItemId,
-		image1_file_id AS image1FileId,
-		image2_file_id AS image2FileId,
-		image3_file_id AS image3FileId,
-		rejection_reason AS rejectionReason,
-		reason,
-		shipping_cost AS shippingCost,
-		shipping_cost_payer AS shippingCostPayer,
-		return_carrier_name AS returnCarrierName,
-		return_tracking_no AS returnTrackingNo,
-		updated_at AS updatedAt
-		FROM returns
-		WHERE returns_id = #{returnsId}
+        r.returns_id AS returnsId,
+        r.member_id AS memberId,
+        r.order_id AS orderId,
+        r.order_item_id AS orderItemId,
+        r.image1_file_id AS image1FileId,
+        r.image2_file_id AS image2FileId,
+        r.image3_file_id AS image3FileId,
+        r.rejection_reason AS rejectionReason,
+        r.reason,
+        r.shipping_cost AS shippingCost,
+        r.shipping_cost_payer AS shippingCostPayer,
+        r.return_carrier_name AS returnCarrierName,
+        r.return_tracking_no AS returnTrackingNo,
+        r.updated_at AS updatedAt,
+        b.brand_name AS brandName,
+        p.name AS productName,
+        po.option_value AS optionValue,
+        oi.quantity,
+        oi.unit_price AS unitPrice,
+        oi.total
+    FROM returns r
+    INNER JOIN order_item oi ON r.order_item_id = oi.order_item_id
+    LEFT JOIN brand b ON oi.brand_id = b.brand_id
+    LEFT JOIN product p ON oi.product_id = p.product_id
+    LEFT JOIN product_option po ON oi.option_id = po.product_option_id
+    WHERE r.returns_id = #{returnsId}
 	</select>
 
 	<!-- ============================================ -->
