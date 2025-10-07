@@ -332,4 +332,88 @@
 		3
 	</select>
 
+	<!-- ======================= ADMIN ======================= -->
+	<!-- 가입한 브랜드 전체 수 -->
+	<select id="brandAllCnt" resultType="Integer" parameterType="searchCondition">
+		select count(*) from brand b
+		<where>
+			<if test="startDateTime != null and endDateTime != null">
+				and (b.created_at &gt;= #{startDateTime}
+						and b.created_at &lt; #{endDateTime})
+			</if>
+			<if test="middleFilter != null and middleFilter != ''">
+				<choose>
+					<when test="middleFilter == 'APPLY_SUBMITTED'">
+						and b.brand_status = 'APPLY_SUBMITTED'
+					</when>
+					<when test="middleFilter == 'APPROVED'">
+						and b.brand_status = 'APPROVED'
+					</when>
+					<when test="middleFilter == 'SIGNUP_COMPLETED'">
+						and b.brand_status = 'SIGNUP_COMPLETED'
+					</when>
+				</choose>
+			</if>
+			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+				<choose>
+					<when test="totalSearch == '브랜드명'">
+						and b.brand_name like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '담당자명'">
+						and b.manager_name like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '사업자번호'">
+						and b.brn like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '아이디'">
+						and b.email like concat('%',#{keyword},'%')
+					</when>
+				</choose>
+			</if>
+		</where>
+	</select>
+
+	<!-- 브랜드 검색 리스트 -->
+	<select id="brandSearchList" resultType="brand" parameterType="searchCondition">
+		select b.*, f.file_rename
+		from brand b
+		left join upload_file f on (b.logo_file_id = f.upload_file_id)
+		<where>
+			<if test="startDateTime != null and endDateTime != null">
+				and (b.created_at &gt;= #{startDateTime}
+						and b.created_at &lt; #{endDateTime})
+			</if>
+			<if test="middleFilter != null and middleFilter != ''">
+				<choose>
+					<when test="middleFilter == 'APPLY_SUBMITTED'">
+						and b.brand_status = 'APPLY_SUBMITTED'
+					</when>
+					<when test="middleFilter == 'APPROVED'">
+						and b.brand_status = 'APPROVED'
+					</when>
+					<when test="middleFilter == 'SIGNUP_COMPLETED'">
+						and b.brand_status = 'SIGNUP_COMPLETED'
+					</when>
+				</choose>
+			</if>
+			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+				<choose>
+					<when test="totalSearch == '브랜드명'">
+						and b.brand_name like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '담당자명'">
+						and b.manager_name like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '사업자번호'">
+						and b.brn like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '아이디'">
+						and b.email like concat('%',#{keyword},'%')
+					</when>
+				</choose>
+			</if>
+		</where>
+		order by b.brand_id desc limit #{start_p},#{post_ea}
+	</select>
+
 </mapper>

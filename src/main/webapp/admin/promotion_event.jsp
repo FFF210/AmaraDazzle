@@ -124,8 +124,7 @@
 							<c:set var="endDate" value="${eventList.endDate}" />
 							<c:set var="createDate" value="${eventList.createdAt}" />
 								<tr>
-									<td><input type="checkbox" class="ch_box"
-										value="${eventList.eventId}" onclick="choice_ck();" /></td>
+									<td><input type="checkbox" class="ch_box" value="${eventList.eventId}" onclick="choice_ck();" /></td>
 									<td>${no-idx.index}</td>
 									<td class="title_cell">${eventList.eventName}</td>
 									<td>${eventList.brandName}</td>
@@ -150,23 +149,23 @@
 									</td>
 									<td>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</td>
 									<td>${fn:substring(createDate,0,19)}</td>
-									<td>${eventList.eventViewCnt}</td>
+									<td></td>
 									<td><c:choose>
-											<c:when test="${eventList.isExposed == '1'}">
+											<c:when test="${eventList.exposeYn == '1'}">
 												<!-- 게시중 -->
 												<my:tag color="pink" size="md" text="게시중" />
 											</c:when>
 											<c:otherwise>
 												<!-- 노게시 -->
-												<my:tag color="green" size="md" text="비공개" />
+												<my:tag color="gray" size="md" text="비공개" />
 											</c:otherwise>
-										</c:choose></td>
+										</c:choose>
+									</td>
 									<td class="detail_cell" onclick="goEventDetail()">
 										<i class="bi bi-three-dots-vertical"></i>
 									</td>
 								</tr>
 							</c:forEach>
-
 						</tbody>
 					</table>
 				</div>
