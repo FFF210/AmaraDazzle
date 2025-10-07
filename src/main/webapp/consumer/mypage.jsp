@@ -46,13 +46,14 @@
 			<!-- ============================ 1. 사용자 정보 요약 ============================ -->
 			<div class="user-info">
 				<my:userInfo userName="${memberInfo.name}"
-					grade="${memberInfo.grade}" points="${memberInfo.pointBalance}"
+					grade="${memberInfo.grade}" 
+					points="${memberInfo.pointBalance}"
 					coupons="${couponCount}" />
 
-				<%-- 이 부분 tag로 교체함 --%>
+				<%-- 이 부분 tag 수정해서 그걸로 교체했는데 만약 tag 불편하시면 다시 이걸로 교체해주세요! --%>
 				<%-- <div class="user-info__top">
 					<p class="greeting">
-						<span class="name">${sessionScope.memberName}</span> 님 반갑습니다.
+						<span class="name">${memberInfo.name}</span> 님 반갑습니다.
 					</p>					
 				</div>
 
@@ -60,15 +61,15 @@
 				<div class="user-info__bottom">
 					<div class="stat">
 						<span class="label">등급</span> <span class="value"><span
-							class="em">임시</span></span>
+							class="em">${memberInfo.grade}</span></span>
 					</div>
 					<div class="stat">
 						<span class="label">포인트</span> <span class="value"><span
-							class="em">${sessionScope.memberPoints}</span> p</span>
+							class="em">${memberInfo.pointBalance}</span> p</span>
 					</div>
 					<div class="stat">
 						<span class="label">쿠폰</span> <span class="value"><span
-							class="em">${sessionScope.memberCoupons}</span> 개</span>
+							class="em">${couponCount}</span> 개</span>
 					</div>
 				</div> --%>
 			</div>

@@ -1,6 +1,7 @@
 package service.consumer;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 public interface OrderService {
@@ -93,4 +94,7 @@ public interface OrderService {
      * @return 주문 건수, 배송 중, 배송 완료 등 통계
      */
     Map<String, Object> getOrderSummaryByMember(Long memberId) throws Exception;
+    
+    //  ================ 취소/교환/반품 통합 목록 조회 ===================
+    List<Map<String, Object>> getCancelExchangeReturnList(Long memberId, String startDate, String endDate) throws Exception;
 }

@@ -14,9 +14,6 @@ public class OrderDAOImpl implements OrderDAO {
 	// MyBatis SqlSession 객체 (DB 연결 관리)
 	private SqlSession sqlSession;
 
-	/**
-	 * 생성자 - MybatisSqlSessionFactory에서 SqlSession 생성
-	 */
 	public OrderDAOImpl() {
 		sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
 	}
@@ -90,10 +87,18 @@ public class OrderDAOImpl implements OrderDAO {
 		return sqlSession.selectOne("mapper.orders.getOrderItemCountByMember", params);
 	}
 
-	//orderStatusCard용도
+	// orderStatusCard용도
 	@Override
 	public Map<String, Object> getOrderStatusCountByMember(Long memberId) throws Exception {
 		return sqlSession.selectOne("mapper.orders.getOrderStatusCountByMember", memberId);
 	}
 
+	// ================ 취소/교환/반품 통합 목록 조회 ===================
+	@Override
+	public List<Map<String, Object>> selectCancelExchangeReturnList(Map<String, Object> params) {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.orders.selectCancelExchangeReturnList", params);
+		}
+
+	}
 }

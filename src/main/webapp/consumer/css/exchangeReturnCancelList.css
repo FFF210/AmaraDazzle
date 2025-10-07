@@ -1,0 +1,98 @@
+@charset "UTF-8";
+
+.container {
+	width: 1020px;
+	margin: 40px auto 0;
+	display: flex;
+	gap: 30px;
+	align-items: flex-start;
+}
+
+.page-contents {
+flex: 1;
+	width: 824px;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch; /* 자식 요소들이 전체 너비를 차지하도록 */
+}
+
+.user-wrapper {
+	margin-bottom: 20px;
+}
+
+.table-wrapper {
+	width: 100%;
+	overflow-x: auto;
+}
+
+.table {
+	width: 100%;
+	table-layout: fixed; /* 테이블 레이아웃 고정 */
+	border-collapse: collapse;
+}
+
+.order-number-cell {
+	vertical-align: top; /* 상단 정렬 */
+	text-align: center; /* 가운데 정렬 */
+	padding: 15px 10px;
+	gap: 1px;
+}
+
+.product-name a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.product-name a:hover {
+	color: #007bff;
+	text-decoration: underline;
+}
+
+.button-vertical {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.button-vertical .btn {
+	width: 100%;
+	min-width: 80px;
+}
+
+.order-status {
+	font-weight: 500;
+	margin-bottom: 8px;
+	color: #333;
+}
+
+.no-action {
+	color: #999;
+	font-size: 14px;
+}
+
+.pagination-wrapper {
+	text-align: center;
+}
+
+.order-date {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.order-number {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.detail-link {
+    display: inline-block;
+    color: #007bff;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.detail-link:hover {
+    text-decoration: underline;
+}

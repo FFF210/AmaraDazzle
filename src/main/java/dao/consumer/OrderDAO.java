@@ -63,4 +63,8 @@ public interface OrderDAO {
 	
 	// orderStatusCard 반영 용도
 	Map<String, Object> getOrderStatusCountByMember(Long memberId) throws Exception;
+	
+	// ================ 취소/교환/반품 페이지용 통합 목록 조회 ==========================
+	List<Map<String, Object>> selectCancelExchangeReturnList(Map<String, Object> params);
+	
 }

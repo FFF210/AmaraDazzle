@@ -52,7 +52,8 @@ public class MemberDAOImpl implements MemberDAO {
 	public Member selectById(Long memberId) throws Exception {
 		return sqlSession.selectOne("mapper.member.selectById", memberId);
 	}
-
+	
+	// 이게 날아갔던 건지...확인 필요
 	@Override
 	public void updateMember(Member member) throws Exception {
 		sqlSession.update("mapper.member.updateMember", member);
