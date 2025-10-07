@@ -20,18 +20,20 @@ public class EventServiceImpl implements EventService {
 		this.eventDAO = new EventDAOImpl();
 	}
 
-	// 이벤트 목록 조회
+	/* ===== eventList ===== */
 	@Override
 	public Map<String, Object> getEventList(Map<String, Object> params) {
+		// 1. 이벤트 목록 조회
 		List<EventList> eventList = eventDAO.selectEventList(params);
 
-		// 총 상품 개수 조회
+		// 2. 총 개수
 		int totalCount = eventDAO.selectEventCount(params);
 
-		// 총 페이지 수 계산
+		// 3. 총 페이지 수 계산
 		int limit = (int) params.getOrDefault("limit", 10);
 		int totalPages = (int) Math.ceil((double) totalCount / limit);
 
+		// 4. 결과 맵 구성
 		Map<String, Object> result = new HashMap<>();
 		result.put("eventList", eventList);
 		result.put("totalCount", totalCount);
@@ -40,51 +42,50 @@ public class EventServiceImpl implements EventService {
 		return result;
 	}
 
+	/* ===== eventForm ===== */
 	@Override
 	public void applyEvent(EventApplicationForm form) {
+		// 1. 이벤트 신청 저장
+		EventApplication application = new EventApplication();
+		application.setEventId(form.getEventId());
+		application.setBrandId(form.getBrandId());
+		application.setManagerName(form.getManagerName());
+		application.setManagerTel(form.getManagerTel());
+		application.setNote(form.getNote());
+		eventDAO.insertEventApplication(application);
 
-        // 1. 이벤트 신청 저장
-        EventApplication application = new EventApplication();
-        application.setEventId(form.getEventId());
-        application.setBrandId(form.getBrandId());
-        application.setManagerName(form.getManagerName());
-        application.setManagerTel(form.getManagerTel());
-        application.setNote(form.getNote());
-        eventDAO.insertEventApplication(application);
+		// 2. 이벤트 상품 등록
+		if (form.getProductIds() != null && !form.getProductIds().isEmpty()) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("eventId", form.getEventId());
+			map.put("brandId", form.getBrandId());
+			map.put("productIds", form.getProductIds());
+			eventDAO.insertEventProducts(map); // event_product: brand_id, product_id
+			eventDAO.updateProductsEvent(map); // product.event_id = eventId
+		}
 
-        // 2. 이벤트 상품 등록 (여러 개)
-        if (form.getProductIds() != null && !form.getProductIds().isEmpty()) {
-            Map<String,Object> map = new HashMap<>();
-            map.put("applicationId", application.getEventApplicationId());
-            map.put("productIds", form.getProductIds());
-            eventDAO.insertEventProducts(map);
-        }
+		// 3. 쿠폰 발급
+		if (form.getCname() != null && !form.getCname().isEmpty()) {
+			Coupon coupon = new Coupon();
+			coupon.setCname(form.getCname());
+			coupon.setStartDate(form.getStartDateCoupon());
+			coupon.setEndDate(form.getEndDateCoupon());
+			coupon.setAmount(form.getAmount());
+			coupon.setAmountCondition(form.getAmountCondition());
 
-        // 3. 쿠폰 발급 (application_id → reason 칼럼에 기록)
-        Coupon coupon = new Coupon();
-        coupon.setCname(form.getCname());
-        coupon.setStartDate(form.getStartDateCoupon());
-        coupon.setEndDate(form.getEndDateCoupon());
-        coupon.setAmount(form.getAmount());
-        coupon.setAmountCondition(form.getAmountCondition());
-        coupon.setProvision(form.getProvision());
-        coupon.setWriterType(form.getWriterType());
-        coupon.setWriterId(form.getWriterId());
-        coupon.setReason("event_application:" + application.getEventApplicationId());
-        eventDAO.insertCoupon(coupon);
-    }
-	
-	// 이벤트 종류
-	public List<String> getEventTypes() {
-	    return eventDAO.selectEventTypes();
+			coupon.setProvision(form.getProvision() != null ? form.getProvision() : "");
+			coupon.setWriterType(form.getWriterType() != null ? form.getWriterType() : "BRAND");
+			coupon.setWriterId(form.getWriterId() != null ? form.getWriterId() : form.getBrandId());
+
+			coupon.setReason("event_application:" + application.getEventApplicationId());
+			eventDAO.insertCoupon(coupon);
+		}
 	}
 
+	// 신청하기 버튼 (단일 이벤트 조회)
 	@Override
-	public List<Event> getEventNamesByType(String type) {
-		return eventDAO.selectEventNamesByType(type);
+	public Event getEventById(Long eventId) {
+		return eventDAO.selectEventById(eventId);
 	}
-	
-	
-	
 
 }
