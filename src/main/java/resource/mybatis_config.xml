@@ -86,6 +86,9 @@
 		<typeAlias type="dto.brand.EventAlert" alias="eventAlert" />
 		<typeAlias type="dto.brand.TopProduct" alias="topProduct" />
 		<typeAlias type="dto.brand.NoticeList" alias="noticeList" />
+		<typeAlias type="dto.brand.SettlementSummary" alias="settlementSummary" />
+		<typeAlias type="dto.brand.SettlementDonut" alias="settlementDonut" />
+		<typeAlias type="dto.brand.SettlementTrend" alias="settlementTrend" />
 		<typeAlias type="dto.brand2.BannerDetail" alias="bannerDetail" />
 		<typeAlias type="dto.brand2.AdminToss" alias="adminToss" />
 		<typeAlias type="dto.brand2.MembershipList" alias="membershipList" />

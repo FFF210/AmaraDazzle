@@ -24,7 +24,8 @@
 		FROM settlement
 		WHERE brand_id = #{brandId}
 		ORDER BY created_at DESC
-		LIMIT #{limit} OFFSET #{offset}
+		LIMIT #{limit}
+		OFFSET #{offset}
 	</select>
 
 	<!--======================= [브랜드 어드민] 정산 목록 개수 ======================= -->
@@ -33,5 +34,100 @@
 		SELECT COUNT(*)
 		FROM settlement
 		WHERE brand_id = #{value}
+	</select>
+
+	<!--======================= [브랜드 어드민] 정산 대시보드 - 요약 조회 ======================= -->
+	<select id="getSettlementSummary" parameterType="long"
+		resultType="settlementSummary">
+		SELECT
+		b.brand_name AS brandName,
+
+		COALESCE(SUM(CASE WHEN
+		MONTH(s.start_date) = MONTH(CURRENT_DATE())
+		AND YEAR(s.start_date) =
+		YEAR(CURRENT_DATE())
+		THEN s.final_amount END), 0) AS
+		currentFinalAmount,
+		COALESCE(SUM(CASE WHEN MONTH(s.start_date) =
+		MONTH(CURRENT_DATE())
+		AND YEAR(s.start_date) = YEAR(CURRENT_DATE())
+		THEN s.fee END), 0) AS currentFee,
+		COALESCE(SUM(CASE WHEN
+		MONTH(s.start_date) = MONTH(CURRENT_DATE())
+		AND YEAR(s.start_date) =
+		YEAR(CURRENT_DATE())
+		THEN s.total_sales END), 0) AS currentTotalSales,
+		COALESCE(SUM(CASE WHEN MONTH(s.start_date) = MONTH(CURRENT_DATE())
+		AND
+		YEAR(s.start_date) = YEAR(CURRENT_DATE())
+		THEN s.pure_profit END), 0)
+		AS currentPureProfit,
+
+		COALESCE(SUM(CASE WHEN MONTH(s.start_date) =
+		MONTH(DATE_SUB(CURRENT_DATE(), INTERVAL 1
+		MONTH))
+		AND YEAR(s.start_date)
+		= YEAR(DATE_SUB(CURRENT_DATE(), INTERVAL 1 MONTH))
+		THEN s.final_amount
+		END), 0) AS previousFinalAmount,
+		COALESCE(SUM(CASE WHEN
+		MONTH(s.start_date) = MONTH(DATE_SUB(CURRENT_DATE(), INTERVAL 1
+		MONTH))
+		AND YEAR(s.start_date) = YEAR(DATE_SUB(CURRENT_DATE(), INTERVAL
+		1 MONTH))
+		THEN s.pure_profit END), 0) AS previousPureProfit,
+
+		CASE
+		WHEN
+		CAST(b.settlement_date AS UNSIGNED) >= DAY(CURRENT_DATE())
+		THEN
+		CAST(b.settlement_date AS UNSIGNED) - DAY(CURRENT_DATE())
+		ELSE
+		DAY(LAST_DAY(CURRENT_DATE())) - DAY(CURRENT_DATE())
+		+
+		CAST(b.settlement_date AS UNSIGNED)
+		END AS daysUntilSettlement
+
+		FROM
+		brand b
+		LEFT JOIN settlement s ON b.brand_id = s.brand_id
+		WHERE
+		b.brand_id = #{brandId}
+		GROUP BY b.brand_id, b.brand_name,
+		b.settlement_date;
+	</select>
+
+	<!--======================= [브랜드 어드민] 정산 대시보드 - 매출 도넛 차트 ======================= -->
+	<select id="getDonutChartData" parameterType="long"
+		resultType="settlementDonut">
+		SELECT
+		COALESCE(SUM(s.p_coupon + s.b_coupon + s.point), 0)
+		AS discountAmount,
+		COALESCE(SUM(s.pure_profit), 0) AS pureProfit,
+		COALESCE(SUM(s.fee), 0) AS fee,
+		COALESCE(SUM(s.total_sales), 0) AS
+		totalSales
+
+		FROM settlement s
+		WHERE s.brand_id = #{brandId}
+		AND
+		MONTH(s.start_date) = MONTH(CURRENT_DATE())
+		AND YEAR(s.start_date) =
+		YEAR(CURRENT_DATE());
+	</select>
+
+
+	<!--======================= [브랜드 어드민] 정산 대시보드 - 월 단위 정산 금액 추이 ======================= -->
+	<select id="getMonthlyTrend" parameterType="long"
+		resultType="settlementTrend">
+		SELECT
+		DATE_FORMAT(s.start_date, '%Y-%m') AS monthLabel,
+		COALESCE(SUM(s.total_sales), 0) AS totalSales,
+		COALESCE(SUM(s.fee), 0) AS fee,
+		COALESCE(SUM(s.pure_profit), 0) AS pureProfit
+		FROM settlement s
+		WHERE s.brand_id = #{brandId}
+		GROUP BY YEAR(s.start_date), MONTH(s.start_date)
+		ORDER BY YEAR(s.start_date), MONTH(s.start_date);
 	</select>
 </mapper>
