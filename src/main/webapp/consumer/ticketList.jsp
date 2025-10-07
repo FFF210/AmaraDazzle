@@ -7,11 +7,16 @@
 <head>
 <meta charset="UTF-8">
 <title>고객센터 - 1:1 문의목록</title>
-<link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/modalRecent.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>" />
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/dateRangeFilterBox.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/table.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/pageHeader.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">

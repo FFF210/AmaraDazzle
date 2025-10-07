@@ -1,5 +1,6 @@
 package dao.consumer;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import dto.Product;
 import dto.consumer.CommonProduct;
+import dto.consumer.ModalProduct;
 import dto.consumer.ProductCategory;
 import dto.consumer.ProductPlan;
 import dto.consumer.ProductRank;
@@ -145,6 +147,18 @@ public class ProductDAOImpl implements ProductDAO {
 	public List<CommonProduct> selectExclusiveProductsForMain(Map<String, Object> params) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
 			return sqlSession.selectList("mapper.product.selectExclusiveProductsForMain", params);
+		}
+	}
+
+	// [소비자] 최근 본 상품 조회
+	@Override
+	public List<ModalProduct> getProductsByIds(List<Long> productIds, Long memberId) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			Map<String, Object> param = new HashMap<>();
+			param.put("productIds", productIds);
+			param.put("memberId", memberId);
+
+			return sqlSession.selectList("mapper.product.getProductsByIds", param);
 		}
 	}
 

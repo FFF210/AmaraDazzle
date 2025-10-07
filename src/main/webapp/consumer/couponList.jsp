@@ -11,12 +11,15 @@
 <title>쿠폰</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
 <link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/modalRecent.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/pageHeader.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>" />
-<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>" />
-<link rel="stylesheet" href="<c:url value='/tagcss/modalRecent.css'/>" />
 <link rel="stylesheet"
 	href="<c:url value='/tagcss/consumerCoupon.css'/>" />
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>" />
@@ -44,10 +47,10 @@
 	</c:if>
 
 	<div class="brand-coupon-section">
-		<a class="brand-title" href="/store/brandDetail?brandId=${coupon.writerId}">
-			<img
-				src="${pageContext.request.contextPath}/image?fileId=${coupon.logoFileId}"
-				alt="브랜드 아이콘" width="40px" /> ${coupon.brandName}
+		<a class="brand-title"
+			href="/store/brandDetail?brandId=${coupon.writerId}"> <img
+			src="${pageContext.request.contextPath}/image?fileId=${coupon.logoFileId}"
+			alt="브랜드 아이콘" width="40px" /> ${coupon.brandName}
 		</a>
 		<div class="brand-coupon-list">
 			<!-- 브랜드 쿠폰 박스 시작 -->

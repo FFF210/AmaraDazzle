@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import dto.Product;
+import dto.consumer.ModalProduct;
 
 public interface ProductService {
 	// 상품 상세
@@ -29,4 +30,7 @@ public interface ProductService {
 
 	// [productDetail용] 브랜드 상품 가져오기 (mapper는 product에)
 	List<Map<String, Object>> getProductsByBrandId(Long brandId) throws Exception;
+
+	// [소비자] 최근 본 상품 조회
+	List<ModalProduct> getModalProducts(List<Long> productIds, Long memberId) throws Exception;
 }

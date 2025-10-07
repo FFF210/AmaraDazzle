@@ -8,6 +8,7 @@ import dao.consumer.ProductDAO;
 import dao.consumer.ProductDAOImpl;
 import dto.Product;
 import dto.consumer.CommonProduct;
+import dto.consumer.ModalProduct;
 import dto.consumer.ProductCategory;
 import dto.consumer.ProductPlan;
 import dto.consumer.ProductRank;
@@ -172,4 +173,10 @@ public class ProductServiceImpl implements ProductService {
 		return result;
 
 	}
+
+	@Override
+	public List<ModalProduct> getModalProducts(List<Long> productIds, Long memberId) throws Exception {
+		return productDAO.getProductsByIds(productIds, memberId);
+	}
+
 }

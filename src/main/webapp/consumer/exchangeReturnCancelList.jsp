@@ -34,13 +34,17 @@
 <title>취소/반품/교환 내역</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/modalRecent.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/table.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 <link rel="stylesheet"
 	href="<c:url value='/tagcss/dateRangeFilterBox.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
 <link rel="stylesheet"
 	href="<c:url value='/consumer/css/mypageMenu.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">

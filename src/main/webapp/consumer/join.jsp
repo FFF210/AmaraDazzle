@@ -8,8 +8,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>회원가입</title>
 <link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/modalRecent.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>" />
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/join.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/textInput.css'/>">

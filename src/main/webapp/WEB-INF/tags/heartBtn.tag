@@ -1,6 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
-<%@ tag body-content="scriptless" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ tag body-content="scriptless"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%-- ================================
      HeartBtn 커스텀 태그
@@ -20,25 +20,27 @@
        count="500" />
 ================================ --%>
 
-<%@ attribute name="state" required="false" %>
-<%@ attribute name="onlyIcon" required="false" %>
-<%@ attribute name="hasCount" required="false" %>
-<%@ attribute name="count" required="false" %>
+<%@ attribute name="state" required="false"%>
+<%@ attribute name="onlyIcon" required="false"%>
+<%@ attribute name="hasCount" required="false"%>
+<%@ attribute name="count" required="false"%>
 
 <c:set var="state" value="${empty state ? 'default' : state}" />
 <c:set var="onlyIcon" value="${empty onlyIcon ? 'false' : onlyIcon}" />
 <c:set var="hasCount" value="${empty hasCount ? 'false' : hasCount}" />
 <c:set var="count" value="${empty count ? '0' : count}" />
 
-<button class="heart-btn 
+<button
+	class="heart-btn 
                ${onlyIcon eq 'true' ? 'icon-only' : 'with-border'} 
                ${hasCount eq 'true' ? 'with-count' : ''}">
 
-  <i class="bi ${state eq 'active' ? 'bi-heart-fill active' : 'bi-heart'}"></i>
+	<i
+		class="bi ${state eq 'active' ? 'bi-heart-fill active' : 'bi-heart'}"></i>
 
-  <c:if test="${hasCount eq 'true'}">
-    <span class="count">${count}</span>
-  </c:if>
+	<c:if test="${hasCount eq 'true'}">
+		<span class="count">${count}</span>
+	</c:if>
 </button>
 
 <script>

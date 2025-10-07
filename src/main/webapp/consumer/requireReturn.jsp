@@ -16,7 +16,13 @@
 	rel="stylesheet">
 
 <!-- Page CSS -->
-<link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/modalRecent.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>" />
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet"
 	href="<c:url value='/consumer/css/requireExchange.css?ver=2'/>">

@@ -14,14 +14,14 @@
 <title>AmaraDazzle</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-
+<link rel="stylesheet" href="<c:url value='/tagcss/modalRecent.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>" />
 <link rel="stylesheet"
-	href="<c:url value='/consumer/css/productCard.css'/>" />
+	href="<c:url value='/consumer/css/aniProductCard.css'/>" />
 <link rel="stylesheet"
 	href="<c:url value='/tagcss/recommendationSectionTitle.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>" />
-<link rel="stylesheet" href="<c:url value='/tagcss/modalRecent.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/eventCard.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>" />
@@ -105,8 +105,9 @@
 					</c:url>
 
 					<%-- 상품 카드 렌더링 --%>
-					<my:productCard brand="${p.brandName}" productId="${p.productId}"
-						title="${p.name}" isWished="${p.isWished}"
+					<my:aniProductCard brand="${p.brandName}"
+						productId="${p.productId}" title="${p.name}"
+						isWished="${p.isWished}"
 						isSale="${p.discountType ne null and p.discountValue ne null 
                               and p.startDate ne null 
                               and p.endDate ne null 
@@ -131,7 +132,7 @@
 						<c:if test="${p.isPlanned ne 0}">
 							<my:tag color="yellow" size="sm" text="기획" />
 						</c:if>
-					</my:productCard>
+					</my:aniProductCard>
 				</c:forEach>
 			</div>
 		</c:if>
@@ -169,7 +170,7 @@
 				</c:url>
 
 				<%-- 상품 카드 렌더링 --%>
-				<my:productCard brand="${p.brandName}" productId="${p.productId}"
+				<my:aniProductCard brand="${p.brandName}" productId="${p.productId}"
 					title="${p.name}" isWished="${p.isWished}"
 					isSale="${p.discountType ne null and p.discountValue ne null 
           and p.startDate ne null 
@@ -195,7 +196,7 @@
 					<c:if test="${p.isPlanned ne 0}">
 						<my:tag color="yellow" size="sm" text="기획" />
 					</c:if>
-				</my:productCard>
+				</my:aniProductCard>
 			</c:forEach>
 		</div>
 
@@ -255,7 +256,7 @@
 				</c:url>
 
 				<%-- 상품 카드 렌더링 --%>
-				<my:productCard brand="${p.brandName}" productId="${p.productId}"
+				<my:aniProductCard brand="${p.brandName}" productId="${p.productId}"
 					title="${p.name}" isWished="${p.isWished}"
 					isSale="${p.discountType ne null and p.discountValue ne null 
           and p.startDate ne null 
@@ -281,7 +282,7 @@
 					<c:if test="${p.isPlanned ne 0}">
 						<my:tag color="yellow" size="sm" text="기획" />
 					</c:if>
-				</my:productCard>
+				</my:aniProductCard>
 			</c:forEach>
 		</div>
 
@@ -342,7 +343,7 @@
 				</c:url>
 
 				<%-- 상품 카드 렌더링 --%>
-				<my:productCard brand="${p.brandName}" productId="${p.productId}"
+				<my:aniProductCard brand="${p.brandName}" productId="${p.productId}"
 					title="${p.name}" isWished="${p.isWished}"
 					isSale="${p.discountType ne null and p.discountValue ne null 
           and p.startDate ne null 
@@ -368,7 +369,7 @@
 					<c:if test="${p.isPlanned ne 0}">
 						<my:tag color="yellow" size="sm" text="기획" />
 					</c:if>
-				</my:productCard>
+				</my:aniProductCard>
 			</c:forEach>
 		</div>
 	</div>
@@ -441,7 +442,8 @@
 				      e.preventDefault();
 
 				      const icon = btn.querySelector("i");
-				      const productId = btn.closest(".product-card").dataset.productid;
+				      const card = btn.closest(".product-card, .ani-product-card");
+				      const productId = card.dataset.productid;
 
 				      fetch("/store/wishlistToggle", {
 				        method: "POST",
@@ -493,7 +495,7 @@
 			  }
 
 			  // 상품 카드 애니메이션
-			  animateOnScroll(".product-card");
+			  animateOnScroll(".ani-product-card");
 
 			  // 브랜드 카드 애니메이션
 			  animateOnScroll(".brand-card");
