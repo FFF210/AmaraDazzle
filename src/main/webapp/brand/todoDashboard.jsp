@@ -41,24 +41,31 @@
 				<section class="dashboard-section">
 					<h3 class="section-title">요약</h3>
 					<div class="tasks-grid">
-						<div class="task-card">
-							<i class="bi bi-cash-coin"></i>
+						<div class="task-card" onclick="location.href='/brand/orderList'">
+							<i class="bi bi-cart-check"></i>
 							<p class="task-label">오늘 주문 건 수</p>
 							<p class="task-count">${summary.todayOrderCount}</p>
 						</div>
-						<div class="task-card">
-							<i class="bi bi-arrow-counterclockwise"></i>
-							<p class="task-label">최근 7일 내 반품/교환 건 수</p>
+						<div class="task-card" onclick="location.href='/brand/returnList'">
+							<i class="bi bi-arrow-repeat"></i>
+							<p class="task-label">
+								최근 7일 내 <br>반품/교환 건 수
+							</p>
 							<p class="task-count">${summary.refundExchangeCount}</p>
 						</div>
-						<div class="task-card">
-							<i class="bi bi-box-seam"></i>
-							<p class="task-label">재고 경고 수 (재고 10 이하 상품/옵션)</p>
+						<div class="task-card"
+							onclick="location.href='/brand/productList'">
+							<i class="bi bi-exclamation-triangle"></i>
+							<p class="task-label">
+								재고 경고 수 <br>(재고 10 이하)
+							</p>
 							<p class="task-count">${summary.lowStockCount}</p>
 						</div>
-						<div class="task-card">
-							<i class="bi bi-box-seam"></i>
-							<p class="task-label">부정 리뷰 (평점 2 이하)</p>
+						<div class="task-card" onclick="location.href='/brand/reviewList'">
+							<i class="bi bi-emoji-frown"></i>
+							<p class="task-label">
+								부정 리뷰 <br>(평점 2 이하)
+							</p>
 							<p class="task-count">${summary.badReviewCount}</p>
 						</div>
 					</div>
@@ -74,106 +81,103 @@
 					<div class="status-list">
 						<a href="/brand/orderList?status=PAID" class="status-item"><span
 							class="status-title">결제 완료 주문</span> <span>${todo.paidOrderCount}건</span>
-							<i class="bi bi-chevron-right"></i></a> <a
-							href="/brand/orderList?status=PREPARING" class="status-item"><span
+						</a> <a href="/brand/orderList?status=PREPARING" class="status-item"><span
 							class="status-title">배송 대기</span> <span>${todo.preparingOrderCount}건</span>
-							<i class="bi bi-chevron-right"></i> </a> <a
-							href="/brand/returnList?status=REQUESTED" class="status-item"><span
+						</a> <a href="/brand/returnList?status=REQUESTED" class="status-item"><span
 							class="status-title">반품 요청</span><span>${todo.returnRequestedCount}건</span>
-							<i class="bi bi-chevron-right"></i></a> <a
-							href="/brand/exchangeList?status=REQUESTED" class="status-item"><span
-							class="status-title">교환 요청</span><span>${todo.exchangeRequestedCount}건</span>
-							<i class="bi bi-chevron-right"></i> </a> <a
-							href="/brand/qnaList?answerStatus=PENDING" class="status-item"><span
+						</a> <a href="/brand/exchangeList?status=REQUESTED"
+							class="status-item"><span class="status-title">교환 요청</span><span>${todo.exchangeRequestedCount}건</span>
+						</a> <a href="/brand/qnaList?answerStatus=PENDING" class="status-item"><span
 							class="status-title">미답변 문의</span><span>${todo.unansweredInquiryCount}건</span>
-							<i class="bi bi-chevron-right"></i></a>
+						</a>
 					</div>
 				</section>
-			
 
 
-			<div class="dashboard-container-wrapper-inner">
-				<!-- 이벤트 일정 -->
-				<section class="dashboard-section">
-					<h3 class="section-title">이벤트 일정</h3>
-					<div class="alerts">
+
+				<div class="dashboard-container-wrapper-inner">
+					<!-- 이벤트 일정 -->
+					<section class="dashboard-section">
+						<h3 class="section-title">이벤트 일정</h3>
+						<div class="alerts">
+
+							<c:choose>
+								<c:when test="${not empty events}">
+									<c:forEach var="event" items="${events}">
+										<c:choose>
+											<c:when test="${event.status eq 'RECRUIT'}">
+												<c:set var="msg"
+													value="[D-${event.daysUntilStart}] ${event.eventName}" />
+											</c:when>
+											<c:when test="${event.status eq 'ONGOING'}">
+												<c:set var="msg"
+													value="[${event.daysUntilEnd}일 후 마감] ${event.eventName}" />
+											</c:when>
+											<c:otherwise>
+												<c:set var="msg" value="" />
+											</c:otherwise>
+										</c:choose>
+										<c:if test="${not empty msg}">
+											<my:alert type="info" message="${msg}" />
+										</c:if>
+									</c:forEach>
+								</c:when>
+
+								<c:otherwise>
+									<p>현재 예정된 이벤트가 없습니다.</p>
+								</c:otherwise>
+							</c:choose>
+
+						</div>
+					</section>
+
+					<!-- 이번 주 인기 상품 -->
+					<section class="dashboard-section">
+						<div class="week">
+							<h3>🏆 이번 주 인기 상품</h3>
+
+							<c:if test="${not empty products}">
+								<c:set var="weekStart" value="${products[0].weekStartDate}" />
+								<c:set var="baseDate" value="${products[0].baseDate}" />
+								<fmt:formatDate value="${weekStart}" pattern="yyyy-MM-dd"
+									var="startFmt" />
+								<fmt:formatDate value="${baseDate}" pattern="yyyy-MM-dd"
+									var="endFmt" />
+								<p>${startFmt}~${endFmt}</p>
+							</c:if>
+						</div>
 
 						<c:choose>
-							<c:when test="${not empty events}">
-								<c:forEach var="event" items="${events}">
-									<c:choose>
-										<c:when test="${event.status eq 'RECRUIT'}">
-											<c:set var="msg"
-												value="[D-${event.daysUntilStart}] ${event.eventName}" />
-										</c:when>
-										<c:when test="${event.status eq 'ONGOING'}">
-											<c:set var="msg"
-												value="[${event.daysUntilEnd}일 후 마감] ${event.eventName}" />
-										</c:when>
-										<c:otherwise>
-											<c:set var="msg" value="" />
-										</c:otherwise>
-									</c:choose>
-									<c:if test="${not empty msg}">
-										<my:alert type="info" message="${msg}" />
-									</c:if>
-								</c:forEach>
-							</c:when>
+							<c:when test="${not empty products}">
+								<div class="top3-container">
+									<c:forEach var="product" items="${products}" varStatus="loop">
+										<div class="top3-card">
+											<div class="rank-badge">
+												<c:choose>
+													<c:when test="${loop.index == 0}">🥇 1위</c:when>
+													<c:when test="${loop.index == 1}">🥈 2위</c:when>
+													<c:when test="${loop.index == 2}">🥉 3위</c:when>
+												</c:choose>
+											</div>
 
+											<img src="/upload/${product.thumbnailFileId}"
+												alt="${product.productName}" />
+											<div class="name">${product.productName}</div>
+											<div class="sold">
+												<fmt:formatNumber value="${product.totalSold}" />
+												개 판매
+											</div>
+										</div>
+									</c:forEach>
+								</div>
+							</c:when>
 							<c:otherwise>
-								<p>현재 예정된 이벤트가 없습니다.</p>
+								<p style="color: #888; margin-left: 20px;">이번 주 판매된 상품이
+									없습니다.</p>
 							</c:otherwise>
 						</c:choose>
-
-					</div>
-				</section>
-				
-				<!-- 이번 주 인기 상품 -->
-				<section class="dashboard-section">
-					<h3 style="margin-left: 20px;">🏆 이번 주 인기 상품</h3>
-
-					<c:if test="${not empty products}">
-						<c:set var="weekStart" value="${products[0].weekStartDate}" />
-						<c:set var="baseDate" value="${products[0].baseDate}" />
-						<fmt:formatDate value="${weekStart}" pattern="yyyy-MM-dd"
-							var="startFmt" />
-						<fmt:formatDate value="${baseDate}" pattern="yyyy-MM-dd"
-							var="endFmt" />
-
-						<p style="margin-left: 20px; color: #555;">${startFmt}~
-							${endFmt}</p>
-					</c:if>
-
-					<c:choose>
-						<c:when test="${not empty products}">
-							<div class="top3-container">
-								<c:forEach var="product" items="${products}" varStatus="loop">
-									<div class="top3-card">
-										<div class="rank-badge">
-											<c:choose>
-												<c:when test="${loop.index == 0}">🥇 1위</c:when>
-												<c:when test="${loop.index == 1}">🥈 2위</c:when>
-												<c:when test="${loop.index == 2}">🥉 3위</c:when>
-											</c:choose>
-										</div>
-
-										<img src="/upload/${product.thumbnailFileId}"
-											alt="${product.productName}" />
-										<div class="name">${product.productName}</div>
-										<div class="sold">
-											<fmt:formatNumber value="${product.totalSold}" />
-											개 판매
-										</div>
-									</div>
-								</c:forEach>
-							</div>
-						</c:when>
-						<c:otherwise>
-							<p style="color: #888; margin-left: 20px;">이번 주 판매된 상품이 없습니다.</p>
-						</c:otherwise>
-					</c:choose>
-				</section>
-			</div>
+					</section>
+				</div>
 			</div>
 		</div>
 	</my:layout>
