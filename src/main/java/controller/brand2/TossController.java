@@ -81,18 +81,9 @@ public class TossController extends HttpServlet {
 			JSONObject result = (JSONObject) parser.parse(apiReader);
 			responseStream.close();
 
-			System.out.println(result.toJSONString());
 			// 4. 성공 시 DB 저장 (MyBatis 활용)
 			if (isSuccess) {
             	String orderIdConfirm = (String)result.get("orderId");
-            	
-            	/* membership 결제건 */
-            	String[] parts = orderIdConfirm.split("-");
-            	String planId = null;
-            	if (parts.length >= 2) {
-            	    planId = parts[1]; // PLAN_1M
-            	}
-            	
             	String paymentKeyConfirm = (String)result.get("paymentKey");
             	String orderNameConfirm = (String)result.get("orderName");
             	String methodConfirm = (String)result.get("method");
@@ -120,17 +111,15 @@ public class TossController extends HttpServlet {
             	adminPayment.setBrandId(1L); // 테스트용, 세션 기반으로 수정 필요
             	
             	
-            	// 결제 타입
+            	// =============================
+                // 멤버십 결제인 경우
+                // =============================
             	if(orderIdConfirm.startsWith("M-")) {
-            		// 멤버십 결제
             		adminPayment.setPaymentType("MEMBERSHIP");
-            		adminPayment.setOrderName(orderNameConfirm);
-            		adminPayment.setPlanId(planId);
             		
-            		// ✅ 멤버십 테이블 반영
-            	    MembershipService membershipService = new MembershipServiceImpl();
-            	    membershipService.applyMembership(adminPayment);
-            		
+            		MembershipService membershipService = new MembershipServiceImpl();
+            	    membershipService.createMembershipWithPayment(adminPayment);
+            	    
             	} else if (orderIdConfirm.startsWith("B-")) {
             		// 배너 광고 결제
             		adminPayment.setPaymentType("BANNER_AD");

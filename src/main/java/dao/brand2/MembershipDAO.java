@@ -3,6 +3,7 @@ package dao.brand2;
 import java.util.List;
 import java.util.Map;
 
+import dto.AdminPayment;
 import dto.Membership;
 import dto.MembershipPlan;
 import dto.brand2.MembershipList;
@@ -18,7 +19,10 @@ public interface MembershipDAO {
 	List<MembershipPlan> selectMembershipPlans();
 
 	// 신규 멤버십 가입
-	int insertMembership(Membership membership);
+	Long insertMembership(Membership membership);
+	
+	// admin_payment insert
+	void insertAdminPayment(AdminPayment payment);
 
 	// 멤버십 취소 (아직 시작 전)
 	int cancelMembership(Long membershipId);

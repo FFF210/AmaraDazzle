@@ -70,7 +70,6 @@
 	margin: 20px auto 30px;
 	padding: 20px;
 	max-width: 900px;
-
 	/* 기존 배경/테두리 제거 */
 	background: none;
 	border: none;
@@ -78,16 +77,16 @@
 
 /* 박스 모양 전용 */
 .notice {
-	background: #fff3cd;             /* 노란색 */
-	border: 1px solid #ffeeba;       /* 노란 테두리 */
+	background: #fff3cd; /* 노란색 */
+	border: 1px solid #ffeeba; /* 노란 테두리 */
 	color: #856404;
 	padding: 16px 20px;
 	border-radius: 8px;
 	font-size: 15px;
 	text-align: center;
 	width: 100%;
-	max-width: 600px;                /* 카드처럼 적당히 제한 */
-	box-shadow: 0 2px 6px rgba(0,0,0,0.05); /* 살짝 그림자 */
+	max-width: 600px; /* 카드처럼 적당히 제한 */
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* 살짝 그림자 */
 }
 
 /* "멤버십 없음" 알림 */
@@ -142,7 +141,7 @@
 }
 
 #btnGoPay {
-	margin-top: 12px;
+	margin-top: 10px;
 }
 </style>
 
@@ -153,38 +152,56 @@
 			items="멤버십 관리:/brand2/membershipList, 멤버십 결제:/brand2/membership" />
 		<!-- 멤버십 상태 영역 -->
 		<div class="membership-status">
+		<!-- currentMembership/reservedMembership는 dto.membership 사용, membershipList는 dto.brand2.membershipList 사용 -->
 			<c:choose>
 				<c:when test="${empty currentMembership}">
 					<div class="notice">
 						보유한 멤버십이 없습니다. 새로운 멤버십을 구독해보세요!<br>
-						<button class="btn btn-outline btn-sm" id="btnGoPay">멤버십
-							결제</button>
+						<button class="btn btn-outline btn-sm" id="btnGoPay"
+							onclick="location.href='/brand2/membership' ">멤버십 결제</button>
 					</div>
 				</c:when>
 
 				<c:otherwise>
-					<div class="current-membership">
-						<span> 현재 이용 중 : <br> <strong id="planLabel">${currentMembership.planName}</strong><br>
-							<strong id="quotaLabel">${currentMembership.remainQuota}</strong>
+					<div class="notice">
+						<span> 현재 이용 중 : <br> <strong id="planLabel">
+								<c:choose>
+									<c:when test="${currentMembership.planId eq 'PLAN_AUTO'}">정기결제 이용권</c:when>
+									<c:when test="${currentMembership.planId eq 'PLAN_1M'}">1개월 이용권</c:when>
+									<c:when test="${currentMembership.planId eq 'PLAN_3M'}">3개월 이용권</c:when>
+									<c:when test="${currentMembership.planId eq 'PLAN_6M'}">6개월 이용권</c:when>
+									<c:when test="${currentMembership.planId eq 'PLAN_12M'}">12개월 이용권</c:when>
+									<c:otherwise>알 수 없는 이용권</c:otherwise>
+								</c:choose>
+						</strong><br> <strong id="quotaLabel">${currentMembership.remainQuota}</strong>
 							건 메일 발송 가능합니다.
 						</span>
-
+						<br>
 						<!-- 예약 멤버십 보조 문구 -->
 						<c:if test="${not empty reservedMembership}">
 							<p class="text-muted" style="font-size: 0.9em; margin-top: 5px;">
-								예약분: <strong>${reservedMembership.remainQuota}</strong>건
-								(${reservedMembership.planName}, 시작일
+								예약분: <strong>${reservedMembership.remainQuota}</strong>건 (
+								<c:choose>
+									<c:when test="${reservedMembership.planId eq 'PLAN_AUTO'}">정기결제 이용권</c:when>
+									<c:when test="${reservedMembership.planId eq 'PLAN_1M'}">1개월 이용권</c:when>
+									<c:when test="${reservedMembership.planId eq 'PLAN_3M'}">3개월 이용권</c:when>
+									<c:when test="${reservedMembership.planId eq 'PLAN_6M'}">6개월 이용권</c:when>
+									<c:when test="${reservedMembership.planId eq 'PLAN_12M'}">12개월 이용권</c:when>
+									<c:otherwise>알 수 없는 이용권</c:otherwise>
+								</c:choose>
+								, 시작일
 								<fmt:formatDate value="${reservedMembership.startDate}"
 									pattern="yyyy-MM-dd" />
 								부터)
 							</p>
 						</c:if>
-
-						<button class="btn btn-outline btn-sm" id="btnAddPlan">멤버십
-							추가</button>
+						<br>
+						<button class="btn btn-outline btn-sm" id="btnGoPay"
+							onclick="location.href='/brand2/membership' ">멤버십 추가</button>
 					</div>
 				</c:otherwise>
 			</c:choose>
+
 		</div>
 
 		<div class="membership-history">
@@ -238,7 +255,10 @@
 										pattern="yyyy-MM-dd" /> ~ <fmt:formatDate
 										value="${membership.endDate}" pattern="yyyy-MM-dd" /></td>
 								<!-- 멤버십 기간 -->
-								<td>${membership.planName}</td>
+								<td><c:choose>
+										<c:when test="${membership.planId eq 'PLAN_AUTO'}">정기결제 이용권</c:when>
+										<c:otherwise>${membership.planPeriod}개월 이용권</c:otherwise>
+									</c:choose></td>
 								<!-- 멤버십 이름 -->
 								<td>${membership.paymentMethod}</td>
 								<!-- 결제수단 -->

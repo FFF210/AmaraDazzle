@@ -1,13 +1,10 @@
 package service.brand2;
 
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.ibatis.session.SqlSession;
 
 import dao.brand2.MembershipDAO;
 import dao.brand2.MembershipDAOImpl;
@@ -15,7 +12,6 @@ import dto.AdminPayment;
 import dto.Membership;
 import dto.MembershipPlan;
 import dto.brand2.MembershipList;
-import util.MybatisSqlSessionFactory;
 
 public class MembershipServiceImpl implements MembershipService {
 
@@ -65,27 +61,49 @@ public class MembershipServiceImpl implements MembershipService {
 		return membershipDAO.selectMembershipPlans();
 	}
 
-	// 결제 성공 시 insert
-	@Override
-	public void applyMembership(AdminPayment payment) {
-		int months = getPeriodByPlanId(payment.getPlanId());
-		LocalDateTime now = LocalDateTime.now();
+	// 💡 멤버십 + 결제 동시 처리 (Membership은 Service 안에서 생성)
+    @Override
+    public Long createMembershipWithPayment(AdminPayment adminPayment) {
+        // planId 는 orderName에 들어온다고 가정 (예: PLAN_1M)
+        String planId = adminPayment.getOrderName();
 
-		// 기존 멤버십이 있어도 무조건 새 행 추가
-		Timestamp startDate = Timestamp.valueOf(now);
-		Timestamp endDate = Timestamp.valueOf(now.plusMonths(months));
+        // TODO: membership_plan 테이블에서 조회하는게 맞음 (지금은 단순 처리)
+        int months;
+        int quota;
+        switch (planId) {
+            case "PLAN_3M":
+                months = 3; quota = 30000; break;
+            case "PLAN_6M":
+                months = 6; quota = 60000; break;
+            case "PLAN_12M":
+                months = 12; quota = 120000; break;
+            default:
+                months = 1; quota = 10000; break;
+        }
 
-		Membership membership = new Membership();
-		membership.setBrandId(payment.getBrandId());
-		membership.setPlanId(payment.getPlanId());
-		membership.setStartDate(startDate);
-		membership.setEndDate(endDate);
-		membership.setStatus("ACTIVE");
-		membership.setRemainQuota(getQuotaByPlanId(payment.getPlanId()));
+        LocalDateTime now = LocalDateTime.now();
+        Timestamp startDate = Timestamp.valueOf(now);
+        Timestamp endDate = Timestamp.valueOf(now.plusMonths(months));
 
-		membershipDAO.insertMembership(membership);
-	}
+        // Service 내부에서 Membership 생성
+        Membership membership = new Membership();
+        membership.setBrandId(adminPayment.getBrandId());
+        membership.setPlanId(planId);
+        membership.setStartDate(startDate);
+        membership.setEndDate(endDate);
+        membership.setStatus("ACTIVE");
+        membership.setRemainQuota(quota);
 
+        // membership insert → PK 리턴
+        Long newMembershipId = membershipDAO.insertMembership(membership);
+
+        // AdminPayment FK 세팅 + insert
+        adminPayment.setMembershipId(newMembershipId);
+        membershipDAO.insertAdminPayment(adminPayment);
+
+        return newMembershipId;
+    }
+	
 	// 현재 이용 중인 멤버십
 	@Override
 	public Membership getCurrentMembership(Long brandId) {
@@ -104,34 +122,4 @@ public class MembershipServiceImpl implements MembershipService {
 		membershipDAO.cancelMembership(membershipId);
 	}
 
-	// --- 내부 유틸 ---
-	private int getPeriodByPlanId(String planId) {
-		switch (planId) {
-		case "PLAN_1M":
-			return 1;
-		case "PLAN_3M":
-			return 3;
-		case "PLAN_6M":
-			return 6;
-		case "PLAN_12M":
-			return 12;
-		default:
-			return 1;
-		}
-	}
-
-	private int getQuotaByPlanId(String planId) {
-		switch (planId) {
-		case "PLAN_1M":
-			return 10000;
-		case "PLAN_3M":
-			return 30000;
-		case "PLAN_6M":
-			return 60000;
-		case "PLAN_12M":
-			return 120000;
-		default:
-			return 10000;
-		}
-	}
 }

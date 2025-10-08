@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
+import dto.AdminPayment;
 import dto.Membership;
 import dto.MembershipPlan;
 import dto.brand2.MembershipList;
@@ -33,16 +34,22 @@ public class MembershipDAOImpl implements MembershipDAO {
 
 	// 신규 멤버십 가입
 	@Override
-	public int insertMembership(Membership membership) {
-		int result = sqlSession.insert("mapper.membership.insertMembership", membership);
+	public Long insertMembership(Membership membership) {
+		sqlSession.insert("mapper.membership.insertMembership", membership);
 		sqlSession.commit();
-		return result;
+		return membership.getMembershipId(); // auto_increment 값
+	}
+
+	@Override
+	public void insertAdminPayment(AdminPayment payment) {
+		sqlSession.insert("mapper.membership.insertAdminPayment", payment);
+		sqlSession.commit();
 	}
 
 	// 멤버십 취소 (start_date > NOW() 인 경우만 가능)
 	@Override
 	public int cancelMembership(Long membershipId) {
-		int result = sqlSession.update("mapper.membership.cancelMembership", membershipId);
+		int result = sqlSession.update("mapper.membership.cancelReservedMembership", membershipId);
 		sqlSession.commit();
 		return result;
 	}

@@ -12,7 +12,7 @@ public class MembershipList {
 	private String status; // 상태 (ACTIVE, EXPIRED, CANCELLED)
 
 	private String planId; // 요금제 ID (PLAN_1M, PLAN_3M ...)
-	private String planName; // 요금제명 (멤버십 1개월, 3개월 ...)
+	private Integer planPeriod; // membership_plan.plan_period
 
 	private String paymentMethod; // 결제수단 (TOSS, CARD ...)
 	private Integer remainQuota; // 남은 발송 건수 (현재 or 예약분 확인용)
@@ -78,12 +78,12 @@ public class MembershipList {
 		this.planId = planId;
 	}
 
-	public String getPlanName() {
-		return planName;
+	public Integer getPlanPeriod() {
+		return planPeriod;
 	}
 
-	public void setPlanName(String planName) {
-		this.planName = planName;
+	public void setPlanPeriod(Integer planPeriod) {
+		this.planPeriod = planPeriod;
 	}
 
 	public String getPaymentMethod() {
@@ -114,10 +114,8 @@ public class MembershipList {
 	public String toString() {
 		return "MembershipList [membershipId=" + membershipId + ", startDate=" + startDate + ", endDate=" + endDate
 				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", status=" + status + ", planId=" + planId
-				+ ", planName=" + planName + ", paymentMethod=" + paymentMethod + ", remainQuota=" + remainQuota
+				+ ", planPeriod=" + planPeriod + ", paymentMethod=" + paymentMethod + ", remainQuota=" + remainQuota
 				+ ", nextPayDate=" + nextPayDate + "]";
 	}
-
 	
-
 }
