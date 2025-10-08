@@ -38,7 +38,8 @@
 							</span>
 						</div>
 						<div class="info-item">
-							<span class="label">주문번호:</span> <span class="value order-number">${exchange.orderCode}</span>
+						<%-- 테이블에서 찾기가 힘들어서 주문 번호 뒤에 교환 아이디도 넣었음 --%>
+						<span class="label">주문번호:</span> <span class="value order-number">${exchange.orderCode}-E${exchange.exchangeId}</span>
 						</div>
 					</div>
 				</section>
@@ -61,18 +62,20 @@
 								<tr>
 									<td>
 										<div class="product-info">
-											<span class="brand">${item.brand_name}</span><br> <span
-												class="product-name"> ${item.name} <c:if
+											<span class="brand">${exchange.brandName}</span><br> <span
+												class="product-name"> ${exchange.productName} <c:if
 													test="${not empty exchange.productOptionId}">
 													<br>
-													<small>(${item.option_value})</small>
+													<small>(${exchange.optionValue})</small>
 												</c:if>
 											</span>
 										</div>
 									</td>
-									<td>${item.price}</td>
-									<td>1</td>
-									<td class="price-highlight">${item.price}</td>
+									<td><fmt:formatNumber value="${exchange.unitPrice}"
+											pattern="#,###" />원</td>
+									<td>${exchange.quantity}</td>
+									<td class="price-highlight"><fmt:formatNumber
+											value="${exchange.total}" pattern="#,###" />원</td>
 								</tr>
 							</tbody>
 						</table>

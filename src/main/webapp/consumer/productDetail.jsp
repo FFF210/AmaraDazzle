@@ -128,11 +128,14 @@ request.setAttribute("floor", floor);
 						var="formattedFinalPrice" />
 
 					<!-- 가격 표시 -->
+					<%-- 세일가 있을때 originPrice는 따로 화면에 안 나오는 거 맞나요??? --%>
 					<div class="price-section">
-						<my:price isSale="${isSale}" hasOption="${product.hasOption == 1}"
-							size="sm" originPrice="${productPrice}"
-							saleRate="${saleRate.intValue()}"
-							finalPrice="${formattedFinalPrice}" />
+						<my:price isSale="${isSale}" 
+						hasOption="${product.hasOption == 1}"
+						size="sm" 
+						originPrice="${productPrice}"
+						saleRate="${saleRate.intValue()}"
+						finalPrice="${formattedFinalPrice}" />
 					</div>
 				</div>
 
@@ -175,9 +178,15 @@ request.setAttribute("floor", floor);
 				<div class="total-price-section">
 					<p class="total-label">총 상품 금액</p>
 					<p class="total-amount" id="totalAmount">
-						<fmt:formatNumber value="${product.price}" type="number"
-							maxFractionDigits="0" groupingUsed="true" />
-						원
+						<c:choose>
+							<c:when test="${product.hasOption == 1}">
+                0원
+            </c:when>
+							<c:otherwise>
+								<fmt:formatNumber value="${finalPrice}" type="number"
+									maxFractionDigits="0" groupingUsed="true" />원
+            </c:otherwise>
+						</c:choose>
 					</p>
 				</div>
 
@@ -335,8 +344,8 @@ request.setAttribute("floor", floor);
 						<!-- 상품 문의 -->
 						<div class="qna-header">
 							<p>상품 문의사항이 아닌 반품/교환관련 문의는 고객센터 1:1 문의를 이용해주세요.</p>
-							<button type="button" class="btn btn-primary btn-sm">상품
-								문의</button>
+							<button type="button" class="btn btn-primary btn-sm" onclick="openQnaModal()">
+							상품 문의</button>
 						</div>
 
 						<!-- 상품 문의 리스트 -->
@@ -372,6 +381,56 @@ request.setAttribute("floor", floor);
 			</div>
 		</div>
 	</main>
+	
+<!-- 상품 문의 모달 (임시로 만든 거니 자유롭게 수정해주세요 감사합니다.........) -->
+<div id="qnaModal" class="modal-overlay" style="display: none;">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>상품 문의 작성</h2>
+            <button type="button" class="modal-close" onclick="closeQnaModal()">
+                <i class="bi bi-x"></i>
+            </button>
+        </div>
+
+        <div class="modal-content">
+            <form id="qnaForm" onsubmit="submitQna(event)">
+                <div class="form-group">
+                    <!-- 상품명 표시를 넣었어요 -->
+                    <label class="form-label" id="qnaProductName">
+                        ${product.name}
+                    </label>
+                    <p class="form-description">
+                        상품 문의 게시판에는 고객님의 정보 확인이 어려우므로 배송문의 같은 것은 1:1 게시판 이용 부탁드립니다.
+                    </p>
+                    <textarea
+                        name="qnaContent"
+                        class="form-textarea"
+                        placeholder="문의 내용"
+                        maxlength="250"
+                        required
+                    ></textarea>
+                    <div class="char-count">
+                        <span id="currentLength">0</span>/250자
+                    </div>
+                </div>
+
+                <div class="form-notice">
+                    <h4>이용안내</h4>
+                    <p>· 재판매금, 상업성 목적글, 미풍양속을 해치는 글을 상품 Q&A의 취지에 어긋나는 글은 삭제될 수 있습니다.</p>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline btn-lg" onclick="closeQnaModal()">
+                        취소
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        등록
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 	<!-- 푸터 include -->
 	<%@ include file="/consumer/footer.jsp"%>
@@ -379,7 +438,13 @@ request.setAttribute("floor", floor);
 	<script>
 window.productId = ${product.productId};
 window.productBrandId = '${brand.brandId}';
-window.productPrice = ${product.price.intValue()};
+//세일가를 productPrice로 설정
+window.productPrice = ${finalPrice.intValue()};
+window.originalPrice = ${product.price.intValue()};
+window.isSale = ${isSale};
+
+//로그인 체크
+window.isLoggedIn = ${not empty sessionScope.memberId};
 
 <c:if test="${product.hasOption == 1}">
 window.productOptionsData = [

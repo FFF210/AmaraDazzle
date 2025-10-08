@@ -38,7 +38,8 @@
 							</span>
 						</div>
 						<div class="info-item">
-							<span class="label">주문번호:</span> <span class="value order-number">${returns.orderCode}</span>
+						    <%-- 테이블 조회 편의를 위해 임의로 주문코드 뒤에 반품 아이디 넣었음 --%>
+							<span class="label">주문번호:</span> <span class="value order-number">${returns.orderCode}-R${returns.returnsId}</span>
 						</div>
 					</div>
 				</section>
@@ -61,13 +62,20 @@
 								<tr>
 									<td>
 										<div class="product-info">
-											<span class="brand">${item.brand_name}</span><br> <span
-												class="product-name">${item.name}</span>
+											<span class="brand">${returns.brandName}</span><br> <span
+												class="product-name"> ${returns.productName} <c:if
+													test="${not empty returns.optionValue}">
+													<br>
+													<small>(${returns.optionValue})</small>
+												</c:if>
+											</span>
 										</div>
 									</td>
-									<td>${item.price}</td>
-									<td>1</td>
-									<td class="price-highlight">${item.price}</td>
+									<td><fmt:formatNumber value="${returns.unitPrice}"
+											pattern="#,###" />원</td>
+									<td>${returns.quantity}</td>
+									<td class="price-highlight"><fmt:formatNumber
+											value="${returns.total}" pattern="#,###" />원</td>
 								</tr>
 							</tbody>
 						</table>

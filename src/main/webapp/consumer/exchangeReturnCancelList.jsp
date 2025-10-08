@@ -95,8 +95,8 @@
 			</div>
 
 			<!-- ============================ 2. 기간 조회 박스 ============================ -->
-			<form
-				action="${pageContext.request.contextPath}/store/mypage/cancelExchangeReturnList"
+			<form id="searchForm"
+				action="${pageContext.request.contextPath}/store/mypage/exchangeReturnCancelList"
 				method="get">
 				<div class="drf-wrap drf-${__size}">
 					<div class="drf-box">
@@ -188,34 +188,38 @@
 												<fmt:formatDate value="${item.updated_at}"
 													pattern="yyyy.MM.dd" />
 											</div>
-											<div class="order-number">${item.order_code}</div> <!-- 상세보기 링크: 교환/반품/취소별로 다르게 -->
+											<div class="order-number">${item.order_code}</div>
+											
+											<!-- 상세보기 링크: 교환/반품만 표시, 취소는 표시 안함 -->
 											<c:choose>
+												<%-- 주문취소는 상세보기 없이 "취소완료" 표시할지 아니면 걍 없앨지...없애는 게 낫겠죠? --%>
 												<c:when test="${item.status == 'CANCELLED'}">
-													<span class="detail-link">취소완료</span>
+													<span class="detail-link-disabled">취소완료</span>
 												</c:when>
+												
+												<%-- 교환 관련 --%>
 												<c:when test="${fn:startsWith(item.status, 'EXCHANGE_')}">
-													<a
-														href="${pageContext.request.contextPath}/store/exchangeDetail?exchangeId=${item.exchange_id}"
+													<a href="${pageContext.request.contextPath}/store/exchangeDetail?exchangeId=${item.exchange_id}"
 														class="detail-link">상세보기</a>
 												</c:when>
-												<%-- COLLECTING은 exchange_id나 returns_id로 판단 --%>
+												
+												<%-- 회수중 (교환/반품 구분) --%>
 												<c:when test="${item.status == 'COLLECTING'}">
 													<c:choose>
 														<c:when test="${not empty item.exchange_id}">
-															<a
-																href="${pageContext.request.contextPath}/store/exchangeDetail?exchangeId=${item.exchange_id}"
+															<a href="${pageContext.request.contextPath}/store/exchangeDetail?exchangeId=${item.exchange_id}"
 																class="detail-link">상세보기</a>
 														</c:when>
 														<c:when test="${not empty item.returns_id}">
-															<a
-																href="${pageContext.request.contextPath}/store/returnDetail?returnsId=${item.returns_id}"
+															<a href="${pageContext.request.contextPath}/store/returnDetail?returnsId=${item.returns_id}"
 																class="detail-link">상세보기</a>
 														</c:when>
 													</c:choose>
 												</c:when>
+												
+												<%-- 반품 관련 --%>
 												<c:when test="${fn:startsWith(item.status, 'RETURN_')}">
-													<a
-														href="${pageContext.request.contextPath}/store/returnDetail?returnsId=${item.returns_id}"
+													<a href="${pageContext.request.contextPath}/store/returnDetail?returnsId=${item.returns_id}"
 														class="detail-link">상세보기</a>
 												</c:when>
 											</c:choose>
@@ -228,9 +232,9 @@
 												<div class="product-info">
 													<div class="product-brand">${item.brand_name}</div>
 													<div class="product-name">
-														<a
-															href="${pageContext.request.contextPath}/store/productDetail?productId=${item.product_id}">
-															${item.name} <c:if test="${not empty item.option_id}">
+														<a href="${pageContext.request.contextPath}/store/productDetail?productId=${item.product_id}">
+															${item.name}
+															<c:if test="${not empty item.option_value}">
 																(${item.option_value})
 															</c:if>
 														</a>
@@ -243,8 +247,7 @@
 										<td>${item.quantity}</td>
 
 										<!-- 구매가 -->
-										<td><fmt:formatNumber value="${item.total}"
-												pattern="#,###" />원</td>
+										<td><fmt:formatNumber value="${item.total}" pattern="#,###" />원</td>
 
 										<!-- 상태 -->
 										<td>
@@ -254,7 +257,6 @@
 													<c:when test="${item.status == 'RETURN_REQUESTED'}">반품신청</c:when>
 													<c:when test="${item.status == 'RETURN_APPROVED'}">반품승인</c:when>
 													<c:when test="${item.status == 'COLLECTING'}">회수중</c:when>
-													<%-- 교환/반품 통합 --%>
 													<c:when test="${item.status == 'RETURN_REFUNDING'}">환불대기</c:when>
 													<c:when test="${item.status == 'RETURN_REJECTED'}">반품거절</c:when>
 													<c:when test="${item.status == 'RETURN_COMPLETED'}">반품완료</c:when>
@@ -264,6 +266,54 @@
 													<c:when test="${item.status == 'EXCHANGE_REJECTED'}">교환거절</c:when>
 													<c:when test="${item.status == 'EXCHANGE_COMPLETED'}">교환완료</c:when>
 													<c:otherwise>${item.status}</c:otherwise>
+												</c:choose>			
+											</div>
+											
+											<!-- 상태별 버튼 -->
+											<div class="status-button">
+												<c:choose>
+													<%-- 회수중: 회수 배송조회 (교환/반품 구분) --%>
+													<c:when test="${item.status == 'COLLECTING'}">
+														<c:choose>
+															<%-- 교환 회수중 --%>
+															<c:when test="${not empty item.exchange_id and not empty item.exchange_return_tracking_no}">
+																<button class="btn btn-outline btn-sm"
+																	onclick="trackDelivery('${item.exchange_return_tracking_no}', '${item.exchange_return_carrier_name}')">
+																	배송조회
+																</button>
+															</c:when>
+															<%-- 반품 회수중 --%>
+															<c:when test="${not empty item.returns_id and not empty item.return_tracking_no}">
+																<button class="btn btn-outline btn-sm"
+																	onclick="trackDelivery('${item.return_tracking_no}', '${item.return_carrier_name}')">
+																	배송조회
+																</button>
+															</c:when>
+														</c:choose>
+													</c:when>
+													
+													<%-- 교환배송중: 교환 재배송 조회 --%>
+													<c:when test="${item.status == 'EXCHANGE_SHIPPING'}">
+														<c:if test="${not empty item.exchange_shipping_tracking_no}">
+															<button class="btn btn-outline btn-sm"
+																onclick="trackDelivery('${item.exchange_shipping_tracking_no}', '${item.exchange_shipping_carrier_name}')">
+																배송조회
+															</button>
+														</c:if>
+													</c:when>
+													
+													<%-- 교환완료: 리뷰작성만 (교환은 1회 제한) --%>
+													<c:when test="${item.status == 'EXCHANGE_COMPLETED'}">
+														<button class="btn btn-outline btn-sm"
+															onclick="writeReview(${item.order_item_id})">
+															리뷰작성
+														</button>
+													</c:when>
+													
+													<%-- 기타 상태: 버튼 없음 --%>
+													<c:otherwise>
+														<span class="no-action">-</span>
+													</c:otherwise>
 												</c:choose>
 											</div>
 										</td>
@@ -281,49 +331,108 @@
 	<%@ include file="/consumer/footer.jsp"%>
 
 	<script>
+	// 배송조회 함수
+	function trackDelivery(trackingNo, carrierName) {
+	    if(!trackingNo) {
+	        alert('운송장 번호가 없습니다.');
+	        return;
+	    }
+	    
+	    let url = '';
+	    if(carrierName === 'CJ대한통운') {
+	        url = 'https://www.doortodoor.co.kr/parcel/doortodoor.do?fsp_action=PARC_ACT_002&fsp_cmd=retrieveInvNoACT&invc_no=' + trackingNo;
+	    } else if(carrierName === '롯데택배') {
+	        url = 'https://www.lotteglogis.com/home/reservation/tracking/linkView?InvNo=' + trackingNo;
+	    } else if(carrierName === '한진택배') {
+	        url = 'https://www.hanjin.com/kor/CMS/DeliveryMgr/WaybillResult.do?mCode=MN038&schLang=KR&wblnumText2=' + trackingNo;
+	    } else {
+	        alert('지원하지 않는 택배사입니다.');
+	        return;
+	    }
+	    
+	    window.open(url, '_blank', 'width=800,height=600');
+	}
+
+	// 리뷰작성 함수
+	function writeReview(orderItemId) {
+	    location.href = '${pageContext.request.contextPath}/consumer/writeReview?orderItemId=' + orderItemId;
+	}
+	
+	// 날짜 선택 스크립트
 	(function(){
-		  // 태그 바로 뒤 script 기준: 이전 형제가 루트
-		  const wrap = document.currentScript && document.currentScript.previousElementSibling;
-		  if(!wrap || !wrap.classList.contains('drf-wrap')) return;
+    // form을 ID로 직접 찾기
+    const wrap = document.querySelector('.drf-wrap');
+    if(!wrap) {
+        console.error('날짜 선택 요소를 찾을 수 없습니다.');
+        return;
+    }
 
-		  const $  = (s,ctx=wrap)=>ctx.querySelector(s);
-		  const $$ = (s,ctx=wrap)=>Array.from(ctx.querySelectorAll(s));
+    const $  = (s,ctx=wrap)=>ctx.querySelector(s);
+    const $$ = (s,ctx=wrap)=>Array.from(ctx.querySelectorAll(s));
 
-		  const sY=$('[data-role="start-y"]'), sM=$('[data-role="start-m"]'), sD=$('[data-role="start-d"]');
-		  const eY=$('[data-role="end-y"]'),   eM=$('[data-role="end-m"]'),   eD=$('[data-role="end-d"]');
+    const sY=$('[data-role="start-y"]'), sM=$('[data-role="start-m"]'), sD=$('[data-role="start-d"]');
+    const eY=$('[data-role="end-y"]'),   eM=$('[data-role="end-m"]'),   eD=$('[data-role="end-d"]');
 
-		  const clamp=(y,m,d)=>Math.min(d, new Date(y, m, 0).getDate());
-		  const setSel=(sel,v)=>{ const t=String(parseInt(v,10)); for(const o of sel.options){ if(String(parseInt(o.value,10))===t){ o.selected=true; break; } } };
-		  const getDate=(Y,M,D)=>new Date(parseInt(Y.value,10), parseInt(M.value,10)-1, parseInt(D.value,10));
-		  const setDate=(dt,start)=>{ const y=dt.getFullYear(), m=dt.getMonth()+1, d=dt.getDate();
-		    if(start){ setSel(sY,y); setSel(sM,m); setSel(sD,clamp(y,m,d)); }
-		    else     { setSel(eY,y); setSel(eM,m); setSel(eD,clamp(y,m,d)); }
-		  };
-		  const minusMonths=(base,months)=>{
-		    let y=base.getFullYear(), m=base.getMonth()+1, d=base.getDate();
-		    let nm=m-months; while(nm<=0){ nm+=12; y--; }
-		    return new Date(y, nm-1, clamp(y,nm,d));
-		  };
+    if(!sY || !sM || !sD || !eY || !eM || !eD) {
+        console.error('날짜 선택 요소를 찾을 수 없습니다.');
+        return;
+    }
 
-		  // 개월 버튼
-		  $$('.drf-chip').forEach(btn=>{
-		    btn.addEventListener('click', ()=>{
-		      const months=parseInt(btn.dataset.months,10)||1;
-		      const end=getDate(eY,eM,eD);
-		      const start=minusMonths(end, months);
-		      setDate(start,true);
+    const clamp=(y,m,d)=>Math.min(d, new Date(y, m, 0).getDate());
+    const setSel=(sel,v)=>{ 
+        const t=String(parseInt(v,10)); 
+        for(const o of sel.options){ 
+            if(String(parseInt(o.value,10))===t){ 
+                o.selected=true; 
+                break; 
+            } 
+        } 
+    };
+    const getDate=(Y,M,D)=>new Date(parseInt(Y.value,10), parseInt(M.value,10)-1, parseInt(D.value,10));
+    const setDate=(dt,start)=>{ 
+        const y=dt.getFullYear(), m=dt.getMonth()+1, d=dt.getDate();
+        if(start){ 
+            setSel(sY,y); setSel(sM,m); setSel(sD,clamp(y,m,d)); 
+        } else { 
+            setSel(eY,y); setSel(eM,m); setSel(eD,clamp(y,m,d)); 
+        }
+    };
+    const minusMonths=(base,months)=>{
+        let y=base.getFullYear(), m=base.getMonth()+1, d=base.getDate();
+        let nm=m-months; 
+        while(nm<=0){ 
+            nm+=12; 
+            y--; 
+        }
+        return new Date(y, nm-1, clamp(y,nm,d));
+    };
 
-		      $$('.drf-chip').forEach(b=>b.classList.remove('is-active'));
-		      btn.classList.add('is-active');
-		    });
-		  });
+    // 개월 버튼 클릭 이벤트
+    $$('.drf-chip').forEach(btn=>{
+        btn.addEventListener('click', (e)=>{
+            e.preventDefault(); // 버튼 기본 동작 방지
+            console.log('버튼 클릭:', btn.dataset.months); // 디버깅용
+            
+            const months=parseInt(btn.dataset.months,10)||1;
+            const end=getDate(eY,eM,eD);
+            const start=minusMonths(end, months);
+            setDate(start,true);
 
-		  // 종료 연/월 변경 시 day 정리
-		  [eY,eM].forEach(sel=> sel.addEventListener('change', ()=>{
-		    const end=getDate(eY,eM,eD); setDate(end,false);
-		    const st =getDate(sY,sM,sD); setDate(new Date(st.getFullYear(), st.getMonth(), clamp(st.getFullYear(), st.getMonth()+1, st.getDate())), true);
-		  }));
-		})();
+            $$('.drf-chip').forEach(b=>b.classList.remove('is-active'));
+            btn.classList.add('is-active');
+        });
+    });
+
+    // 종료 연/월 변경 시 day 정리
+    [eY,eM].forEach(sel=> sel.addEventListener('change', ()=>{
+        const end=getDate(eY,eM,eD); 
+        setDate(end,false);
+        const st =getDate(sY,sM,sD); 
+        setDate(new Date(st.getFullYear(), st.getMonth(), clamp(st.getFullYear(), st.getMonth()+1, st.getDate())), true);
+    }));
+
+    console.log('날짜 선택 스크립트 초기화 완료');
+})();
 	</script>
 </body>
 </html>

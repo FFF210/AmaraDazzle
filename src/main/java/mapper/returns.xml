@@ -93,6 +93,7 @@
         r.return_carrier_name AS returnCarrierName,
         r.return_tracking_no AS returnTrackingNo,
         r.updated_at AS updatedAt,
+        o.order_code AS orderCode,
         b.brand_name AS brandName,
         p.name AS productName,
         po.option_value AS optionValue,
@@ -101,6 +102,7 @@
         oi.total
     FROM returns r
     INNER JOIN order_item oi ON r.order_item_id = oi.order_item_id
+    INNER JOIN orders o ON oi.order_id = o.orders_id
     LEFT JOIN brand b ON oi.brand_id = b.brand_id
     LEFT JOIN product p ON oi.product_id = p.product_id
     LEFT JOIN product_option po ON oi.option_id = po.product_option_id
