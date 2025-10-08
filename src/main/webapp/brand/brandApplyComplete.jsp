@@ -90,7 +90,7 @@ h2 {
 			<div class="bold">운영팀이 확인 후 승인 여부를 이메일로 알려드립니다.</div>
 			<div class="b">
 				<button class="btn btn-primary btn-xl"
-					onclick="location.href='/consumer/main'">AmaraDazzle 둘러보기</button>
+					onclick="location.href='/store/main'">AmaraDazzle 둘러보기</button>
 			</div>
 		</div>
 	</div>

@@ -49,9 +49,10 @@ public class Signup extends HttpServlet {
 			service.registerBrand(brand);
 
 			// 세션에 brandId 저장
+			request.getSession().setAttribute("brand", brand);
 			request.getSession().setAttribute("brandId", brand.getBrandId());
 
-			response.sendRedirect(request.getContextPath() + "/brand/brandApply.jsp");
+			request.getRequestDispatcher("/brand/brandApply.jsp").forward(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

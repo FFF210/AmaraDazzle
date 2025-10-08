@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.time.LocalDate;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
@@ -84,7 +85,21 @@ public class BrandApply extends HttpServlet {
 			newBrand.setBank(getParam(request, "bank"));
 			newBrand.setAccountNumber(getParam(request, "accountNumber"));
 			newBrand.setAccountHolder(getParam(request, "accountHolder"));
-			newBrand.setSettlementDate(getParam(request, "settlementDate"));
+
+			// settlement_date 계산 로직
+			LocalDate now = LocalDate.now();
+			int day = now.getDayOfMonth();
+			String settlementDate;
+
+			if (day >= 1 && day <= 10) {
+				settlementDate = "10";
+			} else if (day >= 11 && day <= 20) {
+				settlementDate = "20";
+			} else {
+				settlementDate = "1";
+			}
+
+			newBrand.setSettlementDate(settlementDate);
 
 			// 상태값
 			newBrand.setBrandStatus("APPLY_SUBMITTED");
