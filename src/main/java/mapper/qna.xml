@@ -23,6 +23,27 @@
 		AND
 		exposure_status = 'PUBLISHED'
 	</select>
+	
+	 <!-- 상품 문의 등록 -->
+    <insert id="insertQna" parameterType="dto.Qna">
+        INSERT INTO qna (
+            member_id,
+            brand_id,
+            product_id,
+            question,
+            status,
+            exposure_status,
+            questioned_at
+        ) VALUES (
+            #{memberId},
+            #{brandId},
+            #{productId},
+            #{question},
+            #{status},
+            #{exposureStatus},
+            NOW()
+        )
+    </insert>
 
 	<!--======================= [브랜드 어드민] 통합 문의 목록 조회 ======================= -->
 	<select id="selectMemberQnaListForBrand" parameterType="map"

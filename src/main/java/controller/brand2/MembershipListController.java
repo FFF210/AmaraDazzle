@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dto.Membership;
+
 import service.brand2.MembershipService;
 import service.brand2.MembershipServiceImpl;
 
@@ -17,13 +19,13 @@ import service.brand2.MembershipServiceImpl;
  * Servlet implementation class MembershipList
  */
 @WebServlet("/brand2/membershipList")
-public class MembershipList extends HttpServlet {
+public class MembershipListController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public MembershipList() {
+	public MembershipListController() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -48,6 +50,9 @@ public class MembershipList extends HttpServlet {
 		Brand brand = (Brand) session.getAttribute("brand");
 		Long brandId = brand.getBrandId();
 =========== 로그인 =========== */
+		
+		Long brandId = 1L;
+		
 		MembershipService service = new MembershipServiceImpl();
 		
 		// 페이지네이션
@@ -56,38 +61,40 @@ public class MembershipList extends HttpServlet {
 		int offset = (page - 1) * limit;
 
 		Map<String, Object> params = new HashMap<>();
-		params.put("status", request.getParameter("status")); // (PENDING/ONGOING/COMPLETED/CANCELED)
-		params.put("searchType", request.getParameter("searchType")); // managerName / managerTel / bannerName
-		params.put("searchKeyword", request.getParameter("keyword")); // 검색 키워드
+		params.put("brandId", brandId);
+//		params.put("status", request.getParameter("status")); // (PENDING/ONGOING/COMPLETED/CANCELED)
+//		params.put("searchType", request.getParameter("searchType")); // managerName / managerTel / bannerName
+//		params.put("searchKeyword", request.getParameter("keyword")); // 검색 키워드
 		params.put("limit", limit);
 		params.put("offset", offset);
-
-		
 		
 		try {
-			// 서비스 호출
-			Map<String, Object> result = service.MembershipListByPage(params);
+			// 결제 목록 + 페이징
+            Map<String, Object> result = service.MembershipListByPage(params);
 
+			// 현재 멤버십 / 예약 멤버십
+            Membership currentMembership = service.getCurrentMembership(brandId);
+            Membership reservedMembership = service.getReservedMembership(brandId);
+			
 			// JSP 전달(jsp -> items="${...}", ServiceImpl -> result.put("...", list);)
 			request.setAttribute("membershipList", result.get("membershipList")); // 멤버십 결제 목록
 			request.setAttribute("totalCount", result.get("totalCount")); // 총 개수
 			request.setAttribute("totalPages", result.get("totalPages")); // 총 페이지 수
 			request.setAttribute("currentPage", page); // 현재 페이지
 			
-			request.getRequestDispatcher("/brand2/membership.jsp").forward(request, response);
+			request.setAttribute("currentMembership", currentMembership);
+            request.setAttribute("reservedMembership", reservedMembership);
+			
+			request.getRequestDispatcher("/brand2/membershipList.jsp").forward(request, response);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("err", "멤버십 목록 조회 오류");
-			request.getRequestDispatcher("error.jsp").forward(request, response);
+			request.getRequestDispatcher("/error.jsp").forward(request, response);
 		}
 
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub

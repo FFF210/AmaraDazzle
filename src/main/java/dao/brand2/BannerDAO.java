@@ -10,7 +10,7 @@ import dto.Banner;
 public interface BannerDAO {
 	
 	// 배너 신청
-	public void insertBannerForm(Banner banner) throws Exception;
+	public int insertBannerForm(Banner banner) throws Exception;
 	
 	// 배너 신청 목록 조회
 	List<Banner> selectAdbannerList(Map<String, Object> params) throws Exception;
@@ -22,7 +22,7 @@ public interface BannerDAO {
 	Banner selectBannerById(@Param("bannerId")long bannerId) throws Exception;
 	
 	// 배너 취소 버튼
-	public void updateBannerStatus(Map<String, Object> params);
+	public int updateBannerStatus(Map<String, Object> params);
 	
 	
 }

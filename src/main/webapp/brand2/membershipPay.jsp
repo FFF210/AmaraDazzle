@@ -37,7 +37,7 @@
 <body>
 	<my:layout>
 		<my:breadcrumb
-			items="멤버십 관리:/brand2/membership, 멤버십 결제:/brand2/membershipPay" />
+			items="멤버십 관리:/brand2/membershipList " />
 		<div class="membershipPayContainer">
 			<div class="notice">멤버십 가입 시 발송한 마케팅 메일과 메인 이벤트의 매출·클릭·구매 성과
 				지표를 확인할 수 있으며, 요금제별 월 발송 건수가 지원됩니다.</div>
@@ -45,7 +45,7 @@
 			<!-- 멤버십 플랜 반복 출력 -->
 			<c:forEach var="plan" items="${plans}">
 				<label class="plan"> <input type="radio" name="plan"
-					value="${plan.amount}">
+					value="${plan.amount}" data-plan-id="${plan.membershipPlanId }">
 					<div class="plan-info">
 						<div class="plan-title">
 							<!-- 플랜명: 기간 기준으로 표시 -->
@@ -96,7 +96,7 @@
 		      return;
 		    }
 		    
-
+		    const planId = selected.dataset.planId;   // ✅ 이제 정상 동작
 		 	// 선택된 라디오의 부모 label 안에서 .plan-title 요소 찾기
 		    const planTitle = selected.closest("label").querySelector(".plan-title").innerText;
 		    
@@ -108,9 +108,9 @@
 		    tossPayments
 		      .requestPayment("카드", {
 		        amount: parseInt(selected.value, 10),  // ✅ 선택된 플랜 금액 반영
-		        orderId: "ORDER-" + new Date().getTime(), // ✅ 주문번호 (유니크하게 생성)
+		        orderId: "M-" + planId + "-" + new Date().getTime(), // ✅ 주문번호 (유니크하게 생성)
 		        orderName: planTitle,   // ✅ plan-title 값 반영
-		        customerName: "테스트사용자", 
+		        customerName: "${membership.brandId}", 
 		        successUrl: "http://localhost:8080/tossSuccess", 
 		        failUrl: "http://localhost:8080/tossFail"
 		      })
@@ -124,7 +124,6 @@
 		  });
 		});
 
-  
   
 </script>
 

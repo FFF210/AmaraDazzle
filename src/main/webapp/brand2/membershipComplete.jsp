@@ -80,30 +80,23 @@ h2 {
 }
 
 .b {
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 }
-
 </style>
 </head>
 <body>
 	<my:layout>
-		<my:breadcrumb
-			items="멤버십 관리:/brand2/membership.jsp, 멤버십 결제:/brand2/membershipPay.jsp" />
+		<my:breadcrumb items="멤버십 관리:/brand2/membership " />
 		<div class="CompleteWrapper">
 			<div class="CompleteContainer">
 				<div class="check-icon">
 					<i class="bi bi-check2-circle"></i>
 				</div>
 				<h2>멤버십 결제가 완료되었습니다.</h2>
-				<div class="info">멤버십명: 3개월 멤버십</div>
-				<div class="info">이용기간 : 2025-09-07~2025-12-07</div>
-				<div class="info">결제금액 : 420,000 (VAT 포함)</div>
 				<div class="bold">마케팅 메일과 성과 지표 이용 가능합니다.</div>
-				<div class="b">
 				<button class="btn btn-outline btn-md"
-					onclick="location.href='/brand'">홈으로 돌아가기</button>
-					</div>
+					onclick="location.href='/brand2/membership'">목록으로 돌아가기</button>
 			</div>
 		</div>
 	</my:layout>

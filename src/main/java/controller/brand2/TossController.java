@@ -28,6 +28,8 @@ import dto.AdminPayment;
 import dto.Brand;
 import service.brand2.AdbannerService;
 import service.brand2.AdbannerServiceImpl;
+import service.brand2.MembershipService;
+import service.brand2.MembershipServiceImpl;
 
 @WebServlet("/tossSuccess")
 public class TossController extends HttpServlet {
@@ -79,7 +81,6 @@ public class TossController extends HttpServlet {
 			JSONObject result = (JSONObject) parser.parse(apiReader);
 			responseStream.close();
 
-			System.out.println(result.toJSONString());
 			// 4. 성공 시 DB 저장 (MyBatis 활용)
 			if (isSuccess) {
             	String orderIdConfirm = (String)result.get("orderId");
@@ -98,7 +99,8 @@ public class TossController extends HttpServlet {
                 Timestamp timestamp = Timestamp.valueOf(ldt);
             	adminPayment.setPayDate(timestamp);
             	adminPayment.setMethod(methodConfirm);
-            	adminPayment.setBannerId(Long.valueOf(orderNameConfirm));
+//            	adminPayment.setBannerId(Long.valueOf(orderNameConfirm)); // orderName을 BannerId로 잘못 매핑
+            	adminPayment.setOrderName(orderNameConfirm);
             	adminPayment.setReceiptUrl(receiptUrl);
             	
             	HttpSession session = request.getSession();
@@ -106,9 +108,34 @@ public class TossController extends HttpServlet {
             	if(brand!=null) {
             		adminPayment.setBrandId(brand.getBrandId());
             	}
-            	adminPayment.setBrandId(1L);
-            	AdbannerService service = new AdbannerServiceImpl();
-            	service.savePayment(adminPayment);
+            	adminPayment.setBrandId(1L); // 테스트용, 세션 기반으로 수정 필요
+            	
+            	
+            	// =============================
+                // 멤버십 결제인 경우
+                // =============================
+            	if(orderIdConfirm.startsWith("M-")) {
+            		adminPayment.setPaymentType("MEMBERSHIP");
+            		
+            		MembershipService membershipService = new MembershipServiceImpl();
+            	    membershipService.createMembershipWithPayment(adminPayment);
+            	    
+            	} else if (orderIdConfirm.startsWith("B-")) {
+            		// 배너 광고 결제
+            		adminPayment.setPaymentType("BANNER_AD");
+            		adminPayment.setOrderName(orderNameConfirm);
+            		
+            		AdbannerService service = new AdbannerServiceImpl();
+            		service.savePayment(adminPayment);
+            		
+            		try {
+            			// orderName이 숫자로 들어오는 경우 (배너 ID)
+                        adminPayment.setBannerId(Long.valueOf(orderNameConfirm));
+                    } catch (NumberFormatException e) {
+                        System.err.println("배너 결제인데 orderName이 숫자가 아님: " + orderNameConfirm);
+            		}
+            	}
+            	
             	request.getRequestDispatcher("/brand2/tossPaymentSuccess.jsp").forward(request, response);
             	
 			} else {
@@ -122,9 +149,6 @@ public class TossController extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.sendRedirect("http://localhost:8080/tossPaymentFail");
 
-//            JSONObject err = new JSONObject();
-//            err.put("message", "결제 처리 중 오류가 발생했습니다.");
-//            out.print(err.toJSONString());
 		} finally {
 			out.flush();
 			out.close();

@@ -83,7 +83,7 @@
 				<div class="user-info__bottom">
 					<div class="stat">
 						<span class="label">등급</span> <span class="value"><span
-							class="em">임시</span></span>
+							class="em">${sessionScope.memberGrade}</span></span>
 					</div>
 					<div class="stat">
 						<span class="label">포인트</span> <span class="value"><span
@@ -364,60 +364,92 @@
 	}
 
 	function writeReview(orderItemId) {
-	    location.href = '/consumer/writeReview?orderItemId=' + orderItemId;
+	    location.href = '/store/writeReview?orderItemId=' + orderItemId;
 	}
 
 	function requestExchange(orderItemId) {
-	    location.href = '/consumer/requestExchange?orderItemId=' + orderItemId;
+	    location.href = '/store/exchangeApply?orderItemId=' + orderItemId;
 	}
 
 	function requestReturn(orderItemId) {
-	    location.href = '/consumer/requestReturn?orderItemId=' + orderItemId;
+	    location.href = '/store/returnApply?orderItemId=' + orderItemId;
 	}
 	
+	// 날짜 선택 스크립트 (태그에서는 되는데 이게 dom을 못 찾아서 수정했어요....)
 	(function(){
-		  // 태그 바로 뒤 script 기준: 이전 형제가 루트
-		  const wrap = document.currentScript && document.currentScript.previousElementSibling;
-		  if(!wrap || !wrap.classList.contains('drf-wrap')) return;
+    // form을 ID로 직접 찾기
+    const wrap = document.querySelector('.drf-wrap');
+    if(!wrap) {
+        console.error('날짜 선택 요소를 찾을 수 없습니다.');
+        return;
+    }
 
-		  const $  = (s,ctx=wrap)=>ctx.querySelector(s);
-		  const $$ = (s,ctx=wrap)=>Array.from(ctx.querySelectorAll(s));
+    const $  = (s,ctx=wrap)=>ctx.querySelector(s);
+    const $$ = (s,ctx=wrap)=>Array.from(ctx.querySelectorAll(s));
 
-		  const sY=$('[data-role="start-y"]'), sM=$('[data-role="start-m"]'), sD=$('[data-role="start-d"]');
-		  const eY=$('[data-role="end-y"]'),   eM=$('[data-role="end-m"]'),   eD=$('[data-role="end-d"]');
+    const sY=$('[data-role="start-y"]'), sM=$('[data-role="start-m"]'), sD=$('[data-role="start-d"]');
+    const eY=$('[data-role="end-y"]'),   eM=$('[data-role="end-m"]'),   eD=$('[data-role="end-d"]');
 
-		  const clamp=(y,m,d)=>Math.min(d, new Date(y, m, 0).getDate());
-		  const setSel=(sel,v)=>{ const t=String(parseInt(v,10)); for(const o of sel.options){ if(String(parseInt(o.value,10))===t){ o.selected=true; break; } } };
-		  const getDate=(Y,M,D)=>new Date(parseInt(Y.value,10), parseInt(M.value,10)-1, parseInt(D.value,10));
-		  const setDate=(dt,start)=>{ const y=dt.getFullYear(), m=dt.getMonth()+1, d=dt.getDate();
-		    if(start){ setSel(sY,y); setSel(sM,m); setSel(sD,clamp(y,m,d)); }
-		    else     { setSel(eY,y); setSel(eM,m); setSel(eD,clamp(y,m,d)); }
-		  };
-		  const minusMonths=(base,months)=>{
-		    let y=base.getFullYear(), m=base.getMonth()+1, d=base.getDate();
-		    let nm=m-months; while(nm<=0){ nm+=12; y--; }
-		    return new Date(y, nm-1, clamp(y,nm,d));
-		  };
+    if(!sY || !sM || !sD || !eY || !eM || !eD) {
+        console.error('날짜 선택 요소를 찾을 수 없습니다.');
+        return;
+    }
 
-		  // 개월 버튼
-		  $$('.drf-chip').forEach(btn=>{
-		    btn.addEventListener('click', ()=>{
-		      const months=parseInt(btn.dataset.months,10)||1;
-		      const end=getDate(eY,eM,eD);
-		      const start=minusMonths(end, months);
-		      setDate(start,true);
+    const clamp=(y,m,d)=>Math.min(d, new Date(y, m, 0).getDate());
+    const setSel=(sel,v)=>{ 
+        const t=String(parseInt(v,10)); 
+        for(const o of sel.options){ 
+            if(String(parseInt(o.value,10))===t){ 
+                o.selected=true; 
+                break; 
+            } 
+        } 
+    };
+    const getDate=(Y,M,D)=>new Date(parseInt(Y.value,10), parseInt(M.value,10)-1, parseInt(D.value,10));
+    const setDate=(dt,start)=>{ 
+        const y=dt.getFullYear(), m=dt.getMonth()+1, d=dt.getDate();
+        if(start){ 
+            setSel(sY,y); setSel(sM,m); setSel(sD,clamp(y,m,d)); 
+        } else { 
+            setSel(eY,y); setSel(eM,m); setSel(eD,clamp(y,m,d)); 
+        }
+    };
+    const minusMonths=(base,months)=>{
+        let y=base.getFullYear(), m=base.getMonth()+1, d=base.getDate();
+        let nm=m-months; 
+        while(nm<=0){ 
+            nm+=12; 
+            y--; 
+        }
+        return new Date(y, nm-1, clamp(y,nm,d));
+    };
 
-		      $$('.drf-chip').forEach(b=>b.classList.remove('is-active'));
-		      btn.classList.add('is-active');
-		    });
-		  });
+    // 개월 버튼 클릭 이벤트
+    $$('.drf-chip').forEach(btn=>{
+        btn.addEventListener('click', (e)=>{
+            e.preventDefault(); // 버튼 기본 동작 방지
+            console.log('버튼 클릭:', btn.dataset.months); // 디버깅용
+            
+            const months=parseInt(btn.dataset.months,10)||1;
+            const end=getDate(eY,eM,eD);
+            const start=minusMonths(end, months);
+            setDate(start,true);
 
-		  // 종료 연/월 변경 시 day 정리
-		  [eY,eM].forEach(sel=> sel.addEventListener('change', ()=>{
-		    const end=getDate(eY,eM,eD); setDate(end,false);
-		    const st =getDate(sY,sM,sD); setDate(new Date(st.getFullYear(), st.getMonth(), clamp(st.getFullYear(), st.getMonth()+1, st.getDate())), true);
-		  }));
-		})();
+            $$('.drf-chip').forEach(b=>b.classList.remove('is-active'));
+            btn.classList.add('is-active');
+        });
+    });
+
+    // 종료 연/월 변경 시 day 정리
+    [eY,eM].forEach(sel=> sel.addEventListener('change', ()=>{
+        const end=getDate(eY,eM,eD); 
+        setDate(end,false);
+        const st =getDate(sY,sM,sD); 
+        setDate(new Date(st.getFullYear(), st.getMonth(), clamp(st.getFullYear(), st.getMonth()+1, st.getDate())), true);
+    }));
+
+    console.log('날짜 선택 스크립트 초기화 완료');
+})();
 	</script>
 </body>
 </html>

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>교환 신청</title>
+<title>반품 신청</title>
 <link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">

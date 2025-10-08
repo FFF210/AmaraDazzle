@@ -33,4 +33,9 @@ public class QnaServiceImpl implements QnaService {
         return qnaDAO.getQnaCountByProductId(productId);
 	}
 
+	@Override
+	public void createQna(Qna qna) throws Exception {
+		qnaDAO.insertQna(qna);	
+	}
+
 }

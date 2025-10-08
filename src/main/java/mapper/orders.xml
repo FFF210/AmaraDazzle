@@ -290,12 +290,25 @@
 		o.order_code,
 		b.brand_name,
 		p.name,
-		e.exchange_id,
-		r.returns_id
+		po.option_value,
+		
+        e.exchange_id,
+        e.return_carrier_name AS exchange_return_carrier_name,    
+        e.return_tracking_no AS exchange_return_tracking_no,      
+        e.shipping_carrier_name AS exchange_shipping_carrier_name, 
+        e.shipping_tracking_no AS exchange_shipping_tracking_no,   
+        e.shipping_cost_payer AS exchange_cost_payer,              
+        
+        r.returns_id,
+        r.return_carrier_name AS return_carrier_name,              
+        r.return_tracking_no AS return_tracking_no,               
+        r.shipping_cost_payer AS return_cost_payer      
+        
 		FROM order_item oi
 		INNER JOIN orders o ON oi.order_id = o.orders_id
 		LEFT JOIN brand b ON oi.brand_id = b.brand_id       
-        LEFT JOIN product p ON oi.product_id = p.product_id 
+        LEFT JOIN product p ON oi.product_id = p.product_id
+        LEFT JOIN product_option po ON oi.option_id = po.product_option_id
 		LEFT JOIN exchange e ON oi.order_item_id = e.order_item_id
 		LEFT JOIN returns r ON oi.order_item_id = r.order_item_id
 		WHERE o.member_id = #{memberId}
