@@ -213,7 +213,8 @@ body {
 	gap: 10px;
 	text-decoration: none;
 	padding: 4px 12px;
-	/* 버튼 기본 스타일 제거 */ background : none; /* 배경색 제거 */
+	/* 버튼 기본 스타일 제거 */
+	background: none; /* 배경색 제거 */
 	border: none; /* 외곽선 제거 */
 	outline: none; /* 포커스 아웃라인 제거 */
 	cursor: pointer; /* 마우스 커서 변경 */
@@ -322,8 +323,9 @@ body {
 	display: block;
 	animation: fadeIn 0.3s ease;
 }
+
 .nav-item .dropdown-panel:hover {
-  display: block;
+	display: block;
 }
 
 /* 카테고리 그룹 내부 */
