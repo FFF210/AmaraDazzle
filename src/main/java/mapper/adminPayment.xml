@@ -7,11 +7,11 @@
 	<!-- 최고관리자의 승인 시 결제하기 버튼 -->
 	<insert id="insertAdminPayment" parameterType="adminPayment">
 		INSERT INTO
-		admin_payment (payment_type, banner_id, plan_id, brand_id, order_id,
+		admin_payment (payment_type, banner_id, membership_id, brand_id, order_id,
 		amount, payment_key,
 		pay_date, method, order_name, receipt_url)
 		VALUES
-		(#{paymentType}, #{bannerId}, #{planId},
+		(#{paymentType}, #{bannerId}, #{membershipId},
 		#{brandId}, #{orderId}, #{amount},
 		#{paymentKey},#{payDate},#{method},#{orderName},#{receiptUrl} )
 	</insert>
@@ -21,7 +21,7 @@
 		UPDATE
 		admin_payment
 		SET payment_key = #{paymentKey},
-		pay_date = #{approvedAt},
+		pay_date = #{payDate},
 		amount = #{amount}
 		WHERE order_id = #{orderId}
 	</update>
