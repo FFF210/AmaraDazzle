@@ -97,7 +97,7 @@ h2 {
 					<i class="bi bi-check2-circle"></i>
 				</div>
 				<h2>신청이 완료되었습니다.</h2>
-				<div class="bold">운영팀이 확인 후 승인 여부를 알림으로 알려드립니다.</div>
+				<div class="bold">운영팀이 확인 후 승인 처리가 이루어집니다.</div>
 				<div class="b">
 					<button class="btn btn-outline btn-md"
 						onclick="location.href='/brand2/adbannerList'">목록 보기</button>

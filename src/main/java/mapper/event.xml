@@ -14,6 +14,7 @@
 		endDate,
 		e.event_name AS eventName,
 		e.status AS status,
+		a.brand_id AS brandId,
 		a.apply_date AS
 		applyDate,
 		a.manager_name AS managerName,
@@ -302,12 +303,10 @@
 
 	<!-- ================ ADMIN =================== -->
 	<!-- event 게시글 총 개수 -->
-	<select id="eventCount" resultType="Integer"
-		parameterType="searchCondition">
+	<select id="eventCount" resultType="Integer" parameterType="searchCondition">
 		select count(*) from event e
-		join event_application ea on (e.event_id =
-		ea.event_id)
-		join brand b on (ea.brand_id = b.brand_id)
+		left join event_application ea on (e.event_id = ea.event_id)
+		left join brand b on (ea.brand_id = b.brand_id)
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
 				and (e.created_at &gt;= #{startDateTime}
@@ -334,24 +333,18 @@
 	</select>
 
 	<!-- event 리스트 보기 -->
-	<select id="allEventList" resultType="banner"
-		parameterType="Map">
+	<select id="allEventList" resultType="event" parameterType="Map">
 		select e.*, b.brand_name from event e
-		join
-		event_application ea on (e.event_id = ea.event_id)
-		join brand b on
-		(ea.brand_id = b.brand_id)
-		order by e.event_id desc limit
-		#{start_p},#{post_ea}
+		left join event_application ea on (e.event_id = ea.event_id)
+		left join brand b on (ea.brand_id = b.brand_id)
+		order by e.event_id desc limit #{start_p},#{post_ea}
 	</select>
 
 	<!-- 검색된 event 리스트 -->
-	<select id="searchEventList" resultType="banner"
-		parameterType="searchCondition">
+	<select id="searchEventList" resultType="event" parameterType="searchCondition">
 		select e.*, b.brand_name from event e
-		join event_application ea on
-		(e.event_id = ea.event_id)
-		join brand b on (ea.brand_id = b.brand_id)
+		left join event_application ea on (e.event_id = ea.event_id)
+		left join brand b on (ea.brand_id = b.brand_id)
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
 				and (e.created_at &gt;= #{startDateTime}
@@ -385,14 +378,12 @@
 		view_cnt = view_cnt+1 where event_id=#{num}
 	</update>
 
-	<!-- 어드민 배너 등록 -->
+	<!-- 어드민 이벤트 등록 -->
 	<insert id="adminEventWrite" parameterType="event">
 		insert into event
 		(event_id, event_type, start_date, end_date,
-		event_name,
-		thumbnail_file_id, detail_file_id, category_id,
-		content, writer,
-		created_at)
+		event_name, thumbnail_file_id, detail_file_id, category_id,
+		content, writer, created_at)
 		values
 		(0, #{eventType}, #{startDate}, #{endDate},
 		#{eventName},#{thumbnailFileId}, #{detailFileId}, #{categoryId},

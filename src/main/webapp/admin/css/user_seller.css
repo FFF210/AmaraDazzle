@@ -1,64 +1,67 @@
 /* ********************* */
 /* 디테일 상단  판매자정보        */
 /* ********************* */
-.content > .profile {
-    display: flex;
-    padding: 10px;
-    margin-bottom: 10px;
+.content>.profile {
+	display: flex;
+	padding: 10px;
+	margin-bottom: 10px;
 }
 
-.content > .profile > .info_image {
-    width: 20%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    gap: 15px;
+.content>.profile>.info_image {
+	width: 20%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 15px;
 }
 
-.info_image > .thumbnail {
-    width: 50%;
-    aspect-ratio: 1 / 1;
-    border: 1px solid var(--outerbox);
-    border-radius: 10px;
-    background-image: url("../image/no-image.svg");
-    background-size: 100% 100%;
+.info_image>.thumbnail {
+	width: 50%;
+	aspect-ratio: 1/1;
+	border: 1px solid var(--outerbox);
+	border-radius: 10px;
+	background-size: cover;
+	background-position: center;
 }
 
-.info_image > .brandStoreBtn {
-    width: 50%;
-    aspect-ratio: 16 / 3;
+.thumbnail img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	border-radius: 10px;
 }
 
-.info_image > .brandStoreBtn > button {
-    width: 100%;
-    background-color: transparent;
-    margin: 0;
-    border: 1px solid var(--primary);
-    color: var(--primary);
-}
-.content > .profile > .info_table {
-    width: 75%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.info_image>.brandStoreBtn {
+	width: 50%;
+	aspect-ratio: 16/3;
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
 }
 
-.info_table > #seller_info {
-    height: 100%;
-    width: 100%;
+.info_image>.brandStoreBtn>.goStoreBtn {
+	width: 100%;
+	background: transparent;
+	margin: 0;
+	border: 1px solid var(--mainColor);
+	color: var(--mainColor);
 }
 
-#seller_info tr th {
-    width: 20%;
-    border-right: none;
+.info_image>.brandStoreBtn>.goStoreBtn:hover {
+	border: 1px solid var(--hoverColor);
+	background: var(--hoverColor);
+	color: var(--base);
+	transition: background 0.5s ease;
 }
 
-#seller_info tr td {
-    width: 30%;
+.info_image>.brandStoreBtn>.goStoreBtn:active {
+	background: var(--clicked);
 }
 
-div.info_table > table#seller_info tr:hover td {
-    background-color: transparent;
+.content .profile .info_table {
+	width: 75%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }

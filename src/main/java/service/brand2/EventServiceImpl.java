@@ -39,7 +39,6 @@ public class EventServiceImpl implements EventService {
 		result.put("eventList", eventList);
 		result.put("totalCount", totalCount);
 		result.put("totalPages", totalPages);
-
 		return result;
 	}
 

@@ -20,9 +20,11 @@ public class Brand {
 	private String settlementDate; // 정산 일자
 	private Timestamp createdAt; // 생성 시각 (DEFAULT CURRENT_TIMESTAMP)
 	private Timestamp updatedAt; // 수정 시각 (ON UPDATE CURRENT_TIMESTAMP)
+	
+	//조인용 컬럼 
+	private String fileRename;   // 리네임 파일명 (UNIQUE)
 
-	public Brand() {
-	}
+	public Brand() {}
 
 	public Long getBrandId() {
 		return brandId;
@@ -158,6 +160,14 @@ public class Brand {
 
 	public void setUpdatedAt(Timestamp updatedAt) {
 		this.updatedAt = updatedAt;
+	}
+
+	public String getFileRename() {
+		return fileRename;
+	}
+
+	public void setFileRename(String fileRename) {
+		this.fileRename = fileRename;
 	}
 
 	@Override

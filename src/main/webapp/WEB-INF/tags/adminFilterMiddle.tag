@@ -28,9 +28,7 @@
 				<button type="button" class="filter-btn" data-filter="${label}" data-value="${optValue}" >${optLabel}</button>
 			</c:forEach>
 		</div>
-		
-		
-		<input type="hidden" name="${name}" value="${searchContent[name]}" />
+		<input type="hidden" name="${name}" value="${searchContent.middleFilter}" />
 	</div>
 </c:forEach>
 
