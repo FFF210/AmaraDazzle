@@ -8,7 +8,7 @@ public class AdminPayment {
 	private String paymentKey; // PG사 결제 고유키 (UNIQUE)
 	private Long brandId; // 결제한 브랜드 ID (FK → brand.brand_id)
 	private Integer amount; // 결제 금액 (원, CHECK >= 0, DEFAULT 0)
-	private Long planId; // 멤버십 요금제 ID (FK → membership_plan.membership_plan_id)
+	private String planId; // 멤버십 요금제 ID (FK → membership_plan.membership_plan_id)
 	private Long bannerId; // 배너 광고 ID (FK → banner.banner_id)
 	private Timestamp payDate; // 결제일 (DEFAULT CURRENT_TIMESTAMP)
 	private String orderId; // 토스페이먼츠용
@@ -59,11 +59,11 @@ public class AdminPayment {
 		this.amount = amount;
 	}
 
-	public Long getPlanId() {
+	public String getPlanId() {
 		return planId;
 	}
 
-	public void setPlanId(Long planId) {
+	public void setPlanId(String planId) {
 		this.planId = planId;
 	}
 

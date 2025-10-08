@@ -15,9 +15,10 @@ public class BannerDAOImpl implements BannerDAO {
 
 	// 배너 신청
 	@Override
-	public void insertBannerForm(Banner banner) throws Exception {
-		sqlSession.insert("mapper.banner.insertBannerForm", banner);
+	public int insertBannerForm(Banner banner) throws Exception {
+		int result = sqlSession.insert("mapper.banner.insertBannerForm", banner);
 		sqlSession.commit();
+		return result;
 	}
 
 	// 배너 신청 목록 조회
@@ -39,9 +40,10 @@ public class BannerDAOImpl implements BannerDAO {
 
 	// 배너 취소 버튼
 	@Override 
-	public void updateBannerStatus(Map<String, Object> params) { 
-		sqlSession.update("mapper.banner.updateBannerStatus", params);
+	public int updateBannerStatus(Map<String, Object> params) { 
+		int result = sqlSession.update("mapper.banner.updateBannerStatus", params);
 		sqlSession.commit();
+		return result;
 	}
 	
 }
