@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class Membership {
     private Long membershipId;    // 멤버십 ID (PK, AUTO_INCREMENT)
     private Long brandId;         // 멤버십 가입 브랜드 ID (FK → brand.brand_id)
-    private Long planId;          // 가입한 요금제 ID (FK → membership_plan.membership_plan_id)
+    private String planId;          // 가입한 요금제 ID (FK → membership_plan.membership_plan_id)
     private Timestamp startDate;  // 멤버십 시작일
     private Timestamp endDate;    // 멤버십 만료일
     private String status;        // 상태 (ACTIVE, EXPIRED, CANCELLED)
@@ -30,10 +30,10 @@ public class Membership {
         this.brandId = brandId;
     }
 
-    public Long getPlanId() {
+    public String getPlanId() {
         return planId;
     }
-    public void setPlanId(Long planId) {
+    public void setPlanId(String planId) {
         this.planId = planId;
     }
 
