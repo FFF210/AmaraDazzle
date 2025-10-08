@@ -4,76 +4,98 @@
 
 <mapper namespace="mapper.membership">
 
-	<!-- <id property="membershipId" column="membership_id" /> 멤버십 ID (PK, AUTO_INCREMENT) -->
-	<!-- <result property="brandId" column="brand_id" /> 멤버십 가입 브랜드 ID (FK → 
-		brand.brand_id) -->
-	<!-- <result property="planId" column="plan_id" /> 가입한 요금제 ID (FK → membership_plan.membership_plan_id) -->
-	<!-- <result property="startDate" column="start_date" /> 멤버십 시작일 -->
-	<!-- <result property="endDate" column="end_date" /> 멤버십 만료일 -->
-	<!-- <result property="status" column="status" /> 상태 (ACTIVE / EXPIRED / 
-		CANCELLED) -->
-	<!-- <result property="createdAt" column="created_at" /> 생성일 (DEFAULT CURRENT_TIMESTAMP) -->
-	<!-- <result property="updatedAt" column="updated_at" /> 최근 갱신일 (ON UPDATE 
-		CURRENT_TIMESTAMP) -->
-	<!-- <result property="remainQuota" column="remain_quota" /> 남은 발송 건수 -->
-
-
-	<!-- admin_payment 테이블 참고용 -->
-	<!-- <id property="paymentId" column="payment_id" /> 결제 내역 고유 ID (PK, AUTO_INCREMENT) -->
-	<!-- <result property="paymentType" column="payment_type" /> 결제 유형 (MEMBERSHIP 
-		/ BANNER_AD) -->
-	<!-- <result property="paymentKey" column="payment_key" /> PG사 결제 고유 키 (UNIQUE) -->
-	<!-- <result property="brandId" column="brand_id" /> 결제한 브랜드 ID (FK → brand.brand_id) -->
-	<!-- <result property="amount" column="amount" /> 결제 금액 (원, CHECK >= 0, 
-		DEFAULT 0) -->
-	<!-- <result property="planId" column="plan_id" /> 멤버십 요금제 ID (FK → membership_plan.membership_plan_id) -->
-	<!-- <result property="bannerId" column="banner_id" /> 배너 광고 ID (FK → banner.banner_id) -->
-	<!-- <result property="payDate" column="pay_date" /> 결제일 (DEFAULT CURRENT_TIMESTAMP) -->
-	<!-- <result property="lastAutopayDate" column="lastautopay_date" /> 마지막 
-		정기결제일 -->
-
-
-	<!-- membership_plan 테이블 참고용 -->
-	<!-- <id property="membershipPlanId" column="membership_plan_id" /> 요금제 
-		ID (PK, UNIQUE) -->
-	<!-- <result property="planPeriod" column="plan_period" /> 기간 (개월 단위, CHECK 
-		> 0) -->
-	<!-- <result property="amount" column="amount" /> 요금제 금액 (원, CHECK >= 0, 
-		DEFAULT 0) -->
-	<!-- <result property="membershipExplain" column="membership_explain" /> 
-		설명 -->
-
-
-	<!-- brand2 -->
-
-	<!-- 멤버십 결제 목록 조회 -->
+	<!-- [brand2] 멤버십 결제 목록 조회 -->
 	<select id="selectMembershipList" parameterType="map"
 		resultType="membershipList">
 		SELECT
 		m.membership_id AS membershipId,
+		m.brand_id AS
+		brandId,
+		m.plan_id AS planId,
 		m.start_date AS startDate,
-		m.end_date AS endDate,
+		m.end_date AS
+		endDate,
 		m.status AS status,
-		p.pay_date AS payDate,
-		CASE WHEN m.status = 'CANCELLED' THEN p.pay_date END AS cancelDate,
-		mp.membership_plan_id AS planId,
-		mp.membership_explain AS planName,
+		m.created_at AS createdAt,
+		m.updated_at AS
+		updatedAt,
+		m.remain_quota AS remainQuota,
+		mp.membership_explain AS
+		planName,
 		p.payment_type AS paymentMethod
 		FROM membership m
-		LEFT JOIN admin_payment p
-		ON m.plan_id = p.plan_id AND m.brand_id = p.brand_id
-		LEFT JOIN membership_plan mp
+		LEFT JOIN
+		membership_plan mp
 		ON m.plan_id = mp.membership_plan_id
-		ORDER BY p.pay_date DESC
+		LEFT JOIN
+		admin_payment p
+		ON m.plan_id = p.plan_id
+		AND m.brand_id = p.brand_id
+		WHERE m.brand_id = #{brandId}
+		ORDER BY
+		m.membership_id DESC
+		LIMIT
+		#{limit} OFFSET #{offset}
 	</select>
 
-	<!-- 멤버십 결제 개수 조회 -->
+	<!-- [brand2] 멤버십 결제 개수 조회 -->
 	<select id="selectMembershipCount" parameterType="map"
 		resultType="int">
 		SELECT COUNT(*)
 		FROM membership m
 	</select>
 
-	<!-- brand2 -->
+	<!-- [brand2] 멤버십 신규 가입 -->
+	<insert id="insertMembership" parameterType="membership">
+		INSERT INTO
+		membership
+		(brand_id, plan_id, start_date, end_date, status,
+		remain_quota)
+		VALUES
+		(#{brandId}, #{planId}, #{startDate}, #{endDate},
+		#{status}, #{remainQuota})
+	</insert>
+
+	<!-- [brand2] 멤버십 취소 버튼 -->
+	<update id="cancelReservedMembership" parameterType="long">
+		UPDATE
+		membership
+		SET status = 'CANCELLED',
+		updated_at = NOW()
+		WHERE
+		membership_id = #{membershipId}
+		AND start_date &gt; NOW()
+		AND status =
+		'ACTIVE'
+	</update>
+
+	<!-- [brand2] 브랜드별 현재 이용중 멤버십 조회 (오늘 날짜가 start~end 사이) -->
+	<select id="selectCurrentMembership" parameterType="long"
+		resultType="membership">
+		SELECT *
+		FROM membership
+		WHERE brand_id = #{brandId}
+		AND
+		status = 'ACTIVE'
+		AND start_date &lt;= NOW()
+		AND end_date &gt;= NOW()
+		ORDER BY
+		created_at DESC
+		LIMIT 1
+	</select>
+
+
+	<!-- [brand2] 브랜드별 예약된 멤버십 조회 (start_date > NOW()) -->
+	<select id="selectReservedMembership" parameterType="long"
+		resultType="membership">
+		SELECT *
+		FROM membership
+		WHERE brand_id = #{brandId}
+		AND status = 'ACTIVE'
+		AND start_date &gt; NOW()
+		ORDER BY start_date ASC
+		LIMIT 1
+	</select>
+	
 
 </mapper>
