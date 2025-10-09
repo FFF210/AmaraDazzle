@@ -1,7 +1,9 @@
 package controller.brand;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -68,8 +70,22 @@ public class ReturnList extends HttpServlet {
 
 		params.put("limit", limit);
 		params.put("offset", offset);
-		// params.put("sortColumn", "total"); // or "date"
-		// params.put("sortDirection", "ASC"); // or "DESC"
+
+		String sortField = request.getParameter("sortField");
+		String sortOrder = request.getParameter("sortOrder");
+
+		// 화이트리스트 검증
+		List<String> allowedFields = Arrays.asList("updated_at", "total");
+		if (!allowedFields.contains(sortField)) {
+			sortField = null;
+		}
+
+		if (!"asc".equalsIgnoreCase(sortOrder) && !"desc".equalsIgnoreCase(sortOrder)) {
+			sortOrder = "asc"; // 기본값
+		}
+
+		params.put("sortField", sortField);
+		params.put("sortOrder", sortOrder);
 
 		try {
 			// 서비스 호출

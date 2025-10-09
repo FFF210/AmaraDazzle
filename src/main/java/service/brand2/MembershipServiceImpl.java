@@ -27,13 +27,6 @@ public class MembershipServiceImpl implements MembershipService {
 		// 신청 목록 조회
 		List<MembershipList> membershipList = membershipDAO.selectMembershipList(params);
 
-//			db에서 데이터 오는 지 확인
-//			 System.out.println("[Service] selectMembershipList 결과 size = " + (membershipList == null ? "null" : membershipList.size()));
-//			    if (membershipList != null) {
-//			        for (Membership m : membershipList) {
-//			            System.out.println("[Service] membership row = " + m);
-//			        }
-//			    }
 		// auto 플랜이면, 다음 결제일 계산
 		for (MembershipList m : membershipList) {
 			if (m.getPlanId() != null && m.getPlanId().contains("AUTO") && m.getStartDate() != null) {
@@ -61,15 +54,13 @@ public class MembershipServiceImpl implements MembershipService {
 		return membershipDAO.selectMembershipPlans();
 	}
 
-	// 💡 멤버십 + 결제 동시 처리 (Membership은 Service 안에서 생성)
+	// 멤버십 + 결제 동시 처리 (Membership은 Service 안에서 생성)
     @Override
-    public Long createMembershipWithPayment(AdminPayment adminPayment) {
-        // planId 는 orderName에 들어온다고 가정 (예: PLAN_1M)
-        String planId = adminPayment.getOrderName();
-
-        // TODO: membership_plan 테이블에서 조회하는게 맞음 (지금은 단순 처리)
+    public Long createMembershipWithPayment(AdminPayment adminPayment, String planId, String orderName) {
+    	// planId는 JSP에서 선택된 PLAN_1M, PLAN_3M 등
         int months;
         int quota;
+        
         switch (planId) {
             case "PLAN_3M":
                 months = 3; quota = 30000; break;
@@ -88,7 +79,7 @@ public class MembershipServiceImpl implements MembershipService {
         // Service 내부에서 Membership 생성
         Membership membership = new Membership();
         membership.setBrandId(adminPayment.getBrandId());
-        membership.setPlanId(planId);
+        membership.setPlanId(planId);   // ✅ PLAN_1M 같은 코드값 저장
         membership.setStartDate(startDate);
         membership.setEndDate(endDate);
         membership.setStatus("ACTIVE");
@@ -99,6 +90,7 @@ public class MembershipServiceImpl implements MembershipService {
 
         // AdminPayment FK 세팅 + insert
         adminPayment.setMembershipId(newMembershipId);
+        adminPayment.setOrderName(orderName);          // 사람이 보는 "1개월 이용권"
         membershipDAO.insertAdminPayment(adminPayment);
 
         return newMembershipId;
@@ -106,13 +98,13 @@ public class MembershipServiceImpl implements MembershipService {
 	
 	// 현재 이용 중인 멤버십
 	@Override
-	public Membership getCurrentMembership(Long brandId) {
+	public MembershipList getCurrentMembership(Long brandId) {
 		return membershipDAO.selectCurrentMembership(brandId);
 	}
 
 	// 예약된 멤버십
 	@Override
-	public Membership getReservedMembership(Long brandId) {
+	public MembershipList getReservedMembership(Long brandId) {
 		return membershipDAO.selectReservedMembership(brandId);
 	}
 

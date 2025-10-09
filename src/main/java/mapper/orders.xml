@@ -329,6 +329,7 @@
 			AND DATE(oi.updated_at) BETWEEN #{startDate} AND
 			#{endDate}
 		</if>
+		
 		ORDER BY oi.updated_at DESC
 	</select>
 
@@ -473,20 +474,10 @@
 		GROUP BY o.orders_id, o.order_code, o.member_id, m.name,
 		e.return_tracking_no, e.shipping_tracking_no
 
-		<choose>
-			<when test="sortColumn == 'date'">
-				ORDER BY MAX(oi.updated_at)
-			</when>
-			<when test="sortColumn == 'total'">
-				ORDER BY SUM(oi.total)
-			</when>
-			<otherwise>
-				ORDER BY MAX(oi.updated_at) DESC
-			</otherwise>
-		</choose>
-
-		<if test="sortDirection != null and sortDirection != ''">
-			${sortDirection}
+		<if test="sortField != null and sortField != ''">
+			ORDER BY ${sortField}
+			<if test="sortOrder == 'desc'">DESC</if>
+			<if test="sortOrder == 'asc'">ASC</if>
 		</if>
 
 		LIMIT #{limit} OFFSET #{offset}
@@ -806,22 +797,12 @@
 		GROUP BY o.orders_id, o.order_code, o.member_id, m.name,
 		r.return_tracking_no
 
-		<choose>
-			<when test="sortColumn == 'date'">
-				ORDER BY MAX(oi.updated_at)
-			</when>
-			<when test="sortColumn == 'total'">
-				ORDER BY SUM(oi.total)
-			</when>
-			<otherwise>
-				ORDER BY MAX(oi.updated_at) DESC
-			</otherwise>
-		</choose>
-
-		<if test="sortDirection != null and sortDirection != ''">
-			${sortDirection}
+		<if test="sortField != null and sortField != ''">
+			ORDER BY ${sortField}
+			<if test="sortOrder == 'desc'">DESC</if>
+			<if test="sortOrder == 'asc'">ASC</if>
 		</if>
-
+		
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
@@ -1134,20 +1115,10 @@
 
 		GROUP BY o.orders_id, o.order_code, o.member_id, m.name
 
-		<choose>
-			<when test="sortColumn == 'date'">
-				ORDER BY MAX(oi.updated_at)
-			</when>
-			<when test="sortColumn == 'total'">
-				ORDER BY SUM(oi.total)
-			</when>
-			<otherwise>
-				ORDER BY MAX(oi.updated_at) DESC
-			</otherwise>
-		</choose>
-
-		<if test="sortDirection != null and sortDirection != ''">
-			${sortDirection}
+		<if test="sortField != null and sortField != ''">
+			ORDER BY ${sortField}
+			<if test="sortOrder == 'desc'">DESC</if>
+			<if test="sortOrder == 'asc'">ASC</if>
 		</if>
 
 		LIMIT #{limit} OFFSET #{offset}
@@ -1430,7 +1401,13 @@
 				AND o.created_at &lt;= #{endDate}
 			</if>
 		</where>
-		ORDER BY o.created_at DESC
+		
+		<if test="sortField != null and sortField != ''">
+			ORDER BY ${sortField}
+			<if test="sortOrder == 'desc'">DESC</if>
+			<if test="sortOrder == 'asc'">ASC</if>
+		</if>
+		
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
@@ -1596,4 +1573,125 @@
 		oi.order_id = #{orderId}
 		ORDER BY oi.order_item_id ASC
 	</select>
+
+	<!-- ======================= [brand2] 대시보드 ======================= -->
+	<!-- 오늘 매출 & 판매 수량 -->
+	<select id="selectSalesToday"
+		resultType="dto.brand2.OrdersDashboard">
+		SELECT
+		(
+		SELECT COALESCE(SUM(o.total_amount), 0)
+		FROM orders o
+		WHERE DATE(o.created_at) = CURDATE()
+		AND EXISTS (
+		SELECT 1 FROM order_item oi
+		WHERE oi.order_id = o.orders_id
+		AND oi.status = 'PAID'
+		AND oi.brand_id = #{brandId}
+		)
+		) AS salesToday,
+		(
+		SELECT COALESCE(SUM(oi.quantity), 0)
+		FROM order_item oi
+		JOIN orders o2 ON o2.orders_id = oi.order_id
+		WHERE DATE(o2.created_at) = CURDATE()
+		AND oi.status = 'PAID'
+		AND oi.brand_id = #{brandId}
+		) AS productCountToday
+	</select>
+
+	<!-- 어제 매출 & 판매 수량 -->
+	<select id="selectSalesYesterday"
+		resultType="dto.brand2.OrdersDashboard">
+		SELECT
+		(
+		SELECT COALESCE(SUM(o.total_amount), 0)
+		FROM orders o
+		WHERE DATE(o.created_at) = CURDATE() - INTERVAL 1 DAY
+		AND EXISTS (
+		SELECT 1 FROM order_item oi
+		WHERE oi.order_id = o.orders_id
+		AND oi.status = 'PAID'
+		AND oi.brand_id = #{brandId}
+		)
+		) AS salesYesterday,
+		(
+		SELECT COALESCE(SUM(oi.quantity), 0)
+		FROM order_item oi
+		JOIN orders o2 ON o2.orders_id = oi.order_id
+		WHERE DATE(o2.created_at) = CURDATE() - INTERVAL 1 DAY
+		AND oi.status = 'PAID'
+		AND oi.brand_id = #{brandId}
+		) AS productCountYesterday
+	</select>
+
+	<!-- 이번 주 매출 & 판매 수량 -->
+	<select id="selectSalesWeek"
+		resultType="dto.brand2.OrdersDashboard">
+		SELECT
+		(
+		SELECT COALESCE(SUM(o.total_amount), 0)
+		FROM orders o
+		WHERE YEARWEEK(o.created_at, 1) = YEARWEEK(CURDATE(), 1)
+		AND EXISTS (
+		SELECT 1 FROM order_item oi
+		WHERE oi.order_id = o.orders_id
+		AND oi.status = 'PAID'
+		AND oi.brand_id = #{brandId}
+		)
+		) AS salesWeek,
+		(
+		SELECT COALESCE(SUM(oi.quantity), 0)
+		FROM order_item oi
+		JOIN orders o2 ON o2.orders_id = oi.order_id
+		WHERE YEARWEEK(o2.created_at, 1) = YEARWEEK(CURDATE(), 1)
+		AND oi.status = 'PAID'
+		AND oi.brand_id = #{brandId}
+		) AS productCountWeek
+	</select>
+
+	<!-- 최근 30일 매출 (일자별 합계) -->
+	<select id="selectSalesLast30Days"
+		resultType="dto.brand2.OrdersDashboard">
+		SELECT
+		DATE(o.created_at) AS orderDate,
+		COALESCE(SUM(o.total_amount), 0) AS dailySales
+		FROM orders o
+		WHERE o.created_at >= CURDATE() - INTERVAL 30 DAY
+		AND EXISTS (
+		SELECT 1 FROM order_item oi
+		WHERE oi.order_id = o.orders_id
+		AND oi.status = 'PAID'
+		AND oi.brand_id = #{brandId}
+		)
+		GROUP BY DATE(o.created_at)
+		ORDER BY orderDate ASC
+	</select>
+
+	<!-- 올해 vs 전년도 월별 매출 비교 (1월~12월)-->
+	<select id="selectMonthlySalesCompare"
+		resultType="dto.brand2.OrdersDashboard">
+		SELECT
+		m.m AS month,
+		COALESCE(SUM(CASE WHEN YEAR(o.created_at) = YEAR(CURDATE()) THEN o.total_amount END),
+		0) AS thisYear,
+		COALESCE(SUM(CASE WHEN YEAR(o.created_at) = YEAR(CURDATE()) - 1 THEN o.total_amount
+		END), 0) AS lastYear
+		FROM (
+		SELECT 1 m UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION
+		ALL
+		SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL
+		SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12
+		) m
+		LEFT JOIN orders o
+		ON MONTH(o.created_at) = m.m
+		AND YEAR(o.created_at) IN (YEAR(CURDATE()), YEAR(CURDATE())-1)
+		LEFT JOIN order_item oi
+		ON oi.order_id = o.orders_id
+		AND oi.status = 'PAID'
+		AND oi.brand_id = #{brandId}
+		GROUP BY m.m
+		ORDER BY m.m;
+	</select>
+	
 </mapper>

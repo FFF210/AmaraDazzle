@@ -28,8 +28,8 @@ public interface MembershipDAO {
 	int cancelMembership(Long membershipId);
 
 	// 브랜드별 현재 이용중 멤버십
-	Membership selectCurrentMembership(Long brandId);
+	MembershipList selectCurrentMembership(Long brandId);
 
 	// 브랜드별 예약된 멤버십
-	Membership selectReservedMembership(Long brandId);
+	MembershipList selectReservedMembership(Long brandId);
 }

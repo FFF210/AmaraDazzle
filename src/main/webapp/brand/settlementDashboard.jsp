@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="../tagcss/layout.css" />
 <link rel="stylesheet" href="../tagcss/sidebar.css" />
 <link rel="stylesheet" href="../tagcss/brandHeader.css" />
+<link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="./css/settlementDashboard.css" />
 
@@ -23,6 +24,11 @@
 </head>
 <body>
 	<my:layout>
+		<!-- breadcrumb -->
+		<div class="page-breadcrumb">
+			<my:breadcrumb items="정산:" />
+		</div>
+
 		<div class="settlement-dashboard">
 
 			<fmt:formatNumber value="${summary.currentFinalAmount}" type="number"
@@ -39,28 +45,28 @@
 			<div class="top-section">
 				<div class="cards-grid">
 					<div class="card-item">
-						<i class="bi bi-coin"></i>
+						<i class="bi bi-wallet2"></i>
 						<div>
 							<p class="card-label">이번 달 정산 예정 금액</p>
 							<p class="card-value">${currentFinalAmountFmt}원</p>
 						</div>
 					</div>
 					<div class="card-item">
-						<i class="bi bi-receipt"></i>
+						<i class="bi bi-receipt-cutoff"></i>
 						<div>
 							<p class="card-label">이번 달 수수료</p>
 							<p class="card-value">${currentFeeFmt}원</p>
 						</div>
 					</div>
 					<div class="card-item">
-						<i class="bi bi-cart-check"></i>
+						<i class="bi bi-bag-check"></i>
 						<div>
 							<p class="card-label">이번 달 총 주문 금액</p>
 							<p class="card-value">${currentTotalSalesFmt}원</p>
 						</div>
 					</div>
 					<div class="card-item">
-						<i class="bi bi-cash-coin"></i>
+						<i class="bi bi-piggy-bank"></i>
 						<div>
 							<p class="card-label">이번 달 순수 매출액</p>
 							<p class="card-value">${currentPureProfitFmt}원</p>
@@ -70,14 +76,14 @@
 
 				<div class="donut-chart">
 					<h3 class="chart-title">이번 달 총 주문 금액 비율</h3>
-					<canvas id="donutChart" width="300" height="300"></canvas>
+					<canvas id="donutChart" width="200" height="200"></canvas>
 				</div>
 			</div>
 
 			<!-- 하단: 바 차트 -->
 			<div class="bottom-section">
 				<h3 class="chart-title">월 단위 정산 금액 추이</h3>
-				<canvas id="lineChart" width="600" height="300"></canvas>
+				<canvas id="lineChart" width="1300" height="380"></canvas>
 			</div>
 
 		</div>
@@ -106,13 +112,24 @@
 	    }]
 	  },
 	  options: {
-	    responsive: true,
-	    cutout: '60%',
-	    plugins: {
-	      legend: { position: 'bottom' }
-	    }
-	  }
-	});
+		    responsive: true,
+		    maintainAspectRatio: false,
+		    cutout: '60%',
+		    plugins: {
+		      legend: {
+		        position: 'right',  /* 하단 → 우측으로 변경 */
+		        labels: {
+		          boxWidth: 15,      /* 색상 박스 크기 조절 */
+		          padding: 15,       /* 항목 간 여백 */
+		          font: { size: 13 } /* 글자 크기 */
+		        }
+		      }
+		    },
+		    layout: {
+		      padding: 10
+		    }
+		  }
+		});
 
 	/*********************************************************************************************************
 	 * 라인 차트

@@ -36,25 +36,22 @@
 			<div class="input-group">
 				<div class="form-group">
 					<label for="upload1">브랜드 로고</label> <img
-						src="${contextPath}/image/plus.png" id="preview-thumbnail"
-						alt="대표 이미지" width="100px"
+						src="${contextPath}/image/plus.png" id="preview-logo"
+						alt="로고 이미지" width="100px"
 						onclick="document.getElementById('upload1').click();" /> <input
 						type="file" id="upload1" name="upload1" accept="image/*"
 						style="display: none"
-						onchange="readURL(this,'preview-thumbnail');" /> <img
-						id="preview1" src="#" alt="미리보기" style="display: none;" />
+						onchange="readURL(this,'preview-logo');" />
 				</div>
 
 				<div class="form-group">
 					<label for="upload2">대표 이미지</label> <img
-						src="${contextPath}/image/plus.png" id="preview-thumbnail"
+						src="${contextPath}/image/plus.png" id="preview-hero"
 						alt="대표 이미지" width="100px"
 						onclick="document.getElementById('upload2').click();" /> <input
 						type="file" id="upload2" name="upload2" accept="image/*"
 						style="display: none"
-						onchange="readURL(this,'preview-thumbnail');" /> <img
-						id="preview2" class="preview-img" src="#" alt="미리보기"
-						style="display: none;" />
+						onchange="readURL(this,'preview-hero');" /> 
 				</div>
 
 				<div class="form-group">
@@ -94,10 +91,10 @@
   /*********************************************************************************************************
    * toast 호출
    *********************************************************************************************************/
-	window.addEventListener("load", () => {
-    	showToast("success", "회원가입이 완료되었습니다. 계속해서 브랜드 입점 신청을 진행해주세요.");
-  	});
-	
+  window.addEventListener("load", () => {
+    showToast("success", "회원가입이 완료되었습니다. 계속해서 브랜드 입점 신청을 진행해주세요.");
+  });
+
   /*********************************************************************************************************
    * 은행명 selectbox
    *********************************************************************************************************/
@@ -109,19 +106,18 @@
       hiddenInput.value = selectEl.value;
     });
   });
-  
+
   /*********************************************************************************************************
    * 이미지 버튼
    *********************************************************************************************************/
-   function readURL(input, previewId) {
-	    if (input.files && input.files[0]) {
-	      const reader = new FileReader();
-	      reader.onload = function(e) {
-	        document.getElementById(previewId).src = e.target.result;
-	      }
-	      reader.readAsDataURL(input.files[0]);
-	    }
-	  }
-});
+  function readURL(input, previewId) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById(previewId).src = e.target.result;
+      };
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
 </script>
 </html>

@@ -3,20 +3,17 @@ package dto.brand2;
 import java.sql.Timestamp;
 
 public class MembershipList {
-	private Long membershipId; // 멤버십 ID
+	private Long membershipId; // 멤버십 ID (PK, AUTO_INCREMENT)
+	private Long brandId; // 멤버십 가입 브랜드 ID (FK → brand.brand_id)
+	private String planId; // 가입한 요금제 ID (FK → membership_plan.membership_plan_id)
 	private Timestamp startDate; // 멤버십 시작일
 	private Timestamp endDate; // 멤버십 만료일
-
-	private Timestamp createdAt; // 결제일 (membership.created_at)
-	private Timestamp updatedAt; // 취소일 (membership.updated_at, CANCELLED 시점)
 	private String status; // 상태 (ACTIVE, EXPIRED, CANCELLED)
-
-	private String planId; // 요금제 ID (PLAN_1M, PLAN_3M ...)
+	private Timestamp createdAt; // 생성일
+	private Timestamp updatedAt; // 최근 갱신일
+	private Integer remainQuota; // 남은 발송 건수
 	private Integer planPeriod; // membership_plan.plan_period
-
 	private String paymentMethod; // 결제수단 (TOSS, CARD ...)
-	private Integer remainQuota; // 남은 발송 건수 (현재 or 예약분 확인용)
-
 	private Timestamp nextPayDate; // 다음 결제일 (PLAN_AUTO인 경우에만)
 
 	public MembershipList() {
@@ -28,6 +25,22 @@ public class MembershipList {
 
 	public void setMembershipId(Long membershipId) {
 		this.membershipId = membershipId;
+	}
+
+	public Long getBrandId() {
+		return brandId;
+	}
+
+	public void setBrandId(Long brandId) {
+		this.brandId = brandId;
+	}
+
+	public String getPlanId() {
+		return planId;
+	}
+
+	public void setPlanId(String planId) {
+		this.planId = planId;
 	}
 
 	public Timestamp getStartDate() {
@@ -46,6 +59,14 @@ public class MembershipList {
 		this.endDate = endDate;
 	}
 
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 	public Timestamp getCreatedAt() {
 		return createdAt;
 	}
@@ -62,20 +83,12 @@ public class MembershipList {
 		this.updatedAt = updatedAt;
 	}
 
-	public String getStatus() {
-		return status;
+	public Integer getRemainQuota() {
+		return remainQuota;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public String getPlanId() {
-		return planId;
-	}
-
-	public void setPlanId(String planId) {
-		this.planId = planId;
+	public void setRemainQuota(Integer remainQuota) {
+		this.remainQuota = remainQuota;
 	}
 
 	public Integer getPlanPeriod() {
@@ -94,14 +107,6 @@ public class MembershipList {
 		this.paymentMethod = paymentMethod;
 	}
 
-	public Integer getRemainQuota() {
-		return remainQuota;
-	}
-
-	public void setRemainQuota(Integer remainQuota) {
-		this.remainQuota = remainQuota;
-	}
-
 	public Timestamp getNextPayDate() {
 		return nextPayDate;
 	}
@@ -112,10 +117,11 @@ public class MembershipList {
 
 	@Override
 	public String toString() {
-		return "MembershipList [membershipId=" + membershipId + ", startDate=" + startDate + ", endDate=" + endDate
-				+ ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", status=" + status + ", planId=" + planId
-				+ ", planPeriod=" + planPeriod + ", paymentMethod=" + paymentMethod + ", remainQuota=" + remainQuota
-				+ ", nextPayDate=" + nextPayDate + "]";
+		return "MembershipList [membershipId=" + membershipId + ", brandId=" + brandId + ", planId=" + planId
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", status=" + status + ", createdAt="
+				+ createdAt + ", updatedAt=" + updatedAt + ", remainQuota=" + remainQuota + ", planPeriod=" + planPeriod
+				+ ", paymentMethod=" + paymentMethod + ", nextPayDate=" + nextPayDate + "]";
 	}
+	
 	
 }

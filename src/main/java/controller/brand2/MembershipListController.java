@@ -10,8 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dto.Membership;
-
+import dto.brand2.MembershipList;
 import service.brand2.MembershipService;
 import service.brand2.MembershipServiceImpl;
 
@@ -73,8 +72,8 @@ public class MembershipListController extends HttpServlet {
             Map<String, Object> result = service.MembershipListByPage(params);
 
 			// 현재 멤버십 / 예약 멤버십
-            Membership currentMembership = service.getCurrentMembership(brandId);
-            Membership reservedMembership = service.getReservedMembership(brandId);
+            MembershipList currentMembership = service.getCurrentMembership(brandId);
+            MembershipList reservedMembership = service.getReservedMembership(brandId);
 			
 			// JSP 전달(jsp -> items="${...}", ServiceImpl -> result.put("...", list);)
 			request.setAttribute("membershipList", result.get("membershipList")); // 멤버십 결제 목록

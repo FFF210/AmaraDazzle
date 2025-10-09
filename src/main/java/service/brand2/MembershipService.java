@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import dto.AdminPayment;
-import dto.Membership;
 import dto.MembershipPlan;
+import dto.brand2.MembershipList;
 
 public interface MembershipService {
 
@@ -16,13 +16,13 @@ public interface MembershipService {
     List<MembershipPlan> getMembershipPlans();
     
  // 💡 멤버십 + 결제 동시 처리
-    Long createMembershipWithPayment(AdminPayment adminPayment);
+    Long createMembershipWithPayment(AdminPayment adminPayment, String planId, String orderName);
 
     // 현재 이용 중인 멤버십
-    Membership getCurrentMembership(Long brandId);
+    MembershipList getCurrentMembership(Long brandId);
 
     // 예약된 멤버십
-    Membership getReservedMembership(Long brandId);
+    MembershipList getReservedMembership(Long brandId);
 
     // 멤버십 취소 (아직 시작 전)
     void cancelMembership(Long membershipId);
