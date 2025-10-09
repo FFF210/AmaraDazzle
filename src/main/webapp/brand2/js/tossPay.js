@@ -1,3 +1,5 @@
+/* ====================== (예시 파일) ====================== */
+
 // ------ 클라이언트 키로 객체 초기화 ------
 var clientKey = "test_ck_XZYkKL4Mrj9eGzWBRNORV0zJwlEW";
 var tossPayments = TossPayments(clientKey);

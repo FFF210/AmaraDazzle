@@ -116,9 +116,11 @@ public class TossController extends HttpServlet {
                 // =============================
             	if(orderIdConfirm.startsWith("M-")) {
             		adminPayment.setPaymentType("MEMBERSHIP");
+            		String planId = request.getParameter("planId"); // PLAN_1M
+            		String orderName = request.getParameter("orderName"); // "1개월 이용권"
             		
             		MembershipService membershipService = new MembershipServiceImpl();
-            	    membershipService.createMembershipWithPayment(adminPayment);
+            	    membershipService.createMembershipWithPayment(adminPayment, planId, orderName);
             	    
             	} else if (orderIdConfirm.startsWith("B-")) {
             		// 배너 광고 결제
@@ -147,7 +149,7 @@ public class TossController extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			response.sendRedirect("http://localhost:8080/tossPaymentFail");
+			response.sendRedirect("http://localhost:8080/tossPaymentFail.jsp");
 
 		} finally {
 			out.flush();

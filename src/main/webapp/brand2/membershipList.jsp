@@ -4,6 +4,7 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<jsp:useBean id="now" class="java.util.Date" scope="page" />
 
 <!DOCTYPE html>
 <html>
@@ -262,6 +263,7 @@
 								<!-- 멤버십 이름 -->
 								<td>${membership.paymentMethod}</td>
 								<!-- 결제수단 -->
+								<td></td>
 								<td><c:choose>
 										<c:when
 											test="${membership.status eq 'ACTIVE' and membership.startDate gt now}">
@@ -307,7 +309,33 @@
 	   * tableFilter 이벤트
 	   * tag에 추가 필요
 	   *********************************************************************************************************/
-	  document.addEventListener("filterChanged", (e) => {
+	   document.querySelectorAll(".table th.sortable").forEach(th => {
+			  th.addEventListener("click", () => {
+			    // 모든 헤더 초기화
+			    document.querySelectorAll(".table th.sortable").forEach(other => {
+			      if (other !== th) {
+			        other.classList.remove("asc", "desc");
+			        other.querySelector(".sort-icon").className = "bi bi-dash-lg sort-icon";
+			      }
+			    });
+
+			    const icon = th.querySelector(".sort-icon");
+
+			    if (th.classList.contains("asc")) {
+			      th.classList.remove("asc");
+			      th.classList.add("desc");
+			      icon.className = "bi bi-caret-down-fill sort-icon";
+			    } else if (th.classList.contains("desc")) {
+			      th.classList.remove("desc");
+			      icon.className = "bi bi-dash-lg sort-icon"; // 기본 상태
+			    } else {
+			      th.classList.add("asc");
+			      icon.className = "bi bi-caret-up-fill sort-icon";
+			    }
+			  });
+			});
+	   
+	   document.addEventListener("filterChanged", (e) => {
 	  if (e.detail.submit) {
 	    const { filters, searchField, searchKeyword } = e.detail;
 	    const params = new URLSearchParams();
