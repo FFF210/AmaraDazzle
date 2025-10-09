@@ -51,7 +51,7 @@
 		UPDATE banner
 		SET
 		status = #{status},
-		updated_at=now()
+		changed_at=now()
 		WHERE banner_id = #{bannerId}
 	</update>
 
@@ -68,8 +68,7 @@
 		b.banner_message,
 		b.status,
 		b.created_at,
-		b.updated_at,
-		b.is_exposed,
+		b.changed_at,
 		b.brand_url,
 		b.state_change,
 		b.admin_id,
@@ -132,7 +131,7 @@
 	</select>
 
 	<!-- 결제 완료 후 배너 상태 변경 <update id="updateBannerStatus" parameterType="map"> 
-		UPDATE banner SET status = #{status}, updated_at = NOW() WHERE banner_id 
+		UPDATE banner SET status = #{status}, changed_at = NOW() WHERE banner_id 
 		= #{bannerId} </update> -->
 
 	<!-- brand2 end -->
@@ -213,8 +212,7 @@
 					</when>
 				</choose>
 			</if>
-			<if
-				test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
 				<choose>
 					<when test="totalSearch == '브랜드명'">
 						and b.brand_name like concat('%',#{keyword},'%')
@@ -265,16 +263,14 @@
 		bannerMessage,
 		b.status AS status,
 		b.created_at AS createdAt,
-		b.updated_at AS updatedAt,
-		b.is_exposed AS isExposed,
+		b.changed_at AS changedAt,
 		b.brand_url AS
 		brandUrl,
 		b.state_change AS stateChange,
 		b.admin_id AS adminId,
 		b.upload_file_id AS uploadFileId
 		FROM banner b
-		WHERE b.is_exposed = 1
-		AND b.state_change = 'POSTING'
+		WHERE b.state_change = 'POSTING'
 		AND b.status IN ('ONGOING')
 		AND NOW()
 		BETWEEN b.start_date AND b.end_date

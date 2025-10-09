@@ -29,7 +29,6 @@
 		c.amount_condition,
 		c.reason,
 		c.provision,
-		c.coupon_limit,
 		c.writer_type,
 		c.writer_id,
 		c.created_at,
@@ -74,16 +73,16 @@
 
 	<!-- ======================= [소비자] 쿠폰 제한 수량 감소 ======================= -->
 	<update id="decreaseCouponLimit" parameterType="long">
-		UPDATE coupon
-		SET
-		coupon_limit = CAST(coupon_limit AS SIGNED) - 1
-		WHERE coupon_id =
-		#{value}
-		AND CAST(coupon_limit AS SIGNED) > 0
+<!-- 		UPDATE coupon -->
+<!-- 		SET -->
+<!-- 		coupon_limit = CAST(coupon_limit AS SIGNED) - 1 -->
+<!-- 		WHERE coupon_id = -->
+<!-- 		#{value} -->
+<!-- 		AND CAST(coupon_limit AS SIGNED) > 0 -->
 	</update>
 
 
-<!-- ======================= [관리자] ======================= -->
+<!-- ======================= [ADMIN] ======================= -->
 	<!-- 쿠폰 발행 수  -->
 	<select id="pCouponCnt" resultType="Integer" parameterType="searchCondition">
 		select count(*) from coupon 
@@ -112,13 +111,14 @@
 	
 	<!-- 쿠폰 발행 리스트 보기  -->
 	<select id="pCouponAllList" resultType="coupon" parameterType="Map">
-		select * from coupon 
-		order by coupon_id desc limit #{start_p},#{post_ea}
+		select cp.*, b.brand_name from coupon cp
+		left join brand b on (cp.writer_id = b.brand_id )
+		order by cp.coupon_id desc limit #{start_p},#{post_ea}
 	</select>
 	
 	<!-- 검색된 발행쿠폰 리스트 -->
 	<select id="pCouponSearchList" resultType="coupon" parameterType="searchCondition">
-		select * from coupon 
+		select cp.* from coupon cp
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
 			    and (created_at &gt;= #{startDateTime} 
@@ -147,12 +147,21 @@
 	<insert id="insertPublCoupon" parameterType="coupon">
 		insert into coupon 
 			(coupon_id, cname, start_date, end_date, 
-			amount, c_code, amount_condition, reason, 
-			provision, coupon_limit, writer_type, writer_id, created_at)
+			amount, category_id, amount_condition, reason, 
+			provision, writer_type, writer_id, created_at)
 		values 
 			(0, #{cname}, #{startDate}, #{endDate},
-			#{amount},#{cCode}, #{amountCondition},#{reason}, 
-			#{provision}, #{couponLimit}, #{writerType}, #{writerId}, now())
+			#{amount},#{categoryId}, #{amountCondition},#{reason}, 
+			#{provision}, #{writerType}, #{writerId}, now())
 	</insert>
 
+	<!-- 쿠폰 내용 상세보기 -->
+	<select id="publCouponDetail" resultType="coupon" parameterType="int" >
+		select cp.*, cd.name as codeName, ct.name as categoryName, ct.parent_id as categoryParent, a.aname
+		from coupon cp
+		left join code_detail cd on (cp.p_code = cd.code_detail_id)
+		left join category ct on (cp.category_id = ct.category_id)
+		join admin_info a on (cp.writer_id = a.admin_info_id)
+		where cp.coupon_id = #{num}
+	</select>
 </mapper>

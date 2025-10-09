@@ -266,5 +266,92 @@
 		INSERT INTO member_skin_issue (member_id, code_id)
 		VALUES (#{memberId}, #{codeId})
 	</insert>
+	
+	
+	<!-- ======================= ADMIN ======================= -->
+	<!-- 가입한 회원 수 -->
+	<select id="memberCnt" resultType="Integer" parameterType="searchCondition">
+		select count(*) from member
+		<where>
+			<if test="startDateTime != null and endDateTime != null">
+				and (created_at &gt;= #{startDateTime}
+						and created_at &lt; #{endDateTime})
+			</if>
+			<if test="middleFilter != null and middleFilter != ''">
+				<choose>
+					<when test="middleFilter == 'VIP'">
+						and grade = 'VIP'
+					</when>
+					<when test="middleFilter == 'GOLD'">
+						and grade = 'GOLD'
+					</when>
+					<when test="middleFilter == 'SILVER'">
+						and grade = 'SILVER'
+					</when>
+					<when test="middleFilter == 'NORMAL'">
+						and grade = 'NORMAL'
+					</when>
+				</choose>
+			</if>
+			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+				<choose>
+					<when test="totalSearch == '회원명'">
+						and name like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '아이디'">
+						and email like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '닉네임'">
+						and nickname like concat('%',#{keyword},'%')
+					</when>
+				</choose>
+			</if>
+		</where>
+	</select>
 
+	<!-- 회원 검색 리스트 -->
+	<select id="memberSearchList" resultType="member" parameterType="searchCondition">
+		select * from member
+		<where>
+			<if test="startDateTime != null and endDateTime != null">
+				and (created_at &gt;= #{startDateTime}
+						and created_at &lt; #{endDateTime})
+			</if>
+			<if test="middleFilter != null and middleFilter != ''">
+				<choose>
+					<when test="middleFilter == 'VIP'">
+						and grade = 'VIP'
+					</when>
+					<when test="middleFilter == 'GOLD'">
+						and grade = 'GOLD'
+					</when>
+					<when test="middleFilter == 'SILVER'">
+						and grade = 'SILVER'
+					</when>
+					<when test="middleFilter == 'NORMAL'">
+						and grade = 'NORMAL'
+					</when>
+				</choose>
+			</if>
+			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+				<choose>
+					<when test="totalSearch == '회원명'">
+						and name like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '아이디'">
+						and email like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '닉네임'">
+						and nickname like concat('%',#{keyword},'%')
+					</when>
+				</choose>
+			</if>
+		</where>
+		order by member_id desc limit #{start_p},#{post_ea}
+	</select>
+
+	<!-- 브랜드 회원 정보 상세보기 -->
+	<select id="selectMemberDetail" resultType="member" parameterType="int" >
+		select * from member where member_id = #{num}
+	</select>
 </mapper>

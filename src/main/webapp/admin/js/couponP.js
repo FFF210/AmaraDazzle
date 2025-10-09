@@ -3,6 +3,11 @@ function cpPublBtn() {
 	location.href = "/admin/pCouponWrite";
 };
 
+//쿠폰 상세보기 버튼 클릭시 발행 페이지로 이동 
+function goPcpDetail(num) {
+	location.href = "/admin/publCouponDetail?num="+num;
+};
+
 document.addEventListener("DOMContentLoaded", function() {
 	/* ************* 입력시 3자리마다 콤마 추가 ************* */ 
 	const priceInputs = document.querySelectorAll(".price_input");
@@ -50,9 +55,11 @@ document.addEventListener("DOMContentLoaded", function() {
 	const frm = document.getElementById("pCouponForm");
 	const submitBtn = document.getElementById("pCouponBtn");
 	const couponCondition = document.getElementById("couponCondition");
-	const couponQuantity = document.getElementById("couponQuantity");
+	const largeSelect = document.getElementById("largeSelect");
+	const middleSelect = document.getElementById("middleSelect");
+	const smallSelect = document.getElementById("smallSelect");
 	const pch_noRestr = document.getElementById("pch_noRestr");
-	const qnt_noRestr = document.getElementById("qnt_noRestr");
+	const cate_noRestr = document.getElementById("cate_noRestr");
 	
 	// 제한없음 클릭 시 입력칸 비활성화 (사용조건)
 	pch_noRestr.addEventListener("change", () => {
@@ -64,16 +71,37 @@ document.addEventListener("DOMContentLoaded", function() {
 			couponCondition.disabled = false;
 		}
 	});
-	// 제한없음 클릭 시 입력칸 비활성화 (발급수량)
-	qnt_noRestr.addEventListener("change", () => {
-		if (qnt_noRestr.checked) {
-			couponQuantity.disabled = true;
-			couponQuantity.value = "";
-			couponQuantity.classList.remove("state_error");
-		} else {
-			couponQuantity.disabled = false;
-		}
+	// 제한없음 클릭 시 입력칸 비활성화 (카테고리)
+	const categorySelects = [largeSelect, middleSelect, smallSelect];
+	const categoryInputs = [
+		document.getElementById("category1Id"),
+		document.getElementById("category2Id"),
+		document.getElementById("category3Id")
+	];
+	const categoryInitials = ["대분류", "중분류", "소분류"];
+		
+	cate_noRestr.addEventListener("change", () => {
+		const isChecked = cate_noRestr.checked;
+
+		categorySelects.forEach((select, i) => {
+			select.classList.toggle("disabled", isChecked);
+			select.classList.remove("state_error");
+
+			// 제한없음 체크 시
+			if (isChecked) {
+				categoryInputs[i].value = "";
+				// 화면 표시 텍스트를 초기값으로 복원
+				const label = select.querySelector(".select-label");
+				if (label) label.textContent = categoryInitials[i];
+
+				// 활성화된 항목 표시 제거 (active 클래스 초기화)
+				select.querySelectorAll(".select-item.active").forEach(item => {
+					item.classList.remove("active");
+				});
+			}
+		});
 	});
+
 
 	//공란 채울 경우 빨강테두리 지움
 	document.querySelectorAll("#pCouponForm input").forEach(input => {
@@ -82,6 +110,18 @@ document.addEventListener("DOMContentLoaded", function() {
 				this.classList.remove("state_error");
 			}
 		});
+	});
+	document.querySelector("#pCouponForm").addEventListener("click", function(e) {
+		const selectItem = e.target.closest(".select-item");
+		if (!selectItem) return; // 리스트 항목(.select-item)이 아니면 종료
+
+		const customSelect = selectItem.closest(".custom-select");
+		const hiddenInput = customSelect.nextElementSibling; 
+
+		// hidden input이 존재하고 값이 비어 있지 않다면 에러 클래스 제거
+		if (hiddenInput && hiddenInput.value.trim() !== "") {
+			customSelect.classList.remove("state_error");
+		}
 	});
 	
 	// ======== 확인 모달에서 "확인" 클릭 시 폼 전송 ========
@@ -155,18 +195,25 @@ document.addEventListener("DOMContentLoaded", function() {
 		//유효기간
 		if (frm.startDate.value.trim() === "") {
 			showAlert("error", " ", "쿠폰의 유효기간을 입력하세요.");
-			frm.startDate.classList.add("state_error");
-			frm.startDate.classList.add("state_error");
+//			frm.startDate.classList.add("state_error");
 			frm.startDate.focus();
 			return;
 		}
 		if (frm.endDate.value.trim() === "") {
 			showAlert("error", " ", "쿠폰의 유효기간을 입력하세요.");
-			frm.endDate.classList.add("state_error");
+//			frm.endDate.classList.add("state_error");
 			frm.endDate.focus();
 			return;
 		}
 		
+		//카테고리
+		//입력값이 없고, 제한없음을 안 눌렀을 때
+		if (document.getElementById("category1Id").value.trim() === ""  && !cate_noRestr.checked) {
+			showAlert("error", " ", "쿠폰을 적용할 카테고리의 대분류를 선택하세요.");
+			largeSelect.classList.add("state_error");
+			largeSelect.focus();
+			return;
+		}
 
 		//사용조건
 		//입력값이 없고, 제한없음도 안 눌렀을 때
@@ -176,7 +223,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			couponCondition.focus();
 			return;
 		}
-		if(!numReg.test(couponQuantity.value.trim()) && couponQuantity.value.trim() !== ""){
+		if(!numReg.test(couponCondition.value.trim()) && couponCondition.value.trim() !== ""){
 			showAlert("error", " ", "숫자만 입력해주세요.");
 			couponQuantity.classList.add("state_error");
 			return;
@@ -187,19 +234,6 @@ document.addEventListener("DOMContentLoaded", function() {
 			showAlert("error", " ", "쿠폰의 지급사유를 입력하세요.");
 			frm.couponReason.classList.add("state_error");
 			frm.couponReason.focus();
-			return;
-		}
-		
-		//발급수량
-		if (couponQuantity.value.trim() === "" && !qnt_noRestr.checked) {
-			showAlert("error", " ", "쿠폰의 발급수량을 입력하세요.");
-			couponQuantity.classList.add("state_error");
-			couponQuantity.focus();
-			return;
-		}
-		if(!numReg.test(couponQuantity.value.trim()) && couponQuantity.value.trim() !== ""){
-			showAlert("error", " ", "숫자만 입력해주세요.");
-			couponQuantity.classList.add("state_error");
 			return;
 		}
 		

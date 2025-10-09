@@ -10,7 +10,7 @@
 <%@ include file="./common/config.jsp"%>
 
 <title>Promotions 이벤트 리스트</title>
-<link rel="stylesheet" href="./css/event.css" />
+<!-- <link rel="stylesheet" href="./css/event.css" /> -->
 <!-- 헤드부분 -->
 
 <body>
@@ -18,13 +18,13 @@
 	<!-- 레이아웃 + 메인컨텐츠 -->
 	<my:adminLayout>
 		<!-- 메인부분 -->
-		<div class="tabs">
-			<div class="tab active" onclick="showTab('eventList')">이벤트</div>
-			<div class="tab" onclick="showTab('ended_promo')">종료된 프로모션</div>
+		<div class="listTabs">
+			<div class="listTab active">이벤트</div>
+			<div class="listTab" >종료된 프로모션</div>
 		</div>
 
 		<!-- ************************* 판매자 탭 ************************* -->
-		<div id="event_ing" class="tab_content">
+		<div id="event_ing" class="main_content">
 			<!-- 필터 -->
 			<form id="searchForm" class="search_form">
 				<my:adminTableFilter>

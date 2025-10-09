@@ -55,10 +55,13 @@ public class CouponServiceImpl implements CouponService{
 		if(pCoupon.getPch_noRestr() != null && !pCoupon.getPch_noRestr().isEmpty()) { // 사용조건 제한없음 체크된 경우 
 			pCoupon.setAmountCondition("-");
 		}
-		if(pCoupon.getQnt_noRestr() != null && !pCoupon.getQnt_noRestr().isEmpty()) { // 발급수량 제한없음 체크된 경우 
-			pCoupon.setCouponLimit("-");
-		}
 		return cp_dao.insertPublCoupon(pCoupon);
+	}
+
+	//발행 쿠폰 상세보기 
+	@Override
+	public Coupon publCouponDetail(int num) {
+		return cp_dao.publCouponDetail(num);
 	}
 
 }

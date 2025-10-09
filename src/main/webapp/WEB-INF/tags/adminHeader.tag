@@ -40,7 +40,7 @@
 			<!-- myInfo modal end -->
 		</div>
 
-		<button type="button" class="link-btn" onclick="">사이트 바로가기</button>
+		<button type="button" class="link-btn" onclick="goMainSite()">사이트 바로가기</button>
 	</div>
 </header>
 <!-- 헤더부분 end -->
@@ -100,6 +100,10 @@
 			console.log("통신오류발생", error);
 		    showAlert("error", "서버 오류", "통신 중 오류가 발생했습니다.");
 		});
+	}
+	
+	function goMainSite(){
+		location.href="/store/main"
 	}
 </script>
 

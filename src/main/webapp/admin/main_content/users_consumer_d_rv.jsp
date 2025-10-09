@@ -6,81 +6,41 @@
 
 <!-- ========== 내용(리뷰) ========== -->
 <div id="review" class="tab_content" style="display: none">
-	<div class="search_box">
-		<form class="search_form">
-			<div class="search_container">
-				<div class="filter">
-					<div class="period_box">
-						<div class="filtering_title">
-							<span class="searchbox_title">작성일 : </span>
-						</div>
-						<div class="period_body">
-							<div>
-								<input type="date" class="btn start_date" /> <span> - </span> <input
-									type="date" class="btn end_date" />
-							</div>
-
-							<div class="p_choice">
-								<input type="button" class="btn" value="오늘" /> <input
-									type="button" class="btn" value="어제" /> <input type="button"
-									class="btn" value="최근7일" /> <input type="button" class="btn"
-									value="최근30일" />
-							</div>
-						</div>
-					</div>
-
-					<div class="category_box">
-						<div class="filtering_title">
-							<span class="searchbox_title">카테고리 : </span>
-						</div>
-						<div>
-							<select class="">
-								<option>대분류</option>
-								<option>대분류</option>
-								<option>대분류</option>
-								<option>대분류</option>
-							</select> <select class="">
-								<option>중분류</option>
-								<option>중분류</option>
-								<option>중분류</option>
-								<option>중분류</option>
-							</select> <select class="">
-								<option>소분류</option>
-								<option>소분류</option>
-								<option>소분류</option>
-								<option>소분류</option>
-							</select>
-						</div>
-					</div>
-
-					<div class="totalSearch_box">
-						<div class="searchType">
-							<select>
-								<option>상품명</option>
-								<option>리뷰내용</option>
-								<option>주문번호</option>
-								<option>code</option>
-							</select>
-						</div>
-						<div class="searchKeyword">
-							<i class="bi bi-search"></i><input type="text" />
-						</div>
-					</div>
-				</div>
-
-				<div class="btn_box">
-					<input type="submit" class="btn first_btn" value="검색" /> <input
-						type="reset" class="btn second_btn" value="초기화" />
-				</div>
-			</div>
-		</form>
-	</div>
-	<!-- 검색박스 end -->
+	<!-- 필터 -->
+	<form id="sellerSettleForm" class="search_form">
+		<my:adminTableFilter>
+			<my:adminFilterPeriod title="작성일" />
+			<my:adminFilterCate />
+			<my:adminFilterTotal searchItems="주문번호,상품명,브랜드명" />
+		</my:adminTableFilter>
+	</form>
+	<!-- 필터 end -->
+	
 	<!-- 리뷰 테이블 -->
 	<div class="whole_table">
 		<div class="table_title">
-			<span span class="list_count">[ 검색 결과 ]&nbsp; 총 100건 중 1 - 10
-				건 </span>
+			<span class="list_count"> 
+			<c:if test="${not empty searchContent}">
+				[ 검색 결과 ]
+			</c:if> &nbsp; 총 ${sellerCnt}건 중 
+			<c:choose>
+				<c:when test="${sellerCnt == 0}">
+   					0 건
+   				</c:when>
+				<c:otherwise>
+    				${postNo + 1}
+ 					<c:choose>
+						<c:when test="${paging.pageno == paging.end_pg && paging.final_post_ea < 10 && paging.final_post_ea != 0}">
+            				- ${postNo + paging.final_post_ea}
+        				</c:when>
+						<c:otherwise>
+                 			- ${postNo + 10}
+            			</c:otherwise>
+					</c:choose>
+       				건
+    			</c:otherwise>
+			</c:choose>
+			</span>
 		</div>
 		<div class="table_wrap">
 			<table>

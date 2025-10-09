@@ -126,9 +126,6 @@
 	</my:adminLayout>
 	<!-- 레이아웃 + 메인컨텐츠 end -->
 
-
-
-
 	<!-- JS부분 -->
 	<script src="../tagjs/selectbox.js"></script>
 	<script src="../tagjs/dateInput.js"></script>

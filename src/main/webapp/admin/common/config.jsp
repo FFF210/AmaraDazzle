@@ -18,7 +18,7 @@
 	<link rel="stylesheet" href="../tagcss/tag.css" />
 	<link rel="stylesheet" href="../tagcss/dateInput.css" />
 	<link rel="stylesheet" href="./css/componant/search_box.css" />
-	<link rel="stylesheet" href="./css/componant/tab.css" />
+	<link rel="stylesheet" href="./css/componant/tab.css?ver=2" />
 	<link rel="stylesheet" href="./css/componant/table.css" />
 
 	<!-- Bootstrap Icons CDN -->

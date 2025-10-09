@@ -19,15 +19,15 @@
 	<my:adminLayout>
 		<!-- 메인부분 -->
 		<!-- 탭 -->
-		<div class="tabs">
-			<div class="tab active">발행 쿠폰 목록</div>
-			<div class="tab" onclick="">개별 지급 목록</div>
+		<div class="listTabs">
+			<div class="listTab active">발행 쿠폰 목록</div>
+			<div class="listTab" onclick="">개별 지급 목록</div>
 		</div>
 
 		<!-- ************************* 발행 쿠폰 목록 탭 ************************* -->
-		<div id="" class="tab_content">
+		<div class="main_content">
 			<!-- 필터 -->
-			<form id="searchForm" class="search_form">
+			<form id="couponSearchForm" class="search_form">
 				<my:adminTableFilter>
 					<my:adminFilterPeriod title="발행일자" />
 					<my:adminFilterPeriod title="유효기간" dateCate="exp_" presets="1주일,10일,1개월"/>
@@ -39,27 +39,25 @@
 			<!-- 테이블 -->
 			<div class="whole_table">
 				<div class="table_title">
-					<span class="list_count"> <c:if
-							test="${not empty searchContent}">
-				[ 검색 결과 ]
-				</c:if> &nbsp; 총 ${pCouponCnt}건 중 <c:choose>
-							<c:when test="${pCouponCnt == 0}">
+					<span class="list_count"> 
+					<c:if test="${not empty searchContent}"> [ 검색 결과 ] </c:if> &nbsp; 총 ${pCouponCnt}건 중 
+					<c:choose>
+						<c:when test="${pCouponCnt == 0}">
        					0 건
-    				</c:when>
-							<c:otherwise>
-      					${postNo + 1}
-     							<c:choose>
-									<c:when
-										test="${paging.pageno == paging.end_pg && paging.final_post_ea < 10 && paging.final_post_ea != 0}">
-               					- ${postNo + paging.final_post_ea}
-          						</c:when>
-									<c:otherwise>
-               					- ${postNo + 10}
-          						</c:otherwise>
-								</c:choose>
-     							건
+    					</c:when>
+						<c:otherwise>
+      						${postNo + 1}
+   							<c:choose>
+								<c:when test="${paging.pageno == paging.end_pg && paging.final_post_ea < 10 && paging.final_post_ea != 0}">
+             					- ${postNo + paging.final_post_ea}
+        						</c:when>
+								<c:otherwise>
+             					- ${postNo + 10}
+        						</c:otherwise>
+							</c:choose>
+   							건
   						</c:otherwise>
-						</c:choose>
+					</c:choose>
 					</span>
 					<!-- 버튼 -->
 					<div>
@@ -75,7 +73,7 @@
 							<!-- 체크박스 -->
 							<col style="width: 5%" />
 							<!-- 번호 -->
-							<col style="width: 15%" />
+							<col style="width: 30%" />
 							<!-- 쿠폰명 -->
 							<col style="width: 8%" />
 							<!-- 금액 -->
@@ -84,24 +82,20 @@
 							<col style="width: 15%" />
 							<!-- 유효기간 -->
 							<col style="width: 7%" />
-							<!-- 잔여량 -->
-							<col style="width: 7%" />
-							<!-- 발행수량 -->
+							<!-- 발행주체 -->
 							<col style="width: 7%" />
 							<!-- 상세보기 -->
 						</colgroup>
 						<thead>
 							<tr>
-								<th><input type="checkbox" id="all_ck"
-									onclick="ck_all(this.checked);" /></th>
+								<th><input type="checkbox" id="all_ck" onclick="ck_all(this.checked);" /></th>
 								<th>#</th>
 								<th class="sortable">쿠폰명 <i class="bi bi-dash-lg sort-icon"></i></th>
 								<th class="sortable">할인금액 <i
 									class="bi bi-dash-lg sort-icon"></i></th>
 								<th class="sortable">발행일 <i class="bi bi-dash-lg sort-icon"></i></th>
 								<th>유효기간</th>
-								<th class="sortable">잔여량 <i class="bi bi-dash-lg sort-icon"></i></th>
-								<th>발행수량</th>
+								<th class="sortable">발행주체 <i class="bi bi-dash-lg sort-icon"></i></th>
 								<th>상세보기</th>
 							</tr>
 						</thead>
@@ -109,7 +103,7 @@
 							<!-- 게시물 개수가 0일 경우 -->
 							<c:if test="${empty pCouponList}">
 								<tr>
-									<td colspan="9">등록된 게시물이 없습니다.</td>
+									<td colspan="8">등록된 게시물이 없습니다.</td>
 								</tr>
 							</c:if>
 
@@ -123,17 +117,14 @@
 										<input type="checkbox" class="ch_box" value="${pCouponList.couponId}" onclick="choice_ck();"/>
 									</td>
 									<td>${no-idx.index}</td>
-									<td>${pCouponList.cname}</td>
+									<td onclick="goPcpDetail('${pCouponList.couponId}')">${pCouponList.cname}</td>
 									<td class="price_cell">
 										<fmt:formatNumber value="${pCouponList.amount}" pattern="#,###,###" />
 									</td>
 									<td>${fn:substring(createDate,0,19)}</td>
 									<td>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</td>
-									<td>
-										<c:if test="${pCouponList.couponLimit eq '-'}">-</c:if>
-									</td>
-									<td>${pCouponList.couponLimit}</td>
-									<td class="detail_cell" onclick="goPCpDetail('${pCouponList.couponId}','${pCouponList.writerType}');"><i class="bi bi-three-dots-vertical"></i></td>
+									<td>${pCouponList.writerType eq 'ADMIN' ? 'Amara Dazzle' : 'BRAND_ADMIN' } </td>
+									<td class="detail_cell" onclick="goPcpDetail('${pCouponList.couponId}');"><i class="bi bi-three-dots-vertical"></i></td>
 								</tr>
 							</c:forEach>
 						</tbody>

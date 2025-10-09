@@ -7,13 +7,13 @@
 
 <!-- 메인부분 -->
 <!-- 탭 -->
-<div class="tabs">
-	<div class="tab active" onclick="showTab('seller')">판매자문의</div>
-	<div class="tab" onclick="showTab('consumer')">일반회원문의</div>
+<div class="listTabs">
+	<div class="listTab active" >판매자문의</div>
+	<div class="listTab">일반회원문의</div>
 </div>
 
 <!-- ************************* 판매자 탭 ************************* -->
-<div id="seller" class="tab_content">
+<div class="main_content">
 	<!-- 필터 -->
 	<form class="search_form">
 		<div class="search_container">

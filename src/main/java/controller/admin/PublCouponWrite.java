@@ -44,8 +44,6 @@ public class PublCouponWrite extends HttpServlet {
 			String pch_noRestr = request.getParameter("pch_noRestr"); // 사용조건 제한없음 
 			String cp_target = request.getParameter("cpTarget"); //지급대상
 			String cp_reason = request.getParameter("couponReason"); //지급 사유 
-			String cp_quantity = request.getParameter("couponQuantity"); //발급수량
-			String qnt_noRestr = request.getParameter("qnt_noRestr"); // 발급수량 제한없음 
 			Long cp_writer = Long.parseLong(request.getParameter("cpWriter")); // 발행한 관리자 코드
 			
 			System.out.println("cp_name : " + cp_name);
@@ -59,8 +57,6 @@ public class PublCouponWrite extends HttpServlet {
 			System.out.println("pch_noRestr : " + pch_noRestr);
 			System.out.println("cp_target : " + cp_target);
 			System.out.println("coupon_reason : " + cp_reason);
-			System.out.println("coupon_quantity : " + cp_quantity);
-			System.out.println("qnt_noRestr : " + qnt_noRestr);
 			System.out.println("cp_writer : " + cp_writer);
 
 			Long cateIdx = null;
@@ -72,7 +68,7 @@ public class PublCouponWrite extends HttpServlet {
 			    cateIdx = Long.parseLong(l_cate);
 			}
 
-			Coupon pCoupon = new Coupon(cp_name, startDate, endDate, cp_amount, cateIdx, cp_condition, cp_reason, cp_target, cp_quantity, "ADMIN", cp_writer, pch_noRestr, qnt_noRestr);
+			Coupon pCoupon = new Coupon(cp_name, startDate, endDate, cp_amount, cateIdx, cp_condition, cp_reason, cp_target, "ADMIN", cp_writer, pch_noRestr);
 
 			CouponService coupon_svc = new CouponServiceImpl();
 			int result = coupon_svc.insertPublCoupon(pCoupon);

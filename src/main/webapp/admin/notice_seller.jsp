@@ -18,13 +18,13 @@
 	<my:adminLayout>
 		<!-- 메인부분 -->
 		<!-- 탭 -->
-		<div class="tabs">
-			<div class="tab active" onclick="showTab('seller')">판매자</div>
-			<div class="tab" onclick="showTab('platform')">플랫폼</div>
+		<div class="tabs listTabs">
+			<div class="listTab active">판매자</div>
+			<div class="listTab" >플랫폼</div>
 		</div>
 
 		<!-- ************************* 판매자 탭 ************************* -->
-		<div id="seller" class="tab_content">
+		<div class="main_content ">
 
 			<!-- 필터 -->
 			<form id="searchForm" class="search_form">

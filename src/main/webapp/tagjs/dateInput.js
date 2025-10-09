@@ -32,8 +32,8 @@ document.addEventListener("DOMContentLoaded", () => {
 							pickedStartDate.setHours(0, 0, 0, 0);
 							pickedendtDate.setHours(0, 0, 0, 0);
 
-							if (pickedendtDate > pickedStartDate) {
-								alert("기간의 마지막은 시작일 이후의 날짜를 선택할 수 없습니다.");
+							if (pickedendtDate < pickedStartDate) {
+								alert("기간의 마지막은 시작일 이전의 날짜를 선택할 수 없습니다.");
 								instance.clear(); 
 								// 잘못 선택한 날짜 지우기
 							}

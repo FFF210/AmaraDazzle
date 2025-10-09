@@ -11,19 +11,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dto.Brand;
+import dto.Member;
 import service.admin.BrandService;
 import service.admin.BrandServiceImpl;
 import service.admin.ConsumerService;
 import service.admin.ConsumerServiceImpl;
 import util.Paging;
 
-@WebServlet("/admin/sellerList")
-public class UserSellerList extends HttpServlet {
+@WebServlet("/admin/consumerList")
+public class UserConsumerList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=utf-8");
 
@@ -35,30 +34,30 @@ public class UserSellerList extends HttpServlet {
 			}
 
 			Paging m_pg = new Paging();
-			BrandService brand_svc = new BrandServiceImpl();
 			ConsumerService member_svc = new ConsumerServiceImpl();
-
+			BrandService brand_svc = new BrandServiceImpl();
+			
 			String startDate = request.getParameter("startDate");
 			String endDate = request.getParameter("endDate");
-			String sellerStatus = request.getParameter("sellerStatus");
+			String memberGrade = request.getParameter("memberGrade");
 			String totalSearch = request.getParameter("totalSearch");
 			String keyword = request.getParameter("keyword");
 
 			System.out.println("startDate : " + startDate);
 			System.out.println("endDate : " + endDate);
-			System.out.println("sellerStatus : " + sellerStatus);
+			System.out.println("memberGrade : " + memberGrade);
 			System.out.println("totalSearch : " + totalSearch);
 			System.out.println("keyword : " + keyword);
 
 			// 검색 조건이 하나라도 있는지 확인
 			boolean hasCondition = (startDate != null && !startDate.trim().isEmpty())
 					|| (endDate != null && !endDate.trim().isEmpty())
-					|| (sellerStatus != null && !sellerStatus.trim().isEmpty())
+					|| (memberGrade != null && !memberGrade.trim().isEmpty())
 					|| (totalSearch != null && !totalSearch.trim().isEmpty())
 					|| (keyword != null && !keyword.trim().isEmpty());
 
-			List<Brand> brandAllList;
-			Integer brandAllCnt;
+			List<Member> memberAllList;
+			Integer memberCnt;
 			Map<String, Object> paging;
 
 			int postNo = m_pg.serial_no(p_no); // 게시물 일련번호 계산
@@ -68,40 +67,41 @@ public class UserSellerList extends HttpServlet {
 				Map<String, String> searchContent = new HashMap<>();
 				searchContent.put("startDate", startDate);
 				searchContent.put("endDate", endDate);
-				searchContent.put("middleFilter", sellerStatus);
+				searchContent.put("middleFilter", memberGrade);
 				searchContent.put("totalSearch", totalSearch);
 				searchContent.put("keyword", keyword);
 
-				brandAllCnt = brand_svc.brandAllCnt(searchContent); // 검색 후 카운트
-				paging = m_pg.page_ea(p_no, brandAllCnt);
-				brandAllList = brand_svc.brandSearchList(searchContent, p_no);
+				memberCnt = member_svc.memberCnt(searchContent); // 검색 후 카운트
+				paging = m_pg.page_ea(p_no, memberCnt);
+				memberAllList = member_svc.memberSearchList(searchContent, p_no);
 
-				if (brandAllCnt == null) brandAllCnt = 0;
+				if (memberCnt == null) memberCnt = 0;
 
 				request.setAttribute("searched", "searched");
 				request.setAttribute("searchContent", searchContent); // 검색어 map
-				request.setAttribute("message", "검색된 판매자가 없습니다.");
+				request.setAttribute("message", "검색된 회원이 없습니다.");
 				
 			}else {
-				brandAllCnt = 0;
-			    paging = m_pg.page_ea(p_no, brandAllCnt);
-			    brandAllList = null;
+				memberCnt = 0;
+			    paging = m_pg.page_ea(p_no, memberCnt);
+			    memberAllList = null;
 				
 				request.setAttribute("message", "검색 후 리스트 확인 가능합니다");
 			}
 
-			Integer sellerAllCnt = brand_svc.brandAllCnt(new HashMap<String, String>()); // 전체 카운트;
-			request.setAttribute("sellerAllCnt", sellerAllCnt); // 총 게시글 수
-			
 			Integer memberAllCnt = member_svc.memberCnt(new HashMap<String, String>()); // 전체 카운트;
 			request.setAttribute("memberAllCnt", memberAllCnt); // 총 회원 수
 			
+			Integer sellerAllCnt = brand_svc.brandAllCnt(new HashMap<String, String>()); // 전체 카운트;
+			request.setAttribute("sellerAllCnt", sellerAllCnt); // 총 브랜드 수 
+			
 			request.setAttribute("postNo", postNo); // 페이지번호 클릭시 나오는 게시글 일련번호
 			request.setAttribute("paging", paging); // 페이징Map
-			request.setAttribute("sellerCnt", brandAllCnt); // 총 게시글 수
-			request.setAttribute("sellerList", brandAllList); // 총 게시물 리스트
+			request.setAttribute("memberCnt", memberCnt); // 총 게시글 수
+			request.setAttribute("memberList", memberAllList); // 총 게시물 리스트
+			
 
-			request.getRequestDispatcher("/admin/users_seller.jsp").forward(request, response);
+			request.getRequestDispatcher("/admin/users_consumer.jsp").forward(request, response);
 
 		} catch (Exception e) {
 			e.printStackTrace();

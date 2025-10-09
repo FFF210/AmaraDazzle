@@ -8,7 +8,21 @@ function showTab(tabId) {
 }
 
 
+//리스트 탭(판매자 / 일반회원) 페이지 전환
+function goConsumerList(){
+	location.href = "consumerList";
+}
+function goSellerList(){
+	location.href = "sellerList";
+}
+
 //브랜드 상세보기 페이지 이동 
 function goSellerDetail(num){
-	location.href = "sellerDetail?num=" + num
+	location.href = "sellerDetail?num=" + num;
 }
+
+//일반회원 상세보기 페이지 이동 
+function goMemberDetail(num){
+	location.href = "memberDetail?num=" + num;
+}
+
