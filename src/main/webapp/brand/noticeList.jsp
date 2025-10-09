@@ -48,7 +48,7 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th class="sortable">번호 <i class="bi bi-dash-lg sort-icon"></i></th>
+								<th>번호</th>
 								<th>공지유형</th>
 								<th>제목</th>
 								<th>작성일</th>
@@ -120,32 +120,6 @@
 		  });
 		});
 	
-  // 테이블 정렬
-  document.querySelectorAll(".table th.sortable").forEach(th => {
-	  th.addEventListener("click", () => {
-	    document.querySelectorAll(".table th.sortable").forEach(other => {
-	      if (other !== th) {
-	        other.classList.remove("asc", "desc");
-	        other.querySelector(".sort-icon").className = "bi bi-dash-lg sort-icon";
-	      }
-	    });
-
-	    const icon = th.querySelector(".sort-icon");
-
-	    if (th.classList.contains("asc")) {
-	      th.classList.remove("asc");
-	      th.classList.add("desc");
-	      icon.className = "bi bi-caret-down-fill sort-icon";
-	    } else if (th.classList.contains("desc")) {
-	      th.classList.remove("desc");
-	      icon.className = "bi bi-dash-lg sort-icon";
-	    } else {
-	      th.classList.add("asc");
-	      icon.className = "bi bi-caret-up-fill sort-icon";
-	    }
-	  });
-	});
-
   // 공지 행 클릭 시 상세 영역 업데이트
   document.querySelectorAll(".notice-row").forEach(row => {
     row.addEventListener("click", () => {

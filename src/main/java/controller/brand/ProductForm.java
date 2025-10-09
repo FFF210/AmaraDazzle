@@ -155,9 +155,6 @@ public class ProductForm extends HttpServlet {
 
 	/**
 	 * 상품-필터 저장
-	 * 
-	 * @throws Exception
-	 * @throws NumberFormatException
 	 */
 	private void saveFilters(ProductService service, ProductDetail product) throws Exception {
 		if (product.getSkinIssues() != null) {
@@ -198,8 +195,6 @@ public class ProductForm extends HttpServlet {
 
 	/**
 	 * request → ProductDetail DTO 변환
-	 * 
-	 * @throws Exception
 	 */
 	private ProductDetail extractProductFromRequest(HttpServletRequest request) throws Exception {
 		ProductDetail product = new ProductDetail();
@@ -291,13 +286,18 @@ public class ProductForm extends HttpServlet {
 		return product;
 	}
 
+	/**
+	 * 이미지 파일 저장
+	 */
 	private Long saveFile(Part part, HttpServletRequest request) throws Exception {
 		if (part == null || part.getSize() == 0)
 			return null;
 
-		// 저장 경로
-		String savePath = request.getServletContext().getRealPath("/upload");
-		File uploadDir = new File(savePath);
+		// web.xml의 context-param에서 업로드 경로 가져오기
+		String uploadDirPath = request.getServletContext().getInitParameter("UPLOAD_DIR");
+
+		// 경로 확인 및 폴더 생성
+		File uploadDir = new File(uploadDirPath);
 		if (!uploadDir.exists())
 			uploadDir.mkdirs();
 
@@ -313,19 +313,18 @@ public class ProductForm extends HttpServlet {
 		// 리네임 파일명 (시간 + 랜덤)
 		String renamed = System.currentTimeMillis() + "_" + (int) (Math.random() * 1000) + ext;
 
-		// 실제 저장
-		part.write(savePath + File.separator + renamed);
+		// 실제 저장 (로컬 절대경로)
+		part.write(uploadDirPath + File.separator + renamed);
 
-		// DB 저장
+		// DB에 상대경로 정보 저장
 		UploadFile fileDto = new UploadFile();
 		fileDto.setFileName(originalName);
 		fileDto.setFileRename(renamed);
-		fileDto.setStoragePath("/upload");
+		fileDto.setStoragePath("/upload_file");
 
 		uploadFileService.save_file(fileDto);
 
-		Long fileId = uploadFileService.select_fileId(renamed); // FK로 넣을 upload_file_id 반환
-
+		Long fileId = uploadFileService.select_fileId(renamed);
 		return fileId;
 	}
 

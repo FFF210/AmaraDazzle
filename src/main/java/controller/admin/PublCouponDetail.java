@@ -14,7 +14,7 @@ import service.admin.CouponServiceImpl;
 import util.NumberFormatting;
 
 
-
+//publ쿠폰 상세보기
 @WebServlet("/admin/publCouponDetail")
 public class PublCouponDetail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -32,7 +32,7 @@ public class PublCouponDetail extends HttpServlet {
 			String amountCondition = coupon.getAmountCondition();
 			if(!amountCondition.equals("-")) {
 				NumberFormatting ac = new NumberFormatting();
-				amountCondition = ac.formatMoney(Long.parseLong(amountCondition));
+				amountCondition = ac.formatMoney(Integer.parseInt(amountCondition));
 				
 				coupon.setAmountCondition(amountCondition);
 			}

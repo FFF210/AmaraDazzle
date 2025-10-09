@@ -102,7 +102,13 @@
 		</where>
 
 		GROUP BY oi.order_id, oi.status
-		ORDER BY oi.order_id DESC
+		
+		<if test="sortField != null and sortField != ''">
+			ORDER BY ${sortField}
+			<if test="sortOrder == 'desc'">DESC</if>
+			<if test="sortOrder == 'asc'">ASC</if>
+		</if>
+		
 		LIMIT #{limit}
 		OFFSET #{offset}
 	</select>
@@ -343,6 +349,44 @@
 		AND YEAR(o.created_at) = YEAR(CURDATE() - INTERVAL 1 MONTH)
 		AND MONTH(o.created_at) = MONTH(CURDATE() - INTERVAL 1 MONTH)
 		AND oi.status = 'CONFIRMED'
+	</select>
+
+	<!-- ======================= [brand2] salesOverview 작업 ======================= -->
+	<select id="selectCategorySalesTrend" parameterType="map"
+		resultType="dto.brand2.SalesOverview">
+		SELECT
+		DATE(o.created_at) AS date,
+		p.category1_id AS categoryId,
+		c.name
+		AS categoryName,
+		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS
+		amount
+		FROM order_item oi
+		JOIN orders o ON oi.order_id = o.orders_id
+		JOIN product p ON oi.product_id = p.product_id
+		JOIN category c ON
+		p.category1_id = c.category_id
+		WHERE oi.brand_id = #{brandId}
+		AND
+		oi.status = 'CONFIRMED'
+		<if test="startDate != null and startDate != ''">
+			AND DATE(o.created_at) &gt;= #{startDate}
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND DATE(o.created_at) &lt;= #{endDate}
+		</if>
+		<if test="categories != null and categories.size > 0">
+			AND p.category1_id IN
+			<foreach item="catId" collection="categories" open="("
+				separator="," close=")">
+				#{catId}
+			</foreach>
+		</if>
+
+
+		GROUP BY DATE(o.created_at), p.category1_id, c.name
+		ORDER BY
+		DATE(o.created_at) ASC
 	</select>
 
 </mapper>

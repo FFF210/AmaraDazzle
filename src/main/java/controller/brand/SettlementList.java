@@ -1,7 +1,9 @@
 package controller.brand;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -56,6 +58,23 @@ public class SettlementList extends HttpServlet {
 		params.put("brandId", brandId);
 		params.put("limit", limit);
 		params.put("offset", offset);
+
+		String sortField = request.getParameter("sortField");
+		String sortOrder = request.getParameter("sortOrder");
+
+		// 화이트리스트 검증
+		List<String> allowedFields = Arrays.asList("start_date", "total_sales", "pure_profit", "final_amount", "fee",
+				"deposited_date");
+		if (!allowedFields.contains(sortField)) {
+			sortField = null;
+		}
+
+		if (!"asc".equalsIgnoreCase(sortOrder) && !"desc".equalsIgnoreCase(sortOrder)) {
+			sortOrder = "asc"; // 기본값
+		}
+
+		params.put("sortField", sortField);
+		params.put("sortOrder", sortOrder);
 
 		try {
 			// 서비스 호출

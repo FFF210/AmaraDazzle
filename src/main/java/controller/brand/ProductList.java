@@ -2,6 +2,7 @@ package controller.brand;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,22 @@ public class ProductList extends HttpServlet {
 		params.put("searchKeyword", request.getParameter("searchKeyword"));
 		params.put("limit", limit);
 		params.put("offset", offset);
+
+		String sortField = request.getParameter("sortField");
+		String sortOrder = request.getParameter("sortOrder");
+
+		// 화이트리스트 검증
+		List<String> allowedFields = Arrays.asList("price", "sale_price", "stock_qty", "sales_qty", "review_count");
+		if (!allowedFields.contains(sortField)) {
+			sortField = null;
+		}
+
+		if (!"asc".equalsIgnoreCase(sortOrder) && !"desc".equalsIgnoreCase(sortOrder)) {
+			sortOrder = "asc"; // 기본값
+		}
+
+		params.put("sortField", sortField);
+		params.put("sortOrder", sortOrder);
 
 		try {
 			// 서비스 호출

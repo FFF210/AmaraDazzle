@@ -60,10 +60,17 @@
 
 	<my:layout>
 		<div class="page-container">
-
+			
 			<!-- breadcrumb -->
 			<div class="page-breadcrumb">
-				<my:breadcrumb items="교환관리:/brand/exchangeList,교환상세:" />
+				<c:choose>
+					<c:when test="${param.from eq 'order'}">
+						<my:breadcrumb items="주문관리:/brand/orderList,주문상세:/brand/orderDetail?orderId=${param.orderId}&from=${param.from},교환상세" />
+					</c:when>
+					<c:otherwise>
+						<my:breadcrumb items="교환관리:/brand/exchangeList,교환상세:" />
+					</c:otherwise>
+				</c:choose>
 			</div>
 
 			<!-- 페이지 헤더 -->

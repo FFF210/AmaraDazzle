@@ -30,6 +30,8 @@
 <link rel="stylesheet" href="../tagcss/uploader.css" />
 <link rel="stylesheet" href="./css/alert.css" />
 <link rel="stylesheet" href="./css/detailForm.css" />
+
+<c:set var="contextPath" value="${pageContext.request.contextPath}" />
 </head>
 
 <body class="<c:if test='${not empty product}'>edit-mode</c:if>">
@@ -184,7 +186,9 @@
 						<label>대표 이미지 <span class="required">*</span></label>
 						<div class="image-slot">
 							<img
-								src="<c:out value='${not empty product.thumbnailFileId ? ("image?fileId=" += product.thumbnailFileId) : (contextPath += "/image/plus.png")}'/>"
+								src="${not empty product.thumbnailFileId 
+              ? pageContext.request.contextPath.concat('/image?fileId=').concat(product.thumbnailFileId)
+              : pageContext.request.contextPath.concat('/image/plus.png')}"
 								id="preview-thumbnail" alt="대표 이미지" width="100px"
 								onclick="document.getElementById('thumbnail').click();" /> <input
 								type="file" id="thumbnail" name="thumbnail" accept="image/*"
@@ -193,14 +197,28 @@
 						</div>
 					</div>
 
+
 					<!-- 추가 이미지 -->
 					<div class="form-group image">
 						<label>추가 이미지<br>(최대 5개)
 						</label>
+
 						<c:forEach var="i" begin="1" end="5">
+							<c:set var="fileId">
+								<c:choose>
+									<c:when test="${i == 1}">${product.image1FileId}</c:when>
+									<c:when test="${i == 2}">${product.image2FileId}</c:when>
+									<c:when test="${i == 3}">${product.image3FileId}</c:when>
+									<c:when test="${i == 4}">${product.image4FileId}</c:when>
+									<c:when test="${i == 5}">${product.image5FileId}</c:when>
+								</c:choose>
+							</c:set>
+
 							<div class="image-slot">
 								<img
-									src="<c:out value='${not empty product["image" += i += "FileId"] ? ("image?fileId=" += product["image" += i += "FileId"]) : (contextPath += "/image/plus.png")}'/>"
+									src="${not empty fileId 
+                ? pageContext.request.contextPath.concat('/image?fileId=').concat(fileId) 
+                : pageContext.request.contextPath.concat('/image/plus.png')}"
 									id="preview-image${i}" alt="추가 이미지${i}" width="100px"
 									onclick="document.getElementById('image${i}').click();" /> <input
 									type="file" id="image${i}" name="image${i}" accept="image/*"
@@ -209,6 +227,7 @@
 							</div>
 						</c:forEach>
 					</div>
+
 
 				</section>
 
@@ -392,11 +411,10 @@
 			</form>
 		</div>
 	</my:layout>
-</body>
-<script src="./js/dialog.js"></script>
-<script src="./js/toast.js"></script>
-<script src="./js/selectbox.js"></script>
-<script>
+	<script src="./js/dialog.js"></script>
+	<script src="./js/toast.js"></script>
+	<script src="./js/selectbox.js"></script>
+	<script>
   /*********************************************************************************************************
    * 카테고리 selectbox
    *********************************************************************************************************/
@@ -614,5 +632,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+</body>
 </html>
 

@@ -36,8 +36,7 @@
 						<my:breadcrumb items="주문관리:/brand/orderList,주문상세:" />
 					</c:when>
 					<c:when test="${param.from eq 'shipping'}">
-						<my:breadcrumb
-							items="배송관리:/brand/shippingList,주문상세:" />
+						<my:breadcrumb items="배송관리:/brand/shippingList,주문상세:" />
 					</c:when>
 					<c:when test="${param.from eq 'shippingDetail'}">
 						<my:breadcrumb
@@ -54,13 +53,15 @@
 						<my:breadcrumb items="교환관리:/brand/exchangeList,주문상세:" />
 					</c:when>
 					<c:when test="${param.from eq 'exchangeDetail'}">
-						<my:breadcrumb items="교환관리:/brand/exchangeList,교환상세:/brand/exchangeDetail?exchangeId=${param.exchangeId},주문상세:" />
+						<my:breadcrumb
+							items="교환관리:/brand/exchangeList,교환상세:/brand/exchangeDetail?exchangeId=${param.exchangeId},주문상세:" />
 					</c:when>
 					<c:when test="${param.from eq 'return'}">
 						<my:breadcrumb items="반품관리:/brand/returnList,주문상세:" />
 					</c:when>
 					<c:when test="${param.from eq 'returnDetail'}">
-						<my:breadcrumb items="반품관리:/brand/returnList,반품상세:/brand/returnDetail?returnId=${param.returnId},주문상세:" />
+						<my:breadcrumb
+							items="반품관리:/brand/returnList,반품상세:/brand/returnDetail?returnId=${param.returnId},주문상세:" />
 					</c:when>
 				</c:choose>
 			</div>
@@ -253,35 +254,40 @@
 													<c:when test="${item.itemStatus eq 'SHIPPING'}">
 														<button type="button"
 															class="btn btn-outline btn-sm btn-release"
-															data-product-id="${product.productId}">배송조회</button>
+															data-product-id="${product.productId}"
+															onclick="location.href='/brand/shippingDetail?orderId=${orderDetail.summary.ordersId}&status=${item.itemStatus}&from=order'">배송조회</button>
 													</c:when>
 													<c:when test="${item.itemStatus eq 'DELIVERED'}">
 														<button type="button"
 															class="btn btn-outline btn-sm btn-release"
-															data-product-id="${product.productId}">배송조회</button>
+															data-product-id="${product.productId}"
+															onclick="location.href='/brand/shippingDetail?orderId=${orderDetail.summary.ordersId}&status=${item.itemStatus}&from=order'">배송조회</button>
 													</c:when>
 													<c:when test="${item.itemStatus eq 'CANCELLED'}">
 														<button type="button"
 															class="btn btn-outline btn-sm btn-release"
 															data-product-id="${product.productId}"
-															onclick="location.href='/brand/cancelDetail?orderId=${orderDetail.summary.ordersId}'">취소조회</button>
+															onclick="location.href='/brand/cancelDetail?orderId=${orderDetail.summary.ordersId}&from=order'">취소조회</button>
 													</c:when>
 													<c:when test="${item.itemStatus eq 'COLLECTING'}">
 														<button type="button"
 															class="btn btn-outline btn-sm btn-release"
-															data-product-id="${product.productId}">회수조회</button>
+															data-product-id="${product.productId}"
+															onclick="location.href='/brand/shippingDetail?orderId=${orderDetail.summary.ordersId}&status=${item.itemStatus}&from=order'">회수조회</button>
 													</c:when>
 													<c:when
 														test="${fn:startsWith(item.itemStatus, 'EXCHANGE') eq true}">
 														<button type="button"
 															class="btn btn-outline btn-sm btn-release"
-															data-product-id="${product.productId}">교환조회</button>
+															data-product-id="${product.productId}"
+															onclick="location.href='/brand/exchangeDetail?exchangeId=${item.exchangeId}&orderId=${orderDetail.summary.ordersId}&from=order'">교환조회</button>
 													</c:when>
 													<c:when
 														test="${fn:startsWith(item.itemStatus, 'RETURN') eq 'true'}">
 														<button type="button"
 															class="btn btn-outline btn-sm btn-release"
-															data-product-id="${product.productId}">반품조회</button>
+															data-product-id="${product.productId}"
+															onclick="location.href='/brand/returnDetail?returnId=${item.returnId}&orderId=${orderDetail.summary.ordersId}&from=order'">반품조회</button>
 													</c:when>
 												</c:choose>
 											</div></td>

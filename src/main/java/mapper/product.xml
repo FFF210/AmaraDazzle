@@ -1432,7 +1432,13 @@
 				</choose>
 			</if>
 		</where>
-		ORDER BY p.product_id DESC
+
+		<if test="sortField != null and sortField != ''">
+			ORDER BY ${sortField}
+			<if test="sortOrder == 'desc'">DESC</if>
+			<if test="sortOrder == 'asc'">ASC</if>
+		</if>
+
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
 

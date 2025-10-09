@@ -19,6 +19,7 @@ import service.admin.EventService;
 import service.admin.EventServiceImpl;
 import util.FileAttach;
 
+//이벤트 등록
 @WebServlet("/admin/promoEventWrite")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 메모리 저장 임계값 (2MB)
 		maxFileSize = 1024 * 1024 * 10, // 개별 파일 최대 크기 (10MB)
