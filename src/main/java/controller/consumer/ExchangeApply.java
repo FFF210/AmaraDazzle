@@ -2,6 +2,8 @@ package controller.consumer;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +18,10 @@ import service.consumer.ExchangeService;
 import service.consumer.ExchangeServiceImpl;
 import service.consumer.MemberService;
 import service.consumer.MemberServiceImpl;
+import service.consumer.OrderService;
+import service.consumer.OrderServiceImpl;
+import service.consumer.ProductService;
+import service.consumer.ProductServiceImpl;
 
 /**
  * Servlet implementation class ExchangeApply
@@ -45,40 +51,51 @@ public class ExchangeApply extends HttpServlet {
 		Long memberId = (Long) session.getAttribute("memberId");
 
 		if (memberId == null) {
-			response.sendRedirect("/store/login");
+			response.sendRedirect(request.getContextPath() + "/store/login");
 			return;
 		}
 
 		// 주문 상품 ID 받아오기
-		String orderItemId = request.getParameter("orderItemId");
+		String orderItemIdStr = request.getParameter("orderItemId");
 
-		if (orderItemId == null || orderItemId.isEmpty()) {
-			response.sendRedirect("/store/orderList");
+		if (orderItemIdStr == null || orderItemIdStr.isEmpty()) {
+			response.sendRedirect(request.getContextPath() + "/store/mypage/orderList");
 			return;
 		}
 
 		try {
-			ExchangeService service = new ExchangeServiceImpl();
+			Long orderItemId = Long.parseLong(orderItemIdStr);
 
 			// 교환 신청 가능 여부 확인
-			if (!service.canApplyExchange(Long.parseLong(orderItemId))) {
-				request.setAttribute("err", "이미 교환 신청된 상품입니다.");
+			ExchangeService exchangeService = new ExchangeServiceImpl();
+			if (!exchangeService.canApplyExchange(orderItemId)) {
+				request.setAttribute("err", "이미 교환 신청된 상품이거나 교환 가능 기간이 지났습니다.");
 				request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);
 				return;
 			}
-			
+
+			// 주문 상품 정보 조회
+			OrderService orderService = new OrderServiceImpl();
+			Map<String, Object> orderItem = orderService.getOrderItemForApply(orderItemId);
+
+			// 교환 가능한 옵션 목록 조회
+			Long productId = ((Number) orderItem.get("productId")).longValue();
+			ProductService productService = new ProductServiceImpl();
+			List<Map<String, Object>> availableOptions = productService.getProductOptions(productId);
+
 			// 회원 정보 가져오기 (주소 정보 미리 채우기용)
 			MemberService memberService = new MemberServiceImpl();
 			Member member = memberService.getMemberInfo(memberId);
 
-			// orderItemId를 JSP로 전달
-			request.setAttribute("orderItemId", orderItemId);
-			request.setAttribute("member", member); // 회원 정보 전달
+			// JSP로 데이터 전달
+			request.setAttribute("orderItem", orderItem);
+			request.setAttribute("availableOptions", availableOptions);
+			request.setAttribute("member", member);
 			request.getRequestDispatcher("/consumer/exchangeApply.jsp").forward(request, response);
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			request.setAttribute("err", "교환 신청 페이지 오류");
+			request.setAttribute("err", "교환 신청 페이지 오류: " + e.getMessage());
 			request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);
 		}
 	}

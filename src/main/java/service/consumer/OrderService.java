@@ -97,4 +97,7 @@ public interface OrderService {
     
     //  ================ 취소/교환/반품 통합 목록 조회 ===================
     List<Map<String, Object>> getCancelExchangeReturnList(Long memberId, String startDate, String endDate) throws Exception;
+    
+    // ================ 교환/반품 신청용 =======================
+    Map<String, Object> getOrderItemForApply(Long orderItemId) throws Exception;
 }

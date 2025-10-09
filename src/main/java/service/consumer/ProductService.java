@@ -33,4 +33,7 @@ public interface ProductService {
 
 	// [소비자] 최근 본 상품 조회
 	List<ModalProduct> getModalProducts(List<Long> productIds, Long memberId) throws Exception;
+	
+	// [소비자] 교환 신청용: 상품의 전체 옵션 목록 조회 (mapper는 productOption)
+	List<Map<String, Object>> getProductOptions(Long productId) throws Exception;
 }

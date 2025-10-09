@@ -6,6 +6,8 @@ import java.util.Map;
 
 import dao.consumer.ProductDAO;
 import dao.consumer.ProductDAOImpl;
+import dao.consumer.ProductOptionDAO;
+import dao.consumer.ProductOptionDAOImpl;
 import dto.Product;
 import dto.consumer.CommonProduct;
 import dto.consumer.ModalProduct;
@@ -177,6 +179,15 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	public List<ModalProduct> getModalProducts(List<Long> productIds, Long memberId) throws Exception {
 		return productDAO.getProductsByIds(productIds, memberId);
+	}
+
+	// 교환 신청용: 상품의 전체 옵션 목록 조회 (mapper 및 DAO는 productOption)
+	@Override
+	public List<Map<String, Object>> getProductOptions(Long productId) throws Exception {
+		
+		ProductOptionDAO productOptionDAO = new ProductOptionDAOImpl();
+		
+		return productOptionDAO.getProductOptions(productId);
 	}
 
 }

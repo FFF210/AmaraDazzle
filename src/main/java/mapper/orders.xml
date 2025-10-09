@@ -333,7 +333,34 @@
 		ORDER BY oi.updated_at DESC
 	</select>
 
-
+	<!-- ==== [소비자] 교환/반품 신청용: 주문 상품 단건 조회 === -->
+	<select id="getOrderItemForApply" parameterType="Long"
+		resultType="map">
+		SELECT
+		oi.order_item_id as orderItemId,
+		oi.order_id as orderId,
+		oi.brand_id as brandId,
+		oi.product_id as productId,
+		oi.option_id as optionId,
+		oi.unit_price as unitPrice,
+		oi.quantity,
+		oi.line_subtotal as lineSubtotal,
+		oi.discount,
+		oi.total,
+		oi.status,
+		o.order_code as orderCode,
+		p.name as productName,
+		p.thumbnail_file_id as thumbnailFileId,
+        p.image1_file_id as image1FileId,
+		b.brand_name as brandName,
+		po.option_value as optionValue
+		FROM order_item oi
+		INNER JOIN orders o ON oi.order_id = o.orders_id
+		LEFT JOIN product p ON oi.product_id = p.product_id
+		LEFT JOIN brand b ON oi.brand_id = b.brand_id
+		LEFT JOIN product_option po ON oi.option_id = po.product_option_id
+		WHERE oi.order_item_id = #{orderItemId}
+	</select>
 
 
 

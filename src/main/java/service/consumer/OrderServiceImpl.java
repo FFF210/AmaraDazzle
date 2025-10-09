@@ -497,4 +497,10 @@ public class OrderServiceImpl implements OrderService {
 		    return orderDAO.selectCancelExchangeReturnList(params);
 	}
 
+	// ============ [소비자] 교환/반품 신청용 ===========
+	@Override
+	public Map<String, Object> getOrderItemForApply(Long orderItemId) throws Exception {
+		return orderDAO.getOrderItemForApply(orderItemId);
+	}
+
 }
