@@ -24,6 +24,14 @@
 		때만 */
 	</update>
 
+	<!-- 옵션 재고 업데이트 (주문 시) *원래는 product_option* -->
+	<update id="updateOptionStock" parameterType="map">
+		UPDATE product_option
+		SET stock_qty = stock_qty - #{quantity}
+		WHERE option_id = #{optionId}
+		AND stock_qty >= #{quantity}
+	</update>
+
 	<!-- 상품의 실제 판매가격 계산 (할인 적용) -->
 	<select id="selectCalculatedPrice" parameterType="long"
 		resultType="map">

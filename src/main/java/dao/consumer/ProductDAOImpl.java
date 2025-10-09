@@ -27,6 +27,42 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 	}
 
+	// (주문 성공시) 상품 재고 감소 (옵션 없는 상품)
+	@Override
+	public int updateStock(Long productId, int quantity) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			Map<String, Object> params = new HashMap<>();
+			params.put("productId", productId);
+			params.put("quantity", quantity);
+
+			int result = sqlSession.update("mapper.product.updateStock", params);
+			sqlSession.commit();
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+
+	// (주문 성공시) 옵션 재고 감소 (옵션 있는 상품)
+	@Override
+	public int updateOptionStock(Long optionId, int quantity) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			Map<String, Object> params = new HashMap<>();
+			params.put("optionId", optionId);
+			params.put("quantity", quantity);
+
+			int result = sqlSession.update("mapper.product.updateOptionStock", params);
+			sqlSession.commit();
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
+	
+	// ========================== [목록 조회 용도] ====================
+
 	// [소비자] 기획 상품 목록 조회
 	@Override
 	public List<ProductPlan> selectPlannedProducts(Map<String, Object> params) throws Exception {
