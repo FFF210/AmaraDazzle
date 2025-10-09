@@ -71,10 +71,10 @@
 				</button>
 				<div class="submenu">
 					<div data-submenu="menu6_sub1">
-						<a href="/admin/orderByOrderList">주문내역</a>
+						<a href="/admin/OrderByOrderList">주문내역</a>
 					</div>
 					<div data-submenu="menu6_sub2">
-						<a href="/admin/todayCalcList">정산내역</a>
+						<a href="/admin/accountTodayList">정산내역</a>
 					</div>
 				</div>
 			</div>

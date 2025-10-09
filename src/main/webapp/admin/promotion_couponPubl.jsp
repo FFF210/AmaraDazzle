@@ -25,7 +25,7 @@
 		</div>
 
 		<!-- ************************* 발행 쿠폰 목록 탭 ************************* -->
-		<div class="main_content">
+		<section class="main_content">
 			<!-- 필터 -->
 			<form id="couponSearchForm" class="search_form">
 				<my:adminTableFilter>
@@ -160,7 +160,7 @@
 				</div>
 				<!-- 페이지네이션 end -->
 			</div>
-		</div>
+		</section>
 		<!-- 메인부분 -->
 
 	</my:adminLayout>
