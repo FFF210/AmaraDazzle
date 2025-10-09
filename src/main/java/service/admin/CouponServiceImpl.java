@@ -32,7 +32,6 @@ public class CouponServiceImpl implements CouponService{
 	@Override
 	public List<Coupon> pCouponAllList(int p_no) {
 		Map<String, Object> listMap = m_pg.paging(p_no);
-
 		return cp_dao.pCouponAllList(listMap);
 	}
 
@@ -62,6 +61,33 @@ public class CouponServiceImpl implements CouponService{
 	@Override
 	public Coupon publCouponDetail(int num) {
 		return cp_dao.publCouponDetail(num);
+	}
+
+	//개별지급 쿠폰 전체 수 
+	@Override
+	public Integer iCouponCnt(Map<String, String> cntMap) {
+		SearchConditionDTO sc_DTO = search.buildSearchDTO(cntMap);
+	    return cp_dao.iCouponCnt(sc_DTO);
+	}
+
+	//개별지급 쿠폰 전체 목록 
+	@Override
+	public List<Coupon> iCouponAllList(Integer p_no) {
+		Map<String, Object> listMap = m_pg.paging(p_no);
+		return cp_dao.iCouponAllList(listMap);
+	}
+
+	//개별지급 쿠폰 검색 목록
+	@Override
+	public List<Coupon> iCouponSearchList(Map<String, String> searchContent, Integer p_no) {
+		 Map<String, Object> searchlistMap = m_pg.paging(p_no);
+	    SearchConditionDTO sc_DTO = search.buildSearchDTO(searchContent);
+
+	    // 페이징 추가 정보 세팅
+	    sc_DTO.setStart_p((Integer) searchlistMap.get("start_p"));
+	    sc_DTO.setPost_ea((Integer) searchlistMap.get("post_ea"));
+
+	    return cp_dao.iCouponSearchList(sc_DTO);
 	}
 
 }

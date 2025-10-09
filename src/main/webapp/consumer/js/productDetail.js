@@ -15,11 +15,11 @@ function initProductDetail() {
 	const thumbnails = document.querySelectorAll('.thumbnail');
 	thumbnails.forEach(thumbnail => {
 		thumbnail.addEventListener('click', function() {
-			changeMainImage(this);
+			changeMainImage(this);  // 클릭된 썸네일을 함수에 전달
 		});
 	});
 
-	// ✅ 커스텀 셀렉트박스 이벤트 처리
+	// 커스텀 셀렉트박스 이벤트 처리
 	initCustomSelectbox();
 }
 
@@ -36,7 +36,7 @@ function changeMainImage(thumbnail) {
 	mainImage.src = thumbnail.src;
 }
 
-// ✅ 커스텀 셀렉트박스 이벤트 처리
+// 커스텀 셀렉트박스 이벤트 처리
 function initCustomSelectbox() {
 	// 셀렉트 헤더 클릭 시 리스트 토글
 	document.addEventListener('click', function(e) {
@@ -71,7 +71,7 @@ function initCustomSelectbox() {
 			});
 			e.target.classList.add('active');
 
-			// ✅ 옵션 선택 처리
+			// 옵션 선택 처리
 			handleOptionSelection(e.target.dataset.value, e.target.textContent);
 		}
 
@@ -245,54 +245,50 @@ function removeOptionById(optionId) {
 }
 
 function updateTotalPrice() {
-	console.log('updateTotalPrice 호출됨');
-	console.log('selectedOptions:', selectedOptions);
+    console.log('updateTotalPrice 호출됨');
+    console.log('selectedOptions:', selectedOptions);
 
-	if (selectedOptions.length === 0) {
-		const totalAmountElement = document.getElementById('totalAmount');
-		console.log('totalAmountElement 찾음:', totalAmountElement);
+    if (selectedOptions.length === 0) {
+        const totalAmountElement = document.getElementById('totalAmount');
+        console.log('totalAmountElement 찾음:', totalAmountElement);
 
-		// ✅ 옵션이 있는 상품인지 확인
-		const hasOptions = typeof window.productOptionsData !== 'undefined';
+        const hasOptions = typeof window.productOptionsData !== 'undefined';
 
-		if (selectedOptions.length === 0) {
-			if (totalAmountElement) {
-				if (hasOptions) {
-					// 옵션 상품: 선택 전에는 0원
-					totalAmountElement.textContent = '0원';
-				} else {
-					// 단일 상품: 세일가 표시 (window.productPrice는 이미 세일가)
-					totalAmountElement.textContent = window.productPrice.toLocaleString() + '원';
-				}
-			}
-			return;
-		}
+        if (selectedOptions.length === 0) {
+            if (totalAmountElement) {
+                if (hasOptions) {
+                    totalAmountElement.textContent = '0원';
+                } else {
+                    totalAmountElement.textContent = window.productPrice.toLocaleString() + '원';
+                }
+            }
+            return;
+        }
 
-		// 선택된 옵션들의 총합 계산
-		totalPrice = selectedOptions.reduce((total, option) => {
-			return total + (option.price * option.quantity);
-		}, 0);
+        totalPrice = selectedOptions.reduce((total, option) => {
+            return total + (option.price * option.quantity);
+        }, 0);
 
-		console.log('계산된 totalPrice:', totalPrice);
+        console.log('계산된 totalPrice:', totalPrice);
 
-		if (totalAmountElement) {
-			totalAmountElement.textContent = totalPrice.toLocaleString() + '원';
-			console.log('가격 업데이트 완료:', totalAmountElement.textContent);
-		} else {
-			console.log('totalAmountElement를 찾을 수 없습니다!');
-		}
-	}
+        if (totalAmountElement) {
+            totalAmountElement.textContent = totalPrice.toLocaleString() + '원';
+            console.log('가격 업데이트 완료:', totalAmountElement.textContent);
+        } else {
+            console.log('totalAmountElement를 찾을 수 없습니다!');
+        }
+    }
+}
 
-	// 탭 내용 초기화
-	function initTabContent() {
-		// 탭 변경 이벤트 리스너
-		document.addEventListener('tabChanged', function(e) {
-			if (e.detail.tabId === 'productTabs') {
-				showTabContent(e.detail.activeTabIndex);
-			}
-		});
-	}
-
+// 탭 내용 초기화
+function initTabContent() {
+    // 탭 변경 이벤트 리스너
+    document.addEventListener('tabChanged', function(e) {
+        if (e.detail.tabId === 'productTabs') {
+            showTabContent(e.detail.activeTabIndex);
+        }
+    });
+}
 	// 탭 내용 표시
 	function showTabContent(tabIndex) {
 		// 모든 탭 패널 숨기기
@@ -407,7 +403,7 @@ function updateTotalPrice() {
 
 	// 바로 구매
 	function buyNow() {
-		// ✅ 디버깅
+		// 디버깅
 		console.log('productOptionsData:', typeof window.productOptionsData !== 'undefined' ? productOptionsData : 'undefined');
 		console.log('selectedOptions:', selectedOptions);
 		console.log('productId:', window.productId);
@@ -549,7 +545,6 @@ function openQnaModal() {
             location.href = '/store/login?redirect=' + encodeURIComponent(location.pathname + location.search);
         }
     }
-}
 }
 
 // 모달 닫기

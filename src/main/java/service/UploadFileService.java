@@ -12,4 +12,7 @@ public interface UploadFileService {
 
 	// 파일 id값으로 UploadFile 객체 가져오기
 	UploadFile selectFileById(Long uploadFileId) throws Exception;
+	
+	// (추가했음) 파일 저장 후 생성된 uploadFileId 반환
+	Long insertFile(UploadFile f_dto) throws Exception;
 }

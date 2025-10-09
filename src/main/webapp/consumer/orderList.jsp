@@ -59,6 +59,14 @@
 	href="<c:url value='/consumer/css/orderList.css'/>">
 </head>
 <body>
+<!-- 주문 취소 결과 알림 -->
+    <c:if test="${param.cancelSuccess eq 'true'}">
+        <script>alert('주문이 취소되었습니다.');</script>
+    </c:if>
+    
+    <c:if test="${param.cancelFail eq 'true'}">
+        <script>alert('주문 취소에 실패했습니다.');</script>
+    </c:if>
 
 	<!-- 상단 헤더 -->
 	<%@ include file="/consumer/header.jsp"%>
@@ -76,7 +84,7 @@
 				<div class="user-info__top">
 					<p class="greeting">
 						<span class="name">${sessionScope.memberName}</span> 님 반갑습니다.
-					</p>			
+					</p>
 				</div>
 
 				<!-- 하단 통계 영역 -->
@@ -135,6 +143,7 @@
 			</div>
 
 			<!-- ============================ 3. 기간 조회 박스 ============================ -->
+			<form method="get" action="${pageContext.request.contextPath}/store/mypage/orderList">
 			<div class="drf-wrap drf-${__size}">
 				<div class="drf-box">
 					<div class="drf-header">
@@ -194,6 +203,7 @@
 
 				<button class="drf-submit" type="submit">${__submit}</button>
 			</div>
+			</form>
 
 			<!-- ============================ 4. 상품 목록 테이블 ============================ -->
 			<div class="table-wrapper">
@@ -299,10 +309,25 @@
 															<div class="button-vertical">
 																<button class="btn btn-outline btn-sm"
 																	onclick="writeReview(${item.orderItemId})">리뷰작성</button>
-																<button class="btn btn-outline btn-sm"
-																	onclick="requestExchange(${item.orderItemId})">교환신청</button>
-																<button class="btn btn-outline btn-sm"
-																	onclick="requestReturn(${item.orderItemId})">반품신청</button>
+
+																<!--  교환 가능 여부 체크 -->
+																<c:if test="${item.canExchange}">
+																	<button class="btn btn-outline btn-sm"
+																		onclick="requestExchange(${item.orderItemId})">교환신청</button>
+																</c:if>
+
+																<!--  반품 가능 여부 체크 -->
+																<c:if test="${item.canReturn}">
+																	<button class="btn btn-outline btn-sm"
+																		onclick="requestReturn(${item.orderItemId})">반품신청</button>
+																</c:if>
+
+																<!--  기간 지난 경우 안내 -->
+																<c:if test="${!item.canExchange && !item.canReturn}">
+																	<span class="no-action"
+																		style="color: #999; font-size: 12px;"> (교환/반품
+																		기간 만료) </span>
+																</c:if>
 															</div>
 														</c:when>
 
@@ -363,8 +388,9 @@
 	    window.open(url, '_blank');
 	}
 
+	//그냥 마이리뷰 페이지로 보내기
 	function writeReview(orderItemId) {
-	    location.href = '/store/writeReview?orderItemId=' + orderItemId;
+	    location.href = '/store/mypage/myReview';
 	}
 
 	function requestExchange(orderItemId) {

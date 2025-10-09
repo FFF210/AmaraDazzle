@@ -53,7 +53,7 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectOne("mapper.member.selectById", memberId);
 	}
 	
-	// 이게 날아갔던 건지...확인 필요
+	// 회원정보 수정
 	@Override
 	public void updateMember(Member member) throws Exception {
 		sqlSession.update("mapper.member.updateMember", member);

@@ -9,13 +9,12 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>쿠폰 생성</title>
+<title>쿠폰 발행</title>
 <link rel="stylesheet" href="./css/boards_write.css" />
 <link rel="stylesheet" href="./css/coupon.css" />
 <!-- 헤드부분 -->
 
 <body>
-
 	<!-- 레이아웃 + 메인컨텐츠 -->
 	<my:adminLayout>
 		<!-- *********************************메인부분********************************* -->
@@ -50,11 +49,14 @@
 							<my:dateInput type="input" name="endDate" inputDay="end"/>
 							<my:dateInput type="preset" presets="1주일,10일,1개월" />
 						</div>
+						<span class="no_condition">
+							<label><input type="checkbox" id="exp_noRestr" name="exp_noRestr"/> 제한 없음</label>
+						</span>
 					</div>
 				</div>
 
 				<div class="part_section">
-					<div class="part_title">카테고리 <span class="reqired_write"></span></div>
+					<div class="part_title">카테고리 <span class="reqired_write">*</span></div>
 					<div class="part_content select_cate">
 						<my:selectbox size="sm" items="대분류" initial="대분류" name="largeCate" id="largeSelect"/>
 						<input type="hidden" name="category1Id" id="category1Id" />
@@ -85,11 +87,12 @@
 					<div class="part_title">지급대상 <span class="reqired_write">*</span></div>
 					<div class="part_content">
 						<div class="answer_body filter-btn-group">
-							<input type="button" class="filter-btn" value="ALL"> 
-							<input type="button" class="filter-btn" value="VIP"> 
-							<input type="button" class="filter-btn" value="GOLD"> 
-							<input type="button" class="filter-btn" value="SILVER"> 
-							<input type="button" class="filter-btn" value="REGULAR ">
+							<button type="button" class="filter-btn" value="ALL">전체회원</button>
+							<button type="button" class="filter-btn" value="VIP">VIP</button>
+							<button type="button" class="filter-btn" value="GOLD">GOLD</button>
+							<button type="button" class="filter-btn" value="SILVER">SILVER</button> 
+							<button type="button" class="filter-btn" value="REGULAR ">일반</button>
+							<button type="button" class="filter-btn" value="INDIVIDUAL ">개별회원</button>
 							<input type="hidden" id="cpTarget" name="cpTarget" >
 						</div>
 					</div>
@@ -175,6 +178,11 @@
 					const oneMonth = new Date(local.getTime() + 30 * 24 * 60 * 60 * 1000);
 					startInput.value = toDateStr(local);
 					endInput.value = toDateStr(oneMonth);
+					break;
+				case "제한없음":
+					const noExp = new Date(local.getTime() + 36500 * 24 * 60 * 60 * 1000);
+					startInput.value = toDateStr(local);
+					endInput.value = toDateStr(noExp);
 					break;
 			}
 

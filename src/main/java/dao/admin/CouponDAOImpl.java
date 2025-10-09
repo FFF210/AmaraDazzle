@@ -47,6 +47,24 @@ public class CouponDAOImpl implements CouponDAO{
 	public Coupon publCouponDetail(int num) {
 		return ss.selectOne("mapper.coupon.publCouponDetail", num);
 	}
+
+	//개별지급 쿠폰 전체 수 
+	@Override
+	public Integer iCouponCnt(SearchConditionDTO sc_DTO) {
+		return ss.selectOne("mapper.coupon.iCouponCnt", sc_DTO);
+	}
+	
+	//개별지급 쿠폰 전체 목록 
+	@Override
+	public List<Coupon> iCouponAllList(Map<String, Object> listMap) {
+		return ss.selectList("mapper.coupon.iCouponAllList",listMap);
+	}
+
+	//개별지급 쿠폰 검색 목록
+	@Override
+	public List<Coupon> iCouponSearchList(SearchConditionDTO sc_DTO) {
+		return ss.selectList("mapper.coupon.iCouponSearchList",sc_DTO);
+	}
 	
 	
 	

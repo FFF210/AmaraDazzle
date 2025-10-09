@@ -51,8 +51,7 @@
 			<!-- user info -->
 			<div class="user-wrapper">
 				<my:userInfo userName="${memberInfo.name}"
-					points="${memberInfo.pointBalance}" coupons="${couponCount}"
-					notifications="${sessionScope.memberNotifications}" />
+					points="${memberInfo.pointBalance}" coupons="${couponCount}" />
 			</div>
 
 			<!-- 리뷰 섹션 -->

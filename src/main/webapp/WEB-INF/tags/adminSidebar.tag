@@ -21,30 +21,29 @@
 
 			<!-- 단일 메뉴 -->
 			<div class="menu-item" data-menu="menu1">
-				<a href="/admin/home" class="menu-link"> <i
-					class="bi bi-house-fill"></i> <span class="menu-text">홈</span>
+				<a href="/admin/home" class="menu-link"> 
+					<i class="bi bi-house-fill"></i><span class="menu-text">홈</span>
 				</a>
 			</div>
 
 			<!-- 단일 메뉴 -->
 			<div class="menu-item" data-menu="menu2">
-				<a href="#" class="menu-link"> <i class="bi bi-journal-check"></i>
-					<span class="menu-text">오늘의 할 일</span>
+				<a href="#" class="menu-link"> 
+					<i class="bi bi-journal-check"></i><span class="menu-text">오늘의 할 일</span>
 				</a>
 			</div>
 
 			<!-- 단일 메뉴 -->
 			<div class="menu-item" data-menu="menu3">
-				<a href="/admin/sellerList" class="menu-link"> <i
-					class="bi bi-people"></i> <span class="menu-text">회원</span>
+				<a href="/admin/sellerList" class="menu-link"> 
+					<i class="bi bi-people"></i> <span class="menu-text">회원</span>
 				</a>
 			</div>
 
 			<!-- 단일 메뉴 -->
 			<div class="menu-item" data-menu="menu4">
-				<a href="/admin/qnaSellerList" class="menu-link"> <i
-					class="bi bi-chat-right-text"></i> <span class="menu-text">일대일
-						문의</span>
+				<a href="/admin/qnaSellerList" class="menu-link"> 
+					<i class="bi bi-chat-right-text"></i><span class="menu-text">일대일 문의</span>
 				</a>
 			</div>
 
@@ -67,8 +66,7 @@
 			<!-- 서브메뉴 포함 -->
 			<div class="menu-item has-submenu" data-menu="menu6">
 				<button class="menu-link">
-					<!-- 					<i class="bi bi-coin"></i> -->
-					<i class="bi bi-calculator"></i> <span class="menu-text">주문/정산</span>
+					<i class="bi bi-coin"></i> <span class="menu-text">주문/정산</span>
 					<i class="bi bi-chevron-down submenu-icon"></i>
 				</button>
 				<div class="submenu">
@@ -111,7 +109,7 @@
 				</button>
 				<div class="submenu">
 					<div data-submenu="menu8_sub1" onclick="setHeader('프로필 > 정보수정')">
-						<a href="#">ㄴㄴㄴㄴ</a>
+						<a href="/brand/todoDashboard">ㄴㄴㄴㄴ</a>
 					</div>
 					<div data-submenu="menu8_sub2" onclick="setHeader('프로필 > 비밀번호 변경')">
 						<a href="#">ㄹㄹㄹㄹㄹ</a>

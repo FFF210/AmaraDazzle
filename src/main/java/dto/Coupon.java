@@ -17,13 +17,14 @@ public class Coupon {
     private Long writerId;          // 쿠폰 발행자 ID (FK → brand.brand_id / admin_info.admin_info_id)
     private Timestamp createdAt;    // 발행일자
     private String pch_noRestr; // 사용조건 제한없음
+    private Long memberId; 	// 개별지급시 회원ID
     
     //조인용 컬럼 
-    private String categoryName; //category.name 
-    private String categoryParent; //category.parent_id 
+    private String fullCategoryPath; //category 풀표기용
     private String codeName; //code_detail.name 
-    private String aName; //admin_info.aname
-    private String brandName; //brand.brand_name
+    private String WriterName; //admin_info.aname or brand.brand_name
+    private String mName; //회원명
+    private String mEmail; //회원아이디
     
     public Coupon() {}
 	public Coupon(String cname, Timestamp startDate, Timestamp endDate, Integer amount,
@@ -127,17 +128,11 @@ public class Coupon {
 	public void setPch_noRestr(String pch_noRestr) {
 		this.pch_noRestr = pch_noRestr;
 	}
-	public String getCategoryName() {
-		return categoryName;
+	public String getFullCategoryPath() {
+		return fullCategoryPath;
 	}
-	public void setCategoryName(String categoryName) {
-		this.categoryName = categoryName;
-	}
-	public String getCategoryParent() {
-		return categoryParent;
-	}
-	public void setCategoryParent(String categoryParent) {
-		this.categoryParent = categoryParent;
+	public void setFullCategoryPath(String fullCategoryPath) {
+		this.fullCategoryPath = fullCategoryPath;
 	}
 	public String getCodeName() {
 		return codeName;
@@ -145,28 +140,43 @@ public class Coupon {
 	public void setCodeName(String codeName) {
 		this.codeName = codeName;
 	}
-	public String getaName() {
-		return aName;
+	public String getWriterName() {
+		return WriterName;
 	}
-	public void setaName(String aName) {
-		this.aName = aName;
+	public void setWriterName(String writerName) {
+		WriterName = writerName;
 	}
-	public String getBrandName() {
-		return brandName;
+	public Long getMemberId() {
+		return memberId;
 	}
-	public void setBrandName(String brandName) {
-		this.brandName = brandName;
+	public void setMemberId(Long memberId) {
+		this.memberId = memberId;
 	}
-	
+	public String getmName() {
+		return mName;
+	}
+	public void setmName(String mName) {
+		this.mName = mName;
+	}
+	public String getmEmail() {
+		return mEmail;
+	}
+	public void setmEmail(String mEmail) {
+		this.mEmail = mEmail;
+	}
 	@Override
 	public String toString() {
 		return "Coupon [couponId=" + couponId + ", cname=" + cname + ", startDate=" + startDate + ", endDate=" + endDate
 				+ ", amount=" + amount + ", pCode=" + pCode + ", categoryId=" + categoryId + ", amountCondition="
 				+ amountCondition + ", reason=" + reason + ", provision=" + provision + ", writerType=" + writerType
-				+ ", writerId=" + writerId + ", createdAt=" + createdAt + ", pch_noRestr=" + pch_noRestr
-				+ ", categoryName=" + categoryName + ", categoryParent=" + categoryParent + ", codeName=" + codeName
-				+ ", aName=" + aName + ", brandName=" + brandName + "]";
+				+ ", writerId=" + writerId + ", createdAt=" + createdAt + ", pch_noRestr=" + pch_noRestr + ", memberId="
+				+ memberId + ", fullCategoryPath=" + fullCategoryPath + ", codeName="
+				+ codeName + ", WriterName=" + WriterName + ", mName=" + mName + ", mEmail=" + mEmail + "]";
 	}
 
 
+	
+
+
+	
 }
