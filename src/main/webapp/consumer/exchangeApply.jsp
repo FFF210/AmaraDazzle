@@ -140,8 +140,7 @@
 					</div>
 				</section>
 
-				<!-- ========== 이미지 첨부 (주석 처리) ========== -->
-				<!-- 
+				<!-- ========== 이미지 첨부 ========== -->
 				<section class="shipping-info-section">
 					<h2 class="section-title">이미지 첨부 (선택)</h2>
 					<div class="delivery-form">
@@ -170,7 +169,6 @@
 						</div>
 					</div>
 				</section>
-				-->
 
 				<!-- ========== 회수지 정보 ========== -->
 				<section class="shipping-info-section">
@@ -293,7 +291,6 @@
 
 	<script>
 		// ========== 이미지 업로드 함수 ==========
-		/*
 		function uploadImage(inputElement, imageIndex) {
 		    const file = inputElement.files[0];
 		    
@@ -314,7 +311,7 @@
 		    const formData = new FormData();
 		    formData.append('file', file);
 		    
-		    fetch('/imageUpload', {
+		    fetch('${pageContext.request.contextPath}/imageUpload', {
 		        method: 'POST',
 		        body: formData
 		    })
@@ -338,7 +335,7 @@
 		        alert('파일 업로드 중 오류가 발생했습니다.');
 		    });
 		}
-		 */
+		
 
 		// 폼 제출 전 검증
 		document

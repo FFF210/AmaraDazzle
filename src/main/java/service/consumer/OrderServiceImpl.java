@@ -425,6 +425,39 @@ public class OrderServiceImpl implements OrderService {
 
 		return result;
 	}
+	
+	// 주문 상품 상태 업데이트
+	@Override
+	public void updateOrderItemStatus(Long orderItemId, String status) throws Exception {
+		orderDAO.updateOrderItemStatus(orderItemId, status);
+	}
+	
+	//주문 취소
+	@Override
+	public boolean cancelOrderItem(Long orderItemId) throws Exception {
+	    
+	    // 1. 현재 상태 확인
+	    String currentStatus = orderDAO.getOrderItemStatus(orderItemId);
+	    
+	    if (currentStatus == null) {
+	        throw new Exception("존재하지 않는 주문입니다.");
+	    }
+	    
+	    // 2. 취소 가능 여부 체크
+	    if (!currentStatus.equals("PAID") && !currentStatus.equals("PREPARING")) {
+	        throw new Exception("취소할 수 없는 상태입니다.");
+	    }
+	    
+	    // 3. 상태만 CANCELLED로 변경 (이미 있는 메서드 활용도 가능!)
+	    int result = orderDAO.cancelOrderItem(orderItemId);
+	    
+	    if (result == 0) {
+	        throw new Exception("주문 취소에 실패했습니다.");
+	    }
+	    
+	    return true;
+	}
+
 
 	// OrderDetail 용도=========================================
 	@Override
@@ -502,5 +535,7 @@ public class OrderServiceImpl implements OrderService {
 	public Map<String, Object> getOrderItemForApply(Long orderItemId) throws Exception {
 		return orderDAO.getOrderItemForApply(orderItemId);
 	}
+
+
 
 }

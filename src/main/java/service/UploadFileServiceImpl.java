@@ -31,4 +31,10 @@ public class UploadFileServiceImpl implements UploadFileService {
 	public UploadFile selectFileById(Long uploadFileId) throws Exception {
 		return file_dao.selectFileById(uploadFileId);
 	}
+
+	// ===== 파일 저장 후 생성된 ID 반환 =====
+	@Override
+	public Long insertFile(UploadFile f_dto) throws Exception {
+		 return file_dao.insertFileAndGetId(f_dto);
+	}
 }

@@ -39,7 +39,7 @@ function initEventListeners() {
     console.log('이벤트 리스너 초기화');
     
     const pointInput = document.querySelector('input[name="usingPoint"]');
-    const maxPoint = window.checkoutInfo.availablePoint || 0;
+    const maxPoint = window.checkoutData.availablePoint || 0;
     
     pointInput.addEventListener('input', function() {
         let value = parseInt(this.value) || 0;
@@ -80,7 +80,7 @@ function fillPhoneNumber() {
     if (phone) {
         const parts = phone.split('-');
         if (parts.length === 3) {
-            const phoneInputs = document.querySelectorAll('#shipPhone');
+            const phoneInputs = document.querySelectorAll('#shipPhone1, #shipPhone2, #shipPhone3'); 
             if (phoneInputs.length >= 3) {
                 phoneInputs[0].value = parts[0];
                 phoneInputs[1].value = parts[1];
@@ -137,8 +137,8 @@ function findPostcode() {
 
 // 초기 금액 계산
 function calculateTotalAmount() {
-    const subtotal = window.checkoutInfo.subtotal || 0;
-    const shipping = window.checkoutInfo.shipping || 0;
+    const subtotal = window.checkoutData.subtotal || 0;
+    const shipping = window.checkoutData.shipping || 0;
     
     document.getElementById('displaySubtotal').textContent = subtotal.toLocaleString() + ' 원';
     document.getElementById('subtotalAmount').value = subtotal;

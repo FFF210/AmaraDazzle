@@ -36,18 +36,38 @@
 	<my:pageHeader hasButton="false" title="주문/결제" />
 
 	<%-- 디버깅: checkoutData 확인 --%>
-	<%-- <div style="background: #f0f0f0; padding: 10px; margin: 10px;">
-    <h3>디버깅 정보</h3>
-    <p>checkoutData: ${checkoutData}</p>
-    <p>brand: ${checkoutData.brand}</p>
-    <p>product: ${checkoutData.product}</p>
-    <p>items 개수: ${checkoutData.items != null ? checkoutData.items.size() : 'null'}</p>
-    <c:if test="${not empty checkoutData.items}">
-        <c:forEach var="item" items="${checkoutData.items}" varStatus="status">
-            <p>Item ${status.index}: ${item.optionValue} - ${item.unitPrice}원</p>
-        </c:forEach>
-    </c:if>
-</div> --%>
+	<div
+		style="background: #f0f0f0; padding: 10px; margin: 10px; border: 2px solid red;">
+		<h3>🔍 디버깅 정보</h3>
+		<p>checkoutData가 null인가? ${checkoutData == null ? 'YES - 문제있음!' : 'NO - 데이터 있음'}</p>
+		<p>brand가 null인가? ${checkoutData.brand == null ? 'YES' : 'NO'}</p>
+		<p>product가 null인가? ${checkoutData.product == null ? 'YES' : 'NO'}</p>
+		<p>items 개수: ${checkoutData.items != null ? checkoutData.items.size() : 'null'}</p>
+
+		<hr>
+
+		<c:if test="${not empty checkoutData}">
+			<p>
+				<strong>Brand Name:</strong> ${checkoutData.brand.brandName}
+			</p>
+			<p>
+				<strong>Product Name:</strong> ${checkoutData.product.name}
+			</p>
+			<p>
+				<strong>Product ID:</strong> ${checkoutData.product.productId}
+			</p>
+		</c:if>
+
+		<c:if test="${not empty checkoutData.items}">
+			<h4>Items 정보:</h4>
+			<c:forEach var="item" items="${checkoutData.items}"
+				varStatus="status">
+				<p>Item ${status.index}: optionId=${item.optionId},
+					optionValue=${item.optionValue}, quantity=${item.quantity},
+					unitPrice=${item.unitPrice}</p>
+			</c:forEach>
+		</c:if>
+	</div>
 
 	<main class="main-container">
 		<div class="main-content">

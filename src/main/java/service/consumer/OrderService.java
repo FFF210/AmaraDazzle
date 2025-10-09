@@ -95,6 +95,16 @@ public interface OrderService {
      */
     Map<String, Object> getOrderSummaryByMember(Long memberId) throws Exception;
     
+    /**
+     * 주문 상품의 상태를 업데이트
+     * @param orderItemId 주문 상품 ID
+     * @param status 변경할 상태 (EXCHANGE_REQUESTED, RETURN_REQUESTED 등)
+     */
+    void updateOrderItemStatus(Long orderItemId, String status) throws Exception;
+    
+    //주문 취소 용도
+    boolean cancelOrderItem(Long orderItemId) throws Exception;
+    
     //  ================ 취소/교환/반품 통합 목록 조회 ===================
     List<Map<String, Object>> getCancelExchangeReturnList(Long memberId, String startDate, String endDate) throws Exception;
     

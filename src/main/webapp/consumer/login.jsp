@@ -51,10 +51,7 @@
 			</div>
 
 			<div class="form-options">
-				<p>
-					<input type="checkbox" name="rememberId" /> 아이디 기억하기
-				</p>
-				<a href="/findAccount" class="link">아이디/비밀번호 찾기</a>
+				<a href="/store/findId" class="link">아이디/비밀번호 찾기</a>
 			</div>
 
 			<button type="submit" class="btn btn-primary btn-xl login">로그인</button>

@@ -55,7 +55,6 @@ public interface OrderDAO {
 	 //@return 주문 상품 상세 정보 리스트 (주문정보 + 상품정보 + 브랜드정보 포함)
 	List<Map<String, Object>> getOrderItemsByMemberWithPeriod(Map<String, Object> params) throws Exception;
 
-
 	 //고객의 주문 상품 총 개수 조회 (페이징용) - 기간 필터링 적용
 	 //@param params Map (memberId, startDate, endDate)
 	 //@return 총 주문 상품 개수
@@ -63,6 +62,15 @@ public interface OrderDAO {
 	
 	// orderStatusCard 반영 용도
 	Map<String, Object> getOrderStatusCountByMember(Long memberId) throws Exception;
+
+	// 주문 상품의 상태 업데이트 용도
+	void updateOrderItemStatus(Long orderItemId, String status) throws Exception;
+	
+	// 주문 아이템 상태 조회
+	String getOrderItemStatus(Long orderItemId) throws Exception;
+
+	// 주문 아이템 취소
+	int cancelOrderItem(Long orderItemId) throws Exception;
 	
 	// ================ 취소/교환/반품 페이지용 통합 목록 조회 ==========================
 	List<Map<String, Object>> selectCancelExchangeReturnList(Map<String, Object> params);

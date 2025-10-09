@@ -157,6 +157,10 @@ public class ReturnApply extends HttpServlet {
 			// 반품 신청
 			ReturnService returnService = new ReturnServiceImpl();
 			returnService.applyReturns(returns);
+			
+			//주문 상품 상태 업데이트
+			OrderService orderService = new OrderServiceImpl();
+	        orderService.updateOrderItemStatus(orderItemId, "EXCHANGE_REQUESTED");
 
 			// 성공 시 취소/교환/반품 내역 페이지로 리다이렉트
 			response.sendRedirect(request.getContextPath() + "/store/mypage/exchangeReturnCancelList");

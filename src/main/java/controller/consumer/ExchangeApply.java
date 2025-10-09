@@ -2,6 +2,7 @@ package controller.consumer;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -23,30 +24,18 @@ import service.consumer.OrderServiceImpl;
 import service.consumer.ProductService;
 import service.consumer.ProductServiceImpl;
 
-/**
- * Servlet implementation class ExchangeApply
- */
 @WebServlet("/store/exchangeApply")
 public class ExchangeApply extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
 	public ExchangeApply() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 
-		// 로그인 체크
 		HttpSession session = request.getSession();
 		Long memberId = (Long) session.getAttribute("memberId");
 
@@ -55,7 +44,6 @@ public class ExchangeApply extends HttpServlet {
 			return;
 		}
 
-		// 주문 상품 ID 받아오기
 		String orderItemIdStr = request.getParameter("orderItemId");
 
 		if (orderItemIdStr == null || orderItemIdStr.isEmpty()) {
@@ -66,24 +54,57 @@ public class ExchangeApply extends HttpServlet {
 		try {
 			Long orderItemId = Long.parseLong(orderItemIdStr);
 
-			// 교환 신청 가능 여부 확인
-			ExchangeService exchangeService = new ExchangeServiceImpl();
-			if (!exchangeService.canApplyExchange(orderItemId)) {
-				request.setAttribute("err", "이미 교환 신청된 상품이거나 교환 가능 기간이 지났습니다.");
+			// 주문 상품 정보 조회
+			OrderService orderService = new OrderServiceImpl();
+			Map<String, Object> orderItem = orderService.getOrderItemForApply(orderItemId);
+
+			if (orderItem == null) {
+				request.setAttribute("err", "주문 상품을 찾을 수 없습니다.");
 				request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);
 				return;
 			}
 
-			// 주문 상품 정보 조회
-			OrderService orderService = new OrderServiceImpl();
-			Map<String, Object> orderItem = orderService.getOrderItemForApply(orderItemId);
+			// ===== 교환 가능 여부 체크 =====
+			String status = (String) orderItem.get("status");
+
+			// 1. 상태 체크 (DELIVERED만 가능)
+			if (!"DELIVERED".equals(status)) {
+				String statusName = getStatusName(status);
+				request.setAttribute("err", "배송완료된 상품만 교환 가능합니다. (현재 상태: " + statusName + ")");
+				request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);
+				return;
+			}
+
+			// 2. 기간 체크 (updated_at 기준 7일 이내)
+			Object updatedAtObj = orderItem.get("updatedAt");
+			if (updatedAtObj != null) {
+				Timestamp updatedAt = null;
+
+				// Timestamp 또는 java.util.Date 타입 처리
+				if (updatedAtObj instanceof Timestamp) {
+					updatedAt = (Timestamp) updatedAtObj;
+				} else if (updatedAtObj instanceof java.util.Date) {
+					updatedAt = new Timestamp(((java.util.Date) updatedAtObj).getTime());
+				}
+
+				if (updatedAt != null) {
+					long diffMillis = System.currentTimeMillis() - updatedAt.getTime();
+					long diffDays = diffMillis / (1000 * 60 * 60 * 24);
+
+					if (diffDays > 7) {
+						request.setAttribute("err", "교환 가능 기간(배송완료 후 7일)이 지났습니다.");
+						request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);
+						return;
+					}
+				}
+			}
 
 			// 교환 가능한 옵션 목록 조회
 			Long productId = ((Number) orderItem.get("productId")).longValue();
 			ProductService productService = new ProductServiceImpl();
 			List<Map<String, Object>> availableOptions = productService.getProductOptions(productId);
 
-			// 회원 정보 가져오기 (주소 정보 미리 채우기용)
+			// 회원 정보 가져오기
 			MemberService memberService = new MemberServiceImpl();
 			Member member = memberService.getMemberInfo(memberId);
 
@@ -100,29 +121,22 @@ public class ExchangeApply extends HttpServlet {
 		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 
-		// 로그인 체크
 		HttpSession session = request.getSession();
 		Long memberId = (Long) session.getAttribute("memberId");
 
 		if (memberId == null) {
-			response.sendRedirect("/store/login");
+			response.sendRedirect(request.getContextPath() + "/store/login");
 			return;
 		}
 
 		try {
-			// 폼에서 전달받은 데이터
 			Long orderId = Long.parseLong(request.getParameter("orderId"));
 			Long orderItemId = Long.parseLong(request.getParameter("orderItemId"));
 
-			// 선택적 필드 처리
 			String productOptionIdStr = request.getParameter("productOptionId");
 			Long productOptionId = (productOptionIdStr != null && !productOptionIdStr.isEmpty())
 					? Long.parseLong(productOptionIdStr)
@@ -152,7 +166,6 @@ public class ExchangeApply extends HttpServlet {
 			String shippingCarrierName = request.getParameter("shippingCarrierName");
 			String shippingTrackingNo = request.getParameter("shippingTrackingNo");
 
-			// Exchange DTO 생성
 			Exchange exchange = new Exchange();
 			exchange.setMemberId(memberId);
 			exchange.setOrderId(orderId);
@@ -170,12 +183,14 @@ public class ExchangeApply extends HttpServlet {
 			exchange.setShippingCarrierName(shippingCarrierName);
 			exchange.setShippingTrackingNo(shippingTrackingNo);
 
-			// 교환 신청
 			ExchangeService service = new ExchangeServiceImpl();
 			service.applyExchange(exchange);
+			
+			//주문 상품 상태 업데이트
+			OrderService orderService = new OrderServiceImpl();
+	        orderService.updateOrderItemStatus(orderItemId, "EXCHANGE_REQUESTED");
 
-			// 성공 시 교환 내역 페이지로 리다이렉트
-			response.sendRedirect("/store/exchangeList");
+			response.sendRedirect(request.getContextPath() + "/store/mypage/exchangeReturnCancelList");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -184,4 +199,27 @@ public class ExchangeApply extends HttpServlet {
 		}
 	}
 
+	// 상태명 변환 헬퍼 메서드
+	private String getStatusName(String status) {
+		switch (status) {
+		case "PAID":
+			return "결제완료";
+		case "PREPARING":
+			return "상품준비중";
+		case "SHIPPING":
+			return "배송중";
+		case "DELIVERED":
+			return "배송완료";
+		case "CONFIRMED":
+			return "구매확정";
+		case "CANCELLED":
+			return "취소완료";
+		case "EXCHANGE_REQUESTED":
+			return "교환신청";
+		case "RETURN_REQUESTED":
+			return "반품신청";
+		default:
+			return status;
+		}
+	}
 }

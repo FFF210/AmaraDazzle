@@ -88,8 +88,9 @@
 					<div class="form-row birthdate-row">
 						<div class="label">생년월일</div>
 						<div class="input-wrapper">
-							<my:textInput type="date" name="birthDate" 
-								value="<fmt:formatDate value='${member.birthDate}' pattern='yyyy-MM-dd'/>" size="lg" />
+						<input type="date"
+						id="birthDate" name="birthDate"
+						value="<fmt:formatDate value='${member.birthDate}' pattern='yyyy-MM-dd'/>">
 						</div>
 					</div>
 					
