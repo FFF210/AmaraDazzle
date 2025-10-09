@@ -225,6 +225,35 @@
 	  }
 	});
 </script>
+	<script>
+	/******************* sortable 부분 *******************/
+	   document.querySelectorAll(".table th.sortable").forEach(th => {
+			  th.addEventListener("click", () => {
+			    // 모든 헤더 초기화
+			    document.querySelectorAll(".table th.sortable").forEach(other => {
+			      if (other !== th) {
+			        other.classList.remove("asc", "desc");
+			        other.querySelector(".sort-icon").className = "bi bi-dash-lg sort-icon";
+			      }
+			    });
+
+			    const icon = th.querySelector(".sort-icon");
+
+			    if (th.classList.contains("asc")) {
+			      th.classList.remove("asc");
+			      th.classList.add("desc");
+			      icon.className = "bi bi-caret-down-fill sort-icon";
+			    } else if (th.classList.contains("desc")) {
+			      th.classList.remove("desc");
+			      icon.className = "bi bi-dash-lg sort-icon"; // 기본 상태
+			    } else {
+			      th.classList.add("asc");
+			      icon.className = "bi bi-caret-up-fill sort-icon";
+			    }
+			  });
+			});
+	</script>
+
 </body>
 
 </html>
