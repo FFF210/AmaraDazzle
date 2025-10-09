@@ -19,7 +19,7 @@ public class NumberFormatting {
     }
 	
 	//금액 숫자 -> 금액단위로 포매팅
-	public String formatMoney(long amount) {
+	public String formatMoney(Integer amount) {
 		if (amount < 1_000) {
 	        return amount + "원";
 	        

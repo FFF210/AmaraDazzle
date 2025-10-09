@@ -21,7 +21,7 @@
 		<!-- 탭 -->
 		<div class="listTabs">
 			<div class="listTab active">발행 쿠폰 목록</div>
-			<div class="listTab" onclick="">개별 지급 목록</div>
+			<div class="listTab" onclick="goIndiCpList()">개별 지급 목록</div>
 		</div>
 
 		<!-- ************************* 발행 쿠폰 목록 탭 ************************* -->

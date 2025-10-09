@@ -13,5 +13,8 @@ public interface CouponDAO {
 	List<Coupon> pCouponSearchList(SearchConditionDTO sc_DTO); //검색된 발행쿠폰 리스트
 	int insertPublCoupon(Coupon pCoupon); //쿠폰 발행
 	Coupon publCouponDetail(int num); //발행쿠폰 상세보기
+	Integer iCouponCnt(SearchConditionDTO sc_DTO);	//개별지급 쿠폰 전체 수 
+	List<Coupon> iCouponAllList(Map<String, Object> listMap);	//개별지급 쿠폰 전체 목록 
+	List<Coupon> iCouponSearchList(SearchConditionDTO sc_DTO);	//개별지급 쿠폰 검색 목록
 
 }

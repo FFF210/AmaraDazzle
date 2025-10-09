@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
@@ -7,19 +9,105 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>쿠폰 생성</title>
-<link rel="stylesheet" href="./css/myApplications.css" />
+<title>쿠폰 지급</title>
 <link rel="stylesheet" href="./css/boards_write.css" />
 <link rel="stylesheet" href="./css/coupon.css" />
-
 
 <!-- 헤드부분 -->
 
 <body>
-
 	<!-- 레이아웃 + 메인컨텐츠 -->
 	<my:adminLayout>
-		<%@ include file="./main_content/promotion_couponIndi_write_content.jsp"%>
+	<form id="iCouponForm">
+		<!-- *********************************메인부분********************************* -->
+		<section class="board_write">
+			<div class="part_section name_part">
+				<div class="part_title">쿠폰명 <span class="reqired_write">*</span></div>
+				<div class="part_content">
+					<div class="content_btn">
+						<button type="button" class="btn action_btn second_btn search_btn"
+							id="cName_searchBtn">검색</button>
+					</div>
+					<input type="text" name="couponName" placeholder="쿠폰명을 입력하세요" style="width: 100%;"/> 
+					<input type="text" name="couponAmount" placeholder="쿠폰금액" class="price_input"> &nbsp;&nbsp;원
+				</div>
+			</div>
+
+			<div class="part_section period_part">
+				<div class="part_title">유효기간 <span class="reqired_write">*</span></div>
+				<div class="part_content couponExp">
+					<div class="filter_box"> 
+						<my:dateInput type="input" name="startDate" />
+						<span> - </span>
+						<my:dateInput type="input" name="endDate" inputDay="end"/>
+						<my:dateInput type="preset" presets="1주일,10일,1개월" />
+					</div>
+					<span class="no_condition">
+						<label><input type="checkbox" id="exp_noRestr" name="exp_noRestr"/> 제한 없음</label>
+					</span>
+				</div>
+			</div>
+
+			<div class="part_section">
+				<div class="part_title">카테고리 <span class="reqired_write">*</span></div>
+				<div class="part_content select_cate">
+					<my:selectbox size="sm" items="대분류" initial="대분류" name="largeCate" id="largeSelect"/>
+					<input type="hidden" name="category1Id" id="category1Id" />
+					<my:selectbox size="sm" items="중분류" initial="중분류" name="middleCate" id="middleSelect"/>
+					<input type="hidden" name="category2Id" id="category2Id" />
+					<my:selectbox size="sm" items="소분류" initial="소분류" name="smallCate" id="smallSelect" />
+					<input type="hidden" name="category3Id" id="category3Id" />
+					<span>&nbsp;&nbsp;구매시 사용가능&nbsp;&nbsp;</span>
+					<span class="no_condition">
+						<label><input type="checkbox" id="cate_noRestr" name="cate_noRestr"/> 제한 없음</label>
+					</span>
+				</div>
+			</div>
+
+			<div class="part_section condition_part">
+				<div class="part_title">사용조건 <span class="reqired_write">*</span></div>
+				<div class="part_content">
+					<input type="text" name="couponCondition" id="couponCondition" placeholder="사용조건" class="price_input" /> 
+					<span>&nbsp;&nbsp;원 이상 구매시 사용가능&nbsp;&nbsp;&nbsp;&nbsp;</span>
+					<span class="no_condition">
+						<label><input type="checkbox" id="pch_noRestr" name="pch_noRestr"/> 제한 없음</label>
+					</span>
+				</div>
+			</div>
+			
+			<div class="part_section target_part name_part">
+				<div class="part_title"> 지급대상 <span class="reqired_write">*</span></div>
+				<div class="part_content">
+					<input type="text" name="memberId" placeholder="회원아이디" style="width: 70%;"/> 
+					<button type="button" class="btn action_btn second_btn search_btn" id="user_searchBtn">검색</button>
+				</div>
+			</div>
+
+			<div class="part_section reason_part">
+				<div class="part_title">지급사유 <span class="reqired_write">*</span></div>
+				<div class="part_content">
+					<input type="text" name="couponReason" placeholder="쿠폰 발행 사유를 입력하세요" style="width: 100%;" />
+				</div>
+			</div>
+
+
+			<div class="part_section bottom_part">
+				<div class="part_title">작성자 <span class="reqired_write">*</span></div>
+				<div class="part_content">
+					<div class="writer_part">
+						<input type="text" class="text_readonly" value="${aname}" readonly />
+						<input type="hidden" name="cpWriter" value="${sessionScope.aidx}">
+					</div>
+					<div class="btn_part">
+						<button type="button" class="btn first_btn action_btn" id="iCouponBtn">등록</button>
+					</div>
+				</div>
+			</div>
+		</section>
+		</form>
+		<my:submitDialog title="모든 입력 내용을 확인하였습니까?" msg="입력한 내용대로 반영됩니다." />
+		
+		<!-- *********************************메인부분 end********************************* -->
 	</my:adminLayout>
 	<!-- 레이아웃 + 메인컨텐츠 end -->
 
@@ -35,18 +123,11 @@
 				<!-- 폼 내용 -->
 				<div class="form-row">
 					<label class="form-row-label">쿠폰 선택</label>
-					<my:selectbox size="lg" id="cpList" items="${currentCpList}" initial="발행 쿠폰 목록" />
+					<my:selectbox size="lg" id="cpList" items="${currentCpList}"
+						initial="발행 쿠폰 목록" />
 				</div>
-				<div class="form-row">
-					<label class="form-row-label">직접 입력</label>
-					<my:textInput id="couponPublish" name="couponPublish" 
-						placeholder="발행할 쿠폰명을 입력하세요" type="default" size="lg"
-						state="default" />
-					<div class="wrapper">
-						<my:textInput id="couponAmount" name="couponAmount"
-							placeholder="금액을 입력하세요" type="default" size="lg" state="default" />
-						&nbsp;&nbsp;원
-					</div>
+				<div class="form-row no_condition">
+					<label><input type="checkbox" id="" name=""/> 직접 입력</label>
 				</div>
 			</div>
 			<div class="modal-footer">
@@ -55,7 +136,7 @@
 			</div>
 		</div>
 	</div>
-
+	
 	<!-- ************ 회원 검색 모달 ************ -->
 	<div id="userModal" class="modal searchModal">
 		<div class="modal-overlay"></div>
@@ -189,16 +270,15 @@
 		</div>
 	</div>
 
-
-
 	<!-- JS부분 -->
-
 	<script src="../tagjs/selectbox.js"></script>
 	<script src="../tagjs/dateInput.js"></script>
-	<script src="./js/modal.js"></script>
-	<script src="./js/toast.js"></script>
-	<script src="./js/componant/table.js"></script>
-	
+	<script src="./js/common/modal.js"></script>
+	<script src="./js/common/toast.js"></script>
+	<script src="./js/common/table.js"></script>
+	<script src="./js/common/category.js"></script>
+	<script src="./js/couponI.js"></script>
+
 	<script>
 /*********************************************************************************************************
 	* 모달 Ajax
@@ -271,7 +351,7 @@
 	// 버튼 이벤트: 모달 열기
 	// 쿠폰명 검색 버튼 
 	document.getElementById("cName_searchBtn").addEventListener("click", () => openDialog("cpNameModal"));
-
+	
 	//회원 검색 버튼 
 	document.getElementById("user_searchBtn").addEventListener("click", () => openDialog("userModal"));
 
@@ -324,7 +404,6 @@
 		});
 	});
 	</script>
-	<script src="./js/coupon.js"></script>
 	<!-- JS부분 end -->
 
 </body>

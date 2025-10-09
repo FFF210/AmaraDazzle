@@ -68,7 +68,7 @@ select.cate_sb {
 	gap: 5px;
 }
 
-.custom-select.disabled {
+.disabled {
 	pointer-events: none; /* 클릭, hover 다 막음 */
 	opacity: 0.5; /* 비활성화된 느낌 */
 }

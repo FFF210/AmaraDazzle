@@ -10,7 +10,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>발행쿠폰 상세보기</title>
+<title>발행쿠폰 상세보기 - ${coupon.cname}</title>
 <link rel="stylesheet" href="./css/coupon.css" />
 <!-- 헤드부분 -->
 
@@ -24,7 +24,7 @@
 			<c:set var="createDate" value="${coupon.createdAt}" />
 			<c:set var="startDate" value="${coupon.startDate}" />
 			<c:set var="endDate" value="${coupon.endDate}" />
-			
+			<c:out value="${coupon.endDate}"></c:out>
 				<table id="coupon_info">
 					<tr>
 						<th>쿠폰명</th>
@@ -32,25 +32,42 @@
 						<th>할인금액</th>
 						<td><fmt:formatNumber value="${coupon.amount}" pattern="#,###,###" /> 원</td>
 					</tr>
+					
 					<tr>
 						<th>발행일자</th>
 						<td>${fn:substring(createDate,0,19)}</td>
 						<th>유효기간</th>
-						<td>지급일로부터 10일</td>
+						<td>
+							<c:choose>
+								<c:when test="${endDate eq '2038-01-19 08:44:07.0' }"> 제한 없음 </c:when>
+								<c:otherwise>
+									${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}
+								</c:otherwise>
+							</c:choose>
+						</td>
 					</tr>
+					
 					<tr>
 						<th>사용조건</th>
 						<td>
 							<c:choose>
-								<c:when test="${coupon.amountCondition eq '-' }">제한 없음 </c:when>
+								<c:when test="${coupon.amountCondition eq '-' }"> 제한 없음 </c:when>
 								<c:otherwise>
 									${coupon.amountCondition} 이상 구매시 사용 가능 
 								</c:otherwise>
 							</c:choose>
 						</td>
-						<th>지급사유</th>
-						<td>${coupon.reason}</td>
+						<th>적용 카테고리</th>
+						<td>
+							<c:choose>
+								<c:when test="${coupon.categoryId eq null }"> 제한 없음 </c:when>
+								<c:otherwise>
+									${coupon.fullCategoryPath}
+								</c:otherwise>
+							</c:choose>
+						</td>
 					</tr>
+					
 					<tr>
 						<th>지급대상</th>
 						<td>
@@ -63,17 +80,14 @@
 								<c:otherwise> 개별 회원  </c:otherwise>
 							</c:choose>
 						</td>
-						<th></th>
-						<td></td>
+						<th>지급사유</th>
+						<td>${coupon.reason}</td>
 					</tr>
 					<tr>
 						<th>발행주체</th>
 						<td>${coupon.writerType eq 'ADMIN' ? 'Amara Dazzle' : 'BRAND_ADMIN' }</td>
 						<th>발행인</th>
-						<td>
-							<c:if test="${coupon.writerType eq 'ADMIN'}">${coupon.aName}</c:if>
-							<c:if test="${coupon.writerType eq 'BRAND_ADMIN'}">${coupon.brandName}</c:if>
-						</td>
+						<td>${coupon.writerName}</td>
 						
 					</tr>
 				</table>

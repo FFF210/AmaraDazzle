@@ -15,15 +15,14 @@ import dto.Coupon;
 import service.admin.CouponService;
 import service.admin.CouponServiceImpl;
 
-//publ쿠폰 등록
-@WebServlet("/admin/pCouponWrite")
+@WebServlet("/admin/iCouponWrite")
 @MultipartConfig
-public class PublCouponWrite extends HttpServlet {
+public class IndiCouponWrite extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	// GET
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.getRequestDispatcher("/admin/promotion_couponPubl_write.jsp").forward(request, response);
+		request.getRequestDispatcher("/admin/promotion_couponIndi_write.jsp").forward(request, response);
 	}
 
 	// POST
@@ -36,6 +35,8 @@ public class PublCouponWrite extends HttpServlet {
 		try {
 			String cp_name = request.getParameter("couponName"); //쿠폰명
 			Integer cp_amount = Integer.parseInt(request.getParameter("couponAmount")); //쿠폰금액
+			Timestamp startDate = Timestamp.valueOf(request.getParameter("startDate")+ " 00:00:00"); //쿠폰 유효기간 시작일
+			Timestamp endDate =  Timestamp.valueOf(request.getParameter("endDate")+ " 23:59:59"); //쿠폰 유효기간 마지막일
 			String l_cate = request.getParameter("category1Id"); //카테고리 - 대분류 
 			String m_cate = request.getParameter("category2Id"); //카테고리 - 중분류 
 			String s_cate = request.getParameter("category3Id"); //카테고리 - 소분류 
@@ -45,41 +46,19 @@ public class PublCouponWrite extends HttpServlet {
 			String cp_reason = request.getParameter("couponReason"); //지급 사유 
 			Long cp_writer = Long.parseLong(request.getParameter("cpWriter")); // 발행한 관리자 코드
 			
-			//유효기간 param 처리 
-			String startDateStr = request.getParameter("startDate"); //쿠폰 유효기간 시작일
-			String endDateStr = request.getParameter("endDate"); //쿠폰 유효기간 마지막일
+			System.out.println("cp_name : " + cp_name);
+			System.out.println("cp_amount : " + cp_amount);
+			System.out.println("startDate : " + startDate);
+			System.out.println("endDate : " + endDate);
+			System.out.println("l_cate : " + l_cate);
+			System.out.println("m_Cate : " + m_cate);
+			System.out.println("s_cate : " + s_cate);
+			System.out.println("cp_condition : " + cp_condition);
+			System.out.println("pch_noRestr : " + pch_noRestr);
+			System.out.println("cp_target : " + cp_target);
+			System.out.println("coupon_reason : " + cp_reason);
+			System.out.println("cp_writer : " + cp_writer);
 
-			Timestamp startDate = null;
-			Timestamp endDate = null;
-			
-			if (startDateStr != null && !startDateStr.isEmpty()) {
-			    startDate = Timestamp.valueOf(startDateStr + " 00:00:00"); 
-			}
-			if (endDateStr != null && !endDateStr.isEmpty()) {
-			    endDate = Timestamp.valueOf(endDateStr + " 23:59:59");  
-			}
-			//null 로 날아올 경우 임의의 값 세팅 
-			if (startDateStr == null || startDateStr.isEmpty()) {
-				startDate = Timestamp.valueOf("1980-01-01 00:00:00");  
-			}
-			if (endDateStr == null || endDateStr.isEmpty()) {
-			    endDate = Timestamp.valueOf("2038-01-19 08:44:07"); //Timestamp 지원범위 
-			}
-			
-//			System.out.println("cp_name : " + cp_name);
-//			System.out.println("cp_amount : " + cp_amount);
-//			System.out.println("startDate : " + startDate);
-//			System.out.println("endDate : " + endDate);
-//			System.out.println("l_cate : " + l_cate);
-//			System.out.println("m_Cate : " + m_cate);
-//			System.out.println("s_cate : " + s_cate);
-//			System.out.println("cp_condition : " + cp_condition);
-//			System.out.println("pch_noRestr : " + pch_noRestr);
-//			System.out.println("cp_target : " + cp_target);
-//			System.out.println("coupon_reason : " + cp_reason);
-//			System.out.println("cp_writer : " + cp_writer);
-
-			//카테고리 param 처리
 			Long cateIdx = null;
 			if (s_cate != null && !s_cate.isEmpty()) {
 			    cateIdx = Long.parseLong(s_cate);

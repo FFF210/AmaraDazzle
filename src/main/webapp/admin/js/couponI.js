@@ -1,14 +1,14 @@
-//개별지급목록 페이지로 이동 
-function goIndiCpList() {
-	location.href = "/admin/iCouponList";
+//발행쿠폰목록 페이지로 이동 
+function goPublCpList() {
+	location.href = "/admin/pCouponList";
 };
 
-//쿠폰 발행 버튼 클릭시 발행 페이지로 이동 
-function cpPublBtn() {
-	location.href = "/admin/pCouponWrite";
+//쿠폰 지급 버튼 클릭시 발행 페이지로 이동 
+function cpIndiBtn() {
+	location.href = "/admin/iCouponWrite";
 };
 
-//쿠폰 상세보기 버튼 클릭시 발행 페이지로 이동 
+//쿠폰 상세보기 버튼 클릭시 상세보기 페이지로 이동 
 function goPcpDetail(num) {
 	location.href = "/admin/publCouponDetail?num="+num;
 };
@@ -36,36 +36,14 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 	});
 
-	
-	/* ************* 등급 버튼 클릭 ************* */
-	const middleBox = document.querySelector(".answer_body.filter-btn-group");
-	if (middleBox) {
-		const middleBtns = document.querySelectorAll(".filter-btn");
-		const hiddenMiddle = document.querySelector("#cpTarget");
-		
-		// 처음엔 '전체' 버튼 활성화
-		middleBtns[0].classList.add("active");
-		hiddenMiddle.value = middleBtns[0].value;
-		
-		middleBtns.forEach((btn) => {
-			btn.addEventListener("click", () => {
-				middleBtns.forEach((b) => b.classList.remove("active")); // 모두 제거
-				btn.classList.add("active"); // 클릭한 것만 적용
-				hiddenMiddle.value = btn.value;
-			});
-		});
-	}
-
 	/* ************* 폼전송 + 유효성검사 ************* */
-	const frm = document.getElementById("pCouponForm");
-	const submitBtn = document.getElementById("pCouponBtn");
+	const frm = document.getElementById("iCouponForm");
+	const submitBtn = document.getElementById("iCouponBtn");
 	const couponCondition = document.getElementById("couponCondition");
-	const couponExp = document.querySelectorAll(".date-input");
 	const largeSelect = document.getElementById("largeSelect");
 	const middleSelect = document.getElementById("middleSelect");
 	const smallSelect = document.getElementById("smallSelect");
 	const pch_noRestr = document.getElementById("pch_noRestr");
-	const exp_noRestr = document.getElementById("exp_noRestr");
 	const cate_noRestr = document.getElementById("cate_noRestr");
 	
 	// 제한없음 클릭 시 입력칸 비활성화 (사용조건)
@@ -77,25 +55,6 @@ document.addEventListener("DOMContentLoaded", function() {
 		} else {
 			couponCondition.disabled = false;
 		}
-	});
-	// 제한없음 클릭 시 입력칸 비활성화 (유효기간)
-	exp_noRestr.addEventListener("change", () => {
-		const isChecked = exp_noRestr.checked;
-		couponExp.forEach((exp) => {
-			exp.classList.toggle("disabled", isChecked);
-			
-			// 제한없음 체크 시
-			if (isChecked) {
-				exp.querySelectorAll(".date-text").forEach(dt => {
-					dt.value = "";
-				});
-
-				// 활성화된 항목 표시(active) 제거 
-				exp.querySelectorAll(".preset-btn.active").forEach(item => {
-					item.classList.remove("active");
-				});
-			}
-		});
 	});
 	// 제한없음 클릭 시 입력칸 비활성화 (카테고리)
 	const categorySelects = [largeSelect, middleSelect, smallSelect];
@@ -163,11 +122,9 @@ document.addEventListener("DOMContentLoaded", function() {
 				pi.value = pi.value.replace(/,/g, "");
 			});
 			
-//			frm.method="POST"
-//			frm.submit();.
 			const formData = new FormData(frm);
 			
-			fetch("/admin/pCouponWrite", {
+			fetch("/admin/iCouponWrite", {
 			  method: "POST",
 			  body: formData
 			})
@@ -219,13 +176,13 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 		
 		//유효기간
-		if (frm.startDate.value.trim() === ""  && !exp_noRestr.checked) {
+		if (frm.startDate.value.trim() === "") {
 			showAlert("error", " ", "쿠폰의 유효기간을 입력하세요.");
 //			frm.startDate.classList.add("state_error");
 			frm.startDate.focus();
 			return;
 		}
-		if (frm.endDate.value.trim() === ""  && !exp_noRestr.checked) {
+		if (frm.endDate.value.trim() === "") {
 			showAlert("error", " ", "쿠폰의 유효기간을 입력하세요.");
 //			frm.endDate.classList.add("state_error");
 			frm.endDate.focus();
