@@ -10,20 +10,26 @@
 <title>주문 관리</title>
 
 <!-- Pretendard 폰트 (CDN) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
 <!-- flatpickr 기본 테마 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
 
 <!-- 한글화 & 커스텀 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
 
 <!-- flatpickr 및 tableFilter.js -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
 <script src="./js/selectbox.js"></script>
 
 <link rel="stylesheet"
@@ -46,6 +52,9 @@
 <link rel="stylesheet" href="./css/alert.css" />
 </head>
 <body>
+	<c:set var="currentSortField" value="${param.sortField}" />
+	<c:set var="currentSortOrder" value="${param.sortOrder}" />
+
 	<my:layout>
 		<div class="page-container">
 			<!-- breadcrumb -->
@@ -71,11 +80,12 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th class="sortable">주문일 <i class="bi bi-dash-lg sort-icon"></i></th>
+								<th class="sortable" data-sort="o.created_at">주문일 <i
+									class="bi bi-dash-lg sort-icon"></i></th>
 								<th>주문번호</th>
 								<th>주문자</th>
-								<th>상품명(옵션)</th>
-								<th class="sortable">총 실결제금액 <i
+								<th>상품명</th>
+								<th class="sortable" data-sort="o.total_amount">총 실결제금액 <i
 									class="bi bi-dash-lg sort-icon"></i></th>
 								<th>결제수단</th>
 								<th>주문상태</th>
@@ -87,7 +97,8 @@
 								<tr>
 									<td><fmt:formatDate value="${order.createdAt}"
 											pattern="yyyy-MM-dd HH:mm" /></td>
-									<td><a href="/brand/orderDetail?orderId=${order.ordersId}&from=order"><c:out
+									<td><a
+										href="/brand/orderDetail?orderId=${order.ordersId}&from=order"><c:out
 												value="${order.orderCode}" /></a></td>
 									<td><c:out value="${order.memberName}" /></td>
 									<td>
@@ -150,6 +161,8 @@
 				<c:if test="${not empty param.searchKeyword}">searchKeyword=${param.searchKeyword}&</c:if>
 				<c:if test="${not empty param.startDate}">startDate=${param.startDate}&</c:if>
 				<c:if test="${not empty param.endDate}">endDate=${param.endDate}&</c:if>
+				<c:if test="${not empty param.sortField}">sortField=${param.sortField}&</c:if>
+				<c:if test="${not empty param.sortOrder}">sortOrder=${param.sortOrder}&</c:if>
 				page=
 			</c:set>
 
@@ -195,34 +208,85 @@
 		});
 
 
-  /*********************************************************************************************************
-   * 테이블 정렬
-   *********************************************************************************************************/
-  document.querySelectorAll(".table th.sortable").forEach(th => {
-	  th.addEventListener("click", () => {
-	    // 모든 헤더 초기화
-	    document.querySelectorAll(".table th.sortable").forEach(other => {
-	      if (other !== th) {
-	        other.classList.remove("asc", "desc");
-	        other.querySelector(".sort-icon").className = "bi bi-dash-lg sort-icon";
-	      }
-	    });
+	 /*********************************************************************************************************
+	  * 테이블 정렬
+	  *********************************************************************************************************/
+	 document.addEventListener("DOMContentLoaded", () => {
+		  // -----------------------------
+		  // 1. 현재 URL 파라미터 상태 반영
+		  // -----------------------------
+		  const params = new URLSearchParams(window.location.search);
+		  const currentSortField = params.get("sortField");
+		  const currentSortOrder = params.get("sortOrder");
 
-	    const icon = th.querySelector(".sort-icon");
+		  if (currentSortField && currentSortOrder) {
+		    const th = document.querySelector(`.table th[data-sort="${currentSortField}"]`);
+		    if (th) {
+		      const icon = th.querySelector(".sort-icon");
+		      th.dataset.state = currentSortOrder;
+		      th.classList.add(currentSortOrder);
+		      icon.className =
+		        currentSortOrder === "asc"
+		          ? "bi bi-caret-up-fill sort-icon"
+		          : "bi bi-caret-down-fill sort-icon";
+		    }
+		  }
 
-	    if (th.classList.contains("asc")) {
-	      th.classList.remove("asc");
-	      th.classList.add("desc");
-	      icon.className = "bi bi-caret-down-fill sort-icon";
-	    } else if (th.classList.contains("desc")) {
-	      th.classList.remove("desc");
-	      icon.className = "bi bi-dash-lg sort-icon"; // 기본 상태
-	    } else {
-	      th.classList.add("asc");
-	      icon.className = "bi bi-caret-up-fill sort-icon";
-	    }
-	  });
-	});
-</script>
+		  // -----------------------------
+		  // 2. 클릭 시 3단계 순환 (asc → desc → none)
+		  // -----------------------------
+		  document.querySelectorAll(".table th.sortable").forEach(th => {
+		    th.addEventListener("click", () => {
+		      const icon = th.querySelector(".sort-icon");
+		      const currentState = th.dataset.state || "none";
+
+		      // 다른 헤더 초기화
+		      document.querySelectorAll(".table th.sortable").forEach(other => {
+		        if (other !== th) {
+		          other.dataset.state = "none";
+		          other.classList.remove("asc", "desc");
+		          const otherIcon = other.querySelector(".sort-icon");
+		          otherIcon.className = "bi bi-dash-lg sort-icon";
+		        }
+		      });
+
+		      // 상태 전환
+		      let nextState;
+		      if (currentState === "none") {
+		        nextState = "asc";
+		        th.classList.add("asc");
+		        th.classList.remove("desc");
+		        icon.className = "bi bi-caret-up-fill sort-icon";
+		      } else if (currentState === "asc") {
+		        nextState = "desc";
+		        th.classList.remove("asc");
+		        th.classList.add("desc");
+		        icon.className = "bi bi-caret-down-fill sort-icon";
+		      } else {
+		        nextState = "none";
+		        th.classList.remove("asc", "desc");
+		        icon.className = "bi bi-dash-lg sort-icon";
+		      }
+
+		      th.dataset.state = nextState;
+
+		      // URL 파라미터 갱신
+		      const sortField = th.dataset.sort;
+		      const params = new URLSearchParams(window.location.search);
+
+		      if (nextState === "none") {
+		        params.delete("sortField");
+		        params.delete("sortOrder");
+		      } else {
+		        params.set("sortField", sortField);
+		        params.set("sortOrder", nextState);
+		      }
+
+		      // 새 URL로 이동 (정렬 요청)
+		      window.location.href = "/brand/orderList?" + params.toString();
+		    });
+		  });
+		});
+	 </script>
 </body>
 </html>

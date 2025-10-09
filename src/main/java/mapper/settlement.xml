@@ -23,7 +23,13 @@
 		writer
 		FROM settlement
 		WHERE brand_id = #{brandId}
-		ORDER BY created_at DESC
+		
+		<if test="sortField != null and sortField != ''">
+			ORDER BY ${sortField}
+			<if test="sortOrder == 'desc'">DESC</if>
+			<if test="sortOrder == 'asc'">ASC</if>
+		</if>
+		
 		LIMIT #{limit}
 		OFFSET #{offset}
 	</select>
