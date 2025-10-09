@@ -1375,6 +1375,8 @@
 		ON p.product_id =
 		r.product_id
 		<where>
+			p.brand_id = #{brandId}
+
 			<!-- 판매 상태 필터 -->
 			<if test="status != null and status != ''">
 				<choose>
@@ -1448,6 +1450,8 @@
 		LEFT JOIN category c3 ON p.category3_id
 		= c3.category_id
 		<where>
+			p.brand_id = #{brandId}
+
 			<!-- 판매 상태 필터 -->
 			<if test="status != null and status != ''">
 				<choose>

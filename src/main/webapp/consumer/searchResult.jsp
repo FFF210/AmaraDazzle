@@ -45,12 +45,16 @@
 
 	<!-- 컨텐츠 영역 -->
 	<div class="search-container">
-		<%-- <!-- 브랜드 매칭 영역 (예: 검색어가 브랜드명과 일치할 경우) -->
-		<c:if test="${keyword eq '바이오던스'}">
-			<my:brandNavCard brandName="${brand.brandName}"
-				brandId="${brand.brandId}" logoFileId="${brand.logoFileId}"
-				isWished="1" href="/store/brandDetail?brandId=${brand.brandId}" />
-		</c:if> --%>
+		<c:if test="${not empty brands}">
+			<div class="brand-match-section">
+				<c:forEach var="brand" items="${brands}">
+					<my:brandNavCard brandName="${brand.brandName}"
+						brandId="${brand.brandId}" logoFileId="${brand.logoFileId}"
+						isWished="${brand.isFollowed}"
+						href="/store/brandDetail?brandId=${brand.brandId}" />
+				</c:forEach>
+			</div>
+		</c:if>
 
 		<!-- 검색 필터 -->
 		<div class="search-filter">

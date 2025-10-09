@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dto.consumer.BrandSearchResult;
+import service.consumer.BrandService;
+import service.consumer.BrandServiceImpl;
 import service.consumer.ProductService;
 import service.consumer.ProductServiceImpl;
 
@@ -25,6 +28,7 @@ public class SearchResult extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private final ProductService service = new ProductServiceImpl();
+	private final BrandService brandService = new BrandServiceImpl();
 
 	public SearchResult() {
 		super();
@@ -62,12 +66,18 @@ public class SearchResult extends HttpServlet {
 		params.put("limit", limit);
 		params.put("offset", offset);
 
+		Map<String, Object> params2 = new HashMap<>();
+		params2.put("memberId", memberId);
+		params2.put("keyword", request.getParameter("keyword"));
+
 		try {
 			// 서비스 호출
 			Map<String, Object> result = service.productSearchListByPage(params);
+			List<BrandSearchResult> brands = brandService.getBrandListForSearch(params2);
 
 			// JSP로 전달
 			request.setAttribute("productSearchList", result.get("productSearchList"));
+			request.setAttribute("brands", brands);
 			request.setAttribute("totalCount", result.get("totalCount")); // 총 개수
 			request.setAttribute("totalPages", result.get("totalPages")); // 총 페이지 수
 			request.setAttribute("currentPage", page); // 현재 페이지
