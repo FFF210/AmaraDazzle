@@ -20,4 +20,9 @@ public interface OrderDashboardService {
 
     // 올해 vs 전년도 월별 매출 비교
     List<OrdersDashboard> getMonthlySalesCompare(Long brandId);
+    
+    // jsp에서 % than last month 부분
+    Long getTotalSales(Long brandId);
+    Long getLastMonthSales(Long brandId);
+
 }

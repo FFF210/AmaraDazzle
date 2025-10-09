@@ -40,5 +40,16 @@ public class OrderDashboardServiceImpl implements OrderDashboardService {
     public List<OrdersDashboard> getMonthlySalesCompare(Long brandId) {
         return orderDashboardDAO.selectMonthlySalesCompare(brandId);
     }
+	
+	// jsp
+	@Override
+	public Long getTotalSales(Long brandId) {
+	    return orderDashboardDAO.selectTotalSales(brandId);
+	}
+
+	@Override
+	public Long getLastMonthSales(Long brandId) {
+	    return orderDashboardDAO.selectLastMonthSales(brandId);
+	}
 
 }
