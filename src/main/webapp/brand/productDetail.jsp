@@ -411,11 +411,10 @@
 			</form>
 		</div>
 	</my:layout>
-</body>
-<script src="./js/dialog.js"></script>
-<script src="./js/toast.js"></script>
-<script src="./js/selectbox.js"></script>
-<script>
+	<script src="./js/dialog.js"></script>
+	<script src="./js/toast.js"></script>
+	<script src="./js/selectbox.js"></script>
+	<script>
   /*********************************************************************************************************
    * 카테고리 selectbox
    *********************************************************************************************************/
@@ -633,5 +632,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+</body>
 </html>
 

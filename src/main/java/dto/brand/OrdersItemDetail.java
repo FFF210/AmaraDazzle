@@ -6,11 +6,29 @@ public class OrdersItemDetail {
 	private Long orderItemId; // 주문 상품 ID (PK)
 	private Long productId; // 상품 ID (FK → product.product_id)
 	private Long optionId; // 옵션 ID (FK → product_option.product_option_id)
+	private Long returnId; // 반품 ID
+	private Long exchangeId; // 교환 ID
 	private Integer quantity; // 주문 수량
 	private BigDecimal total; // 주문 상품 총 금액 (할인 포함, order_item.total)
 	private String itemStatus; // 주문 상품 상태
 	private String productName; // 상품명
 	private String optionName; // 옵션명 (없을 경우 null)
+
+	public Long getReturnId() {
+		return returnId;
+	}
+
+	public void setReturnId(Long returnId) {
+		this.returnId = returnId;
+	}
+
+	public Long getExchangeId() {
+		return exchangeId;
+	}
+
+	public void setExchangeId(Long exchangeId) {
+		this.exchangeId = exchangeId;
+	}
 
 	public Long getOrderItemId() {
 		return orderItemId;
