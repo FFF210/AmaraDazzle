@@ -309,6 +309,8 @@
 	   * tableFilter 이벤트
 	   * tag에 추가 필요
 	   *********************************************************************************************************/
+	   
+	   /******************* sortable 부분 *******************/
 	   document.querySelectorAll(".table th.sortable").forEach(th => {
 			  th.addEventListener("click", () => {
 			    // 모든 헤더 초기화
@@ -334,6 +336,8 @@
 			    }
 			  });
 			});
+	   /******************* sortable 부분 *******************/
+	   
 	   
 	   document.addEventListener("filterChanged", (e) => {
 	  if (e.detail.submit) {
