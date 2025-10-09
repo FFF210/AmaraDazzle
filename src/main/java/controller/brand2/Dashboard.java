@@ -2,18 +2,15 @@ package controller.brand2;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
-import dto.Brand;
 import dto.brand2.OrdersDashboard;
 import service.brand2.OrderDashboardService;
 import service.brand2.OrderDashboardServiceImpl;
@@ -81,6 +78,7 @@ public class Dashboard extends HttpServlet {
 			    row.setLastYear(0L);
 			    shaped.add(row);
 			}
+			
 			// DB 결과 반영
 			for (OrdersDashboard r : raw) {
 				int m = Integer.parseInt(r.getMonth());
@@ -90,6 +88,20 @@ public class Dashboard extends HttpServlet {
 			}
 			request.setAttribute("salesCompareJson", new Gson().toJson(shaped));
 
+			// =================== jsp에서 % than last month 부분 ===================
+			Long totalSales = service.getTotalSales(brandId);
+			Long lastMonthSales = service.getLastMonthSales(brandId);
+
+			// 증감율 계산
+			int salesGrowth = 0;
+			if (lastMonthSales != null && lastMonthSales > 0) {
+			    salesGrowth = (int)Math.round(((double)(totalSales - lastMonthSales) / lastMonthSales) * 100);
+			}
+
+			request.setAttribute("totalSales", totalSales);
+			request.setAttribute("salesGrowth", salesGrowth);
+			// ====================
+			
 			request.getRequestDispatcher("/brand2/dashboard.jsp").forward(request, response);
 
 		} catch (Exception e) {

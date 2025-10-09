@@ -20,4 +20,10 @@ public interface OrderDashboardDAO {
 
     // 올해 vs 전년도 월별 매출 비교
     List<OrdersDashboard> selectMonthlySalesCompare(Long brandId);
+    
+    // jsp에서 % than last month 부분
+    Long selectTotalSales(Long brandId);
+    Long selectLastMonthSales(Long brandId);
+    
+    
 }

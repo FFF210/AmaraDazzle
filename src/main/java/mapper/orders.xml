@@ -1772,5 +1772,4 @@
 		GROUP BY m.m
 		ORDER BY m.m;
 	</select>
-
 </mapper>

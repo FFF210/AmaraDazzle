@@ -7,80 +7,46 @@
 
 <!-- ========== 내용(포인트) ========== -->
 <div id="point" class="tab_content" style="display: none">
-	<!-- 검색박스 -->
-	<div class="search_box">
-		<form class="search_form">
-			<div class="search_container">
-				<div class="filter">
-					<div class="period_box">
-						<div class="filtering_title">
-							<span class="searchbox_title">날짜 : </span>
-						</div>
-						<div class="period_body">
-							<div>
-								<input type="date" class="btn start_date" /> <span> - </span> <input
-									type="date" class="btn end_date" />
-							</div>
-
-							<div class="p_choice">
-								<input type="button" class="btn" value="오늘" /> <input
-									type="button" class="btn" value="어제" /> <input type="button"
-									class="btn" value="최근7일" /> <input type="button" class="btn"
-									value="최근30일" />
-							</div>
-						</div>
-					</div>
-
-					<div class="answer_box">
-						<div class="filtering_title">
-							<span class="searchbox_title">사용내역 : </span>
-						</div>
-						<div class="answer_body">
-							<div class="choice ch">
-								<input type="button" value="전체" />
-							</div>
-							<div class="choice ch">
-								<input type="button" value="사용" />
-							</div>
-							<div class="choice">
-								<input type="button" value="적립" />
-							</div>
-						</div>
-					</div>
-
-					<div class="totalSearch_box">
-						<div class="searchType">
-							<select>
-								<option>내용</option>
-								<option>주문번호</option>
-							</select>
-						</div>
-						<div class="searchKeyword">
-							<i class="bi bi-search"></i><input type="text" />
-						</div>
-					</div>
-				</div>
-
-				<div class="btn_box">
-					<input type="submit" class="btn searchBtn" value="검색" /> <input
-						type="reset" class="btn resetBtn" value="초기화" />
-				</div>
-			</div>
-		</form>
-	</div>
-	<!-- 검색박스 end -->
+	<!-- 필터 -->
+	<form id="sellerSettleForm" class="search_form">
+		<my:adminTableFilter>
+			<my:adminFilterPeriod title="날짜" />
+			<my:adminFilterMiddle filters="사용내역:ALL=전체|SHIPPING=사용|DELIVERED=적립" name="settleStatus" />
+			<my:adminFilterTotal searchItems="주문번호,상품명,브랜드명" />
+		</my:adminTableFilter>
+	</form>
+	<!-- 필터 end -->
 	<!-- 포인트 테이블 -->
 	<div class="whole_table">
 		<div class="table_title">
-			<span>[ 검색 결과 ]&nbsp; 총 100건 중 1 - 10 건 </span>
+			<span class="list_count"> 
+			<c:if test="${not empty searchContent}">
+				[ 검색 결과 ]
+			</c:if> &nbsp; 총 ${sellerCnt}건 중 
+			<c:choose>
+				<c:when test="${sellerCnt == 0}">
+   					0 건
+   				</c:when>
+				<c:otherwise>
+    				${postNo + 1}
+ 					<c:choose>
+						<c:when test="${paging.pageno == paging.end_pg && paging.final_post_ea < 10 && paging.final_post_ea != 0}">
+            				- ${postNo + paging.final_post_ea}
+        				</c:when>
+						<c:otherwise>
+                 			- ${postNo + 10}
+            			</c:otherwise>
+					</c:choose>
+       				건
+    			</c:otherwise>
+			</c:choose>
+			</span>
 		</div>
 		<div class="table_wrap">
 			<table>
 				<colgroup>
 					<col style="width: 5%" />
 					<!-- 번호 -->
-					<col style="width: 10%" />
-					<!-- code -->
 					<col style="width: 15%" />
 					<!-- 날짜 -->
 					<col style="width: 15%" />
@@ -97,7 +63,6 @@
 				<thead>
 					<tr>
 						<th>#</th>
-						<th>code</th>
 						<th>날짜</th>
 						<th>포인트내역</th>
 						<th>금액</th>
@@ -109,7 +74,6 @@
 				<tbody>
 					<tr data-group="1" data-main="true">
 						<td>10</td>
-						<td>P123456</td>
 						<td>2025-09-02 11:12:13</td>
 						<td>상품 구매 적립</td>
 						<td class="price_cell">2,000</td>
@@ -119,7 +83,6 @@
 					</tr>
 					<tr data-group="1" data-main="true">
 						<td>10</td>
-						<td>P123456</td>
 						<td>2025-09-02 11:12:13</td>
 						<td>상품 구매 사용</td>
 						<td class="price_cell">1,000</td>
@@ -129,7 +92,6 @@
 					</tr>
 					<tr data-group="1" data-main="true">
 						<td>10</td>
-						<td>P123456</td>
 						<td>2025-09-02 11:12:13</td>
 						<td>리뷰 적립</td>
 						<td class="price_cell">2,000</td>

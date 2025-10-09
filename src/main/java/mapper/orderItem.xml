@@ -249,5 +249,100 @@
     ORDER BY oi.order_item_id ASC
 </select>
 
+	<!-- ======================= [brand2] dashboard 작업 ======================= -->
+
+	<!-- 오늘 브랜드별 순수 매출 -->
+	<select id="selectSalesToday"
+		resultType="dto.brand2.OrdersDashboard">
+		SELECT
+		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS salesToday,
+		COALESCE(SUM(oi.quantity), 0) AS productCountToday
+		FROM order_item oi
+		JOIN orders o ON oi.order_id = o.orders_id
+		WHERE oi.brand_id = #{brandId}
+		AND DATE(o.created_at) = CURDATE()
+		AND oi.status = 'CONFIRMED'
+	</select>
+
+	<!-- 어제 브랜드별 순수 매출 -->
+	<select id="selectSalesYesterday"
+		resultType="dto.brand2.OrdersDashboard">
+		SELECT
+		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS salesYesterday,
+		COALESCE(SUM(oi.quantity), 0) AS productCountYesterday
+		FROM order_item oi
+		JOIN orders o ON oi.order_id = o.orders_id
+		WHERE oi.brand_id = #{brandId}
+		AND DATE(o.created_at) = CURDATE() - INTERVAL 1 DAY
+		AND oi.status = 'CONFIRMED'
+	</select>
+
+	<!-- 이번 주 브랜드별 순수 매출 -->
+	<select id="selectSalesWeek"
+		resultType="dto.brand2.OrdersDashboard">
+		SELECT
+		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS salesWeek,
+		COALESCE(SUM(oi.quantity), 0) AS productCountWeek
+		FROM order_item oi
+		JOIN orders o ON oi.order_id = o.orders_id
+		WHERE oi.brand_id = #{brandId}
+		AND YEARWEEK(o.created_at, 1) = YEARWEEK(CURDATE(), 1)
+		AND oi.status = 'CONFIRMED'
+	</select>
+
+	<!-- 최근 30일 브랜드별 순수 매출 -->
+	<select id="selectSalesLast30Days"
+		resultType="dto.brand2.OrdersDashboard">
+		SELECT
+		DATE(o.created_at) AS orderDate,
+		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS dailySales
+		FROM order_item oi
+		JOIN orders o ON oi.order_id = o.orders_id
+		WHERE oi.brand_id = #{brandId}
+		AND o.created_at >= CURDATE() - INTERVAL 30 DAY
+		AND oi.status = 'CONFIRMED'
+		GROUP BY DATE(o.created_at)
+		ORDER BY orderDate ASC
+	</select>
+
+	<!-- 올해 vs 전년도 월별 매출 비교 -->
+	<select id="selectMonthlySalesCompare"
+		resultType="dto.brand2.OrdersDashboard">
+		SELECT
+		MONTH(o.created_at) AS month,
+		SUM(CASE WHEN YEAR(o.created_at) = YEAR(CURDATE())
+		THEN (oi.line_subtotal - oi.discount) ELSE 0 END) AS thisYear,
+		SUM(CASE WHEN YEAR(o.created_at) = YEAR(CURDATE()) - 1
+		THEN (oi.line_subtotal - oi.discount) ELSE 0 END) AS lastYear
+		FROM order_item oi
+		JOIN orders o ON oi.order_id = o.orders_id
+		WHERE oi.brand_id = #{brandId}
+		AND YEAR(o.created_at) IN (YEAR(CURDATE()), YEAR(CURDATE()) - 1)
+		AND oi.status = 'CONFIRMED'
+		GROUP BY MONTH(o.created_at)
+		ORDER BY month
+	</select>
+
+	<!-- 이번 달 총 매출 -->
+	<select id="selectTotalSales" resultType="long">
+		SELECT COALESCE(SUM(oi.line_subtotal - oi.discount),0)
+		FROM order_item oi
+		JOIN orders o ON o.orders_id = oi.order_id
+		WHERE oi.brand_id = #{brandId}
+		AND YEAR(o.created_at) = YEAR(CURDATE())
+		AND MONTH(o.created_at) = MONTH(CURDATE())
+		AND oi.status = 'CONFIRMED'
+	</select>
+
+	<!-- 지난 달 총 매출 -->
+	<select id="selectLastMonthSales" resultType="long">
+		SELECT COALESCE(SUM(oi.line_subtotal - oi.discount),0)
+		FROM order_item oi
+		JOIN orders o ON o.orders_id = oi.order_id
+		WHERE oi.brand_id = #{brandId}
+		AND YEAR(o.created_at) = YEAR(CURDATE() - INTERVAL 1 MONTH)
+		AND MONTH(o.created_at) = MONTH(CURDATE() - INTERVAL 1 MONTH)
+		AND oi.status = 'CONFIRMED'
+	</select>
 
 </mapper>

@@ -7,13 +7,13 @@
 
 <!-- 메인부분 -->
 <!-- 탭 -->
-<div class="tabs">
-	<div class="tab" onclick="">발행 쿠폰 목록</div>
-	<div class="tab active" onclick="">개별 지급 목록</div>
+<div class="listTabs">
+	<div class="listTab" onclick="">발행 쿠폰 목록</div>
+	<div class="listTab active" onclick="">개별 지급 목록</div>
 </div>
 
 <!-- ************************* 개별 지급 목록 탭 ************************* -->
-<div id="" class="tab_content">
+<div class="main_content">
 	<!-- 필터 -->
 	<form class="search_form">
 		<div class="search_container">

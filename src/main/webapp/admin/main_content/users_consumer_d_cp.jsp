@@ -6,104 +6,42 @@
 
 <!-- ========== 내용(쿠폰) ========== -->
 <div id="coupon" class="tab_content" style="display: none">
-	<div class="search_box">
-		<form class="search_form">
-			<div class="search_container">
-				<div class="filter">
-					<div class="period_box">
-						<div class="filtering_title">
-							<span class="searchbox_title">발행일자 : </span>
-						</div>
-						<div class="period_body">
-							<div>
-								<input type="date" class="btn start_date" /> <span> - </span> <input
-									type="date" class="btn end_date" />
-							</div>
-
-							<div class="p_choice">
-								<input type="button" class="btn" value="오늘" /> <input
-									type="button" class="btn" value="어제" /> <input type="button"
-									class="btn" value="최근7일" /> <input type="button" class="btn"
-									value="최근30일" />
-							</div>
-						</div>
-					</div>
-
-					<div class="period_box">
-						<div class="filtering_title">
-							<span class="searchbox_title">유효기간 : </span>
-						</div>
-						<div class="period_body">
-							<div>
-								<input type="date" class="btn start_date" /> <span> - </span> <input
-									type="date" class="btn end_date" />
-							</div>
-						</div>
-					</div>
-
-					<div class="answer_box">
-						<div class="filtering_title">
-							<span class="searchbox_title">사용여부 : </span>
-						</div>
-						<div class="answer_body">
-							<div class="choice ch">
-								<input type="button" value="전체" />
-							</div>
-							<div class="choice ch">
-								<input type="button" value="미사용" />
-							</div>
-							<div class="choice">
-								<input type="button" value="사용" />
-							</div>
-						</div>
-					</div>
-
-					<div class="answer_box">
-						<div class="filtering_title">
-							<span class="searchbox_title">사용여부 : </span>
-						</div>
-						<div class="answer_body">
-							<div class="choice ch">
-								<input type="button" value="전체" />
-							</div>
-							<div class="choice ch">
-								<input type="button" value="미사용" />
-							</div>
-							<div class="choice">
-								<input type="button" value="사용" />
-							</div>
-						</div>
-					</div>
-
-					<div class="totalSearch_box">
-						<div class="searchType">
-							<select>
-								<option>쿠폰명</option>
-								<option>쿠폰코드</option>
-								<option>회원아이디</option>
-								<option>회원명</option>
-								<option>조건</option>
-								<option>주문번호</option>
-							</select>
-						</div>
-						<div class="searchKeyword">
-							<i class="bi bi-search"></i><input type="text" />
-						</div>
-					</div>
-				</div>
-
-				<div class="btn_box">
-					<input type="submit" class="btn first_btn" value="검색" /> <input
-						type="reset" class="btn second_btn" value="초기화" />
-				</div>
-			</div>
-		</form>
-	</div>
-	<!-- 검색박스 end -->
+	<!-- 필터 -->
+	<form id="sellerSettleForm" class="search_form">
+		<my:adminTableFilter>
+			<my:adminFilterPeriod title="발행일자" />
+			<my:adminFilterPeriod title="유효기간" dateCate="exp_"/>
+			<my:adminFilterMiddle filters="답변상태:ALL=전체|SHIPPING=미사용|DELIVERED=사용|ddd=기간만료" name="settleStatus" />
+			<my:adminFilterCate />
+			<my:adminFilterTotal searchItems="쿠폰명,쿠폰코드,회원아이디,회원명,조건,주문번호" />
+		</my:adminTableFilter>
+	</form>
+	<!-- 필터 end -->
 	<!-- 쿠폰 테이블 -->
 	<div class="whole_table">
 		<div class="table_title">
-			<span>[ 검색 결과 ]&nbsp; 총 100건 중 1 - 10 건 </span>
+			<span class="list_count"> 
+			<c:if test="${not empty searchContent}">
+				[ 검색 결과 ]
+			</c:if> &nbsp; 총 ${sellerCnt}건 중 
+			<c:choose>
+				<c:when test="${sellerCnt == 0}">
+   					0 건
+   				</c:when>
+				<c:otherwise>
+    				${postNo + 1}
+ 					<c:choose>
+						<c:when test="${paging.pageno == paging.end_pg && paging.final_post_ea < 10 && paging.final_post_ea != 0}">
+            				- ${postNo + paging.final_post_ea}
+        				</c:when>
+						<c:otherwise>
+                 			- ${postNo + 10}
+            			</c:otherwise>
+					</c:choose>
+       				건
+    			</c:otherwise>
+			</c:choose>
+			</span>
 		</div>
 		<div class="table_wrap">
 			<table>

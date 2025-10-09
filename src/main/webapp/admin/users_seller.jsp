@@ -19,13 +19,13 @@
 	<!-- 레이아웃 + 메인컨텐츠 -->
 	<my:adminLayout>
 		<!-- 메인부분 -->
-		<div class="tabs">
-			<div class="tab active" onclick="">판매자 회원 (${sellerAllCnt})</div>
-			<div class="tab">일반회원 회원 (${sellerAllCnt})</div>
+		<div class="listTabs">
+			<div class="listTab active">판매자 회원 (${sellerAllCnt})</div>
+			<div class="listTab" onclick="goConsumerList()">일반회원 회원 (${memberAllCnt})</div>
 		</div>
 
 		<!-- ************************* 판매자 탭 ************************* -->
-		<div id="seller" class="tab_content">
+		<div class="main_content">
 			<!-- 필터 -->
 			<form id="sellerSearchForm" class="search_form">
 				<my:adminTableFilter>
@@ -35,30 +35,30 @@
 				</my:adminTableFilter>
 			</form>
 			<!-- 필터 end -->
+			
 			<!-- 사업자회원 테이블 -->
 			<div class="whole_table" style="display: ${searched eq 'searched' ? 'block' : 'none'};">
 				<div class="table_title">
-					<span class="list_count"> <c:if
-							test="${not empty searchContent}">
-						[ 검색 결과 ]
-						</c:if> &nbsp; 총 ${sellerCnt}건 중 <c:choose>
-							<c:when test="${sellerCnt == 0}">
-		       					0 건
-		    				</c:when>
-							<c:otherwise>
-		       					${postNo + 1}
-	    						<c:choose>
-									<c:when
-										test="${paging.pageno == paging.end_pg && paging.final_post_ea < 10 && paging.final_post_ea != 0}">
-	                 					- ${postNo + paging.final_post_ea}
-	            					</c:when>
-									<c:otherwise>
-	                 					- ${postNo + 10}
-	            					</c:otherwise>
-								</c:choose>
-	       						건
-	    					</c:otherwise>
-						</c:choose>
+					<span class="list_count">
+					<c:if test="${not empty searchContent}"> [ 검색 결과 ] </c:if> 
+					&nbsp; 총 ${sellerCnt}건 중 
+					<c:choose>
+						<c:when test="${sellerCnt == 0}">
+	       					0 건
+	    				</c:when>
+						<c:otherwise>
+	       					${postNo + 1}
+	   						<c:choose>
+								<c:when test="${paging.pageno == paging.end_pg && paging.final_post_ea < 10 && paging.final_post_ea != 0}">
+	                				- ${postNo + paging.final_post_ea}
+	           					</c:when>
+								<c:otherwise>
+	                				- ${postNo + 10}
+	           					</c:otherwise>
+							</c:choose>
+	      						건
+	   					</c:otherwise>
+					</c:choose>
 					</span>
 				</div>
 				<div class="table_wrap">
@@ -76,18 +76,14 @@
 						</colgroup>
 						<thead>
 							<tr>
-								<th><input type="checkbox" id="all_ck"
-									onclick="ck_all(this.checked);" /></th>
+								<th><input type="checkbox" id="all_ck" onclick="ck_all(this.checked);" /></th>
 								<th>#</th>
 								<th>logo</th>
-								<th class="sortable">브랜드명 <i
-									class="bi bi-dash-lg sort-icon"></i></th>
-								<th class="sortable">담당자명 <i
-									class="bi bi-dash-lg sort-icon"></i></th>
+								<th class="sortable">브랜드명 <i class="bi bi-dash-lg sort-icon"></i></th>
+								<th class="sortable">담당자명 <i class="bi bi-dash-lg sort-icon"></i></th>
 								<th class="sortable">가입일 <i class="bi bi-dash-lg sort-icon"></i></th>
-								<th class="sortable">구독여부 <i
-									class="bi bi-dash-lg sort-icon"></i></th>
-								<th>승인여부</th>
+								<th class="sortable">구독여부 <i class="bi bi-dash-lg sort-icon"></i></th>
+								<th class="sortable">승인여부 <i class="bi bi-dash-lg sort-icon"></i></th>
 								<th>상세보기</th>
 							</tr>
 						</thead>
@@ -108,7 +104,8 @@
 									<td class="img_cell">
 										<c:if test="${sellerList.logoFileId eq null}">
 											<img src="../image/no-image.svg">
-										</c:if> <c:if test="${sellerList.logoFileId ne null}">
+										</c:if> 
+										<c:if test="${sellerList.logoFileId ne null}">
 											<img src="${contextPath}/upload_file/${sellerList.fileRename}">
 										</c:if>
 									</td>
@@ -163,7 +160,7 @@
 
 				<div class="pagination_wrap page-pagination">
 					<my:adminPagination currentPage="${paging.pageno}" allPage="${paging.end_pg}"
-							baseUrl="/admin/sellerList?${queryString}" />
+							baseUrl="/admin/consumerList?${queryString}" />
 				</div>
 				<!-- 페이지네이션 end -->
 			</div>

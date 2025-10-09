@@ -423,5 +423,7 @@
 		left join upload_file f on (b.logo_file_id = f.upload_file_id)
 		where b.brand_id = #{num}
 	</select>
+	
+	
 
 </mapper>

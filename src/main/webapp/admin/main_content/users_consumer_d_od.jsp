@@ -6,86 +6,41 @@
 
 <!-- ========== 내용(주문내역) ========== -->
 <div id="order" class="tab_content">
-	<div class="search_box">
-		<form class="search_form">
-			<div class="search_container">
-				<div class="filter">
-					<div class="period_box">
-						<div class="filtering_title">
-							<span class="searchbox_title">주문일 : </span>
-						</div>
-						<div class="period_body">
-							<div>
-								<input type="date" class="btn start_date" /> <span> - </span> <input
-									type="date" class="btn end_date" />
-							</div>
-
-							<div class="p_choice">
-								<input type="button" class="btn" value="오늘" /> <input
-									type="button" class="btn" value="최근7일" /> <input type="button"
-									class="btn" value="최근30일" />
-							</div>
-						</div>
-					</div>
-
-					<div class="answer_box">
-						<div class="filtering_title">
-							<span class="searchbox_title">주문상태 : </span>
-						</div>
-						<div class="answer_body">
-							<div class="choice ch">
-								<input type="button" value="전체" />
-							</div>
-							<div class="choice ch">
-								<input type="button" value="결제완료" />
-							</div>
-							<div class="choice ch">
-								<input type="button" value="상품준비중" />
-							</div>
-							<div class="choice ch">
-								<input type="button" value="배송중" />
-							</div>
-							<div class="choice ch">
-								<input type="button" value="배송완료" />
-							</div>
-							<div class="choice ch">
-								<input type="button" value="취소" />
-							</div>
-							<div class="choice ch">
-								<input type="button" value="교환" />
-							</div>
-							<div class="choice">
-								<input type="button" value="반품" />
-							</div>
-						</div>
-					</div>
-
-					<div class="totalSearch_box">
-						<div class="searchType">
-							<select>
-								<option>주문번호</option>
-								<option>상품명</option>
-								<option>브랜드명</option>
-							</select>
-						</div>
-						<div class="searchKeyword">
-							<i class="bi bi-search"></i><input type="text" />
-						</div>
-					</div>
-				</div>
-
-				<div class="btn_box">
-					<input type="submit" class="btn first_btn" value="검색" /> <input
-						type="reset" class="btn second_btn" value="초기화" />
-				</div>
-			</div>
-		</form>
-	</div>
-	<!-- 검색박스 end -->
+	<!-- 필터 -->
+	<form id="sellerSettleForm" class="search_form">
+		<my:adminTableFilter>
+			<my:adminFilterPeriod title="주문일" />
+			<my:adminFilterMiddle filters="주문상태:ALL=전체|SHIPPING=결제완료|DELIVERED=상품준비중|COLLECTING=배송중|EXCHANGE SHIPPING=배송완료|SHIPPING=취소|DELIVERED=교환|COLLECTING=반품" name="settleStatus" />
+			<my:adminFilterTotal searchItems="주문번호,상품명,브랜드명" />
+		</my:adminTableFilter>
+	</form>
+	<!-- 필터 end -->
+	
 	<!-- 주문내역 테이블 -->
 	<div class="whole_table">
 		<div class="table_title">
-			<span class="list_count">[ 검색 결과 ]&nbsp; 총 100건 중 1 - 10 건 </span>
+			<span class="list_count"> 
+			<c:if test="${not empty searchContent}">
+				[ 검색 결과 ]
+			</c:if> &nbsp; 총 ${sellerCnt}건 중 
+			<c:choose>
+				<c:when test="${sellerCnt == 0}">
+   					0 건
+   				</c:when>
+				<c:otherwise>
+    				${postNo + 1}
+ 					<c:choose>
+						<c:when test="${paging.pageno == paging.end_pg && paging.final_post_ea < 10 && paging.final_post_ea != 0}">
+            				- ${postNo + paging.final_post_ea}
+        				</c:when>
+						<c:otherwise>
+                 			- ${postNo + 10}
+            			</c:otherwise>
+					</c:choose>
+       				건
+    			</c:otherwise>
+			</c:choose>
+			</span>
 		</div>
 		<div class="table_wrap">
 			<table>
@@ -129,16 +84,6 @@
 						<td>2025-08-25 11:20:50</td>
 						<td>[배송중]</td>
 						<td class="detail_cell"><i class="bi bi-three-dots-vertical"></i></td>
-					</tr>
-					<tr>
-						<td>9</td>
-						<td>20250825-001478</td>
-						<td class="title_cell">[수분진정] 아비브 어성초 카... 외 3건</td>
-						<td class="price_cell">25.300</td>
-						<td>아비브</td>
-						<td>2025-08-25 11:20:50</td>
-						<td>[배송중]</td>
-						<td><i class="bi bi-three-dots-vertical"></i></td>
 					</tr>
 				</tbody>
 			</table>

@@ -39,9 +39,16 @@ public class CouponDAOImpl implements CouponDAO{
 		} else {
 			ss.rollback();
 		}
-		
 		return result;
 	}
+
+	//발행 쿠폰 상세보기
+	@Override
+	public Coupon publCouponDetail(int num) {
+		return ss.selectOne("mapper.coupon.publCouponDetail", num);
+	}
+	
+	
 	
 
 }

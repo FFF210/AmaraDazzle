@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dto.Coupon;
+import service.admin.BrandService;
+import service.admin.BrandServiceImpl;
 import service.admin.CouponService;
 import service.admin.CouponServiceImpl;
 import util.Paging;
@@ -33,7 +35,8 @@ public class PublCouponList extends HttpServlet {
 
 			Paging m_pg = new Paging();
 			CouponService coupon_svc = new CouponServiceImpl();
-
+			BrandService b_svc = new BrandServiceImpl();
+			
 			String startDate = request.getParameter("startDate");
 			String endDate = request.getParameter("endDate");
 			String startDate2 = request.getParameter("exp_startDate");
@@ -85,7 +88,7 @@ public class PublCouponList extends HttpServlet {
 			request.setAttribute("paging", paging); // 페이징Map
 			request.setAttribute("pCouponCnt", pCouponCnt); // 총 게시글 수
 			request.setAttribute("pCouponList", pCouponAllList); // 총 게시물 리스트
-
+			
 			request.getRequestDispatcher("/admin/promotion_couponPubl.jsp").forward(request, response);
 
 		} catch (Exception e) {

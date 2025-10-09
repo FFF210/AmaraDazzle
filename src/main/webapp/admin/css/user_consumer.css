@@ -13,22 +13,8 @@
     align-items: center;
 }
 
-.info_table > #seller_info {
-    height: 100%;
-    width: 100%;
-}
-
-#seller_info tr th {
-    width: 20%;
-    border-right: none;
-}
-
-#seller_info tr td {
-    width: 30%;
-}
-
-div.info_table > table#seller_info tr:hover td {
-    background-color: transparent;
+.info_table th {
+	border-right: 1px solid #eee;
 }
 
 #conRvTbl > tr[data-main="true"] > td {

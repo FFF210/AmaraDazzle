@@ -20,7 +20,7 @@ public class BrandServiceImpl implements BrandService{
 	private Paging m_pg = new Paging();
 	private SearchUtil search = new SearchUtil();
 
-	//가입한 브랜드 총 개수 
+	//가입한 브랜드 총 수 
 	@Override
 	public Integer brandAllCnt(Map<String, String> cntMap) {
 		SearchConditionDTO sc_DTO = search.buildSearchDTO(cntMap);

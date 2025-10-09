@@ -57,13 +57,17 @@
 					<div class="part_title">카테고리 <span class="reqired_write"></span></div>
 					<div class="part_content select_cate">
 						<my:selectbox size="sm" items="대분류" initial="대분류" name="largeCate" id="largeSelect"/>
-						<my:selectbox size="sm" items="중분류" initial="중분류" name="middleCate" id="middleSelect"/>
-						<my:selectbox size="sm" items="소분류" initial="소분류" name="smallCate" id="smallSelect" />
 						<input type="hidden" name="category1Id" id="category1Id" />
+						<my:selectbox size="sm" items="중분류" initial="중분류" name="middleCate" id="middleSelect"/>
 						<input type="hidden" name="category2Id" id="category2Id" />
+						<my:selectbox size="sm" items="소분류" initial="소분류" name="smallCate" id="smallSelect" />
 						<input type="hidden" name="category3Id" id="category3Id" />
-						<span>&nbsp;&nbsp;구매시 사용가능&nbsp;&nbsp;&nbsp;&nbsp;</span>
+						<span>&nbsp;&nbsp;구매시 사용가능&nbsp;&nbsp;</span>
+						<span class="no_condition">
+							<label><input type="checkbox" id="cate_noRestr" name="cate_noRestr"/> 제한 없음</label>
+						</span>
 					</div>
+					
 				</div>
 
 				<div class="part_section condition_part">
@@ -71,9 +75,9 @@
 					<div class="part_content">
 						<input type="text" name="couponCondition" id="couponCondition" placeholder="사용조건" class="price_input" /> 
 						<span>&nbsp;&nbsp;원 이상 구매시 사용가능&nbsp;&nbsp;&nbsp;&nbsp;</span>
-						<div class="no_condition">
+						<span class="no_condition">
 							<label><input type="checkbox" id="pch_noRestr" name="pch_noRestr"/> 제한 없음</label>
-						</div>
+						</span>
 					</div>
 				</div>
 
@@ -98,22 +102,14 @@
 					</div>
 				</div>
 
-				<div class="part_section amount_part">
-					<div class="part_title">발급 수량 <span class="reqired_write">*</span></div>
-					<div class="part_content">
-						<input type="text" name="couponQuantity" id="couponQuantity" placeholder="쿠폰 최대 발급 수량 입력" class="price_input" /> 
-						<span>&nbsp;매 한정&nbsp;&nbsp;&nbsp;&nbsp;</span>
-						<div class="no_condition">
-							<label><input type="checkbox" id="qnt_noRestr" name="qnt_noRestr"/> 제한 없음</label>
-						</div>
-					</div>
-				</div>
-
-<!-- 				<div class="part_section dupl_part"> -->
-<!-- 					<div class="part_title">중복 지급 여부 <span class="reqired_write">*</span></div> -->
+<!-- 				<div class="part_section amount_part"> -->
+<!-- 					<div class="part_title">발급 수량 <span class="reqired_write">*</span></div> -->
 <!-- 					<div class="part_content"> -->
-<!-- 						<label><input type="checkbox" name="noDupl" /> 중복 지급 불가</label>&nbsp;&nbsp;&nbsp;   -->
-<!-- 						<span style="color : gray"><small><i class="bi bi-exclamation-octagon"></i> 체크시 한 ID당 중복 발급 불가합니다.</small></span> -->
+<!-- 						<input type="text" name="couponQuantity" id="couponQuantity" placeholder="쿠폰 최대 발급 수량 입력" class="price_input" />  -->
+<!-- 						<span>&nbsp;매 한정&nbsp;&nbsp;&nbsp;&nbsp;</span> -->
+<!-- 						<div class="no_condition"> -->
+<!-- 							<label><input type="checkbox" id="qnt_noRestr" name="qnt_noRestr"/> 제한 없음</label> -->
+<!-- 						</div> -->
 <!-- 					</div> -->
 <!-- 				</div> -->
 

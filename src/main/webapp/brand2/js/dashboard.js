@@ -1,46 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // ===== 최근 30일 라인차트(있으면 그려주고, 없어도 무시) =====
-  const ctxLine = document.getElementById("salesChart");
-  if (ctxLine && Array.isArray(salesData) && salesData.length) {
-    const labels = salesData.map(s => s.orderDate);
-    const data = salesData.map(s => s.dailySales);
-    new Chart(ctxLine, {
-      type: "line",
-      data: {
-        labels,
-        datasets: [{
-          label: "일별 매출",
-          data,
-          borderColor: "#3b82f6",
-          backgroundColor: "rgba(59,130,246,0.3)",
-          fill: true,
-          tension: 0.3,
-          borderWidth: 2,
-          pointRadius: 3,
-          pointBackgroundColor: "#3b82f6"
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: (ctx) => `${ctx.dataset.label}: ${Number(ctx.raw).toLocaleString()}원`
-            }
-          },
-          legend: { position: "bottom" }
-        },
-        scales: {
-          y: { ticks: { callback: v => v.toLocaleString()+"원" } }
-        }
-      }
-    });
-  }
-
-  // ===== 올해 vs 전년도 (한 그래프에 2 dataset) =====
   const ctxBar = document.getElementById("salesCompareChart");
-  if (ctxBar) {
-    // salesCompareData는 [{month:"01월", thisYear:..., lastYear:...}, ...] (1~12월 길이 보장)
+  if (ctxBar && Array.isArray(salesCompareData) && salesCompareData.length) {
+    // [{month:"01월", thisYear:..., lastYear:...}, ...]
     const labels = salesCompareData.map(r => r.month);
     const thisYear = salesCompareData.map(r => Number(r.thisYear) || 0);
     const lastYear = salesCompareData.map(r => Number(r.lastYear) || 0);
@@ -48,10 +9,20 @@ document.addEventListener("DOMContentLoaded", () => {
     new Chart(ctxBar, {
       type: "bar",
       data: {
-        labels,
+        labels: labels, // "01월" ~ "12월"
         datasets: [
-          { label: "올해",    data: thisYear, backgroundColor: "#3b82f6", borderRadius: 6 },
-          { label: "전년도",  data: lastYear, backgroundColor: "#cbd5e1", borderRadius: 6 }
+          {
+            label: "올해 매출액",
+            data: thisYear,
+            backgroundColor: "#3b82f6",
+            borderRadius: 4
+          },
+          {
+            label: "전년도 매출액",
+            data: lastYear,
+            backgroundColor: "#f97316",
+            borderRadius: 4
+          }
         ]
       },
       options: {
@@ -59,14 +30,29 @@ document.addEventListener("DOMContentLoaded", () => {
         plugins: {
           tooltip: {
             callbacks: {
-              label: (ctx) => `${ctx.dataset.label}: ${Number(ctx.raw).toLocaleString()}원`
+              label: (ctx) =>
+                `${ctx.dataset.label}: ${Number(ctx.raw).toLocaleString()}원`
             }
           },
-          legend: { position: "bottom" }
+          legend: {
+            position: "bottom",
+            labels: { color: "#444" }
+          }
         },
         scales: {
-          x: { stacked: false },
-          y: { ticks: { callback: v => v.toLocaleString()+"원" } }
+          x: {
+            stacked: false, // ✅ 나란히 표시
+            ticks: { color: "#555" },
+            grid: { display: false }
+          },
+          y: {
+            stacked: false,
+            ticks: {
+              color: "#555",
+              callback: (value) => value.toLocaleString() + "원"
+            },
+            grid: { color: "#eee" }
+          }
         }
       }
     });
