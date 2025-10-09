@@ -236,8 +236,36 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       const icon = btn.querySelector("i");
-      const productId = btn.closest(".product-card").dataset.productid;
-
+      const type = btn.dataset.type;
+      const id = btn.dataset.id;
+      
+      
+      if (type === "brand") {
+    	  fetch("/store/brandFollowToggle", {
+    	        method: "POST",
+    	        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    	        body: "brandId=" + encodeURIComponent(id)
+    	      })
+    	      .then(res => res.json())
+    	      .then(data => {
+    	        if (!data.success && data.requireLogin) {
+    	          window.location.href = "/store/login";
+    	        } else if (data.success) {
+    	          if (data.isFollowing) {
+    	            icon.classList.remove("bi-heart");
+    	            icon.classList.add("bi-heart-fill", "active");
+    	          } else {
+    	            icon.classList.remove("bi-heart-fill", "active");
+    	            icon.classList.add("bi-heart");
+    	          }
+    	        } else {
+    	          alert(data.message);
+    	        }
+    	      })
+    	      .catch(err => console.error(err));
+      } else {
+    	  const productId = btn.closest(".product-card").dataset.productid;
+    	  
       fetch("/store/wishlistToggle", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -260,6 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       })
       .catch(err => console.error(err));
+      }
     });
   });
 

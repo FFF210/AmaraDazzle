@@ -24,6 +24,9 @@
 <%@ attribute name="onlyIcon" required="false"%>
 <%@ attribute name="hasCount" required="false"%>
 <%@ attribute name="count" required="false"%>
+<%@ attribute name="dataType" required="false"%>
+<%@ attribute name="dataId" required="false"%>
+
 
 <c:set var="state" value="${empty state ? 'default' : state}" />
 <c:set var="onlyIcon" value="${empty onlyIcon ? 'false' : onlyIcon}" />
@@ -33,8 +36,9 @@
 <button
 	class="heart-btn 
                ${onlyIcon eq 'true' ? 'icon-only' : 'with-border'} 
-               ${hasCount eq 'true' ? 'with-count' : ''}">
-
+               ${hasCount eq 'true' ? 'with-count' : ''}"
+	<c:if test="${not empty dataType}">data-type="${dataType}"</c:if>
+	<c:if test="${not empty dataId}">data-id="${dataId}"</c:if>>
 	<i
 		class="bi ${state eq 'active' ? 'bi-heart-fill active' : 'bi-heart'}"></i>
 

@@ -55,4 +55,30 @@ public class BrandFollowToggle extends HttpServlet {
 		}
 	}
 
+	/**
+	 * 브랜드 찜하기 토글 (POST)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("application/json; charset=UTF-8");
+
+		Long memberId = (Long) request.getSession().getAttribute("memberId");
+
+		// 로그인 여부 체크
+		if (memberId == null) {
+			response.getWriter().write("{\"success\":false, \"requireLogin\":true}");
+			return;
+		}
+
+		Long brandId = Long.valueOf(request.getParameter("brandId"));
+
+		try {
+			boolean isFollowing = service.toggleBrandFollow(memberId, brandId);
+			response.getWriter().write("{\"success\":true, \"isFollowing\":" + isFollowing + "}");
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.getWriter().write("{\"success\":false, \"message\":\"서버 오류\"}");
+		}
+	}
+
 }
