@@ -28,14 +28,14 @@
 
 			<!-- 단일 메뉴 -->
 			<div class="menu-item" data-menu="menu2">
-				<a href="#" class="menu-link"> 
+				<a href="/admin/todoList" class="menu-link"> 
 					<i class="bi bi-journal-check"></i><span class="menu-text">오늘의 할 일</span>
 				</a>
 			</div>
 
 			<!-- 단일 메뉴 -->
 			<div class="menu-item" data-menu="menu3">
-				<a href="/admin/sellerList" class="menu-link"> 
+				<a href="/admin/userSellerList" class="menu-link"> 
 					<i class="bi bi-people"></i> <span class="menu-text">회원</span>
 				</a>
 			</div>
@@ -54,10 +54,10 @@
 					<i class="bi bi-chevron-down submenu-icon"></i>
 				</button>
 				<div class="submenu">
-					<div data-submenu="menu5_sub1" onclick="setHeader('프로필 > 정보수정')">
+					<div data-submenu="menu5_sub1">
 						<a href="/admin/reportQnAList">신고글 관리</a>
 					</div>
-					<div data-submenu="menu5_sub2" onclick="setHeader('프로필 > 비밀번호 변경')">
+					<div data-submenu="menu5_sub2">
 						<a href="/admin/noticeSellerList">공지사항</a>
 					</div>
 				</div>
@@ -70,10 +70,10 @@
 					<i class="bi bi-chevron-down submenu-icon"></i>
 				</button>
 				<div class="submenu">
-					<div data-submenu="menu6_sub1" onclick="setHeader('프로필 > 정보수정')">
-						<a href="/admin/orderListByOrder">주문내역</a>
+					<div data-submenu="menu6_sub1">
+						<a href="/admin/orderByOrderList">주문내역</a>
 					</div>
-					<div data-submenu="menu6_sub2" onclick="setHeader('프로필 > 비밀번호 변경')">
+					<div data-submenu="menu6_sub2">
 						<a href="/admin/todayCalcList">정산내역</a>
 					</div>
 				</div>
@@ -86,16 +86,16 @@
 						class="bi bi-chevron-down submenu-icon"></i>
 				</button>
 				<div class="submenu">
-					<div data-submenu="menu7_sub1" onclick="setHeader('프로필 > 정보수정')">
+					<div data-submenu="menu7_sub1">
 						<a href="/admin/promoEventList">이벤트</a>
 					</div>
-					<div data-submenu="menu7_sub2" onclick="setHeader('프로필 > 비밀번호 변경')">
+					<div data-submenu="menu7_sub2">
 						<a href="/admin/promoBannerList">메인배너 관리</a>
 					</div>
-					<div data-submenu="menu7_sub3" onclick="setHeader('프로필 > 비밀번호 변경')">
-						<a href="/admin/pCouponList">쿠폰</a>
+					<div data-submenu="menu7_sub3">
+						<a href="/admin/couponPublList">쿠폰</a>
 					</div>
-					<div data-submenu="menu7_sub4" onclick="setHeader('프로필 > 비밀번호 변경')">
+					<div data-submenu="menu7_sub4">
 						<a href="/admin/pointList">포인트</a>
 					</div>
 				</div>

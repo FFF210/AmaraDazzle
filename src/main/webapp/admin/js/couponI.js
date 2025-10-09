@@ -1,16 +1,16 @@
 //발행쿠폰목록 페이지로 이동 
 function goPublCpList() {
-	location.href = "/admin/pCouponList";
+	location.href = "/admin/couponPublList";
 };
 
-//쿠폰 지급 버튼 클릭시 발행 페이지로 이동 
+//개별 쿠폰 지급 버튼 클릭시 발행 페이지로 이동 
 function cpIndiBtn() {
-	location.href = "/admin/iCouponWrite";
+	location.href = "/admin/couponIndiWrite";
 };
 
-//쿠폰 상세보기 버튼 클릭시 상세보기 페이지로 이동 
+//개별 쿠폰 상세보기 버튼 클릭시 상세보기 페이지로 이동 
 function goPcpDetail(num) {
-	location.href = "/admin/publCouponDetail?num="+num;
+	location.href = "/admin/couponIndiDetail?num="+num;
 };
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			
 			const formData = new FormData(frm);
 			
-			fetch("/admin/iCouponWrite", {
+			fetch("/admin/couponIndiWrite", {
 			  method: "POST",
 			  body: formData
 			})
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function() {
 					showAlert("success", data.title, data.message); // 2초간 토스트
 					
 					setTimeout(() => {
-						location.href = "/admin/pCouponList"; // 리스트로 이동
+						location.href = "/admin/couponIndiList"; // 리스트로 이동
 					}, 3000);
 					
 					

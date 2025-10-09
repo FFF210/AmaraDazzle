@@ -18,7 +18,7 @@ import service.admin.ConsumerService;
 import service.admin.ConsumerServiceImpl;
 import util.Paging;
 
-@WebServlet("/admin/consumerList")
+@WebServlet("/admin/userConsumerList")
 public class UserConsumerList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

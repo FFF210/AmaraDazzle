@@ -15,7 +15,7 @@ import dto.Coupon;
 import service.admin.CouponService;
 import service.admin.CouponServiceImpl;
 
-@WebServlet("/admin/iCouponWrite")
+@WebServlet("/admin/couponIndiWrite")
 @MultipartConfig
 public class IndiCouponWrite extends HttpServlet {
 	private static final long serialVersionUID = 1L;

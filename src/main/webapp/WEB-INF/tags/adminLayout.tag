@@ -39,7 +39,7 @@
 		<!-- 상단 헤더 end -->
 
 		<!-- breadcrumb -->
-		<my:adminBreadcrumb items="상품 관리:/product,상품 목록 조회:" />
+		<my:adminBreadcrumb />
 		<!-- breadcrumb end -->
 
 		<!-- 본문 -->

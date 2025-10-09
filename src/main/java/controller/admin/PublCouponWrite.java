@@ -15,8 +15,8 @@ import dto.Coupon;
 import service.admin.CouponService;
 import service.admin.CouponServiceImpl;
 
-//publ쿠폰 등록
-@WebServlet("/admin/pCouponWrite")
+//발행 쿠폰 등록
+@WebServlet("/admin/couponPublWrite")
 @MultipartConfig
 public class PublCouponWrite extends HttpServlet {
 	private static final long serialVersionUID = 1L;
