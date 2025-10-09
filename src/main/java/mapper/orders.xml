@@ -291,37 +291,45 @@
 		b.brand_name,
 		p.name,
 		po.option_value,
-		
-        e.exchange_id,
-        e.return_carrier_name AS exchange_return_carrier_name,    
-        e.return_tracking_no AS exchange_return_tracking_no,      
-        e.shipping_carrier_name AS exchange_shipping_carrier_name, 
-        e.shipping_tracking_no AS exchange_shipping_tracking_no,   
-        e.shipping_cost_payer AS exchange_cost_payer,              
-        
-        r.returns_id,
-        r.return_carrier_name AS return_carrier_name,              
-        r.return_tracking_no AS return_tracking_no,               
-        r.shipping_cost_payer AS return_cost_payer      
-        
+
+		e.exchange_id,
+		e.return_carrier_name AS exchange_return_carrier_name,
+		e.return_tracking_no AS exchange_return_tracking_no,
+		e.shipping_carrier_name AS exchange_shipping_carrier_name,
+		e.shipping_tracking_no AS exchange_shipping_tracking_no,
+		e.shipping_cost_payer AS exchange_cost_payer,
+
+		r.returns_id,
+		r.return_carrier_name AS return_carrier_name,
+		r.return_tracking_no AS return_tracking_no,
+		r.shipping_cost_payer AS return_cost_payer
+
 		FROM order_item oi
 		INNER JOIN orders o ON oi.order_id = o.orders_id
-		LEFT JOIN brand b ON oi.brand_id = b.brand_id       
-        LEFT JOIN product p ON oi.product_id = p.product_id
-        LEFT JOIN product_option po ON oi.option_id = po.product_option_id
-		LEFT JOIN exchange e ON oi.order_item_id = e.order_item_id
-		LEFT JOIN returns r ON oi.order_item_id = r.order_item_id
+		LEFT
+		JOIN brand b ON oi.brand_id = b.brand_id
+		LEFT JOIN product p ON oi.product_id = p.product_id
+		LEFT JOIN product_option po ON oi.option_id = po.product_option_id
+		LEFT
+		JOIN exchange e ON oi.order_item_id = e.order_item_id
+		LEFT JOIN returns
+		r ON oi.order_item_id = r.order_item_id
 		WHERE o.member_id = #{memberId}
 		AND oi.status IN (
 		'CANCELLED',
-		'RETURN_REQUESTED', 'RETURN_APPROVED', 'COLLECTING', 'RETURN_REFUNDING',
-		'RETURN_REJECTED', 'RETURN_COMPLETED',
-		'EXCHANGE_REQUESTED', 'EXCHANGE_APPROVED', 'EXCHANGE_SHIPPING', 'EXCHANGE_REJECTED',
+		'RETURN_REQUESTED', 'RETURN_APPROVED',
+		'COLLECTING', 'RETURN_REFUNDING',
+		'RETURN_REJECTED',
+		'RETURN_COMPLETED',
+		'EXCHANGE_REQUESTED', 'EXCHANGE_APPROVED',
+		'EXCHANGE_SHIPPING', 'EXCHANGE_REJECTED',
 		'EXCHANGE_COMPLETED'
 		)
 		<if test="startDate != null and endDate != null">
-			AND DATE(oi.updated_at) BETWEEN #{startDate} AND #{endDate}
+			AND DATE(oi.updated_at) BETWEEN #{startDate} AND
+			#{endDate}
 		</if>
+		
 		ORDER BY oi.updated_at DESC
 	</select>
 
@@ -439,20 +447,10 @@
 		GROUP BY o.orders_id, o.order_code, o.member_id, m.name,
 		e.return_tracking_no, e.shipping_tracking_no
 
-		<choose>
-			<when test="sortColumn == 'date'">
-				ORDER BY MAX(oi.updated_at)
-			</when>
-			<when test="sortColumn == 'total'">
-				ORDER BY SUM(oi.total)
-			</when>
-			<otherwise>
-				ORDER BY MAX(oi.updated_at) DESC
-			</otherwise>
-		</choose>
-
-		<if test="sortDirection != null and sortDirection != ''">
-			${sortDirection}
+		<if test="sortField != null and sortField != ''">
+			ORDER BY ${sortField}
+			<if test="sortOrder == 'desc'">DESC</if>
+			<if test="sortOrder == 'asc'">ASC</if>
 		</if>
 
 		LIMIT #{limit} OFFSET #{offset}
@@ -772,22 +770,12 @@
 		GROUP BY o.orders_id, o.order_code, o.member_id, m.name,
 		r.return_tracking_no
 
-		<choose>
-			<when test="sortColumn == 'date'">
-				ORDER BY MAX(oi.updated_at)
-			</when>
-			<when test="sortColumn == 'total'">
-				ORDER BY SUM(oi.total)
-			</when>
-			<otherwise>
-				ORDER BY MAX(oi.updated_at) DESC
-			</otherwise>
-		</choose>
-
-		<if test="sortDirection != null and sortDirection != ''">
-			${sortDirection}
+		<if test="sortField != null and sortField != ''">
+			ORDER BY ${sortField}
+			<if test="sortOrder == 'desc'">DESC</if>
+			<if test="sortOrder == 'asc'">ASC</if>
 		</if>
-
+		
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
@@ -1100,20 +1088,10 @@
 
 		GROUP BY o.orders_id, o.order_code, o.member_id, m.name
 
-		<choose>
-			<when test="sortColumn == 'date'">
-				ORDER BY MAX(oi.updated_at)
-			</when>
-			<when test="sortColumn == 'total'">
-				ORDER BY SUM(oi.total)
-			</when>
-			<otherwise>
-				ORDER BY MAX(oi.updated_at) DESC
-			</otherwise>
-		</choose>
-
-		<if test="sortDirection != null and sortDirection != ''">
-			${sortDirection}
+		<if test="sortField != null and sortField != ''">
+			ORDER BY ${sortField}
+			<if test="sortOrder == 'desc'">DESC</if>
+			<if test="sortOrder == 'asc'">ASC</if>
 		</if>
 
 		LIMIT #{limit} OFFSET #{offset}
@@ -1396,7 +1374,13 @@
 				AND o.created_at &lt;= #{endDate}
 			</if>
 		</where>
-		ORDER BY o.created_at DESC
+		
+		<if test="sortField != null and sortField != ''">
+			ORDER BY ${sortField}
+			<if test="sortOrder == 'desc'">DESC</if>
+			<if test="sortOrder == 'asc'">ASC</if>
+		</if>
+		
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
