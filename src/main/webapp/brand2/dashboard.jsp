@@ -7,16 +7,27 @@
 <meta charset="UTF-8">
 <title>대시보드 화면</title>
 
-
-<link rel="stylesheet" href="./dashboard.css" />
-
+<!-- Pretendard 폰트 (CDN) -->
 <link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/pretendard/dist/web/static/pretendard.css" />
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+
+<!-- flatpickr 기본 테마 -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
+
+<!-- 한글화 & 커스텀 CSS -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
+
+<link rel="stylesheet" href="./css/dashboard.css" />
+
 <link rel="stylesheet" href="../tagcss/tag.css" />
 <link rel="stylesheet" href="../tagcss/breadcrumb.css" />
 <link rel="stylesheet" href="../tagcss/dateInput.css" />
 <link rel="stylesheet" href="../tagcss/form-controls.css" />
-<link rel="stylesheet" href="../tagcss/header.css" />
+<link rel="stylesheet" href="../tagcss/brandHeader.css" />
 <link rel="stylesheet" href="../tagcss/layout.css" />
 <link rel="stylesheet" href="../tagcss/reset.css" />
 <link rel="stylesheet" href="../tagcss/selectbox.css" />
@@ -30,12 +41,8 @@
 <!-- 달력 -->
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-
-<link rel="stylesheet" href="./css/dashboard.css" />
 
 <!-- Chart.js CDN -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -51,7 +58,7 @@
 <body>
 	<my:layout>
 		<my:breadcrumb
-			items="대시보드:/brand2/dashboard.jsp, 매출지표:/brand2/salesStatus.jsp, 성과지표:/brand2/salesStatus.jsp. 마케팅메일 성과:/brand2/salesStatus.jsp, 메인이벤트지표:/brand2/salesStatus.jsp" />
+			items="대시보드:/brand2/dashboard, 매출지표:/brand2/salesStatus.jsp, 성과지표:/brand2/salesStatus.jsp. 마케팅메일 성과:/brand2/salesStatus.jsp, 메인이벤트지표:/brand2/salesStatus.jsp" />
 
 		<div class=dachcontainer>
 			<!-- KPI 지표 -->
@@ -119,7 +126,8 @@
 	</my:layout>
 
 <script>
-  const salesData = ${salesListJson}; // Controller에서 미리 JSON 변환해서 모델에 넣어주기
+const salesData = ${salesListJson != null ? salesListJson : "[]"};
+const salesCompareData = ${salesCompareJson != null ? salesCompareJson : "[]"};
 </script>
 <script src="./js/dashboard.js"></script>
 
