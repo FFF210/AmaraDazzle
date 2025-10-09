@@ -101,4 +101,12 @@ public class OrderDAOImpl implements OrderDAO {
 		}
 
 	}
+
+	//교환/반품 신청용
+	@Override
+	public Map<String, Object> getOrderItemForApply(Long orderItemId) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        return sqlSession.selectOne("mapper.orders.getOrderItemForApply", orderItemId);
+	    }
+	}
 }

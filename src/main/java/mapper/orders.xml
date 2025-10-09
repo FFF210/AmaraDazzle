@@ -291,41 +291,75 @@
 		b.brand_name,
 		p.name,
 		po.option_value,
-		
-        e.exchange_id,
-        e.return_carrier_name AS exchange_return_carrier_name,    
-        e.return_tracking_no AS exchange_return_tracking_no,      
-        e.shipping_carrier_name AS exchange_shipping_carrier_name, 
-        e.shipping_tracking_no AS exchange_shipping_tracking_no,   
-        e.shipping_cost_payer AS exchange_cost_payer,              
-        
-        r.returns_id,
-        r.return_carrier_name AS return_carrier_name,              
-        r.return_tracking_no AS return_tracking_no,               
-        r.shipping_cost_payer AS return_cost_payer      
-        
+
+		e.exchange_id,
+		e.return_carrier_name AS exchange_return_carrier_name,
+		e.return_tracking_no AS exchange_return_tracking_no,
+		e.shipping_carrier_name AS exchange_shipping_carrier_name,
+		e.shipping_tracking_no AS exchange_shipping_tracking_no,
+		e.shipping_cost_payer AS exchange_cost_payer,
+
+		r.returns_id,
+		r.return_carrier_name AS return_carrier_name,
+		r.return_tracking_no AS return_tracking_no,
+		r.shipping_cost_payer AS return_cost_payer
+
 		FROM order_item oi
 		INNER JOIN orders o ON oi.order_id = o.orders_id
-		LEFT JOIN brand b ON oi.brand_id = b.brand_id       
-        LEFT JOIN product p ON oi.product_id = p.product_id
-        LEFT JOIN product_option po ON oi.option_id = po.product_option_id
-		LEFT JOIN exchange e ON oi.order_item_id = e.order_item_id
-		LEFT JOIN returns r ON oi.order_item_id = r.order_item_id
+		LEFT
+		JOIN brand b ON oi.brand_id = b.brand_id
+		LEFT JOIN product p ON oi.product_id = p.product_id
+		LEFT JOIN product_option po ON oi.option_id = po.product_option_id
+		LEFT
+		JOIN exchange e ON oi.order_item_id = e.order_item_id
+		LEFT JOIN returns
+		r ON oi.order_item_id = r.order_item_id
 		WHERE o.member_id = #{memberId}
 		AND oi.status IN (
 		'CANCELLED',
-		'RETURN_REQUESTED', 'RETURN_APPROVED', 'COLLECTING', 'RETURN_REFUNDING',
-		'RETURN_REJECTED', 'RETURN_COMPLETED',
-		'EXCHANGE_REQUESTED', 'EXCHANGE_APPROVED', 'EXCHANGE_SHIPPING', 'EXCHANGE_REJECTED',
+		'RETURN_REQUESTED', 'RETURN_APPROVED',
+		'COLLECTING', 'RETURN_REFUNDING',
+		'RETURN_REJECTED',
+		'RETURN_COMPLETED',
+		'EXCHANGE_REQUESTED', 'EXCHANGE_APPROVED',
+		'EXCHANGE_SHIPPING', 'EXCHANGE_REJECTED',
 		'EXCHANGE_COMPLETED'
 		)
 		<if test="startDate != null and endDate != null">
-			AND DATE(oi.updated_at) BETWEEN #{startDate} AND #{endDate}
+			AND DATE(oi.updated_at) BETWEEN #{startDate} AND
+			#{endDate}
 		</if>
 		ORDER BY oi.updated_at DESC
 	</select>
 
-
+	<!-- ==== [소비자] 교환/반품 신청용: 주문 상품 단건 조회 === -->
+	<select id="getOrderItemForApply" parameterType="Long"
+		resultType="map">
+		SELECT
+		oi.order_item_id as orderItemId,
+		oi.order_id as orderId,
+		oi.brand_id as brandId,
+		oi.product_id as productId,
+		oi.option_id as optionId,
+		oi.unit_price as unitPrice,
+		oi.quantity,
+		oi.line_subtotal as lineSubtotal,
+		oi.discount,
+		oi.total,
+		oi.status,
+		o.order_code as orderCode,
+		p.name as productName,
+		p.thumbnail_file_id as thumbnailFileId,
+        p.image1_file_id as image1FileId,
+		b.brand_name as brandName,
+		po.option_value as optionValue
+		FROM order_item oi
+		INNER JOIN orders o ON oi.order_id = o.orders_id
+		LEFT JOIN product p ON oi.product_id = p.product_id
+		LEFT JOIN brand b ON oi.brand_id = b.brand_id
+		LEFT JOIN product_option po ON oi.option_id = po.product_option_id
+		WHERE oi.order_item_id = #{orderItemId}
+	</select>
 
 
 
