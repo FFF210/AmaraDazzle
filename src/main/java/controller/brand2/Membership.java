@@ -41,6 +41,7 @@ public class Membership extends HttpServlet {
 		// 멤버십플랜 종류
 		List<MembershipPlan> plans = service.getMembershipPlans();
 		request.setAttribute("plans", plans);
+		// jsp items
 
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/brand2/membershipPay.jsp");
 		dispatcher.forward(request, response);

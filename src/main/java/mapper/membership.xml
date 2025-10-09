@@ -86,32 +86,55 @@
 
 	<!-- [brand2] 브랜드별 현재 이용중 멤버십 조회 (오늘 날짜가 start~end 사이) -->
 	<select id="selectCurrentMembership" parameterType="long"
-		resultType="membership">
-		SELECT *
-		FROM membership
-		WHERE brand_id = #{brandId}
+		resultType="membershipList">
+		SELECT 
+		m.membership_id,
+		m.brand_id,
+		m.plan_id,
+		m.start_date,
+		m.end_date,
+		m.status,
+		m.created_at,
+		m.updated_at,
+		m.remain_quota,
+		mp.plan_period AS planPeriod
+		FROM membership m
+		LEFT JOIN membership_plan mp
+		ON m.plan_id = mp.membership_plan_id
+		WHERE m.brand_id = #{brandId}
 		AND
-		status = 'ACTIVE'
-		AND start_date &lt;= NOW()
-		AND end_date &gt;= NOW()
+		m.status = 'ACTIVE'
+		AND m.start_date &lt;= NOW()
+		AND m.end_date &gt;= NOW()
 		ORDER BY
-		created_at DESC
+		m.created_at DESC
 		LIMIT 1
 	</select>
 
 
 	<!-- [brand2] 브랜드별 예약된 멤버십 조회 (start_date > NOW()) -->
 	<select id="selectReservedMembership" parameterType="long"
-		resultType="membership">
-		SELECT *
-		FROM membership
-		WHERE brand_id = #{brandId}
+		resultType="membershipList">
+		SELECT 
+		m.membership_id,
+		m.brand_id,
+		m.plan_id,
+		m.start_date,
+		m.end_date,
+		m.status,
+		m.created_at,
+		m.updated_at,
+		m.remain_quota,
+		mp.plan_period AS planPeriod
+		FROM membership m
+		LEFT JOIN membership_plan mp
+		ON m.plan_id = mp.membership_plan_id
+		WHERE m.brand_id = #{brandId}
 		AND
-		status = 'ACTIVE'
-		AND start_date &gt; NOW()
-		ORDER BY start_date ASC
+		m.status = 'ACTIVE'
+		AND m.start_date &gt; NOW()
+		ORDER BY m.start_date ASC
 		LIMIT 1
 	</select>
-
 
 </mapper>

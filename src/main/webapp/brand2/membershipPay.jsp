@@ -108,10 +108,10 @@
 		    tossPayments
 		      .requestPayment("카드", {
 		        amount: parseInt(selected.value, 10),  // ✅ 선택된 플랜 금액 반영
-		        orderId: "M-" + planId + "-" + new Date().getTime(), // ✅ 주문번호 (유니크하게 생성)
-		        orderName: planTitle,   // ✅ plan-title 값 반영
+		        orderId: "M-" + planId + "-" + Date.now(), // 주문번호 (유니크하게 생성), "M-PLAN_1M"
+		        orderName: planTitle,   // plan-title 값 반영, "1개월 이용권"
 		        customerName: "${membership.brandId}", 
-		        successUrl: "http://localhost:8080/tossSuccess", 
+		        successUrl: "http://localhost:8080/tossSuccess?planId=" + planId + "&orderName=" + encodeURIComponent(planTitle),
 		        failUrl: "http://localhost:8080/tossFail"
 		      })
 /* 		      .catch(function (error) {

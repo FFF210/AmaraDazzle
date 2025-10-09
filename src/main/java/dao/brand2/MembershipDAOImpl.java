@@ -56,13 +56,13 @@ public class MembershipDAOImpl implements MembershipDAO {
 
 	// 브랜드별 현재 이용중 멤버십
 	@Override
-	public Membership selectCurrentMembership(Long brandId) {
+	public MembershipList selectCurrentMembership(Long brandId) {
 		return sqlSession.selectOne("mapper.membership.selectCurrentMembership", brandId);
 	}
 
 	// 브랜드별 예약된 멤버십
 	@Override
-	public Membership selectReservedMembership(Long brandId) {
+	public MembershipList selectReservedMembership(Long brandId) {
 		return sqlSession.selectOne("mapper.membership.selectReservedMembership", brandId);
 	}
 
