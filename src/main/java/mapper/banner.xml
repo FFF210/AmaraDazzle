@@ -15,18 +15,18 @@
 		manager_tel, start_date, end_date,
 		banner_name,
 		banner_message, status,
-		brand_url, upload_file_id)
+		brand_url, upload_file_id, period)
 		VALUES
 		(#{brandId},
 		#{managerName},
 		#{managerTel}, #{startDate},
 		#{endDate},
 		#{bannerName},
-		#{bannerMessage}, #{status}, #{brandUrl}, #{uploadFileId})
+		#{bannerMessage}, #{status}, #{brandUrl}, #{uploadFileId}, DATEDIFF(#{endDate}, #{startDate}) + 1)
 	</insert>
 
 	<!-- 상세보기 버튼 -->
-	<select id="selectBannerById" parameterType="long"
+	<select id="selectBannerById" parameterType="java.lang.Long"
 		resultType="banner">
 		SELECT
 		banner_id AS bannerId,
@@ -41,7 +41,7 @@
 		created_at AS createdAt,
 		banner_message AS bannerMessage,
 		upload_file_id AS uploadFileId,
-		DATEDIFF(end_date, start_date) AS period
+		DATEDIFF(end_date, start_date)+1 AS period
 		FROM banner
 		WHERE banner_id = #{bannerId}
 	</select>
@@ -51,7 +51,7 @@
 		UPDATE banner
 		SET
 		status = #{status},
-		changed_at=now()
+		updated_at=now()
 		WHERE banner_id = #{bannerId}
 	</update>
 
@@ -68,10 +68,11 @@
 		b.banner_message,
 		b.status,
 		b.created_at,
-		b.changed_at,
+		b.updated_at,
 		b.brand_url,
 		b.state_change,
 		b.admin_id,
+		DATEDIFF(b.end_date, b.start_date) + 1 AS period,
 		CASE
 		when ap.payment_id IS NOT NULL THEN 1
 		ELSE 0
@@ -131,7 +132,7 @@
 	</select>
 
 	<!-- 결제 완료 후 배너 상태 변경 <update id="updateBannerStatus" parameterType="map"> 
-		UPDATE banner SET status = #{status}, changed_at = NOW() WHERE banner_id 
+		UPDATE banner SET status = #{status}, updated_at = NOW() WHERE banner_id 
 		= #{bannerId} </update> -->
 
 	<!-- brand2 end -->
@@ -149,8 +150,8 @@
 				and bn.created_at &lt; #{endDateTime})
 			</if>
 			<if test="startDateTime2 != null and endDateTime2 != null">
-				and (bn.changed_at &gt;= #{startDateTime2}
-				and bn.changed_at &lt; #{endDateTime2})
+				and (bn.updated_at &gt;= #{startDateTime2}
+				and bn.updated_at &lt; #{endDateTime2})
 			</if>
 			<if test="middleFilter != null and middleFilter != ''">
 				<choose>
@@ -199,8 +200,8 @@
 				and bn.created_at &lt; #{endDateTime})
 			</if>
 			<if test="startDateTime2 != null and endDateTime2 != null">
-				and (bn.changed_at &gt;= #{startDateTime2}
-				and bn.changed_at &lt; #{endDateTime2})
+				and (bn.updated_at &gt;= #{startDateTime2}
+				and bn.updated_at &lt; #{endDateTime2})
 			</if>
 			<if test="middleFilter != null and middleFilter != ''">
 				<choose>
@@ -263,7 +264,7 @@
 		bannerMessage,
 		b.status AS status,
 		b.created_at AS createdAt,
-		b.changed_at AS changedAt,
+		b.updated_at AS changedAt,
 		b.brand_url AS
 		brandUrl,
 		b.state_change AS stateChange,

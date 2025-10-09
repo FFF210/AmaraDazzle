@@ -123,19 +123,25 @@ public class TossController extends HttpServlet {
             	    membershipService.createMembershipWithPayment(adminPayment, planId, orderName);
             	    
             	} else if (orderIdConfirm.startsWith("B-")) {
-            		// 배너 광고 결제
-            		adminPayment.setPaymentType("BANNER_AD");
-            		adminPayment.setOrderName(orderNameConfirm);
-            		
-            		AdbannerService service = new AdbannerServiceImpl();
-            		service.savePayment(adminPayment);
-            		
-            		try {
-            			// orderName이 숫자로 들어오는 경우 (배너 ID)
-                        adminPayment.setBannerId(Long.valueOf(orderNameConfirm));
-                    } catch (NumberFormatException e) {
-                        System.err.println("배너 결제인데 orderName이 숫자가 아님: " + orderNameConfirm);
-            		}
+            	    // 배너 광고 결제
+            	    adminPayment.setPaymentType("BANNER_AD");
+
+            	    // "B-11-1739097091234" → split 후 index 1 = "11"
+            	    String[] parts = orderIdConfirm.split("-");
+            	    if (parts.length > 1) {
+            	        try {
+            	            adminPayment.setBannerId(Long.valueOf(parts[1])); // bannerId 세팅
+            	        } catch (NumberFormatException e) {
+            	            System.err.println("orderId에서 배너ID 추출 실패: " + orderIdConfirm);
+            	        }
+            	    }
+
+            	    // 상품 설명 (ex: "광고배너 3일 이용")
+            	    adminPayment.setOrderName(orderNameConfirm);
+
+            	    // 결제 내역 저장 + 배너 상태 갱신
+            	    AdbannerService service = new AdbannerServiceImpl();
+            	    service.savePayment(adminPayment);
             	}
             	
             	request.getRequestDispatcher("/brand2/tossPaymentSuccess.jsp").forward(request, response);
