@@ -13,7 +13,7 @@ public class BannerDetail {
     private String bannerMessage;  // 관리자 전달사항
     private String status;         // 진행상황 (PENDING / APPROVED / ONGOING / COMPLETED / CANCELED)
     private Timestamp createdAt;   // 신청일 (DEFAULT CURRENT_TIMESTAMP)
-    private Timestamp updatedAt;   // 수정일
+    private Timestamp changedAt;   // 수정일
     private Integer isExposed;     // 노출여부 (tinyint, DEFAULT 1)
     private String brandUrl;       // 브랜드페이지 URL
     private String stateChange;    // 배너 게시 상태 (POSTING / OFF)
@@ -111,11 +111,11 @@ public class BannerDetail {
         this.createdAt = createdAt;
     }
 
-    public Timestamp getUpdatedAt() {
-        return updatedAt;
+    public Timestamp getChangedAt() {
+        return changedAt;
     }
-    public void setUpdatedAt(Timestamp updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setChangedAt(Timestamp changedAt) {
+        this.changedAt = changedAt;
     }
 
     public Integer getIsExposed() {
@@ -158,7 +158,7 @@ public class BannerDetail {
 		return "Banner [bannerId=" + bannerId + ", brandId=" + brandId + ", managerName=" + managerName
 				+ ", managerTel=" + managerTel + ", startDate=" + startDate + ", endDate=" + endDate + ", bannerName="
 				+ bannerName + ", bannerMessage=" + bannerMessage + ", status=" + status + ", createdAt=" + createdAt
-				+ ", updatedAt=" + updatedAt + ", isExposed=" + isExposed + ", brandUrl=" + brandUrl + ", stateChange="
+				+ ", changedAt=" + changedAt + ", isExposed=" + isExposed + ", brandUrl=" + brandUrl + ", stateChange="
 				+ stateChange + ", adminId=" + adminId + ", UploadFileId=" + UploadFileId + ", period=" + period
 				+ ", uploadFileName=" + uploadFileName + "]";
 	}
