@@ -79,7 +79,7 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	// ===============orderList 용도=================
-	
+
 	@Override
 	public List<Map<String, Object>> getOrderItemsByMemberWithPeriod(Map<String, Object> params) throws Exception {
 		return sqlSession.selectList("mapper.orders.getOrderItemsByMemberWithPeriod", params);
@@ -95,42 +95,51 @@ public class OrderDAOImpl implements OrderDAO {
 	public Map<String, Object> getOrderStatusCountByMember(Long memberId) throws Exception {
 		return sqlSession.selectOne("mapper.orders.getOrderStatusCountByMember", memberId);
 	}
-	
-	// 주문 상품 상태 업데이트 
+
+	// 주문 상품 상태 업데이트
 	@Override
 	public void updateOrderItemStatus(Long orderItemId, String status) throws Exception {
-		 try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-	            Map<String, Object> params = new HashMap<>();
-	            params.put("orderItemId", orderItemId);
-	            params.put("status", status);
-	            
-	            int result = session.update("mapper.orders.updateOrderItemStatus", params);
-	            
-	            if (result > 0) {
-	                session.commit();
-	            } else {
-	                session.rollback();
-	                throw new Exception("주문 상품 상태 업데이트 실패");
-	            }
-		 }		
+		try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			Map<String, Object> params = new HashMap<>();
+			params.put("orderItemId", orderItemId);
+			params.put("status", status);
+
+			int result = session.update("mapper.orders.updateOrderItemStatus", params);
+
+			if (result > 0) {
+				session.commit();
+			} else {
+				session.rollback();
+				throw new Exception("주문 상품 상태 업데이트 실패");
+			}
+		}
 	}
-	
-	//주문 상태 조회
+
+	// 주문 상태 조회
 	@Override
 	public String getOrderItemStatus(Long orderItemId) throws Exception {
-	    try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-	        return session.selectOne("mapper.orders.getOrderItemStatus", orderItemId);
-	    }
+		try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return session.selectOne("mapper.orders.getOrderItemStatus", orderItemId);
+		}
 	}
-	
-	//주문 상태 취소로 바꾸기
+
+	// 주문 상태 취소로 바꾸기
 	@Override
 	public int cancelOrderItem(Long orderItemId) throws Exception {
-	    try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-	        int result = session.update("mapper.orders.cancelOrderItem", orderItemId);
-	        session.commit();
-	        return result;
-	    }
+		try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			int result = session.update("mapper.orders.cancelOrderItem", orderItemId);
+			session.commit();
+			return result;
+		}
+	}
+
+	// 재고 복구
+	@Override
+	public void restoreStockOnCancel(Long orderItemId) throws Exception {
+		try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			session.update("mapper.orders.restoreStockOnCancel", orderItemId);
+			session.commit();
+		}
 	}
 
 	// ================ 취소/교환/반품 통합 목록 조회 ===================
@@ -141,13 +150,12 @@ public class OrderDAOImpl implements OrderDAO {
 		}
 	}
 
-	//교환/반품 신청용
+	// 교환/반품 신청용
 	@Override
 	public Map<String, Object> getOrderItemForApply(Long orderItemId) throws Exception {
 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-	        return sqlSession.selectOne("mapper.orders.getOrderItemForApply", orderItemId);
-	    }
+			return sqlSession.selectOne("mapper.orders.getOrderItemForApply", orderItemId);
+		}
 	}
-
 
 }
