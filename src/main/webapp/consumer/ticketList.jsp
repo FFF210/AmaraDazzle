@@ -62,7 +62,7 @@
                 
                 <%-- 문의 내역이 있을 때 --%>
                 <c:forEach var="ticket" items="${ticketList}" varStatus="status">
-                    <tr onclick="location.href='<c:url value='store/mypage/ticketDetail'/>?ticketId=${ticket.ticketId}'" 
+                    <tr onclick="location.href='<c:url value='/store/mypage/ticketDetail'/>?ticketId=${ticket.ticketId}'" 
                         style="cursor: pointer;">
                         <td>${status.count}</td>
                         <td>

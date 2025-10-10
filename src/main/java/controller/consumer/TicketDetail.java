@@ -53,7 +53,7 @@ public class TicketDetail extends HttpServlet {
 
 			// JSP로 데이터 전달
 			request.setAttribute("ticket", ticket);
-			request.getRequestDispatcher("/consume/ticketDetail.jsp").forward(request, response);
+			request.getRequestDispatcher("/consumer/ticketDetail.jsp").forward(request, response);
 
 		} catch (Exception e) {
 			e.printStackTrace();
