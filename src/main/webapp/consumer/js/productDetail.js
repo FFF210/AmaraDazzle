@@ -248,35 +248,33 @@ function updateTotalPrice() {
     console.log('updateTotalPrice 호출됨');
     console.log('selectedOptions:', selectedOptions);
 
+    const totalAmountElement = document.getElementById('totalAmount');
+    const hasOptions = typeof window.productOptionsData !== 'undefined';
+
+    // 옵션 선택 안 됨
     if (selectedOptions.length === 0) {
-        const totalAmountElement = document.getElementById('totalAmount');
-        console.log('totalAmountElement 찾음:', totalAmountElement);
-
-        const hasOptions = typeof window.productOptionsData !== 'undefined';
-
-        if (selectedOptions.length === 0) {
-            if (totalAmountElement) {
-                if (hasOptions) {
-                    totalAmountElement.textContent = '0원';
-                } else {
-                    totalAmountElement.textContent = window.productPrice.toLocaleString() + '원';
-                }
-            }
-            return;
-        }
-
-        totalPrice = selectedOptions.reduce((total, option) => {
-            return total + (option.price * option.quantity);
-        }, 0);
-
-        console.log('계산된 totalPrice:', totalPrice);
-
         if (totalAmountElement) {
-            totalAmountElement.textContent = totalPrice.toLocaleString() + '원';
-            console.log('가격 업데이트 완료:', totalAmountElement.textContent);
-        } else {
-            console.log('totalAmountElement를 찾을 수 없습니다!');
+            if (hasOptions) {
+                // 옵션 상품: 0원
+                totalAmountElement.textContent = '0원';
+            } else {
+                // 단일 상품: 세일가
+                totalAmountElement.textContent = window.productPrice.toLocaleString() + '원';
+            }
         }
+        return;
+    }
+
+    // 옵션 선택됨: 총합 계산
+    totalPrice = selectedOptions.reduce((total, option) => {
+        return total + (option.price * option.quantity);
+    }, 0);
+
+    console.log('계산된 totalPrice:', totalPrice);
+
+    if (totalAmountElement) {
+        totalAmountElement.textContent = totalPrice.toLocaleString() + '원';
+        console.log('가격 업데이트 완료:', totalAmountElement.textContent);
     }
 }
 
@@ -605,7 +603,7 @@ function submitQna(event) {
     params.append('brandId', window.productBrandId);
     params.append('qnaContent', qnaContent);
     
-    fetch('/store/prodcutDetail/qna', {
+    fetch('/store/productDetail/qna', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
