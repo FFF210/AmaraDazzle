@@ -31,7 +31,9 @@
 	<%-- 헤더 --%>
 	<%@ include file="/consumer/header.jsp"%>
 
-	<my:pageHeader hasButton="false" title="고객센터" description="무엇을 도와드릴까요" />
+	<div class="pageHeader-wrapper">
+		<my:pageHeader hasButton="false" title="고객센터" description="무엇을 도와드릴까요" />
+	</div>
 
 	<!-- 문의 작성 페이지 -->
 	<main class="main-content">
@@ -71,7 +73,7 @@
 
 			<!-- 이미지 업로드 (최대 3개) -->
 			<div class="upload-image">
-				<label>이미지 첨부 (선택, 최대 3개)</label>
+				<label>이미지 첨부 <br>(선택, 최대 3개)</label>
 				<div style="display: flex; gap: 10px; margin-top: 10px;">
 					<my:imageBtn name="image1" />
 					<my:imageBtn name="image2" />
@@ -83,7 +85,7 @@
 				<input type="hidden" name="image3FileId" id="image3FileId">
 			</div>
 
-            <!-- tag부분 안 돼서 기본으로 추가해뒀는데 css를 전혀 건드리지 않아서 엉망이에요... -->
+			<!-- tag부분 안 돼서 기본으로 추가해뒀는데 css를 전혀 건드리지 않아서 엉망이에요... -->
 			<!-- 이미지 업로드 (최대 3개) -->
 			<!-- <div class="upload-image">
 				<label>이미지 첨부 (선택, 최대 3개)</label>
