@@ -27,33 +27,43 @@ public class EventFormDetail extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		String action = request.getParameter("action"); // 상세 or 취소 버튼
-		Long eventId = Long.parseLong(request.getParameter("eventId")); // 이벤트 id 받기
+		String eventIdParam = request.getParameter("eventId"); // 이벤트 id 받기
 
 		try {
 
 			if ("cancel".equals(action)) {
 
-				// ============= 취소 버튼 (아직 미구현) =============
+				// 취소 후 목록으로 이동 (page 유지)
+	            String page = request.getParameter("page");
+	            if (page == null || page.isEmpty()) {
+	                page = "1";
+	            }
 
-//				Map<String, Object> params = new HashMap<>();
-//				params.put("bannerId", Long.parseLong(request.getParameter("bannerId")));
-//				params.put("status", "CANCELED");
-//
-//				service.cancelBanner(params);
-//				response.sendRedirect(request.getContextPath() + "/brand2/adbannerList");
-//				return;
+	            // 쿼리스트링에서 불필요한 cancel 파라미터 제거
+	            String queryString = request.getQueryString();
+	            if (queryString != null) {
+	                queryString = queryString.replaceAll("(&)?action=cancel", "")
+	                                         .replaceAll("(&)?eventApplicationId=\\d+", "")
+	                                         .replaceAll("(&)?eventId=\\d+", "");
+	                if (queryString.startsWith("&")) {
+	                    queryString = queryString.substring(1);
+	                }
+	            }
 
-				// ============= 취소 버튼 =============
-				return;
+	            response.sendRedirect(request.getContextPath() + "/brand2/eventList"
+	                    + (queryString != null && !queryString.isEmpty() ? "?" + queryString : "?page=" + page));
+	            return;
 			}
 
 			// ============= 상세보기 버튼 =============
-
-			EventDetail detail = service.getEventDetailById(eventId);
-			request.setAttribute("event", detail);
-			request.getRequestDispatcher("/brand2/eventFormDetail.jsp").forward(request, response);
-
-			// ============= 상세보기 버튼 =============
+	        if (eventIdParam != null && !eventIdParam.isEmpty()) {
+	            Long eventId = Long.parseLong(eventIdParam);
+	            EventDetail detail = service.getEventDetailById(eventId);
+	            request.setAttribute("event", detail);
+	            request.getRequestDispatcher("/brand2/eventFormDetail.jsp").forward(request, response);
+	        } else {
+	            response.sendRedirect(request.getContextPath() + "/brand2/eventList");
+	        }
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.sendRedirect(request.getContextPath() + "/error.jsp");

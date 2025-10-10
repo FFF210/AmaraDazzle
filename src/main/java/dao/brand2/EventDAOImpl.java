@@ -3,6 +3,7 @@ package dao.brand2;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 
 import dto.Coupon;
@@ -77,6 +78,14 @@ public class EventDAOImpl implements EventDAO {
 	@Override
 	public EventDetail selectEventDetailById(Long eventId) throws Exception {
 		return sqlSession.selectOne("mapper.event.selectEventDetailById", eventId);
+	}
+	
+	// 이벤트 취소 버튼
+	@Override
+	public void deleteEventApplication(@Param("eventApplicationId") Long eventApplicationId) throws Exception {
+	    int deleted = sqlSession.delete("mapper.event.deleteEventApplication", eventApplicationId);
+	    System.out.println("삭제된 행 수 = " + deleted); // 디버깅용
+	    sqlSession.commit();
 	}
 
 }
