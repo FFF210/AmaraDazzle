@@ -72,7 +72,7 @@
 			</div>
 
 			<!-- 이미지 업로드 (최대 3개) -->
-			<div class="upload-image">
+			<%-- <div class="upload-image">
 				<label>이미지 첨부 <br>(선택, 최대 3개)</label>
 				<div style="display: flex; gap: 10px; margin-top: 10px;">
 					<my:imageBtn name="image1" />
@@ -83,11 +83,11 @@
 				<input type="hidden" name="image1FileId" id="image1FileId">
 				<input type="hidden" name="image2FileId" id="image2FileId">
 				<input type="hidden" name="image3FileId" id="image3FileId">
-			</div>
+			</div> --%>
 
 			<!-- tag부분 안 돼서 기본으로 추가해뒀는데 css를 전혀 건드리지 않아서 엉망이에요... -->
 			<!-- 이미지 업로드 (최대 3개) -->
-			<!-- <div class="upload-image">
+			<div class="upload-image">
 				<label>이미지 첨부 (선택, 최대 3개)</label>
 				<div class="image-upload-area"
 					style="display: flex; gap: 20px; margin-top: 10px;">
@@ -125,7 +125,7 @@
 							style="font-size: 12px; color: #666; display: block; margin-top: 5px;"></span>
 					</div>
 				</div>
-			</div> -->
+			</div> 
 
 			<!-- 답변 주체 (hidden, 기본값 ADMIN) -->
 			<input type="hidden" name="recieverType" id="recieverTypeInput"
@@ -167,7 +167,7 @@
 	    const formData = new FormData();
 	    formData.append('file', file);
 	    
-	    fetch('${pageContext.request.contextPath}/imageUpload', {
+	    fetch('${pageContext.request.contextPath}/store/imageUpload', {
 	        method: 'POST',
 	        body: formData
 	    })
@@ -179,7 +179,7 @@
 	            
 	            // 미리보기 이미지 표시
 	            const preview = document.getElementById('preview' + imageIndex);
-	            preview.src = '${pageContext.request.contextPath}/image?fileId=' + data.fileId;
+	            preview.src = '${pageContext.request.contextPath}/store/image?fileId=' + data.fileId;
 	            preview.style.display = 'block';
 	            
 	            // 파일명 표시
