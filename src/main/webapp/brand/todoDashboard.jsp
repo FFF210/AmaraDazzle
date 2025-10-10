@@ -134,7 +134,7 @@
 					<!-- 이번 주 인기 상품 -->
 					<section class="dashboard-section">
 						<div class="week">
-							<h3>🏆 이번 주 인기 상품</h3>
+							<h3 class="section-title">이번 주 인기 상품</h3>
 
 							<c:if test="${not empty products}">
 								<c:set var="weekStart" value="${products[0].weekStartDate}" />
@@ -172,7 +172,7 @@
 								</div>
 							</c:when>
 							<c:otherwise>
-								<p style="color: #888; margin-left: 20px;">이번 주 판매된 상품이
+								<p style="color: #666; font-size: 14px;">이번 주 판매된 상품이
 									없습니다.</p>
 							</c:otherwise>
 						</c:choose>

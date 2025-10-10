@@ -24,6 +24,8 @@
 <link rel="stylesheet" href="<c:url value='/tagcss/eventCard.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
 <link rel="stylesheet"
+	href="<c:url value='/tagcss/categoryFilter.css'/>" />
+<link rel="stylesheet"
 	href="<c:url value='/consumer/css/brandDetail.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
 </head>
@@ -31,130 +33,128 @@
 	<!-- 상단 헤더 -->
 	<%@ include file="/consumer/header.jsp"%>
 
-	<!-- 페이지-->
-	<div class="brandDetail-page">
+	<!-- 페이지 컨텐츠 -->
+	<div class="main-content">
 
-		<!-- 페이지 컨텐츠 -->
-		<div class="main-content">
+		<!-- 상단 영역 -->
+		<div class="upper-container">
 
-			<!-- 상단 영역 -->
-			<div class="upper-container">
+			<!-- 브랜드 헤더 -->
+			<div class="brand-header">
+				<div class="brand-title">
+					<h1>${brand.brandName}</h1>
 
-				<!-- 브랜드 헤더 -->
-				<div class="brand-header">
-					<div class="brand-title">
-						<h1>${brand.brandName}</h1>
-
-						<!-- 하트버튼 -->
-						<div class="brand-favorite" data-brandid="${brand.brandId}">
-							<my:heartBtn state="${isFollowing ? 'active' : 'default'}"
-								onlyIcon="true" hasCount="true" count="${followerCount}" />
-							<span>명이 이 브랜드를 좋아합니다.</span>
-						</div>
-					</div>
-
-					<!-- 브랜드 대표 이미지가 와야함...  w:980px h:320px -->
-					<div class="brand-image">
-						<c:if test="${brand.heroFileId != null}">
-							<!-- heroFileId로 이미지 표시 (upload_file 테이블 조인 필요하면 서블릿에서 처리) -->
-						</c:if>
+					<!-- 하트버튼 -->
+					<div class="brand-favorite" data-brandid="${brand.brandId}">
+						<my:heartBtn state="${isFollowing ? 'active' : 'default'}"
+							onlyIcon="true" hasCount="true" count="${followerCount}" />
+						<span>명이 이 브랜드를 좋아합니다.</span>
 					</div>
 				</div>
+
+				<!-- 브랜드 소개 -->
 				<div class="intro-wrapper">
 					<span>${brand.intro}</span>
 				</div>
 
-
-				<!-- 이벤트 & 브랜드 쿠폰 -->
-				<div class="brand-promotion">
-					<%-- <my:eventCard thumbnailFileId="${e.thumbnailFileId}"
-						title="${e.eventName}" startDate="${startFmt}" endDate="${endFmt}"
-						href="${detailUrl}" status="${e.status}" /> --%>
-
-					<!-- 쿠폰 다운 -->
-					<div class="coupon-download">
-						<%-- <my:consumerCoupon couponId="${coupon.couponId}"
-							cname="${coupon.cname}" couponLimit="${coupon.couponLimit}"
-							categoryName="${coupon.categoryName}"
-							amountCondition="${amountConditionFmt}"
-							downloaded="${coupon.downloaded}" amount="${amountFmt}" /> --%>
-						<button class="btn btn-primary btn-md">관심 브랜드 등록하고 쿠폰 받기</button>
-					</div>
+				<div class="brand-image">
+					<img
+						src="${pageContext.request.contextPath}/image?fileId=${brand.heroFileId}"
+						alt="브랜드 히어로 이미지" width="1020px" height="320px" />
 				</div>
 			</div>
 
 
-			<!-- 브랜드 상품존 -->
-			<div class="product-section">
-				<div class="filter-boxes">
-					<div class="category-filter">
-						<button
-							class="category-item ${empty param.category1Id ? 'selected' : ''}"
-							onclick="location.href='brandDetail?brandId=${brand.brandId}'">전체</button>
+			<!-- 이벤트 & 브랜드 쿠폰 -->
+			<div class="brand-promotion">
+				<%-- 이벤트 카드 --%>
+				<%-- 
+    <my:eventCard thumbnailFileId="${e.thumbnailFileId}"
+        title="${e.eventName}" startDate="${startFmt}" endDate="${endFmt}"
+        href="${detailUrl}" status="${e.status}" />
+    --%>
 
-						<button
-							class="category-item ${param.category1Id eq '1' ? 'selected' : ''}"
-							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=1'">스킨케어</button>
-
-						<button
-							class="category-item ${param.category1Id eq '8' ? 'selected' : ''}"
-							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=8'">마스크팩</button>
-
-						<button
-							class="category-item ${param.category1Id eq '14' ? 'selected' : ''}"
-							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=14'">클렌징</button>
-
-						<button
-							class="category-item ${param.category1Id eq '21' ? 'selected' : ''}"
-							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=21'">선케어</button>
-
-						<button
-							class="category-item ${param.category1Id eq '26' ? 'selected' : ''}"
-							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=26'">메이크업</button>
-
-						<button
-							class="category-item ${param.category1Id eq '49' ? 'selected' : ''}"
-							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=49'">헤어케어</button>
-
-						<button
-							class="category-item ${param.category1Id eq '54' ? 'selected' : ''}"
-							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=54'">바디케어</button>
-
-						<button
-							class="category-item ${param.category1Id eq '66' ? 'selected' : ''}"
-							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=66'">향수</button>
-
-						<button
-							class="category-item ${param.category1Id eq '70' ? 'selected' : ''}"
-							onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=70'">맨즈케어</button>
-					</div>
-					<div class="sortlist-wrapper">
-						<my:sortList hasSelect="false" />
-					</div>
-				</div>
-				<div class="product-grid">
-					<c:choose>
-						<c:when test="${not empty products}">
-							<c:forEach var="product" items="${products}">
-								<my:productCard brand="${brand.brandName}"
-									productId="${product.productId}" title="${product.productName}"
-									isSale="${product.discountType != null && product.discountType != 'NONE'}"
-									hasOption="true" originPrice="${product.price}"
-									saleRate="${product.discountValue != null ? product.discountValue : 0}"
-									finalPrice="${product.price}" />
-							</c:forEach>
-						</c:when>
-						<c:otherwise>
-							<p>등록된 상품이 없습니다.</p>
-						</c:otherwise>
-					</c:choose>
-				</div>
-
-				<c:if test="${not empty products}">
-					<div class="pagination-wrapper">
-						<my:pagination currentPage="1" baseUrl="" totalPages="1" />
-					</div>
+				<%-- 쿠폰 목록이 존재할 때만 렌더링 --%>
+				<c:if test="${not empty couponList}">
+					<c:forEach var="coupon" items="${couponList}">
+						<my:consumerCoupon couponId="${coupon.couponId}"
+							cname="${coupon.cname}" couponLimit="${coupon.couponLimit}"
+							categoryName="${coupon.categoryName}"
+							amountCondition="${coupon.amountConditionFmt}"
+							downloaded="${coupon.downloaded}" amount="${coupon.amountFmt}" />
+					</c:forEach>
 				</c:if>
+			</div>
+
+		</div>
+
+
+		<!-- 브랜드 상품존 -->
+		<div class="product-section">
+			<div class="category-filter">
+				<button
+					class="category-item ${empty param.category1Id ? 'selected' : ''}"
+					onclick="location.href='brandDetail?brandId=${brand.brandId}'">전체</button>
+
+				<button
+					class="category-item ${param.category1Id eq '1' ? 'selected' : ''}"
+					onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=1'">스킨케어</button>
+
+				<button
+					class="category-item ${param.category1Id eq '8' ? 'selected' : ''}"
+					onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=8'">마스크팩</button>
+
+				<button
+					class="category-item ${param.category1Id eq '14' ? 'selected' : ''}"
+					onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=14'">클렌징</button>
+
+				<button
+					class="category-item ${param.category1Id eq '21' ? 'selected' : ''}"
+					onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=21'">선케어</button>
+
+				<button
+					class="category-item ${param.category1Id eq '26' ? 'selected' : ''}"
+					onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=26'">메이크업</button>
+
+				<button
+					class="category-item ${param.category1Id eq '49' ? 'selected' : ''}"
+					onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=49'">헤어케어</button>
+
+				<button
+					class="category-item ${param.category1Id eq '54' ? 'selected' : ''}"
+					onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=54'">바디케어</button>
+
+				<button
+					class="category-item ${param.category1Id eq '66' ? 'selected' : ''}"
+					onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=66'">향수</button>
+
+				<button
+					class="category-item ${param.category1Id eq '70' ? 'selected' : ''}"
+					onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=70'">맨즈케어</button>
+			</div>
+			<div class="product-grid">
+				<c:choose>
+					<c:when test="${not empty products}">
+						<c:forEach var="product" items="${products}">
+							<my:productCard brand="${brand.brandName}"
+								productId="${product.productId}" title="${product.productName}"
+								isSale="${product.discountType != null && product.discountType != 'NONE'}"
+								hasOption="true" originPrice="${product.price}"
+								saleRate="${product.discountValue != null ? product.discountValue : 0}"
+								finalPrice="${product.price}" />
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<p>등록된 상품이 없습니다.</p>
+					</c:otherwise>
+				</c:choose>
+			</div>
+
+			<!-- 페이징 -->
+			<div class="page-pagination">
+				<my:pagination currentPage="${currentPage}"
+					totalPages="${totalPages}"
+					baseUrl="/store/brandDetail?${queryString}" />
 			</div>
 		</div>
 	</div>

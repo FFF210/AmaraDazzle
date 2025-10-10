@@ -18,6 +18,14 @@ public class CouponDAOImpl implements CouponDAO {
 		}
 	}
 
+	// ======================= [소비자] 해당 브랜드 쿠폰 목록 조회 =======================
+	@Override
+	public List<CouponList> selectAvailableCouponsForBrand(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.coupon.selectAvailableCouponsForBrand", params);
+		}
+	}
+
 	// ======================= [소비자] 쿠폰 다운로드 =======================
 	@Override
 	public void insertMemberCoupon(Map<String, Object> params) throws Exception {
