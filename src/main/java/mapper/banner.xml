@@ -51,7 +51,7 @@
 		UPDATE banner
 		SET
 		status = #{status},
-		updated_at=now()
+		changed_at=now()
 		WHERE banner_id = #{bannerId}
 	</update>
 
@@ -68,7 +68,7 @@
 		b.banner_message,
 		b.status,
 		b.created_at,
-		b.updated_at,
+		b.changed_at,
 		b.brand_url,
 		b.state_change,
 		b.admin_id,
@@ -132,7 +132,7 @@
 	</select>
 
 	<!-- 결제 완료 후 배너 상태 변경 <update id="updateBannerStatus" parameterType="map"> 
-		UPDATE banner SET status = #{status}, updated_at = NOW() WHERE banner_id 
+		UPDATE banner SET status = #{status}, changed_at = NOW() WHERE banner_id 
 		= #{bannerId} </update> -->
 
 	<!-- brand2 end -->
@@ -150,8 +150,8 @@
 				and bn.created_at &lt; #{endDateTime})
 			</if>
 			<if test="startDateTime2 != null and endDateTime2 != null">
-				and (bn.updated_at &gt;= #{startDateTime2}
-				and bn.updated_at &lt; #{endDateTime2})
+				and (bn.changed_at &gt;= #{startDateTime2}
+				and bn.changed_at &lt; #{endDateTime2})
 			</if>
 			<if test="middleFilter != null and middleFilter != ''">
 				<choose>
@@ -200,8 +200,8 @@
 				and bn.created_at &lt; #{endDateTime})
 			</if>
 			<if test="startDateTime2 != null and endDateTime2 != null">
-				and (bn.updated_at &gt;= #{startDateTime2}
-				and bn.updated_at &lt; #{endDateTime2})
+				and (bn.changed_at &gt;= #{startDateTime2}
+				and bn.changed_at &lt; #{endDateTime2})
 			</if>
 			<if test="middleFilter != null and middleFilter != ''">
 				<choose>
@@ -264,7 +264,7 @@
 		bannerMessage,
 		b.status AS status,
 		b.created_at AS createdAt,
-		b.updated_at AS changedAt,
+		b.changed_at AS changedAt,
 		b.brand_url AS
 		brandUrl,
 		b.state_change AS stateChange,
