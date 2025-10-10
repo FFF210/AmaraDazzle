@@ -55,7 +55,7 @@
 		SELECT coupon_id
 		FROM coupon
 		WHERE reason = 'Sign up Welcome'
-		AND provision = 'All'
+		AND provision = 'ALL'
 		LIMIT 1
 	</select>
 
