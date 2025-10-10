@@ -45,12 +45,16 @@
 
 	<!-- 컨텐츠 영역 -->
 	<div class="search-container">
-		<%-- <!-- 브랜드 매칭 영역 (예: 검색어가 브랜드명과 일치할 경우) -->
-		<c:if test="${keyword eq '바이오던스'}">
-			<my:brandNavCard brandName="${brand.brandName}"
-				brandId="${brand.brandId}" logoFileId="${brand.logoFileId}"
-				isWished="1" href="/store/brandDetail?brandId=${brand.brandId}" />
-		</c:if> --%>
+		<c:if test="${not empty brands}">
+			<div class="brand-match-section">
+				<c:forEach var="brand" items="${brands}">
+					<my:brandNavCard brandName="${brand.brandName}"
+						brandId="${brand.brandId}" logoFileId="${brand.logoFileId}"
+						isWished="${brand.isFollowed}"
+						href="/store/brandDetail?brandId=${brand.brandId}" />
+				</c:forEach>
+			</div>
+		</c:if>
 
 		<!-- 검색 필터 -->
 		<div class="search-filter">
@@ -232,8 +236,36 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
 
       const icon = btn.querySelector("i");
-      const productId = btn.closest(".product-card").dataset.productid;
-
+      const type = btn.dataset.type;
+      const id = btn.dataset.id;
+      
+      
+      if (type === "brand") {
+    	  fetch("/store/brandFollowToggle", {
+    	        method: "POST",
+    	        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    	        body: "brandId=" + encodeURIComponent(id)
+    	      })
+    	      .then(res => res.json())
+    	      .then(data => {
+    	        if (!data.success && data.requireLogin) {
+    	          window.location.href = "/store/login";
+    	        } else if (data.success) {
+    	          if (data.isFollowing) {
+    	            icon.classList.remove("bi-heart");
+    	            icon.classList.add("bi-heart-fill", "active");
+    	          } else {
+    	            icon.classList.remove("bi-heart-fill", "active");
+    	            icon.classList.add("bi-heart");
+    	          }
+    	        } else {
+    	          alert(data.message);
+    	        }
+    	      })
+    	      .catch(err => console.error(err));
+      } else {
+    	  const productId = btn.closest(".product-card").dataset.productid;
+    	  
       fetch("/store/wishlistToggle", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -256,6 +288,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       })
       .catch(err => console.error(err));
+      }
     });
   });
 

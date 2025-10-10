@@ -18,7 +18,7 @@
 	<!-- 메뉴 리스트 -->
 	<ul class="menu">
 		<!-- 단일 메뉴 -->
-		<li class="menu-item active"><a href="/brand/todoDashboard" class="menu-link"
+		<li class="menu-item"><a href="/brand/todoDashboard" class="menu-link"
 			title="홈"> <i class="bi bi-house-fill"></i> <span
 				class="menu-text">홈</span>
 		</a></li>
@@ -146,101 +146,114 @@
 </nav>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const sidebar = document.getElementById("sidebar");
-    const pinBtn = document.getElementById("pinBtn");
+document.addEventListener("DOMContentLoaded", () => {
+  const sidebar = document.getElementById("sidebar");
+  const pinBtn = document.getElementById("pinBtn");
 
-    // ===============================
-    // 1. 초기 상태 로드 (localStorage에서 불러오기)
-    // ===============================
-    const isPinned = localStorage.getItem("sidebarPinned") === "true";
-    if (isPinned) {
-      // 고정 상태 → 항상 열려 있음
-      sidebar.classList.remove("collapsed");
-      pinBtn.classList.add("pinned");
-    } else {
-      // 비고정 상태 → 기본은 닫혀 있음
+  /***********************************************
+   * 1. 고정 상태 로드
+   ***********************************************/
+  const isPinned = localStorage.getItem("sidebarPinned") === "true";
+  if (isPinned) {
+    sidebar.classList.remove("collapsed");
+    pinBtn.classList.add("pinned");
+  } else {
+    sidebar.classList.add("collapsed");
+    pinBtn.classList.remove("pinned");
+  }
+
+  /***********************************************
+   * 2. 고정 버튼 토글
+   ***********************************************/
+  pinBtn.addEventListener("click", () => {
+    const nowPinned = localStorage.getItem("sidebarPinned") === "true";
+    if (nowPinned) {
       sidebar.classList.add("collapsed");
       pinBtn.classList.remove("pinned");
+      localStorage.setItem("sidebarPinned", "false");
+    } else {
+      sidebar.classList.remove("collapsed");
+      pinBtn.classList.add("pinned");
+      localStorage.setItem("sidebarPinned", "true");
     }
+  });
 
-    // ===============================
-    // 2. 고정 버튼 클릭 → 상태 토글 + 저장
-    // ===============================
-    pinBtn.addEventListener("click", () => {
-      const nowPinned = localStorage.getItem("sidebarPinned") === "true";
-      if (nowPinned) {
-        // 이미 고정되어 있으면 → 해제
-        sidebar.classList.add("collapsed");
-        pinBtn.classList.remove("pinned");
-        localStorage.setItem("sidebarPinned", "false");
-      } else {
-        // 고정되어 있지 않으면 → 고정
-        sidebar.classList.remove("collapsed");
-        pinBtn.classList.add("pinned");
-        localStorage.setItem("sidebarPinned", "true");
-      }
-    });
+  /***********************************************
+   * 3. Hover 시 자동 열림/닫힘 (비고정일 때만)
+   ***********************************************/
+  sidebar.addEventListener("mouseenter", () => {
+    if (localStorage.getItem("sidebarPinned") !== "true") {
+      sidebar.classList.remove("collapsed");
+    }
+  });
+  sidebar.addEventListener("mouseleave", () => {
+    if (localStorage.getItem("sidebarPinned") !== "true") {
+      sidebar.classList.add("collapsed");
+    }
+  });
 
-    // ===============================
-    // 3. hover 시 자동 열림/닫힘 (고정 상태가 아닐 때만)
-    // ===============================
-    sidebar.addEventListener("mouseenter", () => {
-      if (localStorage.getItem("sidebarPinned") !== "true") {
-        sidebar.classList.remove("collapsed");
-      }
-    });
-    sidebar.addEventListener("mouseleave", () => {
-      if (localStorage.getItem("sidebarPinned") !== "true") {
-        sidebar.classList.add("collapsed");
-      }
-    });
+  /***********************************************
+   * 4. 서브메뉴 열림/닫힘 상태 저장
+   ***********************************************/
+  const submenuItems = document.querySelectorAll(".menu-item.has-submenu > .menu-link");
+  submenuItems.forEach((btn, idx) => {
+    const parent = btn.closest(".menu-item");
+    const isOpen = localStorage.getItem("submenuOpen_" + idx) === "true";
+    if (isOpen) parent.classList.add("open");
 
-    // ===============================
-    // 4. 서브메뉴 열림/닫힘 상태 저장
-    // ===============================
-    document.querySelectorAll(".menu-item.has-submenu > .menu-link").forEach((btn, idx) => {
-      const parent = btn.closest(".menu-item");
-
-      // 저장된 열림 상태 불러오기
-      const isOpen = localStorage.getItem("submenuOpen_" + idx) === "true";
-      if (isOpen) parent.classList.add("open");
-
-      // 클릭 시 토글 + 저장
-      btn.addEventListener("click", () => {
-        parent.classList.toggle("open");
-        localStorage.setItem("submenuOpen_" + idx, parent.classList.contains("open"));
-      });
-    });
-
-    // ===============================
-    // 5. 단일 메뉴(active) 처리
-    // ===============================
-    document.querySelectorAll(".menu-item:not(.has-submenu) > .menu-link").forEach(link => {
-      link.addEventListener("click", () => {
-        // 모든 메뉴/링크 active 해제
-        document.querySelectorAll(".menu-item, .submenu a").forEach(el => el.classList.remove("active"));
-
-        // 클릭된 메뉴에 active 추가
-        link.closest(".menu-item").classList.add("active");
-      });
-    });
-
-    // ===============================
-    // 6. 서브메뉴 항목 클릭 시 active 처리
-    // ===============================
-    document.querySelectorAll(".submenu a").forEach(link => {
-      link.addEventListener("click", () => {
-        // 모든 메뉴/링크 active 해제
-        document.querySelectorAll(".menu-item, .submenu a").forEach(el => el.classList.remove("active"));
-
-        // 부모 메뉴 + 클릭한 항목에 active 추가
-        const parentItem = link.closest(".menu-item");
-        parentItem.classList.add("active");
-        link.classList.add("active");
-      });
+    btn.addEventListener("click", () => {
+      parent.classList.toggle("open");
+      localStorage.setItem("submenuOpen_" + idx, parent.classList.contains("open"));
     });
   });
+
+  /***********************************************
+   * 5. 단일 메뉴 active 처리
+   ***********************************************/
+  document.querySelectorAll(".menu-item:not(.has-submenu) > .menu-link").forEach(link => {
+    link.addEventListener("click", () => {
+      document.querySelectorAll(".menu-item, .submenu a").forEach(el => el.classList.remove("active"));
+      link.closest(".menu-item").classList.add("active");
+    });
+  });
+
+  /***********************************************
+   * 6. 서브메뉴 항목 클릭 시 active 처리
+   ***********************************************/
+  document.querySelectorAll(".submenu a").forEach(link => {
+    link.addEventListener("click", () => {
+      document.querySelectorAll(".menu-item, .submenu a").forEach(el => el.classList.remove("active"));
+      const parentItem = link.closest(".menu-item");
+      parentItem.classList.add("active");
+      link.classList.add("active");
+    });
+  });
+
+  /***********************************************
+   * 7. 현재 URL 기반 active/open 자동 적용
+   ***********************************************/
+  const currentPath = window.location.pathname.replace(/\/$/, ""); // 끝 / 제거
+  document.querySelectorAll(".menu a, .submenu a").forEach(link => {
+    const href = link.getAttribute("href");
+    if (!href || href === "#") return;
+
+    const cleanHref = href.replace(/\/$/, "");
+    if (currentPath === cleanHref) {
+      // active
+      link.classList.add("active");
+      const parentItem = link.closest(".menu-item");
+      if (parentItem) parentItem.classList.add("active");
+
+      // has-submenu open 처리 (단, 사용자가 닫은 경우는 제외)
+      const parentMenu = link.closest(".menu-item.has-submenu");
+      if (parentMenu) {
+        const submenuIndex = Array.from(document.querySelectorAll(".menu-item.has-submenu"))
+          .indexOf(parentMenu);
+        const isClosed = localStorage.getItem("submenuOpen_" + submenuIndex) === "false";
+        if (!isClosed) parentMenu.classList.add("open");
+      }
+    }
+  });
+});
 </script>
 
-</script>

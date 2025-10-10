@@ -17,9 +17,9 @@ import service.UploadFileServiceImpl;
 
 /**
  * ImageView 서블릿
- * 
- * 클라이언트에서 /image?fileId=xxx 요청이 들어오면 - DB에서 해당 fileId에 해당하는 파일 메타정보를 조회하고 - 서버
- * 로컬 디스크에서 실제 파일을 읽어 - 브라우저로 전송하는 역할을 한다.
+ *
+ * 클라이언트에서 /image?fileId=xxx 요청이 들어오면 - DB에서 해당 fileId의 파일 메타정보를 조회하고 - web.xml의
+ * UPLOAD_DIR에서 실제 파일을 찾아 - 브라우저로 전송한다.
  *
  * 사용 예시: <img src="/image?fileId=123" />
  */
@@ -56,12 +56,15 @@ public class ImageView extends HttpServlet {
 			return;
 		}
 
-		// 3. 실제 저장된 파일 경로 확인
-		String storagePath = filex.getStoragePath(); // 예: "/upload"
-		String renamed = filex.getFileRename(); // 예: "1728401123_123.png"
+		// 3. 실제 저장된 파일 절대 경로 확인
+		// web.xml의 UPLOAD_DIR을 읽음
+		String uploadDirPath = request.getServletContext().getInitParameter("UPLOAD_DIR");
 
-		String uploadPath = request.getServletContext().getRealPath(storagePath);
-		File file = new File(uploadPath, renamed);
+		// DB에 저장된 파일명
+		String renamed = filex.getFileRename();
+
+		// 파일 객체 생성
+		File file = new File(uploadDirPath, renamed);
 
 		if (!file.exists() || !file.isFile()) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, "file not found on disk");
@@ -76,7 +79,7 @@ public class ImageView extends HttpServlet {
 		response.setContentType(mime);
 		response.setHeader("Content-Length", String.valueOf(file.length()));
 
-		// 5. 파일 내용을 읽어서 응답 스트림으로 출력
+		// 5. 파일을 스트림으로 클라이언트에게 전송
 		try (FileInputStream fis = new FileInputStream(file); OutputStream out = response.getOutputStream()) {
 			byte[] buf = new byte[8192];
 			int len;

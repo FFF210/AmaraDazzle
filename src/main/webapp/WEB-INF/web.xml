@@ -15,4 +15,9 @@
 	<listener>
 	    <listener-class>util.BatchInitListener</listener-class>
 	</listener>
+
+	<context-param>
+		<param-name>UPLOAD_DIR</param-name>
+		<param-value>/Users/eun/Documents/kosta_mini/upload_file</param-value>
+	</context-param>
 </web-app>

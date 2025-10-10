@@ -10,6 +10,8 @@
 	background: #FFF;
 	transition: background 0.2s ease;
 	text-decoration: none;
+	height: 132px;
+    box-sizing: border-box;
 }
 
 .brand-link:hover {

@@ -30,6 +30,29 @@
 		LIMIT #{value}
 	</select>
 
+	<!-- ======================= [소비자] 검색 페이지 - 브랜드 검색 ======================= -->
+	<select id="searchBrandListForConsumer" parameterType="map"
+		resultType="brandSearchResult">
+		SELECT
+		b.brand_id,
+		b.brand_name,
+		b.logo_file_id,
+		CASE
+		WHEN bf.brand_follow_id IS NOT NULL THEN 1
+		ELSE 0
+		END AS is_followed
+		FROM brand b
+		LEFT JOIN brand_follow bf
+		ON b.brand_id = bf.brand_id
+		AND bf.member_id = #{memberId}   
+		WHERE b.brand_status = 'APPROVED'  
+		<if test="keyword != null and keyword != ''">
+			AND b.brand_name LIKE CONCAT('%', #{keyword}, '%')
+		</if>
+		ORDER BY b.brand_name ASC
+	</select>
+
+
 
 
 
@@ -334,12 +357,13 @@
 
 	<!-- ======================= ADMIN ======================= -->
 	<!-- 가입한 브랜드 수 -->
-	<select id="brandAllCnt" resultType="Integer" parameterType="searchCondition">
+	<select id="brandAllCnt" resultType="Integer"
+		parameterType="searchCondition">
 		select count(*) from brand b
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
 				and (b.created_at &gt;= #{startDateTime}
-						and b.created_at &lt; #{endDateTime})
+				and b.created_at &lt; #{endDateTime})
 			</if>
 			<if test="middleFilter != null and middleFilter != ''">
 				<choose>
@@ -354,7 +378,8 @@
 					</when>
 				</choose>
 			</if>
-			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+			<if
+				test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
 				<choose>
 					<when test="totalSearch == '브랜드명'">
 						and b.brand_name like concat('%',#{keyword},'%')
@@ -374,14 +399,16 @@
 	</select>
 
 	<!-- 브랜드 검색 리스트 -->
-	<select id="brandSearchList" resultType="brand" parameterType="searchCondition">
+	<select id="brandSearchList" resultType="brand"
+		parameterType="searchCondition">
 		select b.*, f.file_rename
 		from brand b
-		left join upload_file f on (b.logo_file_id = f.upload_file_id)
+		left join upload_file f on
+		(b.logo_file_id = f.upload_file_id)
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
 				and (b.created_at &gt;= #{startDateTime}
-						and b.created_at &lt; #{endDateTime})
+				and b.created_at &lt; #{endDateTime})
 			</if>
 			<if test="middleFilter != null and middleFilter != ''">
 				<choose>
@@ -396,7 +423,8 @@
 					</when>
 				</choose>
 			</if>
-			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+			<if
+				test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
 				<choose>
 					<when test="totalSearch == '브랜드명'">
 						and b.brand_name like concat('%',#{keyword},'%')
@@ -415,15 +443,17 @@
 		</where>
 		order by b.brand_id desc limit #{start_p},#{post_ea}
 	</select>
-	
+
 	<!-- 브랜드 회원 정보 상세보기 -->
-	<select id="selectBrandDetail" resultType="brand" parameterType="int" >
+	<select id="selectBrandDetail" resultType="brand"
+		parameterType="int">
 		select b.*, f.file_name, f.file_rename
 		from brand b
 		left join upload_file f on (b.logo_file_id = f.upload_file_id)
-		where b.brand_id = #{num}
+		where
+		b.brand_id = #{num}
 	</select>
-	
-	
+
+
 
 </mapper>

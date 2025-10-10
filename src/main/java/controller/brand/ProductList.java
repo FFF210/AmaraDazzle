@@ -2,6 +2,7 @@ package controller.brand;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import dto.Brand;
 import service.brand.ProductService;
 import service.brand.ProductServiceImpl;
 
@@ -35,17 +38,45 @@ public class ProductList extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 
+		HttpSession session = request.getSession(false);
+
+		// 세션 없거나 브랜드 정보 없음 → 로그인 페이지로 리다이렉트
+		if (session == null || session.getAttribute("brand") == null) {
+			response.sendRedirect(request.getContextPath() + "/brand/login");
+			return;
+		}
+
+		Brand brand = (Brand) session.getAttribute("brand");
+		Long brandId = brand.getBrandId();
+
 		// 파라미터 수집
 		int page = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
 		int limit = 10; // 한 페이지당 개수
 		int offset = (page - 1) * limit;
 
 		Map<String, Object> params = new HashMap<>();
+		params.put("brandId", brandId);
 		params.put("status", request.getParameter("status")); // SALE, SOLD_OUT, STOP_SALE
 		params.put("searchType", request.getParameter("searchType")); // NAME or CATEGORY
 		params.put("searchKeyword", request.getParameter("searchKeyword"));
 		params.put("limit", limit);
 		params.put("offset", offset);
+
+		String sortField = request.getParameter("sortField");
+		String sortOrder = request.getParameter("sortOrder");
+
+		// 화이트리스트 검증
+		List<String> allowedFields = Arrays.asList("price", "sale_price", "stock_qty", "sales_qty", "review_count");
+		if (!allowedFields.contains(sortField)) {
+			sortField = null;
+		}
+
+		if (!"asc".equalsIgnoreCase(sortOrder) && !"desc".equalsIgnoreCase(sortOrder)) {
+			sortOrder = "asc"; // 기본값
+		}
+
+		params.put("sortField", sortField);
+		params.put("sortOrder", sortOrder);
 
 		try {
 			// 서비스 호출

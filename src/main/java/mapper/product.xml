@@ -24,6 +24,14 @@
 		때만 */
 	</update>
 
+	<!-- 옵션 재고 업데이트 (주문 시) *원래는 product_option* -->
+	<update id="updateOptionStock" parameterType="map">
+		UPDATE product_option
+		SET stock_qty = stock_qty - #{quantity}
+		WHERE option_id = #{optionId}
+		AND stock_qty >= #{quantity}
+	</update>
+
 	<!-- 상품의 실제 판매가격 계산 (할인 적용) -->
 	<select id="selectCalculatedPrice" parameterType="long"
 		resultType="map">
@@ -1375,6 +1383,8 @@
 		ON p.product_id =
 		r.product_id
 		<where>
+			p.brand_id = #{brandId}
+
 			<!-- 판매 상태 필터 -->
 			<if test="status != null and status != ''">
 				<choose>
@@ -1424,7 +1434,13 @@
 				</choose>
 			</if>
 		</where>
-		ORDER BY p.product_id DESC
+
+		<if test="sortField != null and sortField != ''">
+			ORDER BY ${sortField}
+			<if test="sortOrder == 'desc'">DESC</if>
+			<if test="sortOrder == 'asc'">ASC</if>
+		</if>
+
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
@@ -1442,6 +1458,8 @@
 		LEFT JOIN category c3 ON p.category3_id
 		= c3.category_id
 		<where>
+			p.brand_id = #{brandId}
+
 			<!-- 판매 상태 필터 -->
 			<if test="status != null and status != ''">
 				<choose>
@@ -1656,10 +1674,12 @@
 		SELECT
 		p.product_id AS productId,
 		p.brand_id AS brandId,
-		b.brand_name AS brandName,
+		b.brand_name AS
+		brandName,
 		p.name AS name,
 		p.is_exclusive AS isExclusive,
-		p.is_visible AS isVisible,
+		p.is_visible AS
+		isVisible,
 		p.is_planned AS isPlanned,
 		p.has_option AS hasOption,
 		p.thumbnail_file_id AS thumbnailFileId,
@@ -1668,31 +1688,40 @@
 		p.discount_value AS discountValue,
 
 		CASE
-		WHEN p.discount_type = 'RATE' THEN p.price - (p.price * p.discount_value /
+		WHEN p.discount_type = 'RATE' THEN p.price - (p.price *
+		p.discount_value /
 		100)
-		WHEN p.discount_type = 'AMOUNT' THEN p.price - p.discount_value
+		WHEN p.discount_type = 'AMOUNT' THEN p.price -
+		p.discount_value
 		ELSE p.price
 		END AS finalPrice,
 
 		CASE
-		WHEN p.discount_type IS NOT NULL
+		WHEN p.discount_type
+		IS NOT NULL
 		AND p.discount_value > 0
-		AND (p.start_date IS NULL OR p.start_date &lt;= NOW())
-		AND (p.end_date IS NULL OR p.end_date >= NOW())
+		AND (p.start_date IS NULL OR
+		p.start_date &lt;= NOW())
+		AND (p.end_date IS NULL OR p.end_date >=
+		NOW())
 		THEN 1
 		ELSE 0
 		END AS isSale,
 
-		CASE WHEN uw.wishlist_id IS NOT NULL THEN 1 ELSE 0 END AS isWished
+		CASE WHEN uw.wishlist_id IS NOT NULL
+		THEN 1 ELSE 0 END AS isWished
 
 		FROM product p
-		JOIN brand b ON p.brand_id = b.brand_id
+		JOIN brand b ON p.brand_id
+		= b.brand_id
 		LEFT JOIN wishlist uw
 		ON uw.product_id = p.product_id
-		AND uw.member_id = #{memberId}
+		AND
+		uw.member_id = #{memberId}
 
 		WHERE p.product_id IN
-		<foreach item="id" collection="productIds" open="(" separator="," close=")">
+		<foreach item="id" collection="productIds" open="("
+			separator="," close=")">
 			#{id}
 		</foreach>
 

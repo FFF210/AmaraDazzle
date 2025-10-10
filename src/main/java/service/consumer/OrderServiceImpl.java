@@ -214,7 +214,7 @@ public class OrderServiceImpl implements OrderService {
 			throws Exception {
 		Map<String, Object> checkoutData = new HashMap<>();
 
-		// 1. 회원 정보 조회 (체크아웃 폼 자동 입력용)
+		// 1. 회원 정보 조회
 		Member member = memberDAO.getMemberInfoForCheckout(memberId);
 		if (member == null) {
 			throw new Exception("회원 정보를 찾을 수 없습니다.");
@@ -222,15 +222,71 @@ public class OrderServiceImpl implements OrderService {
 		checkoutData.put("member", member);
 
 		// 2. 상품 정보 조회
-		Map<String, Object> productData = getProductInfoForCheckout(productId, optionId);
-		checkoutData.put("productData", productData);
+		ProductDAO productDAO = new ProductDAOImpl();
+		Product product = productDAO.selectProductByProductId(productId);
+		if (product == null) {
+			throw new Exception("상품 정보를 찾을 수 없습니다.");
+		}
+		checkoutData.put("product", product); // ✅ 수정: productData → product
 
-		// 3. 수량 정보
-		checkoutData.put("quantity", quantity);
+		// 3. 브랜드 정보 조회
+		BrandDAO brandDAO = new BrandDAOImpl();
+		Brand brand = brandDAO.selectBrandByBrandId(product.getBrandId());
+		checkoutData.put("brand", brand);
 
-		// 4. 배송비 계산
-		BigDecimal shippingFee = calculateShippingFee(BigDecimal.ZERO); // 현재는 무조건 2500원
+		// 4. items 리스트 생성
+		List<Map<String, Object>> itemList = new ArrayList<>();
+		Map<String, Object> item = new HashMap<>();
+		BigDecimal subtotal = BigDecimal.ZERO;
+
+		if (optionId != null) {
+			// 옵션이 있는 경우
+			ProductOptionDAO optionDAO = new ProductOptionDAOImpl();
+			ProductOption option = optionDAO.selectProductOptionByOptionId(optionId);
+
+			if (option == null) {
+				throw new Exception("옵션 정보를 찾을 수 없습니다.");
+			}
+
+			if (option.getStockQty() < quantity) {
+				throw new Exception("재고가 부족합니다.");
+			}
+
+			item.put("optionId", optionId);
+			item.put("optionValue", option.getOptionValue());
+			item.put("unitPrice", option.getPrice());
+			item.put("quantity", quantity);
+
+			BigDecimal itemTotal = option.getPrice().multiply(new BigDecimal(quantity));
+			item.put("itemTotal", itemTotal);
+			subtotal = itemTotal;
+
+		} else {
+			// 옵션이 없는 경우
+			item.put("optionId", null);
+			item.put("productId", productId);
+			item.put("optionValue", "기본");
+			item.put("unitPrice", product.getPrice());
+			item.put("quantity", quantity);
+
+			BigDecimal itemTotal = product.getPrice().multiply(new BigDecimal(quantity));
+			item.put("itemTotal", itemTotal);
+			subtotal = itemTotal;
+		}
+
+		itemList.add(item);
+		checkoutData.put("items", itemList); 
+		checkoutData.put("subtotalAmount", subtotal); 
+
+		// 5. 배송비 계산
+		BigDecimal shippingFee = subtotal.compareTo(new BigDecimal("50000")) >= 0 ? BigDecimal.ZERO
+				: new BigDecimal("2500");
 		checkoutData.put("shippingFee", shippingFee);
+
+		// 6. 최종 금액
+		BigDecimal totalAmount = subtotal.add(shippingFee);
+		checkoutData.put("totalAmount", totalAmount);
+		checkoutData.put("availablePoint", member.getPointBalance() != null ? member.getPointBalance() : 0);
 
 		return checkoutData;
 	}
@@ -318,6 +374,36 @@ public class OrderServiceImpl implements OrderService {
 		checkoutData.put("availablePoint", member.getPointBalance() != null ? member.getPointBalance() : 0);
 
 		return checkoutData;
+	}
+	
+	// (주문 성공시) 재고 감소 처리
+	@Override
+	public void decreaseStock(List<Map<String, Object>> items) throws Exception {
+	    ProductDAO productDAO = new ProductDAOImpl();
+	    
+	    for (Map<String, Object> item : items) {
+	        Long optionId = (Long) item.get("optionId");
+	        Long productId = (Long) item.get("productId");
+	        Integer quantity = (Integer) item.get("quantity");
+	        
+	        if (quantity == null || quantity <= 0) {
+	            continue;
+	        }
+	        
+	        int result = 0;
+	        
+	        if (optionId != null) {
+	            // 옵션이 있는 경우
+	            result = productDAO.updateOptionStock(optionId, quantity);
+	        } else if (productId != null) {
+	            // 옵션이 없는 경우
+	            result = productDAO.updateStock(productId, quantity);
+	        }
+	        
+	        if (result == 0) {
+	            throw new Exception("재고가 부족하거나 상품을 찾을 수 없습니다.");
+	        }
+	    }
 	}
 
 	// ==================== orderList용=====================
@@ -425,39 +511,38 @@ public class OrderServiceImpl implements OrderService {
 
 		return result;
 	}
-	
+
 	// 주문 상품 상태 업데이트
 	@Override
 	public void updateOrderItemStatus(Long orderItemId, String status) throws Exception {
 		orderDAO.updateOrderItemStatus(orderItemId, status);
 	}
-	
-	//주문 취소
+
+	// 주문 취소
 	@Override
 	public boolean cancelOrderItem(Long orderItemId) throws Exception {
-	    
-	    // 1. 현재 상태 확인
-	    String currentStatus = orderDAO.getOrderItemStatus(orderItemId);
-	    
-	    if (currentStatus == null) {
-	        throw new Exception("존재하지 않는 주문입니다.");
-	    }
-	    
-	    // 2. 취소 가능 여부 체크
-	    if (!currentStatus.equals("PAID") && !currentStatus.equals("PREPARING")) {
-	        throw new Exception("취소할 수 없는 상태입니다.");
-	    }
-	    
-	    // 3. 상태만 CANCELLED로 변경 (이미 있는 메서드 활용도 가능!)
-	    int result = orderDAO.cancelOrderItem(orderItemId);
-	    
-	    if (result == 0) {
-	        throw new Exception("주문 취소에 실패했습니다.");
-	    }
-	    
-	    return true;
-	}
 
+		// 1. 현재 상태 확인
+		String currentStatus = orderDAO.getOrderItemStatus(orderItemId);
+
+		if (currentStatus == null) {
+			throw new Exception("존재하지 않는 주문입니다.");
+		}
+
+		// 2. 취소 가능 여부 체크
+		if (!currentStatus.equals("PAID") && !currentStatus.equals("PREPARING")) {
+			throw new Exception("취소할 수 없는 상태입니다.");
+		}
+
+		// 3. 상태만 CANCELLED로 변경 (이미 있는 메서드 활용도 가능!)
+		int result = orderDAO.cancelOrderItem(orderItemId);
+
+		if (result == 0) {
+			throw new Exception("주문 취소에 실패했습니다.");
+		}
+
+		return true;
+	}
 
 	// OrderDetail 용도=========================================
 	@Override
@@ -509,25 +594,25 @@ public class OrderServiceImpl implements OrderService {
 
 		return result;
 	}
-	
+
 	// ================[소비자] 취소/교환/반품 통합 목록 조회 ===================
 	@Override
 	public List<Map<String, Object>> getCancelExchangeReturnList(Long memberId, String startDate, String endDate)
 			throws Exception {
-		 if (memberId == null) {
-		        throw new Exception("회원 ID가 필요합니다.");
-		    }
-		    
-		    Map<String, Object> params = new HashMap<>();
-		    params.put("memberId", memberId);
-		    
-		    // 날짜 필터 (선택적)
-		    if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
-		        params.put("startDate", startDate);
-		        params.put("endDate", endDate);
-		    }
-		    
-		    return orderDAO.selectCancelExchangeReturnList(params);
+		if (memberId == null) {
+			throw new Exception("회원 ID가 필요합니다.");
+		}
+
+		Map<String, Object> params = new HashMap<>();
+		params.put("memberId", memberId);
+
+		// 날짜 필터 (선택적)
+		if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
+			params.put("startDate", startDate);
+			params.put("endDate", endDate);
+		}
+
+		return orderDAO.selectCancelExchangeReturnList(params);
 	}
 
 	// ============ [소비자] 교환/반품 신청용 ===========
@@ -535,7 +620,5 @@ public class OrderServiceImpl implements OrderService {
 	public Map<String, Object> getOrderItemForApply(Long orderItemId) throws Exception {
 		return orderDAO.getOrderItemForApply(orderItemId);
 	}
-
-
 
 }

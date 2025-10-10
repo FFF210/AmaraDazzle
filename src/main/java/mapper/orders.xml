@@ -402,15 +402,18 @@
 		resultType="string">
 		SELECT status
 		FROM order_item
-		WHERE order_item_id = #{orderItemId}
+		WHERE order_item_id =
+		#{orderItemId}
 	</select>
 
 	<!-- ========== [소비자] 주문 취소 시 order_item 상태만 CANCELLED로 변경 -->
 	<update id="cancelOrderItem" parameterType="long">
 		UPDATE order_item
-		SET status = 'CANCELLED',
+		SET
+		status = 'CANCELLED',
 		updated_at = NOW()
-		WHERE order_item_id = #{orderItemId}
+		WHERE order_item_id =
+		#{orderItemId}
 		AND status IN ('PAID', 'PREPARING')
 	</update>
 
@@ -1613,15 +1616,24 @@
 		oi.total,
 		oi.status AS item_status,
 		p.name AS product_name,
-		po.option_value AS option_name
+		po.option_value AS
+		option_name,
+		ex.exchange_id AS exchangeId,
+		rt.returns_id AS returnId
+
 		FROM order_item oi
-		JOIN product p ON
-		oi.product_id = p.product_id
-		LEFT JOIN product_option po ON
-		oi.option_id = po.product_option_id
+		JOIN product p
+		ON oi.product_id = p.product_id
+		LEFT JOIN product_option po
+		ON oi.option_id = po.product_option_id
+		LEFT JOIN exchange ex
+		ON oi.order_item_id = ex.order_item_id
+		LEFT JOIN returns rt
+		ON oi.order_item_id = rt.order_item_id
+
 		WHERE oi.brand_id = #{brandId}
-		AND
-		oi.order_id = #{orderId}
+		AND oi.order_id = #{orderId}
+
 		ORDER BY oi.order_item_id ASC
 	</select>
 

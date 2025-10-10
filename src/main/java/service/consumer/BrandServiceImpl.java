@@ -1,10 +1,12 @@
 package service.consumer;
 
 import java.util.List;
+import java.util.Map;
 
 import dao.consumer.BrandDAO;
 import dao.consumer.BrandDAOImpl;
 import dto.Brand;
+import dto.consumer.BrandSearchResult;
 import dto.consumer.MembershipBrand;
 
 public class BrandServiceImpl implements BrandService {
@@ -40,6 +42,12 @@ public class BrandServiceImpl implements BrandService {
 	@Override
 	public List<MembershipBrand> getActiveMembershipBrands(int limit) throws Exception {
 		return brandDAO.selectActiveMembershipBrands(limit);
+	}
+
+	// ======================= [소비자] 검색 페이지 - 브랜드 검색 =======================
+	@Override
+	public List<BrandSearchResult> getBrandListForSearch(Map<String, Object> params) throws Exception {
+		return brandDAO.searchBrandListForConsumer(params);
 	}
 
 }

@@ -1,8 +1,10 @@
 package service.consumer;
 
 import java.util.List;
+import java.util.Map;
 
 import dto.Brand;
+import dto.consumer.BrandSearchResult;
 import dto.consumer.MembershipBrand;
 
 public interface BrandService {
@@ -14,4 +16,7 @@ public interface BrandService {
 
 	// <!-- ================[소비자] 멤버십 가입 브랜드 조회 =================== -->
 	List<MembershipBrand> getActiveMembershipBrands(int limit) throws Exception;
+
+	// ======================= [소비자] 검색 페이지 - 브랜드 검색 =======================
+	List<BrandSearchResult> getBrandListForSearch(Map<String, Object> params) throws Exception;
 }
