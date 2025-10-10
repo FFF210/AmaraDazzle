@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -74,14 +76,21 @@
         href="${detailUrl}" status="${e.status}" />
     --%>
 
+
 				<%-- 쿠폰 목록이 존재할 때만 렌더링 --%>
 				<c:if test="${not empty couponList}">
 					<c:forEach var="coupon" items="${couponList}">
+						<!-- 금액 포맷 -->
+						<fmt:formatNumber value="${coupon.amount}" pattern="#,###"
+							var="amountFmt" />
+						<fmt:formatNumber value="${coupon.amountCondition}"
+							pattern="#,###" var="amountConditionFmt" />
+
 						<my:consumerCoupon couponId="${coupon.couponId}"
 							cname="${coupon.cname}" couponLimit="${coupon.couponLimit}"
 							categoryName="${coupon.categoryName}"
-							amountCondition="${coupon.amountConditionFmt}"
-							downloaded="${coupon.downloaded}" amount="${coupon.amountFmt}" />
+							amountCondition="${amountConditionFmt}"
+							downloaded="${coupon.downloaded}" amount="${amountFmt}" />
 					</c:forEach>
 				</c:if>
 			</div>
