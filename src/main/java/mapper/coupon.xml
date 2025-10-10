@@ -3,7 +3,7 @@
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="mapper.coupon">
-<!-- ======================= [브랜드 어드민] 주문 사용 쿠폰 조회 ======================= -->
+	<!-- ======================= [브랜드 어드민] 주문 사용 쿠폰 조회 ======================= -->
 	<select id="selectOrdersCouponForBrand"
 		resultType="ordersCoupon">
 		SELECT
@@ -17,7 +17,7 @@
 		mc.order_id = #{orderId}
 	</select>
 
-<!-- ======================= [소비자] 다운 가능한 쿠폰 목록 조회 ======================= -->
+	<!-- ======================= [소비자] 다운 가능한 쿠폰 목록 조회 ======================= -->
 	<select id="selectAvailableCoupons" parameterType="map"
 		resultType="couponList">
 		SELECT
@@ -34,27 +34,79 @@
 		c.created_at,
 		b.brand_name,
 		b.logo_file_id,
-		cat.name AS category_name,
+		cat.name AS
+		category_name,
 		CASE
 		WHEN EXISTS (
 		SELECT 1
 		FROM member_coupon mc
-		WHERE mc.coupon_id = c.coupon_id
+		WHERE
+		mc.coupon_id = c.coupon_id
 		AND mc.member_id = #{memberId}
 		)
 		THEN 1 ELSE 0
 		END AS downloaded
 		FROM coupon c
 		LEFT JOIN brand b
-		ON c.writer_type = 'BRAND_ADMIN'
+		ON c.writer_type =
+		'BRAND_ADMIN'
 		AND c.writer_id = b.brand_id
 		LEFT JOIN category cat
-		ON c.category_id = cat.category_id
+		ON
+		c.category_id = cat.category_id
 		WHERE c.provision = 'ALL'
-		AND NOW() BETWEEN c.start_date AND c.end_date
-		ORDER BY b.brand_name ASC, c.created_at DESC
+		AND NOW()
+		BETWEEN c.start_date AND c.end_date
+		ORDER BY b.brand_name ASC,
+		c.created_at DESC
 	</select>
-<!-- ======================= [소비자] 쿠폰 다운로드 ======================= -->
+
+	<!-- ======================= [소비자] 해당 브랜드의 쿠폰 목록 ======================= -->
+	<select id="selectAvailableCouponsForBrand" parameterType="map"
+		resultType="couponList">
+		SELECT
+		c.coupon_id,
+		c.cname,
+		c.start_date,
+		c.end_date,
+		c.amount,
+		c.amount_condition,
+		c.reason,
+		c.provision,
+		c.writer_type,
+		c.writer_id,
+		c.created_at,
+		b.brand_name,
+		b.logo_file_id,
+		cat.name AS
+		category_name,
+		CASE
+		WHEN EXISTS (
+		SELECT 1
+		FROM member_coupon mc
+		WHERE
+		mc.coupon_id = c.coupon_id
+		AND mc.member_id = #{memberId}
+		)
+		THEN 1 ELSE 0
+		END AS downloaded
+		FROM coupon c
+		LEFT JOIN brand b
+		ON c.writer_type =
+		'BRAND_ADMIN'
+		AND c.writer_id = #{brandId}
+		LEFT JOIN category cat
+		ON
+		c.category_id = cat.category_id
+		WHERE c.provision = 'ALL'
+		AND NOW()
+		BETWEEN c.start_date AND c.end_date
+		ORDER BY b.brand_name ASC,
+		c.created_at DESC
+	</select>
+
+
+	<!-- ======================= [소비자] 쿠폰 다운로드 ======================= -->
 	<insert id="insertMemberCoupon" parameterType="map"
 		useGeneratedKeys="true" keyProperty="memberCouponId">
 		INSERT INTO member_coupon (
@@ -70,163 +122,201 @@
 		NOW()
 		)
 	</insert>
-
+	
 	<!-- ======================= [소비자] 쿠폰 제한 수량 감소 ======================= -->
 	<update id="decreaseCouponLimit" parameterType="long">
-<!-- 		UPDATE coupon -->
-<!-- 		SET -->
-<!-- 		coupon_limit = CAST(coupon_limit AS SIGNED) - 1 -->
-<!-- 		WHERE coupon_id = -->
-<!-- 		#{value} -->
-<!-- 		AND CAST(coupon_limit AS SIGNED) > 0 -->
+		<!-- UPDATE coupon -->
+		<!-- SET -->
+		<!-- coupon_limit = CAST(coupon_limit AS SIGNED) - 1 -->
+		<!-- WHERE coupon_id = -->
+		<!-- #{value} -->
+		<!-- AND CAST(coupon_limit AS SIGNED) > 0 -->
 	</update>
 
 
-<!-- ======================= [ADMIN] ======================= -->
-	<!-- 쿠폰 발행 수  -->
-	<select id="pCouponCnt" resultType="Integer" parameterType="searchCondition">
-		select count(*) from coupon 
+
+
+
+	<!-- ======================= [ADMIN] ======================= -->
+	<!-- 쿠폰 발행 수 -->
+	<select id="pCouponCnt" resultType="Integer"
+		parameterType="searchCondition">
+		select count(*) from coupon
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
-			    and (created_at &gt;= #{startDateTime} 
-			    		and created_at &lt; #{endDateTime})
+				and (created_at &gt;= #{startDateTime}
+				and created_at &lt;
+				#{endDateTime})
 			</if>
 			<if test="startDateTime2 != null and endDateTime2 != null">
-			    and (start_date &gt;= #{startDateTime2} 
-			    		and end_date &lt; #{endDateTime2})
+				and (start_date &gt;= #{startDateTime2}
+				and end_date &lt;
+				#{endDateTime2})
 			</if>
-			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+			<if
+				test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
 				<choose>
 					<when test="totalSearch == '쿠폰명'">
 						and cname like concat('%',#{keyword},'%')
 					</when>
 					<when test="totalSearch == '사용조건'">
-						and amount_condition like concat('%',#{keyword},'%')
+						and amount_condition like
+						concat('%',#{keyword},'%')
 					</when>
 				</choose>
 			</if>
 		</where>
 	</select>
-	
-	<!-- 쿠폰 발행 리스트 보기  -->
-	<select id="pCouponAllList" resultType="coupon" parameterType="Map">
+
+	<!-- 쿠폰 발행 리스트 보기 -->
+	<select id="pCouponAllList" resultType="coupon"
+		parameterType="Map">
 		select cp.* from coupon cp
-		order by cp.coupon_id desc limit #{start_p},#{post_ea}
+		order by cp.coupon_id desc
+		limit #{start_p},#{post_ea}
 	</select>
-	
+
 	<!-- 검색된 발행쿠폰 리스트 -->
-	<select id="pCouponSearchList" resultType="coupon" parameterType="searchCondition">
+	<select id="pCouponSearchList" resultType="coupon"
+		parameterType="searchCondition">
 		select cp.* from coupon cp
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
-			    and (created_at &gt;= #{startDateTime} 
-			    		and created_at &lt; #{endDateTime})
+				and (created_at &gt;= #{startDateTime}
+				and created_at &lt;
+				#{endDateTime})
 			</if>
 			<if test="startDateTime2 != null and endDateTime2 != null">
-			    and (start_date &gt;= #{startDateTime2} 
-			    		and end_date &lt; #{endDateTime2})
+				and (start_date &gt;= #{startDateTime2}
+				and end_date &lt;
+				#{endDateTime2})
 			</if>
-			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+			<if
+				test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
 				<choose>
 					<when test="totalSearch == '쿠폰명'">
 						and cname like concat('%',#{keyword},'%')
 					</when>
 					<when test="totalSearch == '사용조건'">
-						and amount_condition like concat('%',#{keyword},'%')
-								
+						and amount_condition like
+						concat('%',#{keyword},'%')
+
 					</when>
 				</choose>
 			</if>
 		</where>
 		order by coupon_id desc limit #{start_p},#{post_ea}
 	</select>
-	
+
 	<!-- 쿠폰 발행 -->
 	<insert id="insertPublCoupon" parameterType="coupon">
-		insert into coupon 
-			(coupon_id, cname, start_date, end_date, 
-			amount, category_id, amount_condition, reason, 
-			provision, writer_type, writer_id, created_at)
-		values 
-			(0, #{cname}, #{startDate}, #{endDate},
-			#{amount},#{categoryId}, #{amountCondition},#{reason}, 
-			#{provision}, #{writerType}, #{writerId}, now())
+		insert into coupon
+		(coupon_id, cname, start_date, end_date,
+		amount, category_id,
+		amount_condition, reason,
+		provision, writer_type, writer_id,
+		created_at)
+		values
+		(0, #{cname}, #{startDate}, #{endDate},
+		#{amount},#{categoryId}, #{amountCondition},#{reason},
+		#{provision},
+		#{writerType}, #{writerId}, now())
 	</insert>
 
 	<!-- 발행 쿠폰 내용 상세보기 -->
-	<select id="publCouponDetail" resultType="coupon" parameterType="int" >
-		select 
-			cp.*, 
-			cd.name as codeName, 
-			cat.path as fullCategoryPath,
-		    case 
-		        when cp.writer_type = 'BRAND_ADMIN' then b.brand_name
-		        when cp.writer_type = 'ADMIN' then a.aname
-		    end as writerName
+	<select id="publCouponDetail" resultType="coupon"
+		parameterType="int">
+		select
+		cp.*,
+		cd.name as codeName,
+		cat.path as
+		fullCategoryPath,
+		case
+		when cp.writer_type = 'BRAND_ADMIN' then
+		b.brand_name
+		when cp.writer_type = 'ADMIN' then a.aname
+		end as
+		writerName
 		from coupon cp
-		left join code_detail cd ON cp.p_code = cd.code_detail_id
-		left join category_path_view cat ON cat.category_id = cp.category_id
+		left join code_detail cd ON cp.p_code =
+		cd.code_detail_id
+		left join category_path_view cat ON cat.category_id =
+		cp.category_id
 		left join brand b ON cp.writer_id = b.brand_id
-		left join admin_info a ON cp.writer_id = a.admin_info_id
-		where cp.coupon_id = #{num}
+		left join
+		admin_info a ON cp.writer_id = a.admin_info_id
+		where cp.coupon_id =
+		#{num}
 	</select>
-	
-	
-	<!-- 개별 쿠폰 발행 수  -->
-	<select id="iCouponCnt" resultType="Integer" parameterType="searchCondition">
-		select count(*) from coupon 
+
+
+	<!-- 개별 쿠폰 발행 수 -->
+	<select id="iCouponCnt" resultType="Integer"
+		parameterType="searchCondition">
+		select count(*) from coupon
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
-			    and (created_at &gt;= #{startDateTime} 
-			    		and created_at &lt; #{endDateTime})
+				and (created_at &gt;= #{startDateTime}
+				and created_at &lt;
+				#{endDateTime})
 			</if>
 			<if test="startDateTime2 != null and endDateTime2 != null">
-			    and (start_date &gt;= #{startDateTime2} 
-			    		and end_date &lt; #{endDateTime2})
+				and (start_date &gt;= #{startDateTime2}
+				and end_date &lt;
+				#{endDateTime2})
 			</if>
-			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+			<if
+				test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
 				<choose>
 					<when test="totalSearch == '쿠폰명'">
 						and cname like concat('%',#{keyword},'%')
 					</when>
 					<when test="totalSearch == '사용조건'">
-						and amount_condition like concat('%',#{keyword},'%')
-								
+						and amount_condition like
+						concat('%',#{keyword},'%')
+
 					</when>
 				</choose>
 			</if>
 		</where>
 	</select>
-	
-	<!-- 개별 쿠폰 발행 리스트 보기  -->
-	<select id="iCouponAllList" resultType="coupon" parameterType="Map">
+
+	<!-- 개별 쿠폰 발행 리스트 보기 -->
+	<select id="iCouponAllList" resultType="coupon"
+		parameterType="Map">
 		select cp.* from coupon cp
-		order by cp.coupon_id desc limit #{start_p},#{post_ea}
+		order by cp.coupon_id desc
+		limit #{start_p},#{post_ea}
 	</select>
-	
+
 	<!-- 검색된 개별 발행 쿠폰 리스트 -->
-	<select id="iCouponSearchList" resultType="coupon" parameterType="searchCondition">
+	<select id="iCouponSearchList" resultType="coupon"
+		parameterType="searchCondition">
 		select cp.*
-<!-- 		, m.name as mName, m.email as mEmail  -->
+		<!-- , m.name as mName, m.email as mEmail -->
 		from coupon cp
-<!-- 		left join member m on (cp.member_id = m.member_id) -->
+		<!-- left join member m on (cp.member_id = m.member_id) -->
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
-			    and (created_at &gt;= #{startDateTime} 
-			    		and created_at &lt; #{endDateTime})
+				and (created_at &gt;= #{startDateTime}
+				and created_at &lt;
+				#{endDateTime})
 			</if>
 			<if test="startDateTime2 != null and endDateTime2 != null">
-			    and (start_date &gt;= #{startDateTime2} 
-			    		and end_date &lt; #{endDateTime2})
+				and (start_date &gt;= #{startDateTime2}
+				and end_date &lt;
+				#{endDateTime2})
 			</if>
-			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+			<if
+				test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
 				<choose>
 					<when test="totalSearch == '쿠폰명'">
 						and cname like concat('%',#{keyword},'%')
 					</when>
 					<when test="totalSearch == '사용조건'">
-						and amount_condition like concat('%',#{keyword},'%')
-								
+						and amount_condition like
+						concat('%',#{keyword},'%')
+
 					</when>
 				</choose>
 			</if>
