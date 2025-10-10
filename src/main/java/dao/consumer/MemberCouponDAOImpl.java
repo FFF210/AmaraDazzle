@@ -1,5 +1,6 @@
 package dao.consumer;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,5 +33,21 @@ public class MemberCouponDAOImpl implements MemberCouponDAO {
 	@Override
 	public Map<String, Object> getCouponInfoByMemberCouponId(Long memberCouponId) throws Exception {
 		 return sqlSession.selectOne("mapper.memberCoupon.getCouponInfoByMemberCouponId", memberCouponId);
+	}
+
+	//회원가입 축하 쿠폰 ID 조회
+	@Override
+	public Long getWelcomeCouponId() throws Exception {
+		return sqlSession.selectOne("mapper.memberCoupon.getWelcomeCouponId");
+	}
+
+	//축하 쿠폰 발급
+	@Override
+	public void issueCoupon(Long memberId, Long couponId) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+	    params.put("memberId", memberId);
+	    params.put("couponId", couponId);
+	    sqlSession.insert("mapper.memberCoupon.issueCoupon", params);
+	    sqlSession.commit();		
 	}
 }

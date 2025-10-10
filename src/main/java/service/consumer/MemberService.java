@@ -104,6 +104,7 @@ public interface MemberService {
     // 피부고민(회원정보수정)======================
     List<Long> getMemberSkinIssues(Long memberId) throws Exception;
     
+    // 회원 정보 수정
     void updateMemberProfile(Member member, List<Long> skinIssueIds) throws Exception;
 
 	// ================[소비자] 소비자 맞춤 필터링 모두 조회 ===================

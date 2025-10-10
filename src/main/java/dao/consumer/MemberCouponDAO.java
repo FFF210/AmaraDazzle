@@ -27,6 +27,13 @@ public interface MemberCouponDAO {
      */
     Map<String, Object> getCouponInfoByMemberCouponId(Long memberCouponId) throws Exception;
     
+    //회원가입 축하 쿠폰 ID 조회
+    Long getWelcomeCouponId() throws Exception;
+    
+    //회원가입 축하 쿠폰 발급
+    void issueCoupon(Long memberId, Long couponId) throws Exception;
+    
+    
 }
 
 

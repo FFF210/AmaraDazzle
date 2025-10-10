@@ -13,6 +13,8 @@ import java.util.Map;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import dao.consumer.MemberCouponDAO;
+import dao.consumer.MemberCouponDAOImpl;
 import dao.consumer.MemberDAO;
 import dao.consumer.MemberDAOImpl;
 import dto.Member;
@@ -86,6 +88,20 @@ public class MemberServiceImpl implements MemberService {
 
 		// 5. 회원 등록
 		memberDAO.insertMember(member);
+		
+		// 6. 회원가입 축하 쿠폰 자동 발급
+	    try {
+	        MemberCouponDAO couponDAO = new MemberCouponDAOImpl();
+	        Long welcomeCouponId = couponDAO.getWelcomeCouponId();
+	        
+	        if (welcomeCouponId != null) {
+	            couponDAO.issueCoupon(member.getMemberId(), welcomeCouponId);
+	        }
+	    } catch (Exception e) {
+	        // 쿠폰 발급 실패해도 회원가입은 성공 처리
+	        // 로그만 남기고 계속 진행
+	        e.printStackTrace();
+	    }
 	}
 
 	// 이메일 중복확인 (근데 이거 사용 안하려나)
