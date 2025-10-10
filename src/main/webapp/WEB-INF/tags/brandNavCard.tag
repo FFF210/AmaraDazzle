@@ -42,7 +42,7 @@
 
 <a class="brand-link" data-brandid="${brandId}"
 	<c:if test="${not empty href}"> href="${href}" </c:if>>
-	
+
 	<div class="brand-wrapper">
 		<!-- 좌측 브랜드 로고 -->
 		<div class="brand-logo">
@@ -58,6 +58,7 @@
 		</div>
 	</div> <!-- 찜 버튼 -->
 	<div class="wishlist-btn">
-		<my:heartBtn state="${heartState}" onlyIcon="true" hasCount="false" />
+		<my:heartBtn state="${heartState}" onlyIcon="true" hasCount="false"
+			dataType="brand" dataId="${brandId}" />
 	</div>
 </a>
