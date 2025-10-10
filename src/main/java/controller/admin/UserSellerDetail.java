@@ -14,7 +14,7 @@ import service.admin.BrandServiceImpl;
 
 
 
-@WebServlet("/admin/sellerDetail")
+@WebServlet("/admin/userSellerDetail")
 public class UserSellerDetail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

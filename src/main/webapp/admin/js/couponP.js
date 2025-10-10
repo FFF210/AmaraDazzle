@@ -1,16 +1,16 @@
 //개별지급목록 페이지로 이동 
 function goIndiCpList() {
-	location.href = "/admin/iCouponList";
+	location.href = "/admin/couponIndiList";
 };
 
 //쿠폰 발행 버튼 클릭시 발행 페이지로 이동 
 function cpPublBtn() {
-	location.href = "/admin/pCouponWrite";
+	location.href = "/admin/couponPublWrite";
 };
 
 //쿠폰 상세보기 버튼 클릭시 발행 페이지로 이동 
 function goPcpDetail(num) {
-	location.href = "/admin/publCouponDetail?num="+num;
+	location.href = "/admin/couponPublDetail?num="+num;
 };
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -167,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function() {
 //			frm.submit();.
 			const formData = new FormData(frm);
 			
-			fetch("/admin/pCouponWrite", {
+			fetch("/admin/couponPublWrite", {
 			  method: "POST",
 			  body: formData
 			})
@@ -182,7 +182,7 @@ document.addEventListener("DOMContentLoaded", function() {
 					showAlert("success", data.title, data.message); // 2초간 토스트
 					
 					setTimeout(() => {
-						location.href = "/admin/pCouponList"; // 리스트로 이동
+						location.href = "/admin/couponPublList"; // 리스트로 이동
 					}, 3000);
 					
 					

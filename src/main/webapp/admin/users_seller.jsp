@@ -160,7 +160,7 @@
 
 				<div class="pagination_wrap page-pagination">
 					<my:adminPagination currentPage="${paging.pageno}" allPage="${paging.end_pg}"
-							baseUrl="/admin/consumerList?${queryString}" />
+							baseUrl="/admin/userSellerList?${queryString}" />
 				</div>
 				<!-- 페이지네이션 end -->
 			</div>

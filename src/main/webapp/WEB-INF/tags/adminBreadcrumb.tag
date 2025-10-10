@@ -14,28 +14,44 @@
     <my:breadcrumb items="상품 관리:/product,상품 목록 조회:" />
 ================================ --%>
 
-<%@ attribute name="items" required="true"%>
+<%@ attribute name="items" required="false"%>
 
-<c:set var="crumbList" value="${fn:split(items, ',')}" />
+<c:set var="crumbItems" value="${not empty items ? items : breadcrumbItems}" />
+<c:if test="${not empty crumbItems}">
+    <c:set var="crumbList" value="${fn:split(crumbItems, ',')}" />
+</c:if>
 
 <nav class="breadcrumb">
 	<ul>
 		<!-- 홈 고정 -->
-		<li class="home"><a href="/"> 홈</a><i
-			class="bi bi-chevron-right breadcrumb-separator"></i></li>
+		<li class="home">
+			<a href="/admin/home">
+				<i class="bi bi-house-door-fill"></i> 홈
+			</a>
+			<!-- crumbList가 실제로 존재할 때만 구분자 표시 -->
+            <c:if test="${not empty crumbList}">
+                <i class="bi bi-chevron-right breadcrumb-separator"></i>
+            </c:if>
+		</li>
 
+		<!-- 동적 breadcrumb -->
 		<c:forEach var="it" items="${crumbList}" varStatus="status">
 			<c:set var="parts" value="${fn:split(it, ':')}" />
-			<li><c:choose>
+			<li>
+				<c:choose>
 					<c:when test="${fn:length(parts) gt 1 and not empty parts[1]}">
 						<a href="${parts[1]}">${parts[0]}</a>
 					</c:when>
 					<c:otherwise>
 						<span>${parts[0]}</span>
 					</c:otherwise>
-				</c:choose> <!-- 마지막 li가 아니면 화살표 아이콘 추가 --> <c:if test="${not status.last}">
+				</c:choose>
+				
+				<!-- 마지막 li가 아니면 화살표 아이콘 추가 -->
+				<c:if test="${not status.last}">
 					<i class="bi bi-chevron-right breadcrumb-separator"></i>
-				</c:if></li>
+				</c:if>
+			</li>
 		</c:forEach>
 	</ul>
 </nav>

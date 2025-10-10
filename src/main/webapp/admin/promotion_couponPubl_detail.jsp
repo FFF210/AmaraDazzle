@@ -18,13 +18,12 @@
 	<!-- 레이아웃 + 메인컨텐츠 -->
 	<my:adminLayout>
 		<!-- 메인부분 -->
-		<section class="main_content coupon_detail">
+		<section class="board_detailview coupon_detail">
 			<!-- 테이블 -->
 			<div class="info_table" style="margin: 50px auto 10px">
 			<c:set var="createDate" value="${coupon.createdAt}" />
 			<c:set var="startDate" value="${coupon.startDate}" />
 			<c:set var="endDate" value="${coupon.endDate}" />
-			<c:out value="${coupon.endDate}"></c:out>
 				<table id="coupon_info">
 					<tr>
 						<th>쿠폰명</th>
@@ -104,8 +103,6 @@
 
 
 
-	<!-- JS부분 -->
-	<!-- JS부분 end -->
 
 </body>
 </html>

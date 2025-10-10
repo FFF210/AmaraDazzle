@@ -14,8 +14,8 @@ import service.admin.CouponServiceImpl;
 import util.NumberFormatting;
 
 
-//publ쿠폰 상세보기
-@WebServlet("/admin/publCouponDetail")
+//발행 쿠폰 상세보기
+@WebServlet("/admin/couponPublDetail")
 public class PublCouponDetail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
