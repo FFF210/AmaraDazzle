@@ -567,6 +567,9 @@ public class OrderServiceImpl implements OrderService {
 		if (result == 0) {
 			throw new Exception("주문 취소에 실패했습니다.");
 		}
+		
+		// 4. 재고 복구
+		orderDAO.restoreStockOnCancel(orderItemId);
 
 		return true;
 	}

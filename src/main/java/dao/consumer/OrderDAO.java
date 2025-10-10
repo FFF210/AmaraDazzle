@@ -72,6 +72,9 @@ public interface OrderDAO {
 	// 주문 아이템 취소
 	int cancelOrderItem(Long orderItemId) throws Exception;
 	
+	// 재고 복구
+	void restoreStockOnCancel(Long orderItemId) throws Exception;
+	
 	// ================ 취소/교환/반품 페이지용 통합 목록 조회 ==========================
 	List<Map<String, Object>> selectCancelExchangeReturnList(Map<String, Object> params);
 	
