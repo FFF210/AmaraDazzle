@@ -16,6 +16,7 @@
 		e.status AS status,
 		a.brand_id AS
 		brandId,
+		a.event_application_id AS eventApplicationId,
 		a.apply_date AS
 		applyDate,
 		a.manager_name AS managerName,

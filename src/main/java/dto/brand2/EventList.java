@@ -24,6 +24,8 @@ public class EventList {
 	// JSP에서 버튼 상태 제어용
 	private String actionType;
 
+	private Long eventApplicationId;
+	
 	public Long getEventId() {
 		return eventId;
 	}
@@ -135,6 +137,15 @@ public class EventList {
 	public void setActionType(String actionType) {
 		this.actionType = actionType;
 	}
+	
+
+	public Long getEventApplicationId() {
+		return eventApplicationId;
+	}
+
+	public void setEventApplicationId(Long eventApplicationId) {
+		this.eventApplicationId = eventApplicationId;
+	}
 
 	@Override
 	public String toString() {
@@ -142,7 +153,7 @@ public class EventList {
 				+ startDate + ", endDate=" + endDate + ", eventName=" + eventName + ", eventType=" + eventType
 				+ ", status=" + status + ", managerName=" + managerName + ", managerTel=" + managerTel + ", note="
 				+ note + ", canApply=" + canApply + ", participateYn=" + participateYn + ", actionType=" + actionType
-				+ "]";
+				+ ", eventApplicationId=" + eventApplicationId + "]";
 	}
 
 }
