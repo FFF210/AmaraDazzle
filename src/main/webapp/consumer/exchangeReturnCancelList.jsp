@@ -331,7 +331,7 @@
 			<!-- 페이징 -->
 			<div class="page-pagination">
 				<my:pagination currentPage="${currentPage}"
-					totalPages="${totalPages}" baseUrl="/store/planList?${queryString}" />
+					totalPages="${totalPages}" baseUrl="/store/mypage/exchangeReturnCancelList?${queryString}" />
 			</div>
 		</div>
 	</div>

@@ -199,7 +199,7 @@
 								<div class="page-pagination-like">
 									<my:pagination currentPage="${currentPage}"
 										totalPages="${totalPages}"
-										baseUrl="/store/like?${queryString}" />
+										baseUrl="/store/mypage/like?${queryString}" />
 								</div>
 							</div>
 						</div>

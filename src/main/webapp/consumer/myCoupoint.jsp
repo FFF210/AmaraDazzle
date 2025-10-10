@@ -148,7 +148,7 @@
 					<div class="page-pagination">
 						<my:pagination currentPage="${currentPage}"
 							totalPages="${totalPages}"
-							baseUrl="/store/planList?${queryString}" />
+							baseUrl="/store/mypage/myCoupoint?${queryString}" />
 					</div>
 				</div>
 			</section>

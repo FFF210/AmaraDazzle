@@ -31,19 +31,15 @@
 <link rel="stylesheet"
 	href="<c:url value='/consumer/css/userInfo.css'/>">
 
-
-
 </head>
 <body>
 	<!-- 상단 헤더 -->
 	<%@ include file="/consumer/header.jsp"%>
 
 	<div class="container">
-		<!-- Sidebar -->
-		<aside class="sidebar">
-			<!-- 마이페이지 메뉴 -->
-			<%@ include file="/consumer/mypageMenu.jsp"%>
-		</aside>
+
+		<!-- 마이페이지 메뉴 -->
+		<%@ include file="/consumer/mypageMenu.jsp"%>
 
 		<!-- Main Content -->
 		<main class="main-content">
@@ -188,6 +184,12 @@
 							</div>
 						</div>
 					</div>
+					
+					<!-- 페이징 -->
+			<div class="page-pagination">
+				<my:pagination currentPage="${currentPage}"
+					totalPages="${totalPages}" baseUrl="/store/mypage/myReview?${queryString}" />
+			</div>
 				</div>
 			</section>
 		</main>
