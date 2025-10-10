@@ -147,7 +147,7 @@
 						<c:forEach var="product" items="${products}">
 							<my:productCard brand="${brand.brandName}"
 								productId="${product.productId}" title="${product.productName}"
-								isSale="${product.discountType != null && product.discountType != 'NONE'}"
+								isSale="${product.discountType ne null && product.discountType ne 'NONE'}"
 								hasOption="true" originPrice="${product.price}"
 								saleRate="${product.discountValue != null ? product.discountValue : 0}"
 								finalPrice="${product.price}" />
