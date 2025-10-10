@@ -20,6 +20,17 @@ flex: 1;
 	margin-bottom: 20px;
 }
 
+.order-header {
+	padding: 30px 0 20px 0;
+}
+
+.order-status-title {
+	font-size: 20px;
+    font-weight: 600;
+    color: #000;
+    margin: 0;
+}
+
 .table-wrapper {
 	width: 100%;
 	overflow-x: auto;
@@ -95,4 +106,8 @@ flex: 1;
 
 .detail-link:hover {
     text-decoration: underline;
+}
+
+.pagination-wrapper {
+	text-align: center;
 }

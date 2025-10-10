@@ -2,7 +2,7 @@
 
 .container {
 	width: 1020px;
-	margin: 40px auto;
+	margin: 40px auto 0;
 	display: flex;
 	gap: 30px;
 	align-items: flex-start;
@@ -22,13 +22,11 @@
 }
 
 .like-container h3 {
-	display: flex;
-	padding: 20px 0;
-	align-items: center;
-	align-self: stretch;
-	font-size: 22px;
-	font-weight: bold;
-	color: #333;
+	font-size: 20px;
+	font-weight: 600;
+	color: #000;
+	margin: 0;
+	padding: 30px 0 20px 0;
 }
 
 /* 탭 스타일 */
@@ -200,9 +198,11 @@
 }
 
 .page-pagination-like {
-	margin-top: 30px; display : flex;
-	justify-content: center;
 	display: flex;
+    padding: 16px 8px;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
 }
 
 .empty-message {

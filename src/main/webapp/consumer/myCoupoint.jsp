@@ -18,13 +18,17 @@
 <link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/table.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/dateRangeFilterBox.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/tagcss/dateRangeFilterBox.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/coupon.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
-<link rel="stylesheet" href="<c:url value='/consumer/css/mypageMenu.css'/>">
-<link rel="stylesheet" href="<c:url value='/consumer/css/myCoupoint.css'/>">
-<link rel="stylesheet" href="<c:url value='/consumer/css/userInfo.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/consumer/css/mypageMenu.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/consumer/css/myCoupoint.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/consumer/css/userInfo.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
 </head>
 <body>
@@ -32,23 +36,27 @@
 	<%@ include file="/consumer/header.jsp"%>
 
 	<div class="container">
-		<!-- Sidebar -->
-		<aside class="sidebar">
-			<!-- 마이페이지 메뉴 -->
-			<%@ include file="/consumer/mypageMenu.jsp"%>
-		</aside>
+
+		<!-- 마이페이지 메뉴 -->
+		<%@ include file="/consumer/mypageMenu.jsp"%>
+
 
 		<!-- Main Content -->
 		<main class="main-content">
-		
-		<h3>마이 쿠폰 / 포인트</h3>
 
 			<!-- user info -->
-			<my:userInfo 
-            userName="${memberInfo.name}"
-            grade="${memberInfo.grade}" 
-            points="${memberInfo.pointBalance}" 
-            coupons="${couponCount}"  />
+			<my:userInfo userName="${memberInfo.name}"
+				grade="${memberInfo.grade}" points="${memberInfo.pointBalance}"
+				coupons="${couponCount}" />
+
+			<div class="myCoupoint-title">
+				<h3>마이 쿠폰</h3>
+				<div class="couponzone-button">
+					<button class="btn btn-primary btn-md"
+						onclick="location.href='<c:url value='/store/couponList'/>'">
+						쿠폰존 바로가기</button>
+				</div>
+			</div>
 
 			<!-- 쿠폰 섹션 -->
 			<section class="coupon-section">
@@ -63,46 +71,40 @@
 							</tr>
 						</thead>
 						<tbody>
-						<!-- 쿠폰이 없을 때 -->
-                        <c:if test="${empty couponList}">
-                            <tr>
-                                <td colspan="3" style="text-align: center; padding: 40px;">
-                                    보유한 쿠폰이 없습니다.
-                                </td>
-                            </tr>
-                        </c:if>
+							<!-- 쿠폰이 없을 때 -->
+							<c:if test="${empty couponList}">
+								<tr>
+									<td colspan="3" style="text-align: center; padding: 40px;">
+										보유한 쿠폰이 없습니다.</td>
+								</tr>
+							</c:if>
 							<!-- 쿠폰 목록 반복 출력 -->
-                        <c:forEach var="coupon" items="${couponList}">
-                            <tr>
-                                <td class="coupon-name">
-                                    ${coupon.cname}
-                                </td>
-                                <td>${coupon.amountCondition}</td>
-                                <td>
-                                    <fmt:formatDate value="${coupon.startDate}" pattern="yyyy.MM.dd"/> ~ 
-                                    <fmt:formatDate value="${coupon.endDate}" pattern="yyyy.MM.dd"/>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
-            </div>
-            <div class="couponzone-button">
-				<button class="btn btn-primary btn-md" 
-                    onclick="location.href='<c:url value='/consumer/couponList'/>'">
-                쿠폰존 바로가기
-            </button>
-            </div>
+							<c:forEach var="coupon" items="${couponList}">
+								<tr>
+									<td class="coupon-name">${coupon.cname}</td>
+									<td>${coupon.amountCondition}</td>
+									<td><fmt:formatDate value="${coupon.startDate}"
+											pattern="yyyy.MM.dd" /> ~ <fmt:formatDate
+											value="${coupon.endDate}" pattern="yyyy.MM.dd" /></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
 			</section>
+			
+			<div class="middle-devider"></div>
+			<div class="myCoupoint-title">
+				<h3>마이 포인트</h3>
+			</div>
 
 			<!-- 포인트 섹션 -->
 			<section class="point">
-				<div class="middle-devider">
-					<h2>사용 가능한 포인트 ${memberInfo.pointBalance} p</h2>
-            </div>
 				<div>
-				<form action="<c:url value='/store/mypage/myCoupoint'/>" method="get">
-					<my:dateRangeFilterBox periods="1,3,6,12" submitLabel="조회" size="sm" />
+					<form action="<c:url value='/store/mypage/myCoupoint'/>"
+						method="get">
+						<my:dateRangeFilterBox periods="1,3,6,12" submitLabel="조회"
+							size="md" />
 					</form>
 
 					<!-- 포인트 내역 테이블 -->
@@ -117,35 +119,36 @@
 							</thead>
 							<tbody>
 								<!-- 포인트 내역이 없을 때 -->
-                            <c:if test="${empty pointHistory}">
-                                <tr>
-                                    <td colspan="3" style="text-align: center; padding: 40px;">
-                                        포인트 내역이 없습니다.
-                                    </td>
-                                </tr>
-                            </c:if>
-                            
-                            <!-- 포인트 내역 반복 출력 -->
-                            <c:forEach var="point" items="${pointHistory}">
-                                <tr>
-                                    <td>
-                                        <fmt:formatDate value="${point.createdAt}" pattern="yyyy.MM.dd"/>
-                                    </td>
-                                    <td>
-                                        ${point.pointHistory}
-                                        <c:if test="${not empty point.orderId}">
-                                            <br>주문번호: ${point.orderId}
+								<c:if test="${empty pointHistory}">
+									<tr>
+										<td colspan="3" style="text-align: center; padding: 40px;">
+											포인트 내역이 없습니다.</td>
+									</tr>
+								</c:if>
+
+								<!-- 포인트 내역 반복 출력 -->
+								<c:forEach var="point" items="${pointHistory}">
+									<tr>
+										<td><fmt:formatDate value="${point.createdAt}"
+												pattern="yyyy.MM.dd" /></td>
+										<td>${point.pointHistory}<c:if
+												test="${not empty point.orderId}">
+												<br>주문번호: ${point.orderId}
                                         </c:if>
-                                    </td>
-                                    <td>
-                                        <span class="${point.amount.startsWith('+') ? 'plus' : 'minus'}">
-                                            ${point.amount}P
-                                        </span>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-                        </tbody>
-                    </table>
+										</td>
+										<td><span
+											class="${point.amount.startsWith('+') ? 'plus' : 'minus'}">
+												${point.amount}P </span></td>
+									</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+					</div>
+					<!-- 페이징 -->
+					<div class="page-pagination">
+						<my:pagination currentPage="${currentPage}"
+							totalPages="${totalPages}"
+							baseUrl="/store/planList?${queryString}" />
 					</div>
 				</div>
 			</section>

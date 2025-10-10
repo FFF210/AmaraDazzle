@@ -211,10 +211,10 @@
 					<thead>
 						<tr>
 							<th style="width: 150px;">주문번호</th>
-							<th style="width: 380px;">상품</th>
-							<th style="width: 46px;">수량</th>
-							<th style="width: 103px;">구매가</th>
-							<th style="width: 145px;">상태</th>
+							<th style="width: 340px;">상품</th>
+							<th style="width: 60px;">수량</th>
+							<th style="width: 100px;">구매가</th>
+							<th style="width: 120px;">상태</th>
 						</tr>
 					</thead>
 					<tbody>
