@@ -1,11 +1,11 @@
 //이벤트 등록 페이지로 이동
 function goWriteEvet() {
-	location.href = "promoEventWrite"
+	location.href = "admin/promoEventWrite"
 }
 
 //배너 상세 페이지로 이동
 function goEventDetail(num) {
-	location.href = "promoEventDetail?num=" + num
+	location.href = "admin/promoEventDetail?num=" + num
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", function() {
 					showAlert("success", data.title, data.message); // 2초간 토스트
 
 					setTimeout(() => {
-						location.href = "/admin/promoBannerList"; // 리스트로 이동
+						location.href = "/admin/promoEventList"; // 리스트로 이동
 					}, 3000);
 
 

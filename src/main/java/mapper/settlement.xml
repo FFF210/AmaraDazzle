@@ -129,11 +129,47 @@
 		SELECT
 		DATE_FORMAT(s.start_date, '%Y-%m') AS monthLabel,
 		COALESCE(SUM(s.total_sales), 0) AS totalSales,
-		COALESCE(SUM(s.fee), 0) AS fee,
+		COALESCE(SUM(s.fee), 0)
+		AS fee,
 		COALESCE(SUM(s.pure_profit), 0) AS pureProfit
 		FROM settlement s
 		WHERE s.brand_id = #{brandId}
-		GROUP BY YEAR(s.start_date), MONTH(s.start_date)
+		GROUP BY YEAR(s.start_date),
+		MONTH(s.start_date)
 		ORDER BY YEAR(s.start_date), MONTH(s.start_date);
 	</select>
+
+
+
+	<!--======================= [ADMIN] ======================= -->
+
+
+	<!-- 미정산 리스트 조회 -->
+	<select id="selectPending" resultType="settlement">
+		SELECT * FROM settlement
+		WHERE status = 'PENDING'
+	</select>
+
+	<!-- 일괄 정산 처리 -->
+	<update id="updateSettleAll" >
+		UPDATE settlement s
+		SET s.total_sales = (
+			SELECT COALESCE(SUM(oi.total),0)
+			FROM order_item oi
+			WHERE oi.brand_id = s.brand_id
+				AND oi.created_at BETWEEN s.start_date AND s.end_date
+				AND oi.status = 'CONFIRMED'
+		),
+		s.fee = (
+			SELECT COALESCE(SUM(oi.total) * 0.07,0) 
+			FROM order_item oi
+			WHERE oi.brand_id = s.brand_id
+				AND oi.created_at BETWEEN s.start_date AND s.end_date
+				AND oi.status = 'CONFIRMED'
+		),
+		s.final_amount = s.total_sales - s.fee,
+		s.calced_YN = 'Completed',
+		s.deposited_date = NOW()
+		WHERE s.calced_YN IN ('Waiting', 'InProgress');
+	</update>
 </mapper>

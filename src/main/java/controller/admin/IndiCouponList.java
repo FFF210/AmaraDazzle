@@ -16,7 +16,7 @@ import service.admin.CouponService;
 import service.admin.CouponServiceImpl;
 import util.Paging;
 
-@WebServlet("/admin/iCouponList")
+@WebServlet("/admin/couponIndiList")
 public class IndiCouponList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	

@@ -15,7 +15,7 @@ import util.NumberFormatting;
 
 
 
-@WebServlet("/admin/memberDetail")
+@WebServlet("/admin/userConsumerDetail")
 public class UserConsumerDetail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

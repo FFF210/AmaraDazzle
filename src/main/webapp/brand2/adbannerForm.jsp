@@ -186,7 +186,7 @@
 									<div class="actions">
 										<button type="button" class="btn btn-outline btn-sm"
 											id="btnClose"
-											onclick="location.href='/brand2/adbannerList.jsp'">닫기</button>
+											onclick="location.href='/brand2/adbannerList'">닫기</button>
 										<button type="submit" class="btn btn-outline btn-sm"
 											id="payBtn">신청하기</button>
 									</div>

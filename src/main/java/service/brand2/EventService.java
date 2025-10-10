@@ -25,4 +25,6 @@ public interface EventService {
 	// 이벤트 상세보기 버튼
 	EventDetail getEventDetailById(Long eventId) throws Exception;
 
+	// 이벤트 취소 버튼
+	void deleteEventApplication(Long eventApplicationId) throws Exception;
 }

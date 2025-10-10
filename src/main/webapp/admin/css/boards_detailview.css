@@ -7,6 +7,7 @@ section.board_detailview {
     padding: 30px;
     display: grid;
     gap: 15px;
+    margin : 10px auto;
 }
 
 section.board_detailview div.part_section {

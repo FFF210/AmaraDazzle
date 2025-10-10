@@ -13,14 +13,11 @@
 <%@ include file="./common/config.jsp"%>
 
 <title>공지 내용보기</title>
-
-<link rel="stylesheet" href="./css/myApplications.css?v=2" />
-<link rel="stylesheet" href="./css/boards_detailview.css?v=2" />
+<link rel="stylesheet" href="./css/boards_detailview.css" />
 
 <!-- 헤드부분 -->
 
 <body>
-
 	<!-- 레이아웃 + 메인컨텐츠 -->
 	<my:adminLayout>
 		<!-- *********************************메인부분********************************* -->

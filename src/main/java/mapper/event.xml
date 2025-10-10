@@ -14,7 +14,8 @@
 		endDate,
 		e.event_name AS eventName,
 		e.status AS status,
-		a.brand_id AS brandId,
+		a.brand_id AS
+		brandId,
 		a.apply_date AS
 		applyDate,
 		a.manager_name AS managerName,
@@ -65,26 +66,32 @@
 	<!-- ====== [brand2] 이벤트 개수 조회 ====== -->
 	<select id="selectEventCount" parameterType="map"
 		resultType="int">
-		SELECT COUNT(*)
+		SELECT COUNT(DISTINCT e.event_id)
 		FROM event e
 		LEFT JOIN event_application a
-		ON e.event_id
-		= a.event_id
+		ON e.event_id = a.event_id
 		AND a.brand_id = #{brandId}
-
 		<where>
 			<!-- 상태 필터 -->
-			<if test="status != null and status != '' and status != 'ALL'">
+			<if test="status != null and status != '' and status != '전체'">
 				AND e.status = #{status}
 			</if>
 
-			<!-- 검색 (이벤트명) -->
-			<if test="searchKeyword != null and searchKeyword != ''">
-				AND e.event_name LIKE CONCAT('%', #{searchKeyword}, '%')
+			<!-- 검색 (이벤트명 / 담당자) -->
+			<if
+				test="searchType != null and searchKeyword != null and searchKeyword != ''">
+				<choose>
+					<when test="searchType eq 'EVENTNAME'">
+						AND e.event_name LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+					<when test="searchType eq 'EVENTMANAGERNAME'">
+						AND a.manager_name LIKE CONCAT('%', #{searchKeyword}, '%')
+					</when>
+				</choose>
 			</if>
-
 		</where>
 	</select>
+
 
 	<!-- ====== [brand2] 이벤트 신청하기 버튼 ====== -->
 	<select id="selectEventById" parameterType="long"
@@ -131,10 +138,13 @@
 		GROUP_CONCAT(p.product_id) AS productIds
 
 		FROM event e
-		LEFT JOIN event_application a ON e.event_id = a.event_id
-		LEFT JOIN coupon c ON c.reason = CONCAT('event_application:',
+		LEFT JOIN
+		event_application a ON e.event_id = a.event_id
+		LEFT JOIN coupon c ON
+		c.reason = CONCAT('event_application:',
 		a.event_application_id)
-		LEFT JOIN product p ON e.event_id = p.event_id
+		LEFT
+		JOIN product p ON e.event_id = p.event_id
 		WHERE e.event_id = #{eventId}
 		GROUP BY e.event_id, e.event_type, e.event_name, e.status,
 		e.start_date, e.end_date,
@@ -142,13 +152,11 @@
 		c.cname, c.start_date, c.end_date, c.amount, c.amount_condition
 	</select>
 
-
-
 	<!-- ========= [brand2] 이벤트 신청 삭제하기 버튼 ========= -->
-	<delete id="updateEventApplication" parameterType="long">
+	<delete id="deleteEventApplication" parameterType="long">
 		DELETE FROM
-		event_application WHERE event_application_id =
-		#{eventApplicationId}
+		event_application
+		WHERE event_application_id = #{eventApplicationId}
 	</delete>
 
 	<!-- ====== [brand2] 이벤트 종료 시 상품 event_id 해제 ====== -->
@@ -303,10 +311,13 @@
 
 	<!-- ================ ADMIN =================== -->
 	<!-- event 게시글 총 개수 -->
-	<select id="eventCount" resultType="Integer" parameterType="searchCondition">
+	<select id="eventCount" resultType="Integer"
+		parameterType="searchCondition">
 		select count(*) from event e
-		left join event_application ea on (e.event_id = ea.event_id)
-		left join brand b on (ea.brand_id = b.brand_id)
+		left join event_application ea on
+		(e.event_id = ea.event_id)
+		left join brand b on (ea.brand_id =
+		b.brand_id)
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
 				and (e.created_at &gt;= #{startDateTime}
@@ -335,16 +346,21 @@
 	<!-- event 리스트 보기 -->
 	<select id="allEventList" resultType="event" parameterType="Map">
 		select e.*, b.brand_name from event e
-		left join event_application ea on (e.event_id = ea.event_id)
-		left join brand b on (ea.brand_id = b.brand_id)
+		left join event_application ea on
+		(e.event_id = ea.event_id)
+		left join brand b on (ea.brand_id =
+		b.brand_id)
 		order by e.event_id desc limit #{start_p},#{post_ea}
 	</select>
 
 	<!-- 검색된 event 리스트 -->
-	<select id="searchEventList" resultType="event" parameterType="searchCondition">
+	<select id="searchEventList" resultType="event"
+		parameterType="searchCondition">
 		select e.*, b.brand_name from event e
-		left join event_application ea on (e.event_id = ea.event_id)
-		left join brand b on (ea.brand_id = b.brand_id)
+		left join event_application ea on
+		(e.event_id = ea.event_id)
+		left join brand b on (ea.brand_id =
+		b.brand_id)
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
 				and (e.created_at &gt;= #{startDateTime}
@@ -382,8 +398,10 @@
 	<insert id="adminEventWrite" parameterType="event">
 		insert into event
 		(event_id, event_type, start_date, end_date,
-		event_name, thumbnail_file_id, detail_file_id, category_id,
-		content, writer, created_at)
+		event_name,
+		thumbnail_file_id, detail_file_id, category_id,
+		content, writer,
+		created_at)
 		values
 		(0, #{eventType}, #{startDate}, #{endDate},
 		#{eventName},#{thumbnailFileId}, #{detailFileId}, #{categoryId},

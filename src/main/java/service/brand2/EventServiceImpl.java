@@ -98,6 +98,12 @@ public class EventServiceImpl implements EventService {
 	public EventDetail getEventDetailById(Long eventId) throws Exception {
 	    return eventDAO.selectEventDetailById(eventId);
 	}
+	
+	// 이벤트 취소 버튼
+	@Override
+    public void deleteEventApplication(Long eventApplicationId) throws Exception {
+        eventDAO.deleteEventApplication(eventApplicationId);
+    }
 
 
 }

@@ -12,13 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dto.Coupon;
-import service.admin.BrandService;
-import service.admin.BrandServiceImpl;
 import service.admin.CouponService;
 import service.admin.CouponServiceImpl;
 import util.Paging;
 
-@WebServlet("/admin/pCouponList")
+//발행쿠폰 리스트
+@WebServlet("/admin/couponPublList")
 public class PublCouponList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
@@ -35,7 +34,6 @@ public class PublCouponList extends HttpServlet {
 
 			Paging m_pg = new Paging();
 			CouponService coupon_svc = new CouponServiceImpl();
-			BrandService b_svc = new BrandServiceImpl();
 			
 			String startDate = request.getParameter("startDate");
 			String endDate = request.getParameter("endDate");

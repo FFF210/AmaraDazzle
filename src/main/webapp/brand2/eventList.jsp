@@ -157,7 +157,7 @@
 										<c:when
 											test="${event.status eq 'RECRUIT' and event.participateYn eq '참여'}">
 											<button type="button" class="btn btn-danger btn-sm"
-												onclick="if(confirm('정말 취소하시겠습니까?')) location.href='/brand2/eventDetail?eventId=${event.eventId}'">취소</button>
+												onclick="if(confirm('정말 취소하시겠습니까?')) location.href='/brand2/eventDetail?action=cancel&eventApplicationId=${event.eventApplicationId}&eventId=${event.eventId}'">취소</button>
 										</c:when>
 										<c:otherwise>
 											<button type="button" class="btn btn-outline btn-sm" disabled>취소</button>

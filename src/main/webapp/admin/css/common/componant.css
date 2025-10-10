@@ -169,13 +169,13 @@ button {
     margin: 0 auto;
 }
 
-.button_wrap {
-    width: 95%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin: 10px auto 0;
-}
+/* .button_wrap { */
+/*     width: 95%; */
+/*     display: flex; */
+/*     justify-content: flex-end; */
+/*     align-items: center; */
+/*     margin: 10px auto 0; */
+/* } */
 
 .action_btn {
     height: 40px;
@@ -186,9 +186,4 @@ button {
     width: 80px;
 }
 
-/* ********************* */
-/*        */
-/* ********************* */
-.title_font {
-    font-size: 16px !important;
-}
+

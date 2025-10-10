@@ -74,6 +74,12 @@ public class AdbannerServiceImpl implements AdbannerService {
 	@Override
 	public void savePayment(AdminPayment adminPayment) throws Exception {
 		adminPaymentDAO.insertAdminPayment(adminPayment);
+		
+		// 배너 상태 갱신
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("bannerId", adminPayment.getBannerId());
+	    params.put("status", "APPROVED"); // 결제 후 승인 완료
+	    bannerDAO.updateBannerStatus(params);
 	}
 	
 	// 파일 등록
