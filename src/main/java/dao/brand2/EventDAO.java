@@ -3,8 +3,6 @@ package dao.brand2;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
-
 import dto.Coupon;
 import dto.Event;
 import dto.EventApplication;
@@ -23,29 +21,17 @@ public interface EventDAO {
 
 	/* eventForm */
 
-	// 1. 이벤트 신청 저장
-	void insertEventApplication(EventApplication application) throws Exception;
+	// ========== event ==========
+    Event selectEventById(Long eventId) throws Exception;
+    EventDetail selectEventDetailById(Long eventId) throws Exception;
+    void resetProductsForEvent(Long eventId) throws Exception;
 
-	// 2-1. 이벤트 상품 여러 개 저장
-	// params: eventId, brandId, productIds(List<Long>)
-	void insertEventProducts(Map<String, Object> params) throws Exception;
+    // ========== event_application ==========
+    void insertEventApplication(EventApplication application) throws Exception;
+    void updateProductsEvent(Map<String, Object> params) throws Exception;
+    void deleteEventApplication(Long eventApplicationId) throws Exception;
 
-	// 2-2. product.event_id 세팅
-	void updateProductsEvent(Map<String, Object> params) throws Exception;
-
-	// 3. 쿠폰 저장
-	int insertCoupon(Coupon coupon) throws Exception;
-
-	// 신청하기 버튼 (단일 이벤트 조회)
-	Event selectEventById(Long eventId) throws Exception;
-	
-	// 이벤트 종료 시 product.event_id 해제
-	void resetProductsForEvent(Long eventId) throws Exception;
-	
-	// 상세보기 버튼
-	EventDetail selectEventDetailById(Long eventId) throws Exception;
-
-	// 이벤트 취소 버튼
-	void deleteEventApplication(@Param("eventApplicationId") Long eventApplicationId) throws Exception;
+    // ========== coupon ==========
+    int insertCoupon(Coupon coupon) throws Exception;
 
 }

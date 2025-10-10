@@ -5,7 +5,6 @@
 <mapper namespace="mapper.eventApplication">
 
 	<!-- ========= [brand2] 이벤트 신청하기 ========= -->
-	<!-- 이벤트종류, 이벤트명, 광고담당자, 담당연락처, 상품코드, 쿠폰설정, 관리자전달사항 -->
 
 	<!-- 1. event_application 저장 -->
 	<insert id="insertEventApplication"
@@ -21,31 +20,42 @@
 		)
 	</insert>
 
-	<!--2-2. product 테이블에 event_id 세팅 -->
+	<!-- 2. 신청 시 product.event_id 세팅 -->
 	<update id="updateProductsEvent" parameterType="map">
-		UPDATE product
-		SET event_id = #{eventId}
-		WHERE brand_id = #{brandId}
-		AND
-		product_id IN
-		<foreach collection="productIds" item="pid" open="("
-			separator="," close=")">
-			#{pid}
+		<foreach collection="productIds" item="pid" index="idx"
+			separator=";">
+			UPDATE product
+			SET event_id = #{eventId},
+			discount_type = #{discountTypes[${idx}]},
+			discount_value = #{discountValues[${idx}]}
+			WHERE product_id = #{pid}
+			AND brand_id = #{brandId}
 		</foreach>
 	</update>
 
-	<!-- 3. coupon 저장 -->
+	<!-- 3. 쿠폰 발급 (reason에 event_application 연동) -->
+	<!-- reason 컬럼에 event_application:{id}를 기록해서 신청과 쿠폰 연결 -->
 	<insert id="insertCoupon" parameterType="coupon"
 		useGeneratedKeys="true" keyProperty="couponId">
 		INSERT INTO coupon (
-		cname, start_date, end_date, amount_condition, amount,
-		reason, provision, writer_type, writer_id
+		cname,
+		start_date, end_date, amount_condition, amount,
+		reason, provision,
+		writer_type, writer_id
 		)
 		VALUES (
-		#{cname}, #{startDate}, #{endDate}, #{amountCondition}, #{amount},
-		#{reason}, #{provision}, #{writerType}, #{writerId}
+		#{cname}, #{startDate}, #{endDate},
+		#{amountCondition}, #{amount},
+		#{reason}, #{provision}, #{writerType},
+		#{writerId}
 		)
 	</insert>
-	<!-- CONCAT('event_application:', #{applicationId}) : 신청ID를 reason에 기록 -->
+
+	<!-- ========= [brand2] 이벤트 신청 삭제하기 버튼 ========= -->
+	<delete id="deleteEventApplication" parameterType="long">
+		DELETE FROM
+		event_application
+		WHERE event_application_id = #{eventApplicationId}
+	</delete>
 
 </mapper>

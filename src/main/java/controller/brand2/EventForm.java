@@ -76,13 +76,14 @@ public class EventForm extends HttpServlet {
 
             form.setEventId(Long.parseLong(request.getParameter("eventId")));
             form.setBrandId(1L); // ★ 세션 연동 필요시 교체
-
+            form.setEventType(request.getParameter("eventType"));
+            
             form.setManagerName(request.getParameter("managerName"));
             form.setManagerTel(request.getParameter("managerTel"));
             form.setNote(request.getParameter("note"));
 
             // 상품코드 여러개
-            String[] productArr = request.getParameterValues("productIds");
+            String[] productArr = request.getParameterValues("productIds[]");
             if (productArr != null) {
                 List<Long> productIds = new java.util.ArrayList<>();
                 for (String pid : productArr) {
@@ -92,20 +93,45 @@ public class EventForm extends HttpServlet {
                 }
                 form.setProductIds(productIds);
             }
+            
+            // 할인 이벤트인 경우 discountType[], discountValue[] 처리
+            String[] discountTypeArr = request.getParameterValues("discountTypes[]");
+            String[] discountValueArr = request.getParameterValues("discountValues[]");
+            
+            if (discountTypeArr != null && discountValueArr != null) {
+                List<String> discountTypes = new java.util.ArrayList<>();
+                List<java.math.BigDecimal> discountValues = new java.util.ArrayList<>();
 
+                for (int i = 0; i < discountTypeArr.length; i++) {
+                    discountTypes.add(discountTypeArr[i]);
+                    if (discountValueArr[i] != null && !discountValueArr[i].isBlank()) {
+                        discountValues.add(new java.math.BigDecimal(discountValueArr[i]));
+                    } else {
+                        discountValues.add(java.math.BigDecimal.ZERO);
+                    }
+                }
+                form.setDiscountTypes(discountTypes);
+                form.setDiscountValues(discountValues);
+            }
+                
             // 쿠폰 입력값
-            form.setCname(request.getParameter("couponName"));
-
+            form.setCouponId(
+                request.getParameter("couponId") != null && !request.getParameter("couponId").isBlank()
+                ? Long.parseLong(request.getParameter("couponId"))
+                : null
+            );
+            form.setCname(request.getParameter("cname")); // 쿠폰명 입력 필드
             String startDateStr = request.getParameter("startDate");
             String endDateStr = request.getParameter("endDate");
+            
             if (startDateStr != null && !startDateStr.isBlank()
                     && endDateStr != null && !endDateStr.isBlank()) {
 
                 LocalDate startLocal = LocalDate.parse(startDateStr);
                 LocalDate endLocal = LocalDate.parse(endDateStr);
 
-                form.setStartDateCoupon(Timestamp.valueOf(startLocal.atStartOfDay()));
-                form.setEndDateCoupon(Timestamp.valueOf(endLocal.atTime(23, 59, 59)));
+                form.setCouponStartDate(Timestamp.valueOf(startLocal.atStartOfDay()));
+                form.setCouponEndDate(Timestamp.valueOf(endLocal.atTime(23, 59, 59)));
             }
 
             // 숫자값 처리
@@ -119,7 +145,7 @@ public class EventForm extends HttpServlet {
                 form.setAmountCondition(amountCondition);
             }
 
-            form.setProvision("개별지급"); 
+            form.setProvision("ALL"); 
             form.setWriterType("BRAND_ADMIN");
             form.setWriterId(form.getBrandId());
 

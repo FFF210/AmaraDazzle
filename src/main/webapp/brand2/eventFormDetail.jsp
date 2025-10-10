@@ -63,7 +63,7 @@
 		<my:breadcrumb items="이벤트 관리:/brand2/eventList.jsp" />
 		<div class="wrap">
 			<section class="card">
-				<div class="head">이벤트 신청</div>
+				<div class="head">이벤트 신청 상세보기</div>
 				<div class="body">
 					<main>
 						<form id="eventForm" novalidate>

@@ -1,5 +1,6 @@
 package dto.brand2;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -7,26 +8,40 @@ public class EventApplicationForm {
 /* ======= insert/update 용 ======= */
 	
     // event_application
+	private Long eventApplicationId;  // 신청 PK (insert 후 세팅)
     private Long brandId;
     private Long eventId;
     private String managerName;
     private String managerTel;
     private String note;
 
+    // event
+    private String eventType;
+    
     // event_product (여러개)
     private List<Long> productIds;
+    
+    // DISCOUNT 이벤트 전용
+    // 또는 할인 이벤트 지원 시
+    private List<String> discountTypes; // RATE/AMOUNT
+    private List<BigDecimal> discountValues; // 할인 값
 
     // coupon
+    private Long couponId; // 이미 발급된 쿠폰을 선택하는 경우 (nullable)
     private String cname;
-    private Timestamp startDateCoupon;
-    private Timestamp endDateCoupon;
+    private Timestamp couponStartDate;
+    private Timestamp couponEndDate;
     private int amount;
     private String amountCondition;
     private String provision;
     private String writerType;
     private Long writerId;
-    
-    
+	public Long getEventApplicationId() {
+		return eventApplicationId;
+	}
+	public void setEventApplicationId(Long eventApplicationId) {
+		this.eventApplicationId = eventApplicationId;
+	}
 	public Long getBrandId() {
 		return brandId;
 	}
@@ -57,11 +72,35 @@ public class EventApplicationForm {
 	public void setNote(String note) {
 		this.note = note;
 	}
+	public String getEventType() {
+		return eventType;
+	}
+	public void setEventType(String eventType) {
+		this.eventType = eventType;
+	}
 	public List<Long> getProductIds() {
 		return productIds;
 	}
 	public void setProductIds(List<Long> productIds) {
 		this.productIds = productIds;
+	}
+	public List<String> getDiscountTypes() {
+		return discountTypes;
+	}
+	public void setDiscountTypes(List<String> discountTypes) {
+		this.discountTypes = discountTypes;
+	}
+	public List<BigDecimal> getDiscountValues() {
+		return discountValues;
+	}
+	public void setDiscountValues(List<BigDecimal> discountValues) {
+		this.discountValues = discountValues;
+	}
+	public Long getCouponId() {
+		return couponId;
+	}
+	public void setCouponId(Long couponId) {
+		this.couponId = couponId;
 	}
 	public String getCname() {
 		return cname;
@@ -69,17 +108,17 @@ public class EventApplicationForm {
 	public void setCname(String cname) {
 		this.cname = cname;
 	}
-	public Timestamp getStartDateCoupon() {
-		return startDateCoupon;
+	public Timestamp getCouponStartDate() {
+		return couponStartDate;
 	}
-	public void setStartDateCoupon(Timestamp startDateCoupon) {
-		this.startDateCoupon = startDateCoupon;
+	public void setCouponStartDate(Timestamp couponStartDate) {
+		this.couponStartDate = couponStartDate;
 	}
-	public Timestamp getEndDateCoupon() {
-		return endDateCoupon;
+	public Timestamp getCouponEndDate() {
+		return couponEndDate;
 	}
-	public void setEndDateCoupon(Timestamp endDateCoupon) {
-		this.endDateCoupon = endDateCoupon;
+	public void setCouponEndDate(Timestamp couponEndDate) {
+		this.couponEndDate = couponEndDate;
 	}
 	public int getAmount() {
 		return amount;
@@ -113,12 +152,14 @@ public class EventApplicationForm {
 	}
 	@Override
 	public String toString() {
-		return "EventApplicationForm [brandId=" + brandId + ", eventId=" + eventId + ", managerName=" + managerName
-				+ ", managerTel=" + managerTel + ", note=" + note + ", productIds=" + productIds + ", cname=" + cname
-				+ ", startDateCoupon=" + startDateCoupon + ", endDateCoupon=" + endDateCoupon + ", amount=" + amount
+		return "EventApplicationForm [eventApplicationId=" + eventApplicationId + ", brandId=" + brandId + ", eventId="
+				+ eventId + ", managerName=" + managerName + ", managerTel=" + managerTel + ", note=" + note
+				+ ", eventType=" + eventType + ", productIds=" + productIds + ", discountTypes=" + discountTypes
+				+ ", discountValues=" + discountValues + ", couponId=" + couponId + ", cname=" + cname
+				+ ", couponStartDate=" + couponStartDate + ", couponEndDate=" + couponEndDate + ", amount=" + amount
 				+ ", amountCondition=" + amountCondition + ", provision=" + provision + ", writerType=" + writerType
 				+ ", writerId=" + writerId + "]";
 	}
-	
+    
     
 }
