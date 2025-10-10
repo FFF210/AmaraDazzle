@@ -3,6 +3,8 @@ package dao.brand2;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import dto.Coupon;
 import dto.Event;
 import dto.EventApplication;
@@ -43,5 +45,7 @@ public interface EventDAO {
 	// 상세보기 버튼
 	EventDetail selectEventDetailById(Long eventId) throws Exception;
 
+	// 이벤트 취소 버튼
+	void deleteEventApplication(@Param("eventApplicationId") Long eventApplicationId) throws Exception;
 
 }

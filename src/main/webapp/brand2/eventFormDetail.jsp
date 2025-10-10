@@ -3,7 +3,7 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -105,7 +105,8 @@
 								<div class="label req">상품코드</div>
 								<div>
 									<div class="chips" id="productChips">
-										<c:forEach var="pid" items="${fn:split(event.productIds, ',')}">
+										<c:forEach var="pid"
+											items="${fn:split(event.productIds, ',')}">
 											<span class="chip">${pid}</span>
 										</c:forEach>
 									</div>
@@ -126,14 +127,11 @@
 
 											<div class="label req">기간</div>
 											<div class="inline date-row">
-												<fmt:formatDate value="${event.startDate}"
-													pattern="yyyy-MM-dd" var="startDateFmt" />
 												<input id="couponFrom" name="startDate" type="date"
-													value="${event.startDate}"> <span>~</span>
-												<fmt:formatDate value="${event.endDate}"
-													pattern="yyyy-MM-dd" var="endDateFmt" />
-												<input id="couponTo" name="endDate" type="date"
-													value="${event.endDate}">
+													value="<fmt:formatDate value='${event.couponStartDate}' pattern='yyyy-MM-dd'/>" />
+												<span>~</span> <input id="couponTo" name="endDate"
+													type="date"
+													value="<fmt:formatDate value='${event.couponEndDate}' pattern='yyyy-MM-dd'/>" />
 											</div>
 
 

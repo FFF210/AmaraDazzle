@@ -122,7 +122,8 @@
 										</c:when>
 									</c:choose></td>
 								<td>${banner.managerName}</td>
-								<td>${banner.period * 140000}</td>
+								<c:set var="calc" value="${banner.period * 140000}" />
+								<td><fmt:formatNumber value="${calc}" type="number" />원</td>
 								<td>${banner.managerTel}</td>
 
 								<!-- 상세보기 버튼 전용 열 -->
