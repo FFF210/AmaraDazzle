@@ -8,6 +8,23 @@
 <meta charset="UTF-8">
 <title>이벤트 신청</title>
 
+<!-- Pretendard 폰트 (CDN) -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+
+<!-- flatpickr 기본 테마 -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
+
+<!-- 한글화 & 커스텀 CSS -->
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
+	
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+	
 <link rel="stylesheet" href="./css/formLayout.css" />
 
 <link rel="stylesheet" href="../tagcss/selectbox.css" />
@@ -26,13 +43,6 @@
 <link rel="stylesheet" href="../tagcss/table.css" />
 <link rel="stylesheet" href="../tagcss/button.css" />
 <link rel="stylesheet" href="../tagcss/textInput.css" />
-
-
-<!-- 달력 -->
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 <style>
 .pagination {
@@ -271,14 +281,22 @@ ETC(기타) : (?)
 					<c:when test="${event.eventType eq 'COUPON'}">
 						<div class="label req">쿠폰 선택</div>
 						<div class="part_content">
-							<select name="couponId" class="text-input default">
-								<option value="">쿠폰 선택</option>
-								<c:forEach var="c" items="${coupons}">
-									<option value="${c.couponId}">${c.cname}</option>
-								</c:forEach>
-							</select>
+							<div class="custom-select sm" id="couponSelect">
+								<div class="select-header">
+									<span>쿠폰 선택</span> <i class="bi bi-chevron-down"></i>
+								</div>
+								<ul class="select-list">
+									<li class="select-item">쿠폰 선택</li>
+									<c:forEach var="c" items="${coupons}">
+										<li class="select-item" data-value="${c.couponId}">
+											${c.cname}</li>
+									</c:forEach>
+								</ul>
+								<input type="hidden" name="couponId" value="" />
+							</div>
 						</div>
 					</c:when>
+
 
 					<c:when test="${event.eventType eq 'DISCOUNT'}">
 						<div class="label req">상품별 할인 등록</div>
@@ -286,17 +304,21 @@ ETC(기타) : (?)
 							<div class="product-row discount-row">
 
 								<div class="field">
-									<div class="text-input-wrapper size--sm state--default">
-										<div class="text-input-inner default">
-											<select name="productId[]" class="text-input default">
-												<option value="">상품 선택</option>
-												<c:forEach var="p" items="${products}">
-													<option value="${p.productId}">${p.productName}</option>
-												</c:forEach>
-											</select>
+									<div class="custom-select sm" id="productSelect">
+										<div class="select-header">
+											<span>상품 선택</span> <i class="bi bi-chevron-down"></i>
 										</div>
+										<ul class="select-list">
+											<li class="select-item">상품 선택</li>
+											<c:forEach var="p" items="${products}">
+												<li class="select-item" data-value="${p.productId}">
+													${p.productName}</li>
+											</c:forEach>
+										</ul>
+										<input type="hidden" name="productId[]" value="" />
 									</div>
 								</div>
+
 
 								<div class="field">
 									<div class="text-input-wrapper size--sm state--default">
@@ -322,7 +344,7 @@ ETC(기타) : (?)
 									aria-label="상품 삭제">×</button>
 							</div>
 						</div>
-
+						<div></div>
 						<div class="product-actions">
 							<button type="button" class="btn icon" id="addProductRow"
 								aria-label="상품 추가">＋</button>
@@ -333,29 +355,41 @@ ETC(기타) : (?)
 					<c:when test="${event.eventType eq 'EXPERIENCE'}">
 						<div class="label req">체험 상품 선택</div>
 						<div class="part_content">
-							<select name="productIds[]" class="text-input default">
-								<option value="">상품 선택</option>
-								<c:forEach var="p" items="${products}">
-									<option value="${p.productId}">${p.productName}</option>
-								</c:forEach>
-							</select>
+							<div class="custom-select sm" id="experienceProductSelect">
+								<div class="select-header">
+									<span>상품 선택</span> <i class="bi bi-chevron-down"></i>
+								</div>
+								<ul class="select-list">
+									<li class="select-item">상품 선택</li>
+									<c:forEach var="p" items="${products}">
+										<li class="select-item" data-value="${p.productId}">
+											${p.productName}</li>
+									</c:forEach>
+								</ul>
+								<input type="hidden" name="productIds[]" value="" />
+							</div>
 						</div>
 					</c:when>
 
 					<c:when test="${event.eventType eq 'PICK'}">
 						<div class="label req">추천 상품 선택</div>
 						<div class="part_content">
-							<select name="productIds[]" class="text-input default">
-								<option value="">상품 선택</option>
-								<c:forEach var="p" items="${products}">
-									<option value="${p.productId}">${p.productName}</option>
-								</c:forEach>
-							</select>
+							<div class="custom-select sm" id="pickProductSelect">
+								<div class="select-header">
+									<span>상품 선택</span> <i class="bi bi-chevron-down"></i>
+								</div>
+								<ul class="select-list">
+									<li class="select-item">상품 선택</li>
+									<c:forEach var="p" items="${products}">
+										<li class="select-item" data-value="${p.productId}">
+											${p.productName}</li>
+									</c:forEach>
+								</ul>
+								<input type="hidden" name="productIds[]" value="" />
+							</div>
 						</div>
 					</c:when>
-
 					<c:otherwise>
-
 					</c:otherwise>
 				</c:choose>
 
@@ -430,22 +464,30 @@ ETC(기타) : (?)
 		</my:brand2formLayout>
 	</my:layout>
 
-<script>
-document.getElementById("addProductRow").addEventListener("click", function() {
-    const productList = document.getElementById("productList");
-    const newRow = productList.querySelector(".product-row").cloneNode(true);
-    // 입력값 초기화
-    newRow.querySelector("select[name='productIds[]']").value = "";
-    newRow.querySelector("input[name='discountValues[]']").value = "";
-    newRow.querySelector("select[name='discountTypes[]']").value = "RATE";
-    productList.appendChild(newRow);
-});
+	<script>
+		document
+				.getElementById("addProductRow")
+				.addEventListener(
+						"click",
+						function() {
+							const productList = document
+									.getElementById("productList");
+							const newRow = productList.querySelector(
+									".product-row").cloneNode(true);
+							// 입력값 초기화
+							newRow.querySelector("select[name='productIds[]']").value = "";
+							newRow
+									.querySelector("input[name='discountValues[]']").value = "";
+							newRow
+									.querySelector("select[name='discountTypes[]']").value = "RATE";
+							productList.appendChild(newRow);
+						});
 
-document.addEventListener("click", function(e) {
-    if (e.target.classList.contains("removeProduct")) {
-        e.target.closest(".product-row").remove();
-    }
-});
-</script>
+		document.addEventListener("click", function(e) {
+			if (e.target.classList.contains("removeProduct")) {
+				e.target.closest(".product-row").remove();
+			}
+		});
+	</script>
 </body>
 </html>
