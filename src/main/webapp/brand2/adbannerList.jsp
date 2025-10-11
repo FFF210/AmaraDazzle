@@ -80,7 +80,6 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th><input type="checkbox" class="form-check" /></th>
 							<th class="sortable">번호 <i class="bi bi-dash-lg sort-icon"></i></th>
 							<th>신청일</th>
 							<th>광고 기간</th>
@@ -96,7 +95,6 @@
 					<tbody>
 						<c:forEach var="banner" items="${bannerList}">
 							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
 								<td>${banner.bannerId}</td>
 								<td><fmt:formatDate value="${banner.createdAt}"
 										pattern="yyyy-MM-dd" /></td>
@@ -106,16 +104,16 @@
 								<td><p class="product-name">${banner.bannerName}</p></td>
 								<td><c:choose>
 										<c:when test="${banner.status eq 'PENDING'}">
-											<my:tag color="blue" size="sm" text="승인 대기" />
+											<my:tag color="yellow" size="sm" text="승인 대기" />
 										</c:when>
 										<c:when test="${banner.status eq 'APPROVED'}">
-											<my:tag color="gray" size="sm" text="승인 완료" />
+											<my:tag color="green" size="sm" text="승인 완료" />
 										</c:when>
 										<c:when test="${banner.status eq 'ONGOING'}">
-											<my:tag color="green" size="sm" text="진행 중" />
+											<my:tag color="blue" size="sm" text="진행 중" />
 										</c:when>
 										<c:when test="${banner.status eq 'COMPLETED'}">
-											<my:tag color="green" size="sm" text="완료" />
+											<my:tag color="gray" size="sm" text="완료" />
 										</c:when>
 										<c:when test="${banner.status eq 'CANCELED'}">
 											<my:tag color="red" size="sm" text="취소" />

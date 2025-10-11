@@ -26,7 +26,9 @@ public interface AdbannerService {
 	// 파일 저장
 	void registerUploadFile(UploadFile uploadFile);
 
-	
+	// 배너, 상세보기 - 결제대기/결제완료용
+	boolean isBannerPaid(long bannerId) throws Exception;
+
 	
 	
 }

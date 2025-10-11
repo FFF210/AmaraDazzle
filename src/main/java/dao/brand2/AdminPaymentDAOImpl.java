@@ -22,4 +22,11 @@ public class AdminPaymentDAOImpl implements AdminPaymentDAO {
 		sqlSession.insert("mapper.adminPayment.insertAdminPayment", adminPayment);
 		sqlSession.commit();
 	}
+	
+	// 배너, 상세보기 - 결제대기/결제완료용
+	@Override
+	public int existsByBannerId(long bannerId) throws Exception {
+	    return sqlSession.selectOne("mapper.adminPayment.existsByBannerId", bannerId);
+	}
+
 }

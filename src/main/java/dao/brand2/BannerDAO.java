@@ -24,5 +24,6 @@ public interface BannerDAO {
 	// 배너 취소 버튼
 	public int updateBannerStatus(Map<String, Object> params);
 	
-	
+	// 디버깅
+//	public boolean existsByBannerId(Long bannerId);
 }
