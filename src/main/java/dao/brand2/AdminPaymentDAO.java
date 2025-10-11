@@ -13,5 +13,8 @@ public interface AdminPaymentDAO {
 	
 	void updateSuccessByOrderId(AdminPayment adminPayment);
 
+	// 배너, 상세보기 - 결제대기/결제완료용
+	int existsByBannerId(long bannerId) throws Exception;
+	
 }
 

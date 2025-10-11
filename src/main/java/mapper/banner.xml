@@ -22,7 +22,8 @@
 		#{managerTel}, #{startDate},
 		#{endDate},
 		#{bannerName},
-		#{bannerMessage}, #{status}, #{brandUrl}, #{uploadFileId}, DATEDIFF(#{endDate}, #{startDate}) + 1)
+		#{bannerMessage}, #{status}, #{brandUrl},
+		#{uploadFileId}, DATEDIFF(#{endDate}, #{startDate}) + 1)
 	</insert>
 
 	<!-- 상세보기 버튼 -->
@@ -41,9 +42,11 @@
 		created_at AS createdAt,
 		banner_message AS bannerMessage,
 		upload_file_id AS uploadFileId,
+		brand_url AS brandUrl,
 		DATEDIFF(end_date, start_date)+1 AS period
 		FROM banner
-		WHERE banner_id = #{bannerId}
+		WHERE banner_id =
+		#{bannerId}
 	</select>
 
 	<!-- 삭제하기 버튼 -->
@@ -74,16 +77,21 @@
 		b.admin_id,
 		DATEDIFF(b.end_date, b.start_date) + 1 AS period,
 		CASE
-		when ap.payment_id IS NOT NULL THEN 1
+		when
+		ap.payment_id IS NOT NULL THEN 1
 		ELSE 0
 		END AS paid
 		FROM
 		banner b
-		LEFT JOIN admin_payment ap
+		LEFT JOIN
+		admin_payment ap
 		ON ap.banner_id = b.banner_id
 		AND
-		ap.payment_type = 'BANNER_AD'
+		ap.payment_type =
+		'BANNER_AD'
 		<where>
+			<!-- 로그인 브랜드 필터 -->
+			b.brand_id = #{brandId}
 			<!-- 상태 필터링 -->
 			<if test="status != null and status != ''">
 				<choose>
@@ -129,29 +137,32 @@
 		resultType="int">
 		SELECT COUNT(*)
 		FROM banner b
+		<where>
+			b.brand_id = #{brandId}
+		</where>
 	</select>
-
-	<!-- 결제 완료 후 배너 상태 변경 <update id="updateBannerStatus" parameterType="map"> 
-		UPDATE banner SET status = #{status}, changed_at = NOW() WHERE banner_id 
-		= #{bannerId} </update> -->
 
 	<!-- brand2 end -->
 
 
 	<!-- admin -->
 	<!-- banner 전체 개수 -->
-	<select id="BannerAllCnt" resultType="Integer" parameterType="searchCondition">
+	<select id="BannerAllCnt" resultType="Integer"
+		parameterType="searchCondition">
 		select count(*) from banner bn
-		left join brand b on (bn.brand_id = b.brand_id)
+		left join brand b on (bn.brand_id =
+		b.brand_id)
 		join admin_info a on (bn.admin_id = a.admin_info_id)
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
 				and (bn.created_at &gt;= #{startDateTime}
-				and bn.created_at &lt; #{endDateTime})
+				and
+				bn.created_at &lt; #{endDateTime})
 			</if>
 			<if test="startDateTime2 != null and endDateTime2 != null">
 				and (bn.changed_at &gt;= #{startDateTime2}
-				and bn.changed_at &lt; #{endDateTime2})
+				and
+				bn.changed_at &lt; #{endDateTime2})
 			</if>
 			<if test="middleFilter != null and middleFilter != ''">
 				<choose>
@@ -178,30 +189,41 @@
 	</select>
 
 	<!-- 전체 배너 리스트 -->
-	<select id="selectAllBannerList" resultType="banner" parameterType="Map">
+	<select id="selectAllBannerList" resultType="banner"
+		parameterType="Map">
 		select bn.*, b.brand_name, a.aname, f.file_rename
-		from banner bn
+		from
+		banner bn
 		left join brand b on (bn.brand_id = b.brand_id)
-		join admin_info a on (bn.admin_id = a.admin_info_id)
-		join upload_file f on (bn.upload_file_id = f.upload_file_id)
-		order by banner_id desc limit #{start_p},#{post_ea}
+		join
+		admin_info a on (bn.admin_id = a.admin_info_id)
+		join upload_file f on
+		(bn.upload_file_id = f.upload_file_id)
+		order by banner_id desc limit
+		#{start_p},#{post_ea}
 	</select>
 
 	<!-- 배너 검색 리스트 -->
-	<select id="selectSearchBannerList" resultType="banner" parameterType="searchCondition">
+	<select id="selectSearchBannerList" resultType="banner"
+		parameterType="searchCondition">
 		select bn.*, b.brand_name, a.aname, f.file_rename
 		from banner bn
-		left join brand b on (bn.brand_id = b.brand_id)
-		join admin_info a on (bn.admin_id = a.admin_info_id)
-		join upload_file f on (bn.upload_file_id = f.upload_file_id)
+		left
+		join brand b on (bn.brand_id = b.brand_id)
+		join admin_info a on
+		(bn.admin_id = a.admin_info_id)
+		join upload_file f on
+		(bn.upload_file_id = f.upload_file_id)
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
 				and (bn.created_at &gt;= #{startDateTime}
-				and bn.created_at &lt; #{endDateTime})
+				and
+				bn.created_at &lt; #{endDateTime})
 			</if>
 			<if test="startDateTime2 != null and endDateTime2 != null">
 				and (bn.changed_at &gt;= #{startDateTime2}
-				and bn.changed_at &lt; #{endDateTime2})
+				and
+				bn.changed_at &lt; #{endDateTime2})
 			</if>
 			<if test="middleFilter != null and middleFilter != ''">
 				<choose>
@@ -213,7 +235,8 @@
 					</when>
 				</choose>
 			</if>
-			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+			<if
+				test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
 				<choose>
 					<when test="totalSearch == '브랜드명'">
 						and b.brand_name like concat('%',#{keyword},'%')
@@ -226,26 +249,32 @@
 		</where>
 		order by bn.banner_id desc limit #{start_p},#{post_ea}
 	</select>
-	
+
 	<!-- 어드민 배너 등록 -->
 	<insert id="adminBannerWrite" parameterType="banner">
-		insert into banner 
-			(banner_id, start_date, end_date, banner_name, 
-			brand_url, admin_id, upload_file_id, created_at)
-		values 
-			(0, #{startDate}, #{endDate}, #{bannerName},
-			#{brandUrl},#{adminId}, #{UploadFileId}, now())
+		insert into banner
+		(banner_id, start_date, end_date, banner_name,
+		brand_url, admin_id, upload_file_id, created_at)
+		values
+		(0, #{startDate}, #{endDate}, #{bannerName},
+		#{brandUrl},#{adminId}, #{UploadFileId}, now())
 	</insert>
-	
+
 	<!-- 배너 게시물 상세보기 -->
-	<select id="bannerDetail" resultType="banner" parameterType="int" >
-		select bn.*, b.brand_name, p.amount as payAmount, a.aname, f.file_name, f.file_rename
+	<select id="bannerDetail" resultType="banner"
+		parameterType="int">
+		select bn.*, b.brand_name, p.amount as payAmount,
+		a.aname, f.file_name, f.file_rename
 		from banner bn
-		left join brand b on (bn.brand_id = b.brand_id)
-		left join admin_payment p on (bn.banner_id = p.banner_id)
+		left join brand b on
+		(bn.brand_id = b.brand_id)
+		left join admin_payment p on (bn.banner_id =
+		p.banner_id)
 		join admin_info a on (bn.admin_id = a.admin_info_id)
-		join upload_file f on (bn.upload_file_id = f.upload_file_id)
-		where bn.banner_id = #{num}
+		join
+		upload_file f on (bn.upload_file_id = f.upload_file_id)
+		where
+		bn.banner_id = #{num}
 	</select>
 
 
@@ -267,15 +296,18 @@
 		b.changed_at AS changedAt,
 		b.brand_url AS
 		brandUrl,
-		b.state_change AS stateChange,
+		b.state_change AS
+		stateChange,
 		b.admin_id AS adminId,
 		b.upload_file_id AS uploadFileId
 		FROM banner b
 		WHERE b.state_change = 'POSTING'
-		AND b.status IN ('ONGOING')
+		AND b.status IN
+		('ONGOING')
 		AND NOW()
 		BETWEEN b.start_date AND b.end_date
-		ORDER BY b.created_at DESC
+		ORDER BY
+		b.created_at DESC
 	</select>
 
 </mapper>

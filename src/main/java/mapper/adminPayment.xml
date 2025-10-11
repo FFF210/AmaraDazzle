@@ -4,12 +4,14 @@
 
 <mapper namespace="mapper.adminPayment">
 
-	<!-- 최고관리자의 승인 시 결제하기 버튼 -->
+	<!-- [brand2] 배너, 최고관리자의 승인 시 결제하기 버튼 -->
 	<insert id="insertAdminPayment" parameterType="adminPayment">
 		INSERT INTO
-		admin_payment (payment_type, banner_id, membership_id, brand_id, order_id,
+		admin_payment (payment_type, banner_id, membership_id, brand_id,
+		order_id,
 		amount, payment_key,
-		pay_date, method, order_name, receipt_url)
+		pay_date, method, order_name,
+		receipt_url)
 		VALUES
 		(#{paymentType}, #{bannerId}, #{membershipId},
 		#{brandId}, #{orderId}, #{amount},
@@ -26,8 +28,11 @@
 		WHERE order_id = #{orderId}
 	</update>
 
-	<!-- banner_id로 결제 여부 조회 <select id="selectPaymentByBannerId" parameterType="long" 
-		resultType="adminPayment"> SELECT * FROM admin_payment WHERE banner_id = 
-		#{bannerId} </select> -->
+	<!-- [brand2] 배너, 상세보기 - 결제대기/결제완료용 -->
+	<select id="existsByBannerId" parameterType="long"
+		resultType="int">
+		SELECT COUNT(*) FROM admin_payment WHERE banner_id = #{bannerId}
+	</select>
+
 
 </mapper>

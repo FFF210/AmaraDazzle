@@ -50,8 +50,15 @@ public class AdbannerDetail extends HttpServlet {
 			
 			// ============= 상세보기 버튼 =============
 			
-			Banner detail = service.getBannerById(bannerId);
+			Banner detail = service.getBannerById(bannerId); // 상세보기 버튼
+			
+			// 결제 여부 조회
+			boolean paid = service.isBannerPaid(bannerId);
+			
+			// JSP로 전달
 			request.setAttribute("banner", detail);
+			request.setAttribute("paid", paid);
+			
 			request.getRequestDispatcher("/brand2/adbannerFormDetail.jsp").forward(request, response);
 			
 			// ============= 상세보기 버튼 =============

@@ -46,4 +46,11 @@ public class BannerDAOImpl implements BannerDAO {
 		return result;
 	}
 	
+	// 디버깅
+//	@Override
+//	public boolean existsByBannerId(Long bannerId) {
+//	    Integer count = sqlSession.selectOne("mapper.adminPayment.existsByBannerId", bannerId);
+//	    System.out.println("[DEBUG] existsByBannerId: bannerId=" + bannerId + ", count=" + count);
+//	    return count != null && count > 0;
+//	}
 }

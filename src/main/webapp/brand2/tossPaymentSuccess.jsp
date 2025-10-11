@@ -27,6 +27,7 @@
 	align-items: center;
 	min-height: calc(100vh - 76px);
 }
+
 .CompleteContainer {
 	background: #fff;
 	padding: 40px;
@@ -36,6 +37,7 @@
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 	margin: 0 auto;
 }
+
 .icon {
 	width: 80px;
 	height: 80px;
@@ -45,22 +47,26 @@
 	justify-content: center;
 	color: #43a047; /* 초록색 */
 }
+
 .icon i {
 	font-size: 80px;
 }
+
 h2 {
 	margin-bottom: 15px;
 	font-size: 20px;
 	color: #333;
 }
+
 .info {
 	font-size: 15px;
 	margin-bottom: 5px;
 	color: #444;
 }
+
 .b {
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
 }
 </style>
 </head>
@@ -79,9 +85,9 @@ h2 {
 						onclick="location.href='/brand2/membership.jsp'">신청 목록 보기</button>
 				</div>
 				 -->
-				<div class="b" style="margin-top:20px;">
+				<div class="b" style="margin-top: 20px;">
 					<button class="btn btn-outline btn-md"
-						onclick="location.href='/brand'">홈으로 돌아가기</button>
+						onclick="location.href='/brand/todoDashboard.jsp'">홈으로 돌아가기</button>
 				</div>
 			</div>
 		</div>

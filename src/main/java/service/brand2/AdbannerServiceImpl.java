@@ -26,9 +26,6 @@ public class AdbannerServiceImpl implements AdbannerService {
 		adminPaymentDAO = new AdminPaymentDAOImpl();
 	}
 	
-	private Paging m_pg = new Paging();
-	private SearchUtil search = new SearchUtil();
-	
 	// 배너 신청
 	@Override
 	public void registerBanner(Banner banner) throws Exception {
@@ -87,6 +84,14 @@ public class AdbannerServiceImpl implements AdbannerService {
 	public void registerUploadFile(UploadFile uploadFile) {
 	    uploadFileDAO.insertUploadFileWithAuto(uploadFile);
 	}
-	    
+	
+	// 배너, 상세보기 - 결제대기/결제완료용
+	@Override
+	public boolean isBannerPaid(long bannerId) throws Exception {
+	    return adminPaymentDAO.existsByBannerId(bannerId) > 0;
+	}
+	
+	
+
 	
 }
