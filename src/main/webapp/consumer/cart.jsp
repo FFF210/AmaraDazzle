@@ -40,67 +40,19 @@
 		<div class="table-wrapper">
 			<table class="table">
 				<thead>
-					<tr>
-						<th style="width: 50px;">선택</th>
-						<th style="width: 80px;">상품정보</th>
-						<th style="width: 300px;">상품명</th>
-						<th style="width: 120px;">수량</th>
-						<th style="width: 120px;">구매가격</th>
-						<th style="width: 80px;">적립금</th>
-						<th style="width: 100px;">관리</th>
+					<tr style="height: 60px;">
+						<th style="width: 50px;"><label class="custom-checkbox-label">
+								<input type="checkbox" class="select-all-btn" /> <span
+								class="custom-checkbox-box"></span>
+						</label></th>
+						<th style="width: 450px;">상품정보</th>
+						<th style="width: 100px;">수량</th>
+						<th style="width: 110px;">상품주문금액</th>
+						<th style="width: 100px;">적립금</th>
+						<th style="width: 150px;">선택</th>
 					</tr>
 				</thead>
 				<tbody>
-					<!-- <tr>
-                    <td>
-                        <input type="checkbox" class="form-check" />
-                    </td>
-                    <td>
-                        <img src="/images/product-placeholder.jpg" alt="상품이미지" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
-                    </td>
-                    <td class="product-name">
-                        토니모리 이러다죽겠네 무지개다리건너 12색 팔레트
-                    </td>
-                    <td>
-                        <input type="number" value="1" min="1" class="quantity-input">
-                    </td>
-                    <td>
-                        <div class="price">19,000원</div>
-                    </td>
-   
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn btn-outline btn-sm">바로구매</button>
-                            <button class="btn btn-outline btn-sm">찜 등록</button>
-                            <button class="btn btn-danger btn-sm">삭제</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <input type="checkbox" class="form-check" />
-                    </td>
-                    <td>
-                        <img src="/images/product-placeholder.jpg" alt="상품이미지" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
-                    </td>
-                    <td class="product-name">
-                         토니모리 이러다죽겠네 무지개다리건너 12색 팔레트
-                    </td>
-                    <td>
-                        <input type="number" value="1" min="1" class="quantity-input">
-                    </td>
-                    <td>
-                        <div class="price">19,000원</div>
-                    </td>
-
-                    <td>
-                        <div class="action-buttons">
-                            <button class="btn btn-outline btn-sm">바로구매</button>
-                            <button class="btn btn-outline btn-sm">찜 등록</button>
-                            <button class="btn btn-danger btn-sm">삭제</button>
-                        </div>
-                    </td>
-                </tr> -->
 					<c:choose>
 						<c:when test="${empty cartItems}">
 							<tr>
@@ -111,50 +63,81 @@
 						<c:otherwise>
 							<c:forEach var="item" items="${cartItems}" varStatus="status">
 								<tr data-cart-item-id="${item.cartItemId}">
-									<td><input type="checkbox"
-										class="form-check item-checkbox" value="${item.cartItemId}" /></td>
-									<td><img src="/images/product-placeholder.jpg"
+									<!-- 체크박스 -->
+									<td><label class="custom-checkbox-label"> <input
+											type="checkbox" class="item-checkbox"
+											value="${item.cartItemId}" /> <span
+											class="custom-checkbox-box"></span>
+									</label></td>
+
+									<!-- 상품정보 -->
+									<td
+										style="width: 450px; display: flex; flex-direction: row; padding: 20px; gap: 20px; align-items: center;"
+										onclick="location.href='${pageContext.request.contextPath}/store/productDetail?productId=${item.productId}'">
+										<img
+										src="${pageContext.request.contextPath}/image?fileId=${item.thumbnailFileId}"
 										alt="${item.productName}"
-										style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+										style="width: 85px; height: 85px; object-fit: cover;">
+										<div class="product-info-wrapper">
+											<p class="brand">${item.brandName}</p>
+											<p class="product">${item.productName}</p>
+											<c:if test="${not empty item.optionName}">
+												<p class="option">옵션 | ${item.optionName}</p>
+											</c:if>
+										</div>
 									</td>
-									<td class="product-name"><a
-										href="${pageContext.request.contextPath}/store/productDetail?productId=${item.productId}">
-											${item.productName} </a> <c:if
-											test="${not empty item.optionName}">
-											<br>
-											<small>옵션: ${item.optionName}</small>
-										</c:if> <br> <small>브랜드: ${item.brandName}</small></td>
-									<td><input type="number" value="${item.quantity}" min="1"
-										max="100" class="quantity-input"
-										data-cart-item-id="${item.cartItemId}"
+
+									<!-- 수량 -->
+									<td style="width: 100px; padding: 20px;"><input
+										type="number" value="${item.quantity}" min="1" max="100"
+										class="quantity-input" data-cart-item-id="${item.cartItemId}"
 										data-original-quantity="${item.quantity}"></td>
-									<td>
-										<div class="price">
+
+									<!-- 구매가격 -->
+									<td style="width: 110px; padding: 20px;"><c:if
+											test="${item.finalPrice < item.productPrice}">
+											<p style="text-decoration: line-through; color: #b5b5b5;">
+												<fmt:formatNumber
+													value="${item.productPrice * item.quantity}" type="number" />
+												원
+											</p>
+										</c:if>
+
+										<p style="font-weight: 600; color: #111;">
 											<fmt:formatNumber value="${item.finalPrice * item.quantity}"
 												type="number" />
 											원
-										</div> <c:if test="${item.finalPrice < item.productPrice}">
-											<small style="text-decoration: line-through; color: #999;">
-												<fmt:formatNumber
-													value="${item.productPrice * item.quantity}" type="number" />원
-											</small>
-										</c:if>
-									</td>
-									<td><fmt:formatNumber
+										</p></td>
+
+									<!-- 적립금 -->
+									<td
+										style="width: 100px; color: #333; font-size: 13px; padding: 20px;"><fmt:formatNumber
 											value="${(item.finalPrice * item.quantity) * 0.01}"
-											pattern="#" />P</td>
-									<td>
+											pattern="#,###" /> P</td>
+
+									<!-- 액션 버튼 -->
+									<td style="width: 150px; padding: 20px;">
 										<div class="action-buttons">
-											<button class="btn btn-outline btn-sm buy-now-btn"
+											<button class="btn btn-primary btn-sm buy-now-btn"
+												style="width: 130px; padding: 0;"
 												data-product-id="${item.productId}"
 												data-brand-id="${item.brandId}"
 												data-option-id="${item.optionId}"
 												data-quantity="${item.quantity}">바로구매</button>
-											<button class="btn btn-outline btn-sm">찜 등록</button>
-											<button class="btn btn-danger btn-sm delete-btn"
-												data-cart-item-id="${item.cartItemId}">삭제</button>
+											<div style="display: flex; gap: 8px;">
+												<div class="wishlist-btn"
+													data-product-id="${item.productId}">
+													<my:heartBtn state="${heartState}" onlyIcon="true"
+														hasCount="false" />
+												</div>
+												<button class="delete-btn"
+													data-cart-item-id="${item.cartItemId}">
+													<i class="bi bi-trash3"></i>
+												</button>
+											</div>
 										</div>
 									</td>
+
 								</tr>
 							</c:forEach>
 						</c:otherwise>
@@ -165,9 +148,11 @@
 
 		<!-- 선택/삭제 버튼 -->
 		<div class="select-all-container">
-			<button type="button" class="btn btn-outline btn-sm select-all-btn">전체선택</button>
+			<button type="button" class="btn btn-outline btn-sm select-all-btn"
+				style="border-color: #ddd; color: #333;">전체선택</button>
 			<button type="button"
-				class="btn btn-outline btn-sm delete-selected-btn">선택상품 삭제</button>
+				class="btn btn-outline btn-sm delete-selected-btn"
+				style="border-color: #ddd; color: #333;">선택상품 삭제</button>
 		</div>
 
 		<!-- 총 결제 예상 정보 -->
@@ -195,5 +180,47 @@
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script src="<c:url value='/consumer/js/cart.js'/>"></script>
+
+	<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  document.body.addEventListener("click", (e) => {
+    const btn = e.target.closest(".wishlist-btn .heart-btn");
+    if (!btn) return; // heart-btn이 아니면 무시
+
+    const wishlistDiv = btn.closest(".wishlist-btn");
+    const productId = wishlistDiv?.dataset.productId;
+    if (!productId) return;
+
+    const icon = btn.querySelector("i");
+
+    fetch("/store/wishlistToggle", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: "productId=" + encodeURIComponent(productId)
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success && data.requireLogin) {
+        window.location.href = "/store/login";
+      } else if (data.success) {
+        if (data.isWished) {
+          icon.classList.remove("bi-heart");
+          icon.classList.add("bi-heart-fill", "active");
+        } else {
+          icon.classList.remove("bi-heart-fill", "active");
+          icon.classList.add("bi-heart");
+        }
+      } else {
+        alert(data.message || "처리 중 오류가 발생했습니다.");
+      }
+    })
+    .catch(err => console.error(err));
+  });
+
+});
+</script>
+
+
 </body>
 </html>

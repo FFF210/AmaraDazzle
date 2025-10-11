@@ -45,7 +45,7 @@ $(document).ready(function() {
         form.submit();
     });
     
-    // ✅ 전체 주문 버튼
+    // 전체 주문 버튼
     $('.order-all-btn').on('click', function() {
         const allItems = $('.item-checkbox').map(function() {
             return $(this).val();
