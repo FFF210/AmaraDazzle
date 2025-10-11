@@ -1,40 +1,109 @@
 @charset "UTF-8";
 
-body {
-    font-family: 'Noto Sans KR', Arial, sans-serif;
-    font-weight: 400;
-    min-width: 1200px; /* 최소 너비 고정 */
+/* 체크박스 */
+/* 기본 체크박스 숨기기 */
+.custom-checkbox-label input[type="checkbox"],
+.custom-checkbox-label .item-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  margin: 0;
+  padding: 0;
+  /* 크기 조정할 경우 기본 체크박스 영역 설정 */
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* 체크박스 용 상자 */
+.custom-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  /* 체크박스 + 텍스트 여백이 필요하면 padding-left 등 설정 */
+}
+
+/* 시각적 체크박스 박스 */
+.custom-checkbox-box {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #ccc; /* 연한 회색 테두리 */
+  border-radius: 4px;
+  background-color: #fff;
+  display: inline-block;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* 체크 상태일 때 배경 및 테두리 변화 */
+.custom-checkbox-label input[type="checkbox"]:checked + .custom-checkbox-box {
+  background-color: #111; 
+  border-color: #111;
+}
+
+/* 체크 아이콘 (가상 요소) */
+.custom-checkbox-box::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 4.5px;
+  top: 0px;
+  width: 4px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* 체크 되었을 때 체크 아이콘 보이기 */
+.custom-checkbox-label input[type="checkbox"]:checked + .custom-checkbox-box::after {
+  display: block;
+}
+
+/* 호버 효과 (마우스 올렸을 때 테두리 진하게) */
+.custom-checkbox-label:hover .custom-checkbox-box {
+  border-color: #999;
 }
 
 .join-container {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	background: #FFF;
-	 width: 100%; /* 전체 너비 */
-    min-height: 100vh; /* 전체 화면 높이 */
-}
-
-.join-box {
-	background: white;
-	display: flex;
-	width: 380px;
-	padding: 100px 0;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	gap: 56px;
+	max-width: 380px;
+	margin: 100px auto;
+	text-align: center;
 }
 
 .join-title {
-	color: #000;
+	margin: 60px 0;
 	text-align: center;
-	font-family: Noto Sans;
-	font-size: 24px;
-	font-style: normal;
-	font-weight: 700;
-	line-height: 120%; /* 28.8px */
+	color: #000;
+	font-size: 28px;
+	font-weight: 400;
+	line-height: 140%;
+}
+
+.btn-primary {
+	background: #111;
+}
+
+.btn-primary:hover {
+	background: #333;
+}
+
+.btn-outline {
+	border: 1px solid #222;
+	color: #111;
+}
+
+.btn-outline:hover {
+	background: #eee;
+}
+
+.btn {
+	border-radius: 0;
+	font-weight: 400;
+	padding: 0;
 }
 
 /* 입력 그룹 스타일 */
@@ -49,13 +118,11 @@ body {
 }
 
 .input-group label {
-	/* display: block; */
-	font-size: 16px;
-	color: #000;;
-	/* 	margin-bottom: 8px; */
-	font-weight: 500;
+	font-size: 15px;
+	color: #111;
+	font-weight: 400;
 	display: flex;
-	align-items: flex-start;
+	align-items: center;
 	gap: 2px;
 	align-self: stretch;
 }
@@ -74,24 +141,24 @@ body {
 
 .input-group input {
 	width: 100%;
-	font-size: 16px;
-	transition: border-color 0.3s ease;
-	box-sizing: border-box;
-	display: flex;
-	height: 56px;
-	padding: 21px 16px;
-	align-items: center;
-	gap: 10px;
-	align-self: stretch;
-	border-radius: 8px;
 	border: 1px solid #DDE1EB;
-	background: #FFF;
+	color: #333539;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+	background-color: #fff;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+	box-sizing: border-box;
+	height: 56px;
+	padding: 0 16px;
+	font-size: 14px;
+	line-height: 1.4;
 }
 
 .input-group input:focus {
+	border: 1px solid #222 !important;
+	box-shadow: none;
 	outline: none;
-	border-color: #007bff;
-	background-color: white;
 }
 
 .input-group input:last-child {
@@ -115,38 +182,20 @@ body {
 	gap: 10px;
 }
 
-.check-btn {
-	background-color: black;
-	/* background: #FFF; */
-	color: white;
-	border: none;
-	/* border: 1px solid #0C8CE9; */
-	border-radius: 6px;
-	font-size: 14px;
-	cursor: pointer;
-	white-space: nowrap;
-	transition: background-color 0.3s ease;
-	display: flex;
-	padding: 7px 14px;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-}
 
-.check-btn:hover {
-	background-color: #0056b3;
-}
-
-/* 생년월일 어케 만드는거임 */
 .birthdate-group input[type="date"] {
-	width: 158.5px;
+	width: fit-content;
 	display: flex;
-	height: 36px;
+	height: 56px;
 	align-items: center;
 	flex-shrink: 0;
-	border-radius: 12px;
 	border: 1px solid #ECEDF0;
 	background: #FFF;
+	
+	font-family: 'Pretendard', 'Noto Sans KR', sans-serif; 
+	font-size: 14px;
+	color: #111;
+	padding: 0 12px;
 }
 
 /* 유효성 검사 메시지 */
@@ -168,7 +217,6 @@ body {
 .gender-group {
 	display: flex;
 	height: 56px;
-	padding: 8px 0;
 	align-items: center;
 	gap: 56px;
 	align-self: stretch;
@@ -195,17 +243,17 @@ body {
 }
 
 .radio-label span {
-    line-height: 1; /* 텍스트 라인 높이 조정 */
-    vertical-align: middle; /* 추가 */
+    line-height: 1; 
+    vertical-align: middle; 
 }
 
-/* 기존 태그 CSS 가져와서 사용 (tag.css) */
 /* 피부타입 태그 컨테이너 */
 .skin-type-tags {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px;
-	margin-top: 8px;
+	gap: 6px;
+	margin-top: 10px;
+	height: 56px;
 }
 
 .tag-radio {
@@ -226,9 +274,9 @@ body {
 
 /* 선택된 상태 스타일링 */
 .tag-radio:checked+.selectable-tag {
-	background-color: #007bff;
+	background-color: #111;
 	color: white;
-	border-color: #007bff;
+	border-color: #111
 }
 
 /* 태그 호버 효과 */
@@ -240,7 +288,7 @@ body {
 /* 태그 선택 시 스타일 (blue 색상으로 변경) */
 .tag-checkbox:checked+.selectable-tag {
 	background-color: #EEF2FF;
-	color: #4F46E5;
+	color: #111;
 }
 
 .radio-label {
@@ -255,57 +303,27 @@ body {
 	margin: 0 6px 0 0 !important;
 }
 
+.tag.md {
+	max-height: 32px !important;
+	width: 70px;
+}
+
+
 /* 약관 동의 섹션 */
 .terms-section {
 	margin: 30px 0;
 	padding: 20px;
-	background-color: #f8f9fa;
-	border-radius: 4px;
-}
-
-.terms-section h3 {
-	font-size: 16px;
-	margin-bottom: 15px;
-	color: #333;
+	background-color: #f9f9f9;
 }
 
 .terms-item {
 	margin-bottom: 10px;
+	text-align: left;
 }
 
-.terms-item a {
-	color: #007bff;
-	text-decoration: none;
-}
-
-.terms-item a:hover {
-	text-decoration: underline;
-}
-
-/* 가입하기 버튼 */
 .join-btn {
 	width: 100%;
-	background-color: black;
-	color: white;
-	border: none;
-	border-radius: 4px;
-	font-size: 16px;
-	font-weight: 600;
-	cursor: pointer;
-	transition: background-color 0.3s ease;
-	display: flex;
-	height: 48px;
-	padding: 12px 28px;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	align-self: stretch;
 }
-
-.join-btn:hover {
-	background-color: #0056b3;
-}
-
 .join-btn:disabled {
 	background-color: #6c757d;
 	cursor: not-allowed;

@@ -16,7 +16,7 @@
 		<div class="footer-wrapper">
 			<div class="footer-container">
 				<div class="footer-col footer-company">
-					<h2 class="ft-title">Brand</h2>
+					<h2 class="ft-title">AmaraDazzle</h2>
 					<ul class="company-list">
 						<li>대표이사: 홍길동 | 사업자등록번호: 809-81-01574</li>
 						<li>주소: (04323) 서울특별시 용산구 한강대로 372, 24층 (동자동, KDB타워)</li>
