@@ -18,14 +18,14 @@
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet" href="<c:url value='/consumer/css/login.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/textInput.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/login.css'/>">
 <!-- 카카오 SDK -->
 <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
 </head>
-<body class="login-page">
+<body>
 	<!-- 헤더 include -->
 	<%@ include file="/consumer/header.jsp"%>
 
@@ -38,21 +38,19 @@
 			class="auth-form">
 			<div class="input-group">
 				<div class="form-group">
-					<label for="loginId">아이디</label>
-					<my:textInput id="email" name="email" placeholder="이메일을 입력하세요"
+					<my:textInput id="email" name="email" placeholder="아이디를 입력하세요."
 						type="default" size="lg" state="default" />
 				</div>
 				<div class="form-group">
-					<label for="loginPw">비밀번호</label>
 					<my:textInput id="password" name="password"
-						placeholder="비밀번호를 입력하세요" type="password" size="lg"
+						placeholder="비밀번호를 입력하세요." type="password" size="lg"
 						state="default" />
 				</div>
 			</div>
 
-			<div class="form-options">
+<!-- 			<div class="form-options">
 				<a href="/store/findId" class="link">아이디/비밀번호 찾기</a>
-			</div>
+			</div> -->
 
 			<button type="submit" class="btn btn-primary btn-xl login">로그인</button>
 

@@ -45,7 +45,7 @@
 								<input type="checkbox" class="select-all-btn" /> <span
 								class="custom-checkbox-box"></span>
 						</label></th>
-						<th style="width: 450px;">상품정보</th>
+						<th style="max-width: 450px;">상품정보</th>
 						<th style="width: 100px;">수량</th>
 						<th style="width: 110px;">상품주문금액</th>
 						<th style="width: 100px;">적립금</th>
@@ -72,7 +72,7 @@
 
 									<!-- 상품정보 -->
 									<td
-										style="width: 450px; display: flex; flex-direction: row; padding: 20px; gap: 20px; align-items: center;"
+										style="width: 490px; display: flex; flex-direction: row; padding: 20px; gap: 20px; align-items: center;"
 										onclick="location.href='${pageContext.request.contextPath}/store/productDetail?productId=${item.productId}'">
 										<img
 										src="${pageContext.request.contextPath}/image?fileId=${item.thumbnailFileId}"
