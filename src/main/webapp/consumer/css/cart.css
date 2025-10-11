@@ -14,9 +14,50 @@
 	margin: 40px auto;
 }
 
-/* 상품명 열은 왼쪽 정렬 */
-.table .product-name {
+.table-wrapper {
+	max-height: fit-content;
+}
+
+.table th, .table td {
+	padding: 0;
+	height: fit-content;
+}
+
+.product-info-wrapper {
 	text-align: left;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	height: fit-content;
+	gap: 6px;
+}
+
+.product-info-wrapper .brand {
+	color: #333;
+	font-weight: 700;
+	font-size: 13px;
+}
+
+.product-info-wrapper .product {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	word-break: break-all;
+	line-height: 18px;
+	max-height: 36px;
+	max-width: 275px;
+	color: #000;
+	font-size: 14px;
+	height: fit-content;
+}
+
+.product-info-wrapper .option {
+	color: #888;
+	font-weight: 400;
+	font-size: 13px;
 }
 
 /* 총 결제 예상금액 스타일 */
@@ -33,10 +74,10 @@
 }
 
 .total-amount {
-	font-size: 25px;
+	font-size: 21px;
 	font-weight: 600;
-	color: #000;
-	line-height: 150%; /* 42px */
+	color: #111;
+	line-height: 150%;
 	letter-spacing: 0.16px;
 }
 
@@ -54,7 +95,53 @@
 /* 액션 버튼들 */
 .action-buttons {
 	display: flex;
-	gap: 8px;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+}
+
+.heart-btn.icon-only i {
+	filter: none;
+}
+
+.delete-btn {
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: 8px;
+	border: none;
+	background: transparent;
+	cursor: pointer;
+	box-sizing: border-box
+}
+
+.heart-btn i, .delete-btn i {
+	font-size: 18px;
+	color: #999;
+}
+
+.btn-primary {
+	background: #111;
+}
+
+.btn-primary:hover {
+	background: #333;
+}
+
+.btn-outline {
+	border: 1px solid #222;
+	color: #111;
+}
+
+.btn-outline:hover {
+	background: #eee;
+}
+
+.btn {
+	border-radius: 0;
+	font-weight: 400;
+	padding: 0;
 }
 
 /* 수량 입력 */
@@ -64,7 +151,8 @@
 	border: 1px solid #E5E7EB;
 	border-radius: 4px;
 	text-align: center;
-	font-size: 14px;
+	font-size: 13px;
+	color: #333;
 }
 
 /* 선택 박스 스타일 */
@@ -78,5 +166,114 @@
 	width: 105px;
 	display: flex;
 	align-items: center;
-    justify-content: center;
+	justify-content: center;
+}
+
+/* 테이블 전체 기본선 제거 */
+.table {
+	border-collapse: collapse;
+	border: none;
+	width: 100%;
+}
+
+/* 모든 셀의 기본선 제거 */
+.table th, .table td {
+	border: none;
+}
+
+/* 행 사이 아래쪽 테두리만 표시 */
+.table tr {
+	border-bottom: 1px solid #E5E7EB; /* 연한 회색 구분선 */
+}
+
+/* 헤더 상단선 추가 */
+.table thead tr:first-child {
+	border-top: 1.5px solid #E5E7EB;
+}
+
+/* 마지막 행 하단선도 유지 */
+.table tbody tr:last-child {
+	border-bottom: 1px solid #E5E7EB;
+}
+
+/* 좌우 여백 시각적으로 띄워주기 */
+.table-wrapper {
+	border-left: none;
+	border-right: none;
+	border: none;
+	border-radius: 0;
+}
+
+.table th {
+	font-size: 13px;
+	color: #111;
+}
+
+
+/* 체크박스 */
+/* 기본 체크박스 숨기기 */
+.custom-checkbox-label input[type="checkbox"],
+.custom-checkbox-label .item-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  margin: 0;
+  padding: 0;
+  /* 크기 조정할 경우 기본 체크박스 영역 설정 */
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* 체크박스 용 상자 */
+.custom-checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  /* 체크박스 + 텍스트 여백이 필요하면 padding-left 등 설정 */
+}
+
+/* 시각적 체크박스 박스 */
+.custom-checkbox-box {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid #ccc; /* 연한 회색 테두리 */
+  border-radius: 4px;
+  background-color: #fff;
+  display: inline-block;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* 체크 상태일 때 배경 및 테두리 변화 */
+.custom-checkbox-label input[type="checkbox"]:checked + .custom-checkbox-box {
+  background-color: #111; 
+  border-color: #111;
+}
+
+/* 체크 아이콘 (가상 요소) */
+.custom-checkbox-box::after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 4.5px;
+  top: 0px;
+  width: 4px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* 체크 되었을 때 체크 아이콘 보이기 */
+.custom-checkbox-label input[type="checkbox"]:checked + .custom-checkbox-box::after {
+  display: block;
+}
+
+/* 호버 효과 (마우스 올렸을 때 테두리 진하게) */
+.custom-checkbox-label:hover .custom-checkbox-box {
+  border-color: #999;
 }
