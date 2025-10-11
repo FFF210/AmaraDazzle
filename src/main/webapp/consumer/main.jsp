@@ -376,130 +376,119 @@
 
 	<!-- 하단 푸터 -->
 	<%@ include file="./footer.jsp"%>
+	<script>
+window.addEventListener("load", () => {
+  /*********************************************************************************************************
+   * 배너 이벤트 
+   *********************************************************************************************************/
+  const slides = document.querySelectorAll(".slide");
+  const dots = document.querySelectorAll(".dot");
+  console.log("slides:", slides.length, "dots:", dots.length);
+
+  if (slides.length > 0) {
+    let currentIndex = 0;
+
+    function showSlide(index) {
+      console.log("showSlide index:", index);
+      slides.forEach((s, i) => {
+        s.classList.toggle("active", i === index);
+        if (dots[i]) dots[i].classList.toggle("active", i === index);
+      });
+      currentIndex = index;
+    }
+
+    function nextSlide() {
+      showSlide((currentIndex + 1) % slides.length);
+    }
+
+    function prevSlide() {
+      showSlide((currentIndex - 1 + slides.length) % slides.length);
+    }
+
+    showSlide(currentIndex);
+    let slideInterval = setInterval(nextSlide, 5000);
+
+    const nextBtn = document.querySelector(".next");
+    const prevBtn = document.querySelector(".prev");
+
+    if (nextBtn) nextBtn.addEventListener("click", () => { nextSlide(); resetInterval(); });
+    if (prevBtn) prevBtn.addEventListener("click", () => { prevSlide(); resetInterval(); });
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener("click", () => { showSlide(i); resetInterval(); });
+    });
+
+    function resetInterval() {
+      clearInterval(slideInterval);
+      slideInterval = setInterval(nextSlide, 5000);
+    }
+  }
+
+  /*********************************************************************************************************
+   * 찜 버튼 클릭 이벤트
+   *********************************************************************************************************/
+  document.querySelectorAll(".wishlist-btn .heart-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+
+      const icon = btn.querySelector("i");
+      const card = btn.closest(".product-card, .ani-product-card");
+      if (!card) return; // ← 안전 처리
+
+      const productId = card.dataset.productid;
+
+      fetch("/store/wishlistToggle", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "productId=" + encodeURIComponent(productId)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success && data.requireLogin) {
+          window.location.href = "/store/login";
+        } else if (data.success) {
+          if (data.isWished) {
+            icon.classList.remove("bi-heart");
+            icon.classList.add("bi-heart-fill", "active");
+          } else {
+            icon.classList.remove("bi-heart-fill", "active");
+            icon.classList.add("bi-heart");
+          }
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch(err => console.error(err));
+    });
+  });
+
+  /*********************************************************************************************************
+   * 상품 카드 스크롤 진입 시 애니메이션
+   *********************************************************************************************************/
+  function animateOnScroll(selector) {
+    const elements = document.querySelectorAll(selector);
+
+    if (elements.length === 0) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+        }
+      });
+    }, { threshold: 0 });
+
+    elements.forEach((el, i) => {
+      el.style.transitionDelay = (i * 0.05) + "s";
+      observer.observe(el);
+    });
+  }
+
+  animateOnScroll(".ani-product-card");
+  animateOnScroll(".brand-card");
+});
+</script>
+
 </body>
-<script>
-	 document.addEventListener("DOMContentLoaded", () => {
-		 /*********************************************************************************************************
-		  * 배너 이벤트 
-		  *********************************************************************************************************/
-			  const slides = document.querySelectorAll(".slide");
-			  const dots = document.querySelectorAll(".dot");
-			  
-			  console.log("slides:", slides.length);
-
-			  if (slides.length === 0) return; // 배너 없음
-
-			  let currentIndex = 0;
-
-			  function showSlide(index) {
-			    console.log("showSlide index:", index);
-			    slides.forEach((s, i) => {
-			      s.classList.toggle("active", i === index);
-			      dots[i].classList.toggle("active", i === index);
-			    });
-			    currentIndex = index;
-			  }
-
-			  function nextSlide() {
-			    showSlide((currentIndex + 1) % slides.length);
-			  }
-
-			  function prevSlide() {
-			    showSlide((currentIndex - 1 + slides.length) % slides.length);
-			  }
-
-			  // 초기 실행
-			  showSlide(currentIndex);
-
-			  // 자동 전환
-			  let slideInterval = setInterval(nextSlide, 5000);
-
-			  // 버튼 이벤트
-			  const nextBtn = document.querySelector(".next");
-			  const prevBtn = document.querySelector(".prev");
-			  if (nextBtn) nextBtn.addEventListener("click", () => { nextSlide(); resetInterval(); });
-			  if (prevBtn) prevBtn.addEventListener("click", () => { prevSlide(); resetInterval(); });
-
-			  // dot 이벤트
-			  dots.forEach((dot, i) => {
-			    dot.addEventListener("click", () => {
-			      showSlide(i);
-			      resetInterval();
-			    });
-			  });
-
-			  function resetInterval() {
-			    clearInterval(slideInterval);
-			    slideInterval = setInterval(nextSlide, 5000);
-			  }
-		 
-	 /*********************************************************************************************************
-	  * 찜 버튼 클릭 이벤트
-	  *********************************************************************************************************/
-			  document.querySelectorAll(".wishlist-btn .heart-btn").forEach(btn => {
-				    btn.addEventListener("click", (e) => {
-				      e.stopPropagation();
-				      e.preventDefault();
-
-				      const icon = btn.querySelector("i");
-				      const card = btn.closest(".product-card, .ani-product-card");
-				      const productId = card.dataset.productid;
-
-				      fetch("/store/wishlistToggle", {
-				        method: "POST",
-				        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-				        body: "productId=" + encodeURIComponent(productId)
-				      })
-				      .then(res => res.json())
-				      .then(data => {
-				    	  if (!data.success && data.requireLogin) {
-				    		    window.location.href = "/store/login"; // 로그인 페이지로 이동
-				    		  }
-				    	  else if (data.success) {
-					          if (data.isWished) {
-					            icon.classList.remove("bi-heart");
-					            icon.classList.add("bi-heart-fill", "active");
-					          } else {
-					            icon.classList.remove("bi-heart-fill", "active");
-					            icon.classList.add("bi-heart");
-					          }
-				        } else {
-				          alert(data.message);
-				        }
-				      })
-				      .catch(err => console.error(err));
-				    });
-				  });
-	 
-	/*********************************************************************************************************
-	 * 상품 카드 스크롤 진입 시 애니메이션
-	 *********************************************************************************************************/
-			// 공용 함수
-			  function animateOnScroll(selector) {
-			    const elements = document.querySelectorAll(selector);
-			    const observer = new IntersectionObserver((entries) => {
-			      entries.forEach(entry => {
-			        if (entry.isIntersecting) {
-			          entry.target.classList.add("visible");
-			        } else {
-			          entry.target.classList.remove("visible");
-			        }
-			      });
-			    }, { threshold: 0.2 });
-
-			    elements.forEach((el, i) => {
-			      // 순차적으로 등장하도록 지연 효과
-			      el.style.transitionDelay = (i * 0.05) + "s";
-			      observer.observe(el);
-			    });
-			  }
-
-			  // 상품 카드 애니메이션
-			  animateOnScroll(".ani-product-card");
-
-			  // 브랜드 카드 애니메이션
-			  animateOnScroll(".brand-card");
-
-	 			});
-	</script>
 </html>

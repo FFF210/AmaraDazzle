@@ -31,7 +31,7 @@
 </div>
 
 <script>
-const contextPath = `\${pageContext.request.contextPath}`;
+/* const contextPath = `\${pageContext.request.contextPath}`; */
 </script>
 
 <script>
@@ -95,9 +95,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	  grid.innerHTML = subset.map(p => {
 
 	    let saleRate = 0;
-	    if (p.discountType eq 'RATE') {
+	    if (p.discountType == 'RATE') {
 	      saleRate = p.discountValue;
-	    } else if (p.discountType eq 'AMOUNT' && p.price > 0) {
+	    } else if (p.discountType == 'AMOUNT' && p.price > 0) {
 	      saleRate = Math.round((p.discountValue / p.price) * 100);
 	    }
 
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	    // 썸네일 URL
 	    const thumbUrl = p.thumbnailFileId
   			? `${contextPath}/image?fileId=${p.thumbnailFileId}`
-  			: `${contextPath}/image/placeholder.png`;
+  			: `/image/placeholder.png`;
 
 
 	    // 할인율 표시
