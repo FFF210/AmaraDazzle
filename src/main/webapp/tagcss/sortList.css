@@ -30,11 +30,11 @@
 	transition: color 0.2s ease;
 	border-right: 1px solid rgba(0, 0, 0, 0.10);
 	font-family: 'Noto Sans KR', sans-serif;
-	color: #666;
+	color: #999;
 	text-align: center;
-	font-size: 15px;
+	font-size: 13px;
 	font-style: normal;
-	font-weight: 500;
+	font-weight: 400;
 	line-height: 18px;
 }
 
@@ -44,10 +44,10 @@
 
 .sort-item:hover {
 	color: #111;
-	font-weight: 700;
+	font-weight: 600;
 }
 
 .sort-item.selected {
 	color: #111;
-	font-weight: 700;
+	font-weight: 600;
 }

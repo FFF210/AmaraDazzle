@@ -41,7 +41,6 @@
 			<button class="sort-item">별점 낮은순</button>
 			<button class="sort-item last">최신순</button>
 		</div>
-		<my:selectbox size="sm" items="전체상품옵션" />
 	</c:if>
 </div>
 

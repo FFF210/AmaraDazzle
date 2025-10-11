@@ -1,6 +1,7 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ tag body-content="empty"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%-- ================================
  QnaItem 커스텀 태그
@@ -18,7 +19,14 @@
 
 <div class="qna-item">
 	<div class="qna-tag">
-		<my:tag color="green" size="md" text="답변완료" />
+		<c:choose>
+			<c:when test="${status eq 'answered'}">
+				<p>답변완료</p>
+			</c:when>
+			<c:otherwise>
+				<p style="font-weight: 400; color: #777;">답변대기</p>
+			</c:otherwise>
+		</c:choose>
 	</div>
 	<div class="qna-title">
 		<p>${title}</p>

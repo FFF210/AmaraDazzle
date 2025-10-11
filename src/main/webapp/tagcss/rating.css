@@ -8,7 +8,6 @@
   justify-content: center;
   align-items: center;
   gap: 2px;
-  background-color: #FFF0BB;
   border-radius: 6px;
 }
 
@@ -22,7 +21,7 @@
 /* 별 아이콘 기본 */
 .rating-container .star {
   font-size: 16px;
-  color: #FFAC33;
+  color: #FFD366;
   cursor: pointer;
   transition: color 0.2s ease;
 }
@@ -34,5 +33,5 @@
 
 /* hover 효과 (읽기전용 아닐 때만) */
 .rating-container:not(.readonly) .star:hover {
-  color: #FFA500;
+  color: #FFD366;
 }

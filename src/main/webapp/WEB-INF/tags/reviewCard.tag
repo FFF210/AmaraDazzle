@@ -34,13 +34,15 @@
 <%@ attribute name="date" required="true"%>
 <%@ attribute name="option" required="false"%>
 <%@ attribute name="content" required="true"%>
-<%@ attribute name="images" required="false"%>
+<%@ attribute name="images" required="false"%> 
+<%@ attribute name="dataRating" required="false"%>
+<%@ attribute name="dataDate" required="false"%>
 
 
 <c:set var="imageList"
 	value="${empty images ? null : fn:split(images, ',')}" />
 
-<div class="review-card">
+<div class="review-card" data-rating="${dataRating}" data-date="${dataDate}">
 	<!-- 왼쪽 : 작성자 정보 -->
 	<div class="review-author">
 		<p class="nickname">${nickname}</p>
@@ -50,7 +52,7 @@
 	<!-- 오른쪽 : 리뷰 내용 -->
 	<div class="review-body">
 		<div class="review-header">
-			<my:rating rating="4" readonly="true" />
+			<my:rating rating="${rating}" readonly="true" />
 			<span class="review-date">${date}</span>
 		</div>
 

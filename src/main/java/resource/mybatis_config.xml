@@ -7,7 +7,7 @@
 	<settings>
 		<!-- 언더스코어 → 카멜 자동 매핑 -->
 		<setting name="mapUnderscoreToCamelCase" value="true" />
-		<setting name="logImpl" value="LOG4J"/>
+		<!-- <setting name="logImpl" value="NONE"/> -->
 	</settings>
         
 	<!-- mapper.xml의 parameterType에 쓸 별칭 지정 -->

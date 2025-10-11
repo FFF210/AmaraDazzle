@@ -37,7 +37,6 @@ request.setAttribute("floor", floor);
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/tab.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/sortList.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/rating.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/selectbox.css'/>">
 <link rel="stylesheet"
 	href="<c:url value='/consumer/css/productDetail.css'/>">
@@ -99,13 +98,12 @@ request.setAttribute("floor", floor);
 					<!-- 브랜드 -->
 					<div class="brand-name">
 						<a
-							href="<c:url value='/store/brandDetail?brandId=${brand.brandId}'/>">${brand.brandName}></a>
+							href="<c:url value='/store/brandDetail?brandId=${brand.brandId}'/>">${brand.brandName}</a>
 					</div>
 
 					<!-- 상품명 -->
 					<h1 class="product-title">${product.name}</h1>
 
-					<!--  태그 표시를 여기다 하나...? 실험을 위해 넣어본 거니 자유롭게 수정해주세요 -->
 					<div class="product-tags">
 						<c:if test="${isExclusive}">
 							<my:tag color="red" size="md" text="단독" />
@@ -130,12 +128,10 @@ request.setAttribute("floor", floor);
 					<!-- 가격 표시 -->
 					<%-- 세일가 있을때 originPrice는 따로 화면에 안 나오는 거 맞나요??? --%>
 					<div class="price-section">
-						<my:price isSale="${isSale}" 
-						hasOption="${product.hasOption == 1}"
-						size="md" 
-						originPrice="${productPrice}"
-						saleRate="${saleRate.intValue()}"
-						finalPrice="${formattedFinalPrice}" />
+						<my:price isSale="${isSale}" hasOption="${product.hasOption == 1}"
+							size="md" originPrice="${productPrice}"
+							saleRate="${saleRate.intValue()}"
+							finalPrice="${formattedFinalPrice}" />
 					</div>
 				</div>
 
@@ -143,7 +139,7 @@ request.setAttribute("floor", floor);
 				<div class="delivery-info">
 					<div class="info-row">
 						<p>포인트</p>
-						최대&nbsp;<span class="value">10</span>% 적립
+						최대&nbsp;<span class="value">10</span> % 적립
 					</div>
 					<div class="info-row">
 						<p>배송일</p>
@@ -216,35 +212,65 @@ request.setAttribute("floor", floor);
 			<div class="tab-content">
 				<div class="tab-panel active" data-tab="0">
 					<div class="product-detail-images" id="productDetailImages">
-						<!-- 상품 상세 이미지들 (일부만 표시) -->
+						<!-- 상품 상세 이미지들 -->
 						<div class="detail-images-container">
-							<img src="<c:url value='/resources/images/product-detail1.jpg'/>"
-								alt="상품 상세 이미지 1"> <img
-								src="<c:url value='/resources/images/product-detail2.jpg'/>"
-								alt="상품 상세 이미지 2"> <img
-								src="<c:url value='/resources/images/product-detail3.jpg'/>"
-								alt="상품 상세 이미지 3">
 
-							<!-- 더보기 영역 (기본적으로 숨김) -->
-							<div class="more-images" id="moreImages">
-								<img
-									src="<c:url value='/resources/images/product-detail4.jpg'/>"
-									alt="상품 상세 이미지 4"> <img
-									src="<c:url value='/resources/images/product-detail5.jpg'/>"
-									alt="상품 상세 이미지 5"> <img
-									src="<c:url value='/resources/images/product-detail6.jpg'/>"
-									alt="상품 상세 이미지 6"> <img
-									src="<c:url value='/resources/images/product-detail7.jpg'/>"
-									alt="상품 상세 이미지 7">
-							</div>
+							<c:choose>
+								<c:when test="${not empty product.detail1FileId}">
+									<img
+										src="${pageContext.request.contextPath}/image?fileId=${product.detail1FileId}"
+										alt="상품 상세 이미지 1" width="960px" />
+									<c:if test="${not empty product.detail2FileId}">
+										<img
+											src="${pageContext.request.contextPath}/image?fileId=${product.detail2FileId}"
+											alt="상품 상세 이미지 2" width="960px" />
+									</c:if>
+									<c:if test="${not empty product.detail3FileId}">
+										<img
+											src="${pageContext.request.contextPath}/image?fileId=${product.detail3FileId}"
+											alt="상품 상세 이미지 3" width="960px" />
+									</c:if>
+
+									<c:if test="${not empty product.detail4FileId}">
+										<div class="more-images" id="moreImages"
+											style="display: none;">
+											<img
+												src="${pageContext.request.contextPath}/image?fileId=${product.detail4FileId}"
+												alt="상품 상세 이미지 4" width="960px" />
+
+											<c:if test="${not empty product.detail5FileId}">
+												<img
+													src="${pageContext.request.contextPath}/image?fileId=${product.detail5FileId}"
+													alt="상품 상세 이미지 5" width="960px" />
+											</c:if>
+											<c:if test="${not empty product.detail6FileId}">
+												<img
+													src="${pageContext.request.contextPath}/image?fileId=${product.detail6FileId}"
+													alt="상품 상세 이미지 6" width="960px" />
+											</c:if>
+											<c:if test="${not empty product.detail7FileId}">
+												<img
+													src="${pageContext.request.contextPath}/image?fileId=${product.detail7FileId}"
+													alt="상품 상세 이미지 7" width="960px" />
+											</c:if>
+										</div>
+
+										<!-- 더보기 버튼 (detail4FileId 있을 때만 표시) -->
+										<button type="button" class="btn btn-outline btn-lg"
+											id="detailToggleBtn" onclick="toggleDetailImages()"
+											style="width: 150px;">상품 설명 더보기</button>
+									</c:if>
+								</c:when>
+
+								<c:otherwise>
+									<p
+										style="padding: 50px 0; display: flex; justify-content: center; font-size: 15px;">
+										상세 이미지를 준비중입니다.</p>
+								</c:otherwise>
+							</c:choose>
 						</div>
-
-						<!-- 더보기/접기 버튼 -->
-						<button type="button" class="btn btn-outline btn-lg"
-							id="detailToggleBtn" onclick="toggleDetailImages()">상품
-							설명 더보기</button>
-
 					</div>
+
 				</div>
 				<div class="tab-panel" data-tab="1">
 					<div class="product-detail-info">
@@ -304,7 +330,9 @@ request.setAttribute("floor", floor);
 					<div class="review-section">
 						<div class="review-summary-section">
 							<!-- 리뷰 요약 -->
-							<my:reviewSummary average="${avg}" floorAvg="${floor}"
+							<fmt:formatNumber value="${avg}" pattern="#.#" var="formattedAvg" />
+
+							<my:reviewSummary average="${formattedAvg}" floorAvg="${floor}"
 								total="${reviewSummary.totalCount != null ? reviewSummary.totalCount : 0}"
 								dist5="${reviewSummary.rating5Count != null ? reviewSummary.rating5Count : 0}"
 								dist4="${reviewSummary.rating4Count != null ? reviewSummary.rating4Count : 0}"
@@ -319,23 +347,58 @@ request.setAttribute("floor", floor);
 							<c:choose>
 								<c:when test="${not empty reviews}">
 									<c:forEach var="review" items="${reviews}">
-										<div data-rating="${review.rating}"
+										<fmt:formatDate value="${review.questionedAt}"
+											pattern="yyyy-MM-dd" var="formattedDate" />
+
+										<!--  리뷰 카드 -->
+										<div class="review-card" data-rating="${review.rating}"
 											data-date="${review.questionedAt}">
-											<my:reviewCard nickname="User${review.memberId}"
-												skinType="All skin types" rating="${review.rating}"
-												date="${review.questionedAt}" option="Product Option"
-												content="${review.content}" images="" />
+											<!-- 왼쪽 : 작성자 정보 -->
+											<div class="review-author">
+												<p class="nickname">닉네임</p>
+												<p class="skin-type">피부타입정보들</p>
+											</div>
+											<!-- 오른쪽 : 리뷰 내용 -->
+											<div class="review-body">
+												<div class="review-header">
+													<!-- 별점 -->
+													<span class="rating-container"
+														data-rating="${review.rating}"> <c:forEach var="i"
+															begin="1" end="5">
+															<i
+																class="bi ${i <= review.rating ? 'bi-star-fill' : 'bi-star'} star"
+																data-value="${i}"></i>
+														</c:forEach>
+													</span> <span class="review-date">${formattedDate}</span>
+												</div>
+
+												<c:if test="${not empty option}">
+													<div class="review-option">옵션 | 구매옵션정보</div>
+												</c:if>
+
+												<div class="review-content">${review.content}</div>
+
+												<c:if test="${not empty imageList}">
+													<div class="review-images">
+														<c:forEach var="img" items="${imageList}">
+															<img src="${img}" alt="리뷰 이미지" />
+														</c:forEach>
+													</div>
+												</c:if>
+											</div>
 										</div>
 									</c:forEach>
+									<div class="pagination-wrapper">
+										<my:pagination currentPage="1" totalPages="1"
+											baseUrl="/store/productDetail?productId=${product.productId}&page=" />
+									</div>
 								</c:when>
 								<c:otherwise>
-									<p>아직 작성된 리뷰가 없습니다.</p>
+									<p
+										style="padding: 50px 0; display: flex; justify-content: center; font-size: 15px;">아직
+										작성된 리뷰가 없습니다.</p>
 								</c:otherwise>
 							</c:choose>
-						</div>
-						<div class="pagination-wrapper">
-							<my:pagination currentPage="1" totalPages="1"
-								baseUrl="/store/productDetail?productId=${product.productId}&page=" />
 						</div>
 					</div>
 				</div>
@@ -344,93 +407,101 @@ request.setAttribute("floor", floor);
 						<!-- 상품 문의 -->
 						<div class="qna-header">
 							<p>상품 문의사항이 아닌 반품/교환관련 문의는 고객센터 1:1 문의를 이용해주세요.</p>
-							<button type="button" class="btn btn-primary btn-sm" onclick="openQnaModal()">
-							상품 문의</button>
+							<button type="button" class="btn btn-primary btn-sm"
+								onclick="openQnaModal()" style="width: 100px; height: 35px;">
+								상품 문의</button>
 						</div>
 
 						<!-- 상품 문의 리스트 -->
 						<div class="qna-list-wrapper">
 							<c:choose>
 								<c:when test="${not empty qnas}">
-									<c:forEach var="qna" items="${qnas}">
-										<my:qnaItem
-											status="${qna.status == 'ANSWERED' ? 'answered' : 'waiting'}"
-											title="${qna.question}" nickname="User${qna.memberId}"
-											date="${qna.questionedAt}" />
+									<c:forEach var="qna" items="${qnas}" varStatus="status">
+										<fmt:formatDate value="${qna.questionedAt}"
+											pattern="yyyy-MM-dd" var="formattedDate" />
 
-										<!-- 답변이 있는 경우 -->
-										<c:if
-											test="${qna.status == 'ANSWERED' and not empty qna.answer}">
-											<my:qnaQuestion content="${qna.question}" />
-											<my:qnaAnswer content="${qna.answer}" />
-										</c:if>
+										<!-- QnA 아이템 (클릭 가능) -->
+										<div class="qna-item-wrapper" data-qna-id="${status.index}">
+											<my:qnaItem
+												status="${qna.status == 'ANSWERED' ? 'answered' : 'waiting'}"
+												title="${qna.question}" nickname="User${qna.memberId}"
+												date="${formattedDate}" />
+
+											<!-- 답변 영역 (기본 숨김) -->
+											<div class="qna-detail-wrapper"
+												id="qnaDetail-${status.index}" style="display: none;">
+												<my:qnaQuestion content="${qna.question}" />
+												<c:if
+													test="${qna.status == 'ANSWERED' and not empty qna.answer}">
+													<my:qnaAnswer content="${qna.answer}" />
+												</c:if>
+											</div>
+										</div>
 									</c:forEach>
+
+									<div class="pagination-wrapper">
+										<my:pagination currentPage="1" totalPages="1"
+											baseUrl="/store/productDetail?productId=${product.productId}&page=" />
+									</div>
 								</c:when>
+
 								<c:otherwise>
-									<p>아직 등록된 문의가 없습니다.</p>
+									<p
+										style="padding: 50px 0; display: flex; justify-content: center; font-size: 15px;">
+										아직 등록된 문의가 없습니다.</p>
 								</c:otherwise>
 							</c:choose>
-						</div>
-
-						<div class="pagination-wrapper">
-							<my:pagination currentPage="1" totalPages="1"
-								baseUrl="/store/productDetail?productId=${product.productId}&page=" />
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</main>
-	
-<!-- 상품 문의 모달 (임시로 만든 거니 자유롭게 수정해주세요 감사합니다.........) -->
-<div id="qnaModal" class="modal-overlay" style="display: none;">
-    <div class="modal-container">
-        <div class="modal-header">
-            <h2>상품 문의 작성</h2>
-            <button type="button" class="modal-close" onclick="closeQnaModal()">
-                <i class="bi bi-x"></i>
-            </button>
-        </div>
 
-        <div class="modal-content">
-            <form id="qnaForm" onsubmit="submitQna(event)">
-                <div class="form-group">
-                    <!-- 상품명 표시를 넣었어요 -->
-                    <label class="form-label" id="qnaProductName">
-                        ${product.name}
-                    </label>
-                    <p class="form-description">
-                        상품 문의 게시판에는 고객님의 정보 확인이 어려우므로 배송문의 같은 것은 1:1 게시판 이용 부탁드립니다.
-                    </p>
-                    <textarea
-                        name="qnaContent"
-                        class="form-textarea"
-                        placeholder="문의 내용"
-                        maxlength="250"
-                        required
-                    ></textarea>
-                    <div class="char-count">
-                        <span id="currentLength">0</span>/250자
-                    </div>
-                </div>
+	<!-- 상품 문의 모달 -->
+	<div id="qnaModal" class="modal-overlay" style="display: none;">
+		<div class="modal-container">
+			<div class="modal-header">
+				<h2>상품 문의 작성</h2>
+				<button type="button" class="modal-close" onclick="closeQnaModal()">
+					<i class="bi bi-x"></i>
+				</button>
+			</div>
 
-                <div class="form-notice">
-                    <h4>이용안내</h4>
-                    <p>· 재판매금, 상업성 목적글, 미풍양속을 해치는 글을 상품 Q&A의 취지에 어긋나는 글은 삭제될 수 있습니다.</p>
-                </div>
+			<div class="modal-content">
+				<form id="qnaForm" onsubmit="submitQna(event)">
+					<div class="form-group">
+						<!-- 상품명 표시 -->
+						<label class="form-label" id="qnaProductName">
+							${product.name} </label>
+						<p class="form-description">
+							상품 Q&A에서는 고객님의 주문 정보를 확인할 수 없습니다.<br> 배송 문의는 1:1 문의 게시판을
+							이용해주세요.
+						</p>
+						<textarea name="qnaContent" class="form-textarea"
+							placeholder="문의 내용" maxlength="250" required></textarea>
+						<div class="char-count">
+							<span id="currentLength">0</span>/250자
+						</div>
+					</div>
 
-                <div class="modal-actions">
-                    <button type="button" class="btn btn-outline btn-lg" onclick="closeQnaModal()">
-                        취소
-                    </button>
-                    <button type="submit" class="btn btn-primary btn-lg">
-                        등록
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+					<div class="form-notice">
+						<h4>이용안내</h4>
+						<p>
+							상품 Q&A의 취지와 맞지 않는 글(재판매 목적, 상업성 홍보, 부적절한 내용 등)은<br>사전 고지
+							없이삭제될 수 있습니다.
+						</p>
+					</div>
+
+					<div class="modal-actions">
+						<button type="button" class="btn btn-outline btn-lg"
+							onclick="closeQnaModal()">취소</button>
+						<button type="submit" class="btn btn-primary btn-lg">등록</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 
 	<!-- 푸터 include -->
 	<%@ include file="/consumer/footer.jsp"%>
@@ -438,24 +509,21 @@ request.setAttribute("floor", floor);
 	<script>
 window.productId = ${product.productId};
 window.productBrandId = '${brand.brandId}';
-//세일가를 productPrice로 설정
 window.productPrice = ${finalPrice.intValue()};
 window.originalPrice = ${product.price.intValue()};
-window.isSale = ${isSale};
-
-//로그인 체크
-window.isLoggedIn = ${not empty sessionScope.memberId};
+window.isSale = ${isSale ? 'true' : 'false'};
+window.isLoggedIn = ${not empty sessionScope.memberId ? 'true' : 'false'};
 
 <c:if test="${product.hasOption == 1}">
 window.productOptionsData = [
-    <c:forEach var="option" items="${productOptions}" varStatus="status">
-        {
-            id: ${option.productOptionId},
-            value: '${option.optionValue}',
-            price: ${option.price.intValue()},
-            stock: ${option.stockQty}
-        }<c:if test="${!status.last}">,</c:if>
-    </c:forEach>
+  <c:forEach var="option" items="${productOptions}" varStatus="status">
+    {
+      id: ${option.productOptionId},
+      value: '${option.optionValue}',
+      price: ${option.price.intValue()},
+      stock: ${option.stockQty}
+    }<c:if test="${!status.last}">,</c:if>
+  </c:forEach>
 ];
 </c:if>
 
@@ -463,35 +531,48 @@ window.productOptionsData = [
  * 상품 상세 페이지 진입 시 로컬 스토리지에 저장 - 최근 본 상품
  *****************************************************************/
 document.addEventListener("DOMContentLoaded", () => {
-	  // 현재 상품 ID 가져오기 (URL 파라미터 기준)
-	  const params = new URLSearchParams(window.location.search);
-	  const productId = params.get("productId");
-	  if (!productId) return;
+  const params = new URLSearchParams(window.location.search);
+  const productId = params.get("productId");
+  if (!productId) return;
 
-	  // 로컬스토리지 키 설정
-	  const KEY = "recentProductIds";
+  const KEY = "recentProductIds";
+  let ids = [];
 
-	  // 기존 리스트 가져오기
-	  let ids = [];
-	  try {
-	    ids = JSON.parse(localStorage.getItem(KEY)) || [];
-	  } catch {
-	    ids = [];
-	  }
+  try {
+    ids = JSON.parse(localStorage.getItem(KEY)) || [];
+  } catch {
+    ids = [];
+  }
 
-	  // 이미 존재하면 중복 제거
-	  ids = ids.filter(id => id !== productId);
+  ids = ids.filter(id => id !== productId); // 중복 제거
+  ids.unshift(productId); // 최신 상품 맨 앞에
+  if (ids.length > 20) ids = ids.slice(0, 20); // 20개 제한
 
-	  // 맨 앞(최근 본 상품이 가장 앞으로)
-	  ids.unshift(productId);
+  localStorage.setItem(KEY, JSON.stringify(ids));
 
-	  // 최대 20개까지만 유지
-	  if (ids.length > 20) ids = ids.slice(0, 20);
+  /*****************************************************************
+   * Q&A 아코디언 기능
+   *****************************************************************/
+  document.querySelectorAll(".qna-item-wrapper").forEach(wrapper => {
+	    const item = wrapper.querySelector(".qna-item");
+	    const detail = wrapper.querySelector(":scope > .qna-detail-wrapper"); 
 
-	  // 다시 저장
-	  localStorage.setItem(KEY, JSON.stringify(ids));
-	});
+	    item.addEventListener("click", () => {
+	      const isVisible = window.getComputedStyle(detail).display !== "none";
+
+	      // 모든 1차 qna-detail 닫기
+	      document.querySelectorAll(".qna-item-wrapper > .qna-detail-wrapper")
+	        .forEach(d => d.style.display = "none");
+
+	      // 클릭한 항목만 토글
+	      if (!isVisible) {
+	        detail.style.display = "block";
+	      }
+	    });
+	  });
+});
 </script>
+
 	<script src="<c:url value='/consumer/js/tab.js'/>"></script>
 	<script src="<c:url value='/consumer/js/productDetail.js'/>"></script>
 	<script src="<c:url value='/consumer/js/addToWishlist.js'/>"></script>

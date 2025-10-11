@@ -11,5 +11,5 @@
 
 <div class="qna-detail qna-answer">
 	<span class="label">A</span>
-	<div class="text">${content}</div>
+	<div class="text"><p>${content}</p></div>
 </div>

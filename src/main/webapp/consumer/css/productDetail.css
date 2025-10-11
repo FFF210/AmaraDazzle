@@ -69,11 +69,15 @@
 }
 
 .brand-name {
-	color: #000;
-	font-size: 16px;
+	font-size: 17px;
 	font-style: normal;
 	font-weight: 500;
 	line-height: 120%;
+}
+
+.brand-name a {
+	text-decoration: none;
+	color: #111;
 }
 
 .a {
@@ -97,20 +101,19 @@
 .delivery-info {
 	display: flex;
 	width: 100%;
-	padding-bottom: 16px;
+	padding: 16px 0;
 	flex-direction: column;
 	align-items: flex-start;
-	gap: 24px;
+	gap: 16px;
 }
 
 .info-row {
 	display: flex;
-	color: #474747;
-	font-size: 13px;
+	color: #111;
+	font-size: 14px;
 	font-style: normal;
-	font-weight: 600;
+	font-weight: 400;
 	line-height: normal;
-	color: #474747;
 }
 
 .info-row p {
@@ -123,6 +126,7 @@
 
 .info-row .value {
 	color: #375FFF;
+	font-weight: 500;
 }
 
 /* 옵션 선택 */
@@ -147,7 +151,7 @@
 }
 
 .total-label {
-	color: #000;
+	color: #111;
 	font-size: 14px;
 	font-style: normal;
 	font-weight: 500;
@@ -184,7 +188,7 @@
 
 /* 상품 탭 섹션 */
 .product-tabs-section {
-	margin-top: 36px;
+	margin-top: 50px;
 }
 
 .product-tabs-section .tab-container {
@@ -217,7 +221,8 @@
 }
 
 .product-detail-images img {
-	width: 100%;
+	display: flex;
+	align-items: center;
 	margin-bottom: 20px;
 }
 
@@ -250,13 +255,14 @@
 }
 
 .detail-section {
-	color: #333;
+	color: #666;
 	line-height: 1.6;
+	font-size: 13px;
 }
 
 .detail-title {
-	font-size: 18px;
-	font-weight: 600;
+	font-size: 15px;
+	font-weight: 500;
 	margin-bottom: 16px;
 }
 
@@ -281,6 +287,27 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	/* background-color: #fafafa; */
+	padding: 30px 0;
+}
+
+.review-card-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: center;
+}
+
+.rating-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 2px;
+}
+
+.rating-container .star {
+	font-size: 16px;
+	color: #FFD366;
 }
 
 /* ======================================== 
@@ -291,162 +318,238 @@
 	justify-content: space-between;
 	align-items: center;
 	align-self: stretch;
-	margin: 0 0 20px 0;
-	padding: 0 10px;
+	padding-bottom: 12px;
 	box-sizing: border-box;
+	border-bottom: 1px solid #111;
 }
 
 .qna-header p {
-	color: #777;
-	font-size: 16px;
+	color: #111;
+	font-size: 13px;
 	font-style: normal;
 	font-weight: 500;
 	line-height: 150%; /* 24px */
 	letter-spacing: 0.091px;
 }
 
+
 /* ========================================
    임의 상품 문의 모달
 ======================================== */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 9999;
 }
 
 .modal-container {
-    background: white;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 500px;
-    max-height: 90vh;
-    overflow-y: auto;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+	background: white;
+	border-radius: 6px;
+	width: 90%;
+	max-width: 500px;
+	max-height: 90vh;
+	overflow-y: auto;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 24px;
-    border-bottom: 1px solid #e5e5e5;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 20px 24px;
+	border-bottom: 1px solid #e5e5e5;
 }
 
 .modal-header h2 {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 0;
+	font-size: 16px;
+	font-weight: 600;
+	margin: 0;
 }
 
 .modal-close {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 0;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #666;
-    transition: color 0.2s;
+	background: none;
+	border: none;
+	font-size: 24px;
+	cursor: pointer;
+	padding: 0;
+	width: 32px;
+	height: 32px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #666;
+	transition: color 0.2s;
 }
 
 .modal-close:hover {
-    color: #000;
+	color: #000;
 }
 
 .modal-content {
-    padding: 24px;
+	padding: 24px;
 }
 
 /* 폼 스타일 */
 .form-group {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 .form-label {
-    display: block;
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 12px;
-    color: #333;
-    line-height: 1.4;
+	display: block;
+	font-size: 15px;
+	font-weight: 600;
+	margin-bottom: 12px;
+	color: #333;
+	line-height: 1.4;
 }
 
 .form-description {
-    font-size: 13px;
-    color: #666;
-    margin-bottom: 16px;
-    line-height: 1.5;
+	font-size: 12px;
+	color: #888;
+	margin-bottom: 16px;
+	line-height: 1.5;
 }
 
 .form-textarea {
-    width: 100%;
-    min-height: 150px;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 14px;
-    line-height: 1.5;
-    resize: vertical;
-    font-family: inherit;
-    box-sizing: border-box;
+	width: 100%;
+	min-height: 150px;
+	padding: 12px;
+	border: 1px solid #ddd;
+	font-size: 14px;
+	line-height: 1.5;
+	resize: vertical;
+	font-family: inherit;
+	box-sizing: border-box;
 }
 
 .form-textarea:focus {
-    outline: none;
-    border-color: #0066ff;
+	outline: none;
+	border-color: #111;
 }
 
 .form-textarea::placeholder {
-    color: #999;
+	color: #999;
 }
 
 .char-count {
-    text-align: right;
-    font-size: 12px;
-    color: #999;
-    margin-top: 8px;
+	text-align: right;
+	font-size: 12px;
+	color: #999;
+	margin-top: 8px;
 }
 
 .form-notice {
-    background-color: #f8f8f8;
-    padding: 16px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+	background-color: #f8f8f8;
+	padding: 16px;
+	margin-bottom: 20px;
 }
 
 .form-notice h4 {
-    font-size: 13px;
-    font-weight: 600;
-    margin: 0 0 8px 0;
-    color: #333;
+	font-size: 13px;
+	font-weight: 600;
+	margin: 0 0 8px 0;
+	color: #333;
 }
 
 .form-notice p {
-    font-size: 12px;
-    color: #666;
-    margin: 0;
-    line-height: 1.6;
+	font-size: 12px;
+	color: #666;
+	margin: 0;
+	line-height: 1.6;
 }
 
 .modal-actions {
-    display: flex;
-    gap: 12px;
+	display: flex;
+	gap: 12px;
 }
 
 .modal-actions .btn {
-    flex: 1;
-    height: 48px;
-    font-size: 15px;
-    font-weight: 600;
+	flex: 1;
+	height: 48px;
+	font-size: 15px;
+	font-weight: 600;
+}
+
+/* 버튼 */
+.btn-primary {
+	background: #111;
+}
+
+.btn-primary:hover {
+	background: #333;
+}
+
+.btn-outline {
+	border: 1px solid #222;
+	color: #111;
+}
+
+.btn-outline:hover {
+	background: #eee;
+}
+
+.btn {
+	border-radius: 0;
+	font-weight: 400;
+	padding: 0;
+}
+
+.select-item:hover {
+	background: #eee;
+}
+
+.select-header {
+	border-radius: 0;
+	padding: 4px 20px;
+}
+
+.product-item {
+	border-radius: 0 !important;
+	padding: 12px 20px !important;
+	margin-top: 6px;
+}
+
+.select-list {
+	border-radius: 0;
+}
+
+.select-label {
+	font-size: 14px;
+	color: #333;
+}
+
+.select-item {
+	font-size: 14px;
+	color: #777;
+}
+
+.product-name {
+	font-weight: 500 !important;
+}
+
+.quantity-control {
+	border-radius: 0 !important;
+	border: 1px solid #DDE1EB !important;
+}
+
+.quantity-control .quantity-input {
+	border: none !important;
+}
+
+.page-btn {
+	border-radius: 0 !important;
+}
+
+.page-btn.active {
+	border: 1px solid #111 !important;
+	color: #fff !important;
+	background: #111 !important;
+	font-weight: 500 !important;
 }

@@ -613,7 +613,7 @@ function submitQna(event) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('상품문의를 등록했습니다!');
+            alert('상품문의를 등록했습니다.');
             closeQnaModal();
             // 페이지 새로고침하여 문의 목록 갱신
             location.reload();
