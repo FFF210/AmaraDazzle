@@ -81,7 +81,7 @@
 				<div class="order-status-header">
 					<h3 class="order-status-title">주문/배송 조회</h3>
 					<a class="more-btn" href="/store/mypage/orderList"> <span
-						class="more-text">더보기</span> <span class="more-icon">›</span>
+						class="more-text">더보기</span>
 					</a>
 				</div>
 
@@ -121,7 +121,7 @@
 			<section class="product-section">
 				<div class="section-header">
 					<h3 class="section-title">좋아요</h3>
-					<a href="/store/mypage/like" class="more-link">더보기 ></a>
+					<a href="/store/mypage/like" class="more-link">더보기</a>
 				</div>
 
 				<!-- 보배님.. 이게 수정된 카드 데이터 인데.. 우선 노션에 설명은 적겠지만 모르겠으면 바로 저한테 물어보세용ㅜㅜ  -->
@@ -157,7 +157,7 @@
 						<c:set var="__isPlannedInt" value="${p.isPlanned ? 1 : 0}" />
 
 						<my:productCard brand="${p.brandName}" productId="${p.productId}"
-							title="${p.name}" isWished="${p.isWished}"
+							title="${p.name}" isWished="1"
 							isSale="${p.discountType ne null and p.discountValue ne null 
           and p.startDate ne null 
           and p.endDate ne null 
@@ -191,7 +191,7 @@
 			<section class="product-section">
 				<div class="section-header">
 					<h3 class="section-title">장바구니</h3>
-					<a href="/store/mypage/cart" class="more-link">더보기 ></a>
+					<a href="/store/mypage/cart" class="more-link">더보기</a>
 				</div>
 
 				<div class="product-grid">

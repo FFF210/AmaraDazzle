@@ -31,7 +31,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>취소/반품/교환 내역</title>
+<title>취소/반품/교환 조회</title>
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 <link rel="stylesheet" href="<c:url value='/tagcss/reset.css'/>" />
@@ -95,7 +95,7 @@
 			</div>
 			
 			<div class="order-header">
-					<h3 class="order-status-title">취소/반품/교환 내역</h3>
+					<h3 class="order-status-title">취소/반품/교환 조회</h3>
 				</div>
 
 			<!-- ============================ 2. 기간 조회 박스 ============================ -->
