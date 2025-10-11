@@ -41,6 +41,7 @@
 		created_at AS createdAt,
 		banner_message AS bannerMessage,
 		upload_file_id AS uploadFileId,
+		brand_url AS brandUrl,
 		DATEDIFF(end_date, start_date)+1 AS period
 		FROM banner
 		WHERE banner_id = #{bannerId}

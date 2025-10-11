@@ -26,9 +26,6 @@ public class AdbannerServiceImpl implements AdbannerService {
 		adminPaymentDAO = new AdminPaymentDAOImpl();
 	}
 	
-	private Paging m_pg = new Paging();
-	private SearchUtil search = new SearchUtil();
-	
 	// 배너 신청
 	@Override
 	public void registerBanner(Banner banner) throws Exception {

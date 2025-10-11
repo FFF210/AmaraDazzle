@@ -89,7 +89,7 @@ h2 {
 <body>
 	<my:layout>
 	<my:breadcrumb
-			items="이벤트 관리:/brand2/adbannerList.jsp, 이벤트 신청:/brand2/adbannerForm.jsp" />
+			items="배너광고 관리:/brand2/adbannerList.jsp, 배너광고 신청:/brand2/adbannerForm.jsp" />
 	
 		<div class="CompleteWrapper">
 			<div class="CompleteContainer">

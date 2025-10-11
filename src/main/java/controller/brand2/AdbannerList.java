@@ -28,7 +28,6 @@ public class AdbannerList extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 		
-/* =========== 로그인 ===========
 		HttpSession session = request.getSession(false);
 
 		// 세션 없거나 브랜드 정보 없음 → 로그인 페이지로 리다이렉트
@@ -39,7 +38,6 @@ public class AdbannerList extends HttpServlet {
 
 		Brand brand = (Brand) session.getAttribute("brand");
 		Long brandId = brand.getBrandId();
-=========== 로그인 =========== */
 		
 		AdbannerService service = new AdbannerServiceImpl();
 		
@@ -49,18 +47,24 @@ public class AdbannerList extends HttpServlet {
 		int offset = (page - 1) * limit;
 
 		Map<String, Object> params = new HashMap<>();
-//		params.put("brandId", brandId);
+		params.put("brandId", brandId);
+		
+		// 상태 필터
 		params.put("status", request.getParameter("status")); // (PENDING/ONGOING/COMPLETED/CANCELED)
+		
+		// 검색 필터
 		params.put("searchType", request.getParameter("searchType")); // managerName / bannerName
 		params.put("searchKeyword", request.getParameter("searchKeyword")); // 검색 키워드
+		
+		// 페이징
 		params.put("limit", limit);
 		params.put("offset", offset);
 
-		// 검색/필터 파라미터
-
 		try {
+			// 서비스 호출
 			Map<String, Object> result = service.AdbannerListByPage(params);
 
+			// jsp 전달
 			request.setAttribute("bannerList", result.get("bannerList")); // 배너 신청 목록
 			request.setAttribute("totalCount", result.get("totalCount")); // 총 개수
 			request.setAttribute("totalPages", result.get("totalPages")); // 총 페이지 수
