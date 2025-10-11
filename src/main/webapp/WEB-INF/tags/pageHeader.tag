@@ -25,6 +25,7 @@
 <%@ attribute name="onlyText" required="false"%>
 <%@ attribute name="title" required="false"%>
 <%@ attribute name="description" required="false"%>
+<%@ attribute name="href" required="false"%>
 
 <c:set var="hasButton" value="${empty hasButton ? 'false' : hasButton}" />
 <c:set var="isSearch" value="${empty isSearch ? 'false' : isSearch}" />
@@ -59,7 +60,7 @@
 				</c:if>
 			</div>
 			<c:if test="${hasButton eq 'true'}">
-				<button class="header-btn">당첨자 발표 보기</button>
+				<button class="header-btn" onClick="location.href='${href}'">1:1 문의하기</button>
 			</c:if>
 		</div>
 	</c:if>

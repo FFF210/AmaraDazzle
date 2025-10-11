@@ -54,7 +54,7 @@
 	href="<c:url value='/consumer/css/userInfo.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet"
-	href="<c:url value='/consumer/css/orderList.css'/>">
+	href="<c:url value='/consumer/css/exchangeReturnCancelList.css'/>">
 </head>
 <body>
 
@@ -93,6 +93,10 @@
 					</div>
 				</div>
 			</div>
+			
+			<div class="order-header">
+					<h3 class="order-status-title">취소/반품/교환 내역</h3>
+				</div>
 
 			<!-- ============================ 2. 기간 조회 박스 ============================ -->
 			<form id="searchForm"
@@ -165,10 +169,10 @@
 					<thead>
 						<tr>
 							<th style="width: 150px;">주문번호</th>
-							<th style="width: 380px;">상품</th>
-							<th style="width: 46px;">수량</th>
-							<th style="width: 103px;">구매가</th>
-							<th style="width: 145px;">상태</th>
+							<th style="width: 340px;">상품</th>
+							<th style="width: 60px;">수량</th>
+							<th style="width: 100px;">구매가</th>
+							<th style="width: 120px;">상태</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -323,6 +327,11 @@
 						</c:choose>
 					</tbody>
 				</table>
+			</div>
+			<!-- 페이징 -->
+			<div class="page-pagination">
+				<my:pagination currentPage="${currentPage}"
+					totalPages="${totalPages}" baseUrl="/store/mypage/exchangeReturnCancelList?${queryString}" />
 			</div>
 		</div>
 	</div>

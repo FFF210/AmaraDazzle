@@ -21,6 +21,12 @@ public class CouponServiceImpl implements CouponService {
 		return couponDAO.selectAvailableCoupons(params);
 	}
 
+	// ======================= [소비자] 해당 브랜드 쿠폰 목록 조회 =======================
+	@Override
+	public List<CouponList> getCounponListForBrand(Map<String, Object> params) throws Exception {
+		return couponDAO.selectAvailableCouponsForBrand(params);
+	}
+
 	// ======================= [소비자] 쿠폰 다운로드 =======================
 	@Override
 	public void downloadCoupon(Long couponId, Long memberId) throws Exception {

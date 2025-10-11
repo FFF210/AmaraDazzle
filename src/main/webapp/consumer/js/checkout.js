@@ -6,6 +6,9 @@ let paymentWidget = null;
 window.onload = function() {
     console.log('checkout.js 로드됨');
     
+    calculateTotalAmount();
+    initEventListeners();
+    
     // 토스페이먼츠 위젯 초기화
     try {
         const tossPayments = TossPayments(clientKey);
@@ -29,9 +32,6 @@ window.onload = function() {
     
     // 전화번호 자동 입력
     fillPhoneNumber();
-    
-    calculateTotalAmount();
-    initEventListeners();
 };
 
 // 이벤트 리스너 초기화

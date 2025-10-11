@@ -1,6 +1,7 @@
 package service.consumer;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -129,7 +130,6 @@ public class OrderServiceImpl implements OrderService {
 	// private static final BigDecimal FREE_SHIPPING_THRESHOLD = new
 	// BigDecimal("50000");
 
-	// 향후 무료배송 기능 추가 시 사용 예정
 	// if (totalAmount.compareTo(FREE_SHIPPING_THRESHOLD) >= 0) {
 	// return BigDecimal.ZERO; // 무료배송
 	// } else {
@@ -266,17 +266,44 @@ public class OrderServiceImpl implements OrderService {
 			item.put("optionId", null);
 			item.put("productId", productId);
 			item.put("optionValue", "기본");
-			item.put("unitPrice", product.getPrice());
+			// 세일 가격 계산 (ProductDetail 서블릿과 동일한 로직)
+			BigDecimal finalPrice = product.getPrice(); // 기본값은 원가
+
+			if (product.getDiscountType() != null && product.getDiscountValue() != null) {
+				Date now = new Date();
+				Date startDate = product.getStartDate();
+				Date endDate = product.getEndDate();
+
+				// 시작일이 없거나 현재가 시작일 이후 && 종료일이 없거나 현재가 종료일 이전
+				boolean isInPeriod = (startDate == null || !now.before(startDate))
+						&& (endDate == null || !now.after(endDate));
+
+				if (isInPeriod) {
+					// 할인가 계산
+					if ("RATE".equals(product.getDiscountType())) {
+						// 정율 할인 (예: 10% 할인)
+						finalPrice = product.getPrice()
+								.multiply(BigDecimal.ONE
+										.subtract(product.getDiscountValue().divide(new BigDecimal("100"))))
+								.setScale(0, RoundingMode.HALF_UP);
+					} else if ("AMOUNT".equals(product.getDiscountType())) {
+						// 정액 할인 (예: 5,000원 할인)
+						finalPrice = product.getPrice().subtract(product.getDiscountValue());
+					}
+				}
+			}
+
+			item.put("unitPrice", finalPrice);
 			item.put("quantity", quantity);
 
-			BigDecimal itemTotal = product.getPrice().multiply(new BigDecimal(quantity));
+			BigDecimal itemTotal = finalPrice.multiply(new BigDecimal(quantity));
 			item.put("itemTotal", itemTotal);
 			subtotal = itemTotal;
 		}
 
 		itemList.add(item);
-		checkoutData.put("items", itemList); 
-		checkoutData.put("subtotalAmount", subtotal); 
+		checkoutData.put("items", itemList);
+		checkoutData.put("subtotalAmount", subtotal);
 
 		// 5. 배송비 계산
 		BigDecimal shippingFee = subtotal.compareTo(new BigDecimal("50000")) >= 0 ? BigDecimal.ZERO
@@ -375,35 +402,35 @@ public class OrderServiceImpl implements OrderService {
 
 		return checkoutData;
 	}
-	
+
 	// (주문 성공시) 재고 감소 처리
 	@Override
 	public void decreaseStock(List<Map<String, Object>> items) throws Exception {
-	    ProductDAO productDAO = new ProductDAOImpl();
-	    
-	    for (Map<String, Object> item : items) {
-	        Long optionId = (Long) item.get("optionId");
-	        Long productId = (Long) item.get("productId");
-	        Integer quantity = (Integer) item.get("quantity");
-	        
-	        if (quantity == null || quantity <= 0) {
-	            continue;
-	        }
-	        
-	        int result = 0;
-	        
-	        if (optionId != null) {
-	            // 옵션이 있는 경우
-	            result = productDAO.updateOptionStock(optionId, quantity);
-	        } else if (productId != null) {
-	            // 옵션이 없는 경우
-	            result = productDAO.updateStock(productId, quantity);
-	        }
-	        
-	        if (result == 0) {
-	            throw new Exception("재고가 부족하거나 상품을 찾을 수 없습니다.");
-	        }
-	    }
+		ProductDAO productDAO = new ProductDAOImpl();
+
+		for (Map<String, Object> item : items) {
+			Long optionId = (Long) item.get("optionId");
+			Long productId = (Long) item.get("productId");
+			Integer quantity = (Integer) item.get("quantity");
+
+			if (quantity == null || quantity <= 0) {
+				continue;
+			}
+
+			int result = 0;
+
+			if (optionId != null) {
+				// 옵션이 있는 경우
+				result = productDAO.updateOptionStock(optionId, quantity);
+			} else if (productId != null) {
+				// 옵션이 없는 경우
+				result = productDAO.updateStock(productId, quantity);
+			}
+
+			if (result == 0) {
+				throw new Exception("재고가 부족하거나 상품을 찾을 수 없습니다.");
+			}
+		}
 	}
 
 	// ==================== orderList용=====================
@@ -540,6 +567,9 @@ public class OrderServiceImpl implements OrderService {
 		if (result == 0) {
 			throw new Exception("주문 취소에 실패했습니다.");
 		}
+		
+		// 4. 재고 복구
+		orderDAO.restoreStockOnCancel(orderItemId);
 
 		return true;
 	}

@@ -417,6 +417,21 @@
 		AND status IN ('PAID', 'PREPARING')
 	</update>
 
+	<!-- ========== [소비자] 주문 취소 시 재고 복구 -->
+	<update id="restoreStockOnCancel" parameterType="long">
+		UPDATE product_option po
+		JOIN order_item oi ON po.product_option_id = oi.option_id
+		SET po.stock_qty = po.stock_qty + oi.quantity
+		WHERE oi.order_item_id = #{orderItemId}
+		AND oi.option_id IS NOT NULL;
+
+		UPDATE product p
+		JOIN order_item oi ON p.product_id = oi.product_id
+		SET p.stock_qty = p.stock_qty + oi.quantity
+		WHERE oi.order_item_id = #{orderItemId}
+		AND oi.option_id IS NULL;
+	</update>
+
 
 	<!-- ======================= [브랜드 어드민] 교환 목록 조회 ======================= -->
 	<select id="selectExchangeOrdersList" parameterType="map"
@@ -1623,16 +1638,21 @@
 
 		FROM order_item oi
 		JOIN product p
-		ON oi.product_id = p.product_id
+		ON
+		oi.product_id = p.product_id
 		LEFT JOIN product_option po
-		ON oi.option_id = po.product_option_id
+		ON oi.option_id
+		= po.product_option_id
 		LEFT JOIN exchange ex
-		ON oi.order_item_id = ex.order_item_id
+		ON oi.order_item_id =
+		ex.order_item_id
 		LEFT JOIN returns rt
-		ON oi.order_item_id = rt.order_item_id
+		ON oi.order_item_id =
+		rt.order_item_id
 
 		WHERE oi.brand_id = #{brandId}
-		AND oi.order_id = #{orderId}
+		AND oi.order_id =
+		#{orderId}
 
 		ORDER BY oi.order_item_id ASC
 	</select>

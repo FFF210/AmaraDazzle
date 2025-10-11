@@ -54,26 +54,13 @@
 					<p class="greeting">
 						<span class="name">${sessionScope.memberName}</span> 님 반갑습니다.
 					</p>
-
-					<button class="bell" type="button" aria-label="알림">
-						<i class="bi bi-bell"></i>
-						<c:if test="${notifications ne '0'}">
-							<span class="bell__badge"
-								aria-label="${sessionScope.memberNotifications}개의 새 알림">
-								<c:choose>
-									<c:when test="${sessionScope.memberNotifications gt 99}">99+</c:when>
-									<c:otherwise>${sessionScope.memberNotifications}</c:otherwise>
-								</c:choose>
-							</span>
-						</c:if>
-					</button>
 				</div>
 
 				<!-- 하단 통계 영역 -->
 				<div class="user-info__bottom">
 					<div class="stat">
 						<span class="label">등급</span> <span class="value"><span
-							class="em">임시</span></span>
+							class="em">${sessionScope.memberGrade}</span></span>
 					</div>
 					<div class="stat">
 						<span class="label">포인트</span> <span class="value"><span
@@ -212,7 +199,7 @@
 								<div class="page-pagination-like">
 									<my:pagination currentPage="${currentPage}"
 										totalPages="${totalPages}"
-										baseUrl="/store/like?${queryString}" />
+										baseUrl="/store/mypage/like?${queryString}" />
 								</div>
 							</div>
 						</div>

@@ -1,185 +1,171 @@
 @charset "UTF-8";
+
+.pageHeader-wrapper {
+	background: #F2EBF1;
+}
+
+.pageHeader-wrapper>* {
+	width: 1020px;
+	margin: 0 auto;
+}
+
+.drf-dates {
+	padding: 0 64px !important;
+}
+.since-drf-date, 
+.until-drf-date {
+	gap: 16px !important;
+	justify-content: unset !important;
+}
+
 /* ========== 메인 컨테이너 ========== */
 .main-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
+	width: 1020px;
+	margin: 40px auto 0;
 }
 
 /* ========== 필터 섹션 ========== */
 .filter-section {
-    margin-bottom: 30px;
+	margin-bottom: 30px;
 }
 
 /* ========== 테이블 래퍼 ========== */
 .table-wrapper {
-    background: #ffffff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	background: #ffffff;
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 /* ========== 테이블 스타일 ========== */
 .ticket-table {
-    width: 100%;
-    border-collapse: collapse;
+	width: 100%;
+	border-collapse: collapse;
 }
 
 .ticket-table thead {
-    background-color: #f8f9fa;
-    border-bottom: 2px solid #e9ecef;
+	background-color: #f8f9fa;
+	border-bottom: 2px solid #e9ecef;
 }
 
 .ticket-table thead th {
-    padding: 16px;
-    text-align: center;
-    font-weight: 600;
-    font-size: 14px;
-    color: #495057;
+	padding: 16px;
+	text-align: center;
+	font-weight: 600;
+	font-size: 14px;
+	color: #495057;
 }
 
 .ticket-table tbody tr {
-    border-bottom: 1px solid #e9ecef;
-    transition: background-color 0.2s;
+	border-bottom: 1px solid #e9ecef;
+	transition: background-color 0.2s;
 }
 
 .ticket-table tbody tr:hover {
-    background-color: #f8f9fa;
+	background-color: #f8f9fa;
 }
 
 .ticket-table tbody td {
-    padding: 16px;
-    text-align: center;
-    font-size: 14px;
-    color: #495057;
+	padding: 16px;
+	text-align: center;
+	font-size: 14px;
+	color: #495057;
 }
 
 /* ========== 행 클릭 ========== */
 .ticket-row {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 /* ========== 번호 ========== */
 .ticket-number {
-    font-weight: 500;
-    color: #6c757d;
+	font-weight: 500;
+	color: #6c757d;
 }
 
 /* ========== 카테고리 뱃지 ========== */
 .ticket-category {
-    text-align: center;
+	text-align: center;
 }
 
 .category-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 500;
-    color: #ffffff;
+	display: inline-block;
+	padding: 4px 12px;
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 500;
+	color: #ffffff;
 }
 
 .badge-order {
-    background-color: #4a90e2;
+	background-color: #4a90e2;
 }
 
 .badge-cancel {
-    background-color: #e74c3c;
+	background-color: #e74c3c;
 }
 
 .badge-refund {
-    background-color: #e67e22;
+	background-color: #e67e22;
 }
 
 .badge-exchange {
-    background-color: #f39c12;
+	background-color: #f39c12;
 }
 
 .badge-delivery {
-    background-color: #9b59b6;
+	background-color: #9b59b6;
 }
 
 .badge-payment {
-    background-color: #1abc9c;
+	background-color: #1abc9c;
 }
 
 .badge-event {
-    background-color: #f7b731;
+	background-color: #f7b731;
 }
 
 .badge-site {
-    background-color: #95a5a6;
+	background-color: #95a5a6;
 }
 
 .badge-general {
-    background-color: #3498db;
+	background-color: #3498db;
 }
 
 /* ========== 문의 내용 ========== */
 .ticket-content {
-    text-align: left !important;
-    max-width: 600px;
+	text-align: left !important;
+	max-width: 600px;
 }
 
 .content-wrapper {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+	display: flex;
+	align-items: center;
+	gap: 8px;
 }
 
 .answer-badge {
-    display: inline-block;
-    padding: 2px 8px;
-    background-color: #1e90ff;
-    color: #ffffff;
-    font-size: 11px;
-    font-weight: 500;
-    border-radius: 10px;
-    white-space: nowrap;
+	display: inline-block;
+	padding: 2px 8px;
+	background-color: #1e90ff;
+	color: #ffffff;
+	font-size: 11px;
+	font-weight: 500;
+	border-radius: 10px;
+	white-space: nowrap;
 }
 
 /* ========== 날짜 ========== */
 .ticket-date {
-    color: #6c757d;
-    font-size: 13px;
+	color: #6c757d;
+	font-size: 13px;
 }
 
 /* ========== 빈 메시지 ========== */
 .empty-message {
-    text-align: center !important;
-    padding: 60px 20px !important;
-    color: #adb5bd;
-    font-size: 15px;
+	text-align: center !important;
+	padding: 60px 20px !important;
+	color: #adb5bd;
+	font-size: 15px;
 }
-
-/* ========== 1:1 문의하기 버튼 ========== */
-.inquiry-button-section {
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
-    margin-bottom: 60px;
-}
-
-.inquiry-btn {
-    padding: 14px 40px;
-    background-color: #1e90ff;
-    color: #ffffff;
-    border: none;
-    border-radius: 6px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.1s;
-    box-shadow: 0 2px 6px rgba(30, 144, 255, 0.3);
-}
-
-.inquiry-btn:hover {
-    background-color: #1873cc;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(30, 144, 255, 0.4);
-}
-
-.inquiry-btn:active {
-    transform: translateY(0);
-}
-

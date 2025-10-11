@@ -19,6 +19,8 @@ import dao.consumer.WishlistDAOImpl;
 import dto.Brand;
 import service.consumer.BrandService;
 import service.consumer.BrandServiceImpl;
+import service.consumer.CouponService;
+import service.consumer.CouponServiceImpl;
 import service.consumer.ProductService;
 import service.consumer.ProductServiceImpl;
 
@@ -50,6 +52,7 @@ public class BrandDetail extends HttpServlet {
 
 			BrandService brandService = new BrandServiceImpl();
 			ProductService productService = new ProductServiceImpl();
+			CouponService couponService = new CouponServiceImpl();
 
 			// 1. 브랜드 정보
 			Brand brand = brandService.selectBrandByBrandId(brandId);
@@ -83,7 +86,15 @@ public class BrandDetail extends HttpServlet {
 				}
 			}
 
+			Map<String, Object> couponParams = new HashMap<>();
+			couponParams.put("memberId", memberId);
+			couponParams.put("brandId", brandId);
+
+			// 6. 브랜드 쿠폰 목록
+			List<dto.consumer.CouponList> couponList = couponService.getCounponListForBrand(couponParams);
+
 			request.setAttribute("brand", brand);
+			request.setAttribute("couponList", couponList);
 			request.setAttribute("followerCount", followerCount);
 			request.setAttribute("isFollowing", isFollowing);
 			request.setAttribute("products", products);

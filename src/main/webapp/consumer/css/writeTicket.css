@@ -1,49 +1,66 @@
 @charset "UTF-8";
 
-.page-header h2 {}
+.pageHeader-wrapper {
+	background: #F2EBF1;
+}
+
+.pageHeader-wrapper>* {
+	width: 1020px;
+	margin: 0 auto;
+}
 
 .main-content {
-	display: flex;
-	padding: 40px 210px;
-	flex-direction: column;
-	align-items: center;
-	align-self: stretch;
-	width: 100%;
-	box-sizing: border-box;
+	width: 1020px;
+	margin: 40px auto;
 }
+
 
 .inquiry-type {
 	display: flex;
 	padding: 20px 0;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 10px;
+	flex-direction: row;
+	align-items: center;
 	align-self: stretch;
 }
 
+.inquiry-type label {
+	min-width: 150px;
+}
+
 .order-number {
-	display: flex;
-	width: 497px;
-	height: 54px;
+	display: flex !important;
+	padding: 20px 0;
+	flex-direction: row;
 	align-items: center;
-	margin-bottom: 30px;
+	align-self: stretch;
+}
+
+.order-number label {
+	min-width: 150px;
 }
 
 .write-form {
 	display: flex;
 	padding: 20px 0;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 10px;
+	flex-direction: row;
+	align-items: center;
 	align-self: stretch;
+}
+
+.write-form label {
+	min-width: 150px;
 }
 
 .upload-image {
 	display: flex;
-	padding: 20px 0 20px 150px;
-	align-items: flex-start;
-	gap: 8px;
+	padding: 20px 0;
+	flex-direction: row;
+	align-items: center;
 	align-self: stretch;
+}
+
+.upload-image label {
+	min-width: 150px;
 }
 
 .action-button {
@@ -53,4 +70,8 @@
 	align-items: center;
 	gap: 8px;
 	align-self: stretch;
+}
+
+.action-button button {
+	width: 200px;
 }

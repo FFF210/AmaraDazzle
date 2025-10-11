@@ -132,7 +132,7 @@ request.setAttribute("floor", floor);
 					<div class="price-section">
 						<my:price isSale="${isSale}" 
 						hasOption="${product.hasOption == 1}"
-						size="sm" 
+						size="md" 
 						originPrice="${productPrice}"
 						saleRate="${saleRate.intValue()}"
 						finalPrice="${formattedFinalPrice}" />

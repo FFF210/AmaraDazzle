@@ -1,6 +1,6 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ tag body-content="empty"%>
-<%@ tag isELIgnored="true"%>
+<%@ tag isELIgnored="false"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 
 <%-- ================================
@@ -29,6 +29,10 @@
 
 	</div>
 </div>
+
+<script>
+/* const contextPath = `\${pageContext.request.contextPath}`; */
+</script>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
@@ -91,9 +95,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	  grid.innerHTML = subset.map(p => {
 
 	    let saleRate = 0;
-	    if (p.discountType === 'RATE') {
+	    if (p.discountType == 'RATE') {
 	      saleRate = p.discountValue;
-	    } else if (p.discountType === 'AMOUNT' && p.price > 0) {
+	    } else if (p.discountType == 'AMOUNT' && p.price > 0) {
 	      saleRate = Math.round((p.discountValue / p.price) * 100);
 	    }
 
@@ -105,12 +109,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	    // 썸네일 URL
 	    const thumbUrl = p.thumbnailFileId
-	      ? `/image?fileId=\${p.thumbnailFileId}`
-	      : '/image/placeholder.png';
+  			? `${contextPath}/image?fileId=${p.thumbnailFileId}`
+  			: `/image/placeholder.png`;
+
 
 	    // 할인율 표시
 	    const saleRateHtml = p.isSale
-	      ? `<span class="sale-rate">${saleRate}${p.discountType === 'RATE' ? '%' : '원'}</span>`
+	      ? `<span class="sale-rate">${saleRate}${p.discountType eq 'RATE' ? '%' : '원'}</span>`
 	      : '';
 
 	    // 태그 표시
@@ -155,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderPagination(total) {
     const pageCount = Math.ceil(total / pageSize);
     pagination.innerHTML = Array.from({ length: pageCount }, (_, i) => `
-      <button class="page-btn ${i + 1 === currentPage ? 'active' : ''}" data-page="${i + 1}">
+      <button class="page-btn ${i + 1 == currentPage ? 'active' : ''}" data-page="${i + 1}">
         ${i + 1}
       </button>
     `).join('');
