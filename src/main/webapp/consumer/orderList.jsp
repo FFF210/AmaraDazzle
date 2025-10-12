@@ -59,14 +59,14 @@
 	href="<c:url value='/consumer/css/orderList.css'/>">
 </head>
 <body>
-<!-- 주문 취소 결과 알림 -->
-    <c:if test="${param.cancelSuccess eq 'true'}">
-        <script>alert('주문이 취소되었습니다.');</script>
-    </c:if>
-    
-    <c:if test="${param.cancelFail eq 'true'}">
-        <script>alert('주문 취소에 실패했습니다.');</script>
-    </c:if>
+	<!-- 주문 취소 결과 알림 -->
+	<c:if test="${param.cancelSuccess eq 'true'}">
+		<script>alert('주문이 취소되었습니다.');</script>
+	</c:if>
+
+	<c:if test="${param.cancelFail eq 'true'}">
+		<script>alert('주문 취소에 실패했습니다.');</script>
+	</c:if>
 
 	<!-- 상단 헤더 -->
 	<%@ include file="/consumer/header.jsp"%>
@@ -143,66 +143,67 @@
 			</div>
 
 			<!-- ============================ 3. 기간 조회 박스 ============================ -->
-			<form method="get" action="${pageContext.request.contextPath}/store/mypage/orderList">
-			<div class="drf-wrap drf-${__size}">
-				<div class="drf-box">
-					<div class="drf-header">
-						<div class="drf-label">구매기간</div>
-						<div class="drf-periods">
-							<c:forTokens items="${__periods}" delims="," var="p"
-								varStatus="st">
-								<button type="button"
-									class="drf-chip ${st.first ? 'is-active' : ''}"
-									data-months="${p}">${p}개월</button>
-							</c:forTokens>
+			<form method="get"
+				action="${pageContext.request.contextPath}/store/mypage/orderList">
+				<div class="drf-wrap drf-${__size}">
+					<div class="drf-box">
+						<div class="drf-header">
+							<div class="drf-label">구매기간</div>
+							<div class="drf-periods">
+								<c:forTokens items="${__periods}" delims="," var="p"
+									varStatus="st">
+									<button type="button"
+										class="drf-chip ${st.first ? 'is-active' : ''}"
+										data-months="${p}">${p}개월</button>
+								</c:forTokens>
+							</div>
+						</div>
+
+						<div class="drf-dates">
+							<div class="since-drf-date">
+								<select class="drf-select" name="${__prefix}StartY"
+									data-role="start-y">
+									<c:forEach var="y" begin="${__yFrom}" end="${__yTo}">
+										<option value="${y}" ${y == __startY ? 'selected' : ''}>${y}</option>
+									</c:forEach>
+								</select><span class="drf-suffix">년</span> <select class="drf-select"
+									name="${__prefix}StartM" data-role="start-m">
+									<c:forEach var="m" begin="1" end="12">
+										<option value="${m}" ${m == __startM ? 'selected' : ''}>${m}</option>
+									</c:forEach>
+								</select><span class="drf-suffix">월</span> <select class="drf-select"
+									name="${__prefix}StartD" data-role="start-d">
+									<c:forEach var="d" begin="1" end="31">
+										<option value="${d}" ${d == __startD ? 'selected' : ''}>${d}</option>
+									</c:forEach>
+								</select><span class="drf-suffix">일</span>
+							</div>
+
+							<div class="drf-tilde">~</div>
+
+							<div class="until-drf-date">
+								<select class="drf-select" name="${__prefix}EndY"
+									data-role="end-y">
+									<c:forEach var="y" begin="${__yFrom}" end="${__yTo}">
+										<option value="${y}" ${y == __endY ? 'selected' : ''}>${y}</option>
+									</c:forEach>
+								</select><span class="drf-suffix">년</span> <select class="drf-select"
+									name="${__prefix}EndM" data-role="end-m">
+									<c:forEach var="m" begin="1" end="12">
+										<option value="${m}" ${m == __endM ? 'selected' : ''}>${m}</option>
+									</c:forEach>
+								</select><span class="drf-suffix">월</span> <select class="drf-select"
+									name="${__prefix}EndD" data-role="end-d">
+									<c:forEach var="d" begin="1" end="31">
+										<option value="${d}" ${d == __endD ? 'selected' : ''}>${d}</option>
+									</c:forEach>
+								</select><span class="drf-suffix">일</span>
+							</div>
 						</div>
 					</div>
 
-					<div class="drf-dates">
-						<div class="since-drf-date">
-							<select class="drf-select" name="${__prefix}StartY"
-								data-role="start-y">
-								<c:forEach var="y" begin="${__yFrom}" end="${__yTo}">
-									<option value="${y}" ${y == __startY ? 'selected' : ''}>${y}</option>
-								</c:forEach>
-							</select><span class="drf-suffix">년</span> <select class="drf-select"
-								name="${__prefix}StartM" data-role="start-m">
-								<c:forEach var="m" begin="1" end="12">
-									<option value="${m}" ${m == __startM ? 'selected' : ''}>${m}</option>
-								</c:forEach>
-							</select><span class="drf-suffix">월</span> <select class="drf-select"
-								name="${__prefix}StartD" data-role="start-d">
-								<c:forEach var="d" begin="1" end="31">
-									<option value="${d}" ${d == __startD ? 'selected' : ''}>${d}</option>
-								</c:forEach>
-							</select><span class="drf-suffix">일</span>
-						</div>
-
-						<div class="drf-tilde">~</div>
-
-						<div class="until-drf-date">
-							<select class="drf-select" name="${__prefix}EndY"
-								data-role="end-y">
-								<c:forEach var="y" begin="${__yFrom}" end="${__yTo}">
-									<option value="${y}" ${y == __endY ? 'selected' : ''}>${y}</option>
-								</c:forEach>
-							</select><span class="drf-suffix">년</span> <select class="drf-select"
-								name="${__prefix}EndM" data-role="end-m">
-								<c:forEach var="m" begin="1" end="12">
-									<option value="${m}" ${m == __endM ? 'selected' : ''}>${m}</option>
-								</c:forEach>
-							</select><span class="drf-suffix">월</span> <select class="drf-select"
-								name="${__prefix}EndD" data-role="end-d">
-								<c:forEach var="d" begin="1" end="31">
-									<option value="${d}" ${d == __endD ? 'selected' : ''}>${d}</option>
-								</c:forEach>
-							</select><span class="drf-suffix">일</span>
-						</div>
-					</div>
+					<button class="drf-submit" type="submit">${__submit}</button>
 				</div>
-
-				<button class="drf-submit" type="submit">${__submit}</button>
-			</div>
 			</form>
 
 			<!-- ============================ 4. 상품 목록 테이블 ============================ -->
@@ -210,11 +211,11 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th style="width: 150px;">주문번호</th>
-							<th style="width: 340px;">상품</th>
-							<th style="width: 60px;">수량</th>
-							<th style="width: 100px;">구매가</th>
-							<th style="width: 120px;">상태</th>
+							<th style="width: 80px; padding: 0;">주문번호</th>
+							<th style="width: 150px; padding: 0;">상품</th>
+							<th style="width: 30px; padding: 0;">수량</th>
+							<th style="width: 60px; padding: 0;">주문금액</th>
+							<th style="width: 80px; padding: 0;">상태</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -235,39 +236,46 @@
 											<!-- 첫 번째 상품일 때만 주문번호 셀 표시 -->
 											<c:if test="${itemStatus.first}">
 												<td class="order-number-cell"
-													rowspan="${fn:length(order.items)}">
-													<div class="order-date">
+													rowspan="${fn:length(order.items)}" style="padding: 0;">
+													<div
+														style="display: flex; flex-direction: column; color: #111;">
 														<fmt:formatDate value="${order.orderDate}"
 															pattern="yyyy.MM.dd" />
+														<a
+															href="${pageContext.request.contextPath}/store/mypage/consumerOrderDetail?orderId=${order.ordersId}"
+															class="detail-link"
+															style="color: #111; font-weight: 600;">${order.orderCode}</a>
 													</div>
-													<div class="order-number">${order.orderCode}</div> <a
-													href="${pageContext.request.contextPath}/store/mypage/consumerOrderDetail?orderId=${order.ordersId}"
-													class="detail-link"> 상세보기</a>
 												</td>
 											</c:if>
 
 											<!-- 상품 정보 -->
-											<td>
-												<div style="display: flex; align-items: center; gap: 12px;">
-													<div class="product-image">이미지</div>
-													<div class="product-info">
-														<div class="product-brand">${item.brandName}</div>
-														<div class="product-name">
-															<a
-																href="${pageContext.request.contextPath}/store/productDetail?productId=${item.productId}">
-																${item.productName} ${item.productName} <c:if
-																	test="${not empty item.optionValue}">
-                                            (${item.optionValue})
-                                        </c:if>
-															</a>
-														</div>
+											<td style="padding: 0;"
+												onclick="location.href='${pageContext.request.contextPath}/store/productDetail?productId=${item.productId}'">
+												<div
+													style="display: flex; align-items: center; gap: 12px; padding: 20px 0;">
+													<img
+														src="${pageContext.request.contextPath}/image?fileId=${item.thumbnailFileId}"
+														alt="${item.productName}"
+														style="width: 80px; height: 80px; object-fit: cover;">
+
+													<div class="product-info"
+														style="text-align: left; display: flex; flex-direction: column; width: 100%; height: fit-content; gap: 6px;">
+														<p class="product-brand"
+															style="color: #333; font-weight: 700; font-size: 13px;">${item.brandName}</p>
+														<p class="product-name">${item.productName}</p>
+														<c:if test="${not empty item.optionValue}">
+															<P
+																style="color: #888; font-weight: 400; font-size: 13px;">옵션
+																| ${item.optionValue}</P>
+														</c:if>
 													</div>
 												</div>
 											</td>
-											<td>${item.quantity}</td>
-											<td><fmt:formatNumber value="${item.total}"
-													pattern="#,###" />원</td>
-											<td>
+											<td style="padding: 0; color: #111; font-size: 13px;">${item.quantity}</td>
+											<td style="padding: 0; color: #111; font-size: 13px;"><fmt:formatNumber
+													value="${item.total}" pattern="#,###" />원</td>
+											<td style="padding: 0;">
 												<!-- 상태명 표시 -->
 												<div class="order-status">
 													<c:choose>
@@ -361,7 +369,8 @@
 			<!-- 페이징 -->
 			<div class="page-pagination">
 				<my:pagination currentPage="${currentPage}"
-					totalPages="${totalPages}" baseUrl="/store/mypage/orderList?${queryString}" />
+					totalPages="${totalPages}"
+					baseUrl="/store/mypage/orderList?${queryString}" />
 			</div>
 		</div>
 	</div>

@@ -1,5 +1,43 @@
 @charset "UTF-8";
 
+.table {
+	table-layout: fixed;
+	width: 100%;
+	border-collapse: collapse;
+	min-width: 0;
+}
+
+.table th, .table td {
+	border: none;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	word-break: keep-all;
+}
+
+.btn-primary {
+	background: #111;
+}
+
+.btn-primary:hover {
+	background: #333;
+}
+
+.btn-outline {
+	border: 1px solid #222;
+	color: #111;
+}
+
+.btn-outline:hover {
+	background: #eee;
+}
+
+.btn {
+	border-radius: 0;
+	font-weight: 400;
+	padding: 0;
+}
+
 .container {
 	width: 1020px;
 	margin: 40px auto 0;
@@ -22,13 +60,10 @@
 
 .table-wrapper {
 	width: 100%;
-	overflow-x: auto;
-}
-
-.table {
-	width: 100%;
-	table-layout: fixed; /* 테이블 레이아웃 고정 */
-	border-collapse: collapse;
+	overflow-x: hidden;
+	overflow-y: visible; /* 세로 스크롤 제거 */
+	height: auto; /* 높이 자동 확장 */
+	max-height: none;
 }
 
 .order-number-cell {
@@ -51,18 +86,28 @@
 .button-vertical {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	align-items: center;
+	gap: 2px;
 }
 
 .button-vertical .btn {
-	width: 100%;
-	min-width: 80px;
+	width: 100px;
+}
+
+.status-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.status-button button {
+	width: 100px;
 }
 
 .order-status {
-	font-weight: 500;
+	font-weight: 600;
 	margin-bottom: 8px;
-	color: #333;
+	color: #111;
 }
 
 .no-action {
@@ -75,9 +120,8 @@
 }
 
 .order-date {
-	font-size: 12px;
-	color: #666;
-	margin-bottom: 4px;
+	font-size: 13px;
+	color: #111;
 }
 
 .order-number {
@@ -93,6 +137,62 @@
 	text-decoration: none;
 }
 
+.product-name {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	word-break: break-all;
+	line-height: 18px;
+	max-height: 36px;
+	max-width: 345px;
+	color: #000;
+	font-size: 14px;
+	height: fit-content;
+}
+
 .detail-link:hover {
 	text-decoration: underline;
+}
+
+/* 테이블 전체 기본선 제거 */
+.table {
+	border-collapse: collapse;
+	border: none;
+	width: 100%;
+}
+
+/* 모든 셀의 기본선 제거 */
+.table th, .table td {
+	border: none;
+}
+
+/* 행 사이 아래쪽 테두리만 표시 */
+.table tr {
+	border-bottom: 1px solid #E5E7EB; /* 연한 회색 구분선 */
+}
+
+/* 헤더 상단선 추가 */
+.table thead tr:first-child {
+	border-top: 1.5px solid #E5E7EB;
+}
+
+/* 마지막 행 하단선도 유지 */
+.table tbody tr:last-child {
+	border-bottom: 1px solid #E5E7EB;
+}
+
+/* 좌우 여백 시각적으로 띄워주기 */
+.table-wrapper {
+	border-left: none;
+	border-right: none;
+	border: none;
+	border-radius: 0;
+}
+
+.table th {
+	font-size: 13px;
+	color: #111;
 }
