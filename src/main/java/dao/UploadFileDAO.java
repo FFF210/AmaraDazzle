@@ -16,4 +16,6 @@ public interface UploadFileDAO {
 	//파일 저장 후 생성된 uploadFileId를 반환
     //(insertUploadFileWithAuto 매퍼 사용)
 	Long insertFileAndGetId(UploadFile f_dto) throws Exception;
+
+	void deleteFile(String fRename);
 }

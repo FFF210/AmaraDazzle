@@ -37,4 +37,11 @@ public class UploadFileServiceImpl implements UploadFileService {
 	public Long insertFile(UploadFile f_dto) throws Exception {
 		 return file_dao.insertFileAndGetId(f_dto);
 	}
+
+	//DB 파일 삭제 
+	@Override
+	public void deleteFile(String fRename) {
+		 file_dao.deleteFile(fRename);
+		
+	}
 }

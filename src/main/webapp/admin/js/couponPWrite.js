@@ -1,18 +1,4 @@
-//개별지급목록 페이지로 이동 
-function goIndiCpList() {
-	location.href = "/admin/couponIndiList";
-};
-
-//쿠폰 발행 버튼 클릭시 발행 페이지로 이동 
-function cpPublBtn() {
-	location.href = "/admin/couponPublWrite";
-};
-
-//쿠폰 상세보기 버튼 클릭시 발행 페이지로 이동 
-function goPcpDetail(num) {
-	location.href = "/admin/couponPublDetail?num="+num;
-};
-
+//쿠폰 발행 함수 
 document.addEventListener("DOMContentLoaded", function() {
 	/* ************* 입력시 3자리마다 콤마 추가 ************* */ 
 	const priceInputs = document.querySelectorAll(".price_input");
@@ -52,6 +38,12 @@ document.addEventListener("DOMContentLoaded", function() {
 				middleBtns.forEach((b) => b.classList.remove("active")); // 모두 제거
 				btn.classList.add("active"); // 클릭한 것만 적용
 				hiddenMiddle.value = btn.value;
+				
+				if(btn.textContent.trim() === "개별회원") {  //개별회원 버튼을 클릭했을 때 즉시지급 버튼 숨김 
+					document.querySelector("#immedBtn").style.display = "none";
+				} else {
+					document.querySelector("#immedBtn").style.display = "block";
+				}
 			});
 		});
 	}
@@ -68,6 +60,30 @@ document.addEventListener("DOMContentLoaded", function() {
 	const exp_noRestr = document.getElementById("exp_noRestr");
 	const cate_noRestr = document.getElementById("cate_noRestr");
 	
+	// 범위로 설정 클릭 시 입력칸 비활성화, 아래 입력칸 노출 (유효기간)
+	exp_noRestr.addEventListener("change", () => {
+		const isChecked = exp_noRestr.checked;
+		
+		couponExp.forEach((exp) => {
+			exp.classList.toggle("disabled", isChecked);
+			
+			// 범위로 설정 체크 시
+			if (isChecked) {
+				//날짜표시칸 내용 지움 
+				exp.querySelectorAll(".date-text").forEach(dt => {
+					dt.value = ""; 
+				});
+
+				// 활성화된 항목 표시(active) 제거 
+				exp.querySelectorAll(".preset-btn.active").forEach(item => {
+					item.classList.remove("active");
+				});
+			} 
+		});
+		
+		//아래 입력칸 노출
+		document.querySelector(".part_content.couponExp2").classList.toggle("visible", isChecked);
+	});
 	// 제한없음 클릭 시 입력칸 비활성화 (사용조건)
 	pch_noRestr.addEventListener("change", () => {
 		if (pch_noRestr.checked) {
@@ -77,25 +93,6 @@ document.addEventListener("DOMContentLoaded", function() {
 		} else {
 			couponCondition.disabled = false;
 		}
-	});
-	// 제한없음 클릭 시 입력칸 비활성화 (유효기간)
-	exp_noRestr.addEventListener("change", () => {
-		const isChecked = exp_noRestr.checked;
-		couponExp.forEach((exp) => {
-			exp.classList.toggle("disabled", isChecked);
-			
-			// 제한없음 체크 시
-			if (isChecked) {
-				exp.querySelectorAll(".date-text").forEach(dt => {
-					dt.value = "";
-				});
-
-				// 활성화된 항목 표시(active) 제거 
-				exp.querySelectorAll(".preset-btn.active").forEach(item => {
-					item.classList.remove("active");
-				});
-			}
-		});
 	});
 	// 제한없음 클릭 시 입력칸 비활성화 (카테고리)
 	const categorySelects = [largeSelect, middleSelect, smallSelect];

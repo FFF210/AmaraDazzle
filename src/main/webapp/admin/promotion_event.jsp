@@ -89,8 +89,6 @@
 							<!-- 이벤트기간 -->
 							<col style="width: 10%" />
 							<!-- 등록일 -->
-							<col style="width: 5%" />
-							<!-- 조회수 -->
 							<col style="width: 8%" />
 							<!-- 노출여부 -->
 							<col style="width: 8%" />
@@ -105,7 +103,6 @@
 								<th class="sortable">이벤트종류 <i class="bi bi-dash-lg sort-icon"></i></th>
 								<th>이벤트기간</th>
 								<th>등록일</th>
-								<th>조회수</th>
 								<th class="sortable">노출여부 <i class="bi bi-dash-lg sort-icon"></i></th>
 								<th>상세보기</th>
 							</tr>
@@ -117,7 +114,7 @@
 									<td colspan="10">등록된 게시물이 없습니다.</td>
 								</tr>
 							</c:if>
-
+	
 							<c:set var="no" value="${eventCount-postNo}" />
 							<c:forEach items="${eventList}" var="eventList" varStatus="idx">
 							<c:set var="startDate" value="${eventList.startDate}" />
@@ -137,10 +134,10 @@
 												<my:tag color="green" size="md" text="할인" />
 											</c:when>
 											<c:when test="${eventList.eventType == 'EXPERIENCE'}">
-												<my:tag color="blue" size="md" text="체험단" />
+												<my:tag color="yellow" size="md" text="체험단" />
 											</c:when>
 											<c:when test="${eventList.eventType == 'PICK'}">
-												<my:tag color="blue" size="md" text="AD's PICK" />
+												<my:tag color="red" size="md" text="AD's PICK" />
 											</c:when>
 											<c:when test="${eventList.eventType == 'ETC'}">
 												<my:tag color="blue" size="md" text="기타" />
@@ -149,7 +146,6 @@
 									</td>
 									<td>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</td>
 									<td>${fn:substring(createDate,0,19)}</td>
-									<td></td>
 									<td><c:choose>
 											<c:when test="${eventList.exposeYn == '1'}">
 												<!-- 게시중 -->

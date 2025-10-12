@@ -67,15 +67,6 @@
 			</div>
 
 			<div class="part_section">
-				<div class="part_title">첨부파일</div>
-				<div class="part_content">
-					<c:if test="${notice.docFileId == null}">
-						<span class="text_readonly">&nbsp; 첨부파일 없음</span>
-					</c:if>
-				</div>
-			</div>
-
-			<div class="part_section">
 				<div class="part_title">내용</div>
 				<div class="part_content">
 					<div class="content_part">
@@ -88,6 +79,15 @@
 				</div>
 			</div>
 
+			<c:if test="${notice.docFileId != null}">
+				<div class="part_section">
+					<div class="part_title">첨부파일</div>
+					<div class="part_content">
+						<span class="text_readonly">&nbsp; 첨부파일 없음</span>
+					</div>
+				</div>
+			</c:if>
+			
 			<div class="part_section">
 				<div class="part_title">작성일자</div>
 				<div class="part_content">
@@ -103,8 +103,13 @@
 						<span>&nbsp; Amara Dazzle</span>
 					</div>
 					<div class="btn_part">
-						<button type="button" class="btn first_btn action_btn">수정</button>
-						<button type="button" class="btn second_btn action_btn">삭제</button>
+						<button type="button" class="btn first_btn action_btn" onclick="editNoticeSeller('${notice.noticeId}')">수정</button>
+						<button type="button" class="btn second_btn action_btn" onclick="exposeState('${notice.noticeId}')">
+							<c:choose>
+								<c:when test="${notice.isExposed == 0}">공개</c:when>
+								<c:when test="${notice.isExposed == 1}">비공개</c:when>
+							</c:choose>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -114,6 +119,8 @@
 	<!-- 레이아웃 + 메인컨텐츠 end -->
 
 
-
+	<!-- JS부분 -->
+	<script src="./js/notice.js"></script>
+	<!-- JS부분 end -->
 </body>
 </html>

@@ -12,7 +12,6 @@
 <title>메인배너 등록</title>
 <link rel="stylesheet" href="../tagcss/uploader.css" />
 <link rel="stylesheet" href="./css/boards_write.css" />
-<link rel="stylesheet" href="./css/myApplications.css" />
 <link rel="stylesheet" href="./css/banner.css" />
 <style>
 	.uploader {padding: 5px;}

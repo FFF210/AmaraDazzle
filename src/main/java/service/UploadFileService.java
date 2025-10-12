@@ -15,4 +15,6 @@ public interface UploadFileService {
 	
 	// (추가했음) 파일 저장 후 생성된 uploadFileId 반환
 	Long insertFile(UploadFile f_dto) throws Exception;
+
+	void deleteFile(String fRename); //DB 파일삭제 
 }
