@@ -1,9 +1,7 @@
 package controller.brand2;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -15,51 +13,73 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONObject;
+
+import dao.brand2.AdminPaymentDAO;
+import dao.brand2.AdminPaymentDAOImpl;
+import dto.AdminPayment;
+import service.brand2.AdbannerService;
+import service.brand2.AdbannerServiceImpl;
+
 /**
  * Servlet implementation class TossCancelController
  */
-@WebServlet("/brand2/tossCancelController")
+@WebServlet("/tossCancel")
 public class TossCancelController extends HttpServlet {
+    private final AdminPaymentDAO adminPaymentDAO = new AdminPaymentDAOImpl();
+    private final AdbannerService adbannerService = new AdbannerServiceImpl();
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
-        String paymentKey = request.getParameter("paymentKey"); // 결제건의 paymentKey
-        String cancelReason = request.getParameter("reason");   // 취소 사유 (예: "광고 취소 요청")
+        Long bannerId = Long.parseLong(request.getParameter("bannerId"));
 
-        // 토스 Secret Key
-        String secretKey = "test_sk_XXXX"; 
-        String encodedAuth = Base64.getEncoder()
-                .encodeToString((secretKey + ":").getBytes(StandardCharsets.UTF_8));
+        try {
+            // 1. 결제 내역 조회
+            AdminPayment payment = adminPaymentDAO.selectPaymentByBannerId(bannerId);
+            if (payment == null) {
+                throw new IllegalStateException("결제 내역이 없습니다.");
+            }
 
-        // API 요청
-        URL url = new URL("https://api.tosspayments.com/v1/payments/" + paymentKey + "/cancel");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setDoOutput(true);
-        conn.setRequestProperty("Authorization", "Basic " + encodedAuth);
-        conn.setRequestProperty("Content-Type", "application/json");
+            String paymentKey = payment.getPaymentKey();
+            int amount = payment.getAmount();
 
-        // body (취소 사유)
-        String body = "{ \"cancelReason\": \"" + cancelReason + "\" }";
-        conn.getOutputStream().write(body.getBytes(StandardCharsets.UTF_8));
+            // 2. Toss API 취소 호출
+            String secretKey = "test_sk_QbgMGZzorz5m714xdBN7Vl5E1em4"; // TODO: 실제 키로 교체
+            String encodedAuth = Base64.getEncoder()
+                    .encodeToString((secretKey + ":").getBytes(StandardCharsets.UTF_8));
 
-        int code = conn.getResponseCode();
-        InputStream respStream = (code == 200 ? conn.getInputStream() : conn.getErrorStream());
+            URL url = new URL("https://api.tosspayments.com/v1/payments/" + paymentKey + "/cancel");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization", "Basic " + encodedAuth);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
 
-        String result = new BufferedReader(new InputStreamReader(respStream))
-                            .lines().reduce("", (acc, line) -> acc + line);
+            JSONObject body = new JSONObject();
+            body.put("cancelReason", "배너 광고 취소");
+            body.put("cancelAmount", amount);
 
-        response.setContentType("application/json; charset=UTF-8");
-        response.getWriter().print(result);
+            OutputStream os = conn.getOutputStream();
+            os.write(body.toString().getBytes("UTF-8"));
+            os.flush();
 
-        // ✅ 여기서 DB 상태 반영
-        if (code == 200) {
-            // admin_payment 테이블 상태 → "CANCELED"
-            // banner.status → "CANCELED"
-            // update 쿼리 실행
+            int code = conn.getResponseCode();
+            System.out.println(">>> Toss Cancel API Response Code: " + code);
+
+            if (code == 200) {
+                // 3. DB 상태 업데이트
+                adbannerService.cancelBanner(bannerId);
+
+                response.sendRedirect(request.getContextPath() + "/brand2/adbannerList");
+            } else {
+                throw new RuntimeException("토스 결제 취소 실패");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/error.jsp");
         }
     }
 }

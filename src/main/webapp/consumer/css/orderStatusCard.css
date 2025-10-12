@@ -69,10 +69,27 @@
 	align-items: center;
 	gap: 10px;
 	cursor: pointer;
+	
+	text-decoration: none;
+	color: inherit;
+	cursor: pointer;
+	transition: all 0.2s;
 }
 
 .status-item:not(:last-child)::after {
 	display: none;
+}
+
+/* 호버 효과 */
+.status-item:hover {
+	background-color: #f8f9fa;
+	transform: translateY(-2px);
+}
+
+/* 활성 상태 */
+.status-item.active {
+	background-color: #e3f2fd;
+	border-color: #2196f3;
 }
 
 /* -------- 카운트 숫자 -------- */

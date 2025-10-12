@@ -1,8 +1,6 @@
 package controller.brand2;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -28,23 +26,21 @@ public class AdbannerDetail extends HttpServlet {
 		String action = request.getParameter("action");  // 상세 or 취소 버튼
 		Long bannerId = Long.parseLong(request.getParameter("bannerId")); // 배너 id 받기
 		
-		
 		try {
 			
 			if("cancel".equals(action)) {
 				
 				// ============= 취소 버튼 =============
+				boolean paid = service.isBannerPaid(bannerId);
 				
-				Map<String, Object> params = new HashMap<>();
-				params.put("bannerId", Long.parseLong(request.getParameter("bannerId")));
-				params.put("status", "CANCELED");
-
-				service.cancelBanner(params);
-			    response.sendRedirect(request.getContextPath() + "/brand2/adbannerList");
-			    return;
-				
-				// ============= 취소 버튼 =============
-				
+				if(paid) {
+					// TossCancelController로 리다이렉트
+			        response.sendRedirect(request.getContextPath() + "/tossCancel?bannerId=" + bannerId);
+				} else {
+					service.cancelBanner(bannerId); // bannerId만 넘김
+					response.sendRedirect(request.getContextPath() + "/brand2/adbannerList");
+				}
+		        return;
 				
 			}
 			
@@ -61,7 +57,6 @@ public class AdbannerDetail extends HttpServlet {
 			
 			request.getRequestDispatcher("/brand2/adbannerFormDetail.jsp").forward(request, response);
 			
-			// ============= 상세보기 버튼 =============
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.sendRedirect(request.getContextPath() + "/error.jsp");

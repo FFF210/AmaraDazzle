@@ -100,7 +100,8 @@
 					</div>
 					<div class="stat">
 						<span class="label">포인트</span> <span class="value"><span
-							class="em"><fmt:formatNumber value="${sessionScope.memberPoints}" pattern="#,###" /></span> p</span>
+							class="em"><fmt:formatNumber
+									value="${sessionScope.memberPoints}" pattern="#,###" /></span> p</span>
 					</div>
 					<div class="stat">
 						<span class="label">쿠폰</span> <span class="value"><span
@@ -136,13 +137,13 @@
 					<div
 						class="status-item ${activeStatus eq 'delivered' ? 'active' : ''}">
 						<div class="status-count">${orderSummary.deliveredCount}</div>
-						<div class="status-label">배송중</div>
+						<div class="status-label">배송완료</div>
 					</div>
 
 					<div
 						class="status-item ${activeStatus eq 'confirmed' ? 'active' : ''}">
 						<div class="status-count">${orderSummary.confirmedCount}</div>
-						<div class="status-label">배송완료</div>
+						<div class="status-label">구매확정</div>
 					</div>
 				</div>
 			</div>
@@ -375,7 +376,7 @@
 			<div class="page-pagination">
 				<my:pagination currentPage="${currentPage}"
 					totalPages="${totalPages}"
-					baseUrl="/store/mypage/orderList?${queryString}" />
+					baseUrl="${pageContext.request.contextPath}/store/mypage/orderList?${queryString}" />
 			</div>
 		</div>
 	</div>
@@ -387,19 +388,39 @@
 	function cancelOrder(orderItemId) {
 	    if(confirm('주문을 취소하시겠습니까?')) {
 	        // 취소 처리 로직
-	        location.href = '/consumer/cancelOrder?orderItemId=' + orderItemId;
+	        location.href = '/store/cancelOrder?orderItemId=' + orderItemId;
 	    }
 	}
 
 	function trackDelivery(trackingNo, carrierName) {
-	    // 택배 조회 새창으로 열기
+		 // 운송장 번호 확인
+	    if(!trackingNo || trackingNo === 'null' || trackingNo === '') {
+	        alert('운송장 번호가 등록되지 않았습니다.');
+	        return;
+	    }
+	    
+	   /*  // 택배 조회 새창으로 열기
 	    let url = '';
+	    
 	    if(carrierName === 'CJ대한통운') {
 	        url = `https://www.doortodoor.co.kr/parcel/doortodoor.do?fsp_action=PARC_ACT_002&fsp_cmd=retrieveInvNoACT&invc_no=${trackingNo}`;
 	    } else if(carrierName === '롯데택배') {
 	        url = `https://www.lotteglogis.com/home/reservation/tracking/linkView?InvNo=${trackingNo}`;
-	    }
-	    window.open(url, '_blank');
+	    } else if(carrierName === '한진택배') {
+	        url = `https://www.hanjin.com/kor/CMS/DeliveryMgr/WaybillResult.do?mCode=MN038&schLang=KR&wblnumText2=${trackingNo}`;
+	    } else if(carrierName === '로젠택배') {
+	        url = `https://www.ilogen.com/web/personal/trace/${trackingNo}`;
+	    } else {
+	        alert('지원하지 않는 택배사입니다: ' + carrierName);
+	        return;
+	    } */
+	    
+	    
+	    // 가짜 배송조회 페이지로 이동
+	    const url = '${pageContext.request.contextPath}/store/deliveryTracking?trackingNo=' + trackingNo + '&carrierName=' + encodeURIComponent(carrierName);
+	    
+	    // 새 창으로 열기
+	    window.open(url, '_blank', 'width=900,height=700,scrollbars=yes');
 	}
 
 	//그냥 마이리뷰 페이지로 보내기

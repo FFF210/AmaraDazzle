@@ -37,10 +37,10 @@ public class WishlistDAOImpl implements WishlistDAO {
 
 	// ================[소비자] 위시리스트 목록 조회 ===================
 	@Override
-	public List<Map<String, Object>> selectWishlistByMemberId(Long memberId) {
-		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-			return sqlSession.selectList("mapper.wishlist.selectWishlistByMemberId", memberId);
-		}
+	public List<Map<String, Object>> selectWishlistByMemberId(Map<String, Object> params) {
+	    try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        return sqlSession.selectList("mapper.wishlist.selectWishlistByMemberId", params);
+	    }
 	}
 
 	// ================[소비자] 찜 개수 조회 ===================

@@ -175,7 +175,8 @@ request.setAttribute("floor", floor);
 					<p class="total-label">총 상품 금액</p>
 					<p class="total-amount" id="totalAmount">
 						<c:choose>
-							<c:when test="${product.hasOption == 1}">
+							<c:when
+								test="${product.hasOption == 1 and not empty productOptions}">
                 0원
             </c:when>
 							<c:otherwise>
@@ -347,7 +348,7 @@ request.setAttribute("floor", floor);
 							<c:choose>
 								<c:when test="${not empty reviews}">
 									<c:forEach var="review" items="${reviews}">
-										<fmt:formatDate value="${review.questionedAt}"
+										<fmt:formatDate value="${review.questioned_at}"
 											pattern="yyyy-MM-dd" var="formattedDate" />
 
 										<!--  리뷰 카드 -->
@@ -355,8 +356,8 @@ request.setAttribute("floor", floor);
 											data-date="${review.questionedAt}">
 											<!-- 왼쪽 : 작성자 정보 -->
 											<div class="review-author">
-												<p class="nickname">닉네임</p>
-												<p class="skin-type">피부타입정보들</p>
+												<p class="nickname">${review.nickname}</p>
+												<p class="skin-type">${not empty review.skin_type ? review.skin_type : '피부타입 미설정'}</p>
 											</div>
 											<!-- 오른쪽 : 리뷰 내용 -->
 											<div class="review-body">
@@ -373,24 +374,38 @@ request.setAttribute("floor", floor);
 												</div>
 
 												<c:if test="${not empty option}">
-													<div class="review-option">옵션 | 구매옵션정보</div>
+													<div class="review-option">옵션 | ${review.option_name}</div>
 												</c:if>
 
 												<div class="review-content">${review.content}</div>
 
-												<c:if test="${not empty imageList}">
+												<c:if
+													test="${not empty review.image1_file_id or not empty review.image2_file_id or not empty review.image3_file_id}">
 													<div class="review-images">
-														<c:forEach var="img" items="${imageList}">
-															<img src="${img}" alt="리뷰 이미지" />
-														</c:forEach>
+														<c:if test="${not empty review.image1_file_id}">
+															<img
+																src="${pageContext.request.contextPath}/image?fileId=${review.image1_file_id}"
+																alt="리뷰 이미지 1" />
+														</c:if>
+														<c:if test="${not empty review.image2_file_id}">
+															<img
+																src="${pageContext.request.contextPath}/image?fileId=${review.image2_file_id}"
+																alt="리뷰 이미지 2" />
+														</c:if>
+														<c:if test="${not empty review.image3_file_id}">
+															<img
+																src="${pageContext.request.contextPath}/image?fileId=${review.image3_file_id}"
+																alt="리뷰 이미지 3" />
+														</c:if>
 													</div>
 												</c:if>
 											</div>
 										</div>
 									</c:forEach>
 									<div class="pagination-wrapper">
-										<my:pagination currentPage="1" totalPages="1"
-											baseUrl="/store/productDetail?productId=${product.productId}&page=" />
+										<my:pagination currentPage="${reviewCurrentPage}"
+											totalPages="${reviewTotalPages}"
+											baseUrl="/store/productDetail?productId=${product.productId}&reviewPage=" />
 									</div>
 								</c:when>
 								<c:otherwise>
@@ -440,8 +455,9 @@ request.setAttribute("floor", floor);
 									</c:forEach>
 
 									<div class="pagination-wrapper">
-										<my:pagination currentPage="1" totalPages="1"
-											baseUrl="/store/productDetail?productId=${product.productId}&page=" />
+										<my:pagination currentPage="${qnaCurrentPage}"
+											totalPages="${qnaTotalPages}"
+											baseUrl="/store/productDetail?productId=${product.productId}&qnaPage=" />
 									</div>
 								</c:when>
 
@@ -514,7 +530,7 @@ window.originalPrice = ${product.price.intValue()};
 window.isSale = ${isSale ? 'true' : 'false'};
 window.isLoggedIn = ${not empty sessionScope.memberId ? 'true' : 'false'};
 
-<c:if test="${product.hasOption == 1}">
+<c:if test="${product.hasOption == 1 and not empty productOptions}">
 window.productOptionsData = [
   <c:forEach var="option" items="${productOptions}" varStatus="status">
     {

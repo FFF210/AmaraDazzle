@@ -39,7 +39,7 @@ public class EventDAOImpl implements EventDAO {
 	
 	// 신청하기 버튼
     @Override
-    public Event selectEventById(Long eventId) throws Exception {
+    public EventDetail selectEventById(Long eventId) throws Exception {
         try(SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
     	return sqlSession.selectOne("mapper.event.selectEventById", eventId);
         }
@@ -47,9 +47,9 @@ public class EventDAOImpl implements EventDAO {
     
     // 상세보기 버튼
     @Override
-    public EventDetail selectEventDetailById(Long eventId) throws Exception {
+    public EventDetail selectEventDetailById(Map<String, Object> params) throws Exception {
         try(SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-    	return sqlSession.selectOne("mapper.event.selectEventDetailById", eventId);
+    	return sqlSession.selectOne("mapper.event.selectEventDetailById", params);
         }
     }
 

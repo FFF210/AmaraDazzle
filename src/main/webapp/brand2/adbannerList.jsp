@@ -67,7 +67,7 @@
 <body>
 	<my:layout>
 		<my:breadcrumb
-			items="배너광고 관리:/brand2/adbannerList, 배너광고 신청:/brand2/adbanner" />
+			items="배너광고 조회:/brand2/adbannerList, 배너광고 신청:/brand2/adbanner" />
 
 		<div class="page-tableFilter">
 			<my:tableFilter
@@ -167,11 +167,13 @@
 
 		<%--
 		status/button
-		승인 대기 : 상세보기/취소
-		승인 완료 : 상세보기/취소
-		진행 중 : 상세보기
-		완료 : 상세보기
-		취소 : 상세보기
+		PENDING 승인 대기 : 상세보기/취소
+		APPROVED 승인 완료 : 상세보기/취소
+			상세보기 : 미결제-결제버튼&닫기, 결제완료-닫기
+			취소 : 미결제-폼만 CANCELED 처리(upload_file 삭제 미구현상태), 결제-TOSS 아직 미구현상태
+		ONGOING 진행 중 : 상세보기
+		COMPLETED 완료 : 상세보기
+		CANCELED 취소 : 상세보기
 		 --%>
 
 		<c:set var="queryString">

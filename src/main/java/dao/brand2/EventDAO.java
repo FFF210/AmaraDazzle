@@ -22,8 +22,8 @@ public interface EventDAO {
 	/* eventForm */
 
 	// ========== event ==========
-    Event selectEventById(Long eventId) throws Exception;
-    EventDetail selectEventDetailById(Long eventId) throws Exception;
+	EventDetail selectEventById(Long eventId) throws Exception;
+    EventDetail selectEventDetailById(Map<String, Object> params) throws Exception; // event_id, brand_id
     void resetProductsForEvent(Long eventId) throws Exception;
 
     // ========== event_application ==========

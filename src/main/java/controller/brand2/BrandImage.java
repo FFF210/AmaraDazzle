@@ -15,24 +15,14 @@ import dto.UploadFile;
 import service.brand2.UploadFileService;
 import service.brand2.UploadFileServiceImpl;
 
-/**
- * Servlet implementation class BrandImage
- */
 @WebServlet("/brand2/image")
 public class BrandImage extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
     public BrandImage() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 		 
@@ -53,10 +43,21 @@ public class BrandImage extends HttpServlet {
                 return;
             }
 
+            
             // 실제 저장 경로 (예: /upload/xxx.png)
-            String path = request.getServletContext().getRealPath(uploadFile.getStoragePath());
-            File file = new File(path);
+//            String path = request.getServletContext().getRealPath(uploadFile.getStoragePath());
+            
+            /**************************/
+            // 실제 저장 경로 (예: /upload_file/0101.webp)
+            String storagePath = uploadFile.getStoragePath();   // "/upload_file"
+            String fileRename = uploadFile.getFileRename();     // "0101.webp"
 
+            // 웹앱 실제 물리 경로로 변환
+            String realPath = request.getServletContext().getRealPath(storagePath);
+            String fullPath = realPath + File.separator + fileRename;
+            /**************************/
+            
+            File file = new File(fullPath);
             if (!file.exists()) {
                 response.sendError(HttpServletResponse.SC_NOT_FOUND, "File not found on disk");
                 return;

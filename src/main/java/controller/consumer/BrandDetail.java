@@ -103,10 +103,16 @@ public class BrandDetail extends HttpServlet {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			request.setAttribute("err", "브랜드 조회 오류");
-			request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);
+			
+			// 응답이 이미 커밋되었는지 확인
+	        if (!response.isCommitted()) {
+	            request.setAttribute("err", "브랜드 조회 오류: " + e.getMessage());
+	            request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);
+	        } else {
+	            // 이미 커밋된 경우 로그만 남기고 종료
+	            System.err.println("응답이 이미 커밋되어 에러 페이지로 이동할 수 없습니다: " + e.getMessage());
+	        }
 		}
-
 	}
 
 }

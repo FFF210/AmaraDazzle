@@ -9,6 +9,12 @@ public interface ReviewService {
 	// 상품아이디로 리뷰 리스트 조회
 	List<Review> getReviewsByProductId(Long productId) throws Exception;
 
+	// 페이지네이션용 리뷰 조회
+	List<Map<String, Object>> getReviewsByProductIdWithPaging(Long productId, int page, int pageSize) throws Exception;
+
+	// 리뷰 총 개수 조회
+	int getReviewCount(Long productId) throws Exception;
+
 	// 리뷰 요약 가져오기
 	Map<String, Object> getReviewSummary(Long productId) throws Exception;
 
@@ -21,7 +27,7 @@ public interface ReviewService {
 
 	// 리뷰 작성
 	void createReview(Review review) throws Exception;
-	
+
 	// 테스트용 메서드 추가
 	List<Map<String, Object>> testQuery(Long memberId) throws Exception;
 }

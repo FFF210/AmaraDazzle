@@ -187,6 +187,11 @@ promotion_event_write.jsp
 				<!-- ====== 상품 카테고리 (readonly) ====== -->
 				<div class="label">상품 카테고리</div>
 				<div class="part_content select_cate">
+				
+				<input type="hidden" name="category1Id" value="${event.category1Id}" />
+				<input type="hidden" name="category2Id" value="${event.category2Id}" />
+				<input type="hidden" name="category3Id" value="${event.category3Id}" />
+				
 					<!-- 이미 event에 설정된 categoryId를 기반으로 채워지는 readonly -->
 					<div class="custom-select sm" id="largeSelect">
 						<div class="select-header">
@@ -227,7 +232,7 @@ promotion_event_write.jsp
 					<div id="imgPreviewWrapper" class="preview-wrapper">
 						<div id="imgPreviewArea" class="preview-area" aria-live="polite">
 							<img
-								src="${pageContext.request.contextPath}/brand2/image?uploadFileId=${banner.uploadFileId}"
+								src="${pageContext.request.contextPath}/brand2/image?uploadFileId=${event.thumbnailFileId}"
 								width="300px" />
 						</div>
 					</div>
@@ -238,7 +243,7 @@ promotion_event_write.jsp
 					<div id="imgPreviewWrapper" class="preview-wrapper">
 						<div id="imgPreviewArea" class="preview-area" aria-live="polite">
 							<img
-								src="${pageContext.request.contextPath}/brand2/image?uploadFileId=${banner.uploadFileId}"
+								src="${pageContext.request.contextPath}/brand2/image?uploadFileId=${event.detailFileId}"
 								width="300px" />
 						</div>
 					</div>

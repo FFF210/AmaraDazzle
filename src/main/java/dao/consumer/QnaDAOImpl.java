@@ -1,6 +1,7 @@
 package dao.consumer;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -16,6 +17,14 @@ public class QnaDAOImpl implements QnaDAO {
             return sqlSession.selectList("mapper.qna.selectQnasByProductId", productId);
         }
     }
+    
+ // 페이지네이션용 문의 목록 조회
+ 	@Override
+ 	public List<Qna> selectQnasByProductIdWithPaging(Map<String, Object> params) throws Exception {
+ 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+ 			return sqlSession.selectList("mapper.qna.selectQnasByProductId", params);
+ 		}
+ 	}
     
     // 문의 개수
     @Override

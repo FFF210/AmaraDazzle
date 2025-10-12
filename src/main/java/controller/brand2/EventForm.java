@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import dto.Event;
 import dto.brand2.EventApplicationForm;
+import dto.brand2.EventDetail;
 import service.brand2.EventService;
 import service.brand2.EventServiceImpl;
 
@@ -45,7 +45,7 @@ public class EventForm extends HttpServlet {
 
             // 단일 이벤트 정보 조회 (eventService → EventDAO.selectEventNamesByType)
             // 모든 이벤트명 중에서 해당 eventId 찾음
-            Event selectedEvent = eventService.getEventById(eventId);
+            EventDetail selectedEvent = eventService.getEventById(eventId);
 
             if (selectedEvent == null) {
                 response.sendRedirect(request.getContextPath() + "/brand2/eventList");

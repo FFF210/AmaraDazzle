@@ -93,7 +93,7 @@ public class EventServiceImpl implements EventService {
 
 	// 신청하기 버튼 (단일 이벤트 조회)
 	@Override
-	public Event getEventById(Long eventId) throws Exception {
+	public EventDetail getEventById(Long eventId) throws Exception {
 		return eventDAO.selectEventById(eventId);
 	}
 	
@@ -105,8 +105,8 @@ public class EventServiceImpl implements EventService {
 
 	// 상세보기 버튼 (신청 정보+쿠폰/상품 JOIN 결과)
 	@Override
-	public EventDetail getEventDetailById(Long eventId) throws Exception {
-	    return eventDAO.selectEventDetailById(eventId);
+	public EventDetail getEventDetailById(Map<String, Object> params) throws Exception {
+	    return eventDAO.selectEventDetailById(params);
 	}
 	
 	// 이벤트 취소 버튼 (취소 시, event_application row 삭제)
