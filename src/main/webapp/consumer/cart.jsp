@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="<c:url value='/tagcss/modalRecent.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/productCard.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/tag.css'/>" />
+<link rel="stylesheet" href="<c:url value='/consumer/css/toast.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>" />
@@ -127,8 +128,9 @@
 											<div style="display: flex; gap: 8px;">
 												<div class="wishlist-btn"
 													data-product-id="${item.productId}">
-													<my:heartBtn state="${heartState}" onlyIcon="true"
-														hasCount="false" />
+													<my:heartBtn state="${item.isWished ? 'active' : 'default'}" 
+													onlyIcon="true"
+													hasCount="false" />
 												</div>
 												<button class="delete-btn"
 													data-cart-item-id="${item.cartItemId}">
@@ -179,10 +181,12 @@
 	<%@ include file="/consumer/footer.jsp"%>
 
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="<c:url value='/consumer/js/addToWishlist.js'/>"></script>
 	<script src="<c:url value='/consumer/js/cart.js'/>"></script>
 
 	<script>
-document.addEventListener("DOMContentLoaded", () => {
+	/* 이 부분은 js에 이미 있음*/
+/* document.addEventListener("DOMContentLoaded", () => {
 
   document.body.addEventListener("click", (e) => {
     const btn = e.target.closest(".wishlist-btn .heart-btn");
@@ -218,7 +222,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch(err => console.error(err));
   });
 
-});
+}); */
 </script>
 
 

@@ -174,10 +174,9 @@
 		oi.tracking_no as trackingNo,
 		oi.carrier_name as carrierName,
 		oi.updated_at as updatedAt,
-		p.name as
-		productName,
-		b.brand_name as
-		brandName,
+		p.name as productName,
+		p.thumbnail_file_id as thumbnailFileId,
+		b.brand_name as brandName,
 		po.option_value as optionValue
 		FROM orders o
 		JOIN order_item
@@ -417,19 +416,22 @@
 		AND status IN ('PAID', 'PREPARING')
 	</update>
 
-	<!-- ========== [소비자] 주문 취소 시 재고 복구 -->
-	<update id="restoreStockOnCancel" parameterType="long">
+	<!-- [소비자] 옵션 상품 재고 복구 -->
+	<update id="restoreOptionStock" parameterType="long">
 		UPDATE product_option po
-		JOIN order_item oi ON po.product_option_id = oi.option_id
+		INNER JOIN order_item oi ON po.product_option_id = oi.option_id
 		SET po.stock_qty = po.stock_qty + oi.quantity
 		WHERE oi.order_item_id = #{orderItemId}
-		AND oi.option_id IS NOT NULL;
+		AND oi.option_id IS NOT NULL
+	</update>
 
+	<!-- [소비자] (옵션 없을 시) 일반 상품 재고 복구 -->
+	<update id="restoreProductStock" parameterType="long">
 		UPDATE product p
-		JOIN order_item oi ON p.product_id = oi.product_id
+		INNER JOIN order_item oi ON p.product_id = oi.product_id
 		SET p.stock_qty = p.stock_qty + oi.quantity
 		WHERE oi.order_item_id = #{orderItemId}
-		AND oi.option_id IS NULL;
+		AND oi.option_id IS NULL
 	</update>
 
 

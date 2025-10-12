@@ -1,5 +1,6 @@
 package service.consumer;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,42 @@ public class ReviewServiceImpl implements ReviewService {
 		}
 		List<Review> reviews = reviewDAO.selectReviewsByProductId(productId);
 		return reviews; // 빈 리스트라도 반환
+	}
+
+	// 페이지네이션용 리뷰 조회
+	@Override
+	public List<Map<String, Object>> getReviewsByProductIdWithPaging(Long productId, int page, int pageSize) throws Exception {
+		if (productId == null || productId <= 0) {
+			throw new IllegalArgumentException("유효하지 않은 상품 ID입니다.");
+		}
+		
+		// null 체크 및 기본값 설정
+		if (page < 1) {
+			page = 1;
+		}
+		if (pageSize < 1) {
+			pageSize = 10;
+		}
+		
+		// OFFSET 계산
+		int offset = (page - 1) * pageSize;
+		
+		// Map으로 파라미터 전달
+		Map<String, Object> params = new HashMap<>();
+		params.put("productId", productId);
+		params.put("limit", pageSize);
+		params.put("offset", offset);
+		
+		return reviewDAO.selectReviewsByProductIdWithPaging(params);
+	}
+
+	// 리뷰 총 개수 조회
+	@Override
+	public int getReviewCount(Long productId) throws Exception {
+		if (productId == null || productId <= 0) {
+			throw new IllegalArgumentException("유효하지 않은 상품 ID입니다.");
+		}
+		return reviewDAO.getReviewCountByProductId(productId);
 	}
 
 	// 리뷰 요약 가져오기
@@ -62,10 +99,10 @@ public class ReviewServiceImpl implements ReviewService {
 		}
 		reviewDAO.insertReview(review);
 	}
-	
+
 	@Override
 	public List<Map<String, Object>> testQuery(Long memberId) throws Exception {
-	    System.out.println("Service - testQuery 호출");
-	    return reviewDAO.testQuery(memberId);
+		System.out.println("Service - testQuery 호출");
+		return reviewDAO.testQuery(memberId);
 	}
 }

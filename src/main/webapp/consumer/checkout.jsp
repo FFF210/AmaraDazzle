@@ -24,8 +24,8 @@
 <link rel="stylesheet" href="<c:url value='/tagcss/textInput.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 
-<!-- 토스 sdk 버전2 -->
-<script src="https://js.tosspayments.com/v2/standard"></script>
+<!-- 토스 sdk 버전1 -->
+<script src="https://js.tosspayments.com/v1"></script>
 </head>
 <body>
 	<!-- 헤더 include -->

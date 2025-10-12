@@ -91,34 +91,34 @@
 				</div>
 
 				<div class="order-status-box">
-					<div class="status-item ${activeStatus eq 'order' ? 'active' : ''}">
+					<a href="/store/mypage/orderList?status=ORDER" class="status-item ${activeStatus eq 'order' ? 'active' : ''}">
 						<div class="status-count">${orderSummary.orderCount}</div>
 						<div class="status-label">주문접수</div>
-					</div>
+					</a>
 
-					<div
+					<a href="/store/mypage/orderList?status=ORDER"
 						class="status-item ${activeStatus eq 'payment' ? 'active' : ''}">
 						<div class="status-count">${orderSummary.paymentCount}</div>
 						<div class="status-label">결제완료</div>
-					</div>
+					</a>
 
-					<div
+					<a href="/store/mypage/orderList?status=ORDER"
 						class="status-item ${activeStatus eq 'shipping' ? 'active' : ''}">
 						<div class="status-count">${orderSummary.shippingCount}</div>
 						<div class="status-label">배송준비중</div>
-					</div>
+					</a>
 
-					<div
+					<a href="/store/mypage/orderList?status=ORDER"
 						class="status-item ${activeStatus eq 'delivered' ? 'active' : ''}">
 						<div class="status-count">${orderSummary.deliveredCount}</div>
 						<div class="status-label">배송중</div>
-					</div>
+					</a>
 
-					<div
+					<a href="/store/mypage/orderList?status=ORDER"
 						class="status-item ${activeStatus eq 'confirmed' ? 'active' : ''}">
 						<div class="status-count">${orderSummary.confirmedCount}</div>
 						<div class="status-label">배송완료</div>
-					</div>
+					</a>
 				</div>
 			</div>
 
@@ -162,7 +162,7 @@
 						<c:set var="__isPlannedInt" value="${p.isPlanned ? 1 : 0}" />
 
 						<my:productCard brand="${p.brandName}" productId="${p.productId}"
-							title="${p.name}" isWished="1"
+							title="${p.name}" isWished="${p.isWished}"
 							isSale="${p.discountType ne null and p.discountValue ne null 
           and p.startDate ne null 
           and p.endDate ne null 
@@ -263,5 +263,6 @@
 
 	<!-- 하단 푸터 -->
 	<%@ include file="/consumer/footer.jsp"%>
+	<script src="<c:url value='/consumer/js/addToWishlist.js'/>"></script>
 </body>
 </html>

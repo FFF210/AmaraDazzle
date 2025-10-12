@@ -130,119 +130,126 @@ public class Checkout extends HttpServlet {
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
 
-
 		try {
-	        // 1. 세션에서 회원 정보 확인
-	        HttpSession session = request.getSession();
-	        Long memberId = (Long) session.getAttribute("memberId");
+			// 1. 세션에서 회원 정보 확인
+			HttpSession session = request.getSession();
+			Long memberId = (Long) session.getAttribute("memberId");
 
-	        if (memberId == null) {
-	            response.sendRedirect(request.getContextPath() + "/store/login");
-	            return;
-	        }
+			if (memberId == null) {
+				response.sendRedirect(request.getContextPath() + "/store/login");
+				return;
+			}
 
-	        // 2. 디버깅: 파라미터 확인
-	        System.out.println("=== 받은 파라미터 확인 ===");
-	        System.out.println("productId: " + request.getParameter("productId"));
-	        System.out.println("brandId: " + request.getParameter("brandId"));
-	        System.out.println("shipRecipient: " + request.getParameter("shipRecipient"));
-	        System.out.println("subtotalAmount: " + request.getParameter("subtotalAmount"));
-	        
-	        // 3. 주문 데이터 수집 (null 체크 추가)
-	        Map<String, Object> orderData = new HashMap<>();
-	        
-	        // 배송지 정보
-	        orderData.put("memberId", memberId);
-	        orderData.put("shipRecipient", request.getParameter("shipRecipient"));
-	        orderData.put("shipPhone", request.getParameter("shipPhone"));
-	        orderData.put("shipPostcode", request.getParameter("shipPostcode"));
-	        orderData.put("shipLine1", request.getParameter("shipLine1"));
-	        orderData.put("shipLine2", request.getParameter("shipLine2"));
-	        orderData.put("note", request.getParameter("note"));
-	        
-	        // 상품 정보 (null 체크)
-	        String productIdStr = request.getParameter("productId");
-	        String brandIdStr = request.getParameter("brandId");
-	        
-	        if (productIdStr == null || brandIdStr == null) {
-	            System.out.println("ERROR: productId 또는 brandId가 null입니다!");
-	            response.setContentType("text/plain; charset=UTF-8");
-	            response.getWriter().write("ERROR:상품 정보가 없습니다 (productId: " + productIdStr + ", brandId: " + brandIdStr + ")");
-	            return;
-	        }
-	        
-	        System.out.println("productIdStr: [" + productIdStr + "], 길이: " + productIdStr.length());
-	        System.out.println("brandIdStr: [" + brandIdStr + "], 길이: " + brandIdStr.length());
+			// 2. 디버깅: 파라미터 확인
+			System.out.println("=== 받은 파라미터 확인 ===");
+			System.out.println("productId: " + request.getParameter("productId"));
+			System.out.println("brandId: " + request.getParameter("brandId"));
+			System.out.println("shipRecipient: " + request.getParameter("shipRecipient"));
+			System.out.println("subtotalAmount: " + request.getParameter("subtotalAmount"));
 
-	        if (productIdStr == null || productIdStr.isEmpty()) {
-	            // 에러!
-	        }
-	        
-	        orderData.put("productId", Long.parseLong(productIdStr));
-	        orderData.put("brandId", Long.parseLong(brandIdStr));
-	        
-	        // 여러 옵션 처리
-	        List<Map<String, Object>> itemsList = new ArrayList<>();
-	        for (int i = 0; i < 10; i++) {
-	            String optionId = request.getParameter("items[" + i + "].optionId");
-	            String quantity = request.getParameter("items[" + i + "].quantity");
-	            
-	            System.out.println("items[" + i + "].optionId: " + optionId);
-	            System.out.println("items[" + i + "].quantity: " + quantity);
-	            
-	            if (optionId != null && quantity != null) {
-	                Map<String, Object> item = new HashMap<>();
-	                item.put("optionId", Long.parseLong(optionId));
-	                item.put("quantity", Integer.parseInt(quantity));
-	                itemsList.add(item);
-	            } else {
-	                break;
-	            }
-	        }
-	        orderData.put("items", itemsList);
-	        
-	        // 금액 정보 (null 체크)
-	        String subtotalStr = request.getParameter("subtotalAmount");
-	        String discountStr = request.getParameter("discountAmount");
-	        String shippingStr = request.getParameter("shippingAmount");
-	        String totalStr = request.getParameter("totalAmount");
-	        
-	        if (subtotalStr == null || discountStr == null || shippingStr == null || totalStr == null) {
-	            System.out.println("ERROR: 금액 정보가 null입니다!");
-	            response.setContentType("text/plain; charset=UTF-8");
-	            response.getWriter().write("ERROR:금액 정보가 없습니다");
-	            return;
-	        }
-	        
-	        orderData.put("subtotalAmount", new BigDecimal(subtotalStr));
-	        orderData.put("discountAmount", new BigDecimal(discountStr));
-	        orderData.put("shippingAmount", new BigDecimal(shippingStr));
-	        orderData.put("totalAmount", new BigDecimal(totalStr));
-	        
-	        // 할인 정보
-	        orderData.put("usingCoupon", request.getParameter("usingCoupon"));
-	        String usingPointStr = request.getParameter("usingPoint");
-	        orderData.put("usingPoint", 
-	            (usingPointStr != null && !usingPointStr.isEmpty()) ? Integer.parseInt(usingPointStr) : 0);
+			// 3. 주문 데이터 수집 (null 체크 추가)
+			Map<String, Object> orderData = new HashMap<>();
 
-	        // 4. 임시 주문 ID 생성
-	        String temporaryOrderId = "ORDER_" + System.currentTimeMillis();
+			// 배송지 정보
+			orderData.put("memberId", memberId);
+			orderData.put("shipRecipient", request.getParameter("shipRecipient"));
+			orderData.put("shipPhone", request.getParameter("shipPhone"));
+			orderData.put("shipPostcode", request.getParameter("shipPostcode"));
+			orderData.put("shipLine1", request.getParameter("shipLine1"));
+			orderData.put("shipLine2", request.getParameter("shipLine2"));
+			orderData.put("note", request.getParameter("note"));
 
-	        // 5. 세션에 주문 데이터 저장
-	        session.setAttribute("pendingOrderData", orderData);
-	        session.setAttribute("temporaryOrderId", temporaryOrderId);
+			// 상품 정보 (null 체크)
+			String productIdStr = request.getParameter("productId");
+			String brandIdStr = request.getParameter("brandId");
 
-	        System.out.println("세션에 저장 완료: " + temporaryOrderId);
+			if (productIdStr == null || brandIdStr == null) {
+				System.out.println("ERROR: productId 또는 brandId가 null입니다!");
+				response.setContentType("text/plain; charset=UTF-8");
+				response.getWriter()
+						.write("ERROR:상품 정보가 없습니다 (productId: " + productIdStr + ", brandId: " + brandIdStr + ")");
+				return;
+			}
 
-	        // 6. 성공 응답
-	        response.setContentType("text/plain; charset=UTF-8");
-	        response.getWriter().write("SUCCESS:" + temporaryOrderId);
+			System.out.println("productIdStr: [" + productIdStr + "], 길이: " + productIdStr.length());
+			System.out.println("brandIdStr: [" + brandIdStr + "], 길이: " + brandIdStr.length());
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        response.setContentType("text/plain; charset=UTF-8");
-	        response.getWriter().write("ERROR:" + e.getMessage());
-	    }
+			if (productIdStr == null || productIdStr.isEmpty()) {
+				// 에러!
+			}
+
+			orderData.put("productId", Long.parseLong(productIdStr));
+			orderData.put("brandId", Long.parseLong(brandIdStr));
+
+			// 여러 옵션 처리
+			List<Map<String, Object>> itemsList = new ArrayList<>();
+			for (int i = 0; i < 10; i++) {
+				String optionId = request.getParameter("items[" + i + "].optionId");
+				String quantity = request.getParameter("items[" + i + "].quantity");
+
+				System.out.println("items[" + i + "].optionId: " + optionId);
+				System.out.println("items[" + i + "].quantity: " + quantity);
+
+				if (optionId != null && quantity != null) {
+					Map<String, Object> item = new HashMap<>();
+
+					// optionId가 빈 문자열이면 null로 처리
+					if (optionId != null && !optionId.trim().isEmpty()) {
+						item.put("optionId", Long.parseLong(optionId));
+					} else {
+						item.put("optionId", null); // 옵션 없는 상품
+					}
+
+					item.put("quantity", Integer.parseInt(quantity));
+					itemsList.add(item);
+				} else {
+					break;
+				}
+			}
+			orderData.put("items", itemsList);
+
+			// 금액 정보 (null 체크)
+			String subtotalStr = request.getParameter("subtotalAmount");
+			String discountStr = request.getParameter("discountAmount");
+			String shippingStr = request.getParameter("shippingAmount");
+			String totalStr = request.getParameter("totalAmount");
+
+			if (subtotalStr == null || discountStr == null || shippingStr == null || totalStr == null) {
+				System.out.println("ERROR: 금액 정보가 null입니다!");
+				response.setContentType("text/plain; charset=UTF-8");
+				response.getWriter().write("ERROR:금액 정보가 없습니다");
+				return;
+			}
+
+			orderData.put("subtotalAmount", new BigDecimal(subtotalStr));
+			orderData.put("discountAmount", new BigDecimal(discountStr));
+			orderData.put("shippingAmount", new BigDecimal(shippingStr));
+			orderData.put("totalAmount", new BigDecimal(totalStr));
+
+			// 할인 정보
+			orderData.put("usingCoupon", request.getParameter("usingCoupon"));
+			String usingPointStr = request.getParameter("usingPoint");
+			orderData.put("usingPoint",
+					(usingPointStr != null && !usingPointStr.isEmpty()) ? Integer.parseInt(usingPointStr) : 0);
+
+			// 4. 임시 주문 ID 생성
+			String temporaryOrderId = "ORDER_" + System.currentTimeMillis();
+
+			// 5. 세션에 주문 데이터 저장
+			session.setAttribute("pendingOrderData", orderData);
+			session.setAttribute("temporaryOrderId", temporaryOrderId);
+
+			System.out.println("세션에 저장 완료: " + temporaryOrderId);
+
+			// 6. 성공 응답
+			response.setContentType("text/plain; charset=UTF-8");
+			response.getWriter().write("SUCCESS:" + temporaryOrderId);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			response.setContentType("text/plain; charset=UTF-8");
+			response.getWriter().write("ERROR:" + e.getMessage());
+		}
 	}
 
 	/**
@@ -254,12 +261,12 @@ public class Checkout extends HttpServlet {
 		// 기본 정보
 		orderData.put("memberId", memberId);
 		orderData.put("phone", request.getParameter("phone"));
-		
+
 		// 전화번호 3개를 합치기
-	    String phone1 = request.getParameter("shipPhone1");
-	    String phone2 = request.getParameter("shipPhone2");
-	    String phone3 = request.getParameter("shipPhone3");
-	    String fullPhone = phone1 + "-" + phone2 + "-" + phone3;
+		String phone1 = request.getParameter("shipPhone1");
+		String phone2 = request.getParameter("shipPhone2");
+		String phone3 = request.getParameter("shipPhone3");
+		String fullPhone = phone1 + "-" + phone2 + "-" + phone3;
 
 		// 배송지 정보
 		orderData.put("shipRecipient", request.getParameter("shipRecipient"));

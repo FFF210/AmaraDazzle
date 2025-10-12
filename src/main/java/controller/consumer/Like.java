@@ -15,6 +15,7 @@ import service.consumer.BrandFollowService;
 import service.consumer.BrandFollowServiceImpl;
 import service.consumer.WishlistService;
 import service.consumer.WishlistServiceImpl;
+import util.PriceCalculator;
 
 /**
  * Servlet implementation class Like
@@ -49,21 +50,43 @@ public class Like extends HttpServlet {
 		}
 
 		try {
+			 // 페이지 파라미터
+            String pageParam = request.getParameter("page");
+            int currentPage = (pageParam != null) ? Integer.parseInt(pageParam) : 1;
+            int pageSize = 12; // 한 페이지에 12개
+            
+            // 탭 파라미터 
+            String tabParam = request.getParameter("tab");
+            String activeTab = (tabParam != null) ? tabParam : "0"; // 기본값 상품 탭
+            
 			// 위시리스트 서비스
 			WishlistService wishlistService = new WishlistServiceImpl();
-			List<Map<String, Object>> wishlist = wishlistService.getWishlistByMemberId(memberId);
-			int wishlistCount = wishlistService.getWishlistCount(memberId);
-
+			List<Map<String, Object>> wishlist = wishlistService.getWishlistByMemberIdWithPaging(memberId, currentPage, pageSize);			int wishlistCount = wishlistService.getWishlistCount(memberId);
+			int totalPages = (int) Math.ceil((double) wishlistCount / pageSize);
+			
+			// finalPrice 계산
+			for (Map<String, Object> item : wishlist) {
+			    Map<String, Object> saleInfo = PriceCalculator.calculateSaleInfoFromMap(item);
+			    item.put("finalPrice", saleInfo.get("finalPrice"));
+	        }
+			
 			// 브랜드 팔로우 서비스
 			BrandFollowService brandFollowService = new BrandFollowServiceImpl();
 			List<Map<String, Object>> brandFollowList = brandFollowService.getBrandFollowByMemberId(memberId);
-			int brandFollowCount = brandFollowService.getBrandFollowCount(memberId);
+			int brandFollowCount = brandFollowService.getBrandFollowCount(memberId);			
 
+			// queryString 
+			String queryString = "tab=" + activeTab;
+			
 			// JSP로 데이터 전달
 			request.setAttribute("wishlist", wishlist);
 			request.setAttribute("wishlistCount", wishlistCount);
+			request.setAttribute("currentPage", currentPage);
+            request.setAttribute("totalPages", totalPages);
 			request.setAttribute("brandFollowList", brandFollowList);
 			request.setAttribute("brandFollowCount", brandFollowCount);
+			request.setAttribute("activeTab", activeTab);
+	        request.setAttribute("queryString", queryString);
 
 			// 마이페이지 좋아요 페이지로 이동
 			request.getRequestDispatcher("/consumer/like.jsp").forward(request, response);
