@@ -12,8 +12,8 @@
 .drf-dates {
 	padding: 0 64px !important;
 }
-.since-drf-date, 
-.until-drf-date {
+
+.since-drf-date, .until-drf-date {
 	gap: 16px !important;
 	justify-content: unset !important;
 }
@@ -168,4 +168,40 @@
 	padding: 60px 20px !important;
 	color: #adb5bd;
 	font-size: 15px;
+}
+
+.btn-primary {
+	background: #111;
+}
+
+.btn-primary:hover {
+	background: #333;
+}
+
+.btn-outline {
+	border: 1px solid #222;
+	color: #111;
+}
+
+.btn-outline:hover {
+	background: #eee;
+}
+
+.btn {
+	border-radius: 0;
+	font-weight: 400;
+	padding: 0;
+}
+
+.page-header .header-btn {
+	border: 1px solid #222 !important;
+	color: #111 !important;
+	border-radius: 0 !important;
+	font-weight: 400 !important;
+	padding: 0 !important;
+	width: 130px;
+}
+
+.page-header .header-btn:hover {
+	background: #eee;
 }
