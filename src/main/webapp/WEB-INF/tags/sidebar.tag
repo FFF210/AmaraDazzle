@@ -77,8 +77,7 @@
 				<i class="bi bi-chevron-down submenu-icon"></i>
 			</button>
 			<ul class="submenu">
-				<li><a href="/brand2/eventList">이벤트 신청</a></li>
-				<li><a href="/brand2/eventList">이벤트 신청 조회</a></li>
+				<li><a href="/brand2/eventList">이벤트 신청 및 조회</a></li>
 			</ul>
 		</li>
 
