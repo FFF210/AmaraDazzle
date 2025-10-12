@@ -38,7 +38,7 @@ public class BannerDAOImpl implements BannerDAO {
 		return sqlSession.selectOne("mapper.banner.selectBannerById", bannerId);
 	}
 
-	// 배너 취소 버튼
+	// 배너 (결제or취소) 상태 변경
 	@Override 
 	public int updateBannerStatus(Map<String, Object> params) { 
 		int result = sqlSession.update("mapper.banner.updateBannerStatus", params);

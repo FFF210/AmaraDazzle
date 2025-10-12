@@ -67,7 +67,7 @@
 <body>
 	<my:layout>
 		<my:breadcrumb
-			items="배너광고 관리:/brand2/adbannerList, 배너광고 신청:/brand2/adbanner" />
+			items="배너광고 조회:/brand2/adbannerList, 배너광고 신청:/brand2/adbanner" />
 
 		<div class="page-tableFilter">
 			<my:tableFilter

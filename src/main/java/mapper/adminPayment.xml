@@ -31,8 +31,28 @@
 	<!-- [brand2] 배너, 상세보기 - 결제대기/결제완료용 -->
 	<select id="existsByBannerId" parameterType="long"
 		resultType="int">
-		SELECT COUNT(*) FROM admin_payment WHERE banner_id = #{bannerId}
+		SELECT COUNT(*) FROM admin_payment WHERE banner_id =
+		#{bannerId}
 	</select>
 
+	<!-- [brand2] 배너, 결제 내역 조회 (취소 시 사용) -->
+	<select id="selectPaymentByBannerId" parameterType="long"
+		resultType="adminPayment">
+		SELECT
+		payment_id AS paymentId,
+		payment_type AS paymentType,
+		payment_key AS paymentKey,
+		brand_id AS brandId,
+		amount,
+		membership_id AS membershipId,
+		banner_id AS bannerId,
+		pay_date AS payDate,
+		order_id AS orderId,
+		method,
+		order_name AS orderName,
+		receipt_url AS receiptUrl
+		FROM admin_payment
+		WHERE banner_id = #{bannerId}
+	</select>
 
 </mapper>

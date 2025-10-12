@@ -18,7 +18,7 @@ public interface AdbannerService {
 	Banner getBannerById(long bannerId) throws Exception;
 	
 	// 배너 취소 버튼
-	void cancelBanner(Map<String, Object> params) throws Exception;
+	void cancelBanner(Long bannerId) throws Exception;
 	
 	// AdminToss 결제 저장
 	void savePayment(AdminPayment adminPayment) throws Exception;
@@ -29,6 +29,6 @@ public interface AdbannerService {
 	// 배너, 상세보기 - 결제대기/결제완료용
 	boolean isBannerPaid(long bannerId) throws Exception;
 
-	
-	
+	// 배너 ID로 결제 내역 조회 (취소 시 사용)
+	AdminPayment getPaymentByBannerId(Long bannerId) throws Exception;
 }

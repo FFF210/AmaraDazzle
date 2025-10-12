@@ -21,7 +21,7 @@ public interface BannerDAO {
 	// 배너 상세보기 버튼
 	Banner selectBannerById(@Param("bannerId")long bannerId) throws Exception;
 	
-	// 배너 취소 버튼
+	// 배너 (결제or취소) 상태 변경
 	public int updateBannerStatus(Map<String, Object> params);
 	
 	// 디버깅
