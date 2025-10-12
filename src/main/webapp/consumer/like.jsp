@@ -60,11 +60,16 @@
 				<div class="user-info__bottom">
 					<div class="stat">
 						<span class="label">등급</span> <span class="value"><span
-							class="em">${sessionScope.memberGrade}</span></span>
+							class="em"><c:choose>
+									<c:when test="${sessionScope.memberGrade eq 'VIP'}">VIP</c:when>
+									<c:when test="${sessionScope.memberGrade eq 'GOLD'}">GOLD</c:when>
+									<c:when test="${sessionScope.memberGrade eq 'SILVER'}">SILVER</c:when>
+									<c:otherwise>일반</c:otherwise>
+								</c:choose></span></span>
 					</div>
 					<div class="stat">
 						<span class="label">포인트</span> <span class="value"><span
-							class="em">${sessionScope.memberPoints}</span> p</span>
+							class="em"><fmt:formatNumber value="${sessionScope.memberPoints}" pattern="#,###" /></span> p</span>
 					</div>
 					<div class="stat">
 						<span class="label">쿠폰</span> <span class="value"><span
@@ -184,9 +189,10 @@
 									<c:choose>
 										<c:when test="${not empty brandFollowList}">
 											<c:forEach var="brand" items="${brandFollowList}">
-												<my:brandNavCard brandName="${brand.brandName}" brandId="${brand.brandId}"
-													logoFileId="${brand.logoFileId}"
-													isWished="1" href="/store/brandDetail?brandId=${brand.brandId}"/>
+												<my:brandNavCard brandName="${brand.brandName}"
+													brandId="${brand.brandId}" logoFileId="${brand.logoFileId}"
+													isWished="1"
+													href="/store/brandDetail?brandId=${brand.brandId}" />
 											</c:forEach>
 										</c:when>
 										<c:otherwise>

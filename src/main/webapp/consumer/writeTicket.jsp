@@ -19,13 +19,13 @@
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/pageHeader.css'/>">
-<link rel="stylesheet"
-	href="<c:url value='/consumer/css/writeTicket.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/selectbox.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/textArea.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/textInput.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/imageBtn.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/consumer/css/writeTicket.css'/>">
 </head>
 <body>
 	<%-- 헤더 --%>
@@ -50,7 +50,8 @@
 
 			<!-- 문의 유형 -->
 			<div class="inquiry-type">
-				<label>문의 유형 <span style="color: red;">*</span></label>
+				<label style="color: #111; font-size: 15px;">문의 유형 <span
+					style="color: red;">*</span></label>
 				<my:selectbox id="categorySelect" size="lg"
 					items="주문,취소,환불,교환,배송,결제,이벤트,사이트 이용 오류/개선" initial="선택해주세요" />
 				<!-- 실제 form 제출용 hidden input -->
@@ -59,7 +60,8 @@
 
 			<!-- 주문 번호 (주문 관련일 때만 표시) -->
 			<div class="order-number" id="orderSection" style="display: none;">
-				<label>주문 번호 <span style="color: red;">*</span></label>
+				<label style="color: #111; font-size: 15px;">주문 번호 <span
+					style="color: red;">*</span></label>
 				<my:textInput id="orderCode" name="orderCode"
 					placeholder="주문 시 발급받은 주문번호를 입력해주세요 (예: 20250104-010001)"
 					type="default" size="lg" state="default" />
@@ -67,31 +69,20 @@
 
 			<!-- 내용 -->
 			<div class="write-form">
-				<label>내용 <span style="color: red;">*</span></label>
+				<label style="color: #111; font-size: 15px;">내용 <span
+					style="color: red;">*</span></label>
 				<my:textArea name="question" placeholder="문의 내용을 입력하세요" />
 			</div>
 
 			<!-- 이미지 업로드 (최대 3개) -->
-			<%-- <div class="upload-image">
-				<label>이미지 첨부 <br>(선택, 최대 3개)</label>
-				<div style="display: flex; gap: 10px; margin-top: 10px;">
-					<my:imageBtn name="image1" />
-					<my:imageBtn name="image2" />
-					<my:imageBtn name="image3" />
-				</div>
-				<!-- 업로드된 파일 ID를 저장할 hidden input -->
-				<input type="hidden" name="image1FileId" id="image1FileId">
-				<input type="hidden" name="image2FileId" id="image2FileId">
-				<input type="hidden" name="image3FileId" id="image3FileId">
-			</div> --%>
-
-			<!-- tag부분 안 돼서 기본으로 추가해뒀는데 css를 전혀 건드리지 않아서 엉망이에요... -->
-			<!-- 이미지 업로드 (최대 3개) -->
 			<div class="upload-image">
-				<label>이미지 첨부 (선택, 최대 3개)</label>
+				<label style="color: #111; font-size: 15px;">이미지 첨부 <br>
+					<span style="color: #777; font-size: 14px;">최대 3개</span></label>
+
 				<div class="image-upload-area"
-					style="display: flex; gap: 20px; margin-top: 10px;">
-					<div class="image-upload-item">
+					style="display: flex; gap: 10px;">
+
+					<!-- <div class="image-upload-item">
 						<label for="imageFile1"
 							style="display: block; margin-bottom: 5px; font-size: 14px;">이미지
 							1</label> <input type="file" id="imageFile1" accept="image/*"
@@ -102,6 +93,7 @@
 						<span id="fileName1"
 							style="font-size: 12px; color: #666; display: block; margin-top: 5px;"></span>
 					</div>
+					
 					<div class="image-upload-item">
 						<label for="imageFile2"
 							style="display: block; margin-bottom: 5px; font-size: 14px;">이미지
@@ -113,6 +105,7 @@
 						<span id="fileName2"
 							style="font-size: 12px; color: #666; display: block; margin-top: 5px;"></span>
 					</div>
+					
 					<div class="image-upload-item">
 						<label for="imageFile3"
 							style="display: block; margin-bottom: 5px; font-size: 14px;">이미지
@@ -123,9 +116,69 @@
 							style="display: none; max-width: 100px; max-height: 100px; border: 1px solid #ddd; margin-top: 5px;">
 						<span id="fileName3"
 							style="font-size: 12px; color: #666; display: block; margin-top: 5px;"></span>
+					</div> -->
+
+
+					<div class="image-upload-item">
+						<!-- 미리보기 이미지 (클릭 시 파일 선택창 열림) -->
+						<img
+							src="${not empty image1FileId 
+            ? pageContext.request.contextPath.concat('/image?fileId=').concat(image1FileId) 
+            : pageContext.request.contextPath.concat('/image/plus.png')}"
+							id="preview-image1" alt="이미지 1" width="100px"
+							style="cursor: pointer;"
+							onclick="document.getElementById('image1').click();" />
+
+						<!-- 실제 파일 선택 input -->
+						<input type="file" id="image1" name="image1" accept="image/*"
+							style="display: none;" onchange="readURL(this,'preview-image1');" />
+
+						<!-- 서버로 전달할 hidden 파일 ID -->
+						<input type="hidden" id="image1FileId" name="image1FileId"
+							value="${image1FileId}" />
 					</div>
+
+					<div class="image-upload-item">
+						<!-- 미리보기 이미지 (클릭 시 파일 선택창 열림) -->
+						<img
+							src="${not empty image2FileId 
+            ? pageContext.request.contextPath.concat('/image?fileId=').concat(image2FileId) 
+            : pageContext.request.contextPath.concat('/image/plus.png')}"
+							id="preview-image2" alt="이미지 2" width="100px"
+							style="cursor: pointer;"
+							onclick="document.getElementById('image2').click();" />
+
+						<!-- 실제 파일 선택 input -->
+						<input type="file" id="image2" name="image2" accept="image/*"
+							style="display: none;" onchange="readURL(this,'preview-image2');" />
+
+						<!-- 서버로 전달할 hidden 파일 ID -->
+						<input type="hidden" id="image2FileId" name="image2FileId"
+							value="${image2FileId}" />
+					</div>
+
+
+					<div class="image-upload-item">
+						<!-- 미리보기 이미지 (클릭 시 파일 선택창 열림) -->
+						<img
+							src="${not empty image3FileId 
+            ? pageContext.request.contextPath.concat('/image?fileId=').concat(image3FileId) 
+            : pageContext.request.contextPath.concat('/image/plus.png')}"
+							id="preview-image3" alt="이미지 3" width="100px"
+							style="cursor: pointer;"
+							onclick="document.getElementById('image3').click();" />
+
+						<!-- 실제 파일 선택 input -->
+						<input type="file" id="image3" name="image3" accept="image/*"
+							style="display: none;" onchange="readURL(this,'preview-image3');" />
+
+						<!-- 서버로 전달할 hidden 파일 ID -->
+						<input type="hidden" id="image3FileId" name="image3FileId"
+							value="${image3FileId}" />
+					</div>
+
 				</div>
-			</div> 
+			</div>
 
 			<!-- 답변 주체 (hidden, 기본값 ADMIN) -->
 			<input type="hidden" name="recieverType" id="recieverTypeInput"
@@ -331,6 +384,27 @@ document.getElementById('ticketForm').addEventListener('submit', function(e) {
         return;
     }
 });
+
+
+//========== 업로드 한 이미지 미리보기 함수 ==========
+function readURL(input, previewId) {
+    const preview = document.getElementById(previewId);
+    const fileNameSpan = document.getElementById("fileName" + previewId.replace(/\D/g, ''));
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            preview.src = e.target.result;
+            preview.style.display = "block";
+        };
+        reader.readAsDataURL(input.files[0]);
+        fileNameSpan.textContent = input.files[0].name;
+    } else {
+        preview.src = "<c:url value='/image/plus.png'/>";
+        fileNameSpan.textContent = "";
+    }
+}
+
 </script>
 </body>
 </html>

@@ -33,7 +33,6 @@ OrderStatusCard 컴포넌트 (JSP include용)
         <h3 class="order-status-title">${title}</h3>
         <button class="more-btn" type="button">
             <span class="more-text">더보기</span>
-            <span class="more-icon">›</span>
         </button>
     </div>
 

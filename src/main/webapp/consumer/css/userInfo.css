@@ -3,7 +3,7 @@
 /* 루트 래퍼 */
 .user-info {
   width: 824px;
-  height: 115px;
+  height: fit-content;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -14,7 +14,7 @@
   background: #fff;
 
   /* 강조 색 커스텀 */
-  --ui-accent: #9C2EF5;
+  --ui-accent: #7421C4;
   --ui-accent-weak: rgba(156, 46, 245, 0.10);
   --ui-text-strong: #000;
   --ui-text: #333;
@@ -32,16 +32,16 @@
 }
 
 .user-info .greeting {
-  color: #333;
-font-size: 20px;
+  color: #111;
+font-size: 18px;
 font-style: normal;
-font-weight: 600;
+font-weight: 500;
 line-height: 120%; /* 28.8px */
 letter-spacing: -0.48px;
 }
 
 .user-info .greeting .name {
-  color: var(--ui-text-strong);
+	font-weight: 600;
 }
 
 /* 등급 뱃지 기본 스타일 */
@@ -93,17 +93,17 @@ letter-spacing: -0.48px;
 }
 
 .user-info .stat .label {
-  color: #666;
-  font: 600 16px/1.4 "Noto Sans KR", sans-serif;
+  color: #333;
+  font: 500 14px/1.4 "Noto Sans KR", sans-serif;
   letter-spacing: -0.1px;
 }
 
 .user-info .stat .value {
   color: #333;
-  font: 600 16px/1.4 "Noto Sans KR", sans-serif;
+  font: 600 14px/1.4 "Noto Sans KR", sans-serif;
 }
 
 .user-info .stat .value .em {
-  color: var(--ui-accent);
-  font-weight: 800;
+  color: #7421C4;
+  font-weight: 600;
 }

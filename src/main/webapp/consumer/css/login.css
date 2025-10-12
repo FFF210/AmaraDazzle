@@ -1,40 +1,35 @@
 @charset "UTF-8";
 
-body.login-page {
-	min-height: 100vh;
-	min-width: 1200px;
-	margin: 0;
-	display: flex;
-	flex-direction: column;	
+.text-input {
+	border-radius: 0;
+}
+
+.text-input:focus {
+	border: 1px solid #222 !important;
+	box-shadow: none;
 }
 
 .login-container {
-	flex: 1;
-	display: flex;
-    max-width: 380px;
-    flex-direction: column;
-	margin: 80px auto;
-	text-align: center;	
-    align-items: center;
-    background-color: white;
-    padding: 40px 20px;
+	max-width: 380px;
+	margin: 100px auto;
+	text-align: center;
 }
 
 .login-title {
-	margin: 20px 0 40px 0;
+	margin: 60px 0;
 	text-align: center;
 	color: #000;
-	font-size: 24px;
-	font-weight: 600;
+	font-size: 28px;
+	font-weight: 400;
 	line-height: 140%;
 }
 
 /* 입력 그룹 스타일 */
 .auth-form .input-group {
-    display: flex;
+	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	gap: 20px;
+	gap: 10px;
 	align-self: stretch;
 }
 
@@ -54,7 +49,6 @@ body.login-page {
 	line-height: 150%;
 	letter-spacing: 0.091px;
 }
-
 
 /* 옵션 영역 */
 .form-options {
@@ -94,10 +88,11 @@ body.login-page {
 }
 
 .btn.login {
-	width: 380px; 
-    height: 56px; 
-    margin: 56px 0 10px 0; 
+	width: 380px;
+	height: 56px;
+	margin: 30px 0 10px 0;
 }
+
 .btn.signup {
 	width: 100%;
 	margin: 0;
@@ -105,77 +100,72 @@ body.login-page {
 
 /* 가입 링크 */
 .auth-footer {
-	color: #464646;
+	color: #333;
 	font-size: 14px;
 	font-style: normal;
-	font-weight: 500;
+	font-weight: 400;
 	line-height: 150%;
 	letter-spacing: 0.08px;
 }
 
 .auth-footer .link {
-	color: #0C8CE9;
+	font-weight: 500;
+	color: #111;
 }
-
 
 /* 카카오 로그인 버튼 */
 .kakao-login-btn {
-    width: 380px; 
-    height: 56px; 
-    padding: 0;
-    background-color: #fee500;
-    color: #000;
-    border: none;
-    border-radius: 4px; /* 작은 모서리 둥글기 */
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+	width: 380px;
+	height: 56px;
+	padding: 0;
+	background-color: #fee500;
+	color: #000;
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	margin-bottom: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
 }
 
- /* 이미지 아이콘 사용 */
+/* 이미지 아이콘 사용 */
 .kakao-icon {
-    width: 30px;
-    height: 30px;  
+	width: 30px;
+	height: 30px;
 }
 
 .kakao-login-btn:hover {
-    opacity: 0.9; /* 마우스 오버시 살짝 투명하게 */
-    transform: translateY(-1px); /* 살짝 위로 올라오는 효과 */
+	opacity: 0.9; /* 마우스 오버시 살짝 투명하게 */
+	transform: translateY(-1px); /* 살짝 위로 올라오는 효과 */
 }
 
 .kakao-login-btn:active {
-    transform: translateY(0); /* 클릭시 원래 위치로 */
-    opacity: 0.8;
+	transform: translateY(0); /* 클릭시 원래 위치로 */
+	opacity: 0.8;
 }
 
-/* 가입 링크 */
-.auth-footer {
-	color: #464646;
-	font-size: 14px;
-	font-style: normal;
-	font-weight: 500;
-	line-height: 150%;
-	letter-spacing: 0.08px;
+.btn-primary {
+	background: #111;
 }
 
-.auth-footer .link {
-	color: #0C8CE9;
-}	
+.btn-primary:hover {
+	background: #333;
+}
 
-/* 반응형 디자인 */
-@media (max-width: 480px) {
-    .login-box {
-        padding: 30px 20px;
-        margin: 0 10px;
-    }
-    
-    .login-title {
-        font-size: 24px;
-    }
+.btn-outline {
+	border: 1px solid #222;
+	color: #111;
+}
+
+.btn-outline:hover {
+	background: #eee;
+}
+
+.btn {
+	border-radius: 0;
+	font-weight: 400;
+	padding: 0;
 }

@@ -51,11 +51,9 @@
 
 			<div class="myCoupoint-title">
 				<h3>마이 쿠폰</h3>
-				<div class="couponzone-button">
-					<button class="btn btn-primary btn-md"
-						onclick="location.href='<c:url value='/store/couponList'/>'">
-						쿠폰존 바로가기</button>
-				</div>
+				<button class="btn btn-primary btn-md"
+					onclick="location.href='<c:url value='/store/couponList'/>'">
+					쿠폰존 바로가기</button>
 			</div>
 
 			<!-- 쿠폰 섹션 -->
@@ -65,7 +63,7 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th style="width: 580px;">쿠폰명</th>
+								<th style="width: 500px;">쿠폰명</th>
 								<th style="width: 140px;">쿠폰사용조건</th>
 								<th style="width: 140px;">사용가능기간</th>
 							</tr>
@@ -92,7 +90,7 @@
 					</table>
 				</div>
 			</section>
-			
+
 			<div class="middle-devider"></div>
 			<div class="myCoupoint-title">
 				<h3>마이 포인트</h3>
@@ -113,7 +111,7 @@
 							<thead>
 								<tr>
 									<th style="width: 140px;">일자</th>
-									<th style="width: 580px;">내용</th>
+									<th style="width: 500px;">내용</th>
 									<th style="width: 140px;">적립/사용</th>
 								</tr>
 							</thead>
@@ -129,14 +127,13 @@
 								<!-- 포인트 내역 반복 출력 -->
 								<c:forEach var="point" items="${pointHistory}">
 									<tr>
-										<td><fmt:formatDate value="${point.createdAt}"
-												pattern="yyyy.MM.dd" /></td>
-										<td>${point.pointHistory}<c:if
-												test="${not empty point.orderId}">
-												<br>주문번호: ${point.orderId}
-                                        </c:if>
-										</td>
-										<td><span
+										<td style="color: #111;"><fmt:formatDate
+												value="${point.createdAt}" pattern="yyyy.MM.dd" /></td>
+										<td style="color: #111; text-align: left; padding: 20px;"><p>${point.pointHistory}</p>
+											<c:if test="${not empty point.orderId}">
+												<p style="color: #999;">주문번호: ${point.orderId}</p>
+											</c:if></td>
+										<td style="color: #111; font-weight: 500;"><span
 											class="${point.amount.startsWith('+') ? 'plus' : 'minus'}">
 												${point.amount}P </span></td>
 									</tr>

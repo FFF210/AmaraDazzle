@@ -46,10 +46,10 @@
 
 .section-title {
 	font-size: 22px;
-	font-weight: 700;
+	font-weight: 500;
 	line-height: 150%; /* 33px */
 	letter-spacing: 0.125px;
-	color: #333;
+	color: #111;
 }
 
 /* 상품 카드 그리드 (3개씩) */

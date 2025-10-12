@@ -2,7 +2,7 @@
 
 /* ===== 토큰 ===== */
  .drf-wrap {
-  --blue:#0C8CE9;
+  --blue:#222;
   --border:rgba(0,0,0,0.10);
   --radius:8px;
   --text:#333;
@@ -22,7 +22,6 @@
     justify-content: space-between;
 	align-items: stretch; /* 버튼 높이를 왼쪽 박스와 동일하게 */
 	gap: 0;
-	border-radius: var(--radius);
 	background: #fff;
 	overflow: hidden; /* 둥근 모서리 일체감 */
 	margin-bottom: 30px;
@@ -35,19 +34,19 @@
 	gap: 12px;
 	width: 100%;
 	padding: 20px;
-	background: #FAFAFA;
+	background: #f9f9f9;
 }
 
 /* 상단: 구매기간 + 개월 버튼 */
 .drf-header {
 	display: flex;
 	align-items: center;
-	gap: 12px;
+	gap: 20px;
 }
 
 .drf-label {
-	color: var(--gray);
-	font: 600 14px/1 "Noto Sans KR", sans-serif;
+	color: #111;
+	font: 500 14px "Noto Sans KR", sans-serif;
 	white-space: nowrap;
 }
 
@@ -65,12 +64,10 @@
 	padding: 8px 20px;
 	justify-content: center;
 	align-items: center;
-	border-radius: var(--radius);
-	/* 기본: 파랑 아웃라인 */
 	background: #fff;
 	border: 1px solid var(--blue);
 	color: var(--blue);
-	font: 700 14px/1 "Noto Sans KR", sans-serif;
+	font: 500 14px/1 "Noto Sans KR", sans-serif;
 	cursor: pointer;
 }
 
@@ -95,7 +92,7 @@
 
 .drf-tilde {
 	color: var(--gray);
-	font-weight: 600;
+	font-weight: 500;
 	padding: 0 8px;
 }
 
@@ -114,16 +111,16 @@
 	padding: 0 16px; /* 핵심 2: 상하 0 */
 	appearance: auto; /* 핵심 3: 기본 화살표 */
 	border: 1px solid var(--border);
-	border-radius: var(--radius);
 	background: #fff;
 	color: var(--text);
 	font: 500 14px/var(--sel-h) "Noto Sans KR", sans-serif;
 	box-sizing: border-box;
+	outline: none;
 }
 
 .drf-suffix {
-	color: gray;
-	font: 600 14px/1 "Noto Sans KR", sans-serif;
+	color: #111;
+	font: 500 14px "Noto Sans KR", sans-serif;
 }
 
 /* 오른쪽: 같은 높이의 파란 조회 버튼 (폭 77px 고정) */
@@ -139,41 +136,4 @@
 	font: 700 14px/1 "Noto Sans KR", sans-serif;
 	cursor: pointer;
 	padding: 0; /* 박스 높이와 정확히 맞춤 */
-}
-
-/* ===== Small 크기 ===== */
-
-.drf-sm .drf-dates {
-    flex-direction: column;
-    align-items: stretch;
-    
-    display: flex;
-    padding-left: 80px;
-    gap: 4px;
-}
-
-.drf-sm .since-drf-date,
-.drf-sm .until-drf-date {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.drf-sm .since-drf-date {
-    justify-content: flex-start;  /* 왼쪽 정렬 */
-}
-
-.drf-sm .until-drf-date {
-    justify-content: flex-end;  /* 오른쪽 정렬 */
-    width: auto;
-}
-
-.drf-sm .drf-tilde {
-    padding: 4px 0;
-    text-align: center;
-    align-self: center;
-}
-
-.drf-sm .drf-submit {
-	width: 77px;
 }
