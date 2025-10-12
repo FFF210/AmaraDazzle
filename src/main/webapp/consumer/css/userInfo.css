@@ -104,6 +104,6 @@ letter-spacing: -0.48px;
 }
 
 .user-info .stat .value .em {
-  color: var(--ui-accent);
+  color: #7421C4;
   font-weight: 600;
 }

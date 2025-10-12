@@ -69,7 +69,7 @@
 					</div>
 					<div class="stat">
 						<span class="label">포인트</span> <span class="value"><span
-							class="em">${sessionScope.memberPoints}</span> p</span>
+							class="em"><fmt:formatNumber value="${sessionScope.memberPoints}" pattern="#,###" /></span> p</span>
 					</div>
 					<div class="stat">
 						<span class="label">쿠폰</span> <span class="value"><span

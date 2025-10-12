@@ -1,6 +1,7 @@
 <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ tag body-content="empty"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <link rel="stylesheet" href="./css/userInfo.css" />
 
 <%-- ================================
@@ -66,7 +67,7 @@ Props
         </div>
         <div class="stat">
             <span class="label">포인트</span> 
-            <span class="value"><span class="em">${points}</span> p</span>
+            <span class="value"><span class="em"><fmt:formatNumber value="${points}" pattern="#,###" /></span> p</span>
         </div>
         <div class="stat">
             <span class="label">쿠폰</span> 

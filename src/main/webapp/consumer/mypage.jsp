@@ -63,11 +63,16 @@
 				<div class="user-info__bottom">
 					<div class="stat">
 						<span class="label">등급</span> <span class="value"><span
-							class="em">${memberInfo.grade}</span></span>
+							class="em"><c:choose>
+									<c:when test="${sessionScope.memberGrade eq 'VIP'}">VIP</c:when>
+									<c:when test="${sessionScope.memberGrade eq 'GOLD'}">GOLD</c:when>
+									<c:when test="${sessionScope.memberGrade eq 'SILVER'}">SILVER</c:when>
+									<c:otherwise>일반</c:otherwise>
+								</c:choose></span></span>
 					</div>
 					<div class="stat">
 						<span class="label">포인트</span> <span class="value"><span
-							class="em">${memberInfo.pointBalance}</span> p</span>
+							class="em"><fmt:formatNumber value="${sessionScope.memberPoints}" pattern="#,###" /></span> p</span>
 					</div>
 					<div class="stat">
 						<span class="label">쿠폰</span> <span class="value"><span
