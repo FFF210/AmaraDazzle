@@ -93,10 +93,10 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="order-header">
-					<h3 class="order-status-title">취소/반품/교환 조회</h3>
-				</div>
+				<h3 class="order-status-title">취소/반품/교환 조회</h3>
+			</div>
 
 			<!-- ============================ 2. 기간 조회 박스 ============================ -->
 			<form id="searchForm"
@@ -168,11 +168,11 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th style="width: 150px;">주문번호</th>
-							<th style="width: 340px;">상품</th>
-							<th style="width: 60px;">수량</th>
-							<th style="width: 100px;">구매가</th>
-							<th style="width: 120px;">상태</th>
+							<th style="width: 80px; padding: 0;">주문번호</th>
+							<th style="width: 150px; padding: 0;">상품</th>
+							<th style="width: 30px; padding: 0;">수량</th>
+							<th style="width: 60px; padding: 0;">주문금액</th>
+							<th style="width: 80px; padding: 0;">상태</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -187,74 +187,85 @@
 								<c:forEach var="item" items="${list}">
 									<tr>
 										<!-- 주문번호 -->
-										<td class="order-number-cell">
-											<div class="order-date">
+										<td class="order-number-cell" style="padding: 0;">
+											<div
+												style="display: flex; flex-direction: column; color: #111;">
 												<fmt:formatDate value="${item.updated_at}"
 													pattern="yyyy.MM.dd" />
+												<a
+													href="${pageContext.request.contextPath}/store/mypage/consumerOrderDetail?orderId=${item.orders_id}"
+													class="detail-link" style="color: #111; font-weight: 600;">${item.order_code}</a>
+												<!-- 상세보기 링크 -->
+												<c:choose>
+													<c:when test="${item.status == 'CANCELLED'}">
+														<span class="detail-link-disabled"
+															style="font-weight: 600;">취소완료</span>
+													</c:when>
+
+													<%-- 교환 관련 --%>
+													<c:when test="${fn:startsWith(item.status, 'EXCHANGE_')}">
+														<a
+															href="${pageContext.request.contextPath}/store/exchangeDetail?exchangeId=${item.exchange_id}"
+															class="detail-link">상세보기</a>
+													</c:when>
+
+													<%-- 회수중 (교환/반품 구분) --%>
+													<c:when test="${item.status == 'COLLECTING'}">
+														<c:choose>
+															<c:when test="${not empty item.exchange_id}">
+																<a
+																	href="${pageContext.request.contextPath}/store/exchangeDetail?exchangeId=${item.exchange_id}"
+																	class="detail-link">상세보기</a>
+															</c:when>
+															<c:when test="${not empty item.returns_id}">
+																<a
+																	href="${pageContext.request.contextPath}/store/returnDetail?returnsId=${item.returns_id}"
+																	class="detail-link">상세보기</a>
+															</c:when>
+														</c:choose>
+													</c:when>
+
+													<%-- 반품 관련 --%>
+													<c:when test="${fn:startsWith(item.status, 'RETURN_')}">
+														<a
+															href="${pageContext.request.contextPath}/store/returnDetail?returnsId=${item.returns_id}"
+															class="detail-link">상세보기</a>
+													</c:when>
+												</c:choose>
 											</div>
-											<div class="order-number">${item.order_code}</div>
-											
-											<!-- 상세보기 링크: 교환/반품만 표시, 취소는 표시 안함 -->
-											<c:choose>
-												<%-- 주문취소는 상세보기 없이 "취소완료" 표시할지 아니면 걍 없앨지...없애는 게 낫겠죠? --%>
-												<c:when test="${item.status == 'CANCELLED'}">
-													<span class="detail-link-disabled">취소완료</span>
-												</c:when>
-												
-												<%-- 교환 관련 --%>
-												<c:when test="${fn:startsWith(item.status, 'EXCHANGE_')}">
-													<a href="${pageContext.request.contextPath}/store/exchangeDetail?exchangeId=${item.exchange_id}"
-														class="detail-link">상세보기</a>
-												</c:when>
-												
-												<%-- 회수중 (교환/반품 구분) --%>
-												<c:when test="${item.status == 'COLLECTING'}">
-													<c:choose>
-														<c:when test="${not empty item.exchange_id}">
-															<a href="${pageContext.request.contextPath}/store/exchangeDetail?exchangeId=${item.exchange_id}"
-																class="detail-link">상세보기</a>
-														</c:when>
-														<c:when test="${not empty item.returns_id}">
-															<a href="${pageContext.request.contextPath}/store/returnDetail?returnsId=${item.returns_id}"
-																class="detail-link">상세보기</a>
-														</c:when>
-													</c:choose>
-												</c:when>
-												
-												<%-- 반품 관련 --%>
-												<c:when test="${fn:startsWith(item.status, 'RETURN_')}">
-													<a href="${pageContext.request.contextPath}/store/returnDetail?returnsId=${item.returns_id}"
-														class="detail-link">상세보기</a>
-												</c:when>
-											</c:choose>
 										</td>
 
 										<!-- 상품 정보 -->
-										<td>
-											<div style="display: flex; align-items: center; gap: 12px;">
-												<div class="product-image">이미지</div>
-												<div class="product-info">
-													<div class="product-brand">${item.brand_name}</div>
-													<div class="product-name">
-														<a href="${pageContext.request.contextPath}/store/productDetail?productId=${item.product_id}">
-															${item.name}
-															<c:if test="${not empty item.option_value}">
-																(${item.option_value})
-															</c:if>
-														</a>
-													</div>
+										<td style="padding: 0;"
+											onclick="location.href='${pageContext.request.contextPath}/store/productDetail?productId=${item.productId}'">
+											<div
+												style="display: flex; align-items: center; gap: 12px; padding: 20px 0;">
+												<img
+													src="${pageContext.request.contextPath}/image?fileId=${item.thumbnailFileId}"
+													alt="${item.name}"
+													style="width: 80px; height: 80px; object-fit: cover;">
+												<div class="product-info"
+													style="text-align: left; display: flex; flex-direction: column; width: 100%; height: fit-content; gap: 6px;">
+													<p class="product-brand"
+														style="color: #333; font-weight: 700; font-size: 13px;">${item.brand_name}</p>
+													<p class="product-name">${item.name}</p>
+													<c:if test="${not empty item.option_value}">
+														<P style="color: #888; font-weight: 400; font-size: 13px;">옵션
+															| ${item.option_value}</P>
+													</c:if>
 												</div>
 											</div>
 										</td>
 
 										<!-- 수량 -->
-										<td>${item.quantity}</td>
+										<td style="padding: 0; color: #111; font-size: 13px;">${item.quantity}</td>
 
 										<!-- 구매가 -->
-										<td><fmt:formatNumber value="${item.total}" pattern="#,###" />원</td>
+										<td style="padding: 0; color: #111; font-size: 13px;"><fmt:formatNumber
+												value="${item.total}" pattern="#,###" />원</td>
 
 										<!-- 상태 -->
-										<td>
+										<td style="padding: 0;">
 											<div class="order-status">
 												<c:choose>
 													<c:when test="${item.status == 'CANCELLED'}">주문취소</c:when>
@@ -270,50 +281,47 @@
 													<c:when test="${item.status == 'EXCHANGE_REJECTED'}">교환거절</c:when>
 													<c:when test="${item.status == 'EXCHANGE_COMPLETED'}">교환완료</c:when>
 													<c:otherwise>${item.status}</c:otherwise>
-												</c:choose>			
-											</div>
-											
-											<!-- 상태별 버튼 -->
+												</c:choose>
+											</div> <!-- 상태별 버튼 -->
 											<div class="status-button">
 												<c:choose>
 													<%-- 회수중: 회수 배송조회 (교환/반품 구분) --%>
 													<c:when test="${item.status == 'COLLECTING'}">
 														<c:choose>
 															<%-- 교환 회수중 --%>
-															<c:when test="${not empty item.exchange_id and not empty item.exchange_return_tracking_no}">
+															<c:when
+																test="${not empty item.exchange_id and not empty item.exchange_return_tracking_no}">
 																<button class="btn btn-outline btn-sm"
 																	onclick="trackDelivery('${item.exchange_return_tracking_no}', '${item.exchange_return_carrier_name}')">
-																	배송조회
-																</button>
+																	배송조회</button>
 															</c:when>
 															<%-- 반품 회수중 --%>
-															<c:when test="${not empty item.returns_id and not empty item.return_tracking_no}">
+															<c:when
+																test="${not empty item.returns_id and not empty item.return_tracking_no}">
 																<button class="btn btn-outline btn-sm"
 																	onclick="trackDelivery('${item.return_tracking_no}', '${item.return_carrier_name}')">
-																	배송조회
-																</button>
+																	배송조회</button>
 															</c:when>
 														</c:choose>
 													</c:when>
-													
+
 													<%-- 교환배송중: 교환 재배송 조회 --%>
 													<c:when test="${item.status == 'EXCHANGE_SHIPPING'}">
-														<c:if test="${not empty item.exchange_shipping_tracking_no}">
+														<c:if
+															test="${not empty item.exchange_shipping_tracking_no}">
 															<button class="btn btn-outline btn-sm"
 																onclick="trackDelivery('${item.exchange_shipping_tracking_no}', '${item.exchange_shipping_carrier_name}')">
-																배송조회
-															</button>
+																배송조회</button>
 														</c:if>
 													</c:when>
-													
+
 													<%-- 교환완료: 리뷰작성만 (교환은 1회 제한) --%>
 													<c:when test="${item.status == 'EXCHANGE_COMPLETED'}">
 														<button class="btn btn-outline btn-sm"
 															onclick="writeReview(${item.order_item_id})">
-															리뷰작성
-														</button>
+															리뷰작성</button>
 													</c:when>
-													
+
 													<%-- 기타 상태: 버튼 없음 --%>
 													<c:otherwise>
 														<span class="no-action">-</span>
@@ -331,7 +339,8 @@
 			<!-- 페이징 -->
 			<div class="page-pagination">
 				<my:pagination currentPage="${currentPage}"
-					totalPages="${totalPages}" baseUrl="/store/mypage/exchangeReturnCancelList?${queryString}" />
+					totalPages="${totalPages}"
+					baseUrl="/store/mypage/exchangeReturnCancelList?${queryString}" />
 			</div>
 		</div>
 	</div>
