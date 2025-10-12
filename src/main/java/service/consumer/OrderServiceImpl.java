@@ -549,29 +549,30 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public boolean cancelOrderItem(Long orderItemId) throws Exception {
 
-		// 1. 현재 상태 확인
-		String currentStatus = orderDAO.getOrderItemStatus(orderItemId);
-
-		if (currentStatus == null) {
-			throw new Exception("존재하지 않는 주문입니다.");
-		}
-
-		// 2. 취소 가능 여부 체크
-		if (!currentStatus.equals("PAID") && !currentStatus.equals("PREPARING")) {
-			throw new Exception("취소할 수 없는 상태입니다.");
-		}
-
-		// 3. 상태만 CANCELLED로 변경 (이미 있는 메서드 활용도 가능!)
-		int result = orderDAO.cancelOrderItem(orderItemId);
-
-		if (result == 0) {
-			throw new Exception("주문 취소에 실패했습니다.");
-		}
-		
-		// 4. 재고 복구
-		orderDAO.restoreStockOnCancel(orderItemId);
-
-		return true;
+		 // 1. 현재 상태 확인
+	    String currentStatus = orderDAO.getOrderItemStatus(orderItemId);
+	    
+	    if (currentStatus == null) {
+	        throw new Exception("존재하지 않는 주문입니다.");
+	    }
+	    
+	    // 2. 취소 가능 여부 체크
+	    if (!currentStatus.equals("PAID") && !currentStatus.equals("PREPARING")) {
+	        throw new Exception("취소할 수 없는 상태입니다.");
+	    }
+	    
+	    // 3. 상태 변경
+	    int result = orderDAO.cancelOrderItem(orderItemId);
+	    
+	    if (result == 0) {
+	        throw new Exception("주문 취소에 실패했습니다.");
+	    }
+	    
+	    // 4. 재고 복구 (둘 다 실행 - 조건에 맞는 것만 업데이트됨)
+	    orderDAO.restoreOptionStock(orderItemId);  // 옵션 있으면 실행
+	    orderDAO.restoreProductStock(orderItemId); // 옵션 없으면 실행
+	    
+	    return true;
 	}
 
 	// OrderDetail 용도=========================================

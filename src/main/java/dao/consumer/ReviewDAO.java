@@ -8,6 +8,12 @@ import dto.Review;
 public interface ReviewDAO {
 	// 리뷰 목록(productDetail 용)
 	List<Review> selectReviewsByProductId(Long productId) throws Exception;
+	
+	// 페이지네이션용 리뷰 목록 조회
+	List<Map<String, Object>> selectReviewsByProductIdWithPaging(Map<String, Object> params) throws Exception;
+		
+	//  리뷰 총 개수 조회
+	int getReviewCountByProductId(Long productId) throws Exception;
 
 	// 리뷰 요약(productDetail 용)
 	Map<String, Object> getReviewSummaryByProductId(Long productId) throws Exception;

@@ -133,13 +133,23 @@ public class OrderDAOImpl implements OrderDAO {
 		}
 	}
 
-	// 재고 복구
+	// 재고 복구 =========================
+	//옵션 있을 시
 	@Override
-	public void restoreStockOnCancel(Long orderItemId) throws Exception {
-		try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-			session.update("mapper.orders.restoreStockOnCancel", orderItemId);
-			session.commit();
-		}
+	public void restoreOptionStock(Long orderItemId) throws Exception {
+	    try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        session.update("mapper.orders.restoreOptionStock", orderItemId);
+	        session.commit();
+	    }
+	}
+	
+	//옵션 없을 시
+	@Override
+	public void restoreProductStock(Long orderItemId) throws Exception {
+	    try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        session.update("mapper.orders.restoreProductStock", orderItemId);
+	        session.commit();
+	    }
 	}
 
 	// ================ 취소/교환/반품 통합 목록 조회 ===================

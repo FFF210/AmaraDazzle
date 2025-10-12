@@ -135,7 +135,7 @@
 
 
 												<my:productCard brand="${p.brandName}"
-													productId="${p.productId}" title="${p.name}" isWished="1"
+													productId="${p.productId}" title="${p.productName}" isWished="1"
 													isSale="${p.discountType ne null and p.discountValue ne null 
           and p.startDate ne null 
           and p.endDate ne null 

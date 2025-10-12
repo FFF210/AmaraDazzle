@@ -93,14 +93,21 @@ public class OrderList extends HttpServlet {
 			// 5. JSP로 데이터 전달
 			request.setAttribute("orderResult", result);
 			request.setAttribute("orderSummary", summary);
+			request.setAttribute("currentPage", result.get("currentPage"));
+			request.setAttribute("totalPages", result.get("totalPages"));
+			request.setAttribute("totalCount", result.get("totalCount"));
 			
-			// 날짜 파라미터도 전달 (검색 조건 유지용)
-			request.setAttribute("startY", startY);
-			request.setAttribute("startM", startM);
-			request.setAttribute("startD", startD);
-			request.setAttribute("endY", endY);
-			request.setAttribute("endM", endM);
-			request.setAttribute("endD", endD);
+			// queryString 생성 (검색 조건 유지)
+			StringBuilder queryString = new StringBuilder();
+			if (startY != null && endY != null) {
+			    queryString.append("drfStartY=").append(startY)
+			               .append("&drfStartM=").append(startM)
+			               .append("&drfStartD=").append(startD)
+			               .append("&drfEndY=").append(endY)
+			               .append("&drfEndM=").append(endM)
+			               .append("&drfEndD=").append(endD);
+			}
+			request.setAttribute("queryString", queryString.toString());
 
 			// 6. JSP로 포워드
 			request.getRequestDispatcher("/consumer/orderList.jsp").forward(request, response);
@@ -117,7 +124,7 @@ public class OrderList extends HttpServlet {
 		}
 	}
 
-	// ===== ✅ 교환 가능 여부 체크 메서드 =====
+	// ===== 교환 가능 여부 체크 메서드 =====
 	private boolean canApplyExchange(Map<String, Object> item) {
 		String status = (String) item.get("status");
 
@@ -154,7 +161,7 @@ public class OrderList extends HttpServlet {
 		return true;
 	}
 
-	// ===== ✅ 반품 가능 여부 체크 메서드 =====
+	// ===== 반품 가능 여부 체크 메서드 =====
 	private boolean canApplyReturn(Map<String, Object> item) {
 		String status = (String) item.get("status");
 

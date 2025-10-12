@@ -6,14 +6,30 @@
 
 	<!-- =================소비자=================== -->
 	<!-- [소비자] 상품 ID로 해당 상품의 리뷰 목록 조회 (공개된 것만) [ProductDetail 용] -->
-	<select id="selectReviewsByProductId" parameterType="Long"
-		resultType="dto.Review">
-		SELECT * FROM review
-		WHERE product_id = #{productId}
-		AND
-		status = 'PUBLISHED'
-		ORDER BY questioned_at DESC
-		LIMIT 10
+	<select id="selectReviewsByProductId" parameterType="map"
+		resultType="java.util.Map">
+		SELECT
+		r.review_id,
+		r.member_id,
+		r.rating,
+		r.content,
+		r.questioned_at,
+		r.image1_file_id,
+		r.image2_file_id,
+		r.image3_file_id,
+		m.nickname,
+		cd.name AS skin_type,
+		po.option_value AS option_name
+		FROM review r
+		INNER JOIN member m ON r.member_id = m.member_id
+		LEFT JOIN code_detail cd 
+		ON m.skin_type_id = cd.code_detail_id
+		LEFT JOIN product_option po 
+		ON r.product_option_id = po.product_option_id
+		WHERE r.product_id = #{productId}
+		AND r.status = 'PUBLISHED'
+		ORDER BY r.questioned_at DESC
+		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
 	<!-- [소비자] 상품의 리뷰 요약 정보 조회 [ProductDetail 용] -->
@@ -32,6 +48,14 @@
 		SUM(CASE WHEN rating = 1 THEN 1
 		ELSE 0 END) as rating1Count
 		FROM review
+		WHERE product_id = #{productId}
+		AND status = 'PUBLISHED'
+	</select>
+
+	<!-- 상품의 리뷰 개수 조회 (페이징 용) -->
+	<select id="getReviewCountByProductId" parameterType="Long"
+		resultType="Integer">
+		SELECT COUNT(*) FROM review
 		WHERE product_id = #{productId}
 		AND status = 'PUBLISHED'
 	</select>
@@ -57,16 +81,21 @@
 		AS option_name
 		FROM order_item oi
 		INNER JOIN orders o ON oi.order_id = o.orders_id
-		INNER JOIN product p ON oi.product_id = p.product_id
-		LEFT JOIN product_option po ON oi.option_id = po.product_option_id
+		INNER JOIN product p
+		ON oi.product_id = p.product_id
+		LEFT JOIN product_option po ON
+		oi.option_id = po.product_option_id
 		WHERE o.member_id = #{memberId}
-		AND oi.status IN ('DELIVERED', 'CONFIRMED')
+		AND
+		oi.status IN ('DELIVERED', 'CONFIRMED')
 		AND NOT EXISTS (
 		SELECT 1
-		FROM review r
+		FROM
+		review r
 		WHERE r.order_item_id = oi.order_item_id
 		)
-		ORDER BY o.created_at DESC
+		ORDER BY o.created_at
+		DESC
 	</select>
 
 	<!-- ========= [소비자 마이페이지용] 내가 작성한 리뷰 목록 조회 ======================= -->

@@ -14,8 +14,7 @@ public interface WishlistDAO {
 	void deleteWishlist(Map<String, Object> params) throws Exception;
 
 	// ================[소비자] 위시리스트 목록 조회 ===================
-	List<Map<String, Object>> selectWishlistByMemberId(Long memberId);
-
+	List<Map<String, Object>> selectWishlistByMemberId(Map<String, Object> params);
 	// ================[소비자] 찜 개수 조회 ===================
 	int countWishlistByMemberId(Long memberId);
 }
