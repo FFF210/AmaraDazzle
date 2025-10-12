@@ -1,195 +1,173 @@
 @charset "UTF-8";
+
+.pageHeader-wrapper {
+	background: #F2EBF1;
+}
+
+.pageHeader-wrapper>* {
+	width: 1020px;
+	margin: 0 auto;
+}
+
+.btn-primary {
+	background: #111;
+}
+
+.btn-primary:hover {
+	background: #333;
+}
+
+.btn-outline {
+	border: 1px solid #222;
+	color: #111;
+}
+
+.btn-outline:hover {
+	background: #eee;
+}
+
+.btn {
+	border-radius: 0;
+	font-weight: 400;
+	padding: 0;
+}
+
+.action-button button {
+	width: 130px;
+}
+
 /* ========== 메인 컨테이너 ========== */
 .main-content {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 40px 20px;
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 40px 20px;
 }
 
 /* ========== 문의 정보 박스 ========== */
 .ticket-info-box {
-    background: #f8f9fa;
-    border-radius: 8px;
-    padding: 24px;
-    margin-bottom: 30px;
+	background: #f9f9f9;
+	padding: 24px;
+	margin-bottom: 30px;
 }
 
 .info-row {
-    display: flex;
-    padding: 12px 0;
-    border-bottom: 1px solid #e9ecef;
+	display: flex;
+	padding: 12px 0;
 }
 
 .info-row:last-child {
-    border-bottom: none;
+	border-bottom: none;
 }
 
 .info-label {
-    width: 120px;
-    font-weight: 600;
-    color: #495057;
-    flex-shrink: 0;
+	width: 120px;
+	font-weight: 500;
+	color: #111;
+	flex-shrink: 0;
+	font-size: 15px;
 }
 
 .info-value {
-    color: #212529;
+	color: #111;
+	font-size: 15px;
 }
 
 /* ========== 상태 뱃지 ========== */
 .status-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 13px;
-    font-weight: 500;
+	display: inline-block;
+	font-size: 15px;
+	font-weight: 500;
+	color: #111;
 }
 
 .status-badge.answered {
-    background-color: #1e90ff;
-    color: #ffffff;
-}
-
-.status-badge.pending {
-    background-color: #ffc107;
-    color: #000000;
+	font-weight: 600;
 }
 
 /* ========== 내용 섹션 ========== */
 .content-section {
-    margin-bottom: 30px;
+	margin-bottom: 30px;
 }
 
 .section-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #212529;
-    margin-bottom: 16px;
-    padding-bottom: 8px;
-    border-bottom: 2px solid #212529;
+	font-size: 18px;
+	font-weight: 400;
+	color: #111;
+	padding-bottom: 8px;
+	border-bottom: 1px solid #ddd;
 }
 
 .content-box {
-    background: #ffffff;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 24px;
-    min-height: 150px;
+	font-size: 14px;
+	padding: 30px 0;
 }
 
 .question-text, .answer-text {
-    line-height: 1.7;
-    color: #495057;
-    white-space: pre-wrap;
-    word-break: break-word;
+	line-height: 1.7;
+	color: #111;
+	white-space: pre-wrap;
+	word-break: break-word;
 }
 
 /* ========== 답변 섹션 ========== */
-.answer-section {
-    background: #f0f8ff;
-    padding: 20px;
-    border-radius: 8px;
-}
-
 .answer-info {
-    margin-bottom: 12px;
+	margin-bottom: 12px;
 }
 
 .answer-date {
-    font-size: 14px;
-    color: #6c757d;
-}
-
-.answer-box {
-    background: #ffffff;
+	width: 100%;
+	display: flex;
+	align-items: flex-end;
+	justify-content: end;
+	color: #333;
+	font-size: 13px;
+	padding: 10px 0 0 0;
 }
 
 /* ========== 답변 대기 ========== */
 .pending-section {
-    text-align: center;
-    padding: 60px 20px;
+	text-align: center;
+	padding: 60px 20px;
 }
 
 .pending-message {
-    color: #6c757d;
+	color: #6c757d;
 }
 
 .pending-icon {
-    font-size: 48px;
-    display: block;
-    margin-bottom: 16px;
+	font-size: 48px;
+	display: block;
+	margin-bottom: 16px;
 }
 
 .pending-message p {
-    font-size: 16px;
-    font-weight: 600;
-    margin-bottom: 8px;
+	font-size: 16px;
+	font-weight: 500;
+	color: #777;
+	margin-bottom: 8px;
 }
 
 .pending-message small {
-    font-size: 14px;
+	font-size: 14px;
+	font-weight: 400;
+	color: #777;
 }
 
 /* ========== 첨부 이미지 ========== */
 .attached-images {
-    margin-top: 24px;
-}
-
-.attached-images h4 {
-    font-size: 15px;
-    font-weight: 600;
-    color: #495057;
-    margin-bottom: 12px;
+	margin-top: 24px;
 }
 
 .image-list {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-}
-
-.attached-img {
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid #dee2e6;
-    cursor: pointer;
-    transition: transform 0.2s;
-}
-
-.attached-img:hover {
-    transform: scale(1.05);
+	display: flex;
+	gap: 12px;
+	flex-wrap: wrap;
 }
 
 /* ========== 버튼 ========== */
 .action-button {
-    display: flex;
-    justify-content: center;
-    margin-top: 40px;
-    gap: 12px;
-}
-
-/* ========== 반응형 ========== */
-@media (max-width: 768px) {
-    .main-content {
-        padding: 20px 10px;
-    }
-    
-    .ticket-info-box {
-        padding: 16px;
-    }
-    
-    .info-row {
-        flex-direction: column;
-        gap: 4px;
-    }
-    
-    .info-label {
-        width: auto;
-    }
-    
-    .attached-img {
-        width: 100%;
-        height: auto;
-    }
+	display: flex;
+	justify-content: center;
+	margin-top: 40px;
+	gap: 12px;
 }

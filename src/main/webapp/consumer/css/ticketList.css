@@ -29,47 +29,69 @@
 	margin-bottom: 30px;
 }
 
+.table {
+	table-layout: fixed;
+	width: 100%;
+	border-collapse: collapse;
+	min-width: 0;
+}
+
+.table th, .table td {
+	border: none;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	word-break: keep-all;
+}
+
 /* ========== 테이블 래퍼 ========== */
 .table-wrapper {
-	background: #ffffff;
-	border-radius: 8px;
-	overflow: hidden;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: visible; /* 세로 스크롤 제거 */
+	height: auto; /* 높이 자동 확장 */
+	max-height: none;
 }
 
 /* ========== 테이블 스타일 ========== */
-.ticket-table {
-	width: 100%;
+/* 테이블 전체 기본선 제거 */
+.table {
 	border-collapse: collapse;
+	border: none;
+	width: 100%;
 }
 
-.ticket-table thead {
-	background-color: #f8f9fa;
-	border-bottom: 2px solid #e9ecef;
+/* 모든 셀의 기본선 제거 */
+.table th, .table td {
+	border: none;
 }
 
-.ticket-table thead th {
-	padding: 16px;
-	text-align: center;
-	font-weight: 600;
-	font-size: 14px;
-	color: #495057;
+/* 행 사이 아래쪽 테두리만 표시 */
+.table tr {
+	border-bottom: 1px solid #E5E7EB; /* 연한 회색 구분선 */
 }
 
-.ticket-table tbody tr {
-	border-bottom: 1px solid #e9ecef;
-	transition: background-color 0.2s;
+/* 헤더 상단선 추가 */
+.table thead tr:first-child {
+	border-top: 1.5px solid #E5E7EB;
 }
 
-.ticket-table tbody tr:hover {
-	background-color: #f8f9fa;
+/* 마지막 행 하단선도 유지 */
+.table tbody tr:last-child {
+	border-bottom: 1px solid #E5E7EB;
 }
 
-.ticket-table tbody td {
-	padding: 16px;
-	text-align: center;
-	font-size: 14px;
-	color: #495057;
+/* 좌우 여백 시각적으로 띄워주기 */
+.table-wrapper {
+	border-left: none;
+	border-right: none;
+	border: none;
+	border-radius: 0;
+}
+
+.table th {
+	font-size: 13px;
+	color: #111;
 }
 
 /* ========== 행 클릭 ========== */
