@@ -12,6 +12,7 @@
 		SELECT
 		p.product_id as productId,
 		p.brand_id as brandId,
+		p.thumbnail_file_id as thumbnailFileId,
 		p.name as productName,
 		p.price as originalPrice,
 		p.discount_type as

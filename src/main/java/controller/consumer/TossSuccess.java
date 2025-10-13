@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
@@ -41,24 +42,54 @@ public class TossSuccess extends HttpServlet {
 		String amount = request.getParameter("amount");
 		String orderId = request.getParameter("orderId");
 
-		System.out.println("=== 토스 결제 콜백 ===");
+		System.out.println("========================================");
+		System.out.println("=== 토스 결제 콜백 시작 ===");
 		System.out.println("paymentKey: " + paymentKey);
 		System.out.println("amount: " + amount);
 		System.out.println("orderId: " + orderId);
+		System.out.println("========================================");
 
 		try {
-			// 1. 토스페이먼츠 API 호출 준비
+			// 1. 세션 확인
+			HttpSession session = request.getSession();
+
+			System.out.println(">>> 1단계: 세션에서 주문 데이터 가져오기");
+			@SuppressWarnings("unchecked")
+			Map<String, Object> orderData = (Map<String, Object>) session.getAttribute("pendingOrderData");
+			String temporaryOrderId = (String) session.getAttribute("temporaryOrderId");
+
+			System.out.println("orderData null? " + (orderData == null));
+			System.out.println("temporaryOrderId: " + temporaryOrderId);
+
+			if (orderData == null) {
+				System.out.println("❌ 에러: 세션에 주문 정보가 없습니다!");
+				String errorMsg = URLEncoder.encode("세션만료-다시주문해주세요", "UTF-8");
+				response.sendRedirect(request.getContextPath() + "/consumer/error.jsp?message=" + errorMsg);
+				return;
+			}
+
+			if (!orderId.equals(temporaryOrderId)) {
+				System.out.println("❌ 에러: 주문 번호 불일치!");
+				System.out.println("orderId: " + orderId);
+				System.out.println("temporaryOrderId: " + temporaryOrderId);
+				String errorMsg = URLEncoder.encode("주문번호불일치", "UTF-8");
+				response.sendRedirect(request.getContextPath() + "/consumer/error.jsp?message=" + errorMsg);
+				return;
+			}
+
+			// 2. 토스페이먼츠 API 호출 준비
+			System.out.println(">>> 2단계: 토스 결제 승인 API 호출");
 			JSONObject obj = new JSONObject();
 			obj.put("orderId", orderId);
 			obj.put("amount", amount);
 			obj.put("paymentKey", paymentKey);
 
-			String widgetSecretKey = "test_sk_Poxy1XQL8RYPqzXP5Dk6rQVxB9lG";
+			String widgetSecretKey = "test_sk_6BYq7GWPVveXkXR7RvqG3NE5vbo1";
 			Base64.Encoder encoder = Base64.getEncoder();
 			byte[] encodedBytes = encoder.encode((widgetSecretKey + ":").getBytes(StandardCharsets.UTF_8));
 			String authorizations = "Basic " + new String(encodedBytes);
 
-			// 2. Toss 결제 승인 API 호출
+			// 3. Toss 결제 승인 API 호출
 			URL url = new URL("https://api.tosspayments.com/v1/payments/confirm");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestProperty("Authorization", authorizations);
@@ -73,6 +104,8 @@ public class TossSuccess extends HttpServlet {
 			int code = connection.getResponseCode();
 			boolean isSuccess = code == 200;
 
+			System.out.println("토스 응답 코드: " + code);
+
 			InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
 
 			JSONParser parser = new JSONParser();
@@ -80,65 +113,68 @@ public class TossSuccess extends HttpServlet {
 			JSONObject result = (JSONObject) parser.parse(apiReader);
 			responseStream.close();
 
-			System.out.println("토스 응답 코드: " + code);
 			System.out.println("토스 응답: " + result.toJSONString());
 
-			// 3. 성공/실패 처리
+			// 4. 성공/실패 처리
 			if (isSuccess) {
-				// ✅ 결제 성공!
-				HttpSession session = request.getSession();
-
-				// 세션에서 주문 데이터 가져오기
-				@SuppressWarnings("unchecked")
-				Map<String, Object> orderData = (Map<String, Object>) session.getAttribute("pendingOrderData");
-				String temporaryOrderId = (String) session.getAttribute("temporaryOrderId");
-
-				if (orderData == null) {
-					throw new Exception("세션에 주문 정보가 없습니다.");
-				}
-
-				if (!orderId.equals(temporaryOrderId)) {
-					throw new Exception("주문 번호가 일치하지 않습니다.");
-				}
+				System.out.println("✅ 토스 결제 승인 성공!");
 
 				// 결제 정보 추가
 				orderData.put("paymentKey", paymentKey);
 				orderData.put("paymentMethod", "CARD");
 
-				// 주문 생성
+				// 5. 주문 생성
+				System.out.println(">>> 3단계: DB에 주문 저장");
 				OrderService orderService = new OrderServiceImpl();
 				Long savedOrderId = orderService.createOrder(orderData);
 
-				System.out.println("주문 저장 완료: " + savedOrderId);
+				System.out.println("✅ 주문 저장 완료: orderId=" + savedOrderId);
 
-				// 재고 감소
+				// 6. 재고 감소
+				System.out.println(">>> 4단계: 재고 감소");
 				@SuppressWarnings("unchecked")
 				List<Map<String, Object>> items = (List<Map<String, Object>>) orderData.get("items");
 				if (items != null && !items.isEmpty()) {
 					orderService.decreaseStock(items);
-					System.out.println("재고 감소 완료");
+					System.out.println("✅ 재고 감소 완료: " + items.size() + "개 아이템");
 				}
 
-				// 세션 정리
+				// 7. 세션 정리
 				session.removeAttribute("pendingOrderData");
 				session.removeAttribute("temporaryOrderId");
+				System.out.println("✅ 세션 정리 완료");
 
-				// 주문 완료 페이지로 리다이렉트
-				response.sendRedirect(request.getContextPath() + "/store/orderComplete?orderId=" + savedOrderId);
+				// 8. 주문 완료 페이지로 리다이렉트
+				System.out.println(">>> 5단계: 주문 완료 페이지로 이동");
+				String redirectUrl = request.getContextPath() + "/store/orderComplete?orderId=" + savedOrderId;
+				System.out.println("리다이렉트 URL: " + redirectUrl);
+				response.sendRedirect(redirectUrl);
 
 			} else {
-				// ❌ 결제 실패!
-				System.out.println("결제 승인 실패!");
+				// 결제 실패
+				System.out.println("❌ 토스 결제 승인 실패!");
 				String errorMessage = (String) result.get("message");
-				response.sendRedirect(request.getContextPath() + 
-					"/consumer/error.jsp?message=결제승인실패:" + errorMessage);
+				System.out.println("에러 메시지: " + errorMessage);
+
+				String encodedMsg = URLEncoder.encode("결제승인실패:" + errorMessage, "UTF-8");
+				response.sendRedirect(request.getContextPath() + "/consumer/error.jsp?message=" + encodedMsg);
 			}
 
 		} catch (Exception e) {
-			System.out.println("=== 에러 발생 ===");
+			System.out.println("========================================");
+			System.out.println("❌❌❌ 치명적 에러 발생! ❌❌❌");
+			System.out.println("========================================");
 			e.printStackTrace();
-			response.sendRedirect(request.getContextPath() + 
-				"/consumer/error.jsp?message=" + e.getMessage());
-		}
-	}
-}
+
+			// ✅ 응답이 아직 커밋되지 않았을 때만 리다이렉트
+			if (!response.isCommitted()) {
+				try {
+					String encodedMsg = URLEncoder.encode("결제처리오류", "UTF-8");
+					response.sendRedirect(request.getContextPath() + "/consumer/error.jsp?message=" + encodedMsg);
+				} catch (Exception ex) {
+					response.sendRedirect(request.getContextPath() + "/consumer/error.jsp?message=PaymentError");
+				}
+			}
+		} 
+	}  
+} 

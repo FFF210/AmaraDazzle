@@ -1,8 +1,8 @@
- // 토스페이먼츠 클라이언트 키
+// 토스페이먼츠 클라이언트 키
 window.onload = function() {
 	console.log('checkout.js 로드됨');
-	
-	fillPhoneNumber();  
+
+	fillPhoneNumber();
 	calculateTotalAmount();
 	initEventListeners();
 
@@ -14,7 +14,7 @@ window.onload = function() {
 	}
 };
 
- // 이벤트 리스너 초기화
+// 이벤트 리스너 초기화
 function initEventListeners() {
 	console.log('이벤트 리스너 초기화');
 
@@ -32,29 +32,39 @@ function initEventListeners() {
 
 	document.querySelector('select[name="usingCoupon"]').addEventListener('change', function() {
 		let discountAmount = 0;
-		if (this.value === 'coupon1') discountAmount = 10000;
-		else if (this.value === 'coupon2') discountAmount = 5000;
 
-		document.getElementById('couponDiscount').textContent = '-' + discountAmount + ' 원';
+		if (this.value) {
+			const selectedOption = this.options[this.selectedIndex];
+			discountAmount = parseInt(selectedOption.getAttribute('data-amount')) || 0;
+		}
+
+		document.getElementById('couponDiscount').textContent = '-' + discountAmount.toLocaleString() + ' 원';
 		calculateTotal();
 	});
 
-	document.querySelector('.btn-outline.btn-md').addEventListener('click', findPostcode);
+	// 우편번호 찾기
+	const findPostcodeBtn = document.getElementById('findPostcodeBtn');
+	if (findPostcodeBtn) {
+		findPostcodeBtn.addEventListener('click', findPostcode);
+	}
 
-	const paymentButton = document.querySelector('.btn-primary.btn-lg');
-	paymentButton.addEventListener('click', function(e) {
-		console.log('결제하기 버튼 클릭!');
-		e.preventDefault();
+	// 결제하기 버튼
+	const paymentButton = document.getElementById('paymentBtn');
+	if (paymentButton) {
+		paymentButton.addEventListener('click', function(e) {
+			console.log('결제하기 버튼 클릭!');
+			e.preventDefault();
 
-		if (!validateForm()) {
-			return;
-		}
+			if (!validateForm()) {
+				return;
+			}
 
-		saveOrderDataToSession();
-	});
-}
+			saveOrderDataToSession();
+		});
+	}
+}  // ✅ 여기가 빠져있었어요!
 
- // 전화번호 자동 입력 함수
+// 전화번호 자동 입력 함수
 function fillPhoneNumber() {
 	const phone = window.checkoutData.memberPhone;
 	if (phone) {
@@ -70,7 +80,7 @@ function fillPhoneNumber() {
 	}
 }
 
- // 폼 유효성 검사
+// 폼 유효성 검사
 function validateForm() {
 	const recipient = document.getElementById('shipRecipient').value.trim();
 	const phone1 = document.getElementById('shipPhone1').value.trim();
@@ -104,7 +114,7 @@ function validateForm() {
 	return true;
 }
 
- // 우편번호 찾기
+// 우편번호 찾기
 function findPostcode() {
 	new daum.Postcode({
 		oncomplete: function(data) {
@@ -115,7 +125,7 @@ function findPostcode() {
 	}).open();
 }
 
- // 초기 금액 계산
+// 초기 금액 계산
 function calculateTotalAmount() {
 	const subtotal = window.checkoutData.subtotal || 0;
 	const shipping = window.checkoutData.shipping || 0;
@@ -126,7 +136,7 @@ function calculateTotalAmount() {
 	calculateTotal();
 }
 
- // 총 금액 계산
+// 총 금액 계산
 function calculateTotal() {
 	const subtotal = parseFloat(document.getElementById('subtotalAmount').value) || 0;
 	const couponDiscount = getCouponDiscountValue();
@@ -142,15 +152,19 @@ function calculateTotal() {
 	document.getElementById('pointEarn').textContent = earnPoint.toLocaleString() + ' 원';
 }
 
- // 쿠폰 할인 금액
+// 쿠폰 할인 금액
 function getCouponDiscountValue() {
-	const selectedCoupon = document.querySelector('select[name="usingCoupon"]').value;
-	if (selectedCoupon === 'coupon1') return 10000;
-	if (selectedCoupon === 'coupon2') return 5000;
-	return 0;
+	const couponSelect = document.querySelector('select[name="usingCoupon"]');
+
+	if (!couponSelect.value) {
+		return 0;
+	}
+
+	const selectedOption = couponSelect.options[couponSelect.selectedIndex];
+	return parseInt(selectedOption.getAttribute('data-amount')) || 0;
 }
 
- // 주문 데이터를 서버 세션에 저장
+// 주문 데이터를 서버 세션에 저장
 function saveOrderDataToSession() {
 	console.log('주문 데이터를 세션에 저장 시작');
 
@@ -176,10 +190,12 @@ function saveOrderDataToSession() {
 
 	const optionIdInputs = document.querySelectorAll('input[name^="items["][name$="].optionId"]');
 	const quantityInputs = document.querySelectorAll('input[name^="items["][name$="].quantity"]');
+	const unitPriceInputs = document.querySelectorAll('input[name^="items["][name$="].unitPrice"]');
 
 	for (let i = 0; i < optionIdInputs.length; i++) {
 		params.append('items[' + i + '].optionId', optionIdInputs[i].value);
 		params.append('items[' + i + '].quantity', quantityInputs[i].value);
+		params.append('items[' + i + '].unitPrice', unitPriceInputs[i].value);
 	}
 
 	params.append('subtotalAmount', document.getElementById('subtotalAmount').value);
@@ -215,7 +231,7 @@ function saveOrderDataToSession() {
 		});
 }
 
- // 결제 처리 (v1 방식)
+// 결제 처리 (v1 방식)
 function processPayment(temporaryOrderId) {
 	console.log('토스 결제 시작, orderId:', temporaryOrderId);
 

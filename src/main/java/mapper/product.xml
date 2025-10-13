@@ -19,9 +19,8 @@
 		stock_qty = stock_qty - #{quantity}
 		WHERE product_id = #{productId}
 		AND
-		has_option = 0 /* 옵션이 없는 상품만 */
-		AND stock_qty >= #{quantity} /* 재고가 충분할
-		때만 */
+		has_option = 0
+		AND stock_qty >= #{quantity} 
 	</update>
 
 	<!-- 옵션 재고 업데이트 (주문 시) *원래는 product_option* -->
@@ -29,8 +28,7 @@
 		UPDATE
 		product_option
 		SET stock_qty = stock_qty - #{quantity}
-		WHERE option_id =
-		#{optionId}
+		WHERE product_option_id = #{optionId}
 		AND stock_qty >= #{quantity}
 	</update>
 

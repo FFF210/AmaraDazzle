@@ -47,7 +47,7 @@ public class BrandDetail extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-	        Long brandId = Long.parseLong(request.getParameter("brandId"));
+			Long brandId = Long.parseLong(request.getParameter("brandId"));
 	        String category1IdStr = request.getParameter("category1Id");
 	        Long category1Id = (category1IdStr != null && !category1IdStr.isEmpty()) 
 	                            ? Long.parseLong(category1IdStr) : null;
@@ -61,8 +61,11 @@ public class BrandDetail extends HttpServlet {
 	        HttpSession session = request.getSession();
 	        Long memberId = (Long) session.getAttribute("memberId");
 
+	        // === Service 객체 모두 생성 (맨 위에서 한 번에!) ===
 	        BrandService brandService = new BrandServiceImpl();
+	        BrandFollowService brandFollowService = new BrandFollowServiceImpl();
 	        ProductService productService = new ProductServiceImpl();
+	        WishlistService wishlistService = new WishlistServiceImpl();
 	        CouponService couponService = new CouponServiceImpl();
 
 	        // === 1. 브랜드 정보 ===
@@ -74,7 +77,6 @@ public class BrandDetail extends HttpServlet {
 	        // === 3. 팔로우 여부 (로그인한 경우만) ===
 	        boolean isFollowing = false;
 	        if (memberId != null) {
-	            BrandFollowService brandFollowService = new BrandFollowServiceImpl(); // DAO 직접 호출 대신 Service 사용
 	            isFollowing = brandFollowService.isBrandFollowed(memberId, brandId);
 	        }
 
@@ -100,7 +102,6 @@ public class BrandDetail extends HttpServlet {
 
 	        // === 6. 각 상품의 찜 여부 확인 (로그인한 경우만) ===
 	        if (memberId != null) {
-	            WishlistService wishlistService = new WishlistServiceImpl(); // DAO 직접 호출 대신 Service 사용
 	            for (Map<String, Object> product : products) {
 	                Long productId = (Long) product.get("productId");
 	                boolean isWished = wishlistService.isProductWished(memberId, productId);

@@ -2,6 +2,8 @@
 (function() {
 'use strict';
 
+let isProcessing = false; // 중복 클릭 방지!
+
 function showToast(isFollowing) {
     const toast = document.createElement('div');
     toast.className = 'toast';
@@ -18,6 +20,14 @@ function showToast(isFollowing) {
 }
 
 function toggleBrandFollow(brandId, icon, countElement) {
+    // 중복 클릭 방지!
+    if (isProcessing) {
+        console.log('이미 처리 중입니다.');
+        return;
+    }
+    
+    isProcessing = true;
+    
     fetch('/store/brandFollowToggle', {
         method: 'POST',
         headers: {
@@ -51,7 +61,6 @@ function toggleBrandFollow(brandId, icon, countElement) {
                         setTimeout(function() { 
                             card.remove();
                             
-                            // 카드가 하나도 없으면 빈 메시지 표시
                             const grid = document.querySelector('.brand-grid');
                             if (grid && grid.querySelectorAll('.brand-card, .brand-nav-card').length === 0) {
                                 grid.innerHTML = '<p class="empty-message">좋아요 브랜드가 없습니다.</p>';
@@ -61,13 +70,11 @@ function toggleBrandFollow(brandId, icon, countElement) {
                 }
             }
             
-            // 팔로워 수 업데이트 (있으면)
-            if (countElement) {
-                let currentCount = parseInt(countElement.textContent) || 0;
-                countElement.textContent = data.isFollowing ? currentCount + 1 : Math.max(0, currentCount - 1);
+            // ✅ 서버에서 반환한 정확한 팔로워 수 사용!
+            if (countElement && data.followerCount !== undefined) {
+                countElement.textContent = data.followerCount;
             }
             
-            // Toast 메시지 표시
             showToast(data.isFollowing);
         } else {
             alert(data.message || '오류가 발생했습니다.');
@@ -76,6 +83,12 @@ function toggleBrandFollow(brandId, icon, countElement) {
     .catch(function(err) {
         console.error('Error:', err);
         alert('서버 오류가 발생했습니다.');
+    })
+    .finally(function() {
+        // 처리 완료 후 0.5초 뒤에 플래그 해제 (안전하게)
+        setTimeout(function() {
+            isProcessing = false;
+        }, 500);
     });
 }
 
@@ -104,11 +117,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const brandId = brandFavorite.dataset.brandid;
 
         if (heartBtn && brandId) {
-            heartBtn.addEventListener('click', function(e) {
+            // 기존 이벤트 리스너 제거 후 새로 등록 (중복 방지)
+            heartBtn.replaceWith(heartBtn.cloneNode(true));
+            const newHeartBtn = brandFavorite.querySelector('.heart-btn');
+            
+            newHeartBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                const icon = heartBtn.querySelector('i');
+                const icon = newHeartBtn.querySelector('i');
                 toggleBrandFollow(brandId, icon, countElement);
             });
         }
