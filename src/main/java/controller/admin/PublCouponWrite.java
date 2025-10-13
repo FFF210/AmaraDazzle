@@ -66,18 +66,18 @@ public class PublCouponWrite extends HttpServlet {
 			    endDate = Timestamp.valueOf("2038-01-19 08:44:07"); //Timestamp 지원범위 
 			}
 			
-//			System.out.println("cp_name : " + cp_name);
-//			System.out.println("cp_amount : " + cp_amount);
-//			System.out.println("startDate : " + startDate);
-//			System.out.println("endDate : " + endDate);
-//			System.out.println("l_cate : " + l_cate);
-//			System.out.println("m_Cate : " + m_cate);
-//			System.out.println("s_cate : " + s_cate);
-//			System.out.println("cp_condition : " + cp_condition);
-//			System.out.println("pch_noRestr : " + pch_noRestr);
-//			System.out.println("cp_target : " + cp_target);
-//			System.out.println("coupon_reason : " + cp_reason);
-//			System.out.println("cp_writer : " + cp_writer);
+			System.out.println("cp_name : " + cp_name);
+			System.out.println("cp_amount : " + cp_amount);
+			System.out.println("startDate : " + startDate);
+			System.out.println("endDate : " + endDate);
+			System.out.println("l_cate : " + l_cate);
+			System.out.println("m_Cate : " + m_cate);
+			System.out.println("s_cate : " + s_cate);
+			System.out.println("cp_condition : " + cp_condition);
+			System.out.println("pch_noRestr : " + pch_noRestr);
+			System.out.println("cp_target : " + cp_target);
+			System.out.println("coupon_reason : " + cp_reason);
+			System.out.println("cp_writer : " + cp_writer);
 
 			//카테고리 param 처리
 			Long cateIdx = null;

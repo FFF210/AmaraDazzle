@@ -15,5 +15,6 @@ public interface CouponService {
 	Integer iCouponCnt(Map<String, String> searchContent);	//개별지급 쿠폰 전체 수
 	List<Coupon> iCouponAllList(Integer p_no);	//개별지급 쿠폰 전체 목록 
 	List<Coupon> iCouponSearchList(Map<String, String> searchContent, Integer p_no);	//개별지급 쿠폰 검색 목록
+	int provisionCoupon(long couponId,String provisionGrade, String startDate, String reason);  //쿠폰 지급 
 
 }

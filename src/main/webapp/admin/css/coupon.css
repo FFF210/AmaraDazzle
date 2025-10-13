@@ -9,13 +9,25 @@ input[name="couponAmount"] {
 
 .part_content input[name="couponName"],
 .part_content input[name="couponExp"],
+.part_content input[name="couponExpRange"],
 .part_content input[name="couponCondition"],
 .part_content input[name="couponQuantity"],
 .part_content input[name="memberId"] {
-    margin-right: 5px;
+    margin-right : 5px;
 }
 .part_content .filter_box {
     margin-right: 10px;	
+}
+div.part_section .part_content.couponExp2 {
+	margin-top : 10px;
+	display : none;
+}
+div.part_section .part_content.couponExp2.visible { 
+	display: flex; 
+}
+
+.custom-select.md {
+	width : 100px;
 }
 
 div.part_section.writer_part {
@@ -26,9 +38,7 @@ div.part_section.writer_part {
     gap: 15px;
 }
 
-/* .custom-select.md { */
-/* 	width : 100px; */
-/* } */
+
 
 
 /* 버튼 그룹 */
@@ -82,4 +92,20 @@ div.no_condition {
 
 .date-input .input-wrapper {
  	width :130px; 
+}
+
+.part_content.reason_content {
+	flex-direction : column;
+	gap: 5px;
+} 
+.coupon-wrap {
+	width : 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.coupon-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px; 
 }

@@ -1,37 +1,4 @@
-//공지 내용 수정 페이지로 이동
-function editNoticeSeller(num){
-	location.href="noticeSellerEdit?num="+num
-}
-
-function exposeState(num){
-	fetch(`/admin/exposeChange?num=${num}`, {
-		method: "GET"
-	})
-	.then(res => res.json())
-	.then(data => {
-		console.log(data);
-		if (data.status == "ok") {
-			// 오버레이 표시
-			document.getElementById("overlay").classList.add("active");
-
-			//등록 성공 알럿 표시
-			showAlert("success", data.title, data.message); // 2초간 토스트
-
-			setTimeout(() => {
-				location.reload(); //현재 페이지 새로고침
-			}, 3000);
-
-
-		} else if (data.status == "partial") {
-			showAlert("error", data.title, data.message); // 2초간 토스트
-		}
-	})
-	.catch(err => {
-		console.error(err);
-		showAlert("error", "삭제 실패", "서버 통신 중 오류가 발생했습니다.");
-	});
-}
-
+//공지 수정 버튼 클릭
 document.addEventListener("DOMContentLoaded", function() {
 	
 	//toast editor 설정 
@@ -41,16 +8,12 @@ document.addEventListener("DOMContentLoaded", function() {
 		initialEditType: 'wysiwyg',
 	});
 	
-	// editor.getHtml()을 사용해서 에디터 내용 받아오기
-	//console.log(editor.getHTML());
-	//console.log(editor.getMarkdown());
-	
 	/* ************* 폼전송 + 유효성검사 ************* */
-	const frm = document.getElementById("noticeForm");
-	const writeBtn = document.getElementById("writeBtn");
+	const frm = document.getElementById("noticeEditForm");
+	const editBtn = document.getElementById("noticeEditBtn");
 	
 	//공란 채울 경우 빨강테두리 지움
-	document.querySelectorAll("#noticeForm input").forEach(input => {
+	document.querySelectorAll("#noticeEditForm input").forEach(input => {
 		input.addEventListener("input", function() {
 			if (this.value.trim() != "") {
 				this.classList.remove("state_error");
@@ -76,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			const formData = new FormData(frm);
 			formData.append("content", editor.getHTML());		
 
-			fetch("/admin/noticeSellerWrite", {
+			fetch("/admin/noticeSellerEdit", {
 				method: "POST",
 				body: formData
 			})
@@ -104,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 	
 	//필수입력 유효성 검사 
-	writeBtn.addEventListener("click", () => {
+	editBtn.addEventListener("click", () => {
 		const noticeImg = document.querySelector('input[name="noticeFile"]');
 		const uploader = document.querySelector("#fileDropper");
 		

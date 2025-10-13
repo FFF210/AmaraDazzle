@@ -304,6 +304,9 @@
 					<when test="totalSearch == '닉네임'">
 						and nickname like concat('%',#{keyword},'%')
 					</when>
+					<when test="totalSearch == '생년월일'">
+						and birth_date like concat('%',#{keyword},'%')
+					</when>
 				</choose>
 			</if>
 		</where>
@@ -343,6 +346,9 @@
 					</when>
 					<when test="totalSearch == '닉네임'">
 						and nickname like concat('%',#{keyword},'%')
+					</when>
+					<when test="totalSearch == '생년월일'">
+						and birth_date like concat('%',#{keyword},'%')
 					</when>
 				</choose>
 			</if>

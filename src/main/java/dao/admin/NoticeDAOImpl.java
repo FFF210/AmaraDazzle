@@ -67,6 +67,50 @@ public class NoticeDAOImpl implements NoticeDAO {
 			ss.rollback();
 		}
 	}
+
+	@Override
+	public int noticeSellerEdit(Notice notice_DTO) {
+		int result = ss.update("mapper.notice.updateSellerNotice", notice_DTO);
+		
+		if(result > 0) {
+			ss.commit();
+			
+		} else {
+			ss.rollback();
+		}
+		
+		return result;
+	}
+
+	//seller 공지 삭제 
+	@Override
+	public int noticeSellerDelete(Long num) {
+		int result = ss.delete("mapper.notice.noticeSellerDelete", num);
+		
+		if(result > 0) {
+			ss.commit();
+			
+		} else {
+			ss.rollback();
+		}
+		
+		return result;
+	}
+
+	//게시상태 변경 
+	@Override
+	public int noticeExposeChange(Map<String, Object> map) {
+		int result = ss.delete("mapper.notice.noticeExposeChange", map);
+		
+		if(result > 0) {
+			ss.commit();
+			
+		} else {
+			ss.rollback();
+		}
+		
+		return result;
+	}
 	
 	
 	

@@ -16,5 +16,6 @@ public interface CouponDAO {
 	Integer iCouponCnt(SearchConditionDTO sc_DTO);	//개별지급 쿠폰 전체 수 
 	List<Coupon> iCouponAllList(Map<String, Object> listMap);	//개별지급 쿠폰 전체 목록 
 	List<Coupon> iCouponSearchList(SearchConditionDTO sc_DTO);	//개별지급 쿠폰 검색 목록
+	int provisionCoupon(Map<String, Object> map); //쿠폰 지급 
 
 }

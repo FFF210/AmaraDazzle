@@ -139,15 +139,23 @@ public class FileAttach {
 
 	
 	// 웹디렉토리 실제 파일 삭제
-	public boolean file_delete(String filenm, HttpServletRequest req, String savePath) {
-		String url = req.getServletContext().getRealPath(savePath);
-		File file = new File(url + filenm);
+	public boolean file_delete(String fRename, HttpServletRequest req) {
+		UploadFileService file_svc = new UploadFileServiceImpl();
+		
+		String url = req.getServletContext().getRealPath("/upload_file/");
+		File file = new File(url + fRename);
 		boolean result = false;
+		
+		//디렉토리에서 파일 삭제 
 		if (file.exists()) { // 해당 파일이 있으면 삭제
 			result = file.delete();
 		} else { // 없으면 => 없어도 글 삭제
 			result = true;
 		}
+		
+		//db에서도 삭제 
+		file_svc.deleteFile(fRename);
+		
 		return result;
 	}
 

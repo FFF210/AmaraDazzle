@@ -53,13 +53,15 @@ public class EventServiceImpl implements EventService {
 	@Override
 	public int adminEventWrite(Event event) {
 		String type = event.getEventType().trim();
-		if(type == "쿠폰") {
+		System.out.println("type : " + type);
+		
+		if(type.equals("쿠폰")) {
 			event.setEventType("COUPON");
-		}else if(type == "할인") {
+		}else if(type.equals("할인")) {
 			event.setEventType("DISCOUNT");
-		}else if(type == "체험단") {
+		}else if(type.equals("체험단")) {
 			event.setEventType("EXPERIENCE");
-		}else if(type == "AD's PICK") {
+		}else if(type.equals("AD's PICK")) {
 			event.setEventType("PICK");
 		} else {
 			event.setEventType("ETC");

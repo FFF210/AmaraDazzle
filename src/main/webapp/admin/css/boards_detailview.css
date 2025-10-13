@@ -1,55 +1,63 @@
 section.board_detailview {
-    width: 750px; /* 50% */
-    border: 1px solid var(--outerbox);
-    border-radius: 10px;
-    background: white;
-    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
-    padding: 30px;
-    display: grid;
-    gap: 15px;
-    margin : 10px auto;
+	min-width: 750px;
+	width: fit-content; /* 내용에 맞춰 줄어듦 */
+	max-width: 1000px;
+	border: 1px solid var(--outerbox);
+	border-radius: 10px;
+	background: var(--base);
+	box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+	padding: 30px;
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	margin: 10px auto;
 }
 
 section.board_detailview div.part_section {
-    width: 100%;
-    display: flex;
-    align-items: center;
-}
-
-section.board_detailview div.part_content {
-    display: flex;
-    align-items: center;
-    width: 565px;
+	width: 100%;
+	display: flex;
+	align-items: center;
 }
 
 section.board_detailview div.part_section .part_title {
-    /* font-size: 16px; */
-    width: 185px;
+	width: 185px;
+}
+
+section.board_detailview div.part_content {
+	display: flex;
+	align-items: center;
+	flex: 1;
+	min-width: 565px;
+	max-width: 815px;
 }
 
 .part_content input[type="text"] {
-    height: 44px;
-    width: 100%;
+	flex: 1;
+	min-width: 565px;
+	width: 100%;     
 }
 
 .part_content .content_part {
-    border: 1px solid var(--outerbox);
-    border-radius: 5px;
-    width: 100%;
-    height: auto;
-    min-height : 500px;
-    padding : 10px;
+	border: 1px solid var(--outerbox);
+	border-radius: 5px;
+	padding: 10px;
+	min-height: 500px;
+	width: fit-content; 
+	min-width: 565px;
+	overflow-x: auto;   
+	box-sizing: border-box;
 }
 
 .content_part .img_content {
-	width : 100%;
+	width: 100%;
 	text-align: center;
 }
 
-
 div.part_section.bottom_part .part_content {
-    display: flex;
-    justify-content: space-between;
+	display: flex;
+	justify-content: space-between;
 }
 
-
+a:link {
+	text-decoration: none;
+}

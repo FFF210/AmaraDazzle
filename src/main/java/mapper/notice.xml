@@ -18,7 +18,7 @@
 
 	<!-- 공지(seller) 상세보기 -->
 	<select id="selectSellerNoticeOne" resultType="notice" parameterType="int">
-		select n.*, c.name,
+		select n.*, c.name, a.aname,
 		f1.file_name AS image1FileName,
 		f1.file_rename AS image1FileRename,
 		f1.storage_path AS image1StoragePath,
@@ -29,6 +29,7 @@
 		f3.file_rename AS image3FileRename,
 		f3.storage_path AS image3StoragePath
 		from notice n
+		join admin_info a on (n.writer = a.admin_info_id)
 		join code_detail c on (n.type_id = c.code_detail_id)
 		LEFT JOIN upload_file f1 ON (n.image1_file_id = f1.upload_file_id)
 		LEFT JOIN upload_file f2 ON (n.image2_file_id = f2.upload_file_id)
@@ -130,7 +131,33 @@
 		view_cnt = view_cnt+1 where notice_id=#{num}
 	</update>
 
-
+	<!-- 공지(seller) 수정  -->
+	<update id="updateSellerNotice" parameterType="notice">
+		update notice set type_id = #{typeId}, title = #{title}, content=#{content}, writer=#{writer},
+		<if test="image1FileId != null">
+		image1_file_id = #{image1FileId}, image2_file_id=#{image2FileId}, image3_file_id=#{image3FileId}, doc_file_id = #{docFileId},
+		</if>
+		updated_at = now() where notice_id=#{noticeId}
+	</update>
+	
+	<!-- 공지(seller) 삭제  -->
+	<delete id="noticeSellerDelete" parameterType="Long">
+		delete from notice where notice_id = #{num}
+	</delete>
+	
+	<!-- 공지 게사상태 변경  -->
+	<update id="noticeExposeChange" parameterType="Map">
+		update notice set 
+		<choose>
+			<when test="isExposed == 1">
+				is_exposed = 0 
+			</when>
+			<when test="isExposed == 0">
+				is_exposed = 1 
+			</when>
+		</choose>
+		where notice_id=#{noticeId}
+	</update>
 
 
 

@@ -23,9 +23,10 @@ public class Notice {
     
     //join용 컬럼 
     private String name; //CodeDetail - 한글 코드 이름 (view 용)
+    private String aname; //admin_info.aname
     
     private String fileName,image1FileName,image2FileName,image3FileName;     //UploadFile - 원본 파일명
-    private String fileRename, image2FileRename, image3FileRename;   //UploadFile - 리네임 파일명 (UNIQUE)
+    private String fileRename, image1FileRename, image2FileRename, image3FileRename;   //UploadFile - 리네임 파일명 (UNIQUE)
     private String storagePath, image1StoragePath, image2StoragePath, image3StoragePath;	 //UploadFile - 서버/스토리지 경로
    
 	public Notice() {}
@@ -39,8 +40,16 @@ public class Notice {
 		this.targetTypeId = targetTypeId;
 		this.imageFileIds = imageFileIds;
 	}
-
- 
+	public Notice(Long typeId, String title, String content, String writer, Long targetTypeId,
+			List<Long> imageFileIds, Long noticeId) {
+		this.typeId = typeId;
+		this.title = title;
+		this.content = content;
+		this.writer = writer;
+		this.targetTypeId = targetTypeId;
+		this.imageFileIds = imageFileIds;
+		this.noticeId = noticeId;
+	}
 	public Long getNoticeId() {
 		return noticeId;
 	}
@@ -167,6 +176,12 @@ public class Notice {
 	public void setFileRename(String fileRename) {
 		this.fileRename = fileRename;
 	}
+	public String getImage1FileRename() {
+		return image1FileRename;
+	}
+	public void setImage1FileRename(String image1FileRename) {
+		this.image1FileRename = image1FileRename;
+	}
 	public String getImage2FileRename() {
 		return image2FileRename;
 	}
@@ -203,8 +218,12 @@ public class Notice {
 	public void setImage3StoragePath(String image3StoragePath) {
 		this.image3StoragePath = image3StoragePath;
 	}
-	
-	
+	public String getAname() {
+		return aname;
+	}
+	public void setAname(String aname) {
+		this.aname = aname;
+	}
 	@Override
     public String toString() {
         return "Notice [noticeId=" + noticeId + ", typeId=" + typeId +

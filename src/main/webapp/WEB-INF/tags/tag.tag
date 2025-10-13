@@ -12,10 +12,7 @@
 
      사용법 예시
      <%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
-     <my:tag 
-       color="green" 
-       size="md" 
-       text="세일" />
+     <my:tag color="green" size="md" text="세일" />
 ================================ --%>
 
 <%@ attribute name="color" required="false" %>

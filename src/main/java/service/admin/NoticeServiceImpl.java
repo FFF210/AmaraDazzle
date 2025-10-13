@@ -1,6 +1,7 @@
 package service.admin;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,6 +79,43 @@ public class NoticeServiceImpl implements NoticeService {
 	    sc_DTO.setPost_ea((Integer) searchlistMap.get("post_ea"));
 
 	    return n_dao.search_nlist(sc_DTO);
+	}
+
+	//seller 공지 수정 
+	@Override
+	public int noticeSellerEdit(Notice notice_DTO) {
+		// 파일 pk 리스트가 null 이면 빈 리스트로 처리(NPE 방지)
+		List<Long> imageFiles = notice_DTO.getImageFileIds();
+		if (imageFiles == null) {
+			imageFiles = Collections.emptyList();
+		}
+
+		// DB 컬럼에 맞게 매핑
+		notice_DTO.setImage1FileId(imageFiles.size() > 0 ? imageFiles.get(0) : null);
+		notice_DTO.setImage2FileId(imageFiles.size() > 1 ? imageFiles.get(1) : null);
+		notice_DTO.setImage3FileId(imageFiles.size() > 2 ? imageFiles.get(2) : null);
+
+		int result = n_dao.noticeSellerEdit(notice_DTO);
+		
+		return result;
+	}
+
+	//seller 공지 삭제 
+	@Override
+	public int noticeSellerDelete(Long num) {
+		int result = n_dao.noticeSellerDelete(num);
+		return result;
+	}
+
+	//게시상태 변경 
+	@Override
+	public int noticeExposeChange(Long num, Integer exposeYN ) {
+		Map<String, Object> map = new HashMap<>();
+		map.put("noticeId", num);
+		map.put("isExposed", exposeYN);
+		
+		int result = n_dao.noticeExposeChange(map);
+		return result;
 	}
 
 	
