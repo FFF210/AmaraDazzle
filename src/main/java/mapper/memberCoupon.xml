@@ -14,8 +14,18 @@
 		AND status = 'AVAILABLE'
 	</select>
 
+	<!-- 회원의 쿠폰 목록 개수 조회 (페이지네이션용) -->
+	<select id="countMemberCouponList" parameterType="Long"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM member_coupon mc
+		JOIN coupon c ON mc.coupon_id = c.coupon_id
+		WHERE mc.member_id = #{memberId}
+		AND mc.status = 'AVAILABLE'
+	</select>
+
 	<!-- 회원의 쿠폰 목록 조회 (쿠폰 상세정보 포함) -->
-	<select id="selectMemberCouponList" parameterType="Long"
+	<select id="selectMemberCouponList" parameterType="map"
 		resultType="map">
 		SELECT
 		mc.member_coupon_id AS memberCouponId,
@@ -34,6 +44,7 @@
 		AND mc.status = 'AVAILABLE'
 		ORDER BY
 		mc.created_at DESC
+		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
 	<!-- [소비자용] 사용한 쿠폰 정보 조회 [orderDetail 용도] -->
@@ -49,11 +60,12 @@
 		#{memberCouponId}
 	</select>
 
-    <!-- ============= [소비자] 회원가입시 쿠폰 넣어주기 ================== -->
+	<!-- ============= [소비자] 회원가입시 쿠폰 넣어주기 ================== -->
 	<!-- [소비자용] 회원가입 축하 쿠폰 ID 조회 -->
 	<select id="getWelcomeCouponId" resultType="Long">
 		SELECT coupon_id
-		FROM coupon
+		FROM
+		coupon
 		WHERE reason = 'Sign up Welcome'
 		AND provision = 'ALL'
 		LIMIT 1
@@ -61,10 +73,12 @@
 
 	<!-- [소비자용] 쿠폰 발급 -->
 	<insert id="issueCoupon" parameterType="map">
-		INSERT INTO member_coupon (
+		INSERT INTO member_coupon
+		(
 		coupon_id, member_id, status, created_at
 		) VALUES (
-		#{couponId}, #{memberId}, 'AVAILABLE', NOW()
+		#{couponId},
+		#{memberId}, 'AVAILABLE', NOW()
 		)
 	</insert>
 

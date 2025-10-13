@@ -134,9 +134,16 @@ public class ProductServiceImpl implements ProductService {
 
 	// [brandDetail용] 브랜드 상품 조회
 	@Override
-	public List<Map<String, Object>> getProductsByBrandId(Long brandId) throws Exception {
-		return productDAO.selectProductsByBrandId(brandId);
+	public List<Map<String, Object>> getProductsByBrandId(Map<String, Object> params) throws Exception {
+	    return productDAO.selectProductsByBrandId(params);
 	}
+	
+	// [brandDetail용] 브랜드 상품 개수 조회
+	@Override
+	public int countProductsByBrand(Map<String, Object> params) throws Exception {
+	    return productDAO.countProductsByBrand(params);
+	}
+
 
 	// [소비자] 검색상품 목록 조회
 	@Override

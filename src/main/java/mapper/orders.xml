@@ -174,9 +174,11 @@
 		oi.tracking_no as trackingNo,
 		oi.carrier_name as carrierName,
 		oi.updated_at as updatedAt,
-		p.name as productName,
+		p.name as
+		productName,
 		p.thumbnail_file_id as thumbnailFileId,
-		b.brand_name as brandName,
+		b.brand_name as
+		brandName,
 		po.option_value as optionValue
 		FROM orders o
 		JOIN order_item
@@ -267,6 +269,31 @@
 		</if>
 	</select>
 
+	<!-- ========= 전체 개수를 세는 쿼리 (페이지네이션용) ================= -->
+	<select id="countCancelExchangeReturnList" parameterType="map"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM order_item oi
+		INNER JOIN orders o ON oi.order_id =
+		o.orders_id
+		WHERE o.member_id = #{memberId}
+		AND oi.status IN (
+		'CANCELLED',
+		'RETURN_REQUESTED', 'RETURN_APPROVED',
+		'COLLECTING',
+		'RETURN_REFUNDING',
+		'RETURN_REJECTED', 'RETURN_COMPLETED',
+		'EXCHANGE_REQUESTED', 'EXCHANGE_APPROVED',
+		'EXCHANGE_SHIPPING',
+		'EXCHANGE_REJECTED',
+		'EXCHANGE_COMPLETED'
+		)
+		<if test="startDate != null and endDate != null">
+			AND DATE(oi.updated_at) BETWEEN #{startDate} AND
+			#{endDate}
+		</if>
+	</select>
+
 	<!-- ========= [소비자용] 취소/교환/반품 통합 목록 조회 ================= -->
 	<select id="selectCancelExchangeReturnList" parameterType="map"
 		resultType="map">
@@ -290,6 +317,7 @@
 		o.order_code,
 		b.brand_name,
 		p.name,
+		p.thumbnail_file_id as thumbnailFileId,
 		po.option_value,
 
 		e.exchange_id,
@@ -343,6 +371,7 @@
 		</if>
 
 		ORDER BY oi.updated_at DESC
+		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
 	<!-- ==== [소비자] 교환/반품 신청용: 주문 상품 단건 조회 === -->
@@ -418,10 +447,13 @@
 
 	<!-- [소비자] 옵션 상품 재고 복구 -->
 	<update id="restoreOptionStock" parameterType="long">
-		UPDATE product_option po
-		INNER JOIN order_item oi ON po.product_option_id = oi.option_id
+		UPDATE
+		product_option po
+		INNER JOIN order_item oi ON po.product_option_id =
+		oi.option_id
 		SET po.stock_qty = po.stock_qty + oi.quantity
-		WHERE oi.order_item_id = #{orderItemId}
+		WHERE
+		oi.order_item_id = #{orderItemId}
 		AND oi.option_id IS NOT NULL
 	</update>
 
@@ -429,8 +461,10 @@
 	<update id="restoreProductStock" parameterType="long">
 		UPDATE product p
 		INNER JOIN order_item oi ON p.product_id = oi.product_id
-		SET p.stock_qty = p.stock_qty + oi.quantity
-		WHERE oi.order_item_id = #{orderItemId}
+		SET
+		p.stock_qty = p.stock_qty + oi.quantity
+		WHERE oi.order_item_id =
+		#{orderItemId}
 		AND oi.option_id IS NULL
 	</update>
 

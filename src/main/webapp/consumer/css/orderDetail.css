@@ -1,19 +1,19 @@
 @charset "UTF-8";
 
-.page-wrap {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 20px;
+.container {
+	width: 1020px;
+	margin: 40px auto 0;
+	display: flex;
+	gap: 30px;
+	align-items: flex-start;
 }
 
-.page-grid {
-    display: flex;
-    gap: 30px;
-    flex-direction: row;
-}
-
-.content {
-    flex: 1;
+.page-contents {
+	flex: 1;
+	width: 824px;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch; /* 자식 요소들이 전체 너비를 차지하도록 */
 }
 
 /* ================================
@@ -21,28 +21,28 @@
 ================================ */
 .section {
 	background: white;
-	padding: 24px;
 	margin-bottom: 32px;
-}
-
-.page-title {
-	font-size: 22px;
-	font-weight: 700;
-	color: #333;
-	margin: 0 0 24px 0;
 }
 
 .section-title {
 	font-size: 22px;
-	font-weight: 600;
-	color: #333;
-	margin: 0 0 8px 0;
+	font-weight: 500;
+	color: #111;
+	margin: 0;
+}
+
+.page-title {
+	font-size: 22px;
+	font-weight: 500;
+	color: #111;
+	margin: 0;
 }
 
 .section-subtitle {
 	font-size: 13px;
-	color: #939393;
-	margin: 0 0 24px 0;
+	color: #999;
+	margin: 10px 0;
+	text-align: right;
 }
 
 /* ================================
@@ -50,34 +50,36 @@
 ================================ */
 .order-info {
 	display: flex;
-	padding: 30px 20px;
+	padding: 20px;
 	align-items: center;
 	gap: 100px;
 	align-self: stretch;
-	border: 1px solid #e5e7eb;
+	border: 1px solid #f1f1f1;
+	margin-top: 20px;
 }
 
 .info-item {
 	display: flex;
 	align-items: center;
-	gap: 12px;
+	gap: 60px;
 }
 
 .info-item .label {
 	font-size: 14px;
-	font-weight: 500;
-	color: #6b7280;
-	min-width: 60px;
+	font-weight: 400;
+	color: #333;
+	min-width: 100px;
 }
 
 .info-item .value {
 	font-size: 14px;
-	font-weight: 500;
-	color: #1f2937;
+	font-weight: 600;
+	margin-left: 6px;
+	color: #111;
 }
 
 .info-item .order-number {
-	color: #6366f1;
+	color: #7421C4;
 	font-weight: 600;
 }
 
@@ -94,99 +96,87 @@
 
 .table-wrapper {
 	width: 100%;
-	max-height: 600px;
-	overflow-y: auto;
-	overflow-x: auto;
-	border: 1px solid #E5E7EB;
-	border-radius: 6px;
+	overflow-x: hidden;
+	overflow-y: visible; /* 세로 스크롤 제거 */
+	height: auto; /* 높이 자동 확장 */
+	max-height: none;
 }
 
 .table {
+	table-layout: fixed;
 	width: 100%;
-	min-width: 900px;
 	border-collapse: collapse;
-	table-layout: auto;
-	box-sizing: border-box;
-}
-
-.table tr {
-	height: 44px;
+	min-width: 0;
 }
 
 .table th, .table td {
-	max-width: 260px;
-	padding: 0 24px;
-	height: 44px;
-	border-bottom: 1px solid #E5E7EB;
-	text-align: center;
-	vertical-align: middle;
-	background: #fff;
-	white-space: nowrap;
+	border: none;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	box-sizing: border-box;
+	white-space: nowrap;
+	word-break: keep-all;
 }
 
-.table tbody tr:last-child td {
-	border-bottom: none;
+/* 테이블 전체 기본선 제거 */
+.table {
+	border-collapse: collapse;
+	border: none;
+	width: 100%;
 }
 
-.table td {
-	color: #667085;
-	font-size: 14px;
-	font-style: normal;
-	font-weight: 400;
-	line-height: 20px;
+/* 모든 셀의 기본선 제거 */
+.table th, .table td {
+	border: none;
+}
+
+/* 행 사이 아래쪽 테두리만 표시 */
+.table tr {
+	border-bottom: 1px solid #E5E7EB; /* 연한 회색 구분선 */
+}
+
+/* 헤더 상단선 추가 */
+.table thead tr:first-child {
+	border-top: 1.5px solid #E5E7EB;
+}
+
+/* 마지막 행 하단선도 유지 */
+.table tbody tr:last-child {
+	border-bottom: 1px solid #E5E7EB;
+}
+
+/* 좌우 여백 시각적으로 띄워주기 */
+.table-wrapper {
+	border-left: none;
+	border-right: none;
+	border: none;
+	border-radius: 0;
 }
 
 .table th {
-	background: #FCFCFD;
-	color: #667085;
-	font-size: 12px;
-	font-style: normal;
-	font-weight: 500;
-	line-height: 18px;
-}
-
-/* 상품 정보 스타일 */
-.product-info {
-	text-align: left;
-	white-space: normal;
-	max-width: 200px;
-}
-
-.product-info .brand {
-	font-size: 12px;
-	color: #6b7280;
-	font-weight: 500;
-}
-
-.product-info .product-name {
 	font-size: 13px;
-	color: #1f2937;
-	font-weight: 400;
-	line-height: 1.4;
+	color: #111;
+}
+
+.product-name {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	word-break: break-all;
+	line-height: 18px;
+	max-height: 36px;
+	max-width: 345px;
+	color: #000;
+	font-size: 14px;
+	height: fit-content;
 }
 
 .price-highlight {
-	color: #7c3aed !important;
+	font-size: 13px !important;
+	color: #111 !important;
 	font-weight: 600 !important;
-}
-
-.action-btn {
-	background: #3b82f6;
-	color: white;
-	border: none;
-	padding: 6px 12px;
-	border-radius: 4px;
-	font-size: 12px;
-	font-weight: 500;
-	cursor: pointer;
-	transition: background-color 0.2s;
-}
-
-.action-btn:hover {
-	background: #2563eb;
 }
 
 /* ================================
@@ -195,21 +185,24 @@
 .form-rows {
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
 }
 
 .form-rows .row {
 	display: flex;
 	align-items: center;
-	gap: 24px;
+	height: 60px;
 }
 
 .form-rows .label {
-	min-width: 120px;
+	display: flex;
+	height: 100%;
+	width: 120px;
+	align-items: center;
 	font-size: 14px;
 	font-weight: 500;
-	color: #374151;
-	padding-top: 16px;
+	color: #111;
+	background-color: #f9f9f9;
+	padding-left: 10px;
 	flex-shrink: 0;
 }
 
@@ -223,7 +216,6 @@
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
 	max-width: 600px;
 }
 
@@ -234,7 +226,16 @@
 .addr-grid-2 {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
-	gap: 12px;
+}
+
+.text-input, .text-input-wrapper .text-input[readonly] {
+	border: none !important;
+	background-color: transparent !important;
+}
+
+.text-input[readonly] {
+	color: #111;
+    opacity: 100;
 }
 
 /* ================================
@@ -243,30 +244,7 @@
 .page-actions {
 	display: flex;
 	justify-content: center;
-	margin-top: 40px;
-	padding-top: 40px;
-}
-
-.btn-primary {
-	background: #3b82f6;
-	color: white;
-	border: none;
-	padding: 16px 32px;
-	border-radius: 8px;
-	font-size: 16px;
-	font-weight: 600;
-	text-decoration: none;
-	cursor: pointer;
-	transition: background-color 0.2s;
-	min-width: 120px;
-	text-align: center;
-	display: inline-block;
-}
-
-.btn-primary:hover {
-	background: #2563eb;
-	text-decoration: none;
-	color: white;
+	margin: 40px 0;
 }
 
 /* ================================
@@ -286,21 +264,44 @@
 
 /* 이미지 갤러리 */
 .image-gallery {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
+	display: flex;
+	gap: 12px;
+	flex-wrap: wrap;
 }
 
 .evidence-image {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.2s;
+	width: 150px;
+	height: 150px;
+	object-fit: cover;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: transform 0.2s;
 }
 
 .evidence-image:hover {
-    transform: scale(1.05);
+	transform: scale(1.05);
+}
+
+.btn-primary {
+	background: #111;
+}
+
+.btn-primary:hover {
+	background: #333;
+}
+
+.btn-outline {
+	border: 1px solid #222;
+	color: #111;
+}
+
+.btn-outline:hover {
+	background: #eee;
+}
+
+.btn {
+	border-radius: 0;
+	font-weight: 400;
+	padding: 0;
 }

@@ -1,20 +1,21 @@
 package controller.brand2;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import dto.Brand;
 import dto.brand2.EventDetail;
 import service.brand2.EventService;
 import service.brand2.EventServiceImpl;
 
-/**
- * Servlet implementation class EventFormDetaill
- */
 @WebServlet("/brand2/eventFormDetail")
 public class EventFormDetail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -58,7 +59,24 @@ public class EventFormDetail extends HttpServlet {
 			// ============= 상세보기 버튼 =============
 	        if (eventIdParam != null && !eventIdParam.isEmpty()) {
 	            Long eventId = Long.parseLong(eventIdParam);
-	            EventDetail detail = service.getEventDetailById(eventId);
+	            
+	            HttpSession session = request.getSession(false);
+	    		
+	    		// 세션 없거나 브랜드 정보 없음 → 로그인 페이지로 리다이렉트
+	    		if (session == null || session.getAttribute("brand") == null) {
+	    			response.sendRedirect(request.getContextPath() + "/brand/login");
+	    			return;
+	    		}
+
+	    		Brand brand = (Brand) session.getAttribute("brand");
+	    		Long brandId = brand.getBrandId();
+	    		
+	    		 // 파라미터 맵 구성
+                Map<String, Object> params = new HashMap<>();
+                params.put("eventId", eventId);
+                params.put("brandId", brandId);
+	            
+	            EventDetail detail = service.getEventDetailById(params);
 	            request.setAttribute("event", detail);
 	            request.getRequestDispatcher("/brand2/eventFormDetail.jsp").forward(request, response);
 	        } else {

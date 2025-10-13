@@ -2,25 +2,21 @@ package dao.consumer;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Map;
 
 import dto.Point;
 
 public interface PointDAO {
+    
+    // 포인트 내역 개수 조회 (페이징용)
+    int countPointHistory(Long memberId) throws Exception;
 	
+    //회원의 포인트 내역 조회 (최근순)
+    List<Map<String, Object>> selectPointHistory(Map<String, Object> params) throws Exception;
 
-    /**
-     * 회원의 포인트 내역 조회 (최근순)
-     * @param memberId 회원 ID
-     * @return 포인트 내역 리스트
-     */
-    List<Point> selectPointHistory(Long memberId) throws Exception;
-    
-    
-    /**
-     * 특정 기간의 포인트 내역 조회
-     * @param memberId 회원 ID, startDate 시작일, endDate 종료일
-     * @return 포인트 내역 리스트
-     */
-    List<Point> selectPointHistoryByPeriod(Long memberId, Timestamp startDate, Timestamp endDate) throws Exception;
-
+    // 특정 기간 내의 포인트 내역 개수 조회(페이징용)
+    int countPointHistoryByPeriod(Map<String, Object> params) throws Exception;
+        
+    //특정 기간의 포인트 내역 조회
+    List<Map<String, Object>> selectPointHistoryByPeriod(Map<String, Object> params) throws Exception;
 }

@@ -16,5 +16,5 @@ public interface MemberCouponService {
 	 * @param memberId 회원 ID
 	 * @return 쿠폰 목록
 	 */
-	List<Map<String, Object>> getMemberCouponList(Long memberId) throws Exception;
+	Map<String, Object> getMemberCouponList(Long memberId, int page, int pageSize) throws Exception;
 	}

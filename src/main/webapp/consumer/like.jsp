@@ -25,6 +25,7 @@
 <link rel="stylesheet" href="<c:url value='/tagcss/brandNavCard.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/table.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/toast.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/like.css'/>">
 <link rel="stylesheet"
 	href="<c:url value='/consumer/css/userInfo.css'/>">
@@ -306,6 +307,7 @@ function toggleWishlist(productId, buttonElement) {
     });
 }
 </script>
+	<script src="<c:url value='/consumer/js/addToWishlist.js'/>"></script>
 	<script src="<c:url value='/consumer/js/addToWishlist.js'/>"></script>
 </body>
 </html>

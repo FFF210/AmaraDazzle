@@ -13,13 +13,30 @@ public class EventDetail {
     private String status;
     private Timestamp startDate;
     private Timestamp endDate;
+    private Long thumbnailFileId; // 배너 이미지 파일 ID (FK → upload_file.upload_file_id)
+    private Long detailFileId;    // 상세페이지 이미지 파일 ID (FK → upload_file.upload_file_id)
+    private String content;       // 내용
+    private Long writer;        // 작성자 (FK → admin_info.admin_info_id)
+    private Integer exposeYn;     // 노출 여부 (DEFAULT 0)
+    private Timestamp createdAt;  // 생성 시각 (DEFAULT CURRENT_TIMESTAMP)
+    private Timestamp updatedAt;  // 수정 시각
 
+    private Long category1Id;
+    private String largeCategoryName;
+    private Long category2Id;
+    private String middleCategoryName;
+    private Long category3Id;
+    private String smallCategoryName;
+    
     // event_application
+    private String eventApplicationId;
     private String managerName;
     private String managerTel;
     private String note;
+    private String applyDate;
 
     // coupon
+    private String couponId;
     private String cname;
     private Timestamp couponStartDate;
     private Timestamp couponEndDate;
@@ -76,6 +93,118 @@ public class EventDetail {
 	public void setEndDate(Timestamp endDate) {
 		this.endDate = endDate;
 	}
+	
+	public Long getThumbnailFileId() {
+		return thumbnailFileId;
+	}
+
+	public void setThumbnailFileId(Long thumbnailFileId) {
+		this.thumbnailFileId = thumbnailFileId;
+	}
+
+	public Long getDetailFileId() {
+		return detailFileId;
+	}
+
+	public void setDetailFileId(Long detailFileId) {
+		this.detailFileId = detailFileId;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public Long getWriter() {
+		return writer;
+	}
+
+	public void setWriter(Long writer) {
+		this.writer = writer;
+	}
+
+	public Integer getExposeYn() {
+		return exposeYn;
+	}
+
+	public void setExposeYn(Integer exposeYn) {
+		this.exposeYn = exposeYn;
+	}
+
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	public Long getCategory1Id() {
+		return category1Id;
+	}
+
+	public void setCategory1Id(Long category1Id) {
+		this.category1Id = category1Id;
+	}
+
+	public String getLargeCategoryName() {
+		return largeCategoryName;
+	}
+
+	public void setLargeCategoryName(String largeCategoryName) {
+		this.largeCategoryName = largeCategoryName;
+	}
+
+	public Long getCategory2Id() {
+		return category2Id;
+	}
+
+	public void setCategory2Id(Long category2Id) {
+		this.category2Id = category2Id;
+	}
+
+	public String getMiddleCategoryName() {
+		return middleCategoryName;
+	}
+
+	public void setMiddleCategoryName(String middleCategoryName) {
+		this.middleCategoryName = middleCategoryName;
+	}
+
+	public Long getCategory3Id() {
+		return category3Id;
+	}
+
+	public void setCategory3Id(Long category3Id) {
+		this.category3Id = category3Id;
+	}
+
+	public String getSmallCategoryName() {
+		return smallCategoryName;
+	}
+
+	public void setSmallCategoryName(String smallCategoryName) {
+		this.smallCategoryName = smallCategoryName;
+	}
+
+	public String getEventApplicationId() {
+		return eventApplicationId;
+	}
+
+	public void setEventApplicationId(String eventApplicationId) {
+		this.eventApplicationId = eventApplicationId;
+	}
 
 	public String getManagerName() {
 		return managerName;
@@ -99,6 +228,22 @@ public class EventDetail {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getApplyDate() {
+		return applyDate;
+	}
+
+	public void setApplyDate(String applyDate) {
+		this.applyDate = applyDate;
+	}
+
+	public String getCouponId() {
+		return couponId;
+	}
+
+	public void setCouponId(String couponId) {
+		this.couponId = couponId;
 	}
 
 	public String getCname() {
@@ -152,11 +297,15 @@ public class EventDetail {
 	@Override
 	public String toString() {
 		return "EventDetail [eventId=" + eventId + ", eventType=" + eventType + ", eventName=" + eventName + ", status="
-				+ status + ", startDate=" + startDate + ", endDate=" + endDate + ", managerName=" + managerName
-				+ ", managerTel=" + managerTel + ", note=" + note + ", cname=" + cname + ", couponStartDate="
-				+ couponStartDate + ", couponEndDate=" + couponEndDate + ", amount=" + amount + ", amountCondition="
-				+ amountCondition + ", productIds=" + productIds + "]";
+				+ status + ", startDate=" + startDate + ", endDate=" + endDate + ", thumbnailFileId=" + thumbnailFileId
+				+ ", detailFileId=" + detailFileId + ", content=" + content + ", writer=" + writer + ", exposeYn="
+				+ exposeYn + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", category1Id=" + category1Id
+				+ ", largeCategoryName=" + largeCategoryName + ", category2Id=" + category2Id + ", middleCategoryName="
+				+ middleCategoryName + ", category3Id=" + category3Id + ", smallCategoryName=" + smallCategoryName
+				+ ", eventApplicationId=" + eventApplicationId + ", managerName=" + managerName + ", managerTel="
+				+ managerTel + ", note=" + note + ", applyDate=" + applyDate + ", couponId=" + couponId + ", cname="
+				+ cname + ", couponStartDate=" + couponStartDate + ", couponEndDate=" + couponEndDate + ", amount="
+				+ amount + ", amountCondition=" + amountCondition + ", productIds=" + productIds + "]";
 	}
-    
-    
+
 }

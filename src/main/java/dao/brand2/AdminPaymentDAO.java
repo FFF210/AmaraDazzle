@@ -16,5 +16,7 @@ public interface AdminPaymentDAO {
 	// 배너, 상세보기 - 결제대기/결제완료용
 	int existsByBannerId(long bannerId) throws Exception;
 	
+	// 배너 ID로 결제 내역 조회 (취소 시 사용)
+    AdminPayment selectPaymentByBannerId(Long bannerId) throws Exception;
+	
 }
-

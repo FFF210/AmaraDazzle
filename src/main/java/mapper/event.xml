@@ -92,23 +92,34 @@
 
 
 	<!-- ====== [brand2] 이벤트 신청하기 버튼 ====== -->
-	<select id="selectEventById" parameterType="long" resultType="event">
+	<select id="selectEventById" parameterType="long"
+		resultType="dto.brand2.EventDetail">
 		SELECT
-			e.event_id AS eventId,
-			e.event_type AS eventType,
-			e.event_name AS eventName,
-			e.start_date AS startDate,
-			e.end_date AS endDate,
-			e.status AS status,
-			e.category_id AS categoryId,
-			e.thumbnail_file_id AS thumbnailFileId,
-			e.detail_file_id AS detailFileId,
-			e.content AS content,
-			e.writer AS writer,
-			e.expose_YN AS exposeYn,
-			e.created_at AS createdAt,
-			e.updated_at AS updatedAt
+		e.event_id AS eventId,
+		e.event_type AS eventType,
+		e.event_name AS eventName,
+		e.start_date AS startDate,
+		e.end_date AS endDate,
+		e.status AS status,
+
+		e.category_id AS category3Id,
+		c3.name AS smallCategoryName,
+		c2.category_id AS category2Id,
+		c2.name AS middleCategoryName,
+		c1.category_id AS category1Id,
+		c1.name AS largeCategoryName,
+
+		e.thumbnail_file_id AS thumbnailFileId,
+		e.detail_file_id AS detailFileId,
+		e.content AS content,
+		e.writer AS writer,
+		e.expose_YN AS exposeYn,
+		e.created_at AS createdAt,
+		e.updated_at AS updatedAt
 		FROM event e
+		LEFT JOIN category c3 ON e.category_id = c3.category_id
+		LEFT JOIN category c2 ON c3.parent_id = c2.category_id
+		LEFT JOIN category c1 ON c2.parent_id = c1.category_id
 		WHERE e.event_id = #{eventId}
 	</select>
 
@@ -124,6 +135,13 @@
 		startDate,
 		e.end_date AS endDate,
 
+		e.category_id AS category3Id,
+        c3.name AS smallCategoryName,
+        c2.category_id AS category2Id,
+        c2.name AS middleCategoryName,
+        c1.category_id AS category1Id,
+        c1.name AS largeCategoryName,
+
 		a.event_application_id AS eventApplicationId,
 		a.manager_name AS managerName,
 		a.manager_tel AS managerTel,
@@ -138,17 +156,38 @@
 		c.amount_condition AS amountCondition,
 
 		GROUP_CONCAT(p.product_id) AS productIds
+		
+		e.thumbnail_file_id AS thumbnailFileId,
+        e.detail_file_id AS detailFileId,
+        e.content AS content,
+        e.writer AS writer,
+        e.expose_YN AS exposeYn,
+        e.created_at AS createdAt,
+        e.updated_at AS updatedAt
 
 		FROM event e
 		LEFT JOIN
 		event_application a ON e.event_id = a.event_id
+		AND a.brand_id = #{brandId}
 		LEFT JOIN coupon c ON
 		c.reason = CONCAT('event_application:',
 		a.event_application_id)
 		LEFT JOIN product p ON e.event_id = p.event_id
+		LEFT JOIN category c3 
+        ON e.category_id = c3.category_id
+    	LEFT JOIN category c2 
+        ON c3.parent_id = c2.category_id
+    	LEFT JOIN category c1 
+        ON c2.parent_id = c1.category_id
 		WHERE e.event_id = #{eventId}
-		GROUP BY e.event_id, e.event_type, e.event_name, e.status,
-		e.start_date, e.end_date, e.category_id, e.thumbnail_file_id, e.detail_file_id, e.content,
+		AND a.brand_id = #{brandId}
+		GROUP BY 
+		e.event_id, e.event_type, e.event_name, e.status,
+		e.start_date, e.end_date, 
+		c3.category_id, c3.name,
+        c2.category_id, c2.name,
+        c1.category_id, c1.name,
+		e.thumbnail_file_id, e.detail_file_id, e.content, e.writer, e.expose_YN, e.created_at, e.updated_at,
 		a.event_application_id, a.manager_name, a.manager_tel, a.note, a.apply_date,
 		c.coupon_id, c.cname, c.start_date, c.end_date, c.amount, c.amount_condition
 	</select>

@@ -49,7 +49,7 @@
 		#{bannerId}
 	</select>
 
-	<!-- 삭제하기 버튼 -->
+	<!-- 상태변경 (결제/취소) -->
 	<update id="updateBannerStatus" parameterType="map">
 		UPDATE banner
 		SET

@@ -65,7 +65,7 @@
 </head>
 <body>
 	<my:layout>
-		<my:breadcrumb items="이벤트 관리:/brand2/eventList" />
+		<my:breadcrumb items="이벤트 신청 조회:/brand2/eventList" />
 		<div class="filter">
 			<my:tableFilter
 				filters="status|진행상황:RECRUIT=모집중|ONGOING=진행중|FINISHED=종료"
@@ -77,7 +77,6 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th><input type="checkbox" class="form-check" /></th>
 							<th class="sortable">번호 <i class="bi bi-dash-lg sort-icon"></i></th>
 							<th>신청일</th>
 							<th>이벤트 기간</th>
@@ -94,7 +93,6 @@
 						<c:forEach var="event" items="${eventList}">
 							<tr>
 								<!-- 번호 -->
-								<td><input type="checkbox" class="form-check" /></td>
 								<td>${event.eventId}</td>
 								<!-- 신청일 -->
 								<td><fmt:formatDate value="${event.applyDate}"

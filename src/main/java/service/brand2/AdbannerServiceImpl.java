@@ -63,8 +63,12 @@ public class AdbannerServiceImpl implements AdbannerService {
 
 	// 배너 취소 버튼
 	@Override
-	public void cancelBanner(Map<String, Object> params) throws Exception {
-	    bannerDAO.updateBannerStatus(params);   // DAO 호출
+	public void cancelBanner(Long bannerId) throws Exception {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("bannerId", bannerId);
+	    params.put("status", "CANCELED"); // 여기서 status 지정
+	 // jsp url action=cancel -> controller (status, CANCELED)
+	    bannerDAO.updateBannerStatus(params);
 	}
 
 	// 배너 결제
@@ -91,7 +95,9 @@ public class AdbannerServiceImpl implements AdbannerService {
 	    return adminPaymentDAO.existsByBannerId(bannerId) > 0;
 	}
 	
-	
-
+	@Override
+	public AdminPayment getPaymentByBannerId(Long bannerId) throws Exception {
+	    return adminPaymentDAO.selectPaymentByBannerId(bannerId);
+	}
 	
 }

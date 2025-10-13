@@ -28,5 +28,11 @@ public class AdminPaymentDAOImpl implements AdminPaymentDAO {
 	public int existsByBannerId(long bannerId) throws Exception {
 	    return sqlSession.selectOne("mapper.adminPayment.existsByBannerId", bannerId);
 	}
+	
+	// 배너 ID로 결제 내역 조회 (취소 시 사용)
+	@Override
+    public AdminPayment selectPaymentByBannerId(Long bannerId) throws Exception {
+        return sqlSession.selectOne("mapper.adminPayment.selectPaymentByBannerId", bannerId);
+    }
 
 }

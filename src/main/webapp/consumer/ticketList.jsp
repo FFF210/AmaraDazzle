@@ -49,9 +49,9 @@
 				<thead>
 					<tr>
 						<th style="width: 80px;">번호</th>
-						<th style="width: 100px;">유형</th>
+						<th style="width: 120px;">유형</th>
 						<th>내용</th>
-						<th style="width: 120px;">등록일</th>
+						<th style="width: 140px;">등록일</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -68,8 +68,8 @@
 						<tr
 							onclick="location.href='<c:url value='/store/mypage/ticketDetail'/>?ticketId=${ticket.ticketId}'"
 							style="cursor: pointer;">
-							<td>${status.count}</td>
-							<td>
+							<td style="color: #111;">${status.count}</td>
+							<td style="color: #111;">
 								<%-- 카테고리별 badge 표시 --%> <c:choose>
 									<c:when test="${ticket.category == 'ORDER'}">
 										<span class="status-badge status-주문">주문</span>
@@ -100,22 +100,20 @@
 									</c:otherwise>
 								</c:choose>
 							</td>
-							<td class="text-left">
-								<%-- 문의 내용 (너무 길면 자르기) --%> <c:choose>
+							<td style="color: #111; text-align: left;"><c:if
+									test="${not empty ticket.answer}">
+									<span
+										style="color: #7421C4; margin-right: 5px; font-weight: 600;">답변완료</span>
+								</c:if> <%-- 문의 내용 (너무 길면 자르기) --%> <c:choose>
 									<c:when test="${ticket.question.length() > 50}">
                                     ${ticket.question.substring(0, 50)}...
                                 </c:when>
 									<c:otherwise>
                                     ${ticket.question}
                                 </c:otherwise>
-								</c:choose> <%-- 답변이 있으면 표시 --%> <c:if test="${not empty ticket.answer}">
-									<span style="color: #1e90ff; margin-left: 5px;">[답변완료]</span>
-								</c:if>
-							</td>
-							<td>
-								<%-- 날짜 포맷 (yyyy-MM-dd) --%> <fmt:formatDate
-									value="${ticket.questionedAt}" pattern="yyyy-MM-dd" />
-							</td>
+								</c:choose></td>
+							<td style="color: #111;"><fmt:formatDate
+									value="${ticket.questionedAt}" pattern="yyyy-MM-dd" /></td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -125,7 +123,8 @@
 		<!-- 페이징 -->
 		<div class="page-pagination">
 			<my:pagination currentPage="${currentPage}"
-				totalPages="${totalPages}" baseUrl="/store/mypage/ticketList?${queryString}" />
+				totalPages="${totalPages}"
+				baseUrl="/store/mypage/ticketList?${queryString}" />
 		</div>
 	</main>
 

@@ -3,6 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="dto.Member"%>
 <%@ page import="java.util.Map"%>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,27 +19,31 @@
 <link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/selectbox.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/pageHeader.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/textInput.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/table.css'/>">
+<link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 <link rel="stylesheet"
 	href="<c:url value='/consumer/css/checkout.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/textInput.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 
 <!-- 토스 sdk 버전1 -->
 <script src="https://js.tosspayments.com/v1"></script>
 </head>
+
 <body>
 	<!-- 헤더 include -->
 	<%@ include file="/consumer/header.jsp"%>
 
 	<!-- 페이지헤더 -->
-	<%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
-	<my:pageHeader hasButton="false" title="주문/결제" />
+	<div class="pageHeader-wrapper">
+		<my:pageHeader hasButton="false" title="주문/결제" />
+	</div>
 
 	<%-- 디버깅: checkoutData 확인 --%>
-	<div
+	<%-- <div
 		style="background: #f0f0f0; padding: 10px; margin: 10px; border: 2px solid red;">
 		<h3>🔍 디버깅 정보</h3>
 		<p>checkoutData가 null인가? ${checkoutData == null ? 'YES - 문제있음!' : 'NO - 데이터 있음'}</p>
@@ -67,269 +74,296 @@
 					unitPrice=${item.unitPrice}</p>
 			</c:forEach>
 		</c:if>
-	</div>
+	</div> --%>
 
-	<main class="main-container">
-		<div class="main-content">
+	<div class="main-content">
 
-			<form method="post" action="checkout">
+		<form method="post" action="checkout">
+			<!-- 배송지 정보 -->
+			<div class="shipping-info-section">
+				<h2 class="section-title">배송지 정보</h2>
 
-				<!-- 배송지 정보 -->
-				<section class="shipping-info-section">
-					<h2 class="section-title">배송지 정보</h2>
-					<div class="delivery-form">
-						<div class="form-row receiver-row">
-							<div class="label">
-								받는분 <span class="required">*</span>
-							</div>
-							<div class="input-area">
-								<%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
-								<my:textInput id="shipRecipient" name="shipRecipient"
-									value="${checkoutData.member.name}" type="default" size="lg"
-									state="default" />
-								<!-- <label class="checkbox-option"> <input type="checkbox">
-								주문자정보와 동일
-							</label> -->
-							</div>
+				<div class="delivery-form">
+					<div class="form-row receiver-row">
+						<div class="label">
+							받는분 <span class="required">*</span>
 						</div>
+						<div class="input-area">
+							<%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+							<my:textInput id="shipRecipient" name="shipRecipient"
+								value="${checkoutData.member.name}" type="default" size="lg"
+								state="default" />
+						</div>
+					</div>
 
-						<div class="form-row phone-row">
-							<div class="label">
-								연락처 <span class="required">*</span>
-							</div>
-							<div class="input-area">
-								<div class="phone-group">
+					<div class="form-row phone-row">
+						<div class="label">
+							연락처 <span class="required">*</span>
+						</div>
+						<div class="input-area">
+							<div class="phone-group">
+								<%
+								// checkoutData에서 member 꺼내기
+								Map<String, Object> data = (Map<String, Object>) request.getAttribute("checkoutData");
+								Member member = (Member) data.get("member");
 
-									<%
-									// checkoutData에서 member 꺼내기
-									Map<String, Object> data = (Map<String, Object>) request.getAttribute("checkoutData");
-									Member member = (Member) data.get("member");
+								// 전화번호 가져오기
+								String phoneNumber = (member != null && member.getPhone() != null) ? member.getPhone() : "";
 
-									// 전화번호 가져오기
-									String phoneNumber = (member != null && member.getPhone() != null) ? member.getPhone() : "";
+								// 디버깅 출력
+								System.out.println("전화번호: " + phoneNumber);
 
-									// 디버깅 출력
-									System.out.println("전화번호: " + phoneNumber);
-
-									// 3개로 나누기
-									String p1 = "", p2 = "", p3 = "";
-									if (!phoneNumber.isEmpty() && phoneNumber.contains("-")) {
-										String[] parts = phoneNumber.split("-");
-										if (parts.length == 3) {
-											p1 = parts[0];
-											p2 = parts[1];
-											p3 = parts[2];
-										}
+								// 3개로 나누기
+								String p1 = "", p2 = "", p3 = "";
+								if (!phoneNumber.isEmpty() && phoneNumber.contains("-")) {
+									String[] parts = phoneNumber.split("-");
+									if (parts.length == 3) {
+										p1 = parts[0];
+										p2 = parts[1];
+										p3 = parts[2];
 									}
-									%>
-									<my:textInput id="shipPhone1" name="shipPhone1" value="<%=p1%>"
-										type="default" size="sm" state="default" />
-									<span class="dash">-</span>
-									<my:textInput id="shipPhone2" name="shipPhone2" value="<%=p2%>"
-										type="default" size="sm" state="default" />
-									<span class="dash">-</span>
-									<my:textInput id="shipPhone3" name="shipPhone3" value="<%=p3%>"
-										type="default" size="sm" state="default" />
-								</div>
-							</div>
-						</div>
-						<div class="form-row address-row">
-							<div class="label">
-								주소 <span class="required">*</span>
-							</div>
-							<div class="input-area address-row">
-								<div class="address-input-group">
-									<my:textInput id="shipPostcode" name="shipPostcode"
-										value="${checkoutData.member.postcode}" type="default"
-										size="sm" state="default" />
-									<button type="button" class="btn btn-outline btn-md"
-										style="width: auto; min-width: auto;">우편번호 찾기</button>
-								</div>
-								<div class=detail-address>
-									<my:textInput id="shipLine1" name="shipLine1"
-										value="${checkoutData.member.line1}" type="default" size="sm"
-										state="default" />
-									<my:textInput id="shipLine2" name="shipLine2"
-										value="${checkoutData.member.line2}" type="default" size="sm"
-										state="default" />
-								</div>
+								}
+								%>
+								<my:textInput id="shipPhone1" name="shipPhone1" value="<%=p1%>"
+									type="default" size="lg" state="default" />
+								<p class="dash">-</p>
+								<my:textInput id="shipPhone2" name="shipPhone2" value="<%=p2%>"
+									type="default" size="lg" state="default" />
+								<p class="dash">-</p>
+								<my:textInput id="shipPhone3" name="shipPhone3" value="<%=p3%>"
+									type="default" size="lg" state="default" />
 							</div>
 						</div>
 					</div>
-				</section>
 
-				<!-- 배송 요청사항 -->
-				<section class="delivery-request">
-					<h2 class="section-title">배송 요청사항</h2>
-					<div class="delivery-form">
-						<div class="form-row delivery-message">
-							<div class="label">배송메시지</div>
-							<div class="input-area">
-								<my:textInput id="note" name="note" placeholder="요청사항을 입력해주세요"
-									type="default" size="md" state="default" />
-							</div>
+					<div class="form-row address-row" style="height: 140px;">
+						<div class="label">
+							주소 <span class="required">*</span>
 						</div>
-					</div>
-				</section>
-
-				<!-- 주문 배송상품 -->
-				<section class="order-products">
-					<h2 class="section-title">주문 배송상품</h2>
-					<div class="product-table">
-						<div class="table-header">
-							<div class="col-product">상품정보</div>
-							<div class="col-price">판매가</div>
-							<div class="col-quantity">수량</div>
-							<div class="col-total">구매가</div>
-						</div>
-						<%-- items 배열을 forEach로 반복 --%>
-						<c:forEach var="item" items="${checkoutData.items}">
-							<div class="table-row">
-								<div class="col-product">
-									<div class="product-info">
-										<img src="https://via.placeholder.com/80x80" alt="상품"
-											class="product-image">
-										<div class="product-details">
-											<%--  checkoutData.brand, product 사용 --%>
-											<div class="brand">${checkoutData.brand.brandName}</div>
-											<div class="product-name">${checkoutData.product.name}</div>
-											<div class="product-option">${item.optionValue}</div>
-										</div>
-									</div>
-								</div>
-								<%-- item의 데이터 사용 --%>
-								<div class="col-price">${item.unitPrice}원</div>
-								<div class="col-quantity">${item.quantity}</div>
-								<div class="col-total">${item.itemTotal}원</div>
+						<div class="input-area address-row">
+							<div class="address-input-group">
+								<my:textInput id="shipPostcode" name="shipPostcode"
+									value="${checkoutData.member.postcode}" type="default"
+									size="lg" state="default" />
+								<button type="button" class="btn btn-primary btn-xl"
+									style="width: 150px;">우편번호 찾기</button>
 							</div>
-						</c:forEach>
-					</div>
-				</section>
-
-				<div class="content-layout">
-					<div class="left-content">
-						<!-- 쿠폰할인정보 -->
-						<section class="coupon-section">
-							<h3 class="section-title">쿠폰할인정보</h3>
-							<div class="coupon-form">
-								<div class="form-row">
-									<div class="label">쿠폰</div>
-									<div class="input-area">
-										<select name="usingCoupon" class="coupon-select">
-											<option value="">사용 가능한 쿠폰 목록</option>
-											<option value="coupon1">10,000원 할인 쿠폰</option>
-											<option value="coupon2">5,000원 할인 쿠폰</option>
-										</select>
-									</div>
-								</div>
-
-								<div class="form-row">
-									<div class="label">포인트</div>
-									<div class="input-area">
-										<input type="number" name="usingPoint" value="0"
-											class="point-input"> <span class="point-unit">원
-											/ 사용가능 포인트: ${checkoutData.member.pointBalance} P</span>
-									</div>
-								</div>
-							</div>
-						</section>
-
-						<!-- 결제수단 선택: (토스페이만!) -->
-						<div class="payment-section">
-							<h3 class="section-title">결제수단 선택</h3>
-							<div class="payment-option">
-								<label class="toss-payment-label"> <input type="radio"
-									name="paymentMethod" value="toss" checked> <span
-									class="sr-only">토스페이먼츠로 결제</span> <img
-									src="<c:url value='/image/logo-toss-pay.svg'/>" alt="토스페이"
-									class="toss-payment-img">
-								</label>
-							</div>
-						</div>
-					</div>
-					<!-- 최종 결제 정보 -->
-					<div class="right-content">
-						<div class="payment-summary">
-							<h3 class="payment-title">최종 결제 정보</h3>
-
-							<div class="price-breakdown">
-								<div class="price-item">
-									<span class="price-label">총 상품 금액</span> <span
-										class="price-value" id="displaySubtotal">0 원</span>
-								</div>
-								<div class="price-item">
-									<span class="price-label">쿠폰 할인 금액</span> <span
-										class="price-value discount" id="couponDiscount">0 원</span>
-								</div>
-								<div class="price-item">
-									<span class="price-label">포인트 사용 금액</span> <span
-										class="price-value" id="pointUsage">0 원</span>
-
-								</div>
-							</div>
-
-							<div class="shipping-fee">
-								<div class="price-item">
-									<span class="price-label">총 배송비</span> <span
-										class="price-value">${checkoutData.shippingFee} 원</span>
-								</div>
-							</div>
-
-							<div class="final-total">
-								<div class="price-item total">
-									<span class="price-label">최종결제금액</span> <span
-										class="price-value final" id="displayTotal">0 원</span>
-								</div>
-							</div>
-
-							<div class="point-earn">
-								<div class="price-item">
-									<span class="price-label">포인트 적립 혜택</span> <span
-										class="price-value" id="pointEarn">0 원</span>
-								</div>
-							</div>
-
-							<div class="agreement-section">
-								<label class="checkbox-option"> <input type="checkbox"
-									required> 주문 내용을 확인했으며, 아래 내용에 모두 동의합니다.
-								</label>
-								<div class="agreement-links">
-									<div>개인정보 수집/이용 동의</div>
-									<div>개인정보 제3자 제공 동의</div>
-									<div>결제대행 서비스 이용약관</div>
-								</div>
-							</div>
-							<div class=button-wrapper>
-								<!--  hidden field -->
-								<input type="hidden" name="productId"
-									value="${checkoutData.product.productId}"> <input
-									type="hidden" name="brandId"
-									value="${checkoutData.brand.brandId}">
-
-								<%-- 여러 옵션 정보 전달 --%>
-								<c:forEach var="item" items="${checkoutData.items}"
-									varStatus="status">
-									<input type="hidden" name="items[${status.index}].optionId"
-										value="${item.optionId}">
-									<input type="hidden" name="items[${status.index}].quantity"
-										value="${item.quantity}">
-								</c:forEach>
-
-								<!-- 금액 정보 -->
-								<input type="hidden" name="subtotalAmount" id="subtotalAmount">
-								<input type="hidden" name="discountAmount" id="discountAmount">
-								<input type="hidden" name="shippingAmount" id="shippingAmount"
-									value="${checkoutData.shippingFee}"> <input
-									type="hidden" name="totalAmount" id="totalAmount">
-
-								<button type="button" class="btn btn-primary btn-lg">결제하기</button>
+							<div class=detail-address>
+								<my:textInput id="shipLine1" name="shipLine1"
+									value="${checkoutData.member.line1}" type="default" size="lg"
+									state="default" />
+								<my:textInput id="shipLine2" name="shipLine2"
+									value="${checkoutData.member.line2}" type="default" size="lg"
+									state="default" />
 							</div>
 						</div>
 					</div>
 				</div>
-			</form>
-		</div>
-	</main>
+			</div>
+
+			<!-- 배송 요청사항 -->
+			<div class="delivery-request">
+				<h2 class="section-title">배송 요청사항</h2>
+				<div class="delivery-form">
+					<div class="form-row delivery-message">
+						<div class="label">배송메시지</div>
+						<div class="input-area">
+							<my:textInput id="note" name="note" placeholder="요청사항을 입력해주세요"
+								type="default" size="lg" state="default" />
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 주문 배송상품 -->
+			<div class="order-products">
+				<h2 class="section-title">주문 배송상품</h2>
+				<div class="table-wrapper">
+					<table class="table">
+						<thead>
+							<tr>
+								<th style="padding: 0;">상품</th>
+								<th style="width: 120px; padding: 0;">판매가</th>
+								<th style="width: 50px; padding: 0;">수량</th>
+								<th style="width: 120px; padding: 0;">주문금액</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- 주문별 외부 루프 -->
+							<c:forEach var="item" items="${checkoutData.items}">
+								<tr>
+									<!-- 상품 정보 -->
+									<td style="padding: 0;"
+										onclick="location.href='${pageContext.request.contextPath}/store/productDetail?productId=${item.productId}'">
+										<div
+											style="display: flex; align-items: center; gap: 12px; padding: 20px 0;">
+											<img
+												src="${pageContext.request.contextPath}/image?fileId=${item.thumbnailFileId}"
+												alt="${item.productName}"
+												style="width: 80px; height: 80px; object-fit: cover;">
+
+											<div class="product-info"
+												style="text-align: left; display: flex; flex-direction: column; width: 100%; height: fit-content; gap: 6px;">
+												<p class="product-brand"
+													style="color: #333; font-weight: 700; font-size: 13px;">${checkoutData.brand.brandName}</p>
+												<p class="product-name">${checkoutData.product.name}</p>
+												<c:if test="${not empty item.optionValue}">
+													<P style="color: #888; font-weight: 400; font-size: 13px;">옵션
+														| ${item.optionValue}</P>
+												</c:if>
+											</div>
+										</div>
+									</td>
+									<td style="padding: 0; color: #111; font-size: 13px;"><fmt:formatNumber
+											value="${item.unitPrice}" pattern="#,###" />원</td>
+									<td style="padding: 0; color: #111; font-size: 13px;">${item.quantity}</td>
+									<td
+										style="padding: 0; color: #111; font-size: 13px; font-weight: 500;"><fmt:formatNumber
+											value="${item.itemTotal}" pattern="#,###" />원</td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="content-layout">
+				<div class="left-content">
+					<!-- 쿠폰할인정보 -->
+					<section class="coupon-section">
+						<h3 class="section-title">쿠폰할인정보</h3>
+						<div class="coupon-form">
+							<div class="form-row">
+								<div class="label">쿠폰</div>
+								<div class="input-area">
+									<!-- <select name="usingCoupon" class="coupon-select">
+										<option value="">사용 가능한 쿠폰 목록</option>
+										<option value="coupon1">10,000원 할인 쿠폰</option>
+										<option value="coupon2">5,000원 할인 쿠폰</option>
+									</select> -->
+									<div class="custom-select lg">
+										<div class="select-header">
+											<span class="select-label">${selectedValue}</span> <i
+												class="bi bi-chevron-down"></i>
+										</div>
+										<ul class="select-list">
+											<c:forEach var="it" items="${itemList}">
+												<li
+													class="select-item ${it eq selectedValue ? 'active' : ''}"
+													data-value="${it}">${it}</li>
+											</c:forEach>
+										</ul>
+									</div>
+
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="label">포인트</div>
+								<div class="input-area">
+									<input type="number" name="usingPoint" value="0"
+										class="point-input"> <span class="point-unit">사용가능
+										포인트: ${checkoutData.member.pointBalance} P</span>
+								</div>
+							</div>
+						</div>
+					</section>
+
+					<!-- 결제수단 선택: (토스페이만!) -->
+					<div class="payment-section">
+						<h3 class="section-title">결제수단 선택</h3>
+						<div class="payment-option">
+							<label class="toss-payment-label"> <input type="radio"
+								name="paymentMethod" value="toss" checked> <span
+								class="sr-only">토스페이먼츠로 결제</span> <img
+								src="<c:url value='/image/logo-toss-pay.svg'/>" alt="토스페이"
+								class="toss-payment-img">
+							</label>
+						</div>
+					</div>
+				</div>
+				<!-- 최종 결제 정보 -->
+				<div class="right-content">
+					<div class="payment-summary">
+						<h3 class="payment-title">최종 결제 정보</h3>
+
+						<div class="price-breakdown">
+							<div class="price-item">
+								<span class="price-label">총 상품 금액</span> <span
+									class="price-value" id="displaySubtotal">0 원</span>
+							</div>
+							<div class="price-item">
+								<span class="price-label">쿠폰 할인 금액</span> <span
+									class="price-value discount" id="couponDiscount">0 원</span>
+							</div>
+							<div class="price-item">
+								<span class="price-label">포인트 사용 금액</span> <span
+									class="price-value" id="pointUsage">0 원</span>
+
+							</div>
+						</div>
+
+						<div class="shipping-fee">
+							<div class="price-item">
+								<span class="price-label">총 배송비</span> <span class="price-value">${checkoutData.shippingFee}
+									원</span>
+							</div>
+						</div>
+
+						<div class="final-total">
+							<div class="price-item total">
+								<span class="price-label">최종결제금액</span> <span
+									class="price-value final" id="displayTotal">0 원</span>
+							</div>
+						</div>
+
+						<div class="point-earn">
+							<div class="price-item">
+								<span class="price-label">포인트 적립 혜택</span> <span
+									class="price-value" id="pointEarn">0 원</span>
+							</div>
+						</div>
+
+						<div class="agreement-section">
+							<label class="checkbox-option"> <input type="checkbox"
+								required> 주문 내용을 확인했으며, 아래 내용에 모두 동의합니다.
+							</label>
+							<div class="agreement-links">
+								<div>개인정보 수집/이용 동의</div>
+								<div>개인정보 제3자 제공 동의</div>
+								<div>결제대행 서비스 이용약관</div>
+							</div>
+						</div>
+						<div class=button-wrapper>
+							<!--  hidden field -->
+							<input type="hidden" name="productId"
+								value="${checkoutData.product.productId}"> <input
+								type="hidden" name="brandId"
+								value="${checkoutData.brand.brandId}">
+
+							<%-- 여러 옵션 정보 전달 --%>
+							<c:forEach var="item" items="${checkoutData.items}"
+								varStatus="status">
+								<input type="hidden" name="items[${status.index}].optionId"
+									value="${item.optionId}">
+								<input type="hidden" name="items[${status.index}].quantity"
+									value="${item.quantity}">
+							</c:forEach>
+
+							<!-- 금액 정보 -->
+							<input type="hidden" name="subtotalAmount" id="subtotalAmount">
+							<input type="hidden" name="discountAmount" id="discountAmount">
+							<input type="hidden" name="shippingAmount" id="shippingAmount"
+								value="${checkoutData.shippingFee}"> <input
+								type="hidden" name="totalAmount" id="totalAmount">
+
+							<button type="button" class="btn btn-primary btn-lg" style="width: 130px">결제하기</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
 
 	<script>
 		window.checkoutData = {

@@ -549,30 +549,30 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public boolean cancelOrderItem(Long orderItemId) throws Exception {
 
-		 // 1. 현재 상태 확인
-	    String currentStatus = orderDAO.getOrderItemStatus(orderItemId);
-	    
-	    if (currentStatus == null) {
-	        throw new Exception("존재하지 않는 주문입니다.");
-	    }
-	    
-	    // 2. 취소 가능 여부 체크
-	    if (!currentStatus.equals("PAID") && !currentStatus.equals("PREPARING")) {
-	        throw new Exception("취소할 수 없는 상태입니다.");
-	    }
-	    
-	    // 3. 상태 변경
-	    int result = orderDAO.cancelOrderItem(orderItemId);
-	    
-	    if (result == 0) {
-	        throw new Exception("주문 취소에 실패했습니다.");
-	    }
-	    
-	    // 4. 재고 복구 (둘 다 실행 - 조건에 맞는 것만 업데이트됨)
-	    orderDAO.restoreOptionStock(orderItemId);  // 옵션 있으면 실행
-	    orderDAO.restoreProductStock(orderItemId); // 옵션 없으면 실행
-	    
-	    return true;
+		// 1. 현재 상태 확인
+		String currentStatus = orderDAO.getOrderItemStatus(orderItemId);
+
+		if (currentStatus == null) {
+			throw new Exception("존재하지 않는 주문입니다.");
+		}
+
+		// 2. 취소 가능 여부 체크
+		if (!currentStatus.equals("PAID") && !currentStatus.equals("PREPARING")) {
+			throw new Exception("취소할 수 없는 상태입니다.");
+		}
+
+		// 3. 상태 변경
+		int result = orderDAO.cancelOrderItem(orderItemId);
+
+		if (result == 0) {
+			throw new Exception("주문 취소에 실패했습니다.");
+		}
+
+		// 4. 재고 복구 (둘 다 실행 - 조건에 맞는 것만 업데이트됨)
+		orderDAO.restoreOptionStock(orderItemId); // 옵션 있으면 실행
+		orderDAO.restoreProductStock(orderItemId); // 옵션 없으면 실행
+
+		return true;
 	}
 
 	// OrderDetail 용도=========================================
@@ -628,8 +628,8 @@ public class OrderServiceImpl implements OrderService {
 
 	// ================[소비자] 취소/교환/반품 통합 목록 조회 ===================
 	@Override
-	public List<Map<String, Object>> getCancelExchangeReturnList(Long memberId, String startDate, String endDate)
-			throws Exception {
+	public Map<String, Object> getCancelExchangeReturnList(Long memberId, String startDate, String endDate, int page,
+			int pageSize) throws Exception {
 		if (memberId == null) {
 			throw new Exception("회원 ID가 필요합니다.");
 		}
@@ -637,13 +637,33 @@ public class OrderServiceImpl implements OrderService {
 		Map<String, Object> params = new HashMap<>();
 		params.put("memberId", memberId);
 
-		// 날짜 필터 (선택적)
+       // 1. 날짜 필터 (선택적)
 		if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
 			params.put("startDate", startDate);
 			params.put("endDate", endDate);
 		}
 
-		return orderDAO.selectCancelExchangeReturnList(params);
+        // 2. 페이지네이션 설정
+		int offset = (page - 1) * pageSize; // 건너뛸 개수 계산
+		params.put("limit", pageSize); // 한 페이지에 보여줄 개수
+		params.put("offset", offset); // 건너뛸 개수
+
+        // 3. 데이터 조회
+		List<Map<String, Object>> list = orderDAO.selectCancelExchangeReturnList(params);
+		int totalCount = orderDAO.countCancelExchangeReturnList(params); // ✨ 전체 개수 조회
+ 
+        // 4. 페이지 정보 계산
+		int totalPages = (int) Math.ceil((double) totalCount / pageSize);
+
+        // 5. 결과 반환 (Map으로)
+		Map<String, Object> result = new HashMap<>();
+		result.put("list", list); // 목록 데이터
+		result.put("totalCount", totalCount); // 전체 개수
+		result.put("totalPages", totalPages); // 전체 페이지 수
+		result.put("currentPage", page); // 현재 페이지
+		result.put("pageSize", pageSize); // 페이지 크기
+
+		return result;
 	}
 
 	// ============ [소비자] 교환/반품 신청용 ===========

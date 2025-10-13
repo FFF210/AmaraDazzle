@@ -104,7 +104,7 @@ public interface OrderService {
 	boolean cancelOrderItem(Long orderItemId) throws Exception;
 
 	// ================ 취소/교환/반품 통합 목록 조회 ===================
-	List<Map<String, Object>> getCancelExchangeReturnList(Long memberId, String startDate, String endDate)
+	Map<String, Object> getCancelExchangeReturnList(Long memberId, String startDate, String endDate, int page, int pageSize) 
 			throws Exception;
 
 	// ================ 교환/반품 신청용 =======================

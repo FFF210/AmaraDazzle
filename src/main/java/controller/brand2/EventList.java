@@ -9,7 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import dto.Brand;
 import service.brand2.EventService;
 import service.brand2.EventServiceImpl;
 
@@ -19,58 +21,50 @@ import service.brand2.EventServiceImpl;
 @WebServlet("/brand2/eventList")
 public class EventList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private EventService eventService;
 
-	/**
-	 * @see HttpServlet#HttpServlet()
-	 */
 	public EventList() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	// 서비스 객체 초기화
-	@Override
-	public void init() throws ServletException {
-		eventService = new EventServiceImpl();
-	}
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
 
-		// 세션에서 brandId 꺼내기
-//		HttpSession session = request.getSession();
-//		Brand brand = (Brand) session.getAttribute("brand");
-//		if (brand != null) {
-//			banner.setBrandId(brand.getBrandId());
-//		} 
+		HttpSession session = request.getSession(false);
+		
+		// 세션 없거나 브랜드 정보 없음 → 로그인 페이지로 리다이렉트
+		if (session == null || session.getAttribute("brand") == null) {
+			response.sendRedirect(request.getContextPath() + "/brand/login");
+			return;
+		}
 
-
-		Map<String, Object> params = new HashMap<>();
+		Brand brand = (Brand) session.getAttribute("brand");
+		Long brandId = brand.getBrandId();
+		
+		EventService service = new EventServiceImpl();
 
 		// 페이지네이션
 		int page = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
 		int limit = 10; // 한 페이지당 개수
 		int offset = (page - 1) * limit;
 
-		params.put("brandId", 1L);
+		Map<String, Object> params = new HashMap<>();
+		params.put("brandId", brandId);
+
 		params.put("status", request.getParameter("status")); // 이벤트 진행 상황
 		params.put("searchType", request.getParameter("searchType")); // 검색 키워드
 		params.put("searchKeyword", request.getParameter("searchKeyword"));
 		params.put("startDate", request.getParameter("startDate")); // 날짜 // 시작일
 		params.put("endDate", request.getParameter("endDate")); // 종료일
+		
 		params.put("limit", limit);
 		params.put("offset", offset);
 
 		try {
 
 			// 서비스 호출
-			Map<String, Object> result = eventService.getEventList(params);
+			Map<String, Object> result = service.getEventList(params);
 
 			// JSP로 전달
 			request.setAttribute("eventList", result.get("eventList")); // 주문 목록
@@ -88,13 +82,8 @@ public class EventList extends HttpServlet {
 
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

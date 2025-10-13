@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import service.consumer.BrandFollowService;
 import service.consumer.BrandFollowServiceImpl;
+import service.consumer.BrandService;
+import service.consumer.BrandServiceImpl;
 
 /**
  * Servlet implementation class BrandFollowToggle
@@ -70,11 +72,24 @@ public class BrandFollowToggle extends HttpServlet {
 			return;
 		}
 
-		Long brandId = Long.valueOf(request.getParameter("brandId"));
+		String brandIdParam = request.getParameter("brandId");
+		if (brandIdParam == null || brandIdParam.isEmpty()) {
+			response.getWriter().write("{\"success\":false, \"message\":\"브랜드 ID가 필요합니다\"}");
+			return;
+		}
 
 		try {
+			Long brandId = Long.valueOf(brandIdParam);
 			boolean isFollowing = service.toggleBrandFollow(memberId, brandId);
-			response.getWriter().write("{\"success\":true, \"isFollowing\":" + isFollowing + "}");
+
+			// 팔로워 수도 함께 반환 (선택사항)
+			BrandService brandService = new BrandServiceImpl();
+			int followerCount = brandService.countBrandFollowers(brandId);
+
+			response.getWriter().write(
+					"{\"success\":true, \"isFollowing\":" + isFollowing + ", \"followerCount\":" + followerCount + "}");
+		} catch (NumberFormatException e) {
+			response.getWriter().write("{\"success\":false, \"message\":\"잘못된 브랜드 ID\"}");
 		} catch (Exception e) {
 			e.printStackTrace();
 			response.getWriter().write("{\"success\":false, \"message\":\"서버 오류\"}");

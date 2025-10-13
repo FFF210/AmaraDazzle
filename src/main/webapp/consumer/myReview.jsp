@@ -23,13 +23,13 @@
 <link rel="stylesheet"
 	href="<c:url value='/consumer/css/mypageMenu.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/tab.css'/>">
-<link rel="stylesheet"
-	href="<c:url value='/consumer/css/myReview.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/table.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/rating.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 <link rel="stylesheet"
 	href="<c:url value='/consumer/css/userInfo.css'/>">
+<link rel="stylesheet"
+	href="<c:url value='/consumer/css/myReview.css'/>">
 
 </head>
 <body>
@@ -73,9 +73,9 @@
 											<table class="table">
 												<thead>
 													<tr>
-														<th style="width: 380px;">상품</th>
-														<th style="width: 140px;">주문일자</th>
-														<th style="width: 240px;">리뷰작성</th>
+														<th style="width: 300px;">상품</th>
+														<th style="width: 110px;">주문일자</th>
+														<th style="width: 120px;">리뷰작성</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -84,25 +84,36 @@
 															<td>
 																<div class="product-info"
 																	onclick="goToProduct(${item.product_id})"
-																	style="cursor: pointer;">
-																	<img src="/images/thumbnail/${item.thumbnail_file_id}"
-																		alt="${item.product_name}" class="product-thumb">
-																	<div class="product-details">
-																		<span class="product-name">${item.product_name}</span>
+																	style="cursor: pointer; display: flex; flex-direction: row; padding: 20px 0; align-items: center; gap: 12px;">
+
+																	<img
+																		src="${pageContext.request.contextPath}/image?fileId=${item.thumbnail_file_id}"
+																		alt="${item.product_name}"
+																		style="width: 80px; height: 80px; object-fit: cover;">
+
+																	<div class="product-details"
+																		style="text-align: left; display: flex; flex-direction: column; width: 100%; height: fit-content; gap: 6px;">
+																		<p class="product-name">${item.product_name}</p>
 																		<c:if test="${not empty item.option_name}">
-																			<span class="option-name">${item.option_name}</span>
+																			<p class="option-name"
+																				style="color: #888; font-weight: 400; font-size: 13px;">옵션
+																				| ${item.option_name}</p>
 																		</c:if>
-																		<span class="price"> <fmt:formatNumber
-																				value="${item.unit_price}" pattern="#,##0" />원
-																			(${item.quantity}개)
-																		</span>
+																		<p class="price"
+																			style="font-size: 13px; font-weight: 400; color: #111;">
+																			<fmt:formatNumber value="${item.unit_price}"
+																				pattern="#,##0" />
+																			원 (${item.quantity}개)
+																		</p>
+
 																	</div>
 																</div>
 															</td>
-															<td><fmt:formatDate value="${item.order_date}"
-																	pattern="yyyy-MM-dd" /></td>
+															<td style="color: #111; font-size: 13px;"><fmt:formatDate
+																	value="${item.order_date}" pattern="yyyy-MM-dd" /></td>
 															<td>
 																<button class="btn btn-outline btn-md"
+																	style="width: 100px;"
 																	onclick="openReviewForm(${item.order_item_id}, ${item.product_id}, '${item.product_option_id}', '${item.product_name}')">
 																	리뷰작성</button>
 															</td>
@@ -129,8 +140,8 @@
 											<table class="table" id="my-review-table">
 												<thead>
 													<tr>
-														<th style="width: 380px;">상품</th>
-														<th style="width: 140px;">주문일자</th>
+														<th style="width: 300px;">상품</th>
+														<th style="width: 110px;">주문일자</th>
 														<th style="width: 240px;">마이리뷰</th>
 													</tr>
 												</thead>
@@ -140,36 +151,51 @@
 															<td>
 																<div class="product-info"
 																	onclick="goToProduct(${review.product_id})"
-																	style="cursor: pointer;">
+																	style="cursor: pointer; display: flex; flex-direction: row; padding: 20px 0; align-items: center; gap: 12px;">
+
 																	<img
-																		src="/images/thumbnail/${review.thumbnail_file_id}"
-																		alt="${review.product_name}" class="product-thumb">
-																	<div class="product-details">
-																		<span class="product-name">${review.product_name}</span>
+																		src="${pageContext.request.contextPath}/image?fileId=${review.thumbnail_file_id}"
+																		alt="${review.product_name}"
+																		style="width: 80px; height: 80px; object-fit: cover;">
+
+																	<div class="product-details"
+																		style="text-align: left; display: flex; flex-direction: column; width: 100%; height: fit-content; gap: 6px;">
+																		<p class="product-name">${review.product_name}</p>
 																		<c:if test="${not empty review.option_name}">
-																			<span class="option-name">${review.option_name}</span>
+																			<p class="option-name"
+																				style="color: #888; font-weight: 400; font-size: 13px;">옵션
+																				| ${review.option_name}</p>
 																		</c:if>
-																		<span class="price"> <fmt:formatNumber
-																				value="${review.unit_price}" pattern="#,##0" />원
-																			(${review.quantity}개)
-																		</span>
+																		<p class="price"
+																			style="font-size: 13px; font-weight: 400; color: #111;">
+																			<fmt:formatNumber value="${review.unit_price}"
+																				pattern="#,##0" />
+																			원 (${review.quantity}개)
+																		</p>
+
 																	</div>
 																</div>
 															</td>
-															<td><fmt:formatDate value="${review.order_date}"
-																	pattern="yyyy-MM-dd" /></td>
-															<td>
-																<div class="review-content">
+															<td style="color: #111; font-size: 13px;"><fmt:formatDate
+																	value="${review.order_date}" pattern="yyyy-MM-dd" /></td>
+															<td style="text-align: left;">
+																<div class="review-content"
+																	style="display: flex; flex-direction: column; align-items: start; gap: 6px;">
 																	<my:rating rating="${review.rating}" readonly="true"
 																		noBackground="true" />
 																	<div class="review-text">
-																		<span class="review-date"> <fmt:formatDate
-																				value="${review.review_date}" pattern="yyyy.MM.dd" />
-																		</span> <br> <span class="content-text">${review.content}</span>
+																		<p class="review-date"
+																			style="color: #999; font-size: 13px;">
+																			<fmt:formatDate value="${review.review_date}"
+																				pattern="yyyy.MM.dd" />
+																		</p>
+																		<p class="product-name">${review.content}</p>
 																	</div>
 																</div>
 															</td>
 														</tr>
+
+
 													</c:forEach>
 												</tbody>
 											</table>
@@ -184,12 +210,13 @@
 							</div>
 						</div>
 					</div>
-					
+
 					<!-- 페이징 -->
-			<div class="page-pagination">
-				<my:pagination currentPage="${currentPage}"
-					totalPages="${totalPages}" baseUrl="/store/mypage/myReview?${queryString}" />
-			</div>
+					<div class="page-pagination">
+						<my:pagination currentPage="${currentPage}"
+							totalPages="${totalPages}"
+							baseUrl="/store/mypage/myReview?${queryString}" />
+					</div>
 				</div>
 			</section>
 		</main>
@@ -210,7 +237,8 @@
 						type="hidden" id="productOptionId" name="productOptionId">
 
 					<div class="form-group">
-						<label>상품명</label> <span id="productNameDisplay"></span>
+						<label>상품명</label> <span id="productNameDisplay"
+							style="color: #111; font-size: 15px;"></span>
 					</div>
 
 					<div class="form-group">
@@ -234,9 +262,10 @@
 					</div>
 
 					<div class="form-actions">
-						<button type="button" class="btn btn-outline"
-							onclick="closeReviewModal()">취소</button>
-						<button type="submit" class="btn btn-primary">리뷰 등록</button>
+						<button type="button" class="btn btn-outline btn-md"
+							onclick="closeReviewModal()" style="width: 100px;">취소</button>
+						<button type="submit" class="btn btn-primary btn-md"
+							style="width: 100px;">리뷰 등록</button>
 					</div>
 				</form>
 			</div>

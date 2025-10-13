@@ -11,14 +11,17 @@ public interface MemberCouponDAO {
      * @param memberId 회원 ID
      * @return 사용 가능한 쿠폰 개수
      */
-    int getAvailableCouponCount (Long memberId) throws Exception ;
+    int getAvailableCouponCount (Long memberId) throws Exception;
+    
+    // 총 쿠폰 개수 조회 (페이징용)
+    int countMemberCouponList(Long memberId) throws Exception;
     
     /**
      * 회원의 쿠폰 목록 조회 (최근순)
      * @param memberId 회원 ID
      * @return 쿠폰 목록
      */
-    List<Map<String, Object>> selectMemberCouponList(Long memberId) throws Exception;
+    List<Map<String, Object>> selectMemberCouponList(Map<String, Object> params) throws Exception;
     
     /**
      * 사용한 쿠폰 정보 조회
