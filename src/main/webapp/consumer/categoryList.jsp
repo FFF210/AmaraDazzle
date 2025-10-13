@@ -270,6 +270,9 @@
 		<c:set var="queryString">
 			<c:if test="${not empty param.sort}">sort=${param.sort}&</c:if>
 			<c:if test="${not empty param.category1Id}">category1Id=${param.category1Id}&</c:if>
+			<c:if test="${not empty param.category2Id}">category2Id=${param.category2Id}&</c:if>
+			<c:if test="${not empty param.category3Id}">category3Id=${param.category3Id}&</c:if>
+			<c:if test="${not empty param.hasSmall}">hasSmall=${param.hasSmall}&</c:if>
 				page=
 			</c:set>
 
