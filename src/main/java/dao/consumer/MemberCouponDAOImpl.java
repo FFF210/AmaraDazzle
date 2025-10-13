@@ -41,6 +41,29 @@ public class MemberCouponDAOImpl implements MemberCouponDAO {
 	public Map<String, Object> getCouponInfoByMemberCouponId(Long memberCouponId) throws Exception {
 		return sqlSession.selectOne("mapper.memberCoupon.getCouponInfoByMemberCouponId", memberCouponId);
 	}
+	
+	// 쿠폰 사용 가능 여부 체크 (조건 포함)
+	@Override
+	public Map<String, Object> checkCouponAvailable(Long memberId, Long memberCouponId) throws Exception {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("memberId", memberId);
+	    params.put("memberCouponId", memberCouponId);
+	    return sqlSession.selectOne("mapper.memberCoupon.checkCouponAvailable", params);
+	}
+	
+	//쿠폰 사용 처리
+	@Override
+	public boolean useCoupon(Long memberId, Long memberCouponId, Long orderId) throws Exception {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("memberId", memberId);
+	    params.put("memberCouponId", memberCouponId);
+	    params.put("orderId", orderId);
+	    
+	    int result = sqlSession.update("mapper.memberCoupon.useCoupon", params);
+	    sqlSession.commit();
+	    
+	    return result > 0;  // true: 성공, false: 실패
+	}
 
 	// 회원가입 축하 쿠폰 ID 조회
 	@Override

@@ -23,6 +23,8 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import service.consumer.MemberCouponService;
+import service.consumer.MemberCouponServiceImpl;
 import service.consumer.OrderService;
 import service.consumer.OrderServiceImpl;
 
@@ -129,6 +131,28 @@ public class TossSuccess extends HttpServlet {
 				Long savedOrderId = orderService.createOrder(orderData);
 
 				System.out.println("✅ 주문 저장 완료: orderId=" + savedOrderId);
+				
+				// ===== 쿠폰 사용 처리 추가 =====
+				System.out.println(">>> 3-1단계: 쿠폰 사용 처리");
+				Long memberCouponId = (Long) orderData.get("usingCoupon");
+				Long memberId = (Long) orderData.get("memberId");
+
+				if (memberCouponId != null) {
+				    try {
+				        MemberCouponService couponService = new MemberCouponServiceImpl();
+				        boolean couponUsed = couponService.applyCoupon(memberId, memberCouponId, savedOrderId);
+				        
+				        if (couponUsed) {
+				            System.out.println("✅ 쿠폰 사용 처리 완료: " + memberCouponId);
+				        } else {
+				            System.err.println("⚠️ 쿠폰 사용 처리 실패 (이미 사용됨): " + memberCouponId);
+				        }
+				    } catch (Exception e) {
+				        // 쿠폰 처리 실패해도 주문은 계속 진행
+				        System.err.println("⚠️ 쿠폰 사용 처리 중 오류: " + e.getMessage());
+				        e.printStackTrace();
+				    }
+				}
 
 				// 6. 재고 감소
 				System.out.println(">>> 4단계: 재고 감소");

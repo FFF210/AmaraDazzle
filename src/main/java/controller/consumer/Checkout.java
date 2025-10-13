@@ -16,6 +16,8 @@ import javax.servlet.http.HttpSession;
 
 import dao.consumer.MemberCouponDAO;
 import dao.consumer.MemberCouponDAOImpl;
+import service.consumer.MemberCouponService;
+import service.consumer.MemberCouponServiceImpl;
 import service.consumer.OrderService;
 import service.consumer.OrderServiceImpl;
 
@@ -211,20 +213,20 @@ public class Checkout extends HttpServlet {
 			// 여러 옵션 처리
 			List<Map<String, Object>> itemsList = new ArrayList<>();
 			Long productId = Long.parseLong(productIdStr);
-			
+
 			for (int i = 0; i < 10; i++) {
 				String optionId = request.getParameter("items[" + i + "].optionId");
 				String quantity = request.getParameter("items[" + i + "].quantity");
-				String unitPrice = request.getParameter("items[" + i + "].unitPrice"); 
+				String unitPrice = request.getParameter("items[" + i + "].unitPrice");
 
 				System.out.println("items[" + i + "].optionId: " + optionId);
 				System.out.println("items[" + i + "].quantity: " + quantity);
 				System.out.println("items[" + i + "].unitPrice: " + unitPrice);
 
-				if (quantity != null && !quantity.trim().isEmpty() 
-				        && unitPrice != null && !unitPrice.trim().isEmpty()) {
-				        
-				        Map<String, Object> item = new HashMap<>();
+				if (quantity != null && !quantity.trim().isEmpty() && unitPrice != null
+						&& !unitPrice.trim().isEmpty()) {
+
+					Map<String, Object> item = new HashMap<>();
 
 					// optionId가 빈 문자열이면 null로 처리
 					if (optionId != null && !optionId.trim().isEmpty()) {
@@ -236,19 +238,19 @@ public class Checkout extends HttpServlet {
 					item.put("productId", productId);
 					item.put("quantity", Integer.parseInt(quantity));
 					item.put("unitPrice", new BigDecimal(unitPrice));
-					
+
 					itemsList.add(item);
 				} else {
 					break;
 				}
 			}
 			orderData.put("items", itemsList);
-			
+
 			if (itemsList.isEmpty()) {
-			    System.out.println("ERROR: 주문 상품이 없습니다!");
-			    response.setContentType("text/plain; charset=UTF-8");
-			    response.getWriter().write("ERROR:주문 상품이 없습니다");
-			    return;
+				System.out.println("ERROR: 주문 상품이 없습니다!");
+				response.setContentType("text/plain; charset=UTF-8");
+				response.getWriter().write("ERROR:주문 상품이 없습니다");
+				return;
 			}
 
 			// 금액 정보 (null 체크)
@@ -269,20 +271,40 @@ public class Checkout extends HttpServlet {
 			orderData.put("shippingAmount", new BigDecimal(shippingStr));
 			orderData.put("totalAmount", new BigDecimal(totalStr));
 
-			// 할인 정보
-			// 쿠폰 처리 (Long으로)
+			// ===== 쿠폰 검증 (중복 선언 제거) =====
 			String usingCouponStr = request.getParameter("usingCoupon");
+			Long memberCouponId = null;
+			int couponDiscount = 0;
+
 			if (usingCouponStr != null && !usingCouponStr.trim().isEmpty()) {
-			    orderData.put("usingCoupon", Long.parseLong(usingCouponStr.trim()));
-			} else {
-			    orderData.put("usingCoupon", null);
+				memberCouponId = Long.parseLong(usingCouponStr.trim());
+
+				// 쿠폰 유효성 검증
+				MemberCouponService couponService = new MemberCouponServiceImpl();
+
+				// 주문 금액
+				int orderAmount = new BigDecimal(subtotalStr).intValue();
+
+				Map<String, Object> validCoupon = couponService.validateCoupon(memberId, memberCouponId, orderAmount);
+
+				if (validCoupon == null) {
+					response.setContentType("text/plain; charset=UTF-8");
+					response.getWriter().write("ERROR:사용할 수 없는 쿠폰입니다.");
+					return;
+				}
+
+				couponDiscount = (int) validCoupon.get("amount");
 			}
+
+			// orderData에 할인 정보 저장
+			orderData.put("usingCoupon", memberCouponId);
+			orderData.put("couponDiscount", couponDiscount);
 
 			// 포인트 처리 (Integer로)
 			String usingPointStr = request.getParameter("usingPoint");
 			orderData.put("usingPoint",
-			        (usingPointStr != null && !usingPointStr.trim().isEmpty()) 
-			        ? Integer.parseInt(usingPointStr.trim()) : 0);
+					(usingPointStr != null && !usingPointStr.trim().isEmpty()) ? Integer.parseInt(usingPointStr.trim())
+							: 0);
 
 			// 4. 임시 주문 ID 생성
 			String temporaryOrderId = "ORDER_" + System.currentTimeMillis();
@@ -350,14 +372,14 @@ public class Checkout extends HttpServlet {
 		// 할인 정보
 		String usingCouponStr = request.getParameter("usingCoupon");
 		if (usingCouponStr != null && !usingCouponStr.isEmpty()) {
-		    orderData.put("usingCoupon", Long.parseLong(usingCouponStr));
+			orderData.put("usingCoupon", Long.parseLong(usingCouponStr));
 		} else {
-		    orderData.put("usingCoupon", null);  // 비어있으면 null
+			orderData.put("usingCoupon", null); // 비어있으면 null
 		}
 
 		String usingPointStr = request.getParameter("usingPoint");
 		orderData.put("usingPoint",
-		        (usingPointStr != null && !usingPointStr.isEmpty()) ? Integer.parseInt(usingPointStr) : 0);
+				(usingPointStr != null && !usingPointStr.isEmpty()) ? Integer.parseInt(usingPointStr) : 0);
 
 		// 주문 상품 계산 정보
 		BigDecimal unitPrice = (BigDecimal) orderData.get("unitPrice");

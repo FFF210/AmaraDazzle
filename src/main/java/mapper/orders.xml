@@ -241,6 +241,7 @@
 		oi.total,
 		oi.status,
 		p.name as productName,
+		p.thumbnail_file_id as thumbnailFileId,
 		b.brand_name as brandName,
 		po.option_value as
 		optionValue
