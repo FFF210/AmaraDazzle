@@ -12,17 +12,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import dao.consumer.BrandFollowDAO;
-import dao.consumer.BrandFollowDAOImpl;
-import dao.consumer.WishlistDAO;
-import dao.consumer.WishlistDAOImpl;
 import dto.Brand;
+import service.consumer.BrandFollowService;
+import service.consumer.BrandFollowServiceImpl;
 import service.consumer.BrandService;
 import service.consumer.BrandServiceImpl;
 import service.consumer.CouponService;
 import service.consumer.CouponServiceImpl;
 import service.consumer.ProductService;
 import service.consumer.ProductServiceImpl;
+import service.consumer.WishlistService;
+import service.consumer.WishlistServiceImpl;
 
 /**
  * Servlet implementation class BrandDetail
@@ -30,6 +30,7 @@ import service.consumer.ProductServiceImpl;
 @WebServlet("/store/brandDetail")
 public class BrandDetail extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final int PAGE_SIZE = 16;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -46,70 +47,98 @@ public class BrandDetail extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			Long brandId = Long.parseLong(request.getParameter("brandId"));
-			HttpSession session = request.getSession();
-			Long memberId = (Long) session.getAttribute("memberId");
+	        Long brandId = Long.parseLong(request.getParameter("brandId"));
+	        String category1IdStr = request.getParameter("category1Id");
+	        Long category1Id = (category1IdStr != null && !category1IdStr.isEmpty()) 
+	                            ? Long.parseLong(category1IdStr) : null;
+	        
+	        int currentPage = 1;
+	        String pageStr = request.getParameter("page");
+	        if (pageStr != null && !pageStr.isEmpty()) {
+	            currentPage = Integer.parseInt(pageStr);
+	        }
 
-			BrandService brandService = new BrandServiceImpl();
-			ProductService productService = new ProductServiceImpl();
-			CouponService couponService = new CouponServiceImpl();
+	        HttpSession session = request.getSession();
+	        Long memberId = (Long) session.getAttribute("memberId");
 
-			// 1. 브랜드 정보
-			Brand brand = brandService.selectBrandByBrandId(brandId);
+	        BrandService brandService = new BrandServiceImpl();
+	        ProductService productService = new ProductServiceImpl();
+	        CouponService couponService = new CouponServiceImpl();
 
-			// 2. 팔로워 수
-			int followerCount = brandService.countBrandFollowers(brandId);
+	        // === 1. 브랜드 정보 ===
+	        Brand brand = brandService.selectBrandByBrandId(brandId);
 
-			// 3. 팔로우 여부
-			boolean isFollowing = false;
-			if (memberId != null) {
-				BrandFollowDAO brandFollowDAO = new BrandFollowDAOImpl();
-				Map<String, Object> params = new HashMap<>();
-				params.put("memberId", memberId);
-				params.put("brandId", brandId);
-				isFollowing = brandFollowDAO.existsBrandFollow(params) > 0;
-			}
+	        // === 2. 팔로워 수 ===
+	        int followerCount = brandService.countBrandFollowers(brandId);
 
-			// 4. 브랜드 상품 목록
-			List<Map<String, Object>> products = productService.getProductsByBrandId(brandId);
+	        // === 3. 팔로우 여부 (로그인한 경우만) ===
+	        boolean isFollowing = false;
+	        if (memberId != null) {
+	            BrandFollowService brandFollowService = new BrandFollowServiceImpl(); // DAO 직접 호출 대신 Service 사용
+	            isFollowing = brandFollowService.isBrandFollowed(memberId, brandId);
+	        }
 
-			// 5. 각 상품의 찜 여부 확인 (추가)
-			if (memberId != null) {
-				WishlistDAO wishlistDAO = new WishlistDAOImpl();
-				for (Map<String, Object> product : products) {
-					Map<String, Object> params = new HashMap<>();
-					params.put("memberId", memberId);
-					params.put("productId", product.get("productId"));
+	        // === 4. 상품 개수 조회 ===
+	        Map<String, Object> countParams = new HashMap<>();
+	        countParams.put("brandId", brandId);
+	        if (category1Id != null) {
+	            countParams.put("category1Id", category1Id);
+	        }
+	        int totalProducts = productService.countProductsByBrand(countParams);
+	        int totalPages = (int) Math.ceil((double) totalProducts / PAGE_SIZE);
 
-					boolean isWished = wishlistDAO.existsWishlist(params) > 0;
-					product.put("isWished", isWished); // 맵에 추가
-				}
-			}
+	        // === 5. 상품 목록 조회 ===
+	        Map<String, Object> productParams = new HashMap<>();
+	        productParams.put("brandId", brandId);
+	        if (category1Id != null) {
+	            productParams.put("category1Id", category1Id);
+	        }
+	        productParams.put("offset", (currentPage - 1) * PAGE_SIZE);
+	        productParams.put("limit", PAGE_SIZE);
+	        
+	        List<Map<String, Object>> products = productService.getProductsByBrandId(productParams);
 
-			Map<String, Object> couponParams = new HashMap<>();
-			couponParams.put("memberId", memberId);
-			couponParams.put("brandId", brandId);
+	        // === 6. 각 상품의 찜 여부 확인 (로그인한 경우만) ===
+	        if (memberId != null) {
+	            WishlistService wishlistService = new WishlistServiceImpl(); // DAO 직접 호출 대신 Service 사용
+	            for (Map<String, Object> product : products) {
+	                Long productId = (Long) product.get("productId");
+	                boolean isWished = wishlistService.isProductWished(memberId, productId);
+	                product.put("isWished", isWished);
+	            }
+	        }
 
-			// 6. 브랜드 쿠폰 목록
-			List<dto.consumer.CouponList> couponList = couponService.getCounponListForBrand(couponParams);
+	        // === 7. 브랜드 쿠폰 목록 ===
+	        Map<String, Object> couponParams = new HashMap<>();
+	        couponParams.put("memberId", memberId);
+	        couponParams.put("brandId", brandId);
+	        List<dto.consumer.CouponList> couponList = couponService.getCounponListForBrand(couponParams);
 
-			request.setAttribute("brand", brand);
-			request.setAttribute("couponList", couponList);
-			request.setAttribute("followerCount", followerCount);
-			request.setAttribute("isFollowing", isFollowing);
-			request.setAttribute("products", products);
+	        // === 8. QueryString 생성 ===
+	        StringBuilder queryString = new StringBuilder("brandId=" + brandId);
+	        if (category1Id != null) {
+	            queryString.append("&category1Id=").append(category1Id);
+	        }
 
-			request.getRequestDispatcher("/consumer/brandDetail.jsp").forward(request, response);
+	        // === Request에 데이터 설정 ===
+	        request.setAttribute("brand", brand);
+	        request.setAttribute("couponList", couponList);
+	        request.setAttribute("followerCount", followerCount);
+	        request.setAttribute("isFollowing", isFollowing);
+	        request.setAttribute("products", products);
+	        request.setAttribute("currentPage", currentPage);
+	        request.setAttribute("totalPages", totalPages);
+	        request.setAttribute("queryString", queryString.toString());
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			
-			// 응답이 이미 커밋되었는지 확인
+	        request.getRequestDispatcher("/consumer/brandDetail.jsp").forward(request, response);
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        
 	        if (!response.isCommitted()) {
 	            request.setAttribute("err", "브랜드 조회 오류: " + e.getMessage());
 	            request.getRequestDispatcher("/consumer/error.jsp").forward(request, response);
 	        } else {
-	            // 이미 커밋된 경우 로그만 남기고 종료
 	            System.err.println("응답이 이미 커밋되어 에러 페이지로 이동할 수 없습니다: " + e.getMessage());
 	        }
 		}

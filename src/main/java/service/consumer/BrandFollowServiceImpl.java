@@ -42,5 +42,14 @@ public class BrandFollowServiceImpl implements BrandFollowService {
 	public int getBrandFollowCount(Long memberId) throws Exception {
 		return brandFollowDAO.countBrandFollowByMemberId(memberId);
 	}
+	
+	// 팔로우 여부
+	@Override
+	public boolean isBrandFollowed(Long memberId, Long brandId) throws Exception {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("memberId", memberId);
+	    params.put("brandId", brandId);
+	    return brandFollowDAO.existsBrandFollow(params) > 0;
+	}
 
 }

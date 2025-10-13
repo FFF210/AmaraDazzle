@@ -15,4 +15,7 @@ public interface WishlistService {
     
     // ================[소비자] 찜 개수 조회 ===================
     int getWishlistCount(Long memberId) throws Exception;
+    
+    //찜 여부
+    boolean isProductWished(Long memberId, Long productId) throws Exception;
 }

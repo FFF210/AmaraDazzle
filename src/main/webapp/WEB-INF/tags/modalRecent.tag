@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetch('/api/recentProducts?productIds=' + productIds.join(','))
       .then(res => res.json())
       .then(products => {
-        countEl.textContent = `전체 ${products.length}개`;
+    	countEl.textContent = '전체 ' + products.length + '개';
         renderPage(products, currentPage);
         renderPagination(products.length);
       })
@@ -109,71 +109,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	    // 썸네일 URL
 	    const thumbUrl = p.thumbnailFileId
-  			? `${contextPath}/image?fileId=${p.thumbnailFileId}`
-  			: `/image/placeholder.png`;
-
+	        ? contextPath + '/image?fileId=' + p.thumbnailFileId
+	        : '/image/placeholder.png';
 
 	    // 할인율 표시
 	    const saleRateHtml = p.isSale
-	      ? `<span class="sale-rate">${saleRate}${p.discountType eq 'RATE' ? '%' : '원'}</span>`
+	      ? '<span class="sale-rate">' + saleRate + (p.discountType === 'RATE' ? '%' : '원') + '</span>'
 	      : '';
 
 	    // 태그 표시
-	    const tagHtml = `
-	      ${p.isExclusive ? '<span class="tag green sm">단독</span>' : ''}
-	      ${p.isPlanned ? '<span class="tag yellow sm">기획</span>' : ''}
-	      ${p.isSale ? '<span class="tag red sm">세일</span>' : ''}
-	    `;
+	    const tagHtml = 
+	      (p.isExclusive ? '<span class="tag green sm">단독</span>' : '') +
+	      (p.isPlanned ? '<span class="tag yellow sm">기획</span>' : '') +
+	      (p.isSale ? '<span class="tag red sm">세일</span>' : '');
 
-	    return `
-	      <a class="product-card" data-productid="${p.productId}" href="/store/productDetail?productId=${p.productId}">
-	        <div class="product-image">
-	          <img src="${thumbUrl}" alt="${p.name}" width="220" />
-	          <div class="wishlist-btn">
-	            <button class="heart-btn icon-only">
-	              <i class="bi ${heartClass}"></i>
-	            </button>
-	          </div>
-	        </div>
-
-	        <div class="product-info">
-	          <p class="product-brand">${p.brandName}</p>
-	          <p class="product-title">${p.name}</p>
-	        </div>
-
-	        <div class="price sm">
-	          ${saleRateHtml}
-	          <span class="final">${formattedPrice}원${p.hasOption ? '~' : ''}</span>
-	        </div>
-
-	        <div class="product-tags">${tagHtml}</div>
-	      </a>
-	    `;
+	    return '<a class="product-card" data-productid="' + p.productId + '" href="/store/productDetail?productId=' + p.productId + '">' +
+	      '<div class="product-image">' +
+	        '<img src="' + thumbUrl + '" alt="' + p.name + '" width="220" />' +
+	        '<div class="wishlist-btn">' +
+	          '<button class="heart-btn icon-only">' +
+	            '<i class="bi ' + heartClass + '"></i>' +
+	          '</button>' +
+	        '</div>' +
+	      '</div>' +
+	      '<div class="product-info">' +
+	        '<p class="product-brand">' + p.brandName + '</p>' +
+	        '<p class="product-title">' + p.name + '</p>' +
+	      '</div>' +
+	      '<div class="price sm">' +
+	        saleRateHtml +
+	        '<span class="final">' + formattedPrice + '원' + (p.hasOption ? '~' : '') + '</span>' +
+	      '</div>' +
+	      '<div class="product-tags">' + tagHtml + '</div>' +
+	    '</a>';
 	  }).join('');
 	}
-
 
 
   /* ==============================
      4. 페이지네이션 렌더링
   ============================== */
   function renderPagination(total) {
-    const pageCount = Math.ceil(total / pageSize);
-    pagination.innerHTML = Array.from({ length: pageCount }, (_, i) => `
-      <button class="page-btn ${i + 1 == currentPage ? 'active' : ''}" data-page="${i + 1}">
-        ${i + 1}
-      </button>
-    `).join('');
+	  const pageCount = Math.ceil(total / pageSize);
+	  pagination.innerHTML = Array.from({ length: pageCount }, (_, i) => 
+	    '<button class="page-btn ' + (i + 1 == currentPage ? 'active' : '') + '" data-page="' + (i + 1) + '">' +
+	      (i + 1) +
+	    '</button>'
+	  ).join('');
 
-    // 각 버튼 클릭 시 해당 페이지로 이동
-    pagination.querySelectorAll('.page-btn').forEach(btn =>
-      btn.addEventListener('click', () => {
-        currentPage = Number(btn.dataset.page);
-        loadRecentProducts();
-      })
-    );
-  }
-
+	  // 각 버튼 클릭 시 해당 페이지로 이동
+	  pagination.querySelectorAll('.page-btn').forEach(btn =>
+	    btn.addEventListener('click', () => {
+	      currentPage = Number(btn.dataset.page);
+	      loadRecentProducts();
+	    })
+	  );
+	}
 
   /* ==============================
      5. 모달 열기 / 닫기

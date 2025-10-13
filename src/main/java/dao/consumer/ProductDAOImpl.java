@@ -137,10 +137,18 @@ public class ProductDAOImpl implements ProductDAO {
 
 	// [brandDetail 용도] 브랜드 상품 조회
 	@Override
-	public List<Map<String, Object>> selectProductsByBrandId(Long brandId) {
-		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-			return sqlSession.selectList("mapper.product.selectProductsByBrandId", brandId);
-		}
+	public List<Map<String, Object>> selectProductsByBrandId(Map<String, Object> params) throws Exception {
+	    try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        return session.selectList("mapper.product.selectProductsByBrandId", params);
+	    }
+	}
+	
+	// [brandDetail 용도] 브랜드 상품 개수 조회
+	@Override
+	public int countProductsByBrand(Map<String, Object> params) throws Exception {
+	    try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        return session.selectOne("mapper.product.countProductsByBrand", params);
+	    }
 	}
 
 	// [소비자] 검색 상품 목록 조회

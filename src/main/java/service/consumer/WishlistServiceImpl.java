@@ -56,5 +56,14 @@ public class WishlistServiceImpl implements WishlistService {
 	public int getWishlistCount(Long memberId) throws Exception {
 		 return wishlistDAO.countWishlistByMemberId(memberId);
 	}
+	
+	// 찜 여부
+	@Override
+	public boolean isProductWished(Long memberId, Long productId) throws Exception {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("memberId", memberId);
+	    params.put("productId", productId);
+	    return wishlistDAO.existsWishlist(params) > 0;
+	}
 
 }
