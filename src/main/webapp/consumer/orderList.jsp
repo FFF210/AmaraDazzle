@@ -248,7 +248,7 @@
 														<fmt:formatDate value="${order.orderDate}"
 															pattern="yyyy.MM.dd" />
 														<a
-															href="${pageContext.request.contextPath}/store/mypage/consumerOrderDetail?orderId=${order.ordersId}"
+															href="${pageContext.request.contextPath}/store/mypage/orderDetail?orderId=${order.ordersId}"
 															class="detail-link"
 															style="color: #111; font-weight: 600;">${order.orderCode}</a>
 													</div>

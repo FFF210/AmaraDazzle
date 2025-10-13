@@ -172,19 +172,52 @@ public class OrderServiceImpl implements OrderService {
 		}
 
 		// 5. 주문 상품 생성
-		OrderItem orderItem = new OrderItem();
-		orderItem.setOrderId(orderId);
-		orderItem.setBrandId((Long) orderData.get("brandId"));
-		orderItem.setProductId((Long) orderData.get("productId"));
-		orderItem.setOptionId((Long) orderData.get("optionId"));
-		orderItem.setUnitPrice((BigDecimal) orderData.get("unitPrice"));
-		orderItem.setQuantity((Integer) orderData.get("quantity"));
-		orderItem.setLineSubtotal((BigDecimal) orderData.get("lineSubtotal"));
-		orderItem.setDiscount((BigDecimal) orderData.get("itemDiscount"));
-		orderItem.setTotal((BigDecimal) orderData.get("itemTotal"));
-		orderItem.setStatus("PAID");
+		@SuppressWarnings("unchecked")
+		List<Map<String, Object>> items = (List<Map<String, Object>>) orderData.get("items");
+		Long brandId = (Long) orderData.get("brandId");
+		Long productId = (Long) orderData.get("productId");
 
-		orderDAO.createOrderItem(orderItem);
+		if (items != null && !items.isEmpty()) {
+			for (Map<String, Object> item : items) {
+				OrderItem orderItem = new OrderItem();
+				orderItem.setOrderId(orderId);
+				orderItem.setBrandId(brandId);
+				orderItem.setProductId(productId);
+
+				// optionId 처리 (null일 수 있음)
+				Object optionIdObj = item.get("optionId");
+				if (optionIdObj != null && optionIdObj instanceof Long) {
+					orderItem.setOptionId((Long) optionIdObj);
+				}
+
+				// unitPrice는 BigDecimal이어야 함
+				Object unitPriceObj = item.get("unitPrice");
+				BigDecimal unitPrice;
+				if (unitPriceObj instanceof BigDecimal) {
+					unitPrice = (BigDecimal) unitPriceObj;
+				} else if (unitPriceObj instanceof Integer) {
+					unitPrice = new BigDecimal((Integer) unitPriceObj);
+				} else if (unitPriceObj instanceof Double) {
+					unitPrice = BigDecimal.valueOf((Double) unitPriceObj);
+				} else {
+					throw new Exception("unitPrice 타입 오류");
+				}
+
+				orderItem.setUnitPrice(unitPrice);
+				orderItem.setQuantity((Integer) item.get("quantity"));
+
+				// itemTotal 계산
+				BigDecimal itemTotal = unitPrice.multiply(new BigDecimal((Integer) item.get("quantity")));
+				orderItem.setLineSubtotal(itemTotal);
+				orderItem.setDiscount(BigDecimal.ZERO);
+				orderItem.setTotal(itemTotal);
+				orderItem.setStatus("PAID");
+
+				orderDAO.createOrderItem(orderItem);
+			}
+		} else {
+			throw new Exception("주문 상품이 없습니다.");
+		}
 
 		return orderId;
 	}
@@ -261,6 +294,12 @@ public class OrderServiceImpl implements OrderService {
 			item.put("itemTotal", itemTotal);
 			subtotal = itemTotal;
 
+			item.put("productId", product.getProductId());
+			item.put("productName", product.getName());
+			item.put("thumbnailFileId", product.getThumbnailFileId());
+			item.put("brandId", brand.getBrandId());
+			item.put("brandName", brand.getBrandName());
+
 		} else {
 			// 옵션이 없는 경우
 			item.put("optionId", null);
@@ -299,6 +338,11 @@ public class OrderServiceImpl implements OrderService {
 			BigDecimal itemTotal = finalPrice.multiply(new BigDecimal(quantity));
 			item.put("itemTotal", itemTotal);
 			subtotal = itemTotal;
+
+			item.put("productName", product.getName());
+			item.put("thumbnailFileId", product.getThumbnailFileId());
+			item.put("brandId", brand.getBrandId());
+			item.put("brandName", brand.getBrandName());
 		}
 
 		itemList.add(item);
@@ -324,6 +368,7 @@ public class OrderServiceImpl implements OrderService {
 		return memberDAO.checkPointAvailable(memberId, usingPoint);
 	}
 
+	// 여러 옵션일 경우
 	@Override
 	public Map<String, Object> prepareCheckoutDataForMultipleOptions(Long memberId, Long productId, String[] optionIds,
 			String[] quantities) throws Exception {
@@ -378,6 +423,13 @@ public class OrderServiceImpl implements OrderService {
 
 			BigDecimal itemTotal = option.getPrice().multiply(new BigDecimal(quantity));
 			item.put("itemTotal", itemTotal);
+
+			// 상품 정보 (장바구니 대비)
+			item.put("productId", product.getProductId());
+			item.put("productName", product.getName());
+			item.put("thumbnailFileId", product.getThumbnailFileId());
+			item.put("brandId", brand.getBrandId());
+			item.put("brandName", brand.getBrandName());
 
 			itemList.add(item);
 			totalAmount = totalAmount.add(itemTotal);
@@ -637,25 +689,25 @@ public class OrderServiceImpl implements OrderService {
 		Map<String, Object> params = new HashMap<>();
 		params.put("memberId", memberId);
 
-       // 1. 날짜 필터 (선택적)
+		// 1. 날짜 필터 (선택적)
 		if (startDate != null && !startDate.isEmpty() && endDate != null && !endDate.isEmpty()) {
 			params.put("startDate", startDate);
 			params.put("endDate", endDate);
 		}
 
-        // 2. 페이지네이션 설정
+		// 2. 페이지네이션 설정
 		int offset = (page - 1) * pageSize; // 건너뛸 개수 계산
 		params.put("limit", pageSize); // 한 페이지에 보여줄 개수
 		params.put("offset", offset); // 건너뛸 개수
 
-        // 3. 데이터 조회
+		// 3. 데이터 조회
 		List<Map<String, Object>> list = orderDAO.selectCancelExchangeReturnList(params);
 		int totalCount = orderDAO.countCancelExchangeReturnList(params); // ✨ 전체 개수 조회
- 
-        // 4. 페이지 정보 계산
+
+		// 4. 페이지 정보 계산
 		int totalPages = (int) Math.ceil((double) totalCount / pageSize);
 
-        // 5. 결과 반환 (Map으로)
+		// 5. 결과 반환 (Map으로)
 		Map<String, Object> result = new HashMap<>();
 		result.put("list", list); // 목록 데이터
 		result.put("totalCount", totalCount); // 전체 개수

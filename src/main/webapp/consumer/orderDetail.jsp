@@ -115,7 +115,8 @@
 												test="${item.status == 'PAID' || item.status == 'PREPARING'}">
 												<button type="button"
 													class="btn btn-outline btn-sm action-btn"
-													style="width: 80px;">취소신청</button>
+													onclick="cancelOrderItem(${item.orderItemId}
+													style="width: 80px;">주문취소</button>
 											</c:when>
 											<c:when test="${item.status == 'SHIPPING'}">
 												<button type="button"
@@ -302,5 +303,12 @@
 
 	<%-- 푸터 --%>
 	<%@ include file="/consumer/footer.jsp"%>
+	<script>
+	function cancelOrderItem(orderItemId) {
+	    if(confirm('정말로 주문을 취소하시겠습니까?')) {
+	        location.href = '${pageContext.request.contextPath}/store/cancelOrder?orderItemId=' + orderItemId;
+	    }
+	}
+	</script>
 </body>
 </html>

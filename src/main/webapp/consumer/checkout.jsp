@@ -42,8 +42,8 @@
 		<my:pageHeader hasButton="false" title="주문/결제" />
 	</div>
 
-	<%-- 디버깅: checkoutData 확인 --%>
-	<%-- <div
+	디버깅: checkoutData 확인
+	<div
 		style="background: #f0f0f0; padding: 10px; margin: 10px; border: 2px solid red;">
 		<h3>🔍 디버깅 정보</h3>
 		<p>checkoutData가 null인가? ${checkoutData == null ? 'YES - 문제있음!' : 'NO - 데이터 있음'}</p>
@@ -74,7 +74,7 @@
 					unitPrice=${item.unitPrice}</p>
 			</c:forEach>
 		</c:if>
-	</div> --%>
+	</div>
 
 	<div class="main-content">
 
@@ -145,8 +145,9 @@
 								<my:textInput id="shipPostcode" name="shipPostcode"
 									value="${checkoutData.member.postcode}" type="default"
 									size="lg" state="default" />
-								<button type="button" class="btn btn-primary btn-xl"
-									style="width: 150px;">우편번호 찾기</button>
+								<button type="button" id="findPostcodeBtn"
+									class="btn btn-primary btn-xl" style="width: 150px;">우편번호
+									찾기</button>
 							</div>
 							<div class=detail-address>
 								<my:textInput id="shipLine1" name="shipLine1"
@@ -205,8 +206,8 @@
 											<div class="product-info"
 												style="text-align: left; display: flex; flex-direction: column; width: 100%; height: fit-content; gap: 6px;">
 												<p class="product-brand"
-													style="color: #333; font-weight: 700; font-size: 13px;">${checkoutData.brand.brandName}</p>
-												<p class="product-name">${checkoutData.product.name}</p>
+													style="color: #333; font-weight: 700; font-size: 13px;">${item.brandName}</p>
+												<p class="product-name">${item.productName}</p>
 												<c:if test="${not empty item.optionValue}">
 													<P style="color: #888; font-weight: 400; font-size: 13px;">옵션
 														| ${item.optionValue}</P>
@@ -236,12 +237,17 @@
 							<div class="form-row">
 								<div class="label">쿠폰</div>
 								<div class="input-area">
-									<!-- <select name="usingCoupon" class="coupon-select">
+									<select name="usingCoupon" class="coupon-select">
 										<option value="">사용 가능한 쿠폰 목록</option>
-										<option value="coupon1">10,000원 할인 쿠폰</option>
-										<option value="coupon2">5,000원 할인 쿠폰</option>
-									</select> -->
-									<div class="custom-select lg">
+										<c:forEach var="coupon" items="${availableCoupons}">
+											<option value="${coupon.memberCouponId}"
+												data-amount="${coupon.amount}">${coupon.cname}(
+												<fmt:formatNumber value="${coupon.amount}" pattern="#,###" />원
+												할인)
+											</option>
+										</c:forEach>
+									</select>
+									<%-- <div class="custom-select lg">
 										<div class="select-header">
 											<span class="select-label">${selectedValue}</span> <i
 												class="bi bi-chevron-down"></i>
@@ -253,7 +259,7 @@
 													data-value="${it}">${it}</li>
 											</c:forEach>
 										</ul>
-									</div>
+									</div> --%>
 
 								</div>
 							</div>
@@ -348,6 +354,8 @@
 									value="${item.optionId}">
 								<input type="hidden" name="items[${status.index}].quantity"
 									value="${item.quantity}">
+								<input type="hidden" name="items[${status.index}].unitPrice"
+									value="${item.unitPrice}">
 							</c:forEach>
 
 							<!-- 금액 정보 -->
@@ -357,14 +365,15 @@
 								value="${checkoutData.shippingFee}"> <input
 								type="hidden" name="totalAmount" id="totalAmount">
 
-							<button type="button" class="btn btn-primary btn-lg" style="width: 130px">결제하기</button>
+							<button type="button" id="paymentBtn"
+								class="btn btn-primary btn-lg" style="width: 130px">결제하기</button>
 						</div>
 					</div>
 				</div>
 			</div>
 		</form>
 	</div>
-
+	<script src="<c:url value='/js/selectbox.js'/>"></script>
 	<script>
 		window.checkoutData = {
 			// 금액 정보
