@@ -21,10 +21,10 @@
 	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
-	
+
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-	
+
 <link rel="stylesheet" href="./css/formLayout.css" />
 
 <link rel="stylesheet" href="../tagcss/selectbox.css" />
@@ -184,48 +184,33 @@ promotion_event_write.jsp
 			</div>
 --%>
 
-				<!-- ====== 상품 카테고리 (readonly) ====== -->
+				<!-- ====== 상품 카테고리 (readonly input) ====== -->
 				<div class="label">상품 카테고리</div>
 				<div class="part_content select_cate">
-				
-				<input type="hidden" name="category1Id" value="${event.category1Id}" />
-				<input type="hidden" name="category2Id" value="${event.category2Id}" />
-				<input type="hidden" name="category3Id" value="${event.category3Id}" />
-				
-					<!-- 이미 event에 설정된 categoryId를 기반으로 채워지는 readonly -->
-					<div class="custom-select sm" id="largeSelect">
-						<div class="select-header">
-							<span>${largeCategoryName}</span> <i class="bi bi-chevron-down"></i>
-						</div>
-						<ul class="select-list">
-							<li class="select-item">${largeCategoryName}</li>
-						</ul>
-						<input type="hidden" name="category1Id"
-							value="${largeCategoryName}" />
-					</div>
 
-					<div class="custom-select sm" id="middleSelect">
-						<div class="select-header">
-							<span>${middleCategoryName}</span> <i class="bi bi-chevron-down"></i>
-						</div>
-						<ul class="select-list">
-							<li class="select-item">${middleCategoryName}</li>
-						</ul>
-						<input type="hidden" name="category2Id"
-							value="${middleCategoryName}" />
-					</div>
+					<!-- 대분류 -->
+					<my:textInput id="largeCategoryName" name="largeCategoryName"
+						type="readOnly" size="sm" state="default"
+						value="${empty event.largeCategoryName ? '' : event.largeCategoryName}" />
+					<input type="hidden" name="category1Id"
+						value="${event.category1Id}" />
 
-					<div class="custom-select sm" id="smallSelect">
-						<div class="select-header">
-							<span>${smallCategoryName}</span> <i class="bi bi-chevron-down"></i>
-						</div>
-						<ul class="select-list">
-							<li class="select-item">${smallCategoryName}</li>
-						</ul>
-						<input type="hidden" name="category3Id"
-							value="${smallCategoryName}" />
-					</div>
+					<!-- 중분류 -->
+					<my:textInput id="middleCategoryName" name="middleCategoryName"
+						type="readOnly" size="sm" state="default"
+						value="${empty event.middleCategoryName ? '' : event.middleCategoryName}" />
+					<input type="hidden" name="category2Id"
+						value="${event.category2Id}" />
+
+					<!-- 소분류 -->
+					<my:textInput id="smallCategoryName" name="smallCategoryName"
+						type="readOnly" size="sm" state="default"
+						value="${empty event.smallCategoryName ? '' : event.smallCategoryName}" />
+					<input type="hidden" name="category3Id"
+						value="${event.category3Id}" />
+
 				</div>
+
 
 				<div class="label">썸네일</div>
 				<div class="upload">
