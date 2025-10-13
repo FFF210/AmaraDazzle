@@ -3,7 +3,6 @@ package service.admin;
 import java.util.List;
 import java.util.Map;
 
-import dto.Banner;
 import dto.Notice;
 
 public interface NoticeService {

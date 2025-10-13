@@ -30,17 +30,22 @@ document.addEventListener("DOMContentLoaded", function() {
 			document.querySelector('#modalCouponAmount').value = amount;
 			document.querySelector('#modalCouponStart').value = start;
 			document.querySelector('#modalCouponEnd').value = end;
+			document.querySelector('#hiddenProvision').value = provision;
 			document.querySelector('#modalCouponReason').value = reason;
 			
 			if(provision == "ALL") {
 				document.querySelector('#modalCouponProvision').value = "모든회원"
+				
 			} else if(provision == "NORMAL") {
 				document.querySelector('#modalCouponProvision').value = "일반"
+				
 			} else if (provision == "INDIVIDUAL") {
 				document.querySelector('#modalCouponProvision').value = "개별회원"
+				
 			} else {
 				document.querySelector('#modalCouponProvision').value = provision;
 			}
+			
 
 			// 지급방식에 따라 "지급대상" 영역 표시/숨김
 			const individualSection = document.querySelector('#indiCpModal .individual-only');
@@ -77,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function() {
 				// 확인 모달에서 전송 버튼 눌렀을 때 실제 Ajax 실행
 				const dialog = document.getElementById("indiCpModal");
 				const couponId = dialog.querySelector("#modalCouponId").value;
-				const provisionGrade = dialog.querySelector("#modalCouponProvision").value;
+				const provisionGrade = dialog.querySelector("#hiddenProvision").value;
 				const startDate = dialog.querySelector("#modalCouponStart").value;
 				const reason = dialog.querySelector("#modalCouponReason").value;
 				

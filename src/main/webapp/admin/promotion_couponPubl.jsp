@@ -247,6 +247,7 @@
 					<label class="form-row-label">지급대상 등급 &nbsp;&nbsp;</label>
 					<div class="filtering_content" style="width : 100%">
 						<input type="text" id="modalCouponProvision" readonly />
+						<input type="hidden" id="hiddenProvision">
 					</div>
 				</div>
 				

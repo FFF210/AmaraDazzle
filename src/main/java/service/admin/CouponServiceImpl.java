@@ -100,16 +100,12 @@ public class CouponServiceImpl implements CouponService{
 		map.put("couponId", couponId);
 		
 		//등급 
-		if(provisionGrade.trim().equals("모든회원")) {
+		if(provisionGrade.trim().equals("ALL")) {
 			List<String> provisionGradeList = Arrays.asList("VIP","GOLD","SILVER","NORMAL");
 			map.put("provisionGradeList", provisionGradeList);
 		} else {
-			if(provisionGrade.trim().equals("일반")) {
-				provisionGrade = "NORMAL";
-			}
 			List<String> provisionGradeList = Arrays.asList(provisionGrade.split(","));
 			map.put("provisionGradeList", provisionGradeList);
-
 		}
 		
 		//생일쿠폰일 경우 생일월
