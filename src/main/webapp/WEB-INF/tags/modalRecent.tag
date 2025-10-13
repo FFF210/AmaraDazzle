@@ -1,11 +1,11 @@
-<%@ tag language="java" pageEncoding="UTF-8"%>
+<%-- <%@ tag language="java" pageEncoding="UTF-8"%>
 <%@ tag body-content="empty"%>
 <%@ tag isELIgnored="false"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 
-<%-- ================================
+================================
      최근 본 상품 모달
-================================ --%>
+================================
 <div id="recent-modal" class="recent-modal hidden">
 
 	<!-- 모달 본문 -->
@@ -201,3 +201,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 </script>
+ --%>
