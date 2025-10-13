@@ -89,6 +89,12 @@
 						</tbody>
 					</table>
 				</div>
+				<!-- 쿠폰 페이징 -->
+				<div class="page-pagination">
+					<my:pagination currentPage="${couponPage}"
+						totalPages="${couponTotalPages}"
+						baseUrl="/store/mypage/myCoupoint?${queryStringCoupon}" />
+				</div>
 			</section>
 
 			<div class="middle-devider"></div>
@@ -130,8 +136,8 @@
 										<td style="color: #111;"><fmt:formatDate
 												value="${point.createdAt}" pattern="yyyy.MM.dd" /></td>
 										<td style="color: #111; text-align: left; padding: 20px;"><p>${point.pointHistory}</p>
-											<c:if test="${not empty point.orderId}">
-												<p style="color: #999;">주문번호: ${point.orderId}</p>
+											<c:if test="${not empty point.orderCode}">
+												<p style="color: #999;">주문번호: ${point.orderCode}</p>
 											</c:if></td>
 										<td style="color: #111; font-weight: 500;"><span
 											class="${point.amount.startsWith('+') ? 'plus' : 'minus'}">
@@ -141,11 +147,11 @@
 							</tbody>
 						</table>
 					</div>
-					<!-- 페이징 -->
+					<!-- 포인트 페이징 -->
 					<div class="page-pagination">
-						<my:pagination currentPage="${currentPage}"
-							totalPages="${totalPages}"
-							baseUrl="/store/mypage/myCoupoint?${queryString}" />
+						<my:pagination currentPage="${pointPage}"
+							totalPages="${pointTotalPages}"
+							baseUrl="/store/mypage/myCoupoint?${queryStringPoint}" />
 					</div>
 				</div>
 			</section>

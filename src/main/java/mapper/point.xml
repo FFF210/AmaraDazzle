@@ -5,37 +5,65 @@
 <mapper namespace="mapper.point">
 
 	<!-- ======================소비자용=============== -->
-	<!-- 포인트 내역 조회 (최근순) -->
-	<select id="selectPointHistory" parameterType="Long"
-		resultType="dto.Point">
-		SELECT
-		point_id AS pointId,
-		point_history AS pointHistory,
-		member_id AS memberId,
-		amount,
-		writer,
-		order_id AS orderId,
-		created_at AS createdAt
+	<!-- 포인트 내역 개수 조회 -->
+	<select id="countPointHistory" parameterType="Long"
+		resultType="int">
+		SELECT COUNT(*)
 		FROM point
 		WHERE member_id = #{memberId}
-		ORDER BY created_at DESC
+	</select>
+
+	<!-- 포인트 내역 조회 (최근순) -->
+	<select id="selectPointHistory" parameterType="map"
+		resultType="map">
+		SELECT
+		p.point_id AS pointId,
+		p.point_history AS pointHistory,
+		p.member_id AS
+		memberId,
+		p.amount,
+		p.writer,
+		p.order_id AS orderId,
+		p.created_at AS
+		createdAt,
+		o.order_code AS orderCode
+		FROM point p
+		LEFT JOIN orders o ON p.order_id = o.orders_id
+		WHERE
+		p.member_id = #{memberId}
+		ORDER BY p.created_at DESC
+		LIMIT #{limit}
+		OFFSET #{offset}
+	</select>
+
+	<!-- 특정 기간의 포인트 내역 개수 조회 -->
+	<select id="countPointHistoryByPeriod" parameterType="map"
+		resultType="int">
+		SELECT COUNT(*)
+		FROM point
+		WHERE member_id = #{memberId}
+		AND
+		created_at BETWEEN #{startDate} AND #{endDate}
 	</select>
 
 	<!-- 특정 기간의 포인트 내역 조회 -->
 	<select id="selectPointHistoryByPeriod" parameterType="map"
-		resultType="dto.Point">
+		resultType="map">
 		SELECT
-		point_id AS pointId,
-		point_history AS pointHistory,
-		member_id AS memberId,
-		amount,
-		writer,
-		order_id AS orderId,
-		created_at AS createdAt
-		FROM point
-		WHERE member_id = #{memberId}
-		AND created_at BETWEEN #{startDate} AND #{endDate}
-		ORDER BY created_at DESC
+		p.point_id AS pointId,
+		p.point_history AS pointHistory,
+		p.member_id AS memberId,
+		p.amount,
+		p.writer,
+		p.order_id AS orderId,
+		p.created_at AS createdAt,
+		o.order_code AS orderCode
+		FROM point p
+		LEFT JOIN orders o ON p.order_id = o.orders_id
+		WHERE p.member_id = #{memberId}
+		AND p.created_at BETWEEN #{startDate} AND #{endDate}
+		ORDER BY p.created_at DESC
+		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
 
