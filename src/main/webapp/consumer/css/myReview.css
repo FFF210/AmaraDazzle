@@ -17,9 +17,9 @@
 }
 
 .review-section h2 {
-	font-size: 20px;
-	font-weight: 600;
-	color: #000;
+	font-size: 22px;
+	font-weight: 500;
+	color: #111;
 	margin: 0;
 	padding: 30px 0 20px 0;
 }
@@ -30,10 +30,10 @@
 }
 
 .empty-state {
-    height: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	height: 300px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 /* 내가 쓴 리뷰 테이블 */
@@ -100,7 +100,7 @@
 .modal-header h3 {
 	margin: 0;
 	font-size: 18px;
-	font-weight: 600;
+	font-weight: 500;
 }
 
 /* 닫기 버튼 */
@@ -117,7 +117,7 @@
 
 /* 모달 바디 */
 .modal-body {
-	padding: 30px;
+	padding: 20px 30px;
 }
 
 /* 폼 그룹 */
@@ -129,6 +129,7 @@
 	display: block;
 	margin-bottom: 5px;
 	font-weight: 500;
+	color: #111;
 }
 
 /* 별점 입력 */
@@ -159,8 +160,12 @@ textarea {
 	width: 100%;
 	padding: 10px;
 	border: 1px solid #ddd;
-	border-radius: 4px;
 	resize: vertical;
+}
+
+textarea:hover {
+	outline: none;
+	border: 1px solid #111;
 }
 
 /* 폼 액션 버튼 */
@@ -169,4 +174,106 @@ textarea {
 	gap: 10px;
 	justify-content: flex-end;
 	margin-top: 20px;
+}
+
+.btn-primary {
+	background: #111;
+}
+
+.btn-primary:hover {
+	background: #333;
+}
+
+.btn-outline {
+	border: 1px solid #222;
+	color: #111;
+}
+
+.btn-outline:hover {
+	background: #eee;
+}
+
+.btn {
+	border-radius: 0;
+	font-weight: 400;
+	padding: 0;
+}
+
+.table {
+	table-layout: fixed;
+	width: 100%;
+	border-collapse: collapse;
+	min-width: 0;
+}
+
+.table th, .table td {
+	border: none;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	word-break: keep-all;
+}
+
+.table-wrapper {
+	width: 100%;
+	overflow-x: hidden;
+	overflow-y: visible; /* 세로 스크롤 제거 */
+	height: auto; /* 높이 자동 확장 */
+	max-height: none;
+}
+
+/* 테이블 전체 기본선 제거 */
+.table {
+	border-collapse: collapse;
+	border: none;
+	width: 100%;
+}
+
+/* 모든 셀의 기본선 제거 */
+.table th, .table td {
+	border: none;
+}
+
+/* 행 사이 아래쪽 테두리만 표시 */
+.table tr {
+	border-bottom: 1px solid #E5E7EB; /* 연한 회색 구분선 */
+}
+
+/* 헤더 상단선 추가 */
+.table thead tr:first-child {
+	border-top: 1.5px solid #E5E7EB;
+}
+
+/* 마지막 행 하단선도 유지 */
+.table tbody tr:last-child {
+	border-bottom: 1px solid #E5E7EB;
+}
+
+/* 좌우 여백 시각적으로 띄워주기 */
+.table-wrapper {
+	border-left: none;
+	border-right: none;
+	border: none;
+	border-radius: 0;
+}
+
+.table th {
+	font-size: 13px;
+	color: #111;
+}
+
+.product-name {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: normal;
+	word-break: break-all;
+	line-height: 18px;
+	max-height: 36px;
+	max-width: 345px;
+	color: #000;
+	font-size: 14px;
+	height: fit-content;
 }

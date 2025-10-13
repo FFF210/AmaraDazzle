@@ -1,30 +1,45 @@
 @charset "UTF-8";
 
-body {
+.text-input {
+	border-radius: 0;
+}
+
+.text-input:focus {
+	box-shadow: none;
+	border: 1px #111 solid !important;
+}
+
+.birthdate-row input[type="date"] {
+	width: fit-content;
+	display: flex;
+	height: 56px;
+	align-items: center;
+	flex-shrink: 0;
+	border: 1px solid #ECEDF0;
+	background: #FFF;
+	font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
 	font-size: 14px;
-	color: #000;
-	background-color: #fff;
-	min-width: 1240px;    /* 패딩 포함한 최소 너비 */
-    overflow-x: auto;
+	color: #111;
+	padding: 0 12px;
 }
 
 .page-wrap {
-    width: 1200px;  /* 최대 너비 설정 */
-    margin: 0 auto;     /* 좌우 자동 마진 */
-    padding: 20px;
-    min-width: 1200px;
+	width: 800px; /* 최대 너비 설정 */
+	margin: 0 auto; /* 좌우 자동 마진 */
+	padding: 40px 0;
 }
 
 h1 {
-	margin-top:30px;
+	font-size: 22px;
+	font-weight: 500;
+	color: #111;
+	margin: 0;
 }
 
 .editProfile-content {
 	display: flex;
 	flex-direction: column;
-	gap: 30px;
-	width: 815px;
-	margin: 0 auto;  
+	margin: 0 auto;
 	align-items: flex-start;
 	flex-shrink: 0;
 }
@@ -34,31 +49,30 @@ h1 {
 	width: 170px;
 	padding: 16px;
 	align-items: center;
-	gap: 4px;
 	flex-shrink: 0;
-	background: #D9D2D7;
-	font-size: 16px;
-	font-weight: 600;
-	color: #000;
+	background: #f9f9f9;
+	font-size: 15px;
+	font-weight: 500;
+	color: #111;
 	align-self: stretch;
 }
 
- .input-area {
+.input-area {
 	display: flex;
 	flex: 1;
 	flex-direction: column;
 	justify-content: center;
 	gap: 8px;
 	background: white;
-} 
+}
 
 /* 기본 form-row 스타일 */
 .form-row {
 	display: flex;
 	width: 100%;
 	min-height: 88px;
-	gap: 8px;
-	align-items: stretch;
+	gap: 16px;
+	align-items: center;
 }
 
 .form-row.address-row {
@@ -82,8 +96,7 @@ h1 {
 
 /* 기존 태그 CSS 가져와서 사용 (tag.css) */
 /* 피부타입 태그 컨테이너 */
-.skin-type-tags, .personal-color-tags, 
-.skin-issue-tags {
+.skin-type-tags, .personal-color-tags, .skin-issue-tags {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 8px;
@@ -145,12 +158,194 @@ h1 {
 }
 
 .delete-account {
-	margin-bottom:30px;
+	margin-bottom: 30px;
 }
 
 .button-container {
-	text-align:center;
-	margin-bottom:40px;
-	width: 100%;         
-    display: block; 
+	text-align: center;
+	margin-bottom: 40px;
+	width: 100%;
+	display: block;
+}
+
+.btn-primary {
+	background: #111;
+}
+
+.btn-primary:hover {
+	background: #333;
+}
+
+.btn-outline {
+	border: 1px solid #222;
+	color: #111;
+}
+
+.btn-outline:hover {
+	background: #eee;
+}
+
+.btn {
+	border-radius: 0;
+	font-weight: 400;
+	padding: 0;
+}
+
+.radio-label {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 500;
+	color: #000;
+	gap: 8px;
+}
+
+.radio-label input[type="radio"] {
+	width: 16px !important;
+	height: 16px !important;
+	margin: 0 8px 0 0 !important;
+	padding: 0 !important;
+	vertical-align: middle;
+	flex-shrink: 0;
+}
+
+.radio-label span {
+	line-height: 1;
+	vertical-align: middle;
+}
+
+/* 피부타입 태그 컨테이너 */
+.skin-type-tags, .personal-color-tags, .skin-issue-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	height: 56px;
+}
+
+.tag-radio {
+	display: none !important; /* !important 추가 */
+	position: absolute; /* 추가로 숨김 */
+	opacity: 0; /* 추가로 숨김 */
+	visibility: hidden; /* 추가로 숨김 */
+}
+
+/* 선택 가능한 태그 추가 스타일 */
+.selectable-tag {
+	cursor: pointer;
+	transition: all 0.3s ease;
+	user-select: none;
+	border: 1px solid #CDD1D5;
+	background: #FFF;
+	min-width: 70px;
+    width: fit-content;
+        color: #111;
+    font-weight: 400;
+}
+
+/* 선택된 상태 스타일링 */
+.tag-radio:checked+.selectable-tag {
+	background-color: #111;
+	color: white;
+	border-color: #111
+}
+
+/* 태그 호버 효과 */
+.selectable-tag:hover {
+	background-color: #f9f9f9;
+	color: #1e293b;
+}
+
+/* 태그 선택 시 스타일  */
+.tag-checkbox:checked+.selectable-tag {
+	background-color: #111;
+    color: white;
+    border-color: #111;
+}
+
+.radio-label {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+.radio-label input {
+	width: auto !important;
+	margin: 0 6px 0 0 !important;
+}
+
+.tag.md {
+	height: 32px;
+	max-height: 32px !important;
+}
+
+/* 체크박스 */
+/* 기본 체크박스 숨기기 */
+.custom-checkbox-label input[type="checkbox"], .custom-checkbox-label .item-checkbox
+	{
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	margin: 0;
+	padding: 0;
+	/* 크기 조정할 경우 기본 체크박스 영역 설정 */
+	width: 20px;
+	height: 20px;
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+}
+
+/* 체크박스 용 상자 */
+.custom-checkbox-label {
+	display: inline-flex;
+	align-items: center;
+	cursor: pointer;
+	position: relative;
+	/* 체크박스 + 텍스트 여백이 필요하면 padding-left 등 설정 */
+}
+
+/* 시각적 체크박스 박스 */
+.custom-checkbox-box {
+	width: 18px;
+	height: 18px;
+	border: 1.5px solid #ccc; /* 연한 회색 테두리 */
+	border-radius: 4px;
+	background-color: #fff;
+	display: inline-block;
+	position: relative;
+	transition: all 0.2s ease;
+}
+
+/* 체크 상태일 때 배경 및 테두리 변화 */
+.custom-checkbox-label input[type="checkbox"]:checked+.custom-checkbox-box
+	{
+	background-color: #111;
+	border-color: #111;
+}
+
+/* 체크 아이콘 (가상 요소) */
+.custom-checkbox-box::after {
+	content: "";
+	position: absolute;
+	display: none;
+	left: 4.5px;
+	top: 0px;
+	width: 4px;
+	height: 9px;
+	border: solid white;
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+}
+
+/* 체크 되었을 때 체크 아이콘 보이기 */
+.custom-checkbox-label input[type="checkbox"]:checked+.custom-checkbox-box::after
+	{
+	display: block;
+}
+
+/* 호버 효과 (마우스 올렸을 때 테두리 진하게) */
+.custom-checkbox-label:hover .custom-checkbox-box {
+	border-color: #999;
 }

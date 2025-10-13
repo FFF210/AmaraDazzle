@@ -81,7 +81,7 @@
 
 		<!-- 문의 내용 -->
 		<div class="content-section">
-			<h3 class="section-title">문의 내용</h3>
+			<h3 class="section-title">문의</h3>
 			<div class="content-box">
 				<p class="question-text">${ticket.question}</p>
 			</div>
@@ -112,7 +112,7 @@
 		<!-- 답변 내용 -->
 		<c:if test="${not empty ticket.answer}">
 			<div class="content-section answer-section">
-				<h3 class="section-title">답변 내용</h3>
+				<h3 class="section-title">답변</h3>
 				<div class="answer-date">
 					<fmt:formatDate value="${ticket.answeredAt}"
 						pattern="yyyy-MM-dd HH:mm" />
