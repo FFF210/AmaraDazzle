@@ -65,6 +65,23 @@ public class CouponDAOImpl implements CouponDAO{
 	public List<Coupon> iCouponSearchList(SearchConditionDTO sc_DTO) {
 		return ss.selectList("mapper.coupon.iCouponSearchList",sc_DTO);
 	}
+
+	//쿠폰 지급 
+	@Override
+	public int provisionCoupon(Map<String, Object> map) {
+		System.out.println("map : " + map);
+		
+		int result = ss.insert("mapper.coupon.provisionCoupon",map);
+		
+		System.out.println("DAO result : " + result);
+		
+		if(result > 0) {
+			ss.commit();
+		} else {
+			ss.rollback();
+		}
+		return result;
+	}
 	
 	
 	

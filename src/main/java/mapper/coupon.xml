@@ -283,4 +283,35 @@
 		</where>
 		order by mc.coupon_id desc limit #{start_p},#{post_ea}
 	</select>
+	
+	<!-- 쿠폰 개별 지급 -->
+	<insert id="provisionCoupon" parameterType="Map">
+		INSERT INTO member_coupon (coupon_id, member_id, status, created_at)
+			SELECT c.coupon_id, m.member_id, 'AVAILABLE', NOW()
+			FROM coupon c
+			JOIN member m ON 1=1
+			<where>
+				c.coupon_id = #{couponId}
+					<!-- 특정 회원 지급 -->
+					<if test="memberId != null and memberId != ''">
+						AND m.member_id = #{memberId}
+					</if>
+					<!-- 등급별 지급 -->
+					<if test="(memberId == null or memberId == '') and provisionGradeList != null and provisionGradeList.size > 0">
+				        AND m.grade IN
+				        <foreach item="grade" collection="provisionGradeList" open="(" separator="," close=")">
+				            #{grade}
+				        </foreach>
+				    </if>
+				    <!-- 생일쿠폰일 경우 -->
+					<if test="reason != null and reason.equals('생일')">	
+						AND MONTH(m.birth_date) = #{birthMonth}
+					</if>
+				<!-- 중복지급 방지 -->
+				AND NOT EXISTS 
+				( SELECT 1 FROM member_coupon mc 
+					WHERE mc.member_id = m.member_id 
+						AND mc.coupon_id = c.coupon_id);
+			</where>
+	</insert>
 </mapper>

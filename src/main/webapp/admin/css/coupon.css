@@ -93,3 +93,19 @@ div.no_condition {
 .date-input .input-wrapper {
  	width :130px; 
 }
+
+.part_content.reason_content {
+	flex-direction : column;
+	gap: 5px;
+} 
+.coupon-wrap {
+	width : 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.coupon-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px; 
+}

@@ -98,21 +98,11 @@
 
 				<div class="part_section reason_part">
 					<div class="part_title">지급사유 <span class="reqired_write">*</span></div>
-					<div class="part_content">
+					<div class="part_content reason_content">
 						<input type="text" name="couponReason" placeholder="쿠폰 발행 사유를 입력하세요" style="width: 100%;" />
+						<div class="coupon-wrap"><label class="coupon-label"><input type="checkbox" id="birth_coupon" name="birth_coupon" value="생일쿠폰"/> 생일쿠폰</label></div>
 					</div>
 				</div>
-
-<!-- 				<div class="part_section amount_part"> -->
-<!-- 					<div class="part_title">발급 수량 <span class="reqired_write">*</span></div> -->
-<!-- 					<div class="part_content"> -->
-<!-- 						<input type="text" name="couponQuantity" id="couponQuantity" placeholder="쿠폰 최대 발급 수량 입력" class="price_input" />  -->
-<!-- 						<span>&nbsp;매 한정&nbsp;&nbsp;&nbsp;&nbsp;</span> -->
-<!-- 						<div class="no_condition"> -->
-<!-- 							<label><input type="checkbox" id="qnt_noRestr" name="qnt_noRestr"/> 제한 없음</label> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 				</div> -->
 
 				<div class="part_section bottom_part">
 					<div class="part_title">작성자 <span class="reqired_write">*</span></div>

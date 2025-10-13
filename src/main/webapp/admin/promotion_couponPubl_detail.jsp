@@ -71,11 +71,11 @@
 						<th>지급대상</th>
 						<td>
 							<c:choose>
-								<c:when test="${coupon.provision eq 'ALL'}"><my:tag color="pink" size="md" text="모든회원" /></c:when>
-								<c:when test="${coupon.provision eq 'VIP'}"><my:tag color="red" size="md" text="VIP회원" /></c:when>
-								<c:when test="${coupon.provision eq 'GOLD'}"><my:tag color="blue" size="md" text="GOLD회원" /></c:when>
-								<c:when test="${coupon.provision eq 'SILVER'}"><my:tag color="yellow" size="md" text="SILVER회원" /></c:when>
-								<c:when test="${coupon.provision eq 'REGULAR'}"><my:tag color="green" size="md" text="일반회원" /></c:when>
+								<c:when test="${coupon.provision eq 'ALL'}"><my:tag color="green" size="md" text="모든회원" /></c:when>
+								<c:when test="${coupon.provision eq 'VIP'}"><my:tag color="red" size="md" text="VIP" /></c:when>
+								<c:when test="${coupon.provision eq 'GOLD'}"><my:tag color="blue" size="md" text="GOLD" /></c:when>
+								<c:when test="${coupon.provision eq 'SILVER'}"><my:tag color="yellow" size="md" text="SILVER" /></c:when>
+								<c:when test="${coupon.provision eq 'NORMAL'}"><my:tag color="pink" size="md" text="일반" /></c:when>
 								<c:otherwise><my:tag color="gray" size="md" text="개별회원" /></c:otherwise>
 							</c:choose>
 						</td>

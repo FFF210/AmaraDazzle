@@ -163,7 +163,7 @@
 									<td>
 										<input type="radio" class="ch_radio" name="pCouponRdo" value="${pCouponList.couponId}"
 											data-cname="${pCouponList.cname}" data-amount="${pCouponList.amount}" data-provision="${pCouponList.provision}"
-											data-start="${fn:substring(startDate,0,10)}" data-end="${fn:substring(endDate,0,10)}" />
+											data-start="${fn:substring(startDate,0,10)}" data-end="${fn:substring(endDate,0,10)}" data-reason="${pCouponList.reason}"/>
 									</td>
 									<td>${no-idx.index}</td>
 									<td onclick="goPcpDetail('${pCouponList.couponId}')">${pCouponList.cname}</td>
@@ -171,10 +171,10 @@
 									<td>
 									<c:choose>
 										<c:when test="${pCouponList.provision eq 'ALL'}"><my:tag color="green" size="md" text="모든회원" /></c:when>
-										<c:when test="${pCouponList.provision eq 'VIP'}"><my:tag color="red" size="md" text="VIP회원" /></c:when>
-										<c:when test="${pCouponList.provision eq 'GOLD'}"><my:tag color="blue" size="md" text="GOLD회원" /></c:when>
-										<c:when test="${pCouponList.provision eq 'SILVER'}"><my:tag color="yellow" size="md" text="SILVER회원" /></c:when>
-										<c:when test="${pCouponList.provision eq 'NORMAL'}"><my:tag color="pink" size="md" text="일반회원" /></c:when>
+										<c:when test="${pCouponList.provision eq 'VIP'}"><my:tag color="red" size="md" text="VIP" /></c:when>
+										<c:when test="${pCouponList.provision eq 'GOLD'}"><my:tag color="blue" size="md" text="GOLD" /></c:when>
+										<c:when test="${pCouponList.provision eq 'SILVER'}"><my:tag color="yellow" size="md" text="SILVER" /></c:when>
+										<c:when test="${pCouponList.provision eq 'NORMAL'}"><my:tag color="pink" size="md" text="일반" /></c:when>
 										<c:otherwise><my:tag color="gray" size="md" text="개별회원" /></c:otherwise>
 									</c:choose>
 									
@@ -182,9 +182,9 @@
 									<td>${fn:substring(createDate,0,19)}</td>
 									<td>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</td>
 									<td>${pCouponList.writerType eq 'ADMIN' ? 'Amara Dazzle' : 'BRAND_ADMIN' } </td>
-									<td class="detail_cell"
-										onclick="goPcpDetail('${pCouponList.couponId}');"><i
-										class="bi bi-three-dots-vertical"></i></td>
+									<td class="detail_cell" onclick="goPcpDetail('${pCouponList.couponId}');">
+										<i class="bi bi-three-dots-vertical"></i>
+									</td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -209,6 +209,7 @@
 				<!-- 페이지네이션 end -->
 			</div>
 		</section>
+		<my:submitDialog title="이대로 지급하시겠습니까?" msg="지급 처리 후 회수 불가합니다." />
 		<!-- 메인부분 -->
 
 	</my:adminLayout>
@@ -229,6 +230,8 @@
 					<div class="part_content">
 						<input type="text" class="text_readonly cp_info" id="modalCouponName" style="width: 100%;" readonly> 
 						<input type="text" class="text_readonly cp_info" id="modalCouponAmount" style="width: 30%;" readonly> 원
+						<input type="hidden" id="modalCouponId">
+						<input type="hidden" id="modalCouponReason">
 					</div>
 				</div>
 				<div class="form-row">
@@ -237,6 +240,13 @@
 						<input type="text" id="modalCouponStart" name="cpStartDate" readonly />
 						<span> - </span>
 						<input type="text" id="modalCouponEnd" name="cpEndDate" readonly />
+					</div>
+				</div>
+				
+				<div class="form-row">
+					<label class="form-row-label">지급대상 등급 &nbsp;&nbsp;</label>
+					<div class="filtering_content" style="width : 100%">
+						<input type="text" id="modalCouponProvision" readonly />
 					</div>
 				</div>
 				
@@ -249,7 +259,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn second_btn btn-md" data-action="취소">취소</button>
-				<button type="button" class="btn first_btn btn-md" data-action="저장">저장</button>
+				<button type="button" class="btn first_btn btn-md" id="cpSubmitBtn" data-action="전송">지급</button>
 			</div>
 		</div>
 	</div>
@@ -266,47 +276,18 @@
 				<!-- 폼 내용 -->
 				<div class="form-row">
 					<div class="part_content">
-						<my:selectbox size="md" items="회원명,아이디,생년월일" name="modalUserSearch" id="modalUserSearch" />
-						<input type="text" class="text_readonly cp_info" style="width: 100%;">
-						<button type="button" id="modalSearchBtn"> <i class="bi bi-search"></i> </button>
+						<my:selectbox size="md" items="회원명,아이디,생년월일" initial="검색 조건" id="modalSearchCondition" />
+						<input type="hidden" name="modalSearchCondition" id="hiddenSearchCondition">
+						<input type="text" class="text_readonly cp_info" id="modalSearchKeyword" style="width: 100%;">
+						<button id="modalSearchBtn"> <i class="bi bi-search"></i> </button>
 					</div>
-					<div class="modal_table hidden" >
+					<div class="modal_table hidden">
 						<div class="table_title">
-							<span class="list_count"> 
-							<c:if test="${not empty searchContent}"> [ 검색 결과 ] </c:if> &nbsp; 총 ${pCouponCnt}건 중 
-								<c:choose>
-									<c:when test="${pCouponCnt == 0}">
-       									0 건
-    								</c:when>
-									<c:otherwise>
-		      							${postNo + 1}
-		   							<c:choose>
-										<c:when test="${paging.pageno == paging.end_pg && paging.final_post_ea < 10 && paging.final_post_ea != 0}">
-		             						- ${postNo + paging.final_post_ea}
-		        						</c:when>
-										<c:otherwise>
-             								- ${postNo + 10}
-        								</c:otherwise>
-									</c:choose>
-   									건
-  								</c:otherwise>
-							</c:choose>
-							</span>
+							<span class="list_count">[ 검색 결과 ]</span>
 						</div>
+					
 						<div class="table_wrap">
 							<table>
-								<colgroup>
-									<col style="width: 4%" />
-									<!-- 체크박스 -->
-									<col style="width: 5%" />
-									<!-- 번호 -->
-									<col style="width: 30%" />
-									<!-- 아이디 -->
-									<col style="width: 15%" />
-									<!-- 회원명 -->
-									<col style="width: 15%" />
-									<!-- 등급 -->
-								</colgroup>
 								<thead>
 									<tr>
 										<th><input type="checkbox" /></th>
@@ -314,36 +295,13 @@
 										<th>아이디</th>
 										<th>회원명</th>
 										<th>등급</th>
+										<th>생년월일</th>
 									</tr>
 								</thead>
 								<tbody>
-									<!-- 게시물 개수가 0일 경우 -->
-									<c:if test="${empty pCouponList}">
-										<tr>
-											<td colspan="6">일치하는 검색 결과가 없습니다.</td>
-										</tr>
-									</c:if>
-
-<%-- 									<c:set var="no" value="${pCouponCnt-postNo}" /> --%>
-<%-- 									<c:forEach items="${pCouponList}" var="pCouponList" varStatus="idx"> --%>
-										<tr>
-											<td><input type="checkbox" /></td>
-											<td>${no-idx.index}</td>
-											<td>아이디</td>
-											<td>회원명</td>
-											<td>등급</td>
-										</tr>
-<%-- 									</c:forEach> --%>
 								</tbody>
 							</table>
 						</div>
-
-						<!-- 페이지네이션 -->
-						<div class="pagination_wrap page-pagination">
-							<my:adminPagination currentPage="${paging.pageno}" allPage="${paging.end_pg}"
-								baseUrl="/admin/couponPublList?${queryString}" />
-						</div>
-						<!-- 페이지네이션 end -->
 					</div>
 				</div>
 			</div>
@@ -362,58 +320,6 @@
 	<script src="./js/couponPList.js"></script>
 
 	<script>
-/*********************************************************************************************************
-	* 모달 Ajax
-*********************************************************************************************************/
-	const sendAjax = (data) => {
-		return fetch("", {
-			method: "POST",
-			headers: { "Content-Type": "application/x-www-form-urlencoded" },
-			body: new URLSearchParams(data)
-		}).then(res => res.json());
-	};
-
-	const dialogHandlers = {
-		indiCpModal: {
-			저장: async () => {
-				const dialog = document.getElementById("indiCpModal");
-				const couponName = dialog.querySelector("#modalCouponName").value;
-				const couponAmount = dialog.querySelector("#modalCouponAmount").value;
-				const startDate = dialog.querySelector("input[name='cpStartDate']").value;
-				const endDate = dialog.querySelector("input[name='cpEndDate']").value;
-
-				const result = await sendAjax({
-					action: "sale",
-					couponName, couponAmount, startDate, endDate,
-					productIds: selectedProducts
-				});
-
-				if (result.result === "success") {
-					localStorage.setItem("toast", JSON.stringify({
-						type: "success",
-						message: "세일이 등록되었습니다."
-					}));
-					location.reload();
-				} else {
-					showToast("error", result.message || "세일 등록 실패");
-				}
-			}
-		}
-	};
-
-/*********************************************************************************************************
-	* 모달 오픈
-*********************************************************************************************************/
-	//공통 이벤트 연결
-	document.addEventListener("dialogAction", (e) => {
-		const { id, action } = e.detail;
-		dialogHandlers[id]?.[action]?.();
-	});
-
-	// 버튼 이벤트: 모달 열기
-	document.getElementById("openIndiBtn").addEventListener("click", () => openDialog("indiCpModal"));		// 쿠폰명 검색 버튼 
-	document.getElementById("userSearchBtn").addEventListener("click", () => openDialog("userSearchModal"));	//회원 검색 버튼 
-	
 /*********************************************************************************************************
 	* 프리셋 버튼 이벤트
 *********************************************************************************************************/
