@@ -10,43 +10,54 @@ import dto.admin.SearchConditionDTO;
 import util.MybatisSqlSessionFactory;
 
 public class BannerDAOImpl implements BannerDAO {
-	SqlSession ss = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
-	
-	//전체 배너 총 개수 
+
+	// 전체 배너 총 개수
 	@Override
 	public Integer bannerAllCount(SearchConditionDTO sc_DTO) throws Exception {
-		return ss.selectOne("mapper.banner.BannerAllCnt", sc_DTO);
+		try (SqlSession ss = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return ss.selectOne("mapper.banner.BannerAllCnt", sc_DTO);
+		}
 	}
 
-	//전체 배너 신청 리스트 
+	// 전체 배너 신청 리스트
 	@Override
 	public List<Banner> bannerAllList(Map<String, Object> listMap) throws Exception {
-		return ss.selectList("mapper.banner.selectAllBannerList",listMap);
+		try (SqlSession ss = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return ss.selectList("mapper.banner.selectAllBannerList", listMap);
+		}
 	}
 
-	//전체 배너 중 검색 리스트
+	// 전체 배너 중 검색 리스트
 	@Override
 	public List<Banner> bannerSearchList(SearchConditionDTO sc_DTO) throws Exception {
-		return ss.selectList("mapper.banner.selectSearchBannerList",sc_DTO);
+		try (SqlSession ss = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return ss.selectList("mapper.banner.selectSearchBannerList", sc_DTO);
+		}
 	}
 
-	//어드민 배너 등록
+	// 어드민 배너 등록
 	@Override
 	public int adminBannerWrite(Banner banner) {
-		int result = ss.insert("mapper.banner.adminBannerWrite",banner);
-		if(result > 0) {
-			ss.commit();
-		} else {
-			ss.rollback();
+		try (SqlSession ss = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			int result = ss.insert("mapper.banner.adminBannerWrite", banner);
+
+			if (result > 0) {
+				ss.commit();
+			} else {
+				ss.rollback();
+			}
+
+			return result;
 		}
-		
-		return result;
+
 	}
 
-	//배너 상세보기
+	// 배너 상세보기
 	@Override
 	public Banner bannerDetail(int num) {
-		return ss.selectOne("mapper.banner.bannerDetail",num);
+		try (SqlSession ss = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return ss.selectOne("mapper.banner.bannerDetail", num);
+		}
 	}
 
 }
