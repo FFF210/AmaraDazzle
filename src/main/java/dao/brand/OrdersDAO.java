@@ -16,6 +16,13 @@ import dto.brand.ReturnOrderList;
 import dto.brand.ReturnSummary;
 
 public interface OrdersDAO {
+
+	// 상품 배송
+	void updateShippingInfo(Map<String, Object> params) throws Exception;
+
+	// 배송 완료
+	void updateStatusToDelivered(long orderId) throws Exception;
+
 	// 주문 목록 조회
 	List<OrdersList> selectOrdersListForBrand(Map<String, Object> params) throws Exception;
 
