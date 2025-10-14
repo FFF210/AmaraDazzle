@@ -29,7 +29,7 @@ public class QnaServiceImpl implements QnaService {
 
 	// 페이지네이션용 문의 조회
 	@Override
-	public List<Qna> getQnasByProductIdWithPaging(Long productId, int page, int pageSize) throws Exception {
+	public List<Map<String, Object>> getQnasByProductIdWithPaging(Long productId, int page, int pageSize) throws Exception {
 		if (productId == null || productId <= 0) {
 			throw new IllegalArgumentException("유효하지 않은 상품 ID입니다.");
 		}

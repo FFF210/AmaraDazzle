@@ -7,11 +7,14 @@
 	<!-- 상품 ID로 해당 상품의 문의 목록 조회 (페이지네이션 추가) -->
 	<select id="selectQnasByProductId" parameterType="map"
 		resultType="dto.Qna">
-		SELECT * FROM qna
-		WHERE product_id = #{productId}
+		SELECT q.*,
+		m.nickname
+		FROM qna q
+		INNER JOIN member m ON q.member_id = m.member_id
+		WHERE q.product_id = #{productId}
 		AND 
-		exposure_status = 'PUBLISHED'
-		ORDER BY questioned_at DESC
+		q.exposure_status = 'PUBLISHED'
+		ORDER BY q.questioned_at DESC
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
 

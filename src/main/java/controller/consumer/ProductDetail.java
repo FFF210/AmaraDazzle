@@ -174,7 +174,7 @@ public class ProductDetail extends HttpServlet {
 			int reviewTotalPages = (int) Math.ceil((double) reviewTotalCount / REVIEW_PAGE_SIZE);
 
 			// QnA 조회 (페이지네이션)
-			List<Qna> qnas = qnaService.getQnasByProductIdWithPaging(product.getProductId(), qnaPage, QNA_PAGE_SIZE);
+			List<Map<String, Object>> qnas = qnaService.getQnasByProductIdWithPaging(product.getProductId(), qnaPage, QNA_PAGE_SIZE);
 			Integer qnaCount = qnaService.getQnaCount(product.getProductId());
 			int qnaTotalPages = (int) Math.ceil((double) qnaCount / QNA_PAGE_SIZE);
 			// 위시리스트 찜 여부 조회

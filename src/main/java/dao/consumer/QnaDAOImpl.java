@@ -20,10 +20,10 @@ public class QnaDAOImpl implements QnaDAO {
     
  // 페이지네이션용 문의 목록 조회
  	@Override
- 	public List<Qna> selectQnasByProductIdWithPaging(Map<String, Object> params) throws Exception {
- 		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
- 			return sqlSession.selectList("mapper.qna.selectQnasByProductId", params);
- 		}
+ 	public List<Map<String, Object>> selectQnasByProductIdWithPaging(Map<String, Object> params) throws Exception {
+ 	    try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+ 	        return sqlSession.selectList("mapper.qna.selectQnasByProductId", params);
+ 	    }
  	}
     
     // 문의 개수
