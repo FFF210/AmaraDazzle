@@ -52,6 +52,8 @@ public class EventListController extends HttpServlet {
 			request.setAttribute("totalPages", result.get("totalPages")); // 총 페이지 수
 			request.setAttribute("currentPage", page); // 현재 페이지
 
+			System.out.print(result.get("eventList"));
+
 			request.getRequestDispatcher("/consumer/eventList.jsp").forward(request, response);
 
 		} catch (Exception e) {

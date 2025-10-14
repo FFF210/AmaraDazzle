@@ -36,7 +36,7 @@
 
 	<!-- 페이지 헤더 -->
 	<div class="page-header-wrapper">
-		<my:pageHeader title="랭킹" description="오늘의 랭킹! 요즘 가장 핫한 상품" />
+		<my:pageHeader title="랭킹" description="지금 가장 많이 사랑받는 뷰티 아이템" />
 	</div>
 
 	<!-- 컨텐츠 영역 -->
