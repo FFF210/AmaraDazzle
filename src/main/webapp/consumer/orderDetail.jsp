@@ -115,19 +115,19 @@
 												test="${item.status == 'PAID' || item.status == 'PREPARING'}">
 												<button type="button"
 													class="btn btn-outline btn-sm action-btn"
-													onclick="cancelOrderItem(${item.orderItemId}
-													style="width: 80px;">주문취소</button>
+													onclick="cancelOrderItem(${item.orderItemId})"
+													style="width: 90px;">주문취소</button>
 											</c:when>
 											<c:when test="${item.status == 'SHIPPING'}">
 												<button type="button"
 													class="btn btn-outline btn-sm action-btn"
-													style="width: 80px;">배송조회</button>
+													style="width: 90px;">배송조회</button>
 											</c:when>
 											<c:when test="${item.status == 'DELIVERED'}">
 												<button
 													onclick="location.href='${pageContext.request.contextPath}/store/mypage/myReview'"
 													type="button" class="btn btn-outline btn-sm action-btn"
-													style="width: 80px;">리뷰작성</button>
+													style="width: 90px;">리뷰작성</button>
 											</c:when>
 										</c:choose>
 									</td>

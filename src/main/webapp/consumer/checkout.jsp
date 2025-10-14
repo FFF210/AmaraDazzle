@@ -91,7 +91,7 @@
 						<div class="input-area">
 							<%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 							<my:textInput id="shipRecipient" name="shipRecipient"
-								value="${checkoutData.member.name}" type="default" size="lg"
+								value="${checkoutData.member.name}" type="default" size="sm"
 								state="default" />
 						</div>
 					</div>
@@ -125,13 +125,13 @@
 								}
 								%>
 								<my:textInput id="shipPhone1" name="shipPhone1" value="<%=p1%>"
-									type="default" size="lg" state="default" />
+									type="default" size="sm" state="default" />
 								<p class="dash">-</p>
 								<my:textInput id="shipPhone2" name="shipPhone2" value="<%=p2%>"
-									type="default" size="lg" state="default" />
+									type="default" size="sm" state="default" />
 								<p class="dash">-</p>
 								<my:textInput id="shipPhone3" name="shipPhone3" value="<%=p3%>"
-									type="default" size="lg" state="default" />
+									type="default" size="sm" state="default" />
 							</div>
 						</div>
 					</div>
@@ -144,17 +144,17 @@
 							<div class="address-input-group">
 								<my:textInput id="shipPostcode" name="shipPostcode"
 									value="${checkoutData.member.postcode}" type="default"
-									size="lg" state="default" />
+									size="sm" state="default" />
 								<button type="button" id="findPostcodeBtn"
-									class="btn btn-primary btn-xl" style="width: 150px;">우편번호
+									class="btn btn-primary btn-sm" style="width: 150px;">우편번호
 									찾기</button>
 							</div>
 							<div class=detail-address>
 								<my:textInput id="shipLine1" name="shipLine1"
-									value="${checkoutData.member.line1}" type="default" size="lg"
+									value="${checkoutData.member.line1}" type="default" size="sm"
 									state="default" />
 								<my:textInput id="shipLine2" name="shipLine2"
-									value="${checkoutData.member.line2}" type="default" size="lg"
+									value="${checkoutData.member.line2}" type="default" size="sm"
 									state="default" />
 							</div>
 						</div>
@@ -170,7 +170,7 @@
 						<div class="label">배송메시지</div>
 						<div class="input-area">
 							<my:textInput id="note" name="note" placeholder="요청사항을 입력해주세요"
-								type="default" size="lg" state="default" />
+								type="default" size="sm" state="default" />
 						</div>
 					</div>
 				</div>
@@ -247,20 +247,6 @@
 											</option>
 										</c:forEach>
 									</select>
-									<%-- <div class="custom-select lg">
-										<div class="select-header">
-											<span class="select-label">${selectedValue}</span> <i
-												class="bi bi-chevron-down"></i>
-										</div>
-										<ul class="select-list">
-											<c:forEach var="it" items="${itemList}">
-												<li
-													class="select-item ${it eq selectedValue ? 'active' : ''}"
-													data-value="${it}">${it}</li>
-											</c:forEach>
-										</ul>
-									</div> --%>
-
 								</div>
 							</div>
 
@@ -268,7 +254,7 @@
 								<div class="label">포인트</div>
 								<div class="input-area">
 									<input type="number" name="usingPoint" value="0"
-										class="point-input"> <span class="point-unit">사용가능
+										class="point-input" style="height: 36px;"> <span class="point-unit">사용가능
 										포인트: ${checkoutData.member.pointBalance} P</span>
 								</div>
 							</div>
