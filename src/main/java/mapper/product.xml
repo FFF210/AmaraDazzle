@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!-- <?xml version="1.0" encoding="UTF-8"?> -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
@@ -1818,5 +1818,36 @@
 		</foreach>
 		)
 	</select>
+
+	<!-- ============= [brand2] 이벤트 신청 시 제품 ============= -->
+
+	<!-- [brand2] 이벤트 신청 시 선택 가능한 상품 조회 -->
+	<select id="selectAvailableProducts" parameterType="map"
+		resultType="dto.Product">
+		SELECT
+		p.product_id AS productId,
+		p.name,
+		p.discount_type AS discountType,
+		p.discount_value AS discountValue,
+		p.event_id AS eventId,
+		p.price,
+		p.stock_qty,
+		p.is_visible
+		FROM product p
+		WHERE p.brand_id = #{brandId}
+		AND p.is_visible = 1
+		AND (p.event_id IS NULL OR p.event_id = #{eventId})
+		ORDER BY p.product_id DESC
+	</select>
+
+
+	<!-- 이벤트 신청 시 상품 연결 -->
+	<update id="updateProductForEvent" parameterType="map">
+		UPDATE product
+		SET event_id = #{eventId},
+		discount_type = #{discountType},
+		discount_value = #{discountValue}
+		WHERE product_id = #{productId}
+	</update>
 
 </mapper>

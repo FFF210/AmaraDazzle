@@ -7,7 +7,6 @@ import java.util.Map;
 import dao.brand2.EventDAO;
 import dao.brand2.EventDAOImpl;
 import dto.Coupon;
-import dto.Event;
 import dto.EventApplication;
 import dto.brand2.EventApplicationForm;
 import dto.brand2.EventDetail;
@@ -52,42 +51,31 @@ public class EventServiceImpl implements EventService {
 		application.setManagerName(form.getManagerName());
 		application.setManagerTel(form.getManagerTel());
 		application.setNote(form.getNote());
-		
-		// insert 후 eventApplicationId가 DTO에 세팅돼야 함 (eventApplication.xml에 useGeneratedKeys)
+
+		// insert 후 eventApplicationId가 DTO에 세팅돼야 함 (eventApplication.xml에
+		// useGeneratedKeys)
 		eventDAO.insertEventApplication(application);
 		Long applicationId = application.getEventApplicationId();
 
 		// 2. 이벤트 상품 등록
 		if (form.getProductIds() != null && !form.getProductIds().isEmpty()) {
-			Map<String, Object> map = new HashMap<>();
-			map.put("eventId", form.getEventId());
-			map.put("brandId", form.getBrandId());
-			map.put("productIds", form.getProductIds());
-			// 할인 이벤트인 경우 discountType/discountValue 추가
-			if ("DISCOUNT".equals(form.getEventType())) {
-	            map.put("discountTypes", form.getDiscountTypes());
-	            map.put("discountValues", form.getDiscountValues());
-	        }
-			
-			eventDAO.updateProductsEvent(map); // product.event_id = eventId
-		}
+			for (int i = 0; i < form.getProductIds().size(); i++) {
+				Map<String, Object> map = new HashMap<>();
+				map.put("eventId", form.getEventId());
+				map.put("productId", form.getProductIds().get(i));
 
-		// 3. 쿠폰 발급
-		if (form.getCname() != null && !form.getCname().isEmpty()) {
-			Coupon coupon = new Coupon();
-			coupon.setCname(form.getCname());
-			coupon.setStartDate(form.getCouponStartDate());
-			coupon.setEndDate(form.getCouponEndDate());
-			coupon.setAmount(form.getAmount());
-			coupon.setAmountCondition(form.getAmountCondition());
+				// 할인 이벤트라면 discount 정보도 추가
+				if ("DISCOUNT".equals(form.getEventType())) {
+					map.put("discountType", form.getDiscountTypes().get(i));
+					map.put("discountValue", form.getDiscountValues().get(i));
+				} else {
+					map.put("discountType", null);
+					map.put("discountValue", null);
+				}
 
-			coupon.setProvision(form.getProvision() != null ? form.getProvision() : "ALL");
-			coupon.setWriterType(form.getWriterType() != null ? form.getWriterType() : "BRAND");
-			coupon.setWriterId(form.getWriterId() != null ? form.getWriterId() : form.getBrandId());
-
-			// 신청 ID와 연결
-			coupon.setReason("event_application:" + applicationId);
-			eventDAO.insertCoupon(coupon);
+				// 상품별 업데이트
+				eventDAO.updateProductForEvent(map); // product.event_id = eventId
+			}
 		}
 	}
 
@@ -96,24 +84,35 @@ public class EventServiceImpl implements EventService {
 	public EventDetail getEventById(Long eventId) throws Exception {
 		return eventDAO.selectEventById(eventId);
 	}
-	
+
+	// 신청 시 coupon
+	@Override
+	public List<Coupon> getCouponsForEvent(Long eventId, Long brandId) throws Exception {
+		Map<String, Object> params = new HashMap<>();
+		params.put("eventId", eventId);
+		params.put("brandId", brandId);
+		return eventDAO.selectCouponsForEvent(params);
+	}
+
 	// 이벤트 종료 시 상품과 이벤트 관계 해제
 	@Override
 	public void resetProductsForEvent(Long eventId) throws Exception {
-	    eventDAO.resetProductsForEvent(eventId);
+		eventDAO.resetProductsForEvent(eventId);
 	}
 
 	// 상세보기 버튼 (신청 정보+쿠폰/상품 JOIN 결과)
 	@Override
 	public EventDetail getEventDetailById(Map<String, Object> params) throws Exception {
-	    return eventDAO.selectEventDetailById(params);
+		EventDetail detail = eventDAO.selectEventDetailById(params);
+		List<Coupon> coupons = eventDAO.selectCouponsForEvent(params);
+		detail.setCoupons(coupons); // EventDetail에 coupons 필드 필요
+		return detail;
 	}
-	
+
 	// 이벤트 취소 버튼 (취소 시, event_application row 삭제)
 	@Override
-    public void deleteEventApplication(Long eventApplicationId) throws Exception {
-        eventDAO.deleteEventApplication(eventApplicationId);
-    }
-
+	public void deleteEventApplication(Long eventApplicationId) throws Exception {
+		eventDAO.deleteEventApplication(eventApplicationId);
+	}
 
 }

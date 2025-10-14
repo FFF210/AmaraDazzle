@@ -113,12 +113,9 @@
 				<c:if test="${qna.category eq 'PRODUCT'}">
 					<div class="product-card">
 						<img
-							src="<c:out value='${not empty qna.productThumbnail ? ("image?fileId=" += qna.productThumbnail) : (contextPath += "/img/plus.png")}'/>"
-							id="preview-thumbnail" alt="대표 이미지" width="100px"
-							onclick="document.getElementById('thumbnail').click();" /> <input
-							type="file" id="thumbnail" name="thumbnail" accept="image/*"
-							style="display: none"
-							onchange="readURL(this,'preview-thumbnail');" />
+							src="
+							${pageContext.request.contextPath}/image?fileId=${qna.productThumbnail}"
+							id="preview-thumbnail" alt="대표 이미지" width="100px" />
 						<div class="product-info">
 							<div class="product-name">${qna.productName}</div>
 							<!-- <div class="chip">옵션 정보</div> -->

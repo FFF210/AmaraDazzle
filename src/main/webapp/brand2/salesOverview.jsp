@@ -80,10 +80,9 @@
 			<canvas id="salesLineChart"></canvas>
 		</div>
 
-		<!-- ============= tableFilter start ============= -->
+		<%-- ============= tableFilter start ============= -->
 		<div class="table-filter">
 			<form method="get" action="/brand2/salesStatus">
-
 				<!-- 날짜 필터 -->
 				<div class="filter-row date-row">
 					<label>기간:</label>
@@ -158,7 +157,7 @@
 
 			</form>
 		</div>
-		<!-- ============= tableFilter end ============= -->
+		<!-- ============= tableFilter end ============= --%>
 
 		<!-- 테이블 -->
 		<div class="tcontainer">

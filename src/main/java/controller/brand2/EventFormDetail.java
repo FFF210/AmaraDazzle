@@ -57,28 +57,34 @@ public class EventFormDetail extends HttpServlet {
 			}
 
 			// ============= 상세보기 버튼 =============
-	        if (eventIdParam != null && !eventIdParam.isEmpty()) {
-	            Long eventId = Long.parseLong(eventIdParam);
-	            
-	            HttpSession session = request.getSession(false);
-	    		
-	    		// 세션 없거나 브랜드 정보 없음 → 로그인 페이지로 리다이렉트
-	    		if (session == null || session.getAttribute("brand") == null) {
-	    			response.sendRedirect(request.getContextPath() + "/brand/login");
-	    			return;
-	    		}
+			if (eventIdParam != null && !eventIdParam.isEmpty()) {
+			    Long eventId = Long.parseLong(eventIdParam);
+			    
+			    HttpSession session = request.getSession(false);
+				
+				// 세션 없거나 브랜드 정보 없음 → 로그인 페이지로 리다이렉트
+				if (session == null || session.getAttribute("brand") == null) {
+					response.sendRedirect(request.getContextPath() + "/brand/login");
+					return;
+				}
 
-	    		Brand brand = (Brand) session.getAttribute("brand");
-	    		Long brandId = brand.getBrandId();
-	    		
-	    		 // 파라미터 맵 구성
-                Map<String, Object> params = new HashMap<>();
-                params.put("eventId", eventId);
-                params.put("brandId", brandId);
-	            
-	            EventDetail detail = service.getEventDetailById(params);
-	            request.setAttribute("event", detail);
-	            request.getRequestDispatcher("/brand2/eventFormDetail.jsp").forward(request, response);
+				Brand brand = (Brand) session.getAttribute("brand");
+				Long brandId = brand.getBrandId();
+				
+				// 파라미터 맵 구성
+				Map<String, Object> params = new HashMap<>();
+				params.put("eventId", eventId);
+				params.put("brandId", brandId);
+				
+				// 이벤트 상세 조회
+				EventDetail detail = service.getEventDetailById(params);
+				
+				// 쿠폰 리스트 조회 후 DTO에 주입
+				detail.setCoupons(service.getCouponsForEvent(eventId, brandId));
+				
+				// JSP로 전달
+				request.setAttribute("event", detail);
+				request.getRequestDispatcher("/brand2/eventFormDetail.jsp").forward(request, response);
 	        } else {
 	            response.sendRedirect(request.getContextPath() + "/brand2/eventList");
 	        }
@@ -89,13 +95,8 @@ public class EventFormDetail extends HttpServlet {
 
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

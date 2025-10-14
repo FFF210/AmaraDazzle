@@ -100,7 +100,7 @@
 								<my:tag color="yellow" size="lg" text="배송중" />
 							</c:when>
 							<c:when test="${orderDetail.summary.orderStatus == 'DELIVERED'}">
-								<my:tag color="yellow" size="lg" text="배송완료" />
+								<my:tag color="green" size="lg" text="배송완료" />
 							</c:when>
 							<c:when test="${orderDetail.summary.orderStatus == 'CONFIRMED'}">
 								<my:tag color="green" size="lg" text="구매확정" />
@@ -231,7 +231,7 @@
 													<my:tag color="yellow" size="sm" text="배송중" />
 												</c:when>
 												<c:when test="${item.itemStatus == 'DELIVERED'}">
-													<my:tag color="yellow" size="sm" text="배송완료" />
+													<my:tag color="green" size="sm" text="배송완료" />
 												</c:when>
 												<c:when test="${item.itemStatus == 'CONFIRMED'}">
 													<my:tag color="green" size="sm" text="구매확정" />
@@ -303,9 +303,35 @@
 					<h3>배송 정보</h3>
 					<div class="form-group">
 						<label>송장번호</label>
-						<my:textInput type="default" size="lg"
-							value="${orderDetail.summary.trackingNo}" />
-						<button type="button" class="btn btn-primary btn-xl">등록</button>
+
+
+						<c:choose>
+							<c:when
+								test="${not empty orderDetail.summary.trackingNo && orderDetail.summary.orderStatus eq 'SHIPPING'}">
+								<my:textInput id="trackingNo_${orderDetail.summary.ordersId}"
+									type="readOnly" size="lg"
+									value="${orderDetail.summary.trackingNo}" />
+								<button id="registerBtn_${orderDetail.summary.ordersId}"
+									type="button" class="btn btn-primary btn-xl"
+									onclick="completeDelivery(${orderDetail.summary.ordersId})">
+									배송완료</button>
+							</c:when>
+							<c:when
+								test="${not empty orderDetail.summary.trackingNo && orderDetail.summary.orderStatus eq 'DELIVERED'}">
+								<my:textInput id="trackingNo_${orderDetail.summary.ordersId}"
+									type="readOnly" size="lg"
+									value="${orderDetail.summary.trackingNo}" />
+							</c:when>
+							<c:when
+								test="${empty orderDetail.summary.trackingNo && orderDetail.summary.orderStatus eq 'PAID'}">
+								<my:textInput id="trackingNo_${orderDetail.summary.ordersId}"
+									type="default" size="lg" value="" />
+								<button id="registerBtn_${orderDetail.summary.ordersId}"
+									type="button" class="btn btn-primary btn-xl"
+									onclick="updateShipping(${orderDetail.summary.ordersId})">
+									등록</button>
+							</c:when>
+						</c:choose>
 					</div>
 					<div class="form-group">
 						<label>배송 요청사항</label>
@@ -317,5 +343,66 @@
 			</form>
 		</div>
 	</my:layout>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+function updateShipping(orderId) {
+    const trackingNo = $("#trackingNo_" + orderId).val();
+    const carrierName = "대한통운";
+    const $button = $("#registerBtn_" + orderId);
+
+    if (!trackingNo || !carrierName) {
+        alert("운송장번호와 택배사를 모두 입력해주세요.");
+        return;
+    }
+    
+    $button.prop("disabled", true).text("등록 중...");
+
+    $.ajax({
+        type: "POST",
+        url: "<c:url value='/brand/updateShippingInfo'/>",
+        data: {
+            orderId: orderId,
+            trackingNo: trackingNo,
+            carrierName: carrierName
+        },
+        dataType: "json",
+        success: function(res) {
+            if (res.success) {
+            	location.reload(); 
+            } else {
+                alert("업데이트 실패: " + res.message);
+            }
+        },
+        error: function() {
+            alert("서버 오류 발생");
+        }
+    });
+}
+
+function completeDelivery(orderId) {
+    const $button = $("#registerBtn_" + orderId);
+    
+    $button.prop("disabled", true).text("배송 중...");
+
+    $.ajax({
+        type: "POST",
+        url: "<c:url value='/brand/completeDelivery'/>",
+        data: {
+            orderId: orderId,
+        },
+        dataType: "json",
+        success: function(res) {
+            if (res.success) {
+            	location.reload(); 
+            } else {
+                alert("업데이트 실패: " + res.message);
+            }
+        },
+        error: function() {
+            alert("서버 오류 발생");
+        }
+    });
+}
+</script>
 </body>
 </html>
