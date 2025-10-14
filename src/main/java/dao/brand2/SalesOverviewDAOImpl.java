@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 import dto.brand2.SalesOverview;
+import dto.brand2.SalesStatusRow;
 import util.MybatisSqlSessionFactory;
 
 public class SalesOverviewDAOImpl implements SalesOverviewDAO {
@@ -18,4 +19,10 @@ public class SalesOverviewDAOImpl implements SalesOverviewDAO {
 		return sqlSession.selectList("mapper.orderItem.selectCategorySalesTrend", params);
 	}
 
+
+    // ================== 테이블용 (날짜별 pivot) ==================
+    @Override
+    public List<SalesStatusRow> selectSalesStatusRows(Map<String, Object> params) {
+        return sqlSession.selectList("mapper.orderItem.selectSalesStatusRows", params);
+    }
 }

@@ -1827,6 +1827,7 @@
 		SELECT
 		p.product_id AS productId,
 		p.name,
+		p.thumbnail_file_id,
 		p.discount_type AS discountType,
 		p.discount_value AS discountValue,
 		p.event_id AS eventId,

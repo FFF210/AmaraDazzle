@@ -200,7 +200,10 @@
 				<div class="upload">
 					<div id="imgPreviewWrapper" class="preview-wrapper">
 						<div id="imgPreviewArea" class="preview-area" aria-live="polite">
-							<img src="/upload/${event.detailFileId}" />
+							<%-- <img src="/upload/${event.detailFileId}" /> --%>
+							<img
+								src="${pageContext.request.contextPath}/image?fileId=${event.thumbnailFileId}"
+								alt="대표 이미지" />
 						</div>
 					</div>
 				</div>
@@ -209,7 +212,10 @@
 				<div class="upload">
 					<div id="imgPreviewWrapper" class="preview-wrapper">
 						<div id="imgPreviewArea" class="preview-area" aria-live="polite">
-							<img src="/upload/${event.detailFileId}" />
+							<%-- <img src="/upload/${event.detailFileId}" /> --%>
+							<img
+								src="${pageContext.request.contextPath}/image?fileId=${event.detailFileId}"
+								alt="대표 이미지" width="588px" />
 						</div>
 					</div>
 				</div>
@@ -266,12 +272,14 @@ ETC(기타) : (?)
 
 					<c:when test="${event.eventType eq 'DISCOUNT'}">
 						<div class="label req">상품별 할인 등록</div>
-						<div class="part_content" id="productList">
-							<div class="product-row discount-row">
+						<div class="part_content" id="productList"
+							style="display: flex; flex-direction: column; gap: 10px;">
+							<div class="product-row discount-row"
+								style="gap: 4px; flex-direction: column;">
 
 								<!-- 상품 선택 -->
 								<div class="field">
-									<div class="custom-select sm">
+									<div class="custom-select md" style="width: 100%;">
 										<div class="select-header">
 											<span>상품 선택</span> <i class="bi bi-chevron-down"></i>
 										</div>
@@ -279,10 +287,14 @@ ETC(기타) : (?)
 											<li class="select-item" data-value="">상품 선택</li>
 											<c:forEach var="p" items="${products}">
 												<li class="select-item" data-value="${p.productId}"
+													style="display: flex; gap: 10px; padding: 5px 20px;"
 													<c:if test="${not empty p.eventId and p.eventId eq event.eventId}">
 													class="selected"
 														</c:if>>
-													${p.name}</li>
+													<img
+													src="${pageContext.request.contextPath}/image?fileId=${p.thumbnailFileId}"
+													alt="대표 이미지" width="60px" /> ${p.name}
+												</li>
 											</c:forEach>
 										</ul>
 										<!-- 선택된 상품 ID 저장 -->
@@ -291,31 +303,33 @@ ETC(기타) : (?)
 								</div>
 
 
-								<!-- 할인 값 -->
-								<div class="field">
-									<div class="text-input-wrapper size--sm state--default">
-										<div class="text-input-inner default">
-											<input type="number" name="discountValue[]"
-												class="text-input default" min="0" placeholder="할인율/금액 입력"
-												value="" />
+								<div style="display: flex; gap: 4px;">
+									<!-- 할인 값 -->
+									<div class="field">
+										<div class="text-input-wrapper size--sm state--default">
+											<div class="text-input-inner default">
+												<input type="number" name="discountValue[]"
+													class="text-input default" min="0" placeholder="할인율/금액 입력"
+													value="" />
+											</div>
 										</div>
 									</div>
-								</div>
 
-								<!-- 할인 타입 -->
-								<div class="field">
-									<div class="text-input-wrapper size--sm state--default">
-										<div class="text-input-inner default">
-											<select name="discountType[]" class="text-input default">
-												<option value="RATE">율 (%)</option>
-												<option value="AMOUNT">금액 (원)</option>
-											</select>
+									<!-- 할인 타입 -->
+									<div class="field">
+										<div class="text-input-wrapper size--sm state--default">
+											<div class="text-input-inner default">
+												<select name="discountType[]" class="text-input default">
+													<option value="RATE">율 (%)</option>
+													<option value="AMOUNT">금액 (원)</option>
+												</select>
+											</div>
 										</div>
 									</div>
-								</div>
 
-								<button type="button" class="btn icon removeProduct"
-									aria-label="상품 삭제">×</button>
+									<button type="button" class="btn icon removeProduct"
+										aria-label="상품 삭제" style="height: 40px; width: 40px;">×</button>
+								</div>
 							</div>
 						</div>
 						<div></div>
@@ -386,52 +400,30 @@ ETC(기타) : (?)
 		</my:brand2formLayout>
 	</my:layout>
 
-<script>
+	<script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ===== 커스텀 셀렉트 초기화 =====
-    document.querySelectorAll(".custom-select").forEach(function (selectBox) {
-        const header = selectBox.querySelector(".select-header");
-        const hiddenInput = selectBox.querySelector("input[type=hidden]");
-        const headerText = header ? header.querySelector("span") : null;
-
-        // 초기값 세팅 (hidden 값 > active/selected 우선)
-        if (hiddenInput && hiddenInput.value) {
-            const matched = selectBox.querySelector(`.select-item[data-value="${hiddenInput.value}"]`);
-            if (matched) {
-                if (headerText) headerText.textContent = matched.textContent.trim();
-                selectBox.querySelectorAll(".select-item").forEach(li => li.classList.remove("active", "selected"));
-                matched.classList.add("active");
-            }
-        } else {
-            const preSelected = selectBox.querySelector(".select-item.active, .select-item.selected");
-            if (preSelected) {
-                const value = preSelected.dataset.value;
-                if (hiddenInput) hiddenInput.value = value;
-                if (headerText) headerText.textContent = preSelected.textContent.trim();
-                selectBox.querySelectorAll(".select-item").forEach(li => li.classList.remove("active", "selected"));
-                preSelected.classList.add("active");
-            }
-        }
-
-        // 드롭다운 열기/닫기
-        if (header) {
-            header.addEventListener("click", function (e) {
-                e.stopPropagation();
-                // 다른 select 닫기
-                document.querySelectorAll(".custom-select.open").forEach(s => {
-                    if (s !== selectBox) s.classList.remove("open");
-                });
-                selectBox.classList.toggle("open"); // ✅ CSS 규칙과 맞춤
-            });
-        }
-    });
-
-    // ===== 항목 선택 (이벤트 위임) =====
+	// ===== 커스텀 셀렉트 (이벤트 위임 기반) =====
     document.addEventListener("click", function (e) {
+        const header = e.target.closest(".select-header");
+        const selectBox = e.target.closest(".custom-select");
+
+        // 1️⃣ 헤더 클릭 → 열기/닫기
+        if (header && selectBox) {
+            e.stopPropagation();
+
+            // 다른 셀렉트 닫기
+            document.querySelectorAll(".custom-select.open").forEach(s => {
+                if (s !== selectBox) s.classList.remove("open");
+            });
+
+            selectBox.classList.toggle("open");
+            return;
+        }
+
+        // 2️⃣ 옵션 클릭 → 선택 처리
         const item = e.target.closest(".select-item");
-        if (item) {
-            const selectBox = item.closest(".custom-select");
+        if (item && selectBox) {
             const headerText = selectBox.querySelector(".select-header span");
             const hiddenInput = selectBox.querySelector("input[type=hidden]");
             const items = selectBox.querySelectorAll(".select-item");
@@ -446,10 +438,11 @@ document.addEventListener("DOMContentLoaded", function () {
             item.classList.add("active");
 
             selectBox.classList.remove("open");
-        } else {
-            // 외부 클릭 → 모든 드롭다운 닫기
-            document.querySelectorAll(".custom-select.open").forEach(s => s.classList.remove("open"));
+            return;
         }
+
+        // 3️⃣ 외부 클릭 시 모든 드롭다운 닫기
+        document.querySelectorAll(".custom-select.open").forEach(s => s.classList.remove("open"));
     });
 
     // ===== 상품 행 추가 =====
@@ -463,26 +456,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const newRow = firstRow.cloneNode(true);
 
-            // hidden 초기화
-            const hiddenInput = newRow.querySelector("input[type=hidden]");
-            if (hiddenInput) hiddenInput.value = "";
+            // 초기화
+            newRow.querySelectorAll("input, select").forEach(el => {
+                if (el.type === "hidden" || el.type === "number") el.value = "";
+                if (el.tagName === "SELECT") el.value = "RATE";
+            });
 
-            // 라벨 초기화
             const headerText = newRow.querySelector(".select-header span");
             if (headerText) headerText.textContent = "상품 선택";
 
-            // 선택 항목 초기화
-            newRow.querySelectorAll(".select-item").forEach(li => {
-                li.classList.remove("active", "selected");
-            });
-
-            // 할인 값 초기화
-            const discountInput = newRow.querySelector("input[name='discountValue[]']");
-            if (discountInput) discountInput.value = "";
-
-            // 할인 타입 초기화
-            const select = newRow.querySelector("select[name='discountType[]']");
-            if (select) select.value = "RATE";
+            newRow.querySelectorAll(".select-item").forEach(li => li.classList.remove("active", "selected"));
 
             productList.appendChild(newRow);
         });
@@ -501,7 +484,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-
 });
 </script>
 
