@@ -1,5 +1,21 @@
 @charset "UTF-8";
 
+.page-btn {
+	border-radius: 0 !important;
+	font-weight: 400 !important;
+}
+
+.page-btn.active {
+	border: 1px solid #111 !important;
+	color: #fff !important;
+	background: #111 !important;
+	font-weight: 500 !important;
+}
+
+.page-btn:hover:not(.active):not(.disabled) {
+	color: #111 !important;
+}
+
 .main-content {
 	width: 1020px;
 	padding: 80px 0 40px 0;
