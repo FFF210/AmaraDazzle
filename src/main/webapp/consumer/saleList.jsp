@@ -35,7 +35,7 @@
 
 	<!-- 페이지 헤더 -->
 	<div class="page-header-wrapper">
-		<my:pageHeader title="세일" description="핫 세일! 이건 꼭 사야 해!" />
+		<my:pageHeader title="세일" description="놓치기 아까운 뷰티 특가 혜택" />
 	</div>
 
 	<!-- 컨텐츠 영역 -->

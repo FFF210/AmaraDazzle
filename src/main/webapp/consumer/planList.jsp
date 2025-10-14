@@ -37,7 +37,7 @@
 
 	<!-- 페이지 헤더 -->
 	<div class="page-header-wrapper">
-		<my:pageHeader title="기획전" description="꼭 갖고 싶은 그 상품들! 다양한 혜택까지!" />
+		<my:pageHeader title="기획전" description="엄선된 기획 상품을 지금 만나보세요" />
 	</div>
 
 	<!-- 컨텐츠 영역 -->
