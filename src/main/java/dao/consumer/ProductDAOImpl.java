@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 import dto.Product;
+import dto.consumer.BrandDetail;
 import dto.consumer.CommonProduct;
 import dto.consumer.ModalProduct;
 import dto.consumer.ProductCategory;
@@ -60,7 +61,7 @@ public class ProductDAOImpl implements ProductDAO {
 			throw e;
 		}
 	}
-	
+
 	// ========================== [목록 조회 용도] ====================
 
 	// [소비자] 기획 상품 목록 조회
@@ -137,18 +138,18 @@ public class ProductDAOImpl implements ProductDAO {
 
 	// [brandDetail 용도] 브랜드 상품 조회
 	@Override
-	public List<Map<String, Object>> selectProductsByBrandId(Map<String, Object> params) throws Exception {
-	    try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-	        return session.selectList("mapper.product.selectProductsByBrandId", params);
-	    }
+	public List<BrandDetail> selectProductsByBrandId(Map<String, Object> params) throws Exception {
+		try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return session.selectList("mapper.product.selectProductsByBrandId", params);
+		}
 	}
-	
+
 	// [brandDetail 용도] 브랜드 상품 개수 조회
 	@Override
 	public int countProductsByBrand(Map<String, Object> params) throws Exception {
-	    try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-	        return session.selectOne("mapper.product.countProductsByBrand", params);
-	    }
+		try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return session.selectOne("mapper.product.countProductsByBrand", params);
+		}
 	}
 
 	// [소비자] 검색 상품 목록 조회
