@@ -113,6 +113,8 @@ hr {
     background: var(--innerbox); /* 선 색상 */
 }
 
+
+
 .price_input:placeholder-shown {
   text-align: left;
 }
@@ -128,6 +130,7 @@ hr {
 button {
     font-family: "Pretendard";
     font-size: 14px;
+    cursor: pointer;
 }
 
 .btn {
@@ -169,13 +172,17 @@ button {
     margin: 0 auto;
 }
 
-/* .button_wrap { */
-/*     width: 95%; */
-/*     display: flex; */
-/*     justify-content: flex-end; */
-/*     align-items: center; */
-/*     margin: 10px auto 0; */
-/* } */
+.button_wrap {
+    width: 95%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 10px auto 0;
+}
+
+.btn_part {
+	display: flex;
+}
 
 .action_btn {
     height: 40px;
@@ -186,4 +193,6 @@ button {
     width: 80px;
 }
 
-
+.hidden {
+	display : none;
+}

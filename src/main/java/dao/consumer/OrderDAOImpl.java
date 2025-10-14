@@ -159,6 +159,14 @@ public class OrderDAOImpl implements OrderDAO {
 			return sqlSession.selectList("mapper.orders.selectCancelExchangeReturnList", params);
 		}
 	}
+	
+	//페이징용 개수 조회
+	@Override
+	public int countCancelExchangeReturnList(Map<String, Object> params) throws Exception {
+	    try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        return sqlSession.selectOne("mapper.orders.countCancelExchangeReturnList", params);
+	    }
+	}
 
 	// 교환/반품 신청용
 	@Override

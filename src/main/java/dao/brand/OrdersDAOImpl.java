@@ -215,4 +215,21 @@ public class OrdersDAOImpl implements OrdersDAO {
 		}
 	}
 
+	// 상품 배송
+	@Override
+	public void updateShippingInfo(Map<String, Object> params) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			sqlSession.update("mapper.orderItem.updateShippingInfo", params);
+			sqlSession.commit();
+		}
+	}
+
+	// 배송 완료
+	@Override
+	public void updateStatusToDelivered(long orderId) throws Exception {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			sqlSession.update("mapper.orderItem.updateStatusToDelivered", orderId);
+			sqlSession.commit();
+		}
+	}
 }

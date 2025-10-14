@@ -80,7 +80,7 @@
             });
         });
         
-        // 2. wishlist-btn용 (장바구니 등) - 추가
+        // 2. wishlist-btn용 (장바구니 등)
         document.querySelectorAll('.wishlist-btn .heart-btn').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();

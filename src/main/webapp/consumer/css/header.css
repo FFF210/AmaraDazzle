@@ -34,6 +34,7 @@ body {
 	padding: 0 210px;
 	flex-direction: column;
 	align-items: flex-end;
+	margin: 0 auto;
 }
 
 /* 상단 영역 (검색창, 로고, 사용자 메뉴) */

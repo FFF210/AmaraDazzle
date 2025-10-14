@@ -1,6 +1,9 @@
 // 장바구니 페이지 JavaScript
 
 $(document).ready(function() {
+	// 페이지 로드 시 초기 계산
+    updateTotalAmount();
+	
     // 수량 변경 이벤트
     $('.quantity-input').on('change', function() {
         const cartItemId = $(this).data('cart-item-id');
@@ -37,7 +40,7 @@ $(document).ready(function() {
         }
 
         // 선택상품 주문
-        const form = $('<form method="post" action="/store/checkout"></form>');
+        const form = $('<form method="get" action="/store/checkout"></form>');
         selectedItems.forEach(function(id) {
             form.append('<input type="hidden" name="cartItemIds" value="' + id + '">');
         });
@@ -57,7 +60,7 @@ $(document).ready(function() {
         }
 
         // 전체상품 주문
-        const form = $('<form method="post" action="/store/checkout"></form>');
+        const form = $('<form method="get" action="/store/checkout"></form>');
         allItems.forEach(function(id) {
             form.append('<input type="hidden" name="cartItemIds" value="' + id + '">');
         });
@@ -70,6 +73,9 @@ $(document).ready(function() {
         const allChecked = $('.item-checkbox:checked').length === $('.item-checkbox').length;
         $('.item-checkbox').prop('checked', !allChecked);
         $(this).text(allChecked ? '전체선택' : '전체선택 해제');
+        
+        // 금액 업데이트!
+        updateTotalAmount();
     });
 
     // 선택상품 삭제 버튼
@@ -87,7 +93,35 @@ $(document).ready(function() {
             deleteSelectedItems(selectedItems);
         }
     });
+    
+     // 개별 체크박스 클릭 시 금액 업데이트
+    $('.item-checkbox').on('change', function() {
+        updateTotalAmount();
+    });
 });
+
+ //  선택된 상품들의 총 금액 계산 함수
+function updateTotalAmount() {
+    let total = 0;
+    let count = 0;
+    
+    $('.item-checkbox:checked').each(function() {
+        const row = $(this).closest('tr');
+        
+        // 해당 row의 최종 가격 가져오기
+        const priceText = row.find('td').eq(3).find('p').last().text(); // "10,000 원"
+        const price = parseInt(priceText.replace(/[^0-9]/g, '')); // 숫자만 추출
+        
+        if (!isNaN(price)) {
+            total += price;
+            count++;
+        }
+    });
+    
+    // 총 결제예상금액 업데이트
+    $('.total-amount').html('총 결제예상금액 ' + total.toLocaleString() + ' 원' + 
+        (count > 0 ? ' (' + count + '개 상품)' : ' (0개 상품)'));
+}
 
 // 수량 변경
 function updateQuantity(cartItemId, quantity) {

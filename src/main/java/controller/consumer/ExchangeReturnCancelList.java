@@ -20,6 +20,7 @@ import service.consumer.OrderServiceImpl;
 @WebServlet("/store/mypage/exchangeReturnCancelList")
 public class ExchangeReturnCancelList extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final int PAGE_SIZE = 10;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -47,6 +48,20 @@ public class ExchangeReturnCancelList extends HttpServlet {
 		}
 
 		try {
+			// 페이지 번호 받기
+			String pageParam = request.getParameter("page");
+			int currentPage = 1; // 기본값 1페이지
+			if (pageParam != null && !pageParam.isEmpty()) {
+				try {
+					currentPage = Integer.parseInt(pageParam);
+					if (currentPage < 1) {
+						currentPage = 1; // 1보다 작으면 1로
+					}
+				} catch (NumberFormatException e) {
+					currentPage = 1; // 숫자가 아니면 1로
+				}
+			}
+
 			// 날짜 필터 받아오기 (년/월/일 따로)
 			String startY = request.getParameter("drfStartY");
 			String startM = request.getParameter("drfStartM");
@@ -69,16 +84,43 @@ public class ExchangeReturnCancelList extends HttpServlet {
 
 			// 취소/교환/반품 통합 목록 조회
 			OrderService ordersService = new OrderServiceImpl();
-			List<Map<String, Object>> list = ordersService.getCancelExchangeReturnList(memberId, startDate, endDate);
+			Map<String, Object> result = ordersService.getCancelExchangeReturnList(memberId, startDate, endDate,
+					currentPage, PAGE_SIZE);
 
-			// JSP로 날짜 값 및 데이터 전달 (다시 선택된 상태로 표시)
-			request.setAttribute("list", list);
-			request.setAttribute("startY", startY);
-			request.setAttribute("startM", startM);
-			request.setAttribute("startD", startD);
-			request.setAttribute("endY", endY);
-			request.setAttribute("endM", endM);
-			request.setAttribute("endD", endD);
+			@SuppressWarnings("unchecked")
+			List<Map<String, Object>> list = (List<Map<String, Object>>) result.get("list");
+			int totalPages = (Integer) result.get("totalPages");
+			int totalCount = (Integer) result.get("totalCount");
+
+			// 6. QueryString 생성 (페이지네이션 링크용) ✨
+			StringBuilder queryString = new StringBuilder();
+			if (startY != null)
+				queryString.append("&drfStartY=").append(startY);
+			if (startM != null)
+				queryString.append("&drfStartM=").append(startM);
+			if (startD != null)
+				queryString.append("&drfStartD=").append(startD);
+			if (endY != null)
+				queryString.append("&drfEndY=").append(endY);
+			if (endM != null)
+				queryString.append("&drfEndM=").append(endM);
+			if (endD != null)
+				queryString.append("&drfEndD=").append(endD);
+
+			// JSP로 데이터 전달
+            request.setAttribute("list", list);
+            request.setAttribute("currentPage", currentPage);
+            request.setAttribute("totalPages", totalPages);
+            request.setAttribute("totalCount", totalCount);
+            request.setAttribute("queryString", queryString.toString());
+
+            // 날짜 값 전달 (다시 선택된 상태로 표시)
+            request.setAttribute("startY", startY);
+            request.setAttribute("startM", startM);
+            request.setAttribute("startD", startD);
+            request.setAttribute("endY", endY);
+            request.setAttribute("endM", endM);
+            request.setAttribute("endD", endD);
 
 			request.getRequestDispatcher("/consumer/exchangeReturnCancelList.jsp").forward(request, response);
 

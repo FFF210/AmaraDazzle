@@ -18,21 +18,29 @@ public class PointDAOImpl implements PointDAO {
 		sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
 	}
 
-	// 회원의 포인트 내역 조회 (최근순)
+	// 포인트 내역 개수 조회 (전체)(페이징용)
 	@Override
-	public List<Point> selectPointHistory(Long memberId) throws Exception {
-		return sqlSession.selectList("mapper.point.selectPointHistory", memberId);
+	public int countPointHistory(Long memberId) throws Exception {
+		Integer count = sqlSession.selectOne("mapper.point.countPointHistory", memberId);
+		return count != null ? count : 0;
 	}
 
-	//특정 기간의 포인트 내역 조회
+	// 회원의 포인트 내역 조회 (최근순)
 	@Override
-	public List<Point> selectPointHistoryByPeriod(Long memberId, Timestamp startDate, Timestamp endDate)
-			throws Exception {
-		Map<String, Object> params = new HashMap<>();
-		params.put("memberId", memberId);
-		params.put("startDate", startDate);
-		params.put("endDate", endDate);
+	public List<Map<String, Object>> selectPointHistory(Map<String, Object> params) throws Exception {
+		return sqlSession.selectList("mapper.point.selectPointHistory", params);
+	}
 
+	// 포인트 내역 개수 조회 (기간별)(페이징용)
+	@Override
+	public int countPointHistoryByPeriod(Map<String, Object> params) throws Exception {
+		Integer count = sqlSession.selectOne("mapper.point.countPointHistoryByPeriod", params);
+		return count != null ? count : 0;
+	}
+
+	// 특정 기간의 포인트 내역 조회
+	@Override
+	public List<Map<String, Object>> selectPointHistoryByPeriod(Map<String, Object> params) throws Exception {
 		return sqlSession.selectList("mapper.point.selectPointHistoryByPeriod", params);
 	}
 

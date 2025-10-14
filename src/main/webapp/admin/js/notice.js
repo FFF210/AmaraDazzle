@@ -1,125 +1,166 @@
-//공지작성 페이지로 이동
-function goWriteNoticeSeller(){
-	location.href="noticeSellerWrite"
+//공지 내용 수정 페이지로 이동
+function editNoticeSeller(num){
+	location.href="noticeSellerEdit?num="+num
 }
 
+function exposeState(num){
+	fetch(`/admin/exposeChange?num=${num}`, {
+		method: "GET"
+	})
+	.then(res => res.json())
+	.then(data => {
+		console.log(data);
+		if (data.status == "ok") {
+			// 오버레이 표시
+			document.getElementById("overlay").classList.add("active");
 
-//공지 내용 상세보기 페이지로 이동
-function goNoticeDetail(num, target){
-	if(target == 5) {
-		location.href="noticeSellerDetail?num="+num
-	} else if(target == 4) {
-		location.href="noticePlatformDetail?num="+num
-	}
-}
+			//등록 성공 알럿 표시
+			showAlert("success", data.title, data.message); // 2초간 토스트
+
+			setTimeout(() => {
+				location.reload(); //현재 페이지 새로고침
+			}, 3000);
 
 
-//toast editor 설정 
-const editor = new toastui.Editor({
-	el: document.querySelector('#editContent'),
-	height: '500px',
-	initialEditType: 'wysiwyg',
-});
-
-// editor.getHtml()을 사용해서 에디터 내용 받아오기
-//console.log(editor.getHTML());
-//console.log(editor.getMarkdown());
-
-const target = document.getElementById("noticeTargetType");
-const category = document.getElementById("noticeCate");
-const title = document.getElementById("noticeTitle");
-const content = editor.getHTML();
-const writer = document.getElementById("noticeWriter");
-const writeBtn = document.getElementById("writeBtn");
-
-//필수입력 유효성 검사 
-writeBtn.addEventListener("click", () => {
-	const fileAttach = document.getElementsByName("noticeFile");
-	if (category.value == "") {
-		alert("공지 카테고리를 선택하세요.");
-		category.focus();
-		return;
-	}
-
-	if (title.value == "") {
-		alert("공지 제목을 입력하세요.");
-		title.focus();
-		return;
-	}
-
-	if (title.value.length > 150) {
-		alert("제목은 150자까지만 쓸 수 있습니다.");
-		title.focus();
-		return;
-	}
-
-	if (editor.getMarkdown() == "") {
-		alert("내용을 입력해주세요.");
-		editor.focus();
-		return;
-	}
-
-	if (editor.getMarkdown().length < 10) {
-		alert("내용은 10자 이상 입력해야 합니다.");
-		editor.focus();
-		return;
-	}
-
-	if(fileAttach){   //파일첨부 함경우 
-		const imgSize = fileAttach.size; // 파일 크기
-		const maxSize = 10 * 1024 * 1024; // 10MB제한
-			
-		if(imgSize > maxSize){
-			alert("파일첨부 용량은 10MB이하만 가능합니다.");
-			return;
+		} else if (data.status == "partial") {
+			showAlert("error", data.title, data.message); // 2초간 토스트
 		}
-	}
-		
-	//완료시 BE로 전달 	
-	if (confirm("모든 작성내용을 확인하였습니까?")) {
-		insertSellerNotice();
-	}
-});
-
-//공지(seller) 글쓰기 ajax
-function insertSellerNotice(){
-	const fileAttach = document.getElementById("fileInput");
-
-	const formData = new FormData();
-	formData.append("type_id", category.value);
-	formData.append("title", title.value);
-	formData.append("content", editor.getHTML());
-	formData.append("writer", writer.value);
-	formData.append("target_type_id", target.value);
-	
-	//파일첨부를 한 경우 
-	if(fileAttach.files.length > 0){
-		for (let i = 0; i < fileAttach.files.length; i++) {
-		   formData.append("noticeFile", fileAttach.files[i]);
-		}
-	}
-    
-	fetch("noticeSellerWrite", {
-		method: "POST",
-		body : formData
-		
-	}).then(function(data) {
-		return data.json();
-
-	}).then(function(result) {
-		if(result.status == "ok"){
-			alert("공지 등록이 완료되었습니다.");
-			
-			//상세보기로 이동
-			location.href="noticeSellerDetail?num="+result.id;
-			
-		}else if(result=="fail"){
-			alert("시스템문제로 공지 등록에 실패했습니다.\n관리자에게 문의해주세요.");
-		}
-
-	}).catch(function(error) {
-		console.log("통신오류발생" + error);
+	})
+	.catch(err => {
+		console.error(err);
+		showAlert("error", "삭제 실패", "서버 통신 중 오류가 발생했습니다.");
 	});
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+	
+	//toast editor 설정 
+	const editor = new toastui.Editor({
+		el: document.querySelector('#editContent'),
+		height: '500px',
+		initialEditType: 'wysiwyg',
+	});
+	
+	// editor.getHtml()을 사용해서 에디터 내용 받아오기
+	//console.log(editor.getHTML());
+	//console.log(editor.getMarkdown());
+	
+	/* ************* 폼전송 + 유효성검사 ************* */
+	const frm = document.getElementById("noticeForm");
+	const writeBtn = document.getElementById("writeBtn");
+	
+	//공란 채울 경우 빨강테두리 지움
+	document.querySelectorAll("#noticeForm input").forEach(input => {
+		input.addEventListener("input", function() {
+			if (this.value.trim() != "") {
+				this.classList.remove("state_error");
+			}
+		});
+	});
+	document.querySelectorAll(".select-item").forEach(select => {
+		select.addEventListener("click", function(e) {
+			const customSelect = e.currentTarget.closest(".custom-select")
+			const hiddenSelect = customSelect.nextElementSibling;
+			if (hiddenSelect && hiddenSelect.value.trim() !== "") {
+				customSelect.classList.remove("state_error");
+			}
+		});
+	});
 
+	// ======== 확인 모달에서 "확인" 클릭 시 폼 전송되도록 미리 대기 ========
+	document.addEventListener("dialogAction", function(e) {
+		const { id, action } = e.detail;
+
+		if (id === "submitCkDialog" && action === "전송") {
+			
+			const formData = new FormData(frm);
+			formData.append("content", editor.getHTML());		
+
+			fetch("/admin/noticeSellerWrite", {
+				method: "POST",
+				body: formData
+			})
+			.then(res => res.json())
+			.then(data => {
+				console.log(data);
+				if (data.status == "ok") {
+					// 오버레이 표시
+					document.getElementById("overlay").classList.add("active");
+
+					//등록 성공 알럿 표시
+					showAlert("success", data.title, data.message); // 2초간 토스트
+
+					setTimeout(() => {
+						location.href="noticeSellerDetail?num="+data.id; // 상세보기로 이동
+					}, 3000);
+
+
+				} else if (data.status == "fail") {
+					showAlert("error", data.title, data.message); // 2초간 토스트
+				}
+			})
+			.catch(err => console.log(err));
+		}
+	});
+	
+	//필수입력 유효성 검사 
+	writeBtn.addEventListener("click", () => {
+		const noticeImg = document.querySelector('input[name="noticeFile"]');
+		const uploader = document.querySelector("#fileDropper");
+		
+		//카테고리
+		if (frm.noticeCate.value.trim() === "") {
+			showAlert("error", " ", "공지 카테고리를 선택하세요.");
+			document.querySelector("#noticeCate").classList.add("state_error");
+			document.querySelector("#noticeCate").focus();
+			return;
+		}
+		
+		//제목
+		if (frm.noticeTitle.value == "") {
+			showAlert("error", " ", "공지 제목을 입력하세요.");
+			frm.noticeTitle.classList.add("state_error");
+			frm.noticeTitle.focus();
+			return;
+		}
+		if (frm.noticeTitle.value.length > 150) {
+			showAlert("error", " ", "제목은 150자까지만 쓸 수 있습니다.");
+			frm.noticeTitle.classList.add("state_error");
+			frm.noticeTitle.focus();
+			return;
+		}
+	
+		//내용
+		if (editor.getMarkdown() == "") {
+			showAlert("error", " ", "내용을 입력해주세요.");
+			editor.focus();
+			return;
+		}
+		
+		//파일첨부
+		if (noticeImg && noticeImg.files.length > 0) {
+			const maxSize = 10 * 1024 * 1024; // 10MB 제한
+			let overSize = false;
+
+			//첨부된 파일 순회하며 사이즈 확인 
+			for (const file of noticeImg.files) {
+				if (file.size > maxSize) {
+					overSize = true;
+					break;
+				}
+			}
+
+			if (overSize) { //파일 1개라도 10MB를 넘을경우 
+				showAlert("error", "", "파일첨부 용량은 10MB 이하만 가능합니다.");
+				uploader.classList.add("error");
+				noticeImg.value = ""; // 파일 선택 초기화
+				return;
+			}
+			// 모든 파일 크기 OK
+			uploader.classList.remove("error");
+		}
+			
+		// 유효성 통과 → 모달 열기
+		openDialog("submitCkDialog");
+	});
+});

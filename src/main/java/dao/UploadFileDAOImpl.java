@@ -52,4 +52,12 @@ public class UploadFileDAOImpl implements UploadFileDAO {
         }
 	}
 
+	//DB 파일 삭제 
+	@Override
+	public void deleteFile(String fRename) {
+		int result = ss.delete("mapper.uploadFile.deleteUploadFile", fRename);
+		if (result > 0) ss.commit();
+		
+	}
+
 }

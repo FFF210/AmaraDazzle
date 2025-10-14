@@ -43,7 +43,7 @@
 				<div class="slide ${status.first ? 'active' : ''}">
 					<a href="/store/brandDetail?brandId=${banner.brandId}"
 						target="_blank"> <img
-						src="/image?fileId=${banner.uploadFileId}"
+						src="${pageContext.request.contextPath}/image?fileId=${banner.uploadFileId}"
 						alt="${banner.bannerName}" />
 					</a>
 				</div>

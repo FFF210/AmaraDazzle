@@ -30,28 +30,26 @@
 					</div>
 				</div>
 
-<!-- 				<div class="part_section period_part"> -->
-<!-- 					<div class="part_title">유효기간 <span class="reqired_write">*</span></div> -->
-<!-- 					<div class="part_content couponExp"> -->
-<!-- 						<label for="couponExp">발급일로부터</label>&nbsp;&nbsp;&nbsp;  -->
-<!-- 						<input type="text" name="couponExp" class="price_input" /> -->
-<%-- 						<my:selectbox size="md" items="일,개월,년" name="expUnit"/> --%>
-<!-- 						<input type="hidden" name="expUnit" value="일"> -->
-<!-- 					</div> -->
-<!-- 				</div> -->
-				
 				<div class="part_section period_part">
 					<div class="part_title">유효기간 <span class="reqired_write">*</span></div>
-					<div class="part_content couponExp">
-						<div class="filter_box"> 
-							<my:dateInput type="input" name="startDate" />
-							<span> - </span>
-							<my:dateInput type="input" name="endDate" inputDay="end"/>
-							<my:dateInput type="preset" presets="1주일,10일,1개월" />
+					<div>
+						<div class="part_content couponExp">
+							<div class="filter_box"> 
+								<my:dateInput type="input" name="startDate" />
+								<span> - </span>
+								<my:dateInput type="input" name="endDate" inputDay="end"/>
+								<my:dateInput type="preset" presets="1주일,10일,1개월" />
+							</div>
+							<span class="no_condition">
+								<label><input type="checkbox" id="exp_noRestr" name="exp_noRestr"/> 제한없음 </label>
+							</span>
 						</div>
-						<span class="no_condition">
-							<label><input type="checkbox" id="exp_noRestr" name="exp_noRestr"/> 제한 없음</label>
-						</span>
+<!-- 						<div class="part_content couponExp2"> -->
+<!-- 							<label for="couponExpRange">발급일로부터</label>&nbsp;&nbsp;&nbsp;  -->
+<!-- 							<input type="text" name="couponExpRange" id="couponExpRange" class="price_input" /> -->
+<%-- 							<my:selectbox size="md" items="일,개월,년" id="expUnit"/> --%>
+<!-- 							<input type="hidden" name="expUnit" value="일"> -->
+<!-- 						</div> -->
 					</div>
 				</div>
 
@@ -91,8 +89,8 @@
 							<button type="button" class="filter-btn" value="VIP">VIP</button>
 							<button type="button" class="filter-btn" value="GOLD">GOLD</button>
 							<button type="button" class="filter-btn" value="SILVER">SILVER</button> 
-							<button type="button" class="filter-btn" value="REGULAR ">일반</button>
-							<button type="button" class="filter-btn" value="INDIVIDUAL ">개별회원</button>
+							<button type="button" class="filter-btn" value="NORMAL">일반</button>
+							<button type="button" class="filter-btn" value="INDIVIDUAL">개별회원</button>
 							<input type="hidden" id="cpTarget" name="cpTarget" >
 						</div>
 					</div>
@@ -100,21 +98,11 @@
 
 				<div class="part_section reason_part">
 					<div class="part_title">지급사유 <span class="reqired_write">*</span></div>
-					<div class="part_content">
+					<div class="part_content reason_content">
 						<input type="text" name="couponReason" placeholder="쿠폰 발행 사유를 입력하세요" style="width: 100%;" />
+						<div class="coupon-wrap"><label class="coupon-label"><input type="checkbox" id="birth_coupon" name="birth_coupon" value="생일쿠폰"/> 생일쿠폰</label></div>
 					</div>
 				</div>
-
-<!-- 				<div class="part_section amount_part"> -->
-<!-- 					<div class="part_title">발급 수량 <span class="reqired_write">*</span></div> -->
-<!-- 					<div class="part_content"> -->
-<!-- 						<input type="text" name="couponQuantity" id="couponQuantity" placeholder="쿠폰 최대 발급 수량 입력" class="price_input" />  -->
-<!-- 						<span>&nbsp;매 한정&nbsp;&nbsp;&nbsp;&nbsp;</span> -->
-<!-- 						<div class="no_condition"> -->
-<!-- 							<label><input type="checkbox" id="qnt_noRestr" name="qnt_noRestr"/> 제한 없음</label> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 				</div> -->
 
 				<div class="part_section bottom_part">
 					<div class="part_title">작성자 <span class="reqired_write">*</span></div>
@@ -124,6 +112,7 @@
 							<input type="hidden" name="cpWriter" value="${sessionScope.aidx}">
 						</div>
 						<div class="btn_part">
+							<button type="button" class="btn second_btn action_btn" id="immedBtn">즉시지급</button>
 							<button type="button" class="btn first_btn action_btn" id="pCouponBtn">등록</button>
 						</div>
 					</div>
@@ -142,7 +131,7 @@
 	<script src="../tagjs/dateInput.js"></script>
 	<script src="./js/common/modal.js"></script>
 	<script src="./js/common/category.js"></script>
-	<script src="./js/couponP.js"></script>
+	<script src="./js/couponPWrite.js"></script>
 
 	<script>
 	// --- 프리셋 버튼 이벤트 ---
@@ -178,11 +167,6 @@
 					const oneMonth = new Date(local.getTime() + 30 * 24 * 60 * 60 * 1000);
 					startInput.value = toDateStr(local);
 					endInput.value = toDateStr(oneMonth);
-					break;
-				case "제한없음":
-					const noExp = new Date(local.getTime() + 36500 * 24 * 60 * 60 * 1000);
-					startInput.value = toDateStr(local);
-					endInput.value = toDateStr(noExp);
 					break;
 			}
 

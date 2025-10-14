@@ -14,19 +14,14 @@ public interface PointService {
      * @param memberId 회원 ID
      * @return 포인트 내역 리스트
      */
-    List<Point> getPointHistory(Long memberId) throws Exception;
+	Map<String, Object> getPointHistory(Long memberId, int page, int pageSize) throws Exception;
     
     /**
      * 특정 기간의 포인트 내역 조회
      * @param memberId 회원 ID, startDate 시작일, endDate 종료일
      * @return 포인트 내역 리스트
      */
-    List<Point> getPointHistoryByPeriod(Long memberId, Timestamp startDate, Timestamp endDate) throws Exception;
-    
-    /**
-     * 회원의 쿠폰 목록 조회
-     * @param memberId 회원 ID
-     * @return 쿠폰 목록
-     */
+	 Map<String, Object> getPointHistoryByPeriod(Long memberId, Timestamp startDate, Timestamp endDate, 
+             int page, int pageSize) throws Exception;
 
 }

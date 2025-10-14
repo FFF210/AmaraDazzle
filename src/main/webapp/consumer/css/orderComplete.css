@@ -1,78 +1,98 @@
 @charset "UTF-8";
+
+.btn-primary {
+	background: #111;
+}
+
+.btn-primary:hover {
+	background: #333;
+}
+
+.btn-outline {
+	border: 1px solid #222;
+	color: #111;
+}
+
+.btn-outline:hover {
+	background: #eee;
+}
+
+.btn {
+	border-radius: 0;
+	font-weight: 400;
+	padding: 0;
+}
+
 .order-completion-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    background-color: white;
+	max-width: 1200px;
+	margin: 0 auto;
+	background-color: white;
 }
 
 .main-section {
-    padding: 80px 40px;
-    text-align: center;
-    border-top: 2px solid #000;
-    border-bottom: 2px solid #000;
-    margin: 40px;
-    background: #F3EFEF
+	padding: 80px 40px;
+	text-align: center;
+	border-top: 2px solid #111;
+	border-bottom: 2px solid #111;
+	margin: 40px;
+	background: linear-gradient(180deg, rgba(252, 249, 250, 0.55) 0%, rgba(249, 223, 230, 0.55) 100%);
 }
 
 .completion-message {
-    font-size: 36px;
-    font-weight: 400;
-    color: #333;
-    margin-bottom: 30px;
+	font-size: 36px;
+	font-weight: 400;
+	color: #333;
+	margin-bottom: 30px;
 }
 
 .order-number {
-    background-color: #888;
-    color: white;
-    padding: 12px 24px;
-    border-radius: 25px;
-    font-size: 16px;
-    display: inline-block;
+	background-color: white;
+	color: #111;
+	padding: 12px 24px;
+	border-radius: 25px;
+	font-size: 14px;
+	display: inline-block;
 }
 
 .info-section {
 	display: flex;
-	width: 955px;
-    padding: 10px;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    border-top: 1px solid rgba(0, 0, 0, 0.50);
+	margin: 20px 40px;
+	justify-content: start;
+	gap: 10px;
 }
 
 .info-list {
-    list-style: none;
-    padding: 0;
-    color: rgba(0, 0, 0, 0.40);
-    font-size: 16px;
+	list-style: none;
+	padding: 0;
+	color: rgba(0, 0, 0, 0.40);
+	font-size: 16px;
 }
 
 .info-list li {
-    padding-left: 12px;
-    margin-bottom: 8px;
+	padding-left: 12px;
+	margin-bottom: 8px;
 }
 
 .info-list li:before {
-    content: "•";
-    margin-right: 8px;
+	content: "•";
+	margin-right: 8px;
 }
 
 .action-buttons {
-    text-align: center;
-    padding: 40px;
+	text-align: center;
+	padding: 40px;
 }
 /* 로딩 애니메이션 (선택사항) */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@keyframes fadeInUp {from { opacity:0;
+	transform: translateY(30px);
 }
 
+to {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+}
 .completion-message {
-    animation: fadeInUp 0.6s ease-out;
+	animation: fadeInUp 0.6s ease-out;
 }

@@ -1,5 +1,7 @@
 package service.admin;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -80,7 +82,7 @@ public class CouponServiceImpl implements CouponService{
 	//개별지급 쿠폰 검색 목록
 	@Override
 	public List<Coupon> iCouponSearchList(Map<String, String> searchContent, Integer p_no) {
-		 Map<String, Object> searchlistMap = m_pg.paging(p_no);
+		Map<String, Object> searchlistMap = m_pg.paging(p_no);
 	    SearchConditionDTO sc_DTO = search.buildSearchDTO(searchContent);
 
 	    // 페이징 추가 정보 세팅
@@ -88,6 +90,37 @@ public class CouponServiceImpl implements CouponService{
 	    sc_DTO.setPost_ea((Integer) searchlistMap.get("post_ea"));
 
 	    return cp_dao.iCouponSearchList(sc_DTO);
+	}
+
+	//쿠폰 지급
+	@Override
+	public int provisionCoupon(long couponId, String provisionGrade, String startDate, String reason) {
+		Map<String, Object> map = new HashMap<>();
+		//쿠폰pk
+		map.put("couponId", couponId);
+		
+		//등급 
+		if(provisionGrade.trim().equals("ALL")) {
+			List<String> provisionGradeList = Arrays.asList("VIP","GOLD","SILVER","NORMAL");
+			map.put("provisionGradeList", provisionGradeList);
+		} else {
+			List<String> provisionGradeList = Arrays.asList(provisionGrade.split(","));
+			map.put("provisionGradeList", provisionGradeList);
+		}
+		
+		//생일쿠폰일 경우 생일월
+		String birthMonth = null; 
+		if (reason != null && reason.trim().contains("생일")) { 
+			String[] parts = startDate.split("-");
+			birthMonth = parts[1];  
+			
+			map.put("reason", "생일");
+			map.put("birthMonth", Integer.parseInt(birthMonth));
+		}
+		
+		int result = cp_dao.provisionCoupon(map);
+
+	    return result;
 	}
 
 }

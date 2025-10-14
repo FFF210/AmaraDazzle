@@ -11,7 +11,7 @@
 /* } */
 
 section.board_write {
-	width: 750px; /* 50% */
+	width: 770px; /* 50% */
 	border: 1px solid var(--outerbox);
 	border-radius: 10px;
 	background: white;
@@ -29,10 +29,10 @@ section.board_write div.part_section {
 
 section.board_write div.part_section .part_title {
 	/* font-size: 16px; */
-	width: 130px;
+	width: 120px;
 }
 section.board_write div.part_section .part_content {
-	width: 620px;
+	width: 650px;
 }
 
 

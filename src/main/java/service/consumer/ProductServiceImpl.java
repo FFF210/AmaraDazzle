@@ -9,6 +9,7 @@ import dao.consumer.ProductDAOImpl;
 import dao.consumer.ProductOptionDAO;
 import dao.consumer.ProductOptionDAOImpl;
 import dto.Product;
+import dto.consumer.BrandDetail;
 import dto.consumer.CommonProduct;
 import dto.consumer.ModalProduct;
 import dto.consumer.ProductCategory;
@@ -134,8 +135,14 @@ public class ProductServiceImpl implements ProductService {
 
 	// [brandDetail용] 브랜드 상품 조회
 	@Override
-	public List<Map<String, Object>> getProductsByBrandId(Long brandId) throws Exception {
-		return productDAO.selectProductsByBrandId(brandId);
+	public List<BrandDetail> getProductsByBrandId(Map<String, Object> params) throws Exception {
+		return productDAO.selectProductsByBrandId(params);
+	}
+
+	// [brandDetail용] 브랜드 상품 개수 조회
+	@Override
+	public int countProductsByBrand(Map<String, Object> params) throws Exception {
+		return productDAO.countProductsByBrand(params);
 	}
 
 	// [소비자] 검색상품 목록 조회
@@ -184,9 +191,9 @@ public class ProductServiceImpl implements ProductService {
 	// 교환 신청용: 상품의 전체 옵션 목록 조회 (mapper 및 DAO는 productOption)
 	@Override
 	public List<Map<String, Object>> getProductOptions(Long productId) throws Exception {
-		
+
 		ProductOptionDAO productOptionDAO = new ProductOptionDAOImpl();
-		
+
 		return productOptionDAO.getProductOptions(productId);
 	}
 

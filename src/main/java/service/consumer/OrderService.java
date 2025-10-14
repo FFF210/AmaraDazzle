@@ -12,6 +12,9 @@ public interface OrderService {
 	 * @return 상품 정보와 계산된 가격 정보
 	 */
 	Map<String, Object> getProductInfoForCheckout(Long productId, Long optionId) throws Exception;
+	
+	//장바구니에서 선택한 상품들로 체크아웃 데이터 준비
+	Map<String, Object> prepareCheckoutDataForCart(Long memberId, List<Map<String, Object>> cartItems) throws Exception;
 
 	/**
 	 * 주문 금액 계산 - 할인 적용된 최종 가격 계산
@@ -104,7 +107,7 @@ public interface OrderService {
 	boolean cancelOrderItem(Long orderItemId) throws Exception;
 
 	// ================ 취소/교환/반품 통합 목록 조회 ===================
-	List<Map<String, Object>> getCancelExchangeReturnList(Long memberId, String startDate, String endDate)
+	Map<String, Object> getCancelExchangeReturnList(Long memberId, String startDate, String endDate, int page, int pageSize) 
 			throws Exception;
 
 	// ================ 교환/반품 신청용 =======================

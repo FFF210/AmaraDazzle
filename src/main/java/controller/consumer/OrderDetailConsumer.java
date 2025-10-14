@@ -17,14 +17,14 @@ import service.consumer.OrderServiceImpl;
 /**
  * Servlet implementation class ConsumerOrderDetail
  */
-@WebServlet("/store/mypage/consumerOrderDetail")
-public class ConsumerOrderDetail extends HttpServlet {
+@WebServlet("/store/mypage/orderDetail")
+public class OrderDetailConsumer extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ConsumerOrderDetail() {
+    public OrderDetailConsumer() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,7 +33,7 @@ public class ConsumerOrderDetail extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-request.setCharacterEncoding("utf-8");
+    request.setCharacterEncoding("utf-8");
         
         try {
             // 1. 세션에서 회원 정보 가져오기
@@ -57,12 +57,11 @@ request.setCharacterEncoding("utf-8");
             
             // 3. Service 호출
             OrderService orderService = new OrderServiceImpl();
-            Map<String, Object> orderDetailInfo = orderService.getOrderDetailInfo(orderId);
-            
-            // 4. 권한 확인 (본인 주문인지 확인)
-         // 4. 권한 확인 (본인 주문인지 확인)
-            Orders order = (Orders) orderDetailInfo.get("order");  // ✅ 올바른 캐스팅
-            Long orderMemberId = order.getMemberId();  // ✅ getter 메서드 사용
+            Map<String, Object> orderDetailInfo = orderService.getOrderDetailInfo(orderId);        
+
+           // 4. 권한 확인 (본인 주문인지 확인)
+            Orders order = (Orders) orderDetailInfo.get("order"); 
+            Long orderMemberId = order.getMemberId();
 
             if (!memberId.equals(orderMemberId)) {
                 request.setAttribute("err", "접근 권한이 없습니다.");

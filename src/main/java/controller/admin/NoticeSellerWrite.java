@@ -2,7 +2,6 @@ package controller.admin;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -39,12 +38,18 @@ public class NoticeSellerWrite extends HttpServlet {
 		response.setContentType("application/json;charset=UTF-8");
 
 		try {
-			Long targetType = Long.valueOf(request.getParameter("target_type_id"));
-			Long category = Long.valueOf(request.getParameter("type_id"));
-			String title = request.getParameter("title");
+			Long targetType = Long.valueOf(request.getParameter("noticeTargetType"));
+			String noticeCate = request.getParameter("noticeCate");
+			String title = request.getParameter("noticeTitle");
 			String content = request.getParameter("content");
-			String writer = request.getParameter("writer");
+			String writer = request.getParameter("noticeWriter");
 
+			System.out.println("targetType : " + targetType);
+			System.out.println("noticeCate : " + noticeCate);
+			System.out.println("title : " + title);
+			System.out.println("content : " + content);
+			System.out.println("writer : " + writer);
+			
 			// 파일첨부파트 추출
 			List<Part> fileParts = new ArrayList<>();
 			for (Part part : request.getParts()) {
@@ -53,7 +58,7 @@ public class NoticeSellerWrite extends HttpServlet {
 				}
 			}
 
-			List<Long> fileIds = Collections.emptyList();
+			List<Long> fileIds = new ArrayList<>();
 			if (!fileParts.isEmpty()) { // 파일첨부를 한 경우
 				FileAttach fileAttach = new FileAttach(); // 파일첨부 클래스 소환
 				Map<String, Object> result = fileAttach.file_save(fileParts, request);
@@ -66,6 +71,12 @@ public class NoticeSellerWrite extends HttpServlet {
 				}
 			}
 
+			//카테고리 분류 
+			Long category = null;
+			if(noticeCate.trim().equals("시스템")) category = 28L;
+			else if(noticeCate.trim().equals("이벤트")) category = 29L;
+			else if(noticeCate.trim().equals("기타")) category = 30L;
+			
 			Notice notice = new Notice(category, title, content, writer, targetType, fileIds);
 
 			NoticeService notice_svc = new NoticeServiceImpl();
@@ -73,11 +84,11 @@ public class NoticeSellerWrite extends HttpServlet {
 			
 			String json = null;
 			if (noticePk != null && noticePk > 0) {
-				json = "{\"status\":\"ok\", \"id\":" + noticePk + "}";
+				json = "{\"status\":\"ok\",\"title\":\"판매자 공지 등록 완료\",\"message\":\"공지 등록이 완료되었습니다.\",\"id\":" + noticePk +"}";
 				response.getWriter().print(json);
 
 			} else {
-				json = "{\"status\":\"fail\"}";
+				json = "{\"status\":\"fail\",\"title\":\"공지 등록 실패\",\"message\":\"시스템문제로 공지 등록에 실패했습니다.\"}";
 				response.getWriter().write(json);
 			}
 

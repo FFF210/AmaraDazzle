@@ -19,6 +19,12 @@
 		select upload_file_id from upload_file where file_rename =
 		#{fileRename}
 	</select>
+	
+	
+	<!-- DB 파일 삭제 -->
+	<delete id="deleteUploadFile" parameterType="String">
+		delete from upload_file where file_rename = #{fileRename}
+	</delete>
 
 	<update id="updateUploadFile" parameterType="uploadFile">
 		update upload_file

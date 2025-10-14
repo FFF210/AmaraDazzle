@@ -22,14 +22,15 @@
 		deposited_date,
 		writer
 		FROM settlement
-		WHERE brand_id = #{brandId}
-		
+		WHERE
+		brand_id = #{brandId}
+
 		<if test="sortField != null and sortField != ''">
 			ORDER BY ${sortField}
 			<if test="sortOrder == 'desc'">DESC</if>
 			<if test="sortOrder == 'asc'">ASC</if>
 		</if>
-		
+
 		LIMIT #{limit}
 		OFFSET #{offset}
 	</select>
@@ -142,34 +143,159 @@
 
 
 	<!--======================= [ADMIN] ======================= -->
-
+	<!-- 전월 정산자료 settlement테이블에 저장 -->
+	<insert id="monthlyInsertSettle" parameterType="Map">
+		INSERT INTO settlement (
+			brand_id, start_date, end_date,
+			total_sales, shipping_charge, p_coupon, b_coupon, point,
+			pure_profit, fee, final_amount, calced_YN, writer
+			)
+			SELECT
+				t.brand_id,
+				t.start_date,
+				t.end_date,
+				t.total_sales,
+				t.shipping_charge,
+				t.p_coupon,
+				t.b_coupon,
+				t.point,
+				t.pure_profit,
+				FLOOR(t.pure_profit * 0.07) AS fee,
+				FLOOR(t.pure_profit - (t.pure_profit * 0.07)) AS final_amount,
+				'Waiting' AS calced_YN,
+				'-' AS writer
+			FROM (
+				SELECT
+					b.brand_id,
+					#{startDate} AS start_date,
+					#{endDate} AS end_date,
+					COALESCE(SUM(pay.amount), 0) AS total_sales,
+					COALESCE(SUM(o.shipping_amount), 0) AS shipping_charge,
+					COALESCE(SUM(CASE WHEN c.writer_type = 'ADMIN' THEN o.discount_amount ELSE 0 END), 0) AS p_coupon,
+					COALESCE(SUM(CASE WHEN c.writer_type = 'BRAND_ADMIN' THEN o.discount_amount ELSE 0 END), 0) AS b_coupon,
+					COALESCE(SUM(o.using_point), 0) AS point,
+					FLOOR((SUM(pay.amount)
+							+ SUM(CASE WHEN c.writer_type = 'ADMIN' THEN o.discount_amount ELSE 0 END)
+							+ SUM(o.using_point)
+							+ SUM(o.shipping_amount))
+							- SUM(CASE WHEN c.writer_type = 'BRAND_ADMIN' THEN o.discount_amount ELSE 0 END)) AS pure_profit
+				FROM payment pay
+				JOIN orders o ON pay.order_id = o.orders_id
+				JOIN order_item oi ON o.orders_id = oi.order_id
+				JOIN brand b ON oi.brand_id = b.brand_id
+				LEFT JOIN coupon c ON o.using_coupon = c.coupon_id
+				WHERE oi.status = 'CONFIRMED'
+				AND o.created_at BETWEEN #{startDate} AND #{endDate}
+				GROUP BY b.brand_id) t;
+	</insert>
 
 	<!-- 미정산 리스트 조회 -->
-	<select id="selectPending" resultType="settlement">
-		SELECT * FROM settlement
-		WHERE status = 'PENDING'
+	<select id="selectWaitingSettle" resultType="settlement">
+		SELECT * FROM
+		settlement
+		WHERE calced_YN = 'Waiting'
 	</select>
 
 	<!-- 일괄 정산 처리 -->
-	<update id="updateSettleAll" >
-		UPDATE settlement s
-		SET s.total_sales = (
-			SELECT COALESCE(SUM(oi.total),0)
-			FROM order_item oi
-			WHERE oi.brand_id = s.brand_id
-				AND oi.created_at BETWEEN s.start_date AND s.end_date
-				AND oi.status = 'CONFIRMED'
-		),
-		s.fee = (
-			SELECT COALESCE(SUM(oi.total) * 0.07,0) 
-			FROM order_item oi
-			WHERE oi.brand_id = s.brand_id
-				AND oi.created_at BETWEEN s.start_date AND s.end_date
-				AND oi.status = 'CONFIRMED'
-		),
-		s.final_amount = s.total_sales - s.fee,
-		s.calced_YN = 'Completed',
-		s.deposited_date = NOW()
-		WHERE s.calced_YN IN ('Waiting', 'InProgress');
+	<update id="settleAllCompleted">
+		<!-- 환불 반영 -->
+	    UPDATE settlement s
+	    JOIN (
+	        SELECT
+	            oi.brand_id,
+	            COALESCE(SUM(pay.amount), 0) AS refund_amount
+	        FROM returns r
+	        JOIN orders o ON r.order_id = o.orders_id
+	        JOIN order_item oi ON r.order_item_id = oi.order_item_id
+	        JOIN payment pay ON pay.order_id = o.orders_id
+	        WHERE r.updated_at BETWEEN #{startDate} AND #{endDate}
+	        GROUP BY oi.brand_id ) refund ON s.brand_id = refund.brand_id
+	    SET
+	        s.total_sales = s.total_sales - refund.refund_amount,
+	        s.pure_profit = s.pure_profit - refund.refund_amount,
+	        s.final_amount = s.final_amount - refund.refund_amount
+	    WHERE s.start_date = #{startDate} AND s.end_date = #{endDate} AND calced_YN = 'Waiting';
+	
+	    <!-- 상태 갱신 -->
+	    UPDATE settlement
+	    SET calced_YN = 'Completed',
+	        deposited_date = NOW()
+	    WHERE start_date = #{startDate} AND end_date = #{endDate}
+      		AND calced_YN = 'InProgress';
 	</update>
+	
+	<!-- 정산할 건 수 -->
+	<select id="settlementCnt" resultType="Integer" parameterType="searchCondition">
+		select count(*) from settlement
+		where 1=1
+		<if test="middleFilter != null and middleFilter != ''">
+			<choose>
+				<when test="middleFilter == 'Waiting'">
+					and calced_YN = 'Waiting'
+				</when>
+				<when test="middleFilter == 'InProgress'">
+					and calced_YN = 'InProgress'
+				</when>
+				<when test="middleFilter == 'Completed'">
+					and calced_YN = 'Completed'
+				</when>
+				<when test="middleFilter == 'Error'">
+					and calced_YN = 'Error'
+				</when>
+			</choose>
+		</if>
+		<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+			<choose>
+				<when test="totalSearch == '브랜드'">
+					and title like concat('%',#{keyword},'%')
+				</when>
+				<when test="totalSearch == '내용'">
+					and content like concat('%',#{keyword},'%')
+				</when>
+			</choose>
+		</if>
+	</select>
+	
+	<!-- 정산 리스트 -->
+	<select id="settlementAllList" resultType="settlement" parameterType="Map">
+		select *
+		from settlement s
+		order by settlement_id desc limit #{start_p},#{post_ea}
+	</select>
+
+
+	<!-- 정산리스트 (검색) -->
+	<select id="settlementSearchList" resultType="settlement" parameterType="searchCondition">
+		select *
+		from settlement s
+		where 1=1
+		<if test="middleFilter != null and middleFilter != ''">
+			<choose>
+				<when test="middleFilter == 'Waiting'">
+					and calced_YN = 'Waiting'
+				</when>
+				<when test="middleFilter == 'InProgress'">
+					and calced_YN = 'InProgress'
+				</when>
+				<when test="middleFilter == 'Completed'">
+					and calced_YN = 'Completed'
+				</when>
+				<when test="middleFilter == 'Error'">
+					and calced_YN = 'Error'
+				</when>
+			</choose>
+		</if>
+		<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+			<choose>
+				<when test="totalSearch == '브랜드명'">
+					and title like concat('%',#{keyword},'%')
+				</when>
+				<when test="totalSearch == '내용'">
+					and content like concat('%',#{keyword},'%')
+				</when>
+			</choose>
+		</if>
+		order by settlement_id desc limit #{start_p},#{post_ea}
+	</select>
+	
 </mapper>

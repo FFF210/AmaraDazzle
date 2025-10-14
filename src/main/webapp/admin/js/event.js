@@ -1,11 +1,12 @@
 //이벤트 등록 페이지로 이동
 function goWriteEvet() {
-	location.href = "admin/promoEventWrite"
+	location.href = "promoEventWrite"
 }
 
 //배너 상세 페이지로 이동
 function goEventDetail(num) {
-	location.href = "admin/promoEventDetail?num=" + num
+	console.log(num)
+	location.href = "promoEventDetail?num=" + num
 }
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -118,16 +119,16 @@ document.addEventListener("DOMContentLoaded", function() {
 		//파일첨부 시
 
 		//내용
-		if (editor.getMarkdown() == "") {
-			showAlert("error", " ", "내용을 입력해주세요.");
-			editor.focus();
-			return;
-		}
-		if (editor.getMarkdown().length < 10) {
-			showAlert("error", " ", "내용은 10자 이상 입력해야 합니다.");
-			editor.focus();
-			return;
-		}
+//		if (editor.getMarkdown() == "") {
+//			showAlert("error", " ", "내용을 입력해주세요.");
+//			editor.focus();
+//			return;
+//		}
+//		if (editor.getMarkdown().length < 10) {
+//			showAlert("error", " ", "내용은 10자 이상 입력해야 합니다.");
+//			editor.focus();
+//			return;
+//		}
 
 		// 유효성 통과 -> 모달 열기
 		openDialog("submitCkDialog");

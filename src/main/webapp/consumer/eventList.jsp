@@ -30,7 +30,7 @@
 
 	<!-- 페이지 헤더 -->
 	<div class="page-header-wrapper">
-		<my:pageHeader title="이벤트" description="풍성한 이벤트! 즐거운 올리브영" />
+		<my:pageHeader title="이벤트" description="참여하고, 더 많은 혜택을 만나보세요" />
 	</div>
 
 	<!-- 이벤트 목록 -->

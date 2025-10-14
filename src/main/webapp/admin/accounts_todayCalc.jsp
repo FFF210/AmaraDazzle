@@ -65,9 +65,7 @@
 				<!-- 필터 -->
 				<form id="" class="search_form">
 					<my:adminTableFilter>
-						<my:adminFilterMiddle
-							filters="게시 상태:ALL=전체|WAITING=미정산|InProgress=진행중|Completed=정산완료|ERROR=오류발생"
-							name="middleFilter" />
+						<my:adminFilterMiddle filters="게시 상태:ALL=전체|WAITING=미정산|InProgress=진행중|Completed=정산완료|ERROR=오류발생" name="middleFilter" />
 						<my:adminFilterTotal searchItems="브랜드명" initial="브랜드명"/>
 					</my:adminTableFilter>
 				</form>
@@ -78,9 +76,9 @@
 					<div class="table_title">
 						<span class="list_count"> 
 						<c:if test="${not empty searchContent}"> [ 검색 결과 ] </c:if> 
-						&nbsp; 총 ${pCouponCnt}건 중 
+						&nbsp; 총 ${settlementCnt}건 중 
 						<c:choose>
-							<c:when test="${pCouponCnt == 0}">
+							<c:when test="${settlementCnt == 0}">
 	       						0 건
 	    					</c:when>
 							<c:otherwise>
@@ -129,8 +127,7 @@
 							</colgroup>
 							<thead>
 								<tr>
-									<th><input type="checkbox" id="all_ck"
-										onclick="ck_all(this.checked);" /></th>
+									<th><input type="checkbox" id="all_ck" onclick="ck_all(this.checked);" /></th>
 									<th>#</th>
 									<th>IMG</th>
 									<th class="sortable">브랜드명 <i class="bi bi-dash-lg sort-icon"></i></th>
@@ -144,43 +141,50 @@
 							</thead>
 							<tbody>
 								<!-- 게시물 개수가 0일 경우 -->
-								<c:if test="${empty pCouponList}">
+								<c:if test="${empty settlementList}">
 									<tr>
 										<td colspan="10">등록된 게시물이 없습니다.</td>
 									</tr>
 								</c:if>
 								
-								
+								<c:set var="no" value="${settlementCnt-postNo}" />
+								<c:forEach items="${settlementList}" var="settlementList" varStatus="idx">
 								<tr>
-									<td><input type="checkbox" class="ch_box" value=""
-										onclick="choice_ck();" /></td>
-									<td>10</td>
-									<td>아비브</td>
-									<td>아비브</td>
-									<td class="price_cell">122,345,600</td>
-									<td class="price_cell">122,345,600</td>
-									<td class="price_cell">122,345,600</td>
-									<td class="price_cell">122,345,600</td>
-									<td>[정산상태]</td>
+									<td><input type="checkbox" class="ch_box" value="${settlementList.settlementId}" onclick="choice_ck();" /></td>
+									<td>${no-idx.index}</td>
+									<td></td>
+									<td>${settlementList.brandId}</td>
+									<td class="price_cell">${settlementList.totalSales}</td>
+									<td class="price_cell">${settlementList.pureProfit}</td>
+									<td class="price_cell">${settlementList.fee}</td>
+									<td class="price_cell">${settlementList.finalAmount}</td>
+									<td>
+										<c:choose>
+											<c:when test="${settlementList.calcedYN == 'Waiting'}">
+												<my:tag color="pink" size="md" text="미정산" />
+											</c:when>
+											<c:when test="${settlementList.calcedYN == 'InProgress'}">
+												<my:tag color="green" size="md" text="진행중" />
+											</c:when>
+											<c:when test="${settlementList.calcedYN == 'Completed'}">
+												<my:tag color="blue" size="md" text="정산완료" />
+											</c:when>
+											<c:when test="${settlementList.calcedYN == 'error'}">
+												<my:tag color="blue" size="md" text="오류발생" />
+											</c:when>
+										</c:choose>
+									</td>
 									<td class="detail_cell" onclick="goDetail();"><i class="bi bi-three-dots-vertical"></i></td>
 								</tr>
+								</c:forEach>
 							</tbody>
 						</table>
 					</div>
 	
 					<!-- 페이지네이션 -->
 					<c:set var="queryString">
-						<c:if test="${param.startDate != null and param.startDate ne ''}">
-	  						startDate=${param.startDate}&
-						</c:if>
-						<c:if test="${param.endDate != null and param.endDate ne ''}">
-						    endDate=${param.endDate}&
-						</c:if>
-						<c:if test="${param.startDate2 != null and param.startDate2 ne ''}">
-			  					startDate2=${param.startDate2}&
-						</c:if>
-						<c:if test="${param.endDate2 != null and param.endDate2 ne ''}">
-						    endDate2=${param.endDate2}&
+						<c:if test="${param.middleFilter != null and param.middleFilter ne ''}">
+						    middleFilter=${param.middleFilter}&
 						</c:if>
 						<c:if test="${param.totalSearch != null and param.totalSearch ne ''}">
 						    totalSearch=${param.totalSearch}&

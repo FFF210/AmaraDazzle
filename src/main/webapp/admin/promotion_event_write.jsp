@@ -72,21 +72,21 @@
 			</div>
 
 			<div class="part_section">
-				<div class="part_title">썸네일</div>
+				<div class="part_title">썸네일<span class="reqired_write">*</span></div>
 				<div class="part_content">
 					<my:imageBtn name="eventThumbImg" />
 				</div>
 			</div>
 			
 			<div class="part_section">
-				<div class="part_title">메인 이미지</div>
+				<div class="part_title">메인 이미지<span class="reqired_write">*</span></div>
 				<div class="part_content">
 					<my:uploader size="sm" name="eventDetailImg"/>
 				</div>
 			</div>
 
 			<div class="part_section content_part">
-				<div class="part_title">내용 <span class="reqired_write">*</span></div>
+				<div class="part_title">내용</div>
 				<div class="part_content">
 					<!-- toast editor 삽입 -->
 					<div id="editContent"></div>

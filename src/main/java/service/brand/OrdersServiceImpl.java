@@ -289,4 +289,16 @@ public class OrdersServiceImpl implements OrdersService {
 		ordersDAO.updateExchangeCompleted(params);
 	}
 
+	// 상품 배송
+	@Override
+	public void updateShipping(Map<String, Object> params) throws Exception {
+		ordersDAO.updateShippingInfo(params);
+	}
+
+	// 배송 완료
+	@Override
+	public void updateDelivered(long orderId) throws Exception {
+		ordersDAO.updateStatusToDelivered(orderId);
+	}
+
 }

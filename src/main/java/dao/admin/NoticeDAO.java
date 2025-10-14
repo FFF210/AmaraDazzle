@@ -14,5 +14,8 @@ public interface NoticeDAO {
 	List<Notice> sellerNoticeList(Map<String, Object> listMap); //seller 공지 리스트 
 	List<Notice> search_nlist(SearchConditionDTO sc_DTO); //검색된 seller 공지 리스트 
 	void viewCount(int num);
+	int noticeSellerEdit(Notice notice_DTO);	//seller 공지 수정 
+	int noticeSellerDelete(Long num);	// seller 공지 삭제 
+	int noticeExposeChange(Map<String, Object> map); //게시상태 변경 
 
 }

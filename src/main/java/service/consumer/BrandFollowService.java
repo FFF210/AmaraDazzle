@@ -12,4 +12,7 @@ public interface BrandFollowService {
     
     // ================[소비자] 팔로우 브랜드 개수 조회 ===================
     int getBrandFollowCount(Long memberId) throws Exception;
+    
+    // 팔로우 여부
+    boolean isBrandFollowed(Long memberId, Long brandId) throws Exception;
 }

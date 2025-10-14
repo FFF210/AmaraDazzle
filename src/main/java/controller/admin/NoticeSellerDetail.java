@@ -37,8 +37,6 @@ public class NoticeSellerDetail extends HttpServlet {
 
 			notice_DTO.setImageFileIds(ids);
 			
-//			service.viewCount(Integer.parseInt(num));
-
 			request.setAttribute("notice", notice_DTO);
 			request.getRequestDispatcher("notice_detail.jsp").forward(request, response);
 
