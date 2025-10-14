@@ -238,7 +238,8 @@
 							<div class="form-row">
 								<div class="label">쿠폰</div>
 								<div class="input-area">
-									<select name="usingCoupon" class="coupon-select">
+									<select name="usingCoupon" class="coupon-select"
+										onchange="setCouponAmount(this)">
 										<option value="">사용 가능한 쿠폰 목록</option>
 										<c:forEach var="coupon" items="${availableCoupons}">
 											<option value="${coupon.memberCouponId}"
@@ -247,7 +248,8 @@
 												할인)
 											</option>
 										</c:forEach>
-									</select>
+									</select> <input type="hidden" name="couponAmount" id="couponAmount"
+										value="">
 								</div>
 							</div>
 
@@ -370,6 +372,12 @@
 	</div>
 	<script src="<c:url value='/js/selectbox.js'/>"></script>
 	<script>
+		function setCouponAmount(select) {
+			const selectedOption = select.options[select.selectedIndex];
+			const amount = selectedOption.dataset.amount || "";
+			document.getElementById("couponAmount").value = amount;
+		}
+
 		window.checkoutData = {
 			// 금액 정보
 			subtotal : parseFloat('${checkoutData.subtotalAmount}') || 0,
