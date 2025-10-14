@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <!DOCTYPE html>
 <html>
@@ -141,16 +142,63 @@
 					class="category-item ${param.category1Id eq '70' ? 'selected' : ''}"
 					onclick="location.href='brandDetail?brandId=${brand.brandId}&category1Id=70'">맨즈케어</button>
 			</div>
+
+			<!-- 상품 카드 실제 데이터 -->
 			<div class="product-grid">
 				<c:choose>
 					<c:when test="${not empty products}">
-						<c:forEach var="product" items="${products}">
-							<my:productCard brand="${brand.brandName}"
-								productId="${product.productId}" title="${product.productName}"
-								isSale="${product.discountType ne null && product.discountType ne 'NONE'}"
-								hasOption="true" originPrice="${product.price}"
-								saleRate="${product.discountValue != null ? product.discountValue : 0}"
-								finalPrice="${product.price}" />
+						<c:forEach var="p" items="${products}">
+							<c:choose>
+								<c:when test="${p.discountType eq 'RATE'}">
+									<c:set var="saleRateRaw" value="${p.discountValue}" />
+								</c:when>
+								<c:when test="${p.discountType eq 'AMOUNT'}">
+									<c:set var="saleRateRaw"
+										value="${(p.discountValue / p.price) * 100}" />
+								</c:when>
+								<c:otherwise>
+									<c:set var="saleRateRaw" value="0" />
+								</c:otherwise>
+							</c:choose>
+
+							<fmt:formatNumber value="${p.finalPrice}" type="number"
+								maxFractionDigits="0" groupingUsed="true" var="finalPrice" />
+
+							<fmt:formatNumber value="${saleRateRaw}" type="number"
+								maxFractionDigits="0" groupingUsed="true" var="saleRate" />
+
+							<c:url value="/store/productDetail" var="detailUrl">
+								<c:param name="productId" value="${p.productId}" />
+							</c:url>
+
+
+							<my:productCard brand="${p.brandName}" productId="${p.productId}"
+								title="${p.name}" isWished="${p.isWished}"
+								isSale="${p.discountType ne null and p.discountValue ne null 
+          and p.startDate ne null 
+          and p.endDate ne null 
+          and p.startDate.time <= now.time 
+          and now.time <= p.endDate.time}"
+								hasOption="${p.hasOption eq 1}" originPrice="${p.price}"
+								saleRate="${saleRate}" finalPrice="${finalPrice}"
+								href="${detailUrl}" thumbnailFileId="${p.thumbnailFileId}">
+
+								<c:if
+									test="${p.discountType ne null 
+          and p.discountValue ne null 
+          and p.startDate ne null 
+          and p.endDate ne null 
+          and p.startDate.time <= now.time 
+          and now.time <= p.endDate.time}">
+									<my:tag color="red" size="sm" text="세일" />
+								</c:if>
+								<c:if test="${p.isExclusive ne 0}">
+									<my:tag color="green" size="sm" text="단독" />
+								</c:if>
+								<c:if test="${p.isPlanned ne 0}">
+									<my:tag color="yellow" size="sm" text="기획" />
+								</c:if>
+							</my:productCard>
 						</c:forEach>
 					</c:when>
 					<c:otherwise>
@@ -158,6 +206,14 @@
 					</c:otherwise>
 				</c:choose>
 			</div>
+
+
+<c:set var="queryString">
+			<c:if test="${not empty param.brandId}">brandId=${param.brandId}&</c:if>
+			<c:if test="${not empty param.category1Id}">category1Id=${param.category1Id}&</c:if>
+				page=
+			</c:set>
+			
 
 			<!-- 페이징 -->
 			<div class="page-pagination">
