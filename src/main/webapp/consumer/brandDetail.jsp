@@ -27,6 +27,8 @@
 <link rel="stylesheet" href="<c:url value='/tagcss/eventCard.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
 <link rel="stylesheet"
+	href="<c:url value='/tagcss/consumerCoupon.css'/>" />
+<link rel="stylesheet"
 	href="<c:url value='/tagcss/categoryFilter.css'/>" />
 <link rel="stylesheet"
 	href="<c:url value='/consumer/css/brandDetail.css'/>">
