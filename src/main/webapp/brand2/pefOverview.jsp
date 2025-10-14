@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
+    pageEncoding="UTF-8"%>
+    <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>대시보드 화면</title>
+<title>성과지표 화면</title>
 
 <!-- Pretendard 폰트 (CDN) -->
 <link rel="stylesheet"
@@ -75,7 +75,7 @@ status        = CONFIRMED
  --%>
 	<my:layout>
 		<my:breadcrumb
-			items="대시보드:/brand2/dashboard, 매출지표:/brand2/salesStatus.jsp, 성과지표:/brand2/pefOverview.jsp, 메인이벤트지표:/brand2/eventOverview.jsp" />
+			items="대시보드:/brand2/dashboard, 매출지표:/brand2/salesStatus.jsp, 성과지표:/brand2/salesStatus.jsp. 마케팅메일 성과:/brand2/salesStatus.jsp, 메인이벤트지표:/brand2/salesStatus.jsp" />
 
 		<div class=dachcontainer>
 			<!-- KPI 지표 -->

@@ -3,11 +3,9 @@ package dao.brand2;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.session.SqlSession;
 
 import dto.Coupon;
-import dto.Event;
 import dto.EventApplication;
 import dto.brand2.EventDetail;
 import dto.brand2.EventList;
@@ -61,8 +59,18 @@ public class EventDAOImpl implements EventDAO {
         sqlSession.commit();
         }
     }
+    
+    
+    // 이벤트 신청 시 상품 연결
+    @Override
+	public void updateProductForEvent(Map<String, Object> params) throws Exception {
+    	try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+            sqlSession.update("mapper.product.updateProductForEvent", params); // product.xml 사용
+            sqlSession.commit();
+        }
+	}
 
-    // ========== event_application ==========
+	// ========== event_application ==========
     // 이벤트 신청 저장
     @Override
     public void insertEventApplication(EventApplication application) throws Exception {
@@ -90,13 +98,10 @@ public class EventDAOImpl implements EventDAO {
     }
 
     // ========== coupon ==========
-    // 이벤트 - 쿠폰
     @Override
-    public int insertCoupon(Coupon coupon) throws Exception {
-        try(SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-    	int result = sqlSession.insert("mapper.eventApplication.insertCoupon", coupon);
-        sqlSession.commit();
-        return result;
+    public List<Coupon> selectCouponsForEvent(Map<String, Object> params) throws Exception {
+        try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+            return sqlSession.selectList("mapper.coupon.selectCouponsForEvent", params);
         }
     }
 }

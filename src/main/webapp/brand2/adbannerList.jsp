@@ -80,7 +80,6 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th class="sortable">번호 <i class="bi bi-dash-lg sort-icon"></i></th>
 							<th>신청일</th>
 							<th>광고 기간</th>
 							<th>광고명</th>
@@ -95,7 +94,6 @@
 					<tbody>
 						<c:forEach var="banner" items="${bannerList}">
 							<tr>
-								<td>${banner.bannerId}</td>
 								<td><fmt:formatDate value="${banner.createdAt}"
 										pattern="yyyy-MM-dd" /></td>
 								<td><fmt:formatDate value="${banner.startDate}"

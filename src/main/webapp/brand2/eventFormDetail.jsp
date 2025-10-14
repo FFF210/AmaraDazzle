@@ -3,12 +3,12 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>이벤트 신청</title>
+<title>이벤트 신청 상세보기</title>
 
 <link rel="stylesheet" href="./css/formLayout.css" />
 
@@ -29,20 +29,7 @@
 <link rel="stylesheet" href="../tagcss/button.css" />
 <link rel="stylesheet" href="../tagcss/textInput.css" />
 
-
-<!-- 달력 -->
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
 <style>
-.pagination {
-	display: flex;
-	justify-content: center; /* 수평 가운데 정렬 */
-	margin: 20px 0; /* 위아래 여백 */
-}
-
 .breadcrumb {
 	margin-top: 8px;
 	margin-left: 24px;
@@ -52,9 +39,6 @@
 	margin-top: 6px;
 }
 </style>
-
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="../tagjs/selectbox.js"></script>
 
 </head>
 <body>
@@ -67,158 +51,146 @@
 				<div class="body">
 					<main>
 						<form id="eventForm" novalidate>
-
-
-							<!-- ============================================= -->
 							<div class="grid">
-								<!-- 이벤트 ID (숨김) -->
-								<input type="hidden" id="eventId" name="eventId"
-									value="${event.eventId}" />
 
-								<!-- 이벤트 종류 -->
-								<div class="label req">이벤트 종류</div>
+								<!-- 이벤트 ID -->
+								<input type="hidden" name="eventId" value="${event.eventId}" />
+
+								<div class="label">이벤트 종류</div>
 								<div>
-									<my:textInput id="eventType" name="eventType" type="readOnly"
-										size="sm" state="default" value="${event.eventType}" />
+									<my:textInput type="readOnly" size="sm" state="default"
+										value="${event.eventType}" />
 								</div>
 
-								<!-- 이벤트명 -->
-								<div class="label req">이벤트명</div>
+								<div class="label">이벤트명</div>
 								<div>
-									<my:textInput id="eventName" name="eventName" type="readOnly"
-										size="sm" state="default" value="${event.eventName}" />
+									<my:textInput type="readOnly" size="sm" state="default"
+										value="${event.eventName}" />
 								</div>
 
-								<div class="label req">이벤트 담당자</div>
+								<div class="label">이벤트기간</div>
 								<div>
-									<my:textInput id="managerName" name="managerName"
-										type="readOnly" size="sm" state="default"
-										value="${event.managerName}" />
+									<my:textInput type="readOnly" size="sm" state="default"
+										value="${event.startDate} ~ ${event.endDate}" />
 								</div>
 
-								<div class="label req">담당연락처</div>
-								<div>
-									<my:textInput id="managerTel" name="managerTel" type="readOnly"
-										size="sm" state="default" value="${event.managerTel}" />
-								</div>
-
-								<div class="label req">상품코드</div>
-								<div>
-									<div class="chips" id="productChips">
-										<c:forEach var="pid"
-											items="${fn:split(event.productIds, ',')}">
-											<span class="chip">${pid}</span>
-										</c:forEach>
+								<c:if
+									test="${not empty event.category1Id 
+								or not empty event.category2Id 
+								or not empty event.category3Id}">
+									<div class="label">상품 카테고리</div>
+									<div class="part_content select_cate">
+										<c:if test="${not empty event.largeCategoryName}">
+											<my:textInput type="readOnly" size="sm" state="default"
+												value="${event.largeCategoryName}" />
+										</c:if>
+										<c:if test="${not empty event.middleCategoryName}">
+											<my:textInput type="readOnly" size="sm" state="default"
+												value="${event.middleCategoryName}" />
+										</c:if>
+										<c:if test="${not empty event.smallCategoryName}">
+											<my:textInput type="readOnly" size="sm" state="default"
+												value="${event.smallCategoryName}" />
+										</c:if>
 									</div>
-								</div>
+								</c:if>
 
-								<div class="label">쿠폰 설정</div>
-								<div>
-									<div class="coupon-box" id="couponBox">
-
-										<!-- grid -->
-										<div class="grid"
-											style="grid-template-columns: 140px 1fr; gap: 10px 12px">
-											<div class="label req">쿠폰명</div>
-											<div>
-												<my:textInput id="couponName" name="cname" type="readOnly"
-													size="sm" state="default" value="${event.cname}" />
-											</div>
-
-											<div class="label req">기간</div>
-											<div class="inline date-row">
-												<input id="couponFrom" name="startDate" type="date"
-													value="<fmt:formatDate value='${event.couponStartDate}' pattern='yyyy-MM-dd'/>" />
-												<span>~</span> <input id="couponTo" name="endDate"
-													type="date"
-													value="<fmt:formatDate value='${event.couponEndDate}' pattern='yyyy-MM-dd'/>" />
-											</div>
-
-
-											<div class="label req">최소주문</div>
-											<div class="inline">
-												<div class="text-input-wrapper size--sm state--default">
-													<div class="text-input-inner default">
-														<input id="couponMin" name="amountCondition" type="number"
-															readonly class="text-input"
-															value="${event.amountCondition}"> <span
-															class="muted">원 이상 구매 시</span>
-													</div>
-												</div>
-											</div>
-
-
-											<div class="label req">할인</div>
-											<div class="inline">
-												<div class="text-input-wrapper size--sm state--default">
-													<div class="text-input-inner default">
-														<input id="couponAmount" name="amount" type="number"
-															readonly class="text-input" value="${event.amount }">
-														<span class="muted">원 할인</span>
-													</div>
-												</div>
-											</div>
+								<div class="label">썸네일</div>
+								<div class="upload">
+									<div id="imgPreviewWrapper" class="preview-wrapper">
+										<div id="imgPreviewArea" class="preview-area"
+											aria-live="polite">
+											<img src="/upload/${event.thumbnailFileId}" />
 										</div>
 									</div>
 								</div>
 
+								<div class="label">메인 이미지</div>
+								<div class="upload">
+									<div id="imgPreviewWrapper" class="preview-wrapper">
+										<div id="imgPreviewArea" class="preview-area"
+											aria-live="polite">
+											<img src="/upload/${event.detailFileId}" />
+										</div>
+									</div>
+								</div>
+								<div class="label">브랜드 전달내용</div>
+								<div>
+									<my:textArea readonly="true" value="${banner.bannerMessage}" />
+								</div>
+
+								<div class="label">이벤트 담당자</div>
+								<div>
+									<my:textInput type="readOnly" size="sm" state="default"
+										value="${event.managerName}" />
+								</div>
+
+								<div class="label">담당 연락처</div>
+								<div>
+									<my:textInput type="readOnly" size="sm" state="default"
+										value="${event.managerTel}" />
+								</div>
+
+								<!-- 이벤트 유형별 상세 -->
+								<c:choose>
+									<c:when test="${event.eventType eq 'COUPON'}">
+										<div class="label">쿠폰 목록</div>
+										<div>
+											<c:forEach var="c" items="${event.coupons}">
+												<span class="chip">${c.cname}</span>
+											</c:forEach>
+										</div>
+									</c:when>
+
+									<c:when test="${event.eventType eq 'DISCOUNT'}">
+										<div class="label">상품별 할인</div>
+										<div>
+											<c:forEach var="d" items="${discountProducts}">
+												<p>
+													- ${d.productName} : ${d.discountValue}
+													<c:choose>
+														<c:when test="${d.discountType eq 'RATE'}">%</c:when>
+														<c:otherwise>원</c:otherwise>
+													</c:choose>
+												</p>
+											</c:forEach>
+										</div>
+									</c:when>
+
+									<c:when test="${event.eventType eq 'EXPERIENCE'}">
+										<div class="label">체험 상품</div>
+										<div>
+											<c:forEach var="p" items="${products}">
+												<span class="chip">${p.productName}</span>
+											</c:forEach>
+										</div>
+									</c:when>
+
+									<c:when test="${event.eventType eq 'PICK'}">
+										<div class="label">추천 상품</div>
+										<div>
+											<c:forEach var="p" items="${products}">
+												<span class="chip">${p.productName}</span>
+											</c:forEach>
+										</div>
+									</c:when>
+								</c:choose>
+
 								<div class="label">관리자 전달사항</div>
 								<div>
-									<my:textArea id="note" name="note" readonly="true"
-										value="${event.note}" />
+									<my:textArea readonly="true" value="${event.note}" />
 								</div>
 							</div>
 
 							<div class="footer">
 								<button type="button" class="btn btn-outline btn-sm"
-									id="btnClose" onclick="location.href='/brand2/eventList'">닫기</button>
+									onclick="location.href='/brand2/eventList'">닫기</button>
 							</div>
-							<!-- ============================================= -->
 						</form>
 					</main>
 				</div>
 			</section>
 		</div>
 	</my:layout>
-
-	<script> 
-	document.addEventListener("DOMContentLoaded", ()=> {
-	    const addBtn = document.getElementById("addProduct");
-	    
-	    if(addBtn) {
-	    
-	    const input = document.getElementById("productInput");
-	    const chips = document.getElementById("productChips");
-
-	    addBtn.addEventListener("click", () => {
-	        const val = input.value.trim();
-	        if (val !== "") {
-	            // chip 생성
-	            const chip = document.createElement("span");
-	            chip.classList.add("chip");
-	            chip.textContent = val;
-
-	            // 삭제 버튼
-	            const removeBtn = document.createElement("button");
-	            removeBtn.type = "button";
-	            removeBtn.textContent = "×";
-	            removeBtn.onclick = () => chip.remove();
-
-	            chip.appendChild(removeBtn);
-	            chips.appendChild(chip);
-
-	            // hidden input 생성 (배열로 서버 전송)
-	            const hidden = document.createElement("input");
-	            hidden.type = "hidden";
-	            hidden.name = "productIds"; // 여러 개 전달됨
-	            hidden.value = val;
-	            chip.appendChild(hidden);
-
-	            input.value = ""; // 입력 초기화
-	        }
-	    });
-	   }
-});
-</script>
 </body>
 </html>

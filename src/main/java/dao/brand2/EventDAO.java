@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import dto.Coupon;
-import dto.Event;
 import dto.EventApplication;
 import dto.brand2.EventDetail;
 import dto.brand2.EventList;
@@ -24,7 +23,11 @@ public interface EventDAO {
 	// ========== event ==========
 	EventDetail selectEventById(Long eventId) throws Exception;
     EventDetail selectEventDetailById(Map<String, Object> params) throws Exception; // event_id, brand_id
-    void resetProductsForEvent(Long eventId) throws Exception;
+    
+    // product.xml
+    void resetProductsForEvent(Long eventId) throws Exception; // 이벤트 종료 시 상품 해제 미구현
+    void updateProductForEvent(Map<String, Object> params) throws Exception; // 이벤트 신청 시 상품 연결
+    
 
     // ========== event_application ==========
     void insertEventApplication(EventApplication application) throws Exception;
@@ -32,6 +35,6 @@ public interface EventDAO {
     void deleteEventApplication(Long eventApplicationId) throws Exception;
 
     // ========== coupon ==========
-    int insertCoupon(Coupon coupon) throws Exception;
-
+    List<Coupon> selectCouponsForEvent(Map<String, Object> params) throws Exception; 
+    // params : eventId, brandId
 }
