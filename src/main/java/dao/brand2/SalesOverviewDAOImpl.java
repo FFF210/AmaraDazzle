@@ -11,18 +11,19 @@ import util.MybatisSqlSessionFactory;
 
 public class SalesOverviewDAOImpl implements SalesOverviewDAO {
 
-	SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
-	
 	// 카테고리별 매출 추이 조회
 	@Override
 	public List<SalesOverview> selectCategorySalesTrend(Map<String, Object> params) {
-		return sqlSession.selectList("mapper.orderItem.selectCategorySalesTrend", params);
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.orderItem.selectCategorySalesTrend", params);
+		}
 	}
 
-
-    // ================== 테이블용 (날짜별 pivot) ==================
-    @Override
-    public List<SalesStatusRow> selectSalesStatusRows(Map<String, Object> params) {
-        return sqlSession.selectList("mapper.orderItem.selectSalesStatusRows", params);
-    }
+	// ================== 테이블용 (날짜별 pivot) ==================
+	@Override
+	public List<SalesStatusRow> selectSalesStatusRows(Map<String, Object> params) {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectList("mapper.orderItem.selectSalesStatusRows", params);
+		}
+	}
 }
