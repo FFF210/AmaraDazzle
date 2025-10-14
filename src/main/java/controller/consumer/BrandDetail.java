@@ -120,6 +120,9 @@ public class BrandDetail extends HttpServlet {
 			if (category1Id != null) {
 				queryString.append("&category1Id=").append(category1Id);
 			}
+			
+			// === 9. 브랜드 이벤트 목록 ===
+			List<Map<String, Object>> eventList = brandService.getEventsByBrandId(brandId);
 
 			// === Request에 데이터 설정 ===
 			request.setAttribute("brand", brand);
@@ -130,6 +133,7 @@ public class BrandDetail extends HttpServlet {
 			request.setAttribute("currentPage", currentPage);
 			request.setAttribute("totalPages", totalPages);
 			request.setAttribute("queryString", queryString.toString());
+			request.setAttribute("eventList", eventList);
 
 			System.out.print(products);
 
