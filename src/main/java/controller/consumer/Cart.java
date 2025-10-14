@@ -128,7 +128,7 @@ public class Cart extends HttpServlet {
 					quantity = (Integer) quantityObj;
 				}
 
-				total += (finalPrice + optionPrice) * quantity;
+				total += finalPrice * quantity;
 			}
 		}
 

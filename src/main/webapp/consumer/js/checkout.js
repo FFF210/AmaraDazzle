@@ -182,17 +182,26 @@ function saveOrderDataToSession() {
 	params.append('shipLine2', document.getElementById('shipLine2').value.trim());
 	params.append('note', document.getElementById('note').value.trim());
 
+	// ✅ 수정: 장바구니인지 확인
 	const productIdInput = document.querySelector('input[name="productId"]');
 	const brandIdInput = document.querySelector('input[name="brandId"]');
 
-	params.append('productId', productIdInput.value);
-	params.append('brandId', brandIdInput.value);
+	// 상품 직접 구매일 경우에만 추가
+	if (productIdInput && brandIdInput) {
+		params.append('productId', productIdInput.value);
+		params.append('brandId', brandIdInput.value);
+	}
 
+	// ✅ items 정보 (brandId/productId 포함)
+	const brandIdInputs = document.querySelectorAll('input[name^="items["][name$="].brandId"]');
+	const productIdInputs = document.querySelectorAll('input[name^="items["][name$="].productId"]');
 	const optionIdInputs = document.querySelectorAll('input[name^="items["][name$="].optionId"]');
 	const quantityInputs = document.querySelectorAll('input[name^="items["][name$="].quantity"]');
 	const unitPriceInputs = document.querySelectorAll('input[name^="items["][name$="].unitPrice"]');
 
-	for (let i = 0; i < optionIdInputs.length; i++) {
+	for (let i = 0; i < brandIdInputs.length; i++) {
+		params.append('items[' + i + '].brandId', brandIdInputs[i].value);
+		params.append('items[' + i + '].productId', productIdInputs[i].value);
 		params.append('items[' + i + '].optionId', optionIdInputs[i].value);
 		params.append('items[' + i + '].quantity', quantityInputs[i].value);
 		params.append('items[' + i + '].unitPrice', unitPriceInputs[i].value);

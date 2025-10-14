@@ -47,33 +47,34 @@
 		style="background: #f0f0f0; padding: 10px; margin: 10px; border: 2px solid red;">
 		<h3>🔍 디버깅 정보</h3>
 		<p>checkoutData가 null인가? ${checkoutData == null ? 'YES - 문제있음!' : 'NO - 데이터 있음'}</p>
-		<p>brand가 null인가? ${checkoutData.brand == null ? 'YES' : 'NO'}</p>
-		<p>product가 null인가? ${checkoutData.product == null ? 'YES' : 'NO'}</p>
-		<p>items 개수: ${checkoutData.items != null ? checkoutData.items.size() : 'null'}</p>
+		<!-- 장바구니 여부 확인 -->
+		<c:choose>
+			<c:when test="${checkoutData.isFromCart}">
+				<p>
+					<strong>주문 방식:</strong> 🛒 장바구니에서 주문
+				</p>
+				<p>
+					<strong>상품 개수:</strong> ${checkoutData.items.size()}개
+				</p>
+			</c:when>
+			<c:otherwise>
+				<p>
+					<strong>주문 방식:</strong> 📦 상품 직접 구매
+				</p>
+				<p>
+					<strong>Brand:</strong> ${checkoutData.brand.brandName}
+				</p>
+				<p>
+					<strong>Product:</strong> ${checkoutData.product.name}
+				</p>
+			</c:otherwise>
+		</c:choose>
 
 		<hr>
-
-		<c:if test="${not empty checkoutData}">
-			<p>
-				<strong>Brand Name:</strong> ${checkoutData.brand.brandName}
-			</p>
-			<p>
-				<strong>Product Name:</strong> ${checkoutData.product.name}
-			</p>
-			<p>
-				<strong>Product ID:</strong> ${checkoutData.product.productId}
-			</p>
-		</c:if>
-
-		<c:if test="${not empty checkoutData.items}">
-			<h4>Items 정보:</h4>
-			<c:forEach var="item" items="${checkoutData.items}"
-				varStatus="status">
-				<p>Item ${status.index}: optionId=${item.optionId},
-					optionValue=${item.optionValue}, quantity=${item.quantity},
-					unitPrice=${item.unitPrice}</p>
-			</c:forEach>
-		</c:if>
+		<h4>Items 목록:</h4>
+		<c:forEach var="item" items="${checkoutData.items}" varStatus="status">
+			<p>Item ${status.index}: ${item.brandName} - ${item.productName}</p>
+		</c:forEach>
 	</div>
 
 	<div class="main-content">
@@ -254,8 +255,9 @@
 								<div class="label">포인트</div>
 								<div class="input-area">
 									<input type="number" name="usingPoint" value="0"
-										class="point-input" style="height: 36px;"> <span class="point-unit">사용가능
-										포인트: ${checkoutData.member.pointBalance} P</span>
+										class="point-input" style="height: 36px;"> <span
+										class="point-unit">사용가능 포인트:
+										${checkoutData.member.pointBalance} P</span>
 								</div>
 							</div>
 						</div>
@@ -328,14 +330,21 @@
 						</div>
 						<div class=button-wrapper>
 							<!--  hidden field -->
-							<input type="hidden" name="productId"
-								value="${checkoutData.product.productId}"> <input
-								type="hidden" name="brandId"
-								value="${checkoutData.brand.brandId}">
+							<!-- 장바구니가 아닐 때만 productId/brandId 전송 -->
+							<c:if test="${not checkoutData.isFromCart}">
+								<input type="hidden" name="productId"
+									value="${checkoutData.product.productId}">
+								<input type="hidden" name="brandId"
+									value="${checkoutData.brand.brandId}">
+							</c:if>
 
 							<%-- 여러 옵션 정보 전달 --%>
 							<c:forEach var="item" items="${checkoutData.items}"
 								varStatus="status">
+								<input type="hidden" name="items[${status.index}].brandId"
+									value="${item.brandId}">
+								<input type="hidden" name="items[${status.index}].productId"
+									value="${item.productId}">
 								<input type="hidden" name="items[${status.index}].optionId"
 									value="${item.optionId}">
 								<input type="hidden" name="items[${status.index}].quantity"

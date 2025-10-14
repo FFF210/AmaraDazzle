@@ -65,6 +65,84 @@ public class OrderServiceImpl implements OrderService {
 
 		return result;
 	}
+	
+	// 장바구니에서 넘어갈 때
+	@Override
+	public Map<String, Object> prepareCheckoutDataForCart(Long memberId, List<Map<String, Object>> cartItems) throws Exception {
+	    Map<String, Object> checkoutData = new HashMap<>();
+	    
+	    // 1. 회원 정보 조회
+	    Member member = memberDAO.getMemberInfoForCheckout(memberId);
+	    if (member == null) {
+	        throw new Exception("회원 정보를 찾을 수 없습니다.");
+	    }
+	    checkoutData.put("member", member);
+	    
+	    // 2. items 리스트 생성 (장바구니에서 온 데이터 변환)
+	    List<Map<String, Object>> itemList = new ArrayList<>();
+	    BigDecimal subtotal = BigDecimal.ZERO;
+	    
+	    for (Map<String, Object> cartItem : cartItems) {
+	        Map<String, Object> item = new HashMap<>();
+	        
+	        // 기본 정보
+	        item.put("productId", cartItem.get("productId"));
+	        item.put("productName", cartItem.get("productName"));
+	        item.put("brandId", cartItem.get("brandId"));
+	        item.put("brandName", cartItem.get("brandName"));
+	        item.put("thumbnailFileId", cartItem.get("thumbnailFileId"));
+	        
+	        // 옵션 정보
+	        item.put("optionId", cartItem.get("optionId")); // null일 수 있음
+	        item.put("optionValue", cartItem.get("optionName")); // 'optionName'을 'optionValue'로 매핑
+	        
+	        // 수량 및 가격
+	        Integer quantity = (Integer) cartItem.get("quantity");
+	        
+	        // finalPrice를 unitPrice로 사용 (이미 할인이 적용된 가격)
+	        Object finalPriceObj = cartItem.get("finalPrice");
+	        BigDecimal unitPrice;
+	        
+	        if (finalPriceObj instanceof BigDecimal) {
+	            unitPrice = (BigDecimal) finalPriceObj;
+	        } else if (finalPriceObj instanceof Integer) {
+	            unitPrice = new BigDecimal((Integer) finalPriceObj);
+	        } else if (finalPriceObj instanceof Double) {
+	            unitPrice = BigDecimal.valueOf((Double) finalPriceObj);
+	        } else {
+	            throw new Exception("가격 정보 오류");
+	        }
+	        
+	        item.put("quantity", quantity);
+	        item.put("unitPrice", unitPrice);
+	        
+	        // itemTotal 계산
+	        BigDecimal itemTotal = unitPrice.multiply(new BigDecimal(quantity));
+	        item.put("itemTotal", itemTotal);
+	        
+	        itemList.add(item);
+	        subtotal = subtotal.add(itemTotal);
+	    }
+	    
+	    checkoutData.put("items", itemList);
+	    checkoutData.put("subtotalAmount", subtotal);
+	    
+	    // 3. 배송비 계산 (50,000원 이상 무료)
+	    BigDecimal shippingFee = subtotal.compareTo(new BigDecimal("50000")) >= 0 
+	        ? BigDecimal.ZERO 
+	        : new BigDecimal("2500");
+	    checkoutData.put("shippingFee", shippingFee);
+	    
+	    // 4. 최종 금액
+	    BigDecimal totalAmount = subtotal.add(shippingFee);
+	    checkoutData.put("totalAmount", totalAmount);
+	    checkoutData.put("availablePoint", member.getPointBalance() != null ? member.getPointBalance() : 0);
+	    
+	    // 5. 장바구니용 플래그
+	    checkoutData.put("isFromCart", true);
+	    
+	    return checkoutData;
+	}
 
 	// 주문 금액 계산 - 할인 적용된 최종 가격 계산
 	@Override
@@ -174,52 +252,96 @@ public class OrderServiceImpl implements OrderService {
 		// 5. 주문 상품 생성
 		@SuppressWarnings("unchecked")
 		List<Map<String, Object>> items = (List<Map<String, Object>>) orderData.get("items");
-		Long brandId = (Long) orderData.get("brandId");
-		Long productId = (Long) orderData.get("productId");
 
+		// 아이템이 비어있으면
 		if (items != null && !items.isEmpty()) {
 			for (Map<String, Object> item : items) {
 				OrderItem orderItem = new OrderItem();
 				orderItem.setOrderId(orderId);
-				orderItem.setBrandId(brandId);
-				orderItem.setProductId(productId);
+				
+				// item 안에서 브랜드아이디, 상품아이디 꺼내기
+				// brandId 안전하게 처리 (어느 타입이 되든 다시 long으로 변환)
+			    Long itemBrandId = null;
+			    Object brandIdObj = item.get("brandId");
+			    if (brandIdObj instanceof Long) {
+			        itemBrandId = (Long) brandIdObj;
+			    } else if (brandIdObj instanceof Integer) {
+			        itemBrandId = ((Integer) brandIdObj).longValue();
+			    } else if (brandIdObj instanceof String && !((String) brandIdObj).isEmpty()) {
+			        itemBrandId = Long.parseLong((String) brandIdObj);
+			    }
+			    
+			    if (itemBrandId == null) {
+			        Object orderBrandIdObj = orderData.get("brandId");
+			        if (orderBrandIdObj instanceof Long) {
+			            itemBrandId = (Long) orderBrandIdObj;
+			        }
+			    }
+			    
+			    // productId 안전하게 처리
+			    Long itemProductId = null;
+			    Object productIdObj = item.get("productId");
+			    if (productIdObj instanceof Long) {
+			        itemProductId = (Long) productIdObj;
+			    } else if (productIdObj instanceof Integer) {
+			        itemProductId = ((Integer) productIdObj).longValue();
+			    } else if (productIdObj instanceof String && !((String) productIdObj).isEmpty()) {
+			        itemProductId = Long.parseLong((String) productIdObj);
+			    }
+			    
+			    if (itemProductId == null) {
+			        Object orderProductIdObj = orderData.get("productId");
+			        if (orderProductIdObj instanceof Long) {
+			            itemProductId = (Long) orderProductIdObj;
+			        }
+			    }
+	            
+	            orderItem.setBrandId(itemBrandId);
+	            orderItem.setProductId(itemProductId);
 
-				// optionId 처리 (null일 수 있음)
-				Object optionIdObj = item.get("optionId");
-				if (optionIdObj != null && optionIdObj instanceof Long) {
-					orderItem.setOptionId((Long) optionIdObj);
-				}
+	            // optionId 안전하게 처리
+	            Object optionIdObj = item.get("optionId");
+	            if (optionIdObj instanceof Long) {
+	                orderItem.setOptionId((Long) optionIdObj);
+	            } else if (optionIdObj instanceof Integer) {
+	                orderItem.setOptionId(((Integer) optionIdObj).longValue());
+	            } else if (optionIdObj instanceof String) {
+	                String optionIdStr = (String) optionIdObj;
+	                if (!optionIdStr.isEmpty()) {
+	                    orderItem.setOptionId(Long.parseLong(optionIdStr));
+	                }
+	            }
 
-				// unitPrice는 BigDecimal이어야 함
-				Object unitPriceObj = item.get("unitPrice");
-				BigDecimal unitPrice;
-				if (unitPriceObj instanceof BigDecimal) {
-					unitPrice = (BigDecimal) unitPriceObj;
-				} else if (unitPriceObj instanceof Integer) {
-					unitPrice = new BigDecimal((Integer) unitPriceObj);
-				} else if (unitPriceObj instanceof Double) {
-					unitPrice = BigDecimal.valueOf((Double) unitPriceObj);
-				} else {
-					throw new Exception("unitPrice 타입 오류");
-				}
+	            // unitPrice는 BigDecimal이어야 함
+	            Object unitPriceObj = item.get("unitPrice");
+	            BigDecimal unitPrice;
+	            if (unitPriceObj instanceof BigDecimal) {
+	                unitPrice = (BigDecimal) unitPriceObj;
+	            } else if (unitPriceObj instanceof Integer) {
+	                unitPrice = new BigDecimal((Integer) unitPriceObj);
+	            } else if (unitPriceObj instanceof Double) {
+	                unitPrice = BigDecimal.valueOf((Double) unitPriceObj);
+	            } else {
+	                throw new Exception("unitPrice 타입 오류");
+	            }
 
-				orderItem.setUnitPrice(unitPrice);
-				orderItem.setQuantity((Integer) item.get("quantity"));
+	            orderItem.setUnitPrice(unitPrice);
+	            orderItem.setQuantity((Integer) item.get("quantity"));
 
-				// itemTotal 계산
-				BigDecimal itemTotal = unitPrice.multiply(new BigDecimal((Integer) item.get("quantity")));
-				orderItem.setLineSubtotal(itemTotal);
-				orderItem.setDiscount(BigDecimal.ZERO);
-				orderItem.setTotal(itemTotal);
-				orderItem.setStatus("PAID");
+	            // itemTotal 계산
+	            BigDecimal itemTotal = unitPrice.multiply(new BigDecimal((Integer) item.get("quantity")));
+	            orderItem.setLineSubtotal(itemTotal);
+	            orderItem.setDiscount(BigDecimal.ZERO);
+	            orderItem.setTotal(itemTotal);
+	            orderItem.setStatus("PAID");
 
-				orderDAO.createOrderItem(orderItem);
-			}
-		} else {
-			throw new Exception("주문 상품이 없습니다.");
-		}
+	            orderDAO.createOrderItem(orderItem);
+	        }
+	    } else {
+	        throw new Exception("주문 상품이 없습니다.");
+	    }
 
-		return orderId;
+	    return orderId;
 	}
 
 	// 주문 완료 정보 조회 - 주문 완료 페이지에서 보여줄 정보
@@ -461,28 +583,50 @@ public class OrderServiceImpl implements OrderService {
 		ProductDAO productDAO = new ProductDAOImpl();
 
 		for (Map<String, Object> item : items) {
-			Long optionId = (Long) item.get("optionId");
-			Long productId = (Long) item.get("productId");
-			Integer quantity = (Integer) item.get("quantity");
+			// 타입 안전하게 변환....
+			Long optionId = null;
+	        Object optionIdObj = item.get("optionId");
+	        if (optionIdObj instanceof Long) {
+	            optionId = (Long) optionIdObj;
+	        } else if (optionIdObj instanceof Integer) {
+	            optionId = ((Integer) optionIdObj).longValue();
+	        } else if (optionIdObj instanceof String) {
+	            String str = (String) optionIdObj;
+	            if (!str.isEmpty()) {
+	                optionId = Long.parseLong(str);
+	            }
+	        }
+	        
+	        Long productId = null;
+	        Object productIdObj = item.get("productId");
+	        if (productIdObj instanceof Long) {
+	            productId = (Long) productIdObj;
+	        } else if (productIdObj instanceof Integer) {
+	            productId = ((Integer) productIdObj).longValue();
+	        } else if (productIdObj instanceof String && !((String) productIdObj).isEmpty()) {
+	            productId = Long.parseLong((String) productIdObj);
+	        }
+	        
+	        Integer quantity = (Integer) item.get("quantity");
 
-			if (quantity == null || quantity <= 0) {
-				continue;
-			}
+	        if (quantity == null || quantity <= 0) {
+	            continue;
+	        }
 
-			int result = 0;
+	        int result = 0;
 
-			if (optionId != null) {
-				// 옵션이 있는 경우
-				result = productDAO.updateOptionStock(optionId, quantity);
-			} else if (productId != null) {
-				// 옵션이 없는 경우
-				result = productDAO.updateStock(productId, quantity);
-			}
+	        if (optionId != null) {
+	            // 옵션이 있는 경우
+	            result = productDAO.updateOptionStock(optionId, quantity);
+	        } else if (productId != null) {
+	            // 옵션이 없는 경우
+	            result = productDAO.updateStock(productId, quantity);
+	        }
 
-			if (result == 0) {
-				throw new Exception("재고가 부족하거나 상품을 찾을 수 없습니다.");
-			}
-		}
+	        if (result == 0) {
+	            throw new Exception("재고가 부족하거나 상품을 찾을 수 없습니다.");
+	        }
+	    }
 	}
 
 	// ==================== orderList용=====================
