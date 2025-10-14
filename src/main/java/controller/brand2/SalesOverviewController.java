@@ -17,17 +17,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
+import dto.Brand;
 import dto.Category;
 import dto.brand2.SalesOverview;
+import dto.brand2.SalesStatusRow;
 import service.brand2.SalesOverviewService;
 import service.brand2.SalesOverviewServiceImpl;
 
-/**
- * Servlet implementation class SalesOverview
- */
 @WebServlet("/brand2/salesOverview")
 public class SalesOverviewController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -39,18 +39,25 @@ public class SalesOverviewController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
-		/*
-		 * HttpSession session = request.getSession(false);
-		 * 
-		 * // 세션 없거나 브랜드 정보 없음 → 로그인 페이지로 리다이렉트 if (session == null ||
-		 * session.getAttribute("brand") == null) {
-		 * response.sendRedirect(request.getContextPath() + "/brand/login"); return; }
-		 * 
-		 * Brand brand = (Brand) session.getAttribute("brand"); Long brandId =
-		 * brand.getBrandId();
-		 */
-		Long brandId = 1L;
+		
+		HttpSession session = request.getSession(false);
+
+		// 세션 없거나 브랜드 정보 없음 → 로그인 페이지로 리다이렉트
+		if (session == null || session.getAttribute("brand") == null) {
+			response.sendRedirect(request.getContextPath() + "/brand/login");
+			return;
+		}
+
+		Brand brand = (Brand) session.getAttribute("brand");
+		Long brandId = brand.getBrandId();
+		
 		SalesOverviewService service = new SalesOverviewServiceImpl();
+		
+		// 페이지네이션
+				int page = Integer.parseInt(request.getParameter("page") == null ? "1" : request.getParameter("page"));
+				int limit = 10; // 한 페이지당 개수
+				int offset = (page - 1) * limit;
+
 
 		try {
 
@@ -64,6 +71,10 @@ public class SalesOverviewController extends HttpServlet {
 			params.put("startDate", startDate);
 			params.put("endDate", endDate);
 			
+			// 페이징
+			params.put("limit", limit);
+			params.put("offset", offset);
+			
 			if (categoryIds != null && !categoryIds.isEmpty()) {
 			    List<Long> categoryList = Arrays.stream(categoryIds.split(","))
 			                                    .map(Long::parseLong)   // String → Long 변환
@@ -75,8 +86,11 @@ public class SalesOverviewController extends HttpServlet {
 
 			
 			// ====== 서비스 호출 ======
-			List<SalesOverview> salesList = service.getCategorySalesTrend(params);
+			List<SalesOverview> overviewList  = service.getCategorySalesTrend(params);
 
+			// 테이블 데이터용 (pivot 구조)
+	        List<SalesStatusRow> salesStatusList = service.getSalesStatusRows(params);
+			
 			// 카테고리 depth=1 목록
 			List<Category> categories = service.getLargeCategories();
 			
@@ -85,15 +99,16 @@ public class SalesOverviewController extends HttpServlet {
 
 			// x축 라벨 (날짜별)
 			Set<String> labelSet = new TreeSet<>(); // 자동 정렬
-			for (SalesOverview row : salesList) {
+			for (SalesOverview row : overviewList) {
 				labelSet.add(row.getDate().toString());
 			}
 			List<String> labels = new ArrayList<>(labelSet);
 			chartData.put("labels", labels);
+			
 			// 카테고리별 매출 데이터셋 구성
 			Map<String, List<Long>> categoryDataMap = new LinkedHashMap<>();
 
-			for (SalesOverview row : salesList) {
+			for (SalesOverview row : overviewList) {
 				String dateStr = row.getDate().toString();
 				String catName = row.getCategoryName();
 				Long amount = row.getAmount() != null ? row.getAmount() : 0L;
@@ -124,7 +139,7 @@ public class SalesOverviewController extends HttpServlet {
 			String salesChartJson = gson.toJson(chartData);
 
 			// ====== JSP에 전달 ======
-			request.setAttribute("salesList", salesList);
+			request.setAttribute("salesList", salesStatusList);
 			request.setAttribute("salesChartJson", salesChartJson);
 			request.setAttribute("categories", categories);
 
@@ -138,7 +153,6 @@ public class SalesOverviewController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 

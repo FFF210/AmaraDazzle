@@ -285,10 +285,12 @@
 
 	<!-- ======================= [브랜드 어드민] 상품 배송 ======================= -->
 	<update id="updateStatusToDelivered" parameterType="long">
-		UPDATE order_item
+		UPDATE
+		order_item
 		SET status = 'DELIVERED',
 		updated_at = NOW()
-		WHERE order_id = #{orderId}
+		WHERE order_id =
+		#{orderId}
 	</update>
 
 
@@ -417,32 +419,38 @@
 		= 'CONFIRMED'
 	</select>
 
-	<!-- ======================= [brand2] salesOverview 작업 ======================= -->
+	<!-- ======================= [brand2] salesOverview 작업 (차트용) ======================= -->
 	<select id="selectCategorySalesTrend" parameterType="map"
 		resultType="dto.brand2.SalesOverview">
 		SELECT
 		DATE(o.created_at) AS date,
-		
-		CASE 
-            WHEN c.depth = 1 THEN c.category_id
-            WHEN c.depth = 2 THEN c.parent_id
-            WHEN c.depth = 3 THEN (SELECT parent_id FROM category pc WHERE pc.category_id = c.parent_id)
-        END AS categoryId,
-        
-        CASE 
-            WHEN c.depth = 1 THEN c.name
-            WHEN c.depth = 2 THEN (SELECT name FROM category pc WHERE pc.category_id = c.parent_id)
-            WHEN c.depth = 3 THEN (SELECT name FROM category gc 
-                                    WHERE gc.category_id = (SELECT parent_id FROM category pc WHERE pc.category_id = c.parent_id))
-        END AS categoryName,
-		
-		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS	amount
+
+		CASE
+		WHEN c.depth = 1 THEN c.category_id
+		WHEN c.depth = 2 THEN c.parent_id
+		WHEN c.depth = 3 THEN (SELECT parent_id FROM category pc WHERE
+		pc.category_id = c.parent_id)
+		END AS categoryId,
+
+		CASE
+		WHEN c.depth = 1 THEN c.name
+		WHEN c.depth = 2 THEN (SELECT name FROM category pc WHERE pc.category_id =
+		c.parent_id)
+		WHEN c.depth = 3 THEN (SELECT name FROM category gc
+		WHERE gc.category_id = (SELECT parent_id FROM category pc WHERE
+		pc.category_id = c.parent_id))
+		END AS categoryName,
+
+		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS amount
 		FROM order_item oi
-		JOIN orders o ON oi.order_id = o.orders_id
-		JOIN product p ON oi.product_id = p.product_id
+		JOIN orders o ON
+		oi.order_id = o.orders_id
+		JOIN product p ON oi.product_id =
+		p.product_id
 		JOIN category c ON p.category1_id = c.category_id
-		WHERE oi.brand_id = #{brandId}
-		AND	oi.status = 'CONFIRMED'
+		WHERE
+		oi.brand_id = #{brandId}
+		AND oi.status = 'CONFIRMED'
 		<if test="startDate != null and startDate != ''">
 			AND DATE(o.created_at) &gt;= #{startDate}
 		</if>
@@ -451,29 +459,75 @@
 		</if>
 		<if test="categories != null and categories.size > 0">
 			AND (
-            CASE 
-                WHEN c.depth = 1 THEN c.category_id
-                WHEN c.depth = 2 THEN c.parent_id
-                WHEN c.depth = 3 THEN (SELECT parent_id FROM category pc WHERE pc.category_id = c.parent_id)
-            END
-        ) IN
-        <foreach item="catId" collection="categories" open="(" separator="," close=")">
-            #{catId}
+			CASE
+			WHEN c.depth = 1 THEN c.category_id
+			WHEN c.depth = 2 THEN c.parent_id
+			WHEN c.depth = 3 THEN (SELECT parent_id FROM category pc WHERE
+			pc.category_id = c.parent_id)
+			END
+			) IN
+			<foreach item="catId" collection="categories" open="("
+				separator="," close=")">
+				#{catId}
 			</foreach>
 		</if>
 		GROUP BY DATE(o.created_at),
-		 CASE 
-                WHEN c.depth = 1 THEN c.category_id
-                WHEN c.depth = 2 THEN c.parent_id
-                WHEN c.depth = 3 THEN (SELECT parent_id FROM category pc WHERE pc.category_id = c.parent_id)
-             END,
-             CASE 
-                WHEN c.depth = 1 THEN c.name
-                WHEN c.depth = 2 THEN (SELECT name FROM category pc WHERE pc.category_id = c.parent_id)
-                WHEN c.depth = 3 THEN (SELECT name FROM category gc 
-                                        WHERE gc.category_id = (SELECT parent_id FROM category pc WHERE pc.category_id = c.parent_id))
-             END
-    ORDER BY DATE(o.created_at) ASC
+		CASE
+		WHEN c.depth = 1 THEN c.category_id
+		WHEN c.depth = 2 THEN c.parent_id
+		WHEN c.depth = 3 THEN (SELECT parent_id FROM category pc WHERE
+		pc.category_id = c.parent_id)
+		END,
+		CASE
+		WHEN c.depth = 1 THEN c.name
+		WHEN c.depth = 2 THEN (SELECT name FROM category pc WHERE pc.category_id =
+		c.parent_id)
+		WHEN c.depth = 3 THEN (SELECT name FROM category gc
+		WHERE gc.category_id = (SELECT parent_id FROM category pc WHERE
+		pc.category_id = c.parent_id))
+		END
+		ORDER BY DATE(o.created_at) ASC
+	</select>
+
+	<!-- ======================= [brand2] salesOverview (테이블용 pivot) ======================= -->
+	<select id="selectSalesStatusRows" parameterType="map"
+		resultType="dto.brand2.SalesStatusRow">
+		SELECT
+		DATE(o.created_at) AS date,
+		SUM(oi.line_subtotal - oi.discount) AS total,
+		SUM(CASE WHEN c.category_id = 1 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS skincare,
+		SUM(CASE WHEN c.category_id = 8 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS maskpack,
+		SUM(CASE WHEN c.category_id = 14 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS cleansing,
+		SUM(CASE WHEN c.category_id = 21 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS suncare,
+		SUM(CASE WHEN c.category_id = 26 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS makeup,
+		SUM(CASE WHEN c.category_id = 49 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS haircare,
+		SUM(CASE WHEN c.category_id = 54 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS bodycare,
+		SUM(CASE WHEN c.category_id = 66 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS perfume,
+		SUM(CASE WHEN c.category_id = 70 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS menCare
+		FROM order_item oi
+		JOIN orders o ON oi.order_id = o.orders_id
+		JOIN product p ON oi.product_id = p.product_id
+		JOIN category c ON p.category1_id = c.category_id
+		WHERE oi.brand_id = #{brandId}
+		AND oi.status = 'CONFIRMED'
+		<if test="startDate != null and startDate != ''">
+			AND DATE(o.created_at) &gt;= #{startDate}
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND DATE(o.created_at) &lt;= #{endDate}
+		</if>
+		GROUP BY DATE(o.created_at)
+		ORDER BY DATE(o.created_at) DESC
+		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
 </mapper>
