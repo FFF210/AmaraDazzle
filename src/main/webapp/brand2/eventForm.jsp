@@ -201,7 +201,9 @@
 					<div id="imgPreviewWrapper" class="preview-wrapper">
 						<div id="imgPreviewArea" class="preview-area" aria-live="polite">
 							<%-- <img src="/upload/${event.detailFileId}" /> --%>
-							<img src="${pageContext.request.contextPath}/image?fileId=${event.thumbnailFileId}" alt="대표 이미지" />
+							<img
+								src="${pageContext.request.contextPath}/image?fileId=${event.thumbnailFileId}"
+								alt="대표 이미지" />
 						</div>
 					</div>
 				</div>
@@ -211,7 +213,9 @@
 					<div id="imgPreviewWrapper" class="preview-wrapper">
 						<div id="imgPreviewArea" class="preview-area" aria-live="polite">
 							<%-- <img src="/upload/${event.detailFileId}" /> --%>
-							<img src="${pageContext.request.contextPath}/image?fileId=${event.detailFileId}" alt="대표 이미지" width="588px"/>
+							<img
+								src="${pageContext.request.contextPath}/image?fileId=${event.detailFileId}"
+								alt="대표 이미지" width="588px" />
 						</div>
 					</div>
 				</div>
@@ -283,10 +287,14 @@ ETC(기타) : (?)
 											<li class="select-item" data-value="">상품 선택</li>
 											<c:forEach var="p" items="${products}">
 												<li class="select-item" data-value="${p.productId}"
+													style="display: flex; gap: 10px; padding: 5px 20px;"
 													<c:if test="${not empty p.eventId and p.eventId eq event.eventId}">
 													class="selected"
 														</c:if>>
-													${p.name}</li>
+													<img
+													src="${pageContext.request.contextPath}/image?fileId=${p.thumbnailFileId}"
+													alt="대표 이미지" width="60px" /> ${p.name}
+												</li>
 											</c:forEach>
 										</ul>
 										<!-- 선택된 상품 ID 저장 -->
