@@ -323,4 +323,20 @@
 		</where>
 		order by coupon_id desc limit #{start_p},#{post_ea}
 	</select>
+
+
+	<!-- ==================================== [brand2] ===================================== -->
+	<!-- eventForm.jsp COUPON일 경우 -->
+	<!-- 이벤트 전용 쿠폰 목록 조회 -->
+	<select id="selectCouponsForEvent" parameterType="map"
+		resultType="dto.Coupon">
+		SELECT
+		coupon_id AS couponId,
+		cname,
+		event_id AS eventId
+		FROM coupon
+		WHERE event_id = #{eventId}
+     	AND writer_id = #{brandId}
+     	AND writer_type = 'BRAND_ADMIN'
+	</select>
 </mapper>

@@ -1,7 +1,6 @@
 package dto.brand2;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.List;
 
 public class EventApplicationForm {	
@@ -28,6 +27,11 @@ public class EventApplicationForm {
 
     // coupon
     private Long couponId; // 이미 발급된 쿠폰을 선택하는 경우 (nullable)
+    
+    // 쿠폰 다중 선택용
+    private List<Long> couponIds;  // 신청 시 선택한 쿠폰들
+
+    /*
     private String cname;
     private Timestamp couponStartDate;
     private Timestamp couponEndDate;
@@ -36,6 +40,8 @@ public class EventApplicationForm {
     private String provision;
     private String writerType;
     private Long writerId;
+    */
+    
 	public Long getEventApplicationId() {
 		return eventApplicationId;
 	}
@@ -102,6 +108,16 @@ public class EventApplicationForm {
 	public void setCouponId(Long couponId) {
 		this.couponId = couponId;
 	}
+	
+	@Override
+	public String toString() {
+		return "EventApplicationForm [eventApplicationId=" + eventApplicationId + ", brandId=" + brandId + ", eventId="
+				+ eventId + ", managerName=" + managerName + ", managerTel=" + managerTel + ", note=" + note
+				+ ", eventType=" + eventType + ", productIds=" + productIds + ", discountTypes=" + discountTypes
+				+ ", discountValues=" + discountValues + ", couponId=" + couponId + ", couponIds=" + couponIds + "]";
+	}
+	
+	/*
 	public String getCname() {
 		return cname;
 	}
@@ -150,16 +166,6 @@ public class EventApplicationForm {
 	public void setWriterId(Long writerId) {
 		this.writerId = writerId;
 	}
-	@Override
-	public String toString() {
-		return "EventApplicationForm [eventApplicationId=" + eventApplicationId + ", brandId=" + brandId + ", eventId="
-				+ eventId + ", managerName=" + managerName + ", managerTel=" + managerTel + ", note=" + note
-				+ ", eventType=" + eventType + ", productIds=" + productIds + ", discountTypes=" + discountTypes
-				+ ", discountValues=" + discountValues + ", couponId=" + couponId + ", cname=" + cname
-				+ ", couponStartDate=" + couponStartDate + ", couponEndDate=" + couponEndDate + ", amount=" + amount
-				+ ", amountCondition=" + amountCondition + ", provision=" + provision + ", writerType=" + writerType
-				+ ", writerId=" + writerId + "]";
-	}
-    
+	*/
     
 }

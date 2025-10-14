@@ -356,19 +356,27 @@
 		resultType="dto.brand2.SalesOverview">
 		SELECT
 		DATE(o.created_at) AS date,
-		p.category1_id AS categoryId,
-		c.name
-		AS categoryName,
-		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS
-		amount
+		
+		CASE 
+            WHEN c.depth = 1 THEN c.category_id
+            WHEN c.depth = 2 THEN c.parent_id
+            WHEN c.depth = 3 THEN (SELECT parent_id FROM category pc WHERE pc.category_id = c.parent_id)
+        END AS categoryId,
+        
+        CASE 
+            WHEN c.depth = 1 THEN c.name
+            WHEN c.depth = 2 THEN (SELECT name FROM category pc WHERE pc.category_id = c.parent_id)
+            WHEN c.depth = 3 THEN (SELECT name FROM category gc 
+                                    WHERE gc.category_id = (SELECT parent_id FROM category pc WHERE pc.category_id = c.parent_id))
+        END AS categoryName,
+		
+		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS	amount
 		FROM order_item oi
 		JOIN orders o ON oi.order_id = o.orders_id
 		JOIN product p ON oi.product_id = p.product_id
-		JOIN category c ON
-		p.category1_id = c.category_id
+		JOIN category c ON p.category1_id = c.category_id
 		WHERE oi.brand_id = #{brandId}
-		AND
-		oi.status = 'CONFIRMED'
+		AND	oi.status = 'CONFIRMED'
 		<if test="startDate != null and startDate != ''">
 			AND DATE(o.created_at) &gt;= #{startDate}
 		</if>
@@ -376,17 +384,30 @@
 			AND DATE(o.created_at) &lt;= #{endDate}
 		</if>
 		<if test="categories != null and categories.size > 0">
-			AND p.category1_id IN
-			<foreach item="catId" collection="categories" open="("
-				separator="," close=")">
-				#{catId}
+			AND (
+            CASE 
+                WHEN c.depth = 1 THEN c.category_id
+                WHEN c.depth = 2 THEN c.parent_id
+                WHEN c.depth = 3 THEN (SELECT parent_id FROM category pc WHERE pc.category_id = c.parent_id)
+            END
+        ) IN
+        <foreach item="catId" collection="categories" open="(" separator="," close=")">
+            #{catId}
 			</foreach>
 		</if>
-
-
-		GROUP BY DATE(o.created_at), p.category1_id, c.name
-		ORDER BY
-		DATE(o.created_at) ASC
+		GROUP BY DATE(o.created_at),
+		 CASE 
+                WHEN c.depth = 1 THEN c.category_id
+                WHEN c.depth = 2 THEN c.parent_id
+                WHEN c.depth = 3 THEN (SELECT parent_id FROM category pc WHERE pc.category_id = c.parent_id)
+             END,
+             CASE 
+                WHEN c.depth = 1 THEN c.name
+                WHEN c.depth = 2 THEN (SELECT name FROM category pc WHERE pc.category_id = c.parent_id)
+                WHEN c.depth = 3 THEN (SELECT name FROM category gc 
+                                        WHERE gc.category_id = (SELECT parent_id FROM category pc WHERE pc.category_id = c.parent_id))
+             END
+    ORDER BY DATE(o.created_at) ASC
 	</select>
 
 </mapper>

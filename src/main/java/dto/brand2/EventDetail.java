@@ -3,48 +3,57 @@ package dto.brand2;
 import java.sql.Timestamp;
 import java.util.List;
 
+import dto.Coupon;
+
 public class EventDetail {
 	/* ======= 상세보기버튼 조회 결과 전용 DTO ======= */
-	
+
 	// event
-    private Long eventId;
-    private String eventType;
-    private String eventName;
-    private String status;
-    private Timestamp startDate;
-    private Timestamp endDate;
-    private Long thumbnailFileId; // 배너 이미지 파일 ID (FK → upload_file.upload_file_id)
-    private Long detailFileId;    // 상세페이지 이미지 파일 ID (FK → upload_file.upload_file_id)
-    private String content;       // 내용
-    private Long writer;        // 작성자 (FK → admin_info.admin_info_id)
-    private Integer exposeYn;     // 노출 여부 (DEFAULT 0)
-    private Timestamp createdAt;  // 생성 시각 (DEFAULT CURRENT_TIMESTAMP)
-    private Timestamp updatedAt;  // 수정 시각
+	private Long eventId;
+	private String eventType;
+	private String eventName;
+	private String status;
+	private Timestamp startDate;
+	private Timestamp endDate;
+	private Long thumbnailFileId; // 배너 이미지 파일 ID (FK → upload_file.upload_file_id)
+	private Long detailFileId; // 상세페이지 이미지 파일 ID (FK → upload_file.upload_file_id)
+	private String content; // 내용
+	private Long writer; // 작성자 (FK → admin_info.admin_info_id)
+	private Integer exposeYn; // 노출 여부 (DEFAULT 0)
+	private Timestamp createdAt; // 생성 시각 (DEFAULT CURRENT_TIMESTAMP)
+	private Timestamp updatedAt; // 수정 시각
 
-    private Long category1Id;
-    private String largeCategoryName;
-    private Long category2Id;
-    private String middleCategoryName;
-    private Long category3Id;
-    private String smallCategoryName;
-    
-    // event_application
-    private String eventApplicationId;
-    private String managerName;
-    private String managerTel;
-    private String note;
-    private String applyDate;
+	private Long category1Id;
+	private String largeCategoryName;
+	private Long category2Id;
+	private String middleCategoryName;
+	private Long category3Id;
+	private String smallCategoryName;
 
-    // coupon
-    private String couponId;
-    private String cname;
-    private Timestamp couponStartDate;
-    private Timestamp couponEndDate;
-    private int amount;
-    private String amountCondition;
-    
-    // 상품코드
-    private String productIds;
+	// event_application
+	private String eventApplicationId;
+	private String managerName;
+	private String managerTel;
+	private String note;
+	private String applyDate;
+
+	// coupon
+	// coupon 리스트
+	private List<Coupon> coupons;
+
+	private String couponId;
+	private String cname;
+	private Timestamp couponStartDate;
+	private Timestamp couponEndDate;
+	private int amount;
+	private String amountCondition;
+
+	// ===== 상품 (DISCOUNT용) =====
+	private String productIds; // 여러 개 상품 ID (콤마구분 or 배열 처리용)
+	private List<Long> productIdList; // 다중 상품 ID를 List로 변환해서 담을 수 있음
+
+	private String discountType; // RATE / AMOUNT
+	private Integer discountValue; // 할인 값 (null 가능)
 
 	public Long getEventId() {
 		return eventId;
@@ -93,7 +102,7 @@ public class EventDetail {
 	public void setEndDate(Timestamp endDate) {
 		this.endDate = endDate;
 	}
-	
+
 	public Long getThumbnailFileId() {
 		return thumbnailFileId;
 	}
@@ -238,6 +247,14 @@ public class EventDetail {
 		this.applyDate = applyDate;
 	}
 
+	public List<Coupon> getCoupons() {
+		return coupons;
+	}
+
+	public void setCoupons(List<Coupon> coupons) {
+		this.coupons = coupons;
+	}
+
 	public String getCouponId() {
 		return couponId;
 	}
@@ -294,6 +311,30 @@ public class EventDetail {
 		this.productIds = productIds;
 	}
 
+	public List<Long> getProductIdList() {
+		return productIdList;
+	}
+
+	public void setProductIdList(List<Long> productIdList) {
+		this.productIdList = productIdList;
+	}
+
+	public String getDiscountType() {
+		return discountType;
+	}
+
+	public void setDiscountType(String discountType) {
+		this.discountType = discountType;
+	}
+
+	public Integer getDiscountValue() {
+		return discountValue;
+	}
+
+	public void setDiscountValue(Integer discountValue) {
+		this.discountValue = discountValue;
+	}
+
 	@Override
 	public String toString() {
 		return "EventDetail [eventId=" + eventId + ", eventType=" + eventType + ", eventName=" + eventName + ", status="
@@ -303,9 +344,11 @@ public class EventDetail {
 				+ ", largeCategoryName=" + largeCategoryName + ", category2Id=" + category2Id + ", middleCategoryName="
 				+ middleCategoryName + ", category3Id=" + category3Id + ", smallCategoryName=" + smallCategoryName
 				+ ", eventApplicationId=" + eventApplicationId + ", managerName=" + managerName + ", managerTel="
-				+ managerTel + ", note=" + note + ", applyDate=" + applyDate + ", couponId=" + couponId + ", cname="
-				+ cname + ", couponStartDate=" + couponStartDate + ", couponEndDate=" + couponEndDate + ", amount="
-				+ amount + ", amountCondition=" + amountCondition + ", productIds=" + productIds + "]";
+				+ managerTel + ", note=" + note + ", applyDate=" + applyDate + ", coupons=" + coupons + ", couponId="
+				+ couponId + ", cname=" + cname + ", couponStartDate=" + couponStartDate + ", couponEndDate="
+				+ couponEndDate + ", amount=" + amount + ", amountCondition=" + amountCondition + ", productIds="
+				+ productIds + ", productIdList=" + productIdList + ", discountType=" + discountType
+				+ ", discountValue=" + discountValue + "]";
 	}
-
+	
 }
