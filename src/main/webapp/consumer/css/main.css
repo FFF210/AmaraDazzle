@@ -82,14 +82,14 @@
 }
 
 .brand-card .brand-name {
-	font-size: 1.2rem;
-	font-weight: bold;
+	color: #111;
+    font-size: 18px;
 	margin: 8px 0;
 }
 
 .brand-card .brand-intro {
-	font-size: 0.9rem;
-	color: #555;
+	font-size: 14px;
+    color: #666;
 	line-height: 1.4;
 	min-height: 40px;
 }
@@ -105,7 +105,16 @@
 	margin-left: calc(-50vw + 50%);
 	padding: 60px 20px;
 	border-radius: 0;
-	background: linear-gradient(135deg, #F2EBF1 0%, #D9D2D7 30%, #F2B3C4 100%);
+	background: linear-gradient(
+  180deg,
+  rgba(255, 255, 255, 1) 0%,            /* 맨 위 흰색 */
+  rgba(255, 255, 255, 0.95) 10%,        /* 위에서 약간 흰색 유지 */
+  rgba(250, 235, 240, 0.85) 25%,        /* 핑크빛 시작 */
+  rgba(249, 223, 230, 0.85) 50%,        /* 중앙 강한 핑크 */
+  rgba(250, 235, 240, 0.85) 75%,        /* 핑크빛 유지 */
+  rgba(255, 255, 255, 0.95) 90%,        /* 다시 흰색으로 복귀 */
+  rgba(255, 255, 255, 1) 100%           /* 맨 아래 완전 흰색 */
+);
 	margin-bottom: 60px;
 }
 

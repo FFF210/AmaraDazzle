@@ -40,7 +40,7 @@
 				완료되었습니다.</h1>
 
 			<div class="order-number"
-				onclick="location.href='${pageContext.request.contextPath}/store/orderDetail?orderId=${orderId}'"
+				onclick="location.href='${pageContext.request.contextPath}/store/mypage/orderDetail?orderId=${orderId}'"
 				style="cursor: pointer;">주문번호 ${orderInfo.order.orderCode}</div>
 
 			<!-- 주문 정보 요약 -->

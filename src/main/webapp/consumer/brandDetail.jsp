@@ -58,15 +58,14 @@
 				</div>
 
 				<!-- 브랜드 소개 -->
-				<div class="intro-wrapper">
+				<%-- <div class="intro-wrapper">
 					<span>${brand.intro}</span>
-				</div>
+				</div> --%>
 
-				<div class="brand-image">
 					<img
 						src="${pageContext.request.contextPath}/image?fileId=${brand.heroFileId}"
-						alt="브랜드 히어로 이미지" width="1020px" height="320px" />
-				</div>
+						alt="브랜드 히어로 이미지" height= "550px"/>
+
 			</div>
 
 
