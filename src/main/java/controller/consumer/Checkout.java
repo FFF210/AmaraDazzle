@@ -16,6 +16,8 @@ import javax.servlet.http.HttpSession;
 
 import dao.consumer.MemberCouponDAO;
 import dao.consumer.MemberCouponDAOImpl;
+import service.consumer.CartItemService;
+import service.consumer.CartItemServiceImpl;
 import service.consumer.MemberCouponService;
 import service.consumer.MemberCouponServiceImpl;
 import service.consumer.OrderService;
@@ -54,7 +56,45 @@ public class Checkout extends HttpServlet {
 				return;
 			}
 
-			// 2. 요청 파라미터 받기
+			// 장바구니에서 온 경우 처리
+			String[] cartItemIdsArray = request.getParameterValues("cartItemIds");
+
+			if (cartItemIdsArray != null && cartItemIdsArray.length > 0) {
+				System.out.println("=== 장바구니에서 체크아웃 시작 ===");
+
+				// 장바구니 아이템 ID 리스트 변환
+				List<Long> cartItemIds = new ArrayList<>();
+				for (String id : cartItemIdsArray) {
+					cartItemIds.add(Long.parseLong(id));
+				}
+
+				// 선택된 장바구니 상품 조회
+				CartItemService cartService = new CartItemServiceImpl();
+				List<Map<String, Object>> cartItems = cartService.getSelectedItemsForCheckout(memberId, cartItemIds);
+
+				System.out.println("선택된 장바구니 상품 개수: " + cartItems.size());
+
+				// OrderService로 체크아웃 데이터 준비
+				OrderService orderService = new OrderServiceImpl();
+				Map<String, Object> checkoutData = orderService.prepareCheckoutDataForCart(memberId, cartItems);
+
+				// 쿠폰 목록 조회
+				MemberCouponDAO couponDAO = new MemberCouponDAOImpl();
+				Map<String, Object> couponParams = new HashMap<>();
+				couponParams.put("memberId", memberId);
+				couponParams.put("limit", 100);
+				couponParams.put("offset", 0);
+
+				List<Map<String, Object>> availableCoupons = couponDAO.selectMemberCouponList(couponParams);
+				request.setAttribute("availableCoupons", availableCoupons);
+
+				// JSP로 데이터 전달
+				request.setAttribute("checkoutData", checkoutData);
+				request.getRequestDispatcher("/consumer/checkout.jsp").forward(request, response);
+				return;
+			}
+
+			// 요청 파라미터 받기
 			String productIdStr = request.getParameter("productId");
 
 			if (productIdStr == null) {
@@ -65,7 +105,7 @@ public class Checkout extends HttpServlet {
 
 			Long productId = Long.parseLong(productIdStr);
 
-			// 3. 여러 옵션인지 단일 상품인지 확인
+			// 여러 옵션인지 단일 상품인지 확인
 			String[] optionIdParams = new String[10];
 			String[] quantityParams = new String[10];
 			int itemCount = 0;
@@ -188,37 +228,29 @@ public class Checkout extends HttpServlet {
 			orderData.put("shipLine2", request.getParameter("shipLine2"));
 			orderData.put("note", request.getParameter("note"));
 
-			// 상품 정보 (null 체크)
+			// 상품 정보 (장바구니면 없을 수 있음)
 			String productIdStr = request.getParameter("productId");
 			String brandIdStr = request.getParameter("brandId");
 
-			if (productIdStr == null || brandIdStr == null) {
-				System.out.println("ERROR: productId 또는 brandId가 null입니다!");
-				response.setContentType("text/plain; charset=UTF-8");
-				response.getWriter()
-						.write("ERROR:상품 정보가 없습니다 (productId: " + productIdStr + ", brandId: " + brandIdStr + ")");
-				return;
+			if (productIdStr != null && !productIdStr.isEmpty()) {
+				orderData.put("productId", Long.parseLong(productIdStr));
 			}
-
-			System.out.println("productIdStr: [" + productIdStr + "], 길이: " + productIdStr.length());
-			System.out.println("brandIdStr: [" + brandIdStr + "], 길이: " + brandIdStr.length());
-
-			if (productIdStr == null || productIdStr.isEmpty()) {
-				// 에러!
+			if (brandIdStr != null && !brandIdStr.isEmpty()) {
+				orderData.put("brandId", Long.parseLong(brandIdStr));
 			}
-
-			orderData.put("productId", Long.parseLong(productIdStr));
-			orderData.put("brandId", Long.parseLong(brandIdStr));
 
 			// 여러 옵션 처리
 			List<Map<String, Object>> itemsList = new ArrayList<>();
-			Long productId = Long.parseLong(productIdStr);
 
 			for (int i = 0; i < 10; i++) {
+				String brandId = request.getParameter("items[" + i + "].brandId");
+				String productId = request.getParameter("items[" + i + "].productId");
 				String optionId = request.getParameter("items[" + i + "].optionId");
 				String quantity = request.getParameter("items[" + i + "].quantity");
 				String unitPrice = request.getParameter("items[" + i + "].unitPrice");
 
+				System.out.println("items[" + i + "].brandId: " + brandId);
+				System.out.println("items[" + i + "].productId: " + productId);
 				System.out.println("items[" + i + "].optionId: " + optionId);
 				System.out.println("items[" + i + "].quantity: " + quantity);
 				System.out.println("items[" + i + "].unitPrice: " + unitPrice);
@@ -227,6 +259,14 @@ public class Checkout extends HttpServlet {
 						&& !unitPrice.trim().isEmpty()) {
 
 					Map<String, Object> item = new HashMap<>();
+
+					// brandId, productId
+					if (brandId != null && !brandId.trim().isEmpty()) {
+						item.put("brandId", Long.parseLong(brandId));
+					}
+					if (productId != null && !productId.trim().isEmpty()) {
+						item.put("productId", Long.parseLong(productId));
+					}
 
 					// optionId가 빈 문자열이면 null로 처리
 					if (optionId != null && !optionId.trim().isEmpty()) {
@@ -273,6 +313,11 @@ public class Checkout extends HttpServlet {
 
 			// ===== 쿠폰 검증 (중복 선언 제거) =====
 			String usingCouponStr = request.getParameter("usingCoupon");
+
+//			// 쿠폰 할인 금액
+//			int couponAmount = Integer.parseInt(request.getParameter("couponAmount"));
+//			orderData.put("couponAmount", couponAmount);
+
 			Long memberCouponId = null;
 			int couponDiscount = 0;
 
@@ -302,9 +347,26 @@ public class Checkout extends HttpServlet {
 
 			// 포인트 처리 (Integer로)
 			String usingPointStr = request.getParameter("usingPoint");
-			orderData.put("usingPoint",
-					(usingPointStr != null && !usingPointStr.trim().isEmpty()) ? Integer.parseInt(usingPointStr.trim())
-							: 0);
+			int usingPoint = 0;
+
+			if (usingPointStr != null && !usingPointStr.trim().isEmpty()) {
+				usingPoint = Integer.parseInt(usingPointStr.trim());
+			}
+
+			orderData.put("usingPoint", usingPoint);
+
+			int discountTotal = couponDiscount + usingPoint;
+			int discountFinal = 0;
+
+			// 장바구니 상품 개수로 나누기
+			if (!itemsList.isEmpty()) {
+				discountFinal = discountTotal / itemsList.size();
+			}
+
+			System.out.println(
+					"할인 총액: " + discountTotal + ", 상품 개수: " + itemsList.size() + ", 1개당 할인액: " + discountFinal);
+
+			orderData.put("discountFinal", new BigDecimal(discountFinal));
 
 			// 4. 임시 주문 ID 생성
 			String temporaryOrderId = "ORDER_" + System.currentTimeMillis();

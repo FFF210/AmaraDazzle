@@ -36,7 +36,7 @@
 .qna-title p {
 	overflow: hidden;
 	color: #111;
-	text-align: center;
+	text-align: left;
 	text-overflow: ellipsis;
 	font-size: 14px;
 	font-style: normal;

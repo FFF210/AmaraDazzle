@@ -9,20 +9,26 @@
 <title>고객 문의 조회</title>
 
 <!-- Pretendard 폰트 (CDN) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
 <!-- flatpickr 기본 테마 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/light.css">
 
 <!-- 한글화 & 커스텀 CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
 
 <!-- flatpickr 및 tableFilter.js -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ko.js"></script>
-<script src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/js/tableFilter.js"></script>
 <script src="./js/selectbox.js"></script>
 
 <link rel="stylesheet"
@@ -44,8 +50,8 @@
 <link rel="stylesheet" href="../tagcss/table.css" />
 </head>
 <body>
-<c:set var="currentSortField" value="${param.sortField}" />
-<c:set var="currentSortOrder" value="${param.sortOrder}" />
+	<c:set var="currentSortField" value="${param.sortField}" />
+	<c:set var="currentSortOrder" value="${param.sortOrder}" />
 
 	<!-- Toast 알림 컨테이너 -->
 	<div id="toast-container"></div>
@@ -75,7 +81,8 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th class="sortable" data-sort="questioned_at">작성일 <i class="bi bi-dash-lg sort-icon"></i></th>
+								<th class="sortable" data-sort="questioned_at">작성일 <i
+									class="bi bi-dash-lg sort-icon"></i></th>
 								<th>문의유형</th>
 								<th>상품명</th>
 								<th>작성자</th>
@@ -119,7 +126,8 @@
 									<!-- 상품명 -->
 									<td>
 										<div class="product-name">
-											<p>${qna.productName}</p>
+											<p
+												style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 150px; text-align: left;">${qna.productName}</p>
 										</div>
 									</td>
 
@@ -129,7 +137,8 @@
 									<!-- 문의내용 -->
 									<td>
 										<div class="product-name">
-											<p>${qna.question}</p>
+											<p
+												style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 350px; text-align: left;">${qna.question}</p>
 										</div>
 									</td>
 
@@ -147,8 +156,7 @@
 										<div class="actions">
 											<button type="button"
 												class="btn btn-outline btn-sm btn-detail"
-												data-qna-id="${qna.memberQnaId}"
-												data-type="${qna.type}">상세</button>
+												data-qna-id="${qna.memberQnaId}" data-type="${qna.type}">상세</button>
 										</div>
 									</td>
 								</tr>

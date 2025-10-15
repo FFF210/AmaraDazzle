@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -23,10 +24,13 @@ import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import dto.Payment;
 import service.consumer.MemberCouponService;
 import service.consumer.MemberCouponServiceImpl;
 import service.consumer.OrderService;
 import service.consumer.OrderServiceImpl;
+import service.consumer.PaymentService;
+import service.consumer.PaymentServiceImpl;
 
 @WebServlet("/store/tossSuccess")
 public class TossSuccess extends HttpServlet {
@@ -131,6 +135,35 @@ public class TossSuccess extends HttpServlet {
 				Long savedOrderId = orderService.createOrder(orderData);
 
 				System.out.println("✅ 주문 저장 완료: orderId=" + savedOrderId);
+				
+				// ✅ 수정: 결제 정보 저장
+				System.out.println(">>> 3-0단계: 결제 정보 저장");
+				try {
+				    Payment payment = new Payment();
+				    payment.setOrderId(savedOrderId);
+				    payment.setProvider("toss");
+				    
+				    // 토스 응답에서 결제 방법 추출
+				    String paymentMethod = "tosspay"; // 기본값
+				    if (result.containsKey("method")) {
+				        paymentMethod = (String) result.get("method");
+				    }
+				    payment.setMethod(paymentMethod);
+				    
+				    payment.setAmount(new BigDecimal(amount));
+				    payment.setStatus("AUTHORIZED");
+				    payment.setPaymentKey(paymentKey);
+				    
+				    // Service로 payment 저장
+				    PaymentService paymentService = new PaymentServiceImpl();
+				    paymentService.savePayment(payment);
+				    
+				    System.out.println("✅ 결제 정보 저장 완료: paymentKey=" + paymentKey);
+				} catch (Exception e) {
+				    System.err.println("⚠️ 결제 정보 저장 실패: " + e.getMessage());
+				    e.printStackTrace();
+				    // 결제 정보 저장 실패해도 주문은 완료된 상태이므로 계속 진행
+				}
 				
 				// ===== 쿠폰 사용 처리 추가 =====
 				System.out.println(">>> 3-1단계: 쿠폰 사용 처리");

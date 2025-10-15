@@ -4,14 +4,16 @@
 
 <mapper namespace="mapper.cartItem">
 
-<!-- =======================소비자용===================== -->
+	<!-- =======================소비자용===================== -->
 	<!-- 장바구니에 상품 추가 -->
 	<insert id="insertCartItem" parameterType="dto.CartItem"
 		useGeneratedKeys="true" keyProperty="cartItemId">
 		INSERT INTO cart_item (
-		member_id, brand_id, product_id, option_id, quantity
+		member_id,
+		brand_id, product_id, option_id, quantity
 		) VALUES (
-		#{memberId}, #{brandId}, #{productId}, #{optionId}, #{quantity}
+		#{memberId},
+		#{brandId}, #{productId}, #{optionId}, #{quantity}
 		)
 	</insert>
 
@@ -26,34 +28,73 @@
 		ci.quantity,
 		ci.created_at as createdAt,
 		p.name as productName,
-		p.price as productPrice,
+		p.price as
+		productPrice,
 		p.thumbnail_file_id as thumbnailFileId,
 		CASE
+		WHEN
+		ci.option_id IS NOT NULL THEN
+		CASE
+		<!-- 옵션이 있는 경우: 옵션 가격을 기준으로 할인 적용 -->
 		WHEN p.discount_type = 'RATE' AND
+		(p.start_date IS NULL OR p.start_date
+		&lt;= NOW()) AND
+		(p.end_date IS NULL OR p.end_date >= NOW())
+		THEN
+		ROUND(po.price * (1 - p.discount_value / 100), 0)
+		WHEN p.discount_type
+		= 'AMOUNT' AND
 		(p.start_date IS NULL OR p.start_date &lt;= NOW()) AND
 		(p.end_date IS NULL OR p.end_date >= NOW())
+		THEN po.price -
+		p.discount_value
+		ELSE po.price
+		END
+		<!-- 옵션이 없는 경우: 기본 가격 기준으로 할인 적용 -->
+		ELSE
+		CASE
+		WHEN p.discount_type = 'RATE' AND
+		(p.start_date IS NULL OR
+		p.start_date &lt;= NOW()) AND
+		(p.end_date IS NULL OR p.end_date >=
+		NOW())
 		THEN ROUND(p.price * (1 - p.discount_value / 100), 0)
-		WHEN p.discount_type = 'AMOUNT' AND
-		(p.start_date IS NULL OR p.start_date &lt;= NOW()) AND
+		WHEN
+		p.discount_type = 'AMOUNT' AND
+		(p.start_date IS NULL OR p.start_date
+		&lt;= NOW()) AND
 		(p.end_date IS NULL OR p.end_date >= NOW())
-		THEN p.price - p.discount_value
+		THEN
+		p.price - p.discount_value
 		ELSE p.price
+		END
 		END as finalPrice,
+
 		po.option_value as optionName,
 		po.price as optionPrice,
-		b.brand_name as brandName
+		b.brand_name as
+		brandName
 		FROM cart_item ci
-		JOIN product p ON ci.product_id = p.product_id
-		LEFT JOIN product_option po ON ci.option_id = po.product_option_id
-		LEFT JOIN brand b ON ci.brand_id = b.brand_id
-		WHERE ci.member_id = #{memberId}
+		JOIN product p ON
+		ci.product_id =
+		p.product_id
+		LEFT JOIN product_option po ON
+		ci.option_id =
+		po.product_option_id
+		LEFT JOIN brand b ON ci.brand_id =
+		b.brand_id
+		WHERE
+		ci.member_id = #{memberId}
 		AND p.is_visible = 1
-		ORDER BY ci.created_at DESC
+		ORDER BY
+		ci.created_at
+		DESC
 	</select>
 
 	<!-- 장바구니 상품 수량 변경 -->
 	<update id="updateCartItemQuantity" parameterType="map">
-		UPDATE cart_item SET
+		UPDATE
+		cart_item SET
 		quantity = #{quantity}
 		WHERE cart_item_id = #{cartItemId}
 		AND member_id = #{memberId}
@@ -61,7 +102,8 @@
 
 	<!-- 장바구니 특정 상품 삭제 -->
 	<delete id="deleteCartItemById" parameterType="map">
-		DELETE FROM cart_item
+		DELETE FROM
+		cart_item
 		WHERE cart_item_id = #{cartItemId}
 		AND member_id = #{memberId}
 	</delete>
@@ -84,7 +126,24 @@
 		ci.quantity,
 		p.name as productName,
 		p.price as productPrice,
-		p.shipping_method as shippingMethod,
+		p.shipping_method as
+		shippingMethod,
+		p.thumbnail_file_id as thumbnailFileId,
+		
+		CASE
+		WHEN ci.option_id IS NOT NULL THEN
+		CASE
+		WHEN p.discount_type = 'RATE' AND
+		(p.start_date IS NULL OR p.start_date &lt;= NOW()) AND
+		(p.end_date IS NULL OR p.end_date >= NOW())
+		THEN ROUND(po.price * (1 - p.discount_value / 100), 0)
+		WHEN p.discount_type = 'AMOUNT' AND
+		(p.start_date IS NULL OR p.start_date &lt;= NOW()) AND
+		(p.end_date IS NULL OR p.end_date >= NOW())
+		THEN po.price - p.discount_value
+		ELSE po.price
+		END
+		ELSE
 		CASE
 		WHEN p.discount_type = 'RATE' AND
 		(p.start_date IS NULL OR p.start_date &lt;= NOW()) AND
@@ -95,13 +154,21 @@
 		(p.end_date IS NULL OR p.end_date >= NOW())
 		THEN p.price - p.discount_value
 		ELSE p.price
+		END
 		END as finalPrice,
+		
 		po.option_value as optionName,
 		po.price as optionPrice,
-		b.brand_name as brandName
+		b.brand_name as
+		brandName,
+		b.brand_id as brandId
 		FROM cart_item ci
-		JOIN product p ON ci.product_id = p.product_id
-		LEFT JOIN product_option po ON ci.option_id = po.product_option_id
+		JOIN product p ON
+		ci.product_id =
+		p.product_id
+		LEFT JOIN product_option po ON ci.option_id
+		=
+		po.product_option_id
 		LEFT JOIN brand b ON ci.brand_id = b.brand_id
 		WHERE ci.member_id = #{memberId}
 		AND ci.cart_item_id IN

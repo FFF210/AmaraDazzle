@@ -80,10 +80,9 @@
 			<canvas id="salesLineChart"></canvas>
 		</div>
 
-		<!-- ============= tableFilter start ============= -->
+		<%-- ============= tableFilter start ============= -->
 		<div class="table-filter">
 			<form method="get" action="/brand2/salesStatus">
-
 				<!-- 날짜 필터 -->
 				<div class="filter-row date-row">
 					<label>기간:</label>
@@ -158,7 +157,7 @@
 
 			</form>
 		</div>
-		<!-- ============= tableFilter end ============= -->
+		<!-- ============= tableFilter end ============= --%>
 
 		<!-- 테이블 -->
 		<div class="tcontainer">
@@ -176,6 +175,7 @@
 							<th>헤어케어</th>
 							<th>바디케어</th>
 							<th>향수</th>
+							<th>맨즈케어</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -193,6 +193,7 @@
 								<td><fmt:formatNumber value="${row.haircare}" type="number" /></td>
 								<td><fmt:formatNumber value="${row.bodycare}" type="number" /></td>
 								<td><fmt:formatNumber value="${row.perfume}" type="number" /></td>
+								<td><fmt:formatNumber value="${row.menCare}" type="number"/></td>
 							</tr>
 						</c:forEach>
 					</tbody>

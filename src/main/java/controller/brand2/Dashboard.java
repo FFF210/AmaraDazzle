@@ -8,9 +8,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
+import dto.Brand;
 import dto.brand2.OrdersDashboard;
 import service.brand2.OrderDashboardService;
 import service.brand2.OrderDashboardServiceImpl;
@@ -25,12 +27,10 @@ public class Dashboard extends HttpServlet {
 
 	public Dashboard() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-/*
 		HttpSession session = request.getSession(false);
 		
 		// 세션 없거나 브랜드 정보 없음 → 로그인 페이지로 리다이렉트
@@ -41,8 +41,6 @@ public class Dashboard extends HttpServlet {
 
 		Brand brand = (Brand) session.getAttribute("brand");
 		Long brandId = brand.getBrandId();
-*/
-		Long brandId = 1L;
 
 		try {
 

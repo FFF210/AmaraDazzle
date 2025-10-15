@@ -33,7 +33,7 @@
 
 	<!-- 페이지 헤더 -->
 	<div class="page-header-wrapper">
-		<my:pageHeader title="쿠폰" description="쇼핑하는 재미! 올리브영만의 더 특별한 혜택" />
+		<my:pageHeader title="쿠폰" description="지금 다운로드하고 바로 혜택 받기" />
 	</div>
 
 	<div class="coupon-wrapper">

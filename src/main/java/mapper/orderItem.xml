@@ -102,13 +102,13 @@
 		</where>
 
 		GROUP BY oi.order_id, oi.status
-		
+
 		<if test="sortField != null and sortField != ''">
 			ORDER BY ${sortField}
 			<if test="sortOrder == 'desc'">DESC</if>
 			<if test="sortOrder == 'asc'">ASC</if>
 		</if>
-		
+
 		LIMIT #{limit}
 		OFFSET #{offset}
 	</select>
@@ -196,64 +196,104 @@
 		o.order_code AS orderCode,
 		o.ship_recipient AS shipRecipient,
 		o.ship_phone AS shipPhone,
-		CONCAT(o.ship_postcode, ' ', o.ship_line1, ' ', o.ship_line2) AS shipAddress,
+		CONCAT(o.ship_postcode, ' ', o.ship_line1, '
+		', o.ship_line2) AS shipAddress,
 		o.note AS note,
-		o.created_at AS orderDate,
+		o.created_at AS
+		orderDate,
 		oi.tracking_no AS trackingNo,
 		oi.carrier_name AS carrierName,
 		oi.status AS status,
 		(SELECT p2.name
 		FROM order_item oi2
-		JOIN product p2 ON oi2.product_id = p2.product_id
+		JOIN product p2
+		ON oi2.product_id = p2.product_id
 		WHERE oi2.order_id = oi.order_id
-		AND oi2.status = oi.status
+		AND
+		oi2.status = oi.status
 		LIMIT 1) AS representProductName,
-		(SELECT GROUP_CONCAT(p3.name SEPARATOR ', ')
+		(SELECT
+		GROUP_CONCAT(p3.name SEPARATOR ', ')
 		FROM order_item oi3
-		JOIN product p3 ON oi3.product_id = p3.product_id
+		JOIN product p3
+		ON oi3.product_id = p3.product_id
 		WHERE oi3.order_id = oi.order_id
-		AND oi3.status = oi.status) AS allProductNames,
+		AND
+		oi3.status = oi.status) AS allProductNames,
 		CASE
-		WHEN oi.status IN ('SHIPPING','DELIVERED','COLLECTING','EXCHANGE
-		SHIPPING') THEN oi.status
+		WHEN oi.status IN
+		('SHIPPING','DELIVERED','COLLECTING','EXCHANGE
+		SHIPPING') THEN
+		oi.status
 		ELSE 'DELIVERED'
 		END AS displayStatus
 		FROM order_item oi
-		INNER JOIN orders o ON oi.order_id = o.orders_id
+		INNER
+		JOIN orders o ON oi.order_id = o.orders_id
 		<where>
 			oi.order_id = #{orderId}
 			AND oi.status = #{status}
-			AND oi.brand_id = #{brandId}
+			AND
+			oi.brand_id = #{brandId}
 		</where>
 		LIMIT 1
 	</select>
 
 	<!-- ======================= [브랜드 어드민] 배송 상세 상품 목록 조회 ======================= -->
-<select id="selectShippingDetailItemsForBrand"
-        parameterType="map" resultType="shippingDetailItem">
-    SELECT
-        oi.order_item_id AS orderItemId,
-        oi.product_id AS productId,
-        oi.option_id AS optionId,
-        p.name AS productName,
-        po.option_value AS optionName,
-        oi.quantity AS quantity,
-        oi.status AS status,
-        CASE
-            WHEN oi.status IN ('SHIPPING','DELIVERED','COLLECTING','EXCHANGE SHIPPING') 
-            THEN oi.status
-            ELSE 'DELIVERED'
-        END AS displayStatus
-    FROM order_item oi
-    INNER JOIN product p ON oi.product_id = p.product_id
-    LEFT JOIN product_option po ON oi.option_id = po.product_option_id
-    <where>
-        oi.order_id = #{orderId}
-        AND oi.status = #{status}
-        AND oi.brand_id = #{brandId}
-    </where>
-    ORDER BY oi.order_item_id ASC
-</select>
+	<select id="selectShippingDetailItemsForBrand"
+		parameterType="map" resultType="shippingDetailItem">
+		SELECT
+		oi.order_item_id AS orderItemId,
+		oi.product_id AS productId,
+		oi.option_id AS optionId,
+		p.name AS productName,
+		po.option_value AS
+		optionName,
+		oi.quantity AS quantity,
+		oi.status AS status,
+		CASE
+		WHEN
+		oi.status IN ('SHIPPING','DELIVERED','COLLECTING','EXCHANGE
+		SHIPPING')
+		THEN oi.status
+		ELSE 'DELIVERED'
+		END AS displayStatus
+		FROM order_item oi
+		INNER JOIN product p ON oi.product_id = p.product_id
+		LEFT JOIN
+		product_option po ON oi.option_id = po.product_option_id
+		<where>
+			oi.order_id = #{orderId}
+			AND oi.status = #{status}
+			AND
+			oi.brand_id = #{brandId}
+		</where>
+		ORDER BY oi.order_item_id ASC
+	</select>
+
+	<!-- ======================= [브랜드 어드민] 상품 배송 ======================= -->
+	<update id="updateShippingInfo" parameterType="map">
+		UPDATE order_item
+		SET
+		tracking_no = #{trackingNo},
+		carrier_name = #{carrierName},
+		status =
+		'SHIPPING',
+		updated_at = NOW()
+		WHERE order_id = #{orderId}
+	</update>
+
+	<!-- ======================= [브랜드 어드민] 상품 배송 ======================= -->
+	<update id="updateStatusToDelivered" parameterType="long">
+		UPDATE
+		order_item
+		SET status = 'DELIVERED',
+		updated_at = NOW()
+		WHERE order_id =
+		#{orderId}
+	</update>
+
+
 
 	<!-- ======================= [brand2] dashboard 작업 ======================= -->
 
@@ -261,25 +301,32 @@
 	<select id="selectSalesToday"
 		resultType="dto.brand2.OrdersDashboard">
 		SELECT
-		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS salesToday,
+		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS
+		salesToday,
 		COALESCE(SUM(oi.quantity), 0) AS productCountToday
-		FROM order_item oi
+		FROM
+		order_item oi
 		JOIN orders o ON oi.order_id = o.orders_id
-		WHERE oi.brand_id = #{brandId}
+		WHERE
+		oi.brand_id = #{brandId}
 		AND DATE(o.created_at) = CURDATE()
-		AND oi.status = 'CONFIRMED'
+		AND
+		oi.status = 'CONFIRMED'
 	</select>
 
 	<!-- 어제 브랜드별 순수 매출 -->
 	<select id="selectSalesYesterday"
 		resultType="dto.brand2.OrdersDashboard">
 		SELECT
-		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS salesYesterday,
+		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS
+		salesYesterday,
 		COALESCE(SUM(oi.quantity), 0) AS productCountYesterday
 		FROM order_item oi
 		JOIN orders o ON oi.order_id = o.orders_id
-		WHERE oi.brand_id = #{brandId}
-		AND DATE(o.created_at) = CURDATE() - INTERVAL 1 DAY
+		WHERE
+		oi.brand_id = #{brandId}
+		AND DATE(o.created_at) = CURDATE() - INTERVAL
+		1 DAY
 		AND oi.status = 'CONFIRMED'
 	</select>
 
@@ -287,12 +334,16 @@
 	<select id="selectSalesWeek"
 		resultType="dto.brand2.OrdersDashboard">
 		SELECT
-		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS salesWeek,
+		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS
+		salesWeek,
 		COALESCE(SUM(oi.quantity), 0) AS productCountWeek
-		FROM order_item oi
+		FROM
+		order_item oi
 		JOIN orders o ON oi.order_id = o.orders_id
-		WHERE oi.brand_id = #{brandId}
-		AND YEARWEEK(o.created_at, 1) = YEARWEEK(CURDATE(), 1)
+		WHERE
+		oi.brand_id = #{brandId}
+		AND YEARWEEK(o.created_at, 1) =
+		YEARWEEK(CURDATE(), 1)
 		AND oi.status = 'CONFIRMED'
 	</select>
 
@@ -302,13 +353,17 @@
 		SELECT
 		DATE(o.created_at) AS orderDate,
 		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS dailySales
-		FROM order_item oi
+		FROM
+		order_item oi
 		JOIN orders o ON oi.order_id = o.orders_id
-		WHERE oi.brand_id = #{brandId}
-		AND o.created_at >= CURDATE() - INTERVAL 30 DAY
+		WHERE
+		oi.brand_id = #{brandId}
+		AND o.created_at >= CURDATE() - INTERVAL 30
+		DAY
 		AND oi.status = 'CONFIRMED'
 		GROUP BY DATE(o.created_at)
-		ORDER BY orderDate ASC
+		ORDER BY
+		orderDate ASC
 	</select>
 
 	<!-- 올해 vs 전년도 월별 매출 비교 -->
@@ -316,14 +371,20 @@
 		resultType="dto.brand2.OrdersDashboard">
 		SELECT
 		MONTH(o.created_at) AS month,
-		SUM(CASE WHEN YEAR(o.created_at) = YEAR(CURDATE())
-		THEN (oi.line_subtotal - oi.discount) ELSE 0 END) AS thisYear,
-		SUM(CASE WHEN YEAR(o.created_at) = YEAR(CURDATE()) - 1
-		THEN (oi.line_subtotal - oi.discount) ELSE 0 END) AS lastYear
+		SUM(CASE WHEN
+		YEAR(o.created_at) = YEAR(CURDATE())
+		THEN (oi.line_subtotal -
+		oi.discount) ELSE 0 END) AS thisYear,
+		SUM(CASE WHEN YEAR(o.created_at)
+		= YEAR(CURDATE()) - 1
+		THEN (oi.line_subtotal - oi.discount) ELSE 0 END)
+		AS lastYear
 		FROM order_item oi
-		JOIN orders o ON oi.order_id = o.orders_id
+		JOIN orders o ON oi.order_id =
+		o.orders_id
 		WHERE oi.brand_id = #{brandId}
-		AND YEAR(o.created_at) IN (YEAR(CURDATE()), YEAR(CURDATE()) - 1)
+		AND YEAR(o.created_at) IN
+		(YEAR(CURDATE()), YEAR(CURDATE()) - 1)
 		AND oi.status = 'CONFIRMED'
 		GROUP BY MONTH(o.created_at)
 		ORDER BY month
@@ -331,44 +392,65 @@
 
 	<!-- 이번 달 총 매출 -->
 	<select id="selectTotalSales" resultType="long">
-		SELECT COALESCE(SUM(oi.line_subtotal - oi.discount),0)
+		SELECT
+		COALESCE(SUM(oi.line_subtotal - oi.discount),0)
 		FROM order_item oi
-		JOIN orders o ON o.orders_id = oi.order_id
+		JOIN
+		orders o ON o.orders_id = oi.order_id
 		WHERE oi.brand_id = #{brandId}
 		AND YEAR(o.created_at) = YEAR(CURDATE())
-		AND MONTH(o.created_at) = MONTH(CURDATE())
+		AND MONTH(o.created_at) =
+		MONTH(CURDATE())
 		AND oi.status = 'CONFIRMED'
 	</select>
 
 	<!-- 지난 달 총 매출 -->
 	<select id="selectLastMonthSales" resultType="long">
-		SELECT COALESCE(SUM(oi.line_subtotal - oi.discount),0)
+		SELECT
+		COALESCE(SUM(oi.line_subtotal - oi.discount),0)
 		FROM order_item oi
-		JOIN orders o ON o.orders_id = oi.order_id
+		JOIN
+		orders o ON o.orders_id = oi.order_id
 		WHERE oi.brand_id = #{brandId}
 		AND YEAR(o.created_at) = YEAR(CURDATE() - INTERVAL 1 MONTH)
-		AND MONTH(o.created_at) = MONTH(CURDATE() - INTERVAL 1 MONTH)
-		AND oi.status = 'CONFIRMED'
+		AND
+		MONTH(o.created_at) = MONTH(CURDATE() - INTERVAL 1 MONTH)
+		AND oi.status
+		= 'CONFIRMED'
 	</select>
 
-	<!-- ======================= [brand2] salesOverview 작업 ======================= -->
+	<!-- ======================= [brand2] salesOverview 작업 (차트용) ======================= -->
 	<select id="selectCategorySalesTrend" parameterType="map"
 		resultType="dto.brand2.SalesOverview">
 		SELECT
 		DATE(o.created_at) AS date,
-		p.category1_id AS categoryId,
-		c.name
-		AS categoryName,
-		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS
-		amount
+
+		CASE
+		WHEN c.depth = 1 THEN c.category_id
+		WHEN c.depth = 2 THEN c.parent_id
+		WHEN c.depth = 3 THEN (SELECT parent_id FROM category pc WHERE
+		pc.category_id = c.parent_id)
+		END AS categoryId,
+
+		CASE
+		WHEN c.depth = 1 THEN c.name
+		WHEN c.depth = 2 THEN (SELECT name FROM category pc WHERE pc.category_id =
+		c.parent_id)
+		WHEN c.depth = 3 THEN (SELECT name FROM category gc
+		WHERE gc.category_id = (SELECT parent_id FROM category pc WHERE
+		pc.category_id = c.parent_id))
+		END AS categoryName,
+
+		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS amount
 		FROM order_item oi
-		JOIN orders o ON oi.order_id = o.orders_id
-		JOIN product p ON oi.product_id = p.product_id
-		JOIN category c ON
-		p.category1_id = c.category_id
-		WHERE oi.brand_id = #{brandId}
-		AND
-		oi.status = 'CONFIRMED'
+		JOIN orders o ON
+		oi.order_id = o.orders_id
+		JOIN product p ON oi.product_id =
+		p.product_id
+		JOIN category c ON p.category1_id = c.category_id
+		WHERE
+		oi.brand_id = #{brandId}
+		AND oi.status = 'CONFIRMED'
 		<if test="startDate != null and startDate != ''">
 			AND DATE(o.created_at) &gt;= #{startDate}
 		</if>
@@ -376,17 +458,76 @@
 			AND DATE(o.created_at) &lt;= #{endDate}
 		</if>
 		<if test="categories != null and categories.size > 0">
-			AND p.category1_id IN
+			AND (
+			CASE
+			WHEN c.depth = 1 THEN c.category_id
+			WHEN c.depth = 2 THEN c.parent_id
+			WHEN c.depth = 3 THEN (SELECT parent_id FROM category pc WHERE
+			pc.category_id = c.parent_id)
+			END
+			) IN
 			<foreach item="catId" collection="categories" open="("
 				separator="," close=")">
 				#{catId}
 			</foreach>
 		</if>
+		GROUP BY DATE(o.created_at),
+		CASE
+		WHEN c.depth = 1 THEN c.category_id
+		WHEN c.depth = 2 THEN c.parent_id
+		WHEN c.depth = 3 THEN (SELECT parent_id FROM category pc WHERE
+		pc.category_id = c.parent_id)
+		END,
+		CASE
+		WHEN c.depth = 1 THEN c.name
+		WHEN c.depth = 2 THEN (SELECT name FROM category pc WHERE pc.category_id =
+		c.parent_id)
+		WHEN c.depth = 3 THEN (SELECT name FROM category gc
+		WHERE gc.category_id = (SELECT parent_id FROM category pc WHERE
+		pc.category_id = c.parent_id))
+		END
+		ORDER BY DATE(o.created_at) ASC
+	</select>
 
-
-		GROUP BY DATE(o.created_at), p.category1_id, c.name
-		ORDER BY
-		DATE(o.created_at) ASC
+	<!-- ======================= [brand2] salesOverview (테이블용 pivot) ======================= -->
+	<select id="selectSalesStatusRows" parameterType="map"
+		resultType="dto.brand2.SalesStatusRow">
+		SELECT
+		DATE(o.created_at) AS date,
+		SUM(oi.line_subtotal - oi.discount) AS total,
+		SUM(CASE WHEN c.category_id = 1 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS skincare,
+		SUM(CASE WHEN c.category_id = 8 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS maskpack,
+		SUM(CASE WHEN c.category_id = 14 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS cleansing,
+		SUM(CASE WHEN c.category_id = 21 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS suncare,
+		SUM(CASE WHEN c.category_id = 26 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS makeup,
+		SUM(CASE WHEN c.category_id = 49 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS haircare,
+		SUM(CASE WHEN c.category_id = 54 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS bodycare,
+		SUM(CASE WHEN c.category_id = 66 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS perfume,
+		SUM(CASE WHEN c.category_id = 70 THEN (oi.line_subtotal - oi.discount) ELSE 0
+		END) AS menCare
+		FROM order_item oi
+		JOIN orders o ON oi.order_id = o.orders_id
+		JOIN product p ON oi.product_id = p.product_id
+		JOIN category c ON p.category1_id = c.category_id
+		WHERE oi.brand_id = #{brandId}
+		AND oi.status = 'CONFIRMED'
+		<if test="startDate != null and startDate != ''">
+			AND DATE(o.created_at) &gt;= #{startDate}
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND DATE(o.created_at) &lt;= #{endDate}
+		</if>
+		GROUP BY DATE(o.created_at)
+		ORDER BY DATE(o.created_at) DESC
+		LIMIT #{limit} OFFSET #{offset}
 	</select>
 
 </mapper>

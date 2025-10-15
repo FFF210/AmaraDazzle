@@ -25,6 +25,7 @@
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/cart.css'/>">
+<link rel="stylesheet" href="<c:url value='/consumer/css/toast.css'/>">
 </head>
 <body>
 	<!-- 상단 헤더 -->

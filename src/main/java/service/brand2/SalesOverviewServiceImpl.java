@@ -9,6 +9,7 @@ import dao.brand2.SalesOverviewDAO;
 import dao.brand2.SalesOverviewDAOImpl;
 import dto.Category;
 import dto.brand2.SalesOverview;
+import dto.brand2.SalesStatusRow;
 
 public class SalesOverviewServiceImpl implements SalesOverviewService {
 	
@@ -28,5 +29,10 @@ public class SalesOverviewServiceImpl implements SalesOverviewService {
 	@Override
     public List<Category> getLargeCategories() throws Exception {
         return categoryDAO.selectLargeCategories();
+    }
+	
+	@Override
+    public List<SalesStatusRow> getSalesStatusRows(Map<String, Object> params) {
+        return salesOverviewDAO.selectSalesStatusRows(params);
     }
 }

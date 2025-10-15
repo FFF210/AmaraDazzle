@@ -122,7 +122,7 @@
 												<my:tag color="yellow" size="sm" text="배송중" />
 											</c:when>
 											<c:when test="${order.orderStatus == 'DELIVERED'}">
-												<my:tag color="yellow" size="sm" text="배송완료" />
+												<my:tag color="green" size="sm" text="배송완료" />
 											</c:when>
 											<c:when test="${order.orderStatus == 'CONFIRMED'}">
 												<my:tag color="green" size="sm" text="구매확정" />

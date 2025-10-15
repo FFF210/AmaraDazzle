@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,10 +23,10 @@
 	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/custom-flatpickr.css">
-	
+
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-	
+
 <link rel="stylesheet" href="./css/formLayout.css" />
 
 <link rel="stylesheet" href="../tagcss/selectbox.css" />
@@ -67,7 +69,6 @@
 .product-row .field:nth-child(3) {
 	flex: 0 0 160px;
 } /* 할인유형 */
-}
 
 /* 삭제 버튼 (×) */
 .product-row .removeProduct {
@@ -122,7 +123,6 @@
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="../tagjs/selectbox.js"></script>
 
 </head>
 <body>
@@ -158,82 +158,52 @@
 						size="sm" state="default"
 						value="${event.startDate} ~ ${event.endDate}" />
 				</div>
+				<!-- ====== 상품 카테고리 (readonly input) ====== -->
+				<c:if
+					test="${not empty event.category1Id 
+          or not empty event.category2Id 
+          or not empty event.category3Id}">
+					<div class="label">상품 카테고리</div>
+					<div class="part_content select_cate">
 
-				<%-- 썸네일, 메인 이미지, 내용 
-promotion_event_write.jsp
-<div class="part_section">
-				<div class="part_title">썸네일</div>
-				<div class="part_content">
-					<my:imageBtn name="eventThumbImg" />
-				</div>
-			</div>
-			
-			<div class="part_section">
-				<div class="part_title">메인 이미지</div>
-				<div class="part_content">
-					<my:uploader size="sm" name="eventDetailImg"/>
-				</div>
-			</div>
+						<!-- 대분류 -->
+						<c:if test="${not empty event.category1Id}">
+							<my:textInput id="largeCategoryName" name="largeCategoryName"
+								type="readOnly" size="sm" state="default"
+								value="${event.largeCategoryName}" />
+							<input type="hidden" name="category1Id"
+								value="${event.category1Id}" />
+						</c:if>
 
-			<div class="part_section content_part">
-				<div class="part_title">내용 <span class="reqired_write">*</span></div>
-				<div class="part_content">
-					<!-- toast editor 삽입 -->
-					<div id="editContent"></div>
-				</div>
-			</div>
---%>
+						<!-- 중분류 -->
+						<c:if test="${not empty event.category2Id}">
+							<my:textInput id="middleCategoryName" name="middleCategoryName"
+								type="readOnly" size="sm" state="default"
+								value="${event.middleCategoryName}" />
+							<input type="hidden" name="category2Id"
+								value="${event.category2Id}" />
+						</c:if>
 
-				<!-- ====== 상품 카테고리 (readonly) ====== -->
-				<div class="label">상품 카테고리</div>
-				<div class="part_content select_cate">
-				
-				<input type="hidden" name="category1Id" value="${event.category1Id}" />
-				<input type="hidden" name="category2Id" value="${event.category2Id}" />
-				<input type="hidden" name="category3Id" value="${event.category3Id}" />
-				
-					<!-- 이미 event에 설정된 categoryId를 기반으로 채워지는 readonly -->
-					<div class="custom-select sm" id="largeSelect">
-						<div class="select-header">
-							<span>${largeCategoryName}</span> <i class="bi bi-chevron-down"></i>
-						</div>
-						<ul class="select-list">
-							<li class="select-item">${largeCategoryName}</li>
-						</ul>
-						<input type="hidden" name="category1Id"
-							value="${largeCategoryName}" />
+						<!-- 소분류 -->
+						<c:if test="${not empty event.category3Id}">
+							<my:textInput id="smallCategoryName" name="smallCategoryName"
+								type="readOnly" size="sm" state="default"
+								value="${event.smallCategoryName}" />
+							<input type="hidden" name="category3Id"
+								value="${event.category3Id}" />
+						</c:if>
+
 					</div>
-
-					<div class="custom-select sm" id="middleSelect">
-						<div class="select-header">
-							<span>${middleCategoryName}</span> <i class="bi bi-chevron-down"></i>
-						</div>
-						<ul class="select-list">
-							<li class="select-item">${middleCategoryName}</li>
-						</ul>
-						<input type="hidden" name="category2Id"
-							value="${middleCategoryName}" />
-					</div>
-
-					<div class="custom-select sm" id="smallSelect">
-						<div class="select-header">
-							<span>${smallCategoryName}</span> <i class="bi bi-chevron-down"></i>
-						</div>
-						<ul class="select-list">
-							<li class="select-item">${smallCategoryName}</li>
-						</ul>
-						<input type="hidden" name="category3Id"
-							value="${smallCategoryName}" />
-					</div>
-				</div>
+				</c:if>
 
 				<div class="label">썸네일</div>
 				<div class="upload">
 					<div id="imgPreviewWrapper" class="preview-wrapper">
 						<div id="imgPreviewArea" class="preview-area" aria-live="polite">
+							<%-- <img src="/upload/${event.detailFileId}" /> --%>
 							<img
-								src="${pageContext.request.contextPath}/brand2/image?uploadFileId=${event.thumbnailFileId}"
-								width="300px" />
+								src="${pageContext.request.contextPath}/image?fileId=${event.thumbnailFileId}"
+								alt="대표 이미지" />
 						</div>
 					</div>
 				</div>
@@ -242,9 +212,10 @@ promotion_event_write.jsp
 				<div class="upload">
 					<div id="imgPreviewWrapper" class="preview-wrapper">
 						<div id="imgPreviewArea" class="preview-area" aria-live="polite">
+							<%-- <img src="/upload/${event.detailFileId}" /> --%>
 							<img
-								src="${pageContext.request.contextPath}/brand2/image?uploadFileId=${event.detailFileId}"
-								width="300px" />
+								src="${pageContext.request.contextPath}/image?fileId=${event.detailFileId}"
+								alt="대표 이미지" width="588px" />
 						</div>
 					</div>
 				</div>
@@ -284,69 +255,81 @@ ETC(기타) : (?)
 				<c:choose>
 
 					<c:when test="${event.eventType eq 'COUPON'}">
-						<div class="label req">쿠폰 선택</div>
+						<div class="label">쿠폰 목록</div>
 						<div class="part_content">
-							<div class="custom-select sm" id="couponSelect">
-								<div class="select-header">
-									<span>쿠폰 선택</span> <i class="bi bi-chevron-down"></i>
+							<c:forEach var="c" items="${eventCoupons}">
+								<div class="field">
+									<div class="text-input-wrapper size--sm state--default">
+										<div class="text-input-inner default">
+											<input type="text" class="text-input default"
+												value="${c.cname}" readonly />
+										</div>
+									</div>
 								</div>
-								<ul class="select-list">
-									<li class="select-item">쿠폰 선택</li>
-									<c:forEach var="c" items="${coupons}">
-										<li class="select-item" data-value="${c.couponId}">
-											${c.cname}</li>
-									</c:forEach>
-								</ul>
-								<input type="hidden" name="couponId" value="" />
-							</div>
+							</c:forEach>
 						</div>
 					</c:when>
 
-
 					<c:when test="${event.eventType eq 'DISCOUNT'}">
 						<div class="label req">상품별 할인 등록</div>
-						<div class="part_content" id="productList">
-							<div class="product-row discount-row">
+						<div class="part_content" id="productList"
+							style="display: flex; flex-direction: column; gap: 10px;">
+							<div class="product-row discount-row"
+								style="gap: 4px; flex-direction: column;">
 
+								<!-- 상품 선택 -->
 								<div class="field">
-									<div class="custom-select sm" id="productSelect">
+									<div class="custom-select md" style="width: 100%;">
 										<div class="select-header">
 											<span>상품 선택</span> <i class="bi bi-chevron-down"></i>
 										</div>
 										<ul class="select-list">
-											<li class="select-item">상품 선택</li>
+											<li class="select-item" data-value="">상품 선택</li>
 											<c:forEach var="p" items="${products}">
-												<li class="select-item" data-value="${p.productId}">
-													${p.productName}</li>
+												<li class="select-item" data-value="${p.productId}"
+													style="display: flex; gap: 10px; padding: 5px 20px;"
+													<c:if test="${not empty p.eventId and p.eventId eq event.eventId}">
+													class="selected"
+														</c:if>>
+													<img
+													src="${pageContext.request.contextPath}/image?fileId=${p.thumbnailFileId}"
+													alt="대표 이미지" width="60px" /> ${p.name}
+												</li>
 											</c:forEach>
 										</ul>
+										<!-- 선택된 상품 ID 저장 -->
 										<input type="hidden" name="productId[]" value="" />
 									</div>
 								</div>
 
 
-								<div class="field">
-									<div class="text-input-wrapper size--sm state--default">
-										<div class="text-input-inner default">
-											<input type="number" name="discountValue[]"
-												class="text-input default" min="0" placeholder="할인율/금액 입력" />
+								<div style="display: flex; gap: 4px;">
+									<!-- 할인 값 -->
+									<div class="field">
+										<div class="text-input-wrapper size--sm state--default">
+											<div class="text-input-inner default">
+												<input type="number" name="discountValue[]"
+													class="text-input default" min="0" placeholder="할인율/금액 입력"
+													value="" />
+											</div>
 										</div>
 									</div>
-								</div>
 
-								<div class="field">
-									<div class="text-input-wrapper size--sm state--default">
-										<div class="text-input-inner default">
-											<select name="discountType[]" class="text-input default">
-												<option value="RATE">율 (%)</option>
-												<option value="AMOUNT">금액 (원)</option>
-											</select>
+									<!-- 할인 타입 -->
+									<div class="field">
+										<div class="text-input-wrapper size--sm state--default">
+											<div class="text-input-inner default">
+												<select name="discountType[]" class="text-input default">
+													<option value="RATE">율 (%)</option>
+													<option value="AMOUNT">금액 (원)</option>
+												</select>
+											</div>
 										</div>
 									</div>
-								</div>
 
-								<button type="button" class="btn icon removeProduct"
-									aria-label="상품 삭제">×</button>
+									<button type="button" class="btn icon removeProduct"
+										aria-label="상품 삭제" style="height: 40px; width: 40px;">×</button>
+								</div>
 							</div>
 						</div>
 						<div></div>
@@ -356,6 +339,9 @@ ETC(기타) : (?)
 							<p class="help">여러 개 상품을 추가하고 각각 할인유형/값을 설정하세요.</p>
 						</div>
 					</c:when>
+
+
+
 
 					<c:when test="${event.eventType eq 'EXPERIENCE'}">
 						<div class="label req">체험 상품 선택</div>
@@ -371,7 +357,7 @@ ETC(기타) : (?)
 											${p.productName}</li>
 									</c:forEach>
 								</ul>
-								<input type="hidden" name="productIds[]" value="" />
+								<input type="hidden" name="productId[]" value="" />
 							</div>
 						</div>
 					</c:when>
@@ -390,7 +376,7 @@ ETC(기타) : (?)
 											${p.productName}</li>
 									</c:forEach>
 								</ul>
-								<input type="hidden" name="productIds[]" value="" />
+								<input type="hidden" name="productId[]" value="" />
 							</div>
 						</div>
 					</c:when>
@@ -398,60 +384,7 @@ ETC(기타) : (?)
 					</c:otherwise>
 				</c:choose>
 
-
-
-				<!-- ================================(구) 쿠폰 설정 쿠폰 발급 jsp 구현 ================================  -->
-				<%--
-
-				<div class="label">쿠폰 설정</div>
-				<div>
-					<div class="coupon-box" id="couponBox">
-
-						<!-- grid -->
-						<div class="grid"
-							style="grid-template-columns: 140px 1fr; gap: 10px 12px">
-							<div class="label req">쿠폰명</div>
-							<div>
-								<my:textInput id="couponName" name="cname"
-									placeholder="쿠폰명을 입력하세요." type="default" size="sm"
-									state="default" />
-							</div>
-
-							<div class="label req">기간</div>
-							<div class="inline date-row">
-								<input id="couponFrom" name="startDate" type="date"> <span>~</span>
-								<input id="couponTo" name="endDate" type="date">
-							</div>
-
-
-							<div class="label req">최소주문</div>
-							<div class="inline">
-								<div class="text-input-wrapper size--sm state--default">
-									<div class="text-input-inner default">
-										<input id="couponMin" name="amountCondition" type="number"
-											min="0" step="100" placeholder="0" class="text-input">
-										<span class="muted">원 이상 구매 시</span>
-									</div>
-								</div>
-							</div>
-
-
-							<div class="label req">할인</div>
-							<div class="inline">
-								<div class="text-input-wrapper size--sm state--default">
-									<div class="text-input-inner default">
-										<input id="couponAmount" name="amount" type="number" min="0"
-											step="100" placeholder="0" class="text-input"> <span
-											class="muted">원 할인</span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
---%>
 				<!-- ==================================================================================  -->
-
 
 				<div class="label">관리자 전달사항</div>
 				<div>
@@ -464,35 +397,99 @@ ETC(기타) : (?)
 					onclick="location.href='/brand2/eventList'">닫기</button>
 				<button type="submit" class="btn btn-outline btn-sm" id="btnSubmit">신청하기</button>
 			</div>
-
-
 		</my:brand2formLayout>
 	</my:layout>
 
 	<script>
-		document
-				.getElementById("addProductRow")
-				.addEventListener(
-						"click",
-						function() {
-							const productList = document
-									.getElementById("productList");
-							const newRow = productList.querySelector(
-									".product-row").cloneNode(true);
-							// 입력값 초기화
-							newRow.querySelector("select[name='productIds[]']").value = "";
-							newRow
-									.querySelector("input[name='discountValues[]']").value = "";
-							newRow
-									.querySelector("select[name='discountTypes[]']").value = "RATE";
-							productList.appendChild(newRow);
-						});
+document.addEventListener("DOMContentLoaded", function () {
 
-		document.addEventListener("click", function(e) {
-			if (e.target.classList.contains("removeProduct")) {
-				e.target.closest(".product-row").remove();
-			}
-		});
-	</script>
+	// ===== 커스텀 셀렉트 (이벤트 위임 기반) =====
+    document.addEventListener("click", function (e) {
+        const header = e.target.closest(".select-header");
+        const selectBox = e.target.closest(".custom-select");
+
+        // 1️⃣ 헤더 클릭 → 열기/닫기
+        if (header && selectBox) {
+            e.stopPropagation();
+
+            // 다른 셀렉트 닫기
+            document.querySelectorAll(".custom-select.open").forEach(s => {
+                if (s !== selectBox) s.classList.remove("open");
+            });
+
+            selectBox.classList.toggle("open");
+            return;
+        }
+
+        // 2️⃣ 옵션 클릭 → 선택 처리
+        const item = e.target.closest(".select-item");
+        if (item && selectBox) {
+            const headerText = selectBox.querySelector(".select-header span");
+            const hiddenInput = selectBox.querySelector("input[type=hidden]");
+            const items = selectBox.querySelectorAll(".select-item");
+
+            const value = item.dataset.value;
+            const text = item.textContent.trim();
+
+            if (hiddenInput) hiddenInput.value = value;
+            if (headerText) headerText.textContent = text;
+
+            items.forEach(li => li.classList.remove("active", "selected"));
+            item.classList.add("active");
+
+            selectBox.classList.remove("open");
+            return;
+        }
+
+        // 3️⃣ 외부 클릭 시 모든 드롭다운 닫기
+        document.querySelectorAll(".custom-select.open").forEach(s => s.classList.remove("open"));
+    });
+
+    // ===== 상품 행 추가 =====
+    const addBtn = document.getElementById("addProductRow");
+    const productList = document.getElementById("productList");
+
+    if (addBtn && productList) {
+        addBtn.addEventListener("click", function () {
+            const firstRow = productList.querySelector(".product-row");
+            if (!firstRow) return;
+
+            const newRow = firstRow.cloneNode(true);
+
+            // 초기화
+            newRow.querySelectorAll("input, select").forEach(el => {
+                if (el.type === "hidden" || el.type === "number") el.value = "";
+                if (el.tagName === "SELECT") el.value = "RATE";
+            });
+
+            const headerText = newRow.querySelector(".select-header span");
+            if (headerText) headerText.textContent = "상품 선택";
+
+            newRow.querySelectorAll(".select-item").forEach(li => li.classList.remove("active", "selected"));
+
+            productList.appendChild(newRow);
+        });
+    }
+
+    // ===== 상품 행 삭제 =====
+    if (productList) {
+        productList.addEventListener("click", function (e) {
+            if (e.target.classList.contains("removeProduct")) {
+                const rows = productList.querySelectorAll(".product-row");
+                if (rows.length > 1) {
+                    e.target.closest(".product-row").remove();
+                } else {
+                    alert("최소 1개의 상품은 유지해야 합니다.");
+                }
+            }
+        });
+    }
+});
+</script>
+
+
+
+
+
 </body>
 </html>

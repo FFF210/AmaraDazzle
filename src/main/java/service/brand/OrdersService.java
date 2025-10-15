@@ -13,6 +13,13 @@ import dto.brand.ReturnItemDetail;
 import dto.brand.ReturnSummary;
 
 public interface OrdersService {
+
+	// 상품 배송
+	void updateShipping(Map<String, Object> params) throws Exception;
+
+	// 배송 완료
+	void updateDelivered(long orderId) throws Exception;
+
 	// 주문 목록 조회
 	Map<String, Object> ordersListByPage(Map<String, Object> params) throws Exception;
 

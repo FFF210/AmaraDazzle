@@ -5,6 +5,7 @@ import java.util.Map;
 
 import dto.Category;
 import dto.brand2.SalesOverview;
+import dto.brand2.SalesStatusRow;
 
 public interface SalesOverviewService {
 	/**
@@ -15,5 +16,14 @@ public interface SalesOverviewService {
 	 */
 	List<SalesOverview> getCategorySalesTrend(Map<String, Object> params);
 	
+	// 대분류 카테고리 조회 (depth=1)
 	List<Category> getLargeCategories() throws Exception;
+	
+	/**
+     * 카테고리별 매출 현황 (테이블 pivot용)
+     * @param params (brandId, startDate, endDate)
+     * @return List<SalesStatusRow>
+     */
+    List<SalesStatusRow> getSalesStatusRows(Map<String, Object> params);
+	
 }

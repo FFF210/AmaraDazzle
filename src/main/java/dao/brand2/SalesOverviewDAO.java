@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import dto.brand2.SalesOverview;
+import dto.brand2.SalesStatusRow;
 
 public interface SalesOverviewDAO {
 	 /**
@@ -17,5 +18,9 @@ public interface SalesOverviewDAO {
      * @return 카테고리별 매출 리스트
      */
 	
+	// 차트용
 	List<SalesOverview> selectCategorySalesTrend(Map<String, Object> params);
+	
+	// 테이블용
+	List<SalesStatusRow> selectSalesStatusRows(Map<String, Object> params);
 }

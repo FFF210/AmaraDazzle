@@ -83,8 +83,7 @@
 .product-card {
 	display: flex;
 	padding: 16px 20px;
-	flex-direction: column;
-	align-items: flex-start;
+	align-items: center;
 	gap: 12px;
 	align-self: stretch;
 	box-sizing: border-box;

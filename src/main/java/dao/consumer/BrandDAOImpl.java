@@ -19,6 +19,14 @@ public class BrandDAOImpl implements BrandDAO {
 			return sqlSession.selectOne("mapper.brand.selectBrandByBrandId", brandId);
 		}
 	}
+	
+	// 브랜드의 진행 중인 이벤트 조회
+	@Override
+	public List<Map<String, Object>> selectEventsByBrandId(Long brandId) throws Exception {
+	    try (SqlSession session = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+	        return session.selectList("mapper.event.selectEventsByBrandId", brandId);
+	    }
+	}
 
 	// 브랜드 팔로워수 세기
 	@Override
