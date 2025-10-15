@@ -6,37 +6,30 @@
 
 	<!-- 파일 저장 -->
 	<insert id="insertUploadFile" parameterType="uploadFile">
-		insert
-		into
-		upload_file
-		(file_name, file_rename, storage_path)
+		insert into upload_file (file_name, file_rename, storage_path)
 		values(#{fileName},#{fileRename}, #{storagePath})
 	</insert>
 
 	<!-- 저장된 파일의 id값 가져오기 -->
-	<select id="selectFileId" parameterType="String"
-		resultType="long">
-		select upload_file_id from upload_file where file_rename =
-		#{fileRename}
+	<select id="selectFileId" parameterType="String" resultType="long">
+		select upload_file_id from upload_file where file_rename = #{fileRename}
 	</select>
-	
 	
 	<!-- DB 파일 삭제 -->
 	<delete id="deleteUploadFile" parameterType="String">
 		delete from upload_file where file_rename = #{fileRename}
 	</delete>
+	
+	
 
 	<update id="updateUploadFile" parameterType="uploadFile">
 		update upload_file
-		set file_name = #{fileName}, file_rename = #{fileRename}, storage_path
-		= #{storagePath}, created_at = #{createdAt}
-		WHERE upload_file_id =
-		#{uploadFileId}
+		set file_name = #{fileName}, file_rename = #{fileRename}, storage_path = #{storagePath}, created_at = #{createdAt}
+		WHERE upload_file_id = #{uploadFileId}
 	</update>
 
 	<!-- 저장된 파일 id값으로 정보 가져오기 -->
-	<select id="selectFileById" parameterType="long"
-		resultType="uploadFile">
+	<select id="selectFileById" parameterType="long" resultType="uploadFile">
 		SELECT upload_file_id, file_name, file_rename, storage_path
 		FROM upload_file
 		WHERE upload_file_id = #{uploadFileId}

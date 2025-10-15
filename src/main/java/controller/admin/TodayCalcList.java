@@ -1,6 +1,7 @@
 package controller.admin;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -75,11 +76,18 @@ public class TodayCalcList extends HttpServlet {
 		        request.setAttribute("searchContent", searchContent); // 검색어 map
 		    }
 			
+			LocalDate today = LocalDate.now();
+			LocalDate firstDayPrevMonth = today.minusMonths(1).withDayOfMonth(1);
+			LocalDate lastDayPrevMonth = today.minusMonths(1).withDayOfMonth(today.minusMonths(1).lengthOfMonth());
+			
+			request.setAttribute("settleStartDate", firstDayPrevMonth); //  정산월 시작일
+			request.setAttribute("settleEndDate", lastDayPrevMonth); // 정산월 마지막일 
+			
 			request.setAttribute("postNo", postNo); // 페이지번호 클릭시 나오는 게시글 일련번호
 			request.setAttribute("paging", paging); // 페이징Map
 			request.setAttribute("settlementCnt", settlementCnt); // 총 게시글 수
 			request.setAttribute("settlementList", settlementList); // 총 게시물 리스트
-
+			System.out.println("settlementList : " + settlementList);
 			request.getRequestDispatcher("/admin/accounts_todayCalc.jsp").forward(request, response);
 
 		} catch (Exception e) {

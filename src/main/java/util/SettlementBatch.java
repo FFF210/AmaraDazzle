@@ -14,7 +14,7 @@ public class SettlementBatch {
 	 
 	public static void start() {
 		Runnable task = () -> {
-		    System.out.println("[정산 배치] 매시간별 자동 실행 시작");
+		    System.out.println("[🔥정산 배치🔥] 매시간별 자동 실행 시작");
 		    LocalDate today = LocalDate.now();
 		    LocalDate firstDayPrevMonth = today.minusMonths(1).withDayOfMonth(1);
 			LocalDate lastDayPrevMonth = today.minusMonths(1).withDayOfMonth(today.minusMonths(1).lengthOfMonth());

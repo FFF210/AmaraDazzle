@@ -146,82 +146,126 @@
 	<!-- 전월 정산자료 settlement테이블에 저장 -->
 	<insert id="monthlyInsertSettle" parameterType="Map">
 		INSERT INTO settlement (
-			brand_id, start_date, end_date,
-			total_sales, shipping_charge, p_coupon, b_coupon, point,
-			pure_profit, fee, final_amount, calced_YN, writer
-			)
-			SELECT
-				t.brand_id,
-				t.start_date,
-				t.end_date,
-				t.total_sales,
-				t.shipping_charge,
-				t.p_coupon,
-				t.b_coupon,
-				t.point,
-				t.pure_profit,
-				FLOOR(t.pure_profit * 0.07) AS fee,
-				FLOOR(t.pure_profit - (t.pure_profit * 0.07)) AS final_amount,
-				'Waiting' AS calced_YN,
-				'-' AS writer
-			FROM (
-				SELECT
-					b.brand_id,
-					#{startDate} AS start_date,
-					#{endDate} AS end_date,
-					COALESCE(SUM(pay.amount), 0) AS total_sales,
-					COALESCE(SUM(o.shipping_amount), 0) AS shipping_charge,
-					COALESCE(SUM(CASE WHEN c.writer_type = 'ADMIN' THEN o.discount_amount ELSE 0 END), 0) AS p_coupon,
-					COALESCE(SUM(CASE WHEN c.writer_type = 'BRAND_ADMIN' THEN o.discount_amount ELSE 0 END), 0) AS b_coupon,
-					COALESCE(SUM(o.using_point), 0) AS point,
-					FLOOR((SUM(pay.amount)
-							+ SUM(CASE WHEN c.writer_type = 'ADMIN' THEN o.discount_amount ELSE 0 END)
-							+ SUM(o.using_point)
-							+ SUM(o.shipping_amount))
-							- SUM(CASE WHEN c.writer_type = 'BRAND_ADMIN' THEN o.discount_amount ELSE 0 END)) AS pure_profit
-				FROM payment pay
-				JOIN orders o ON pay.order_id = o.orders_id
-				JOIN order_item oi ON o.orders_id = oi.order_id
-				JOIN brand b ON oi.brand_id = b.brand_id
-				LEFT JOIN coupon c ON o.using_coupon = c.coupon_id
-				WHERE oi.status = 'CONFIRMED'
-				AND o.created_at BETWEEN #{startDate} AND #{endDate}
-				GROUP BY b.brand_id) t;
+		    brand_id, start_date, end_date,
+		    total_sales, shipping_charge, p_coupon, b_coupon, point,
+		    pure_profit, fee, final_amount, calced_YN, writer
+		)
+		SELECT
+		    t.brand_id,
+		    t.start_date,
+		    t.end_date,
+		    t.total_sales,
+		    t.shipping_charge,
+		    t.p_coupon,
+		    t.b_coupon,
+		    t.point,
+		    t.pure_profit,
+		    FLOOR(t.pure_profit * 0.07) AS fee,  
+		    FLOOR(t.pure_profit - (t.pure_profit * 0.07)) AS final_amount,	 
+		    'Waiting' AS calced_YN,
+		    '-' AS writer
+		FROM (
+		    SELECT
+		        b.brand_id,
+		        #{startDate} AS start_date,
+		        #{endDate} AS end_date,
+		        COALESCE(SUM(oi.line_subtotal), 0) AS total_sales,
+		        COALESCE(SUM(o.shipping_amount), 0) AS shipping_charge,
+		        COALESCE(SUM(CASE WHEN c.writer_type = 'ADMIN' THEN o.discount_amount ELSE 0 END), 0) AS p_coupon,
+		        COALESCE(SUM(CASE WHEN c.writer_type = 'BRAND_ADMIN' THEN o.discount_amount ELSE 0 END), 0) AS b_coupon,
+		        COALESCE(SUM(o.using_point), 0) AS point,
+		        FLOOR((SUM(oi.line_subtotal)
+       					+ SUM(CASE WHEN c.writer_type = 'ADMIN' THEN o.discount_amount ELSE 0 END)
+       					+ SUM(o.using_point)
+        				+ SUM(o.shipping_amount))
+   						- SUM(CASE WHEN c.writer_type = 'BRAND_ADMIN' THEN o.discount_amount ELSE 0 END)) AS pure_profit
+		    FROM order_item oi 
+		    JOIN orders o ON o.orders_id = oi.order_id
+		    JOIN brand b ON oi.brand_id = b.brand_id
+		    LEFT JOIN coupon c ON o.using_coupon = c.coupon_id
+		    WHERE oi.status = 'CONFIRMED'
+		      AND o.created_at BETWEEN #{startDate} AND #{endDate}
+		    GROUP BY b.brand_id
+		) t
+		WHERE NOT EXISTS (
+		    SELECT 1 FROM settlement s
+		    WHERE s.brand_id = t.brand_id
+		      AND s.start_date = t.start_date
+		      AND s.end_date = t.end_date
+		)
 	</insert>
 
 	<!-- 미정산 리스트 조회 -->
 	<select id="selectWaitingSettle" resultType="settlement">
-		SELECT * FROM
-		settlement
+		SELECT * FROM settlement
 		WHERE calced_YN = 'Waiting'
 	</select>
 
 	<!-- 일괄 정산 처리 -->
-	<update id="settleAllCompleted">
-		<!-- 환불 반영 -->
-	    UPDATE settlement s
-	    JOIN (
-	        SELECT
-	            oi.brand_id,
-	            COALESCE(SUM(pay.amount), 0) AS refund_amount
-	        FROM returns r
-	        JOIN orders o ON r.order_id = o.orders_id
-	        JOIN order_item oi ON r.order_item_id = oi.order_item_id
-	        JOIN payment pay ON pay.order_id = o.orders_id
-	        WHERE r.updated_at BETWEEN #{startDate} AND #{endDate}
-	        GROUP BY oi.brand_id ) refund ON s.brand_id = refund.brand_id
-	    SET
-	        s.total_sales = s.total_sales - refund.refund_amount,
-	        s.pure_profit = s.pure_profit - refund.refund_amount,
-	        s.final_amount = s.final_amount - refund.refund_amount
-	    WHERE s.start_date = #{startDate} AND s.end_date = #{endDate} AND calced_YN = 'Waiting';
+	<update id="updateRefundAdjustment" parameterType="Map">
+		<!-- 환불/교환 반영 : 1.총매출 갱신 -->
+		UPDATE settlement s 
+		LEFT JOIN ( SELECT 
+						oi.brand_id, 
+						COALESCE(SUM(CASE WHEN oi.status = 'RETURN_COMPLETED' THEN (oi.unit_price * oi.quantity) - oi.discount ELSE 0 END), 0) AS refund_amount, 
+						COALESCE(SUM(CASE WHEN oi.status = 'RETURN_COMPLETED' AND r.shipping_cost_payer = 'brand' THEN r.shipping_cost ELSE 0 END), 0) AS r_brand_shipping_cost, 
+						COALESCE(SUM(CASE WHEN oi.status = 'RETURN_COMPLETED' AND r.shipping_cost_payer = 'member' THEN r.shipping_cost ELSE 0 END ), 0) AS r_member_shipping_cost 
+					FROM returns r 
+					JOIN order_item oi ON r.order_item_id = oi.order_item_id 
+					WHERE r.updated_at BETWEEN #{startDate} AND #{endDate} 
+					GROUP BY oi.brand_id) refund ON s.brand_id = refund.brand_id 
+		LEFT JOIN ( SELECT 
+						oi.brand_id, 
+						COALESCE(SUM(CASE WHEN oi.status = 'EXCHANGE_COMPLETED' AND e.shipping_cost_payer = 'brand' THEN e.shipping_cost ELSE 0 END), 0) AS e_brand_shipping_cost, 
+						COALESCE(SUM(CASE WHEN oi.status = 'EXCHANGE_COMPLETED' AND e.shipping_cost_payer = 'member' THEN e.shipping_cost ELSE 0 END), 0) AS e_member_shipping_cost 
+					FROM exchange e 
+					JOIN order_item oi ON e.order_item_id = oi.order_item_id 
+					WHERE e.updated_at BETWEEN #{startDate} AND #{endDate} 
+					GROUP BY oi.brand_id) ex ON s.brand_id = ex.brand_id 
+		SET 
+		s.total_sales = s.total_sales - COALESCE(refund.refund_amount, 0) - COALESCE(refund.r_member_shipping_cost, 0), 
+		s.shipping_charge = s.shipping_charge + COALESCE(ex.e_member_shipping_cost, 0), 
+		s.calced_YN = 'InProgress' 
+		WHERE s.start_date = #{startDate} AND s.end_date = #{endDate} AND s.calced_YN = 'Waiting'; 
+	</update>
+	<update id="updatePureAdjustment" parameterType="Map">
+		<!-- 환불/교환 반영 : 2.순수익 갱신 -->
+		UPDATE settlement s 
+		LEFT JOIN ( SELECT 
+						oi.brand_id, 
+						COALESCE(SUM(CASE WHEN oi.status = 'RETURN_COMPLETED' THEN (oi.unit_price * oi.quantity) - oi.discount ELSE 0 END), 0) AS refund_amount, 
+						COALESCE(SUM(CASE WHEN oi.status = 'RETURN_COMPLETED' AND r.shipping_cost_payer = 'brand' THEN r.shipping_cost ELSE 0 END), 0) AS r_brand_shipping_cost, 
+						COALESCE(SUM(CASE WHEN oi.status = 'RETURN_COMPLETED' AND r.shipping_cost_payer = 'member' THEN r.shipping_cost ELSE 0 END ), 0) AS r_member_shipping_cost 
+					FROM returns r 
+					JOIN order_item oi ON r.order_item_id = oi.order_item_id 
+					WHERE r.updated_at BETWEEN #{startDate} AND #{endDate} 
+					GROUP BY oi.brand_id) refund ON s.brand_id = refund.brand_id 
+		LEFT JOIN ( SELECT 
+						oi.brand_id, 
+						COALESCE(SUM(CASE WHEN oi.status = 'EXCHANGE_COMPLETED' AND e.shipping_cost_payer = 'brand' THEN e.shipping_cost ELSE 0 END), 0) AS e_brand_shipping_cost, 
+						COALESCE(SUM(CASE WHEN oi.status = 'EXCHANGE_COMPLETED' AND e.shipping_cost_payer = 'member' THEN e.shipping_cost ELSE 0 END), 0) AS e_member_shipping_cost 
+					FROM exchange e 
+					JOIN order_item oi ON e.order_item_id = oi.order_item_id 
+					WHERE e.updated_at BETWEEN #{startDate} AND #{endDate} 
+					GROUP BY oi.brand_id) ex ON s.brand_id = ex.brand_id 
+		SET 
+		s.pure_profit = (s.total_sales + s.shipping_charge) - COALESCE(refund.r_brand_shipping_cost, 0) - COALESCE(ex.e_brand_shipping_cost, 0)
+		WHERE s.start_date = #{startDate} AND s.end_date = #{endDate} AND s.calced_YN = 'InProgress';
+	</update>
+	<update id="updateFeeAdjustment" parameterType="Map">
+		<!-- 환불/교환 반영 : 3.수수료, 최종정산액 갱신 -->
+		UPDATE settlement s SET 
+		s.fee = FLOOR(s.pure_profit * 0.07), 
+		s.final_amount = FLOOR(s.pure_profit - s.fee)
+		WHERE s.start_date = #{startDate} AND s.end_date = #{endDate} AND s.calced_YN = 'InProgress';
+	</update>
 	
-	    <!-- 상태 갱신 -->
+	<update id="settleCompleted" parameterType="Map">
+	    <!-- 최종 상태 갱신 -->
 	    UPDATE settlement
 	    SET calced_YN = 'Completed',
 	        deposited_date = NOW()
-	    WHERE start_date = #{startDate} AND end_date = #{endDate}
-      		AND calced_YN = 'InProgress';
+	    WHERE start_date = #{startDate} AND end_date = #{endDate} AND calced_YN = 'InProgress';
 	</update>
 	
 	<!-- 정산할 건 수 -->
@@ -258,8 +302,8 @@
 	
 	<!-- 정산 리스트 -->
 	<select id="settlementAllList" resultType="settlement" parameterType="Map">
-		select *
-		from settlement s
+		select s.*, b.brand_name from settlement s
+		join brand b on s.brand_id = b.brand_id
 		order by settlement_id desc limit #{start_p},#{post_ea}
 	</select>
 
