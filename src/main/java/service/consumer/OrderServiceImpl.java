@@ -342,18 +342,18 @@ public class OrderServiceImpl implements OrderService {
 					itemTotal = BigDecimal.valueOf((Double) itemTotalObj);
 				} else {
 					throw new Exception("itemTotalObj 타입 오류");
-				}				
+				}
 				orderItem.setTotal(itemTotal);
 				orderItem.setLineSubtotal(itemTotal);
-				orderItem.setDiscount(unitPrice.multiply(new BigDecimal((Integer) item.get("quantity"))).subtract(itemTotal));
-				
+				orderItem.setDiscount(
+						unitPrice.multiply(new BigDecimal((Integer) item.get("quantity"))).subtract(itemTotal));
+
 				// memberCouponId 안전하게 처리
-				if(item.get("memberCouponId")!=null) {
+				if (item.get("memberCouponId") != null) {
 					System.out.println(item.get("memberCouponId"));
-					orderItem.setMemberCouponId((Long)item.get("memberCouponId"));
+					orderItem.setMemberCouponId((Long) item.get("memberCouponId"));
 				}
-			
-				
+
 				orderItem.setStatus("PAID");
 
 				orderDAO.createOrderItem(orderItem);
@@ -819,10 +819,12 @@ public class OrderServiceImpl implements OrderService {
 
 		// 4. 쿠폰 정보 조회 및 포맷팅
 		String couponDisplayText = "0원";
+		String couponName = "";
 		if (order.getUsingCoupon() != null) {
 			Map<String, Object> coupon = memberCouponDAO.getCouponInfoByMemberCouponId(order.getUsingCoupon());
 			if (coupon != null) {
 				Integer amount = (Integer) coupon.get("amount");
+				couponName = (String) coupon.get("cname");
 				if (amount != null) {
 					couponDisplayText = String.format("%,d원", amount);
 				}
@@ -835,8 +837,9 @@ public class OrderServiceImpl implements OrderService {
 		paymentInfo.put("discountAmountText", String.format("%,d원", order.getDiscountAmount().intValue()));
 		paymentInfo.put("shippingAmountText", String.format("%,d원", order.getShippingAmount().intValue()));
 		paymentInfo.put("totalAmountText", String.format("%,d원", order.getTotalAmount().intValue()));
-		paymentInfo.put("usingPointText", order.getUsingPoint() + " P");
+		paymentInfo.put("usingPointText", order.getUsingPoint() + "P");
 		paymentInfo.put("couponDisplayText", couponDisplayText); // 쿠폰 포맷팅 완료
+		paymentInfo.put("couponName", couponName);
 
 		result.put("paymentInfo", paymentInfo);
 

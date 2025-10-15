@@ -124,3 +124,7 @@ h1 {
 	display: flex;
 	justify-content: center;
 }
+
+.heart-btn {
+	padding: 0;
+}

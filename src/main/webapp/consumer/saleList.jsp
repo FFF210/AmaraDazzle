@@ -90,9 +90,9 @@
 			<div class="highlight-sale-container">
 
 				<!-- 왼쪽 버튼 -->
-				<button class="nav-btn prev">
+				<!-- <button class="nav-btn prev">
 					<i class="bi bi-chevron-left"></i>
-				</button>
+				</button> -->
 
 				<!-- 상품 아이템 리스트 -->
 				<div class="highlight-sale-list">
@@ -141,9 +141,9 @@
 
 				</div>
 				<!-- 오른쪽 버튼 -->
-				<button class="nav-btn next">
+			<!-- 	<button class="nav-btn next">
 					<i class="bi bi-chevron-right"></i>
-				</button>
+				</button> -->
 			</div>
 		</div>
 

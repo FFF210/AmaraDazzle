@@ -72,11 +72,10 @@
 			<!-- 이벤트 & 브랜드 쿠폰 -->
 			<div class="brand-promotion">
 				<%-- 이벤트 카드 --%>
-				<%-- 
+
     <my:eventCard thumbnailFileId="${e.thumbnailFileId}"
         title="${e.eventName}" startDate="${startFmt}" endDate="${endFmt}"
-        href="${detailUrl}" status="${e.status}" />
-    --%>
+        href="${detailUrl}" status="${e.status}" /> 
 
 
 				<%-- 쿠폰 목록이 존재할 때만 렌더링 --%>

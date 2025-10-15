@@ -75,7 +75,8 @@
 						<tbody>
 							<c:forEach var="item" items="${orderDetailInfo.orderItems}">
 								<tr>
-									<td style="padding: 0; cursor: pointer;" onclick="location.href='${pageContext.request.contextPath}/store/productDetail?productId=${item.productId}'">
+									<td style="padding: 0; cursor: pointer;"
+										onclick="location.href='${pageContext.request.contextPath}/store/productDetail?productId=${item.productId}'">
 										<div
 											style="display: flex; align-items: center; gap: 12px; padding: 20px 0;">
 											<img
@@ -97,14 +98,30 @@
 									<td style="padding: 0; color: #111; font-size: 13px;"><fmt:formatNumber
 											value="${item.unitPrice}" pattern="#,###" />원</td>
 									<td style="padding: 0; color: #111; font-size: 13px;">${item.quantity}</td>
-									<td class="price-highlight" style="padding: 0;"><fmt:formatNumber
-											value="${item.total}" pattern="#,###" />원</td>
+									<td class="price-highlight"><c:choose>
+											<c:when test="${item.total lt item.unitPrice}">
+												<div class="price-wrapper">
+													<span class="original-price"> <fmt:formatNumber
+															value="${item.unitPrice}" pattern="#,###" />원
+													</span> <span class="discounted-price"> <fmt:formatNumber
+															value="${item.total}" pattern="#,###" />원
+													</span>
+												</div>
+											</c:when>
+											<c:otherwise>
+												<span class="normal-price"> <fmt:formatNumber
+														value="${item.total}" pattern="#,###" />원
+												</span>
+											</c:otherwise>
+										</c:choose></td>
+
 									<td style="padding: 0; color: #111; font-size: 13px;">
 										<%-- 상태별 한글 표시 --%> <c:choose>
 											<c:when test="${item.status == 'PAID'}">결제완료</c:when>
 											<c:when test="${item.status == 'PREPARING'}">상품준비중</c:when>
 											<c:when test="${item.status == 'SHIPPING'}">배송중</c:when>
 											<c:when test="${item.status == 'DELIVERED'}">배송완료</c:when>
+											<c:when test="${item.status == 'CANCELLED'}">주문취소</c:when>
 											<c:when test="${item.status == 'CONFIRMED'}">구매확정</c:when>
 											<c:otherwise>${item.status}</c:otherwise>
 										</c:choose>
@@ -142,9 +159,10 @@
 			<section class="section od-ship">
 				<h2 class="section-title">배송지 정보</h2>
 
-				<div class="form-rows" style="margin-top: 20px;">
+				<div class="form-rows"
+					style="margin-top: 20px; border-top: 1.5px solid #f1f1f1; border-bottom: 1.5px solid #f1f1f1;">
 					<!-- 받는분 -->
-					<div class="row">
+					<div class="row" style="border-bottom: 1px solid #f1f1f1;">
 						<div class="label">받는분</div>
 						<div class="input-wrapper">
 							<my:textInput type="readOnly" name="name"
@@ -153,7 +171,8 @@
 					</div>
 
 					<!-- 주소 -->
-					<div class="row" style="height: 120px;">
+					<div class="row"
+						style="height: 80px; border-bottom: 1px solid #f1f1f1;">
 						<div class="label">주소</div>
 						<div class="addr">
 							<!-- 1) 우편번호: 단독 한 줄 -->
@@ -173,16 +192,8 @@
 									<div class="text-input-inner readOnly">
 										<input type="text" name="mainAddress"
 											class="text-input readOnly"
-											value="${orderDetailInfo.order.shipLine1}" readOnly
-											style="height: 30px;" />
-									</div>
-								</div>
-								<div class="text-input-wrapper size--lg state--default">
-									<div class="text-input-inner readOnly">
-										<input type="text" name="detailAddress"
-											class="text-input readOnly"
-											value="${orderDetailInfo.order.shipLine2}" readOnly
-											style="height: 30px;" />
+											value="도로명: ${orderDetailInfo.order.shipLine1} ${orderDetailInfo.order.shipLine2}"
+											readOnly style="height: 30px;" />
 									</div>
 								</div>
 							</div>
@@ -190,7 +201,7 @@
 					</div>
 
 					<!-- 연락처 -->
-					<div class="row">
+					<div class="row" style="border-bottom: 1px solid #f1f1f1;">
 						<div class="label">연락처</div>
 						<div class="input-wrapper">
 							<my:textInput id="연락처" name="phoneNumber" type="readOnly"
@@ -212,83 +223,58 @@
 			<%-- ===== 결제 정보 ===== --%>
 			<section class="section od-payment">
 				<h2 class="section-title">결제 정보</h2>
+				<div
+					style="display: flex; width: 100%; align-items: start; justify-content: space-between; border-top: 1.5px solid #f1f1f1; border-bottom: 1.5px solid #f1f1f1; margin-top: 20px;">
+					<div
+						style="padding: 30px 60px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+						<h4 style="font-size: 18px; color: #333;">주문금액</h4>
+						<p style="font-size: 20px; color: #ff4444; font-weight: 700;">${orderDetailInfo.paymentInfo.subtotalAmountText}</p>
+					</div>
 
-				<div class="form-rows" style="margin-top: 20px;">
-					<div class="row">
-						<div class="label">총 주문금액</div>
-						<div class="input-wrapper">
-							<div class="text-input-wrapper size--lg state--default">
-								<div class="text-input-inner readOnly">
-									<input type="text" class="text-input readOnly"
-										value="${orderDetailInfo.paymentInfo.subtotalAmountText}"
-										readOnly
-										style="font-size: 16px; font-weight: 600; color: #7421C4;" />
-								</div>
-							</div>
+					<div
+						style="padding: 30px 60px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+						<h4 style="font-size: 18px; color: #333;">쿠폰할인금액</h4>
+						<div
+							style="display: flex; flex-direction: column; align-items: center; gap: 4px;">
+
+							<c:choose>
+								<c:when
+									test="${orderDetailInfo.paymentInfo.couponDisplayText == '0원'}">
+									<p style="font-size: 20px; color: #ff4444; font-weight: 700;">
+										${orderDetailInfo.paymentInfo.couponDisplayText}</p>
+								</c:when>
+								<c:otherwise>
+									<p style="font-size: 20px; color: #ff4444; font-weight: 700;">-${orderDetailInfo.paymentInfo.couponDisplayText}</p>
+									<p
+										style="background: rgb(255, 68, 68, 0.1); padding: 4px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; color: #333;">${orderDetailInfo.paymentInfo.couponName}</p>
+								</c:otherwise>
+							</c:choose>
 						</div>
 					</div>
 
-					<div class="row">
-						<div class="label">총 할인금액</div>
-						<div class="input-wrapper od-payment">
-
-							<div class="text-input-wrapper size--lg state--default">
-								<div class="text-input-inner readOnly">
-									<input type="text" class="text-input readOnly"
-										value="${orderDetailInfo.paymentInfo.discountAmountText}"
-										readOnly
-										style="font-size: 16px; font-weight: 600; color: #7421C4;" />
-								</div>
-							</div>
-						</div>
+					<div
+						style="padding: 30px 60px; display: flex; flex-direction: column; gap: 10px; align-items: center;">
+						<h4 style="font-size: 18px; color: #333;">포인트 결제</h4>
+						<p style="font-size: 20px; color: #ff4444; font-weight: 700;">
+							<c:choose>
+								<c:when
+									test="${empty orderDetailInfo.paymentInfo.usingPointText}">
+									0
+      
+    </c:when>
+								<c:otherwise>${orderDetailInfo.paymentInfo.usingPointText}
+    </c:otherwise>
+							</c:choose>
+						</p>
 					</div>
+				</div>
 
-					<div class="row">
-						<div class="label">쿠폰 할인</div>
-						<div class="input-wrapper">
-							<div class="text-input-wrapper size--lg state--default">
-								<div class="text-input-inner readOnly">
-									<input type="text" class="text-input readOnly"
-										value="${orderDetailInfo.paymentInfo.couponDisplayText}"
-										readOnly />
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="label">포인트 사용</div>
-						<div class="input-wrapper">
-							<div class="text-input-wrapper size--lg state--default">
-								<div class="text-input-inner readOnly">
-									<input type="text" class="text-input readOnly"
-										value="${empty orderDetailInfo.paymentInfo.usingPointText ? '0 P' : orderDetailInfo.paymentInfo.usingPointText}"
-										readOnly />
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="label">총 결제금액</div>
-						<div class="input-wrapper od-payment">
-							<div class="text-input-wrapper size--lg state--default">
-								<div class="text-input-inner readOnly">
-									<input type="text" class="text-input readOnly"
-										value="${orderDetailInfo.paymentInfo.totalAmountText}"
-										readOnly
-										style="font-size: 16px; font-weight: 600; color: #7421C4;" />
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="label">결제수단</div>
-						<div class="input-wrapper">
-							<my:textInput type="readOnly" value="토스 페이먼츠" size="lg" />
-						</div>
-					</div>
+				<div
+					style="display: flex; flex-direction: column; align-items: end; padding: 20px 30px; background: #f9f9f9;">
+					<h3 style="font-size: 20px;">
+						총 결제금액   <span style="color: #7421C4">${orderDetailInfo.paymentInfo.totalAmountText}</span>
+					</h3>
+					<p style="font-size: 13px; color: #999;">토스페이</p>
 				</div>
 			</section>
 
