@@ -247,26 +247,21 @@
 	</insert>
 
 	<!-- 발행 쿠폰 내용 상세보기 -->
-	<select id="publCouponDetail" resultType="coupon"
-		parameterType="int">
+	<select id="publCouponDetail" resultType="coupon" parameterType="int">
 		select
-		cp.*,
-		cd.name as codeName,
-		cat.path as fullCategoryPath,
-		case
-		when cp.writer_type = 'BRAND_ADMIN' then b.brand_name
-		when cp.writer_type = 'ADMIN' then a.aname
-		end as writerName
+			cp.*,
+			cd.name as codeName,
+			cat.path as fullCategoryPath,
+			case
+				when cp.writer_type = 'BRAND_ADMIN' then b.brand_name
+				when cp.writer_type = 'ADMIN' then a.aname
+			end as writerName
 		from coupon cp
-		left join code_detail cd ON cp.p_code =
-		cd.code_detail_id
-		left join category_path_view cat ON cat.category_id =
-		cp.category_id
+		left join code_detail cd ON cp.p_code = cd.code_detail_id
+		left join category_path_view cat ON cat.category_id = cp.category_id
 		left join brand b ON cp.writer_id = b.brand_id
-		left join
-		admin_info a ON cp.writer_id = a.admin_info_id
-		where cp.coupon_id =
-		#{num}
+		left join admin_info a ON cp.writer_id = a.admin_info_id
+		where cp.coupon_id = #{num}
 	</select>
 
 

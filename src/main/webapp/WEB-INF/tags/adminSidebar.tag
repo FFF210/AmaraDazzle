@@ -108,11 +108,11 @@
 						class="bi bi-chevron-down submenu-icon"></i>
 				</button>
 				<div class="submenu">
-					<div data-submenu="menu8_sub1" onclick="setHeader('프로필 > 정보수정')">
-						<a href="/brand/todoDashboard">ㄴㄴㄴㄴ</a>
+					<div data-submenu="menu8_sub1" >
+						<a href="/brand/todoDashboard" target="_blank">AmaraDazzle</a>
 					</div>
-					<div data-submenu="menu8_sub2" onclick="setHeader('프로필 > 비밀번호 변경')">
-						<a href="#">ㄹㄹㄹㄹㄹ</a>
+					<div data-submenu="menu8_sub2" >
+						<a href="#">관리자 등록</a>
 					</div>
 				</div>
 			</div>
