@@ -98,12 +98,14 @@
 									<c:otherwise>일반</c:otherwise>
 								</c:choose></span></span>
 					</div>
-					<div class="stat">
+					<div class="stat" onclick="location.href='${pageContext.request.contextPath}/store/mypage/myCoupoint'"
+     style="cursor: pointer;">
 						<span class="label">포인트</span> <span class="value"><span
 							class="em"><fmt:formatNumber
 									value="${sessionScope.memberPoints}" pattern="#,###" /></span> p</span>
 					</div>
-					<div class="stat">
+					<div class="stat" onclick="location.href='${pageContext.request.contextPath}/store/mypage/myCoupoint'"
+     style="cursor: pointer;">
 						<span class="label">쿠폰</span> <span class="value"><span
 							class="em">${sessionScope.memberCoupons}</span> 개</span>
 					</div>
@@ -256,7 +258,7 @@
 											</c:if>
 
 											<!-- 상품 정보 -->
-											<td style="padding: 0;"
+											<td style="padding: 0; cursor: pointer;"
 												onclick="location.href='${pageContext.request.contextPath}/store/productDetail?productId=${item.productId}'">
 												<div
 													style="display: flex; align-items: center; gap: 12px; padding: 20px 0;">
@@ -372,6 +374,11 @@
 					</tbody>
 				</table>
 			</div>
+			
+			<c:set var="queryString">
+				page=
+			</c:set>
+			
 			<!-- 페이징 -->
 			<div class="page-pagination">
 				<my:pagination currentPage="${currentPage}"

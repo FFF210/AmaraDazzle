@@ -254,7 +254,7 @@
 	background-color: #f9fafb;
 	border-color: #e5e7eb;
 	color: #374151;
-	cursor: not-allowed;
+	cursor: default;
 }
 
 .text-input-wrapper .text-input[readonly]:focus {

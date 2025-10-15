@@ -63,8 +63,8 @@
 					<table class="table">
 						<thead>
 							<tr>
-								<th style="width: 500px;">쿠폰명</th>
-								<th style="width: 140px;">쿠폰사용조건</th>
+								<th style="width: 200px;">쿠폰명</th>
+								<th style="width: 70px;">쿠폰사용조건</th>
 								<th style="width: 140px;">사용가능기간</th>
 							</tr>
 						</thead>
@@ -80,7 +80,8 @@
 							<c:forEach var="coupon" items="${couponList}">
 								<tr>
 									<td class="coupon-name">${coupon.cname}</td>
-									<td>${coupon.amountCondition}</td>
+									<td><fmt:formatNumber value="${coupon.amountCondition}"
+											type="number" /></td>
 									<td><fmt:formatDate value="${coupon.startDate}"
 											pattern="yyyy.MM.dd" /> ~ <fmt:formatDate
 											value="${coupon.endDate}" pattern="yyyy.MM.dd" /></td>

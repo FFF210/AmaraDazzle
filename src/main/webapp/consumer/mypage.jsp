@@ -56,7 +56,7 @@
 				<div class="user-info__top">
 					<p class="greeting">
 						<span class="name">${memberInfo.name}</span> 님 반갑습니다.
-					</p>					
+					</p>
 				</div>
 
 				<!-- 하단 통계 영역 -->
@@ -70,15 +70,20 @@
 									<c:otherwise>일반</c:otherwise>
 								</c:choose></span></span>
 					</div>
-					<div class="stat">
+					<div class="stat"
+						onclick="location.href='${pageContext.request.contextPath}/store/mypage/myCoupoint'"
+     style="cursor: pointer;">
 						<span class="label">포인트</span> <span class="value"><span
-							class="em"><fmt:formatNumber value="${sessionScope.memberPoints}" pattern="#,###" /></span> p</span>
+							class="em"><fmt:formatNumber
+									value="${sessionScope.memberPoints}" pattern="#,###" /></span> p</span>
 					</div>
-					<div class="stat">
+					<div class="stat"
+						onclick="location.href='${pageContext.request.contextPath}/store/mypage/myCoupoint'"
+     style="cursor: pointer;">
 						<span class="label">쿠폰</span> <span class="value"><span
 							class="em">${couponCount}</span> 개</span>
 					</div>
-				</div> 
+				</div>
 			</div>
 
 			<!-- ============================ 2. 주문/배송 조회 ============================ -->
@@ -91,30 +96,23 @@
 				</div>
 
 				<div class="order-status-box">
-					<a href="/store/mypage/orderList?status=ORDER" class="status-item ${activeStatus eq 'order' ? 'active' : ''}">
+					<a href="/store/mypage/orderList?status=ORDER"
+						class="status-item ${activeStatus eq 'order' ? 'active' : ''}">
 						<div class="status-count">${orderSummary.orderCount}</div>
 						<div class="status-label">주문접수</div>
-					</a>
-
-					<a href="/store/mypage/orderList?status=ORDER"
+					</a> <a href="/store/mypage/orderList?status=ORDER"
 						class="status-item ${activeStatus eq 'payment' ? 'active' : ''}">
 						<div class="status-count">${orderSummary.paymentCount}</div>
 						<div class="status-label">결제완료</div>
-					</a>
-
-					<a href="/store/mypage/orderList?status=ORDER"
+					</a> <a href="/store/mypage/orderList?status=ORDER"
 						class="status-item ${activeStatus eq 'shipping' ? 'active' : ''}">
 						<div class="status-count">${orderSummary.shippingCount}</div>
 						<div class="status-label">배송준비중</div>
-					</a>
-
-					<a href="/store/mypage/orderList?status=ORDER"
+					</a> <a href="/store/mypage/orderList?status=ORDER"
 						class="status-item ${activeStatus eq 'delivered' ? 'active' : ''}">
 						<div class="status-count">${orderSummary.deliveredCount}</div>
 						<div class="status-label">배송중</div>
-					</a>
-
-					<a href="/store/mypage/orderList?status=ORDER"
+					</a> <a href="/store/mypage/orderList?status=ORDER"
 						class="status-item ${activeStatus eq 'confirmed' ? 'active' : ''}">
 						<div class="status-count">${orderSummary.confirmedCount}</div>
 						<div class="status-label">배송완료</div>
@@ -133,7 +131,7 @@
 				<!-- forEach 문에서 items 부분(현재 productPlanList)만 백엔드에서 내려오는 데이터 이름으로 바꾸시면 됩니다! -->
 				<!-- 나머지 수정할 필요 없음 !!! -->
 				<div class="product-grid">
-					 <c:forEach var="p" items="${wishlist}">
+					<c:forEach var="p" items="${wishlist}">
 						<c:choose>
 							<c:when test="${p.discountType eq 'RATE'}">
 								<c:set var="saleRateRaw" value="${p.discountValue}" />

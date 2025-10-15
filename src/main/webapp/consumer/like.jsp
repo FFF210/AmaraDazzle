@@ -68,11 +68,13 @@
 									<c:otherwise>일반</c:otherwise>
 								</c:choose></span></span>
 					</div>
-					<div class="stat">
+					<div class="stat" onclick="location.href='${pageContext.request.contextPath}/store/mypage/myCoupoint'"
+     style="cursor: pointer;">
 						<span class="label">포인트</span> <span class="value"><span
 							class="em"><fmt:formatNumber value="${sessionScope.memberPoints}" pattern="#,###" /></span> p</span>
 					</div>
-					<div class="stat">
+					<div class="stat" onclick="location.href='${pageContext.request.contextPath}/store/mypage/myCoupoint'"
+     style="cursor: pointer;">
 						<span class="label">쿠폰</span> <span class="value"><span
 							class="em">${sessionScope.memberCoupons}</span> 개</span>
 					</div>

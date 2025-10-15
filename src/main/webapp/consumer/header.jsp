@@ -94,8 +94,8 @@ request.setAttribute("loginUser", loginUser);
 					</c:choose>
 
 					<!-- 최근 본 상품: 토글 버튼 -->
-					<button id="recent-btn" type="button" class="recent-toggle">최근
-						본 상품</button>
+					<!-- <button id="recent-btn" type="button" class="recent-toggle">최근
+						본 상품</button> -->
 				</div>
 			</div>
 

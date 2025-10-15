@@ -42,7 +42,7 @@
 		<my:pageHeader hasButton="false" title="주문/결제" />
 	</div>
 
-	디버깅: checkoutData 확인
+	<%-- 디버깅: checkoutData 확인
 	<div
 		style="background: #f0f0f0; padding: 10px; margin: 10px; border: 2px solid red;">
 		<h3>🔍 디버깅 정보</h3>
@@ -75,7 +75,7 @@
 		<c:forEach var="item" items="${checkoutData.items}" varStatus="status">
 			<p>Item ${status.index}: ${item.brandName} - ${item.productName}</p>
 		</c:forEach>
-	</div>
+	</div> --%>
 
 	<div class="main-content">
 
@@ -185,9 +185,9 @@
 						<thead>
 							<tr>
 								<th style="padding: 0;">상품</th>
-								<th style="width: 120px; padding: 0;">판매가</th>
-								<th style="width: 50px; padding: 0;">수량</th>
-								<th style="width: 120px; padding: 0;">주문금액</th>
+								<th style="width: 130px; padding: 0;">판매가</th>
+								<th style="width: 70px; padding: 0;">수량</th>
+								<th style="width: 130px; padding: 0;">주문금액</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -221,8 +221,11 @@
 									<td style="padding: 0; color: #111; font-size: 13px;">${item.quantity}</td>
 									<td
 										style="padding: 0; color: #111; font-size: 13px; font-weight: 500;">
-										<span id="brandId-${item.brandId}" data-totalprice="${item.itemTotal}" data-productid="${item.productId}" class="totalPrice">
-											<fmt:formatNumber value="${item.itemTotal}" pattern="#,###" /></span>원</td>
+										<span id="brandId-${item.brandId}"
+										data-totalprice="${item.itemTotal}"
+										data-productid="${item.productId}" class="totalPrice">
+											<fmt:formatNumber value="${item.itemTotal}" pattern="#,###" /></span>원
+									</td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -244,7 +247,8 @@
 										<option value="">사용 가능한 쿠폰 목록</option>
 										<c:forEach var="coupon" items="${availableCoupons}">
 											<option value="${coupon.memberCouponId}"
-												data-amount="${coupon.amount}" data-brandid="${coupon.writerId}">${coupon.cname}(
+												data-amount="${coupon.amount}"
+												data-brandid="${coupon.writerId}">${coupon.cname}(
 												<fmt:formatNumber value="${coupon.amount}" pattern="#,###" />원
 												할인)
 											</option>
@@ -356,7 +360,9 @@
 									value="${item.unitPrice}">
 								<input type="hidden" name="items[${status.index}].itemTotal"
 									value="${item.itemTotal}" id="h-${item.productId}">
-								<input type="hidden" name="items[${status.index}].memberCouponId" id="c-${item.productId}">
+								<input type="hidden"
+									name="items[${status.index}].memberCouponId"
+									id="c-${item.productId}">
 							</c:forEach>
 
 							<!-- 금액 정보 -->
@@ -383,10 +389,28 @@
 			document.getElementById("couponAmount").value = amount;
 			const brandid = selectedOption.dataset.brandid || "";
 			const itemTotPriceSpan = document.getElementById("brandId-"+brandid);
+			
 			if(itemTotPriceSpan!=null) {
 				console.log(itemTotPriceSpan.dataset.totalprice)
 				const salePrice = +itemTotPriceSpan.dataset.totalprice - +amount;
-				itemTotPriceSpan.innerText = salePrice.toLocaleString();
+				const originalPrice = +itemTotPriceSpan.dataset.totalprice;
+				
+				// 기존 금액에 스타일 적용 (할인 전 금액으로 표시)
+		        itemTotPriceSpan.classList.add("original-price");
+		        itemTotPriceSpan.style.textDecoration = "line-through";
+		        itemTotPriceSpan.style.color = "#999";
+		        
+		       // 기존 가격 옆에 할인된 금액 표시 (중복 방지)
+		        if (!itemTotPriceSpan.parentElement.querySelector(".discounted-price")) {
+		            const discountEl = document.createElement("div");
+		            discountEl.className = "discounted-price";
+		            discountEl.textContent = salePrice.toLocaleString() + "원";
+		            itemTotPriceSpan.parentElement.appendChild(discountEl);
+		        } else {
+		            // 이미 있다면 금액만 갱신
+		            itemTotPriceSpan.parentElement.querySelector(".discounted-price").textContent = salePrice.toLocaleString() + "원";
+		        }
+
 				const hiddenItemTotal = document.getElementById("h-"+itemTotPriceSpan.dataset.productid);
 				hiddenItemTotal.value = salePrice;
 				const memberCoupon = document.getElementById("c-"+itemTotPriceSpan.dataset.productid);
@@ -398,6 +422,14 @@
 			const elements = document.querySelectorAll('.totalPrice');
 			elements.forEach((el, index) => {
 			  el.innerText = (Math.floor(+el.dataset.totalprice)).toLocaleString();  
+			  el.classList.remove("original-price");
+		      el.style.textDecoration = "none";
+		      el.style.color = "#111";
+		        
+		      // 할인된 가격 요소 제거
+		      const discountEl = el.parentElement.querySelector(".discounted-price");
+		      if (discountEl) discountEl.remove();
+		        
 			  document.getElementById("h-"+el.dataset.productid).value = Math.floor(+el.dataset.totalprice);
 			  document.getElementById("c-"+el.dataset.productid).value=""
 			});

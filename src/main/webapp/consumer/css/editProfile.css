@@ -79,7 +79,7 @@ h1 {
 	width: 695px;
 	height: 117px;
 	display: flex;
-	gap: 8px;
+	gap: 16px;
 	align-self: stretch;
 }
 

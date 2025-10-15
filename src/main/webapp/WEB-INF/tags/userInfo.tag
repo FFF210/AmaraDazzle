@@ -65,11 +65,13 @@ Props
             <span class="label">등급</span> 
             <span class="value"><span class="em">${gradeText}</span></span>
         </div>
-        <div class="stat">
+        <div class="stat" onclick="location.href='${pageContext.request.contextPath}/store/mypage/myCoupoint'"
+     style="cursor: pointer;">
             <span class="label">포인트</span> 
             <span class="value"><span class="em"><fmt:formatNumber value="${points}" pattern="#,###" /></span> p</span>
         </div>
-        <div class="stat">
+        <div class="stat" onclick="location.href='${pageContext.request.contextPath}/store/mypage/myCoupoint'"
+     style="cursor: pointer;">
             <span class="label">쿠폰</span> 
             <span class="value"><span class="em">${coupons}</span> 개</span>
         </div>

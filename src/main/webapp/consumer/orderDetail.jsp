@@ -67,7 +67,7 @@
 								<th style="width: 150px; padding: 0;">상품명</th>
 								<th style="width: 60px; padding: 0;">판매가</th>
 								<th style="width: 30px; padding: 0;">수량</th>
-								<th style="width: 60px; padding: 0;">구매가</th>
+								<th style="width: 60px; padding: 0;">결제금액</th>
 								<th style="width: 80px; padding: 0;">진행현황</th>
 								<th style="width: 80px; padding: 0;">선택</th>
 							</tr>
@@ -75,7 +75,7 @@
 						<tbody>
 							<c:forEach var="item" items="${orderDetailInfo.orderItems}">
 								<tr>
-									<td style="padding: 0;">
+									<td style="padding: 0; cursor: pointer;" onclick="location.href='${pageContext.request.contextPath}/store/productDetail?productId=${item.productId}'">
 										<div
 											style="display: flex; align-items: center; gap: 12px; padding: 20px 0;">
 											<img
