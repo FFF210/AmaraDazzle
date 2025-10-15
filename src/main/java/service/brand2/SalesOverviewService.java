@@ -24,6 +24,6 @@ public interface SalesOverviewService {
      * @param params (brandId, startDate, endDate)
      * @return List<SalesStatusRow>
      */
-    List<SalesStatusRow> getSalesStatusRows(Map<String, Object> params);
+    Map<String, Object> getSalesStatusRows(Map<String, Object> params) throws Exception;
 	
 }

@@ -53,6 +53,65 @@
 	margin-top: 8px;
 	margin-left: 24px;
 }
+
+
+/* 1) KPI 카드 */
+.card {
+    padding: 16px;        /* 기존 20px → 16px */
+    border-radius: 8px;   /* 모서리 조금 줄임 */
+}
+
+.card h4 {
+    font-size: 13px;      /* 기존 15px → 13px */
+}
+
+.card p {
+    font-size: 18px;      /* 기존 22px → 18px */
+}
+
+.card span {
+    font-size: 12px;      /* 기존 13px → 12px */
+}
+
+
+/* 2) 매출 차트 박스 */
+
+.chart-box {
+    padding: 16px;        /* 기존 20px → 16px */
+    margin-bottom: 20px;  /* 간격 줄임 */
+}
+
+.chart-box h3 {
+    font-size: 16px;      /* 제목 크기 축소 */
+}
+
+.total-sales {
+    font-size: 15px;      /* 기존 18px → 15px */
+    margin: 6px 0 12px;
+}
+
+.chart-box canvas {
+    max-height: 350px;    /* 캔버스 높이 제한 */
+}
+
+/* 3) 성과 카드 (performance)	 */
+.perf-card {
+    padding: 16px;        /* 내부 여백 축소 */
+}
+
+.perf-card .icon {
+    font-size: 24px;      /* 기존 30px → 24px */
+}
+
+.perf-card p {
+    font-size: 16px;      /* 기존 20px → 16px */
+}
+
+/* 전체 컨테이너 여백 */
+.dachcontainer {
+    padding: 16px;        /* 기존 24px → 16px */
+}
+
 </style>
 
 </head>
@@ -75,7 +134,7 @@ status        = CONFIRMED
  --%>
 	<my:layout>
 		<my:breadcrumb
-			items="대시보드:/brand2/dashboard, 매출지표:/brand2/salesStatus.jsp, 성과지표:/brand2/pefOverview.jsp, 메인이벤트지표:/brand2/eventOverview.jsp" />
+			items="대시보드:/brand2/dashboard, 매출지표:/brand2/salesOverview" />
 
 		<div class=dachcontainer>
 			<!-- KPI 지표 -->

@@ -63,6 +63,10 @@
 	margin: 16px 0 8px 0;
 }
 
+.chart-box canvas {
+	max-height: 350px; /* 캔버스 높이 제한 */
+}
+
 .table-filter {
 	margin-bottom: 8px;
 }
@@ -165,7 +169,7 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th class="sortable">날짜 <i class="bi bi-dash-lg sort-icon"></i></th>
+							<th class="sortable">날짜</th>
 							<th>전체 매출</th>
 							<th>스킨케어</th>
 							<th>마스크팩</th>
@@ -193,19 +197,26 @@
 								<td><fmt:formatNumber value="${row.haircare}" type="number" /></td>
 								<td><fmt:formatNumber value="${row.bodycare}" type="number" /></td>
 								<td><fmt:formatNumber value="${row.perfume}" type="number" /></td>
-								<td><fmt:formatNumber value="${row.menCare}" type="number"/></td>
+								<td><fmt:formatNumber value="${row.menCare}" type="number" /></td>
 							</tr>
 						</c:forEach>
 					</tbody>
 				</table>
 			</div>
 		</div>
-
+		<c:set var="queryString">
+			<c:if test="${not empty param.status}">status=${param.status}&</c:if>
+			<c:if test="${not empty param.searchType}">searchType=${param.searchType}&</c:if>
+			<c:if test="${not empty param.searchKeyword}">searchKeyword=${param.searchKeyword}&</c:if>
+				page=
+			</c:set>
 		<!-- 페이징 -->
 		<div class="page-pagination">
 			<my:pagination currentPage="${currentPage}"
-				totalPages="${totalPages}" baseUrl="/brand2/salesOverview" />
+				totalPages="${totalPages}"
+				baseUrl="/brand2/salesOverview?${queryString}" />
 		</div>
+		
 	</my:layout>
 
 	<%-- =================================================================================================================== --%>
@@ -231,89 +242,6 @@
 				plugins : { legend : { position : 'right' } },
 				scales : { y : { beginAtZero : true } }
 			}
-		});
-	</script>
-	<script>
-	/*******************tableFilter 이벤트*******************/
-	document.addEventListener("DOMContentLoaded", () => {
-		  const form = document.querySelector(".table-filter form");
-
-		  // ====== 카테고리 버튼 ======
-		  const categoryButtons = form.querySelectorAll(".filter-btn[data-filter='categories']");
-		  
-		  // hidden input 생성 (다중 선택 지원)
-		  let hiddenInput = form.querySelector("input[name='categories']");
-		  if (!hiddenInput) {
-		    hiddenInput = document.createElement("input");
-		    hiddenInput.type = "hidden";
-		    hiddenInput.name = "categories";
-		    form.appendChild(hiddenInput);
-		  }
-
-		  categoryButtons.forEach((btn) => {
-		    btn.addEventListener("click", () => {
-		      // active 토글
-		      btn.classList.toggle("active");
-
-		      // 선택된 버튼들의 value 수집
-		      const selectedValues = Array.from(categoryButtons)
-		        .filter((b) => b.classList.contains("active"))
-		        .map((b) => b.dataset.value);
-
-		      // hidden input에 콤마로 연결해서 저장
-		      hiddenInput.value = selectedValues.join(",");
-		    });
-		  });
-
-		  // ====== 날짜 빠른 선택 ======
-		  const presetBtns = form.querySelectorAll(".preset-btn.date-quick");
-		  presetBtns.forEach((btn) => {
-		    btn.addEventListener("click", () => {
-		      const range = btn.dataset.range;
-		      const startDateInput = form.querySelector("input[name='startDate']");
-		      const endDateInput = form.querySelector("input[name='endDate']");
-		      const today = new Date();
-		      let startDate, endDate;
-
-		      switch (range) {
-		        case "today":
-		          startDate = endDate = today;
-		          break;
-		        case "yesterday":
-		          startDate = endDate = new Date(today.setDate(today.getDate() - 1));
-		          break;
-		        case "7":
-		          endDate = new Date();
-		          startDate = new Date();
-		          startDate.setDate(endDate.getDate() - 6);
-		          break;
-		        case "30":
-		          endDate = new Date();
-		          startDate = new Date();
-		          startDate.setDate(endDate.getDate() - 29);
-		          break;
-		      }
-
-		      // 날짜 yyyy-MM-dd 포맷 변환
-		      const format = (d) => d.toISOString().slice(0, 10);
-		      if (startDateInput) startDateInput.value = format(startDate);
-		      if (endDateInput) endDateInput.value = format(endDate);
-		    });
-		  });
-
-		  // ====== 리셋 버튼 ======
-		  const resetBtn = form.querySelector("button[type='reset']");
-		  if (resetBtn) {
-		    resetBtn.addEventListener("click", () => {
-		      // 카테고리 버튼 초기화
-		      categoryButtons.forEach((btn) => btn.classList.remove("active"));
-		      hiddenInput.value = "";
-
-		      // 날짜 초기화
-		      form.querySelector("input[name='startDate']").value = "";
-		      form.querySelector("input[name='endDate']").value = "";
-		    });
-		  }
 		});
 	</script>
 	<script>

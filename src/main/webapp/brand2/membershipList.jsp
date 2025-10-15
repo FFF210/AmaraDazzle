@@ -154,55 +154,37 @@
 		<!-- 멤버십 상태 영역 -->
 		<div class="membership-status">
 		<!-- currentMembership/reservedMembership는 dto.membership 사용, membershipList는 dto.brand2.membershipList 사용 -->
-			<c:choose>
-				<c:when test="${empty currentMembership}">
-					<div class="notice">
-						보유한 멤버십이 없습니다. 새로운 멤버십을 구독해보세요!<br>
-						<button class="btn btn-outline btn-sm" id="btnGoPay"
-							onclick="location.href='/brand2/membership' ">멤버십 결제</button>
-					</div>
-				</c:when>
+<c:choose>
+    <c:when test="${empty currentMembership}">
+        <div class="notice">
+            <strong>현재 보유한 멤버십이 없습니다.</strong><br>  
+            <span class="text-muted" style="font-size:0.9em;">메인 페이지 'PICK' 영역에 브랜드를 노출하고 싶다면 지금 바로 구독해보세요!</span><br>
+            <button class="btn btn-outline btn-sm" id="btnGoPay"
+                onclick="location.href='/brand2/membership'">멤버십 결제</button>
+        </div>
+    </c:when>
 
-				<c:otherwise>
-					<div class="notice">
-						<span> 현재 이용 중 : <br> <strong id="planLabel">
-								<c:choose>
-									<c:when test="${currentMembership.planId eq 'PLAN_AUTO'}">정기결제 이용권</c:when>
-									<c:when test="${currentMembership.planId eq 'PLAN_1M'}">1개월 이용권</c:when>
-									<c:when test="${currentMembership.planId eq 'PLAN_3M'}">3개월 이용권</c:when>
-									<c:when test="${currentMembership.planId eq 'PLAN_6M'}">6개월 이용권</c:when>
-									<c:when test="${currentMembership.planId eq 'PLAN_12M'}">12개월 이용권</c:when>
-									<c:otherwise>알 수 없는 이용권</c:otherwise>
-								</c:choose>
-						</strong><br> <strong id="quotaLabel">${currentMembership.remainQuota}</strong>
-							건 메일 발송 가능합니다.
-						</span>
-						<br>
-						<!-- 예약 멤버십 보조 문구 -->
-						<c:if test="${not empty reservedMembership}">
-							<p class="text-muted" style="font-size: 0.9em; margin-top: 5px;">
-								예약분: <strong>${reservedMembership.remainQuota}</strong>건 (
-								<c:choose>
-									<c:when test="${reservedMembership.planId eq 'PLAN_AUTO'}">정기결제 이용권</c:when>
-									<c:when test="${reservedMembership.planId eq 'PLAN_1M'}">1개월 이용권</c:when>
-									<c:when test="${reservedMembership.planId eq 'PLAN_3M'}">3개월 이용권</c:when>
-									<c:when test="${reservedMembership.planId eq 'PLAN_6M'}">6개월 이용권</c:when>
-									<c:when test="${reservedMembership.planId eq 'PLAN_12M'}">12개월 이용권</c:when>
-									<c:otherwise>알 수 없는 이용권</c:otherwise>
-								</c:choose>
-								, 시작일
-								<fmt:formatDate value="${reservedMembership.startDate}"
-									pattern="yyyy-MM-dd" />
-								부터)
-							</p>
-						</c:if>
-						<br>
-						<button class="btn btn-outline btn-sm" id="btnGoPay"
-							onclick="location.href='/brand2/membership' ">멤버십 추가</button>
-					</div>
-				</c:otherwise>
-			</c:choose>
-
+    <c:otherwise>
+        <div class="notice">
+            <span>
+                <strong id="planLabel">
+                    <c:choose>
+                        <c:when test="${currentMembership.planId eq 'PLAN_AUTO'}">정기결제 이용권</c:when>
+                        <c:when test="${currentMembership.planId eq 'PLAN_1M'}">1개월 이용권</c:when>
+                        <c:when test="${currentMembership.planId eq 'PLAN_3M'}">3개월 이용권</c:when>
+                        <c:when test="${currentMembership.planId eq 'PLAN_6M'}">6개월 이용권</c:when>
+                        <c:when test="${currentMembership.planId eq 'PLAN_12M'}">12개월 이용권</c:when>
+                        <c:otherwise>알 수 없는 이용권</c:otherwise>
+                    </c:choose>
+                </strong>을(를) 이용 중입니다.
+            </span>
+            <br>
+            <span class="text-muted" style="font-size:0.9em;">
+                현재 멤버십을 통해 메인 페이지 'PICK' 영역에서 브랜드 노출 혜택을 받고 있습니다.
+            </span>
+        </div>
+    </c:otherwise>
+</c:choose>
 		</div>
 
 		<div class="membership-history">
@@ -210,8 +192,6 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th><input type="checkbox" class="form-check" /></th>
-							<th class="sortable">번호 <i class="bi bi-dash-lg sort-icon"></i></th>
 							<th>결제일</th>
 							<th>취소일</th>
 							<th>상태</th>
@@ -225,9 +205,6 @@
 					<tbody>
 						<c:forEach var="membership" items="${membershipList }">
 							<tr>
-								<td><input type="checkbox" class="form-check" /></td>
-								<td>${membership.membershipId}</td>
-								<!-- 번호 -->
 								<td><fmt:formatDate value="${membership.createdAt}"
 										pattern="yyyy-MM-dd" /></td>
 								<!-- 결제일 -->
