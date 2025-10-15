@@ -116,7 +116,8 @@
 		line_subtotal,
 		discount,
 		total,
-		status
+		status,
+		member_coupon_id
 		) VALUES (
 		#{orderId},
 		#{brandId},
@@ -127,7 +128,8 @@
 		#{lineSubtotal},
 		#{discount},
 		#{total},
-		'PAID'
+		'PAID',
+		#{memberCouponId}
 		)
 	</insert>
 

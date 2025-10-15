@@ -329,10 +329,31 @@ public class OrderServiceImpl implements OrderService {
 				orderItem.setQuantity((Integer) item.get("quantity"));
 
 				// itemTotal 계산
-				BigDecimal itemTotal = unitPrice.multiply(new BigDecimal((Integer) item.get("quantity")));
-				orderItem.setLineSubtotal(itemTotal);
-				orderItem.setDiscount((BigDecimal) orderData.get("discountFinal"));
+//				BigDecimal itemTotal = unitPrice.multiply(new BigDecimal((Integer) item.get("quantity")));
+//				orderItem.setLineSubtotal(itemTotal);
+//				orderItem.setDiscount((BigDecimal) orderData.get("discountFinal"));
+				Object itemTotalObj = item.get("itemTotal");
+				BigDecimal itemTotal;
+				if (itemTotalObj instanceof BigDecimal) {
+					itemTotal = (BigDecimal) itemTotalObj;
+				} else if (itemTotalObj instanceof Integer) {
+					itemTotal = new BigDecimal((Integer) itemTotalObj);
+				} else if (itemTotalObj instanceof Double) {
+					itemTotal = BigDecimal.valueOf((Double) itemTotalObj);
+				} else {
+					throw new Exception("itemTotalObj 타입 오류");
+				}				
 				orderItem.setTotal(itemTotal);
+				orderItem.setLineSubtotal(itemTotal);
+				orderItem.setDiscount(unitPrice.multiply(new BigDecimal((Integer) item.get("quantity"))).subtract(itemTotal));
+				
+				// memberCouponId 안전하게 처리
+				if(item.get("memberCouponId")!=null) {
+					System.out.println(item.get("memberCouponId"));
+					orderItem.setMemberCouponId((Long)item.get("memberCouponId"));
+				}
+			
+				
 				orderItem.setStatus("PAID");
 
 				orderDAO.createOrderItem(orderItem);
@@ -581,14 +602,8 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public void decreaseStock(List<Map<String, Object>> items) throws Exception {
 		ProductDAO productDAO = new ProductDAOImpl();
-		
-		//디버깅용
-		System.out.println(">>> 재고 감소 시작! 총 " + items.size() + "개");
-	    int index = 0;
 
 		for (Map<String, Object> item : items) {
-			System.out.println("  [" + index + "] 처리 시작"); 
-			
 			// 타입 안전하게 변환....
 			Long optionId = null;
 			Object optionIdObj = item.get("optionId");
@@ -616,8 +631,6 @@ public class OrderServiceImpl implements OrderService {
 			Integer quantity = (Integer) item.get("quantity");
 
 			if (quantity == null || quantity <= 0) {
-				System.out.println("      ⚠️ quantity 없음, 스킵");
-	            index++;
 				continue;
 			}
 
@@ -625,26 +638,16 @@ public class OrderServiceImpl implements OrderService {
 
 			if (optionId != null) {
 				// 옵션이 있는 경우
-				System.out.println("      → 옵션 재고 감소 시도...");
 				result = productDAO.updateOptionStock(optionId, quantity);
 			} else if (productId != null) {
 				// 옵션이 없는 경우
-				System.out.println("      → 상품 재고 감소 시도..."); 
 				result = productDAO.updateStock(productId, quantity);
 			}
-			
-			System.out.println("      → 결과: " + result);
 
 			if (result == 0) {
-				System.out.println("      ❌ 실패! (optionId=" + optionId + ", productId=" + productId + ")");
 				throw new Exception("재고가 부족하거나 상품을 찾을 수 없습니다.");
 			}
-			
-			 System.out.println("      ✅ 성공!");
-		     index++;
 		}
-		
-		System.out.println(">>> 재고 감소 완료!"); 
 	}
 
 	// ==================== orderList용=====================

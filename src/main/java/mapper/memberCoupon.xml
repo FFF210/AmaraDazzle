@@ -31,6 +31,7 @@
 		resultType="map">
 		SELECT
 		mc.member_coupon_id AS memberCouponId,
+		c.writer_id AS writerId,
 		c.cname,
 		c.amount,
 		c.amount_condition AS amountCondition,
@@ -44,6 +45,15 @@
 		WHERE
 		mc.member_id = #{memberId}
 		AND mc.status = 'AVAILABLE'
+		AND ( c.writer_type = 'ADMIN'  
+    	<if test="brands != null and brands.size() > 0">
+    		OR
+        	c.writer_id IN
+        	<foreach item="brand" index="index" collection="brands" open="(" separator="," close=")">
+            	#{brand}
+        	</foreach>
+    	</if>
+    	)
 		ORDER BY
 		mc.created_at DESC
 		LIMIT #{limit} OFFSET #{offset}
@@ -114,7 +124,5 @@
 		#{memberId}, 'AVAILABLE', NOW()
 		)
 	</insert>
-
-
 
 </mapper>

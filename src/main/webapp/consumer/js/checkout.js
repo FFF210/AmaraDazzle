@@ -166,7 +166,7 @@ function getCouponDiscountValue() {
 
 // 주문 데이터를 서버 세션에 저장
 function saveOrderDataToSession() {
-	console.log('주문 데이터를 세션에 저장 시작');
+	console.log('주문 데이터를 세션에 저장 시작2');
 
 	const phone1 = document.getElementById('shipPhone1').value.trim();
 	const phone2 = document.getElementById('shipPhone2').value.trim();
@@ -174,6 +174,7 @@ function saveOrderDataToSession() {
 	const fullPhone = phone1 + '-' + phone2 + '-' + phone3;
 
 	const params = new URLSearchParams();
+	
 
 	params.append('shipRecipient', document.getElementById('shipRecipient').value.trim());
 	params.append('shipPhone', fullPhone);
@@ -198,6 +199,13 @@ function saveOrderDataToSession() {
 	const optionIdInputs = document.querySelectorAll('input[name^="items["][name$="].optionId"]');
 	const quantityInputs = document.querySelectorAll('input[name^="items["][name$="].quantity"]');
 	const unitPriceInputs = document.querySelectorAll('input[name^="items["][name$="].unitPrice"]');
+	const itemTotalInputs = document.querySelectorAll('input[name^="items["][name$="].itemTotal"]');
+	const memberCouponIdInputs = document.querySelectorAll('input[name^="items["][name$="].memberCouponId"]');
+	console.log("--------")
+	console.log(brandIdInputs.length)
+	
+	params.append('itemCnt', brandIdInputs.length);
+
 
 	for (let i = 0; i < brandIdInputs.length; i++) {
 		params.append('items[' + i + '].brandId', brandIdInputs[i].value);
@@ -205,6 +213,8 @@ function saveOrderDataToSession() {
 		params.append('items[' + i + '].optionId', optionIdInputs[i].value);
 		params.append('items[' + i + '].quantity', quantityInputs[i].value);
 		params.append('items[' + i + '].unitPrice', unitPriceInputs[i].value);
+		params.append('items[' + i + '].itemTotal', itemTotalInputs[i].value);
+		params.append('items[' + i + '].memberCouponId', memberCouponIdInputs[i].value);
 	}
 
 	params.append('subtotalAmount', document.getElementById('subtotalAmount').value);

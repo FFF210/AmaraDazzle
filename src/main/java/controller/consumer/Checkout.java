@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,6 +23,8 @@ import service.consumer.MemberCouponService;
 import service.consumer.MemberCouponServiceImpl;
 import service.consumer.OrderService;
 import service.consumer.OrderServiceImpl;
+import service.consumer.ProductService;
+import service.consumer.ProductServiceImpl;
 
 /**
  * Servlet implementation class Checkout
@@ -84,8 +87,15 @@ public class Checkout extends HttpServlet {
 				couponParams.put("memberId", memberId);
 				couponParams.put("limit", 100);
 				couponParams.put("offset", 0);
+				///////////////////////////
+				List<Long> brandList = cartItems.stream().map(m->(Long)m.get("brandId")).collect(Collectors.toList());
+				couponParams.put("brands",brandList);
+				System.out.println(brandList);
 
 				List<Map<String, Object>> availableCoupons = couponDAO.selectMemberCouponList(couponParams);
+				System.out.println("----");
+				System.out.println(couponParams);
+				System.out.println(availableCoupons);
 				request.setAttribute("availableCoupons", availableCoupons);
 
 				// JSP로 데이터 전달
@@ -168,6 +178,9 @@ public class Checkout extends HttpServlet {
 			couponParams.put("memberId", memberId);
 			couponParams.put("limit", 100);
 			couponParams.put("offset", 0);
+			///////////////////////////
+			ProductService servic = new ProductServiceImpl();
+			couponParams.put("brands",new ArrayList<Long>().add(servic.getProductDetail(productId).getBrandId()));
 
 			List<Map<String, Object>> availableCoupons = couponDAO.selectMemberCouponList(couponParams);
 			request.setAttribute("availableCoupons", availableCoupons);
@@ -241,19 +254,23 @@ public class Checkout extends HttpServlet {
 
 			// 여러 옵션 처리
 			List<Map<String, Object>> itemsList = new ArrayList<>();
-
-			for (int i = 0; i < 10; i++) {
+			Integer itemCnt = Integer.parseInt(request.getParameter("itemCnt"));
+			for (int i = 0; i < itemCnt; i++) {
 				String brandId = request.getParameter("items[" + i + "].brandId");
 				String productId = request.getParameter("items[" + i + "].productId");
 				String optionId = request.getParameter("items[" + i + "].optionId");
 				String quantity = request.getParameter("items[" + i + "].quantity");
 				String unitPrice = request.getParameter("items[" + i + "].unitPrice");
+				String itemTotal = request.getParameter("items[" + i + "].itemTotal");
+				String memberCouponId = request.getParameter("items[" + i + "].memberCouponId");
 
 				System.out.println("items[" + i + "].brandId: " + brandId);
 				System.out.println("items[" + i + "].productId: " + productId);
 				System.out.println("items[" + i + "].optionId: " + optionId);
 				System.out.println("items[" + i + "].quantity: " + quantity);
 				System.out.println("items[" + i + "].unitPrice: " + unitPrice);
+				System.out.println("items[" + i + "].itemTotal: " + itemTotal);
+				System.out.println("items[" + i + "].memberCouponId: " + memberCouponId);
 
 				if (quantity != null && !quantity.trim().isEmpty() && unitPrice != null
 						&& !unitPrice.trim().isEmpty()) {
@@ -278,11 +295,13 @@ public class Checkout extends HttpServlet {
 					item.put("productId", productId);
 					item.put("quantity", Integer.parseInt(quantity));
 					item.put("unitPrice", new BigDecimal(unitPrice));
+					item.put("itemTotal", new BigDecimal(itemTotal));
+					if(memberCouponId!=null && !memberCouponId.isEmpty()) {
+						item.put("memberCouponId", Long.parseLong(memberCouponId));
+					}
 
 					itemsList.add(item);
-				} else {
-					break;
-				}
+				} 
 			}
 			orderData.put("items", itemsList);
 

@@ -16,6 +16,7 @@ public class OrderItem {
     private String trackingNo;    // 운송장 번호
     private String carrierName;   // 택배사 이름
     private String status;        // 주문 상태 (PAID, PREPARING, SHIPPING, ...)
+    private Long memberCouponId;
 
     public OrderItem() {
     }
@@ -111,14 +112,23 @@ public class OrderItem {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "OrderItem [orderItemId=" + orderItemId + ", orderId=" + orderId +
-                ", brandId=" + brandId + ", productId=" + productId +
-                ", optionId=" + optionId + ", unitPrice=" + unitPrice +
-                ", quantity=" + quantity + ", lineSubtotal=" + lineSubtotal +
-                ", discount=" + discount + ", total=" + total +
-                ", trackingNo=" + trackingNo + ", carrierName=" + carrierName +
-                ", status=" + status + "]";
-    }
+    
+    public Long getMemberCouponId() {
+		return memberCouponId;
+	}
+
+	public void setMemberCouponId(Long memberCouponId) {
+		this.memberCouponId = memberCouponId;
+	}
+
+	@Override
+	public String toString() {
+		return "OrderItem [orderItemId=" + orderItemId + ", orderId=" + orderId + ", brandId=" + brandId
+				+ ", productId=" + productId + ", optionId=" + optionId + ", unitPrice=" + unitPrice + ", quantity="
+				+ quantity + ", lineSubtotal=" + lineSubtotal + ", discount=" + discount + ", total=" + total
+				+ ", trackingNo=" + trackingNo + ", carrierName=" + carrierName + ", status=" + status
+				+ ", memberCouponId=" + memberCouponId + "]";
+	}
+
+
 }
