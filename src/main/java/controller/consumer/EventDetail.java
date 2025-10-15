@@ -1,6 +1,7 @@
 package controller.consumer;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -40,6 +41,8 @@ public class EventDetail extends HttpServlet {
 
 			// JSP에 전달
 			request.setAttribute("eventDetail", eventDetail);
+
+			eventProducts.sort(Comparator.comparing(EventDetailProduct::getBrandId));
 			request.setAttribute("eventProducts", eventProducts);
 
 			request.getRequestDispatcher("/consumer/eventDetail.jsp").forward(request, response);

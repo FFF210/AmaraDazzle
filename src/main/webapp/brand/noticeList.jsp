@@ -64,11 +64,11 @@
 											size="sm" text="${notice.typeName}" /></td>
 									<td>
 										<div class="product-name">
-											<p>${notice.title}</p>
+											<p style="text-align: left;">${notice.title}</p>
 										</div>
 									</td>
-									<td style="width: 160px"><fmt:formatDate value="${notice.createdAt}"
-											pattern="yyyy-MM-dd" /></td>
+									<td style="width: 160px"><fmt:formatDate
+											value="${notice.createdAt}" pattern="yyyy-MM-dd" /></td>
 								</tr>
 							</c:forEach>
 						</tbody>

@@ -25,7 +25,7 @@ html, body {
 .dashboard-container {
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
+	gap: 10px;
 	padding: 8px 20px 20px 20px;
 	box-sizing: border-box;
 	overflow-x: hidden;
@@ -44,13 +44,13 @@ html, body {
 
 .dashboard-container-wrapper {
 	display: flex;
-	gap: 20px;
+	gap: 10px;
 }
 
 .dashboard-container-wrapper-inner {
 	display: flex;
 	flex-direction: column;
-	gap: 20px;
+	gap: 10px;
 	width: 900px;
 }
 
@@ -103,8 +103,13 @@ html, body {
 	display: flex;
 	align-items: center;
 	transition: all 0.2s ease;
-	height: 40px;
+	height: 36px;
 	cursor: pointer;
+}
+
+.alert-message {
+	font-size: 15px;
+	color: #111;
 }
 
 .task-card:hover {
@@ -124,8 +129,9 @@ html, body {
 }
 
 .task-label {
-	color: #666;
+	color: #111;
 	font-size: 15px;
+	text-align: left;
 }
 
 .task-count {
@@ -148,7 +154,7 @@ html, body {
 	background: #fff;
 	border: 1px solid #e0e0e0;
 	border-radius: 10px;
-	padding: 18px;
+	padding: 24px;
 	text-decoration: none;
 	transition: background 0.2s ease, box-shadow 0.2s ease;
 }
@@ -160,7 +166,7 @@ html, body {
 
 .status-title {
 	flex: 0 0 130px;
-	color: #555 !important;
+	color: #111 !important;
 	font-weight: 500 !important;
 }
 
@@ -196,8 +202,9 @@ html, body {
 }
 
 .week p {
-	font-size: 14px;
-	color: #777;
+	font-size: 13px;
+	color: #999;
+	margin-bottom: 10px;
 }
 
 .top3-container {
@@ -205,35 +212,34 @@ html, body {
 	justify-content: center;
 	align-items: flex-end;
 	gap: 30px;
-	margin: 30px 0;
+	margin: 10px 0 40px 0;
 }
 
 .top3-card {
 	width: 160px;
 	text-align: center;
 	background: #fff;
-	border-radius: 14px;
-	box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 12px;
+	box-shadow: 0 3px 4px rgba(0, 0, 0, 0.1);
 	padding: 16px;
 	position: relative;
 	transition: transform 0.25s ease, box-shadow 0.25s ease;
 	top: 30px;
-	height: 100%;
+	height: fit-content;
 }
 
 /* .top3-card:hover {
 	transform: scale(1.05);
 	box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 } */
-
 .rank-badge {
 	position: absolute;
-	top: -12px;
+	top: -16px;
 	left: 50%;
 	transform: translateX(-50%);
-	background: #f9c74f;
-	color: #111;
-	font-weight: 700;
+	background: rgba(255, 245, 217, 0.8);
+	color: #f9a44f;
+	font-weight: 600;
 	border-radius: 12px;
 	padding: 4px 10px;
 	font-size: 0.9em;
@@ -241,24 +247,22 @@ html, body {
 }
 
 .top3-card img {
-	width: 100%;
-	height: 160px;
 	object-fit: cover;
-	border-radius: 10px;
 }
 
 .top3-card .name {
 	margin-top: 10px;
-	font-size: 1em;
-	font-weight: 600;
-	color: #333;
+	font-size: 14px;
+	font-weight: 500;
+	color: #111;
 }
 
 .top3-card .sold {
-	font-size: 0.9em;
+	font-size: 13px;
 	color: #777;
+	margin-top: 5px;
 }
-/* 
+
 .top3-card:nth-child(2) {
 	transform: scale(1.12);
-} */
+}
