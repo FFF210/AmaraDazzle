@@ -40,6 +40,7 @@ p, h1, h2, h3, h4, h5, button {
 
 .container {
 	display: flex;
+	align-items: stretch; /* 높이 맞추기 */
 }
 
 /* ==================================== */
@@ -47,12 +48,11 @@ p, h1, h2, h3, h4, h5, button {
 /* ==================================== */
 .main {
 	flex: 1;
+	min-width: 400px; /* 최소폭 지정 */
 	background-color: var(--base);
 	transition: all 0.3s;
 }
 
 main {
 	padding: 10px;
-	/* display: flex;
-    flex-direction: column; */
 }

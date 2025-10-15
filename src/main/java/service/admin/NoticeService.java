@@ -14,7 +14,7 @@ public interface NoticeService {
 	List<Notice> search_post(Map<String, String> searchContent, int p_no); //검색된 seller 공지 리스트 
 	int noticeSellerEdit(Notice notice_DTO); // seller 공지 수정 
 	int noticeSellerDelete(Long num); //seller 공지 삭제 
-	int noticeExposeChange(Long num, Integer exposeYN); //게시상태 변경 
+	int noticeExposeChange(Long num); //게시상태 변경 
 	
 
 }

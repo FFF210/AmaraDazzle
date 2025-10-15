@@ -149,7 +149,7 @@
 									</td>
 									<td>${noticeList.viewCnt}</td>
 									<td>
-										<span onclick="exposeState('${noticeList.noticeId}')"> 
+										<span onclick="exposeState('${noticeList.noticeId}', 'noticeSeller')"> 
 										<c:choose>
 											<c:when test="${noticeList.isExposed == '1' }">
 												<!-- 게시여부 : 게시중 -->

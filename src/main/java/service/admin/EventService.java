@@ -11,5 +11,6 @@ public interface EventService {
 	List<Event> allEventList(int p_no); // event 리스트 보기
 	List<Event> searchEventList(Map<String, String> searchContent, int p_no); // 검색된 event 리스트 
 	int adminEventWrite(Event event); //event 등록
+	int eventExposeChange(Long num);	//이벤트 노출상태 변경 
 
 }

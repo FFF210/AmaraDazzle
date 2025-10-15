@@ -3,13 +3,110 @@ function goWriteEvet() {
 	location.href = "promoEventWrite"
 }
 
-//배너 상세 페이지로 이동
+//이벤트 상세 페이지로 이동
 function goEventDetail(num) {
 	console.log(num)
 	location.href = "promoEventDetail?num=" + num
 }
 
+function exposeState(num, type){
+	fetch(`/admin/exposeChange?num=${num}&type=${type}`, {
+		method: "POST"
+	})
+	.then(res => res.json())
+	.then(data => {
+		console.log(data);
+		if (data.status == "ok") {
+			// 오버레이 표시
+			document.getElementById("overlay").classList.add("active");
+
+			//등록 성공 알럿 표시
+			showAlert("success", data.title, data.message); // 2초간 토스트
+
+			setTimeout(() => {
+				location.reload(); //현재 페이지 새로고침
+			}, 3000);
+
+
+		} else if (data.status == "partial") {
+			showAlert("error", data.title, data.message); // 2초간 토스트
+		}
+	})
+	.catch(err => {
+		console.error(err);
+		showAlert("error", "삭제 실패", "서버 통신 중 오류가 발생했습니다.");
+	});
+}
+
 document.addEventListener("DOMContentLoaded", function() {
+	const thumbInput = document.getElementById("eventThumbImg");
+	const mainImgInput = document.getElementById("fileInput");
+	const previewBtn = document.getElementById("eventPreviewBtn");	
+	const imgBtn = document.querySelector("#wrapper-eventThumbImg");//이미지 담는 div
+	const uploader = document.querySelector("#fileDropper");	//이미지 담는 div
+	
+	previewBtn.addEventListener("click", () => {
+		console.log("미리보기 버튼 클릭!!")
+		
+	  	const thumbFile = thumbInput.files[0];
+	  	const mainFile = mainImgInput.files[0];
+		const eventTypeInput = document.querySelector("#eventType .select-item.active");
+		const titleInput = document.getElementById("eventName").value.trim();
+		const startInput = document.querySelector(".input-wrapper .start_date").value.trim();
+		const endInput = document.querySelector(".input-wrapper .end_date").value.trim();
+		const eventTypeValue = eventTypeInput?.dataset.value?.trim() || "";
+//		const cateInput1 = document.querySelector("#largeSelect .select-item.active").dataset.value.trim();
+//		const cateInput2 = document.querySelector("#middleSelect .select-item.active").dataset.value.trim();
+//		const cateInput3 = document.querySelector("#smallSelect .select-item.active").dataset.value.trim();
+		
+		if (!thumbFile && !mainFile) {
+			showAlert("error", " ", "미리보기시 이미지는 필수로 첨부해야 합니다.");
+			imgBtn.classList.add("state_error");
+			uploader.classList.add("state_error");
+			return;
+		}
+
+	  const thumbUrl = URL.createObjectURL(thumbFile);
+	  const mainUrl = URL.createObjectURL(mainFile);
+	  const previewWindow = window.open("", "_blank");
+	  previewWindow.document.write(`
+	    <html>
+	      <head>
+	        <title>이벤트 화면 미리보기</title>
+			<link rel="stylesheet" href="./css/boards_detailview.css">
+			<link rel="stylesheet" href="./css/event.css">
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+	        <style>
+	          
+	        </style>
+	      </head>
+	      <body>
+		  	<section class="board_detailview">
+			  	<div class="titlePart">
+					<div class="thumbImgPart">
+						<img src="${thumbUrl}" class="eventThumbImg">
+					</div>
+					<div class="contentPart">
+						<h1 class="preview-title">${titleInput}</h1>
+						<p><i class="bi bi-dot"></i>카테고리 : ${eventTypeValue}</p>
+						<p><i class="bi bi-dot"></i>진행기간 : ${startInput} ~ ${endInput}</p>
+						<p><i class="bi bi-dot"></i> ${startInput} ~ ${endInput}</p>
+					</div>
+				</div>
+				<hr />
+				<div class="mainContentPart">
+					<div class="mainImgPart">
+						<img src="${mainUrl}" class="eventMainImg">
+					</div>
+				</div>
+			</section>
+	        
+	      </body>
+	    </html>
+	  `);
+	});
+	
+	
 	/* ************* 폼전송 + 유효성검사 ************* */
 	const frm = document.getElementById("eventWriteForm");
 	const submitBtn = document.getElementById("eventWriteBtn");
@@ -77,8 +174,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
 	//필수입력 유효성 검사 
 	submitBtn.addEventListener("click", () => {
-		const eventImg = document.querySelector('input[name="eventImg"]');
-//		const uploader = document.querySelector("#fileDropper");
+		const thumbFile = thumbInput.files[0];
+	  	const mainFile = mainImgInput.files[0];
 
 		//이벤트종류
 		if (frm.eventType.value.trim() == "") {
@@ -117,6 +214,12 @@ document.addEventListener("DOMContentLoaded", function() {
 		}
 
 		//파일첨부 시
+		if (!thumbFile && !mainFile) {
+			showAlert("error", " ", "미리보기시 이미지는 필수로 첨부해야 합니다.");
+			imgBtn.classList.add("state_error");
+			uploader.classList.add("state_error");
+			return;
+		}
 
 		//내용
 //		if (editor.getMarkdown() == "") {

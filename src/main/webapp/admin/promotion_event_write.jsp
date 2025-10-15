@@ -67,7 +67,7 @@
 			<div class="part_section mainhead_part">
 				<div class="part_title">이벤트명 <span class="reqired_write">*</span></div>
 				<div class="part_content">
-					<input type="text" name="eventName" placeholder="이벤트명을 입력하세요 (최대 100자까지 입력가능)" style="width: 100%;" maxlength="100"/>
+					<input type="text" name="eventName" id="eventName" placeholder="이벤트명을 입력하세요 (최대 100자까지 입력가능)" style="width: 100%;" maxlength="100"/>
 				</div>
 			</div>
 
@@ -102,7 +102,7 @@
 						
 					</div>
 					<div class="btn_part">
-<!-- 						<button type="button" class="btn second_btn action_btn">미리보기</button> -->
+						<button type="button" class="btn second_btn action_btn" id="eventPreviewBtn">미리보기</button>
 						<button type="button" class="btn first_btn action_btn" id="eventWriteBtn">등록</button>
 					</div>
 				</div>

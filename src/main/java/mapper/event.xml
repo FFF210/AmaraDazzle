@@ -497,6 +497,19 @@
 		#{eventName},#{thumbnailFileId}, #{detailFileId}, #{categoryId},
 		#{content}, #{writer}, now())
 	</insert>
+	
+	
+	<!-- 이벤트 노출상태 변경  -->
+	<update id="eventExposeChange" parameterType="Long">
+		UPDATE event 
+		SET 
+		expose_YN = NOT expose_YN, 
+		start_date = CASE 
+                        WHEN expose_YN = 1 THEN NOW() 
+                        ELSE start_date 
+                     END
+		WHERE event_id = #{event_id}
+	</update>
 
 	<!-- ======================= [소비자] 브랜드의 진행 중인 이벤트 조회 ======================= -->
 	<select id="selectEventsByBrandId" parameterType="Long"
