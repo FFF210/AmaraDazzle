@@ -13,6 +13,7 @@ public interface EventDAO {
 	List<Event> searchEventList(SearchConditionDTO sc_DTO); // 검색된 event 리스트
 	void eventViewCount(int num);
 	int adminEventWrite(Event event); //이벤트 등록 
+	int eventExposeChange(Long num);	//이벤트 노출 여부 변경 
 	
 	
 

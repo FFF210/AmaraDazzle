@@ -16,6 +16,6 @@ public interface NoticeDAO {
 	void viewCount(int num);
 	int noticeSellerEdit(Notice notice_DTO);	//seller 공지 수정 
 	int noticeSellerDelete(Long num);	// seller 공지 삭제 
-	int noticeExposeChange(Map<String, Object> map); //게시상태 변경 
+	int noticeExposeChange(Long num); //게시상태 변경 
 
 }

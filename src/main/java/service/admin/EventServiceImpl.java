@@ -70,4 +70,10 @@ public class EventServiceImpl implements EventService {
 		return e_dao.adminEventWrite(event);
 	}
 
+	//이벤트 노출상태 변경 
+	@Override
+	public int eventExposeChange(Long num) {
+		return e_dao.eventExposeChange(num);
+	}
+
 }

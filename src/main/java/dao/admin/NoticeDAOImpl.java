@@ -114,9 +114,9 @@ public class NoticeDAOImpl implements NoticeDAO {
 
 	// 게시상태 변경
 	@Override
-	public int noticeExposeChange(Map<String, Object> map) {
+	public int noticeExposeChange(Long num) {
 		try (SqlSession ss = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-			int result = ss.delete("mapper.notice.noticeExposeChange", map);
+			int result = ss.update("mapper.notice.noticeExposeChange", num);
 
 			if (result > 0) {
 				ss.commit();

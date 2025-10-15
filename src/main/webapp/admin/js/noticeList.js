@@ -12,9 +12,9 @@ function goNoticeDetail(num, target) {
 	}
 }
 
-function exposeState(num){
-	fetch(`/admin/exposeChange?num=${num}`, {
-		method: "GET"
+function exposeState(num, type){
+	fetch(`/admin/exposeChange?num=${num}&type=${type}`, {
+		method: "POST"
 	})
 	.then(res => res.json())
 	.then(data => {

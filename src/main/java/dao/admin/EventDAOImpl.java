@@ -65,4 +65,19 @@ public class EventDAOImpl implements EventDAO {
 		}
 	}
 
+	@Override
+	public int eventExposeChange(Long num) {
+		try (SqlSession ss = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			int result = ss.update("mapper.event.eventExposeChange", num);
+			
+			if (result > 0) {
+				ss.commit();
+			} else {
+				ss.rollback();
+			}
+
+			return result;
+		}
+	}
+
 }

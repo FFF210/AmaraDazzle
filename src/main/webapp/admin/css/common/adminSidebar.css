@@ -22,6 +22,7 @@
 	align-self: flex-start; /* flex 컨테이너에서 sticky가 먹히게 */
 	justify-content: space-between;
 	flex-shrink: 0;
+	padding-bottom : 10px;
 }
 
 
