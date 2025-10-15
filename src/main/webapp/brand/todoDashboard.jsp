@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -80,15 +81,15 @@
 					<h3 class="section-title">오늘 할 일</h3>
 					<div class="status-list">
 						<a href="/brand/orderList?status=PAID" class="status-item"><span
-							class="status-title">결제 완료 주문</span> <span>${todo.paidOrderCount}건</span>
+							class="status-title">결제 완료 주문</span> <span>${todo.paidOrderCount} 건</span>
 						</a> <a href="/brand/orderList?status=PREPARING" class="status-item"><span
-							class="status-title">배송 대기</span> <span>${todo.preparingOrderCount}건</span>
+							class="status-title">배송 대기</span> <span>${todo.preparingOrderCount} 건</span>
 						</a> <a href="/brand/returnList?status=REQUESTED" class="status-item"><span
-							class="status-title">반품 요청</span><span>${todo.returnRequestedCount}건</span>
+							class="status-title">반품 요청</span><span>${todo.returnRequestedCount} 건</span>
 						</a> <a href="/brand/exchangeList?status=REQUESTED"
-							class="status-item"><span class="status-title">교환 요청</span><span>${todo.exchangeRequestedCount}건</span>
+							class="status-item"><span class="status-title">교환 요청</span><span>${todo.exchangeRequestedCount} 건</span>
 						</a> <a href="/brand/qnaList?answerStatus=PENDING" class="status-item"><span
-							class="status-title">미답변 문의</span><span>${todo.unansweredInquiryCount}건</span>
+							class="status-title">미답변 문의</span><span>${todo.unansweredInquiryCount} 건</span>
 						</a>
 					</div>
 				</section>
@@ -150,18 +151,20 @@
 						<c:choose>
 							<c:when test="${not empty products}">
 								<div class="top3-container">
-									<c:forEach var="product" items="${products}" varStatus="loop">
-										<div class="top3-card">
-											<div class="rank-badge">
-												<c:choose>
-													<c:when test="${loop.index == 0}">🥇 1위</c:when>
-													<c:when test="${loop.index == 1}">🥈 2위</c:when>
-													<c:when test="${loop.index == 2}">🥉 3위</c:when>
-												</c:choose>
-											</div>
 
-											<img src="/upload/${product.thumbnailFileId}"
-												alt="${product.productName}" />
+									<c:set var="order" value="${fn:split('1,0,2', ',')}" />
+									<c:forEach var="i" items="${order}">
+										<c:set var="product" value="${products[i]}" />
+
+										<div class="top3-card"
+											onclick="location.href='/store/productDetail?productId=${product.productId}'"
+											style="cursor: pointer;">
+											<div class="rank-badge">${i + 1}위</div>
+
+											<img
+												src="${pageContext.request.contextPath}/image?fileId=${product.thumbnailFileId}"
+												alt="대표 이미지" width="100px" height="100px" />
+
 											<div class="name">${product.productName}</div>
 											<div class="sold">
 												<fmt:formatNumber value="${product.totalSold}" />
@@ -172,8 +175,7 @@
 								</div>
 							</c:when>
 							<c:otherwise>
-								<p style="color: #666; font-size: 14px;">이번 주 판매된 상품이
-									없습니다.</p>
+								<p style="color: #666; font-size: 14px;">이번 주 판매된 상품이 없습니다.</p>
 							</c:otherwise>
 						</c:choose>
 					</section>
