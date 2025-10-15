@@ -59,7 +59,7 @@
 #pinBtn {
 	background: none;
 	border: none;
-	color: #4B4B4B;
+	color: #333;
 	cursor: pointer;
 }
 
@@ -94,7 +94,7 @@
 	align-items: center;
 	gap: 8px;
 	padding: 8px 16px;
-	color: #4B4B4B;
+	color: #333;
 	text-decoration: none;
 	cursor: pointer;
 	box-sizing: border-box;

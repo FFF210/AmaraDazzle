@@ -18,22 +18,12 @@
 	<!-- 메뉴 리스트 -->
 	<ul class="menu">
 		<!-- 단일 메뉴 -->
-		<li class="menu-item"><a href="/brand/todoDashboard" class="menu-link"
-			title="홈"> <i class="bi bi-house-fill"></i> <span
+		<li class="menu-item"><a href="/brand/todoDashboard"
+			class="menu-link" title="홈"> <i class="bi bi-house-fill"></i> <span
 				class="menu-text">홈</span>
 		</a></li>
 
 		<!-- 서브메뉴 포함 -->
-		<li class="menu-item has-submenu">
-			<button class="menu-link" title="상품 관리">
-				<i class="bi bi-box-seam-fill"></i> <span class="menu-text">상품
-					관리</span> <i class="bi bi-chevron-down submenu-icon"></i>
-			</button>
-			<ul class="submenu">
-				<li><a href="/brand/productDetail">상품 등록</a></li>
-				<li><a href="/brand/productList">상품 목록 조회</a></li>
-			</ul>
-		</li>
 
 		<li class="menu-item has-submenu">
 			<button class="menu-link" title="주문·배송 관리">
@@ -46,6 +36,50 @@
 				<li><a href="/brand/exchangeList">교환 관리</a></li>
 				<li><a href="/brand/returnList">반품 관리</a></li>
 				<li><a href="/brand/shippingList">배송 관리</a></li>
+			</ul>
+		</li>
+
+		<li class="menu-item has-submenu">
+			<button class="menu-link" title="통계 지표">
+				<i class="bi bi-bar-chart-fill"></i> <span class="menu-text">통계
+					지표</span> <i class="bi bi-chevron-down submenu-icon"></i>
+			</button>
+			<ul class="submenu">
+				<li><a href="/brand2/dashboard">대시보드</a></li>
+				<li><a href="/brand2/salesOverview">매출 현황</a></li>
+			</ul>
+		</li>
+
+		<li class="menu-item has-submenu">
+			<button class="menu-link" title="프로모션">
+				<i class="bi bi-tags-fill"></i> <span class="menu-text">프로모션</span>
+				<i class="bi bi-chevron-down submenu-icon"></i>
+			</button>
+			<ul class="submenu">
+				<li><a href="/brand2/eventList">이벤트 신청 및 조회</a></li>
+			</ul>
+		</li>
+
+
+		<li class="menu-item has-submenu">
+			<button class="menu-link" title="쿠폰 발급">
+				<i class="bi bi-envelope-at-fill"></i> <span class="menu-text">쿠폰
+					발급</span> <i class="bi bi-chevron-down submenu-icon"></i>
+			</button>
+			<ul class="submenu">
+				<li><a href="#">쿠폰 발급</a></li>
+				<li><a href="#">쿠폰 발급 조회</a></li>
+			</ul>
+		</li>
+
+		<li class="menu-item has-submenu">
+			<button class="menu-link" title="배너 광고">
+				<i class="bi bi-badge-ad-fill"></i> <span class="menu-text">배너
+					광고</span> <i class="bi bi-chevron-down submenu-icon"></i>
+			</button>
+			<ul class="submenu">
+				<li><a href="/brand2/adbanner">배너 광고 신청</a></li>
+				<li><a href="/brand2/adbannerList">배너 광고 조회</a></li>
 			</ul>
 		</li>
 
@@ -71,46 +105,15 @@
 			</ul>
 		</li>
 
-		<li class="menu-item has-submenu">
-			<button class="menu-link" title="프로모션">
-				<i class="bi bi-tags-fill"></i> <span class="menu-text">프로모션</span>
-				<i class="bi bi-chevron-down submenu-icon"></i>
-			</button>
-			<ul class="submenu">
-				<li><a href="/brand2/eventList">이벤트 신청 및 조회</a></li>
-			</ul>
-		</li>
 
 		<li class="menu-item has-submenu">
-			<button class="menu-link" title="배너 광고">
-				<i class="bi bi-badge-ad-fill"></i> <span class="menu-text">배너
-					광고</span> <i class="bi bi-chevron-down submenu-icon"></i>
+			<button class="menu-link" title="상품 관리">
+				<i class="bi bi-box-seam-fill"></i> <span class="menu-text">상품
+					관리</span> <i class="bi bi-chevron-down submenu-icon"></i>
 			</button>
 			<ul class="submenu">
-				<li><a href="/brand2/adbanner">배너 광고 신청</a></li>
-				<li><a href="/brand2/adbannerList">배너 광고 조회</a></li>
-			</ul>
-		</li>
-
-		<li class="menu-item has-submenu">
-			<button class="menu-link" title="쿠폰 발급">
-				<i class="bi bi-envelope-at-fill"></i> <span class="menu-text">쿠폰 발급</span> 
-				<i class="bi bi-chevron-down submenu-icon"></i>
-			</button>
-			<ul class="submenu">
-				<li><a href="#">쿠폰 발급</a></li>
-				<li><a href="#">쿠폰 발급 조회</a></li>
-			</ul>
-		</li>
-
-		<li class="menu-item has-submenu">
-			<button class="menu-link" title="통계 지표">
-				<i class="bi bi-bar-chart-fill"></i> <span class="menu-text">통계
-					지표</span> <i class="bi bi-chevron-down submenu-icon"></i>
-			</button>
-			<ul class="submenu">
-				<li><a href="/brand2/dashboard">대시보드</a></li>
-				<li><a href="/brand2/salesOverview">매출 현황</a></li>
+				<li><a href="/brand/productDetail">상품 등록</a></li>
+				<li><a href="/brand/productList">상품 목록 조회</a></li>
 			</ul>
 		</li>
 
