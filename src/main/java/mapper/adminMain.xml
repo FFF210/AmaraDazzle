@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.adminMain">
+
+	<!-- 기간별 주문건수  -->
+	<select id="orderCntByPeriod" resultType="Map">
+		SELECT 
+		    todayOrder.count AS today_order_count,
+		    thisMonthOrder.count AS this_month_order_count,
+		    ROUND(((todayOrder.count - yesterdayOrder.count) / NULLIF(yesterdayOrder.count, 0)) * 100, 2) AS day_order_diff_percent,
+		    ROUND(((thisMonthOrder.count - lastMonthOrder.count) / NULLIF(lastMonthOrder.count, 0)) * 100, 2) AS month_order_diff_percent
+		FROM
+		    (SELECT COUNT(*) AS count FROM orders WHERE DATE(created_at) = CURDATE()) AS todayOrder,
+		    (SELECT COUNT(*) AS count FROM orders WHERE DATE(created_at) = CURDATE() - INTERVAL 1 DAY) AS yesterdayOrder,
+		    (SELECT COUNT(*) AS count FROM orders WHERE created_at &gt;= DATE_FORMAT(CURDATE(), '%Y-%m-01')
+		       												AND created_at &lt; CURDATE()) AS thisMonthOrder,
+		    (SELECT COUNT(*) AS count FROM orders WHERE created_at &gt;= DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01')
+		       												AND created_at &lt;  DATE_FORMAT(CURDATE(), '%Y-%m-01')) AS lastMonthOrder
+	</select>
+	
+	<!-- 기간별 가입자수  -->
+	<select id="memberCntByPeriod" resultType="Map">
+		SELECT 
+		    todayMember.count AS today_member_count,
+		    thisMonthMember.count AS this_month_member_count,
+		    ROUND(((todayMember.count - yesterdayMember.count) / NULLIF(yesterdayMember.count, 0)) * 100, 2) AS day_member_diff_percent,
+		    ROUND(((thisMonthMember.count - lastMonthMember.count) / NULLIF(lastMonthMember.count, 0)) * 100, 2) AS month_member_diff_percent
+		FROM
+		    (SELECT COUNT(*) AS count FROM member WHERE DATE(created_at) = CURDATE()) AS todayMember,
+		    (SELECT COUNT(*) AS count FROM member WHERE DATE(created_at) = CURDATE() - INTERVAL 1 DAY) AS yesterdayMember,
+		    (SELECT COUNT(*) AS count FROM member WHERE created_at &gt;= DATE_FORMAT(CURDATE(), '%Y-%m-01')
+		       												AND created_at &lt; CURDATE()) AS thisMonthMember,
+		    (SELECT COUNT(*) AS count FROM member WHERE created_at &gt;= DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01')
+		       												AND created_at &lt;  DATE_FORMAT(CURDATE(), '%Y-%m-01')) AS lastMonthMember
+	</select>
+	
+	
+	
+	<!-- 베스트셀러 TOP5  -->
+	<select id="bestSellerTop5" resultType="Map">
+	    SELECT
+	        p.product_id,
+	        p.name AS product_name,
+	        p.price AS product_price,
+	        b.brand_name,
+	        
+	        <!-- 이번 달 판매량 -->
+	        COALESCE(SUM(CASE 
+				            WHEN oi.created_at &gt;= DATE_FORMAT(CURDATE(), '%Y-%m-01')
+				                 AND oi.created_at &lt; CURDATE()
+				            THEN oi.quantity END), 0) AS this_month_qty,
+	        
+	        <!-- 지난 달 판매량 -->
+	        COALESCE(SUM(CASE 
+				            WHEN oi.created_at &gt;= DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01')
+				                 AND oi.created_at &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01')
+				            THEN oi.quantity END), 0) AS last_month_qty,
+	        
+	        <!-- 판매량 변화율 -->
+	        CASE WHEN COALESCE(SUM(CASE 
+			        WHEN oi.created_at &gt;= DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01')
+			          AND oi.created_at &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01')
+			        THEN oi.quantity END), 0) = 0 
+			    THEN 0
+			    ELSE ROUND((
+			        (COALESCE(SUM(CASE 
+			            WHEN oi.created_at &gt;= DATE_FORMAT(CURDATE(), '%Y-%m-01')
+			              AND oi.created_at &lt; CURDATE()
+			            THEN oi.quantity END), 0)
+			         -
+			         COALESCE(SUM(CASE 
+			            WHEN oi.created_at &gt;= DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01')
+			              AND oi.created_at &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01')
+			            THEN oi.quantity END), 0)
+			        )
+			        /
+			        COALESCE(SUM(CASE 
+			            WHEN oi.created_at &gt;= DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01')
+			              AND oi.created_at &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01')
+			            THEN oi.quantity END), 1)
+			    ) * 100, 2)
+			END AS diff_percent
+	    FROM order_item oi
+	    JOIN product p ON p.product_id = oi.product_id
+	    JOIN brand b ON b.brand_id = oi.brand_id
+	    WHERE oi.status IN ('CONFIRMED')
+	    GROUP BY p.product_id, p.name, b.brand_name
+	    ORDER BY this_month_qty DESC
+	    LIMIT 5
+	</select>
+	
+	<!-- 판매율 높은 브랜드 TOP5 -->
+	
+
+</mapper>
