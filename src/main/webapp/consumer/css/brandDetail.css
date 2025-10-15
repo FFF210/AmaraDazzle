@@ -50,6 +50,8 @@
 	flex-direction: column;
 	align-items: center;
 	gap: 10px;
+	    width: 1020px;
+    margin: 0 auto;
 }
 
 .heart-btn.icon-only {
@@ -79,15 +81,6 @@ h1 {
 	color: #666;
 }
 
-/* 브랜드 이미지 영역 */
-.brand-image {
-	content: "";
-	width: 1020px;
-	height: 320px;
-	background-color: #ddd;
-	display: block;
-}
-
 /* 브랜드 소개 텍스트 */
 .intro-wrapper {
 	display: flex;
@@ -115,6 +108,7 @@ h1 {
 	width: 1020px;
 	flex-direction: column;
 	align-items: center;
+	margin: 0 auto;
 }
 
 /* 상품 카드 4열 x 여러 줄 */

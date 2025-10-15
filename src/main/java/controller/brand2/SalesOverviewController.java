@@ -89,7 +89,7 @@ public class SalesOverviewController extends HttpServlet {
 			List<SalesOverview> overviewList  = service.getCategorySalesTrend(params);
 
 			// 테이블 데이터용 (pivot 구조)
-	        List<SalesStatusRow> salesStatusList = service.getSalesStatusRows(params);
+	        Map<String, Object> result = service.getSalesStatusRows(params);
 			
 			// 카테고리 depth=1 목록
 			List<Category> categories = service.getLargeCategories();
@@ -139,7 +139,11 @@ public class SalesOverviewController extends HttpServlet {
 			String salesChartJson = gson.toJson(chartData);
 
 			// ====== JSP에 전달 ======
-			request.setAttribute("salesList", salesStatusList);
+			request.setAttribute("salesList", result.get("salesList"));
+			request.setAttribute("totalCount", result.get("totalCount"));
+			request.setAttribute("totalPages", result.get("totalPages"));
+			request.setAttribute("currentPage", result.get("page"));
+			
 			request.setAttribute("salesChartJson", salesChartJson);
 			request.setAttribute("categories", categories);
 

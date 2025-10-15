@@ -23,6 +23,7 @@
 <link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/heartBtn.css'/>" />
 <link rel="stylesheet" href="<c:url value='/tagcss/price.css'/>" />
+<link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 <link rel="stylesheet" href="<c:url value='/consumer/css/header.css'/>" />
 <link rel="stylesheet" href="<c:url value='/consumer/css/footer.css'/>" />
 <link rel="stylesheet"
@@ -32,6 +33,16 @@
 	<!-- 상단 헤더 -->
 	<%@ include file="./header.jsp"%>
 
+	<div
+		style="display: flex; align-items: center; justify-content: space-between; padding: 20px 210px 10px 210px; margin: 0 auto;">
+		<p style="font-size: 27px; color: #111;">${eventDetail.eventName}</p>
+		<p style="font-size: 13px; color: #999">
+			<fmt:formatDate value="${eventDetail.startDate}" pattern="yyyy-MM-dd" />
+			~
+			<fmt:formatDate value="${eventDetail.endDate}" pattern="yyyy-MM-dd" />
+		</p>
+	</div>
+
 	<!-- 이벤트 상세 본문 (이미지) -->
 	<div class="event-detail">
 		<img
@@ -39,65 +50,98 @@
 			alt="이벤트 대표 이미지" width="630px" />
 	</div>
 
-	<!-- 이벤트 관련 상품 -->
+	<c:set var="currentBrandId" value="0" />
+
 	<div class="event-products">
+		<c:forEach var="p" items="${eventProducts}" varStatus="loop">
+
+			<%-- 브랜드가 바뀌면 새로운 섹션 시작 --%>
+			<c:if test="${p.brandId ne currentBrandId}">
+				<%-- 이전 섹션 닫기 (첫 번째 반복 제외) --%>
+				<c:if test="${!loop.first}">
+	</div>
+	<!-- .product-grid -->
+	</div>
+	<!-- .brand-section -->
+	</c:if>
+
+	<%-- 새로운 브랜드 섹션 시작 --%>
+	<div class="brand-section">
+		<h3 class="brand-title">${p.brandName}</h3>
 		<div class="product-grid">
-			<c:forEach var="p" items="${eventProducts}">
-				<%-- 할인율(saleRate) 계산 --%>
-				<c:choose>
-					<c:when test="${p.discountType eq 'RATE'}">
-						<c:set var="saleRateRaw" value="${p.discountValue}" />
-					</c:when>
-					<c:when test="${p.discountType eq 'AMOUNT'}">
-						<c:set var="saleRateRaw"
-							value="${(p.discountValue / p.price) * 100}" />
-					</c:when>
-					<c:otherwise>
-						<c:set var="saleRateRaw" value="0" />
-					</c:otherwise>
-				</c:choose>
+			<c:set var="currentBrandId" value="${p.brandId}" />
+			</c:if>
 
-				<%-- 숫자 포맷팅 (소수점 제거, 3자리마다 콤마) --%>
-				<fmt:formatNumber value="${p.finalPrice}" type="number"
-					maxFractionDigits="0" groupingUsed="true" var="finalPrice" />
+			<%-- 할인율(saleRate) 계산 --%>
+			<c:choose>
+				<c:when test="${p.discountType eq 'RATE'}">
+					<c:set var="saleRateRaw" value="${p.discountValue}" />
+				</c:when>
+				<c:when test="${p.discountType eq 'AMOUNT'}">
+					<c:set var="saleRateRaw"
+						value="${(p.discountValue / p.price) * 100}" />
+				</c:when>
+				<c:otherwise>
+					<c:set var="saleRateRaw" value="0" />
+				</c:otherwise>
+			</c:choose>
 
-				<fmt:formatNumber value="${saleRateRaw}" type="number"
-					maxFractionDigits="0" groupingUsed="true" var="saleRate" />
+			<%-- 숫자 포맷팅 (소수점 제거, 3자리마다 콤마) --%>
+			<fmt:formatNumber value="${p.finalPrice}" type="number"
+				maxFractionDigits="0" groupingUsed="true" var="finalPrice" />
 
-				<c:url value="/store/productDetail" var="detailUrl">
-					<c:param name="productId" value="${p.productId}" />
-				</c:url>
+			<fmt:formatNumber value="${saleRateRaw}" type="number"
+				maxFractionDigits="0" groupingUsed="true" var="saleRate" />
 
-				<%-- 상품 카드 렌더링 --%>
-				<my:productCard brand="${p.brandName}" productId="${p.productId}"
-					title="${p.name}" isWished="${p.isWished}"
-					isSale="${p.discountType ne null and p.discountValue ne null 
+			<c:url value="/store/productDetail" var="detailUrl">
+				<c:param name="productId" value="${p.productId}" />
+			</c:url>
+
+			<%-- 상품 카드 렌더링 --%>
+			<my:productCard brand="${p.brandName}" productId="${p.productId}"
+				title="${p.name}" isWished="${p.isWished}"
+				isSale="${p.discountType ne null and p.discountValue ne null 
           and p.startDate ne null 
           and p.endDate ne null 
           and p.startDate.time <= now.time 
           and now.time <= p.endDate.time}"
-					hasOption="${p.hasOption eq 1}" originPrice="${p.price}"
-					saleRate="${saleRate}" finalPrice="${finalPrice}"
-					href="${detailUrl}" thumbnailFileId="${p.thumbnailFileId}">
+				hasOption="${p.hasOption eq 1}" originPrice="${p.price}"
+				saleRate="${saleRate}" finalPrice="${finalPrice}"
+				href="${detailUrl}" thumbnailFileId="${p.thumbnailFileId}">
 
-					<c:if
-						test="${p.discountType ne null 
+				<c:if
+					test="${p.discountType ne null 
           and p.discountValue ne null 
           and p.startDate ne null 
           and p.endDate ne null 
           and p.startDate.time <= now.time 
           and now.time <= p.endDate.time}">
-						<my:tag color="red" size="sm" text="세일" />
-					</c:if>
-					<c:if test="${p.isExclusive ne 0}">
-						<my:tag color="green" size="sm" text="단독" />
-					</c:if>
-					<c:if test="${p.isPlanned ne 0}">
-						<my:tag color="yellow" size="sm" text="기획" />
-					</c:if>
-				</my:productCard>
-			</c:forEach>
+					<my:tag color="red" size="sm" text="세일" />
+				</c:if>
+				<c:if test="${p.isExclusive ne 0}">
+					<my:tag color="green" size="sm" text="단독" />
+				</c:if>
+				<c:if test="${p.isPlanned ne 0}">
+					<my:tag color="yellow" size="sm" text="기획" />
+				</c:if>
+			</my:productCard>
+
+			<%-- 마지막 루프면 섹션 닫기 --%>
+			<c:if test="${loop.last}">
 		</div>
+		<!-- .product-grid -->
+	</div>
+	<!-- .brand-section -->
+	</c:if>
+
+	</c:forEach>
+	</div>
+
+
+
+	<div
+		style="width: 100%; display: flex; align-items: center; justify-content: center; margin: 20px 0 40px 0;">
+		<button class="btn btn-outline btn-lg" style="width: 150px;" onclick="location.href='/store/eventList'">목록</button>
 	</div>
 
 	<!-- 하단 푸터 -->

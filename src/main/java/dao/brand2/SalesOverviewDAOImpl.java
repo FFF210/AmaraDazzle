@@ -26,4 +26,12 @@ public class SalesOverviewDAOImpl implements SalesOverviewDAO {
 			return sqlSession.selectList("mapper.orderItem.selectSalesStatusRows", params);
 		}
 	}
+	
+	// 테이블용 페이징처리 개수 조회
+	@Override
+	public Integer selectSalesOverviewCount(Map<String, Object> params) {
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.orderItem.selectSalesStatusCount", params);
+		}
+	}
 }

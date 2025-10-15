@@ -93,7 +93,7 @@
 		</li>
 
 		<li class="menu-item has-submenu">
-			<button class="menu-link" title="마케팅 메일">
+			<button class="menu-link" title="쿠폰 발급">
 				<i class="bi bi-envelope-at-fill"></i> <span class="menu-text">쿠폰 발급</span> 
 				<i class="bi bi-chevron-down submenu-icon"></i>
 			</button>
@@ -111,8 +111,6 @@
 			<ul class="submenu">
 				<li><a href="/brand2/dashboard">대시보드</a></li>
 				<li><a href="/brand2/salesOverview">매출 현황</a></li>
-				<li><a href="/brand2/pefOverview">성과 지표</a></li>
-				<li><a href="/brand2/eventOverview">메인 이벤트 성과</a></li>
 			</ul>
 		</li>
 

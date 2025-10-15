@@ -137,13 +137,13 @@
 					<div
 						class="status-item ${activeStatus eq 'delivered' ? 'active' : ''}">
 						<div class="status-count">${orderSummary.deliveredCount}</div>
-						<div class="status-label">배송완료</div>
+						<div class="status-label">배송중</div>
 					</div>
 
 					<div
 						class="status-item ${activeStatus eq 'confirmed' ? 'active' : ''}">
 						<div class="status-count">${orderSummary.confirmedCount}</div>
-						<div class="status-label">구매확정</div>
+						<div class="status-label">배송완료</div>
 					</div>
 				</div>
 			</div>

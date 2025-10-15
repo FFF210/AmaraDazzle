@@ -292,7 +292,7 @@
 		'FINISHED' THEN 2
 		ELSE 3
 		END,
-		e.start_date ASC
+		e.start_date DESC
 		LIMIT
 		#{offset}, #{limit}
 	</select>

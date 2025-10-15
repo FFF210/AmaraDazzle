@@ -33,15 +33,50 @@
 	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://js.tosspayments.com/v1/payment"></script>
+
+<style>
+/* 박스 모양 전용 */
+.notice {
+	background: #fff3cd; /* 노란색 */
+	border: 1px solid #ffeeba; /* 노란 테두리 */
+	color: #856404;
+	padding: 16px 20px;
+	border-radius: 8px;
+	font-size: 15px;
+	text-align: center;
+	width: 100%;
+	max-width: 600px; /* 카드처럼 적당히 제한 */
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* 살짝 그림자 */
+}
+
+/* 멤버십 상태 영역 */
+.membership-status {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 20px;
+	margin: 10px 0px 10px;
+	padding: 10px;
+	max-width: 900px;
+	/* 기존 배경/테두리 제거 */
+	background: none;
+	border: none;
+}
+</style>
+
 </head>
 <body>
 	<my:layout>
 		<my:breadcrumb
-			items="멤버십 관리:/brand2/membershipList " />
+			items="멤버십 관리:/brand2/membershipList, 멤버십 결제:/brand2/membership" />
 		<div class="membershipPayContainer">
-			<div class="notice">멤버십 가입 시 발송한 마케팅 메일과 메인 이벤트의 매출·클릭·구매 성과
-				지표를 확인할 수 있으며, 요금제별 월 발송 건수가 지원됩니다.</div>
-
+			<div class="membership-status">
+				<div class="notice">
+					<strong>멤버십에 가입하면 메인페이지 'PICK' 영역에 브랜드가 노출됩니다.</strong> <br> <span
+						class="text-muted" style="font-size: 0.9em;">수많은 고객이 매일
+						방문하는 첫 화면에서 브랜드를 알릴 수 있는 특별한 기회를 놓치지 마세요!</span>
+				</div>
+			</div>
 			<!-- 멤버십 플랜 반복 출력 -->
 			<c:forEach var="plan" items="${plans}">
 				<label class="plan"> <input type="radio" name="plan"

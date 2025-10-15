@@ -329,10 +329,31 @@ public class OrderServiceImpl implements OrderService {
 				orderItem.setQuantity((Integer) item.get("quantity"));
 
 				// itemTotal 계산
-				BigDecimal itemTotal = unitPrice.multiply(new BigDecimal((Integer) item.get("quantity")));
-				orderItem.setLineSubtotal(itemTotal);
-				orderItem.setDiscount((BigDecimal) orderData.get("discountFinal"));
+//				BigDecimal itemTotal = unitPrice.multiply(new BigDecimal((Integer) item.get("quantity")));
+//				orderItem.setLineSubtotal(itemTotal);
+//				orderItem.setDiscount((BigDecimal) orderData.get("discountFinal"));
+				Object itemTotalObj = item.get("itemTotal");
+				BigDecimal itemTotal;
+				if (itemTotalObj instanceof BigDecimal) {
+					itemTotal = (BigDecimal) itemTotalObj;
+				} else if (itemTotalObj instanceof Integer) {
+					itemTotal = new BigDecimal((Integer) itemTotalObj);
+				} else if (itemTotalObj instanceof Double) {
+					itemTotal = BigDecimal.valueOf((Double) itemTotalObj);
+				} else {
+					throw new Exception("itemTotalObj 타입 오류");
+				}				
 				orderItem.setTotal(itemTotal);
+				orderItem.setLineSubtotal(itemTotal);
+				orderItem.setDiscount(unitPrice.multiply(new BigDecimal((Integer) item.get("quantity"))).subtract(itemTotal));
+				
+				// memberCouponId 안전하게 처리
+				if(item.get("memberCouponId")!=null) {
+					System.out.println(item.get("memberCouponId"));
+					orderItem.setMemberCouponId((Long)item.get("memberCouponId"));
+				}
+			
+				
 				orderItem.setStatus("PAID");
 
 				orderDAO.createOrderItem(orderItem);

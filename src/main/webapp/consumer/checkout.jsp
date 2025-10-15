@@ -220,8 +220,9 @@
 											value="${item.unitPrice}" pattern="#,###" />원</td>
 									<td style="padding: 0; color: #111; font-size: 13px;">${item.quantity}</td>
 									<td
-										style="padding: 0; color: #111; font-size: 13px; font-weight: 500;"><fmt:formatNumber
-											value="${item.itemTotal}" pattern="#,###" />원</td>
+										style="padding: 0; color: #111; font-size: 13px; font-weight: 500;">
+										<span id="brandId-${item.brandId}" data-totalprice="${item.itemTotal}" data-productid="${item.productId}" class="totalPrice">
+											<fmt:formatNumber value="${item.itemTotal}" pattern="#,###" /></span>원</td>
 								</tr>
 							</c:forEach>
 						</tbody>
@@ -243,7 +244,7 @@
 										<option value="">사용 가능한 쿠폰 목록</option>
 										<c:forEach var="coupon" items="${availableCoupons}">
 											<option value="${coupon.memberCouponId}"
-												data-amount="${coupon.amount}">${coupon.cname}(
+												data-amount="${coupon.amount}" data-brandid="${coupon.writerId}">${coupon.cname}(
 												<fmt:formatNumber value="${coupon.amount}" pattern="#,###" />원
 												할인)
 											</option>
@@ -353,6 +354,9 @@
 									value="${item.quantity}">
 								<input type="hidden" name="items[${status.index}].unitPrice"
 									value="${item.unitPrice}">
+								<input type="hidden" name="items[${status.index}].itemTotal"
+									value="${item.itemTotal}" id="h-${item.productId}">
+								<input type="hidden" name="items[${status.index}].memberCouponId" id="c-${item.productId}">
 							</c:forEach>
 
 							<!-- 금액 정보 -->
@@ -373,9 +377,30 @@
 	<script src="<c:url value='/js/selectbox.js'/>"></script>
 	<script>
 		function setCouponAmount(select) {
+			resetProductTotalPrice();
 			const selectedOption = select.options[select.selectedIndex];
 			const amount = selectedOption.dataset.amount || "";
 			document.getElementById("couponAmount").value = amount;
+			const brandid = selectedOption.dataset.brandid || "";
+			const itemTotPriceSpan = document.getElementById("brandId-"+brandid);
+			if(itemTotPriceSpan!=null) {
+				console.log(itemTotPriceSpan.dataset.totalprice)
+				const salePrice = +itemTotPriceSpan.dataset.totalprice - +amount;
+				itemTotPriceSpan.innerText = salePrice.toLocaleString();
+				const hiddenItemTotal = document.getElementById("h-"+itemTotPriceSpan.dataset.productid);
+				hiddenItemTotal.value = salePrice;
+				const memberCoupon = document.getElementById("c-"+itemTotPriceSpan.dataset.productid);
+				memberCoupon.value = selectedOption.value;
+			}
+		}
+		
+		function resetProductTotalPrice() {
+			const elements = document.querySelectorAll('.totalPrice');
+			elements.forEach((el, index) => {
+			  el.innerText = (Math.floor(+el.dataset.totalprice)).toLocaleString();  
+			  document.getElementById("h-"+el.dataset.productid).value = Math.floor(+el.dataset.totalprice);
+			  document.getElementById("c-"+el.dataset.productid).value=""
+			});
 		}
 
 		window.checkoutData = {
