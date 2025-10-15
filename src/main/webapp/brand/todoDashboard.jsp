@@ -43,30 +43,38 @@
 					<h3 class="section-title">요약</h3>
 					<div class="tasks-grid">
 						<div class="task-card" onclick="location.href='/brand/orderList'">
-							<i class="bi bi-cart-check"></i>
-							<p class="task-label">오늘 주문 건 수</p>
+							<div class = "task-card-container">
+								<i class="bi bi-cart-check"></i>
+								<p class="task-label">오늘 주문 건 수</p>
+							</div>
 							<p class="task-count">${summary.todayOrderCount}</p>
 						</div>
 						<div class="task-card" onclick="location.href='/brand/returnList'">
-							<i class="bi bi-arrow-repeat"></i>
-							<p class="task-label">
-								최근 7일 내 <br>반품/교환 건 수
-							</p>
+							<div class = "task-card-container">
+								<i class="bi bi-arrow-repeat"></i>
+								<p class="task-label">
+									최근 7일 내 <br>반품/교환 건 수
+								</p>
+							</div>
 							<p class="task-count">${summary.refundExchangeCount}</p>
 						</div>
 						<div class="task-card"
 							onclick="location.href='/brand/productList'">
-							<i class="bi bi-exclamation-triangle"></i>
-							<p class="task-label">
-								재고 경고 수 <br>(재고 10 이하)
-							</p>
+							<div class = "task-card-container">
+								<i class="bi bi-exclamation-triangle"></i>
+								<p class="task-label">
+									재고 경고 수 <br>(재고 10 이하)
+								</p>
+							</div>
 							<p class="task-count">${summary.lowStockCount}</p>
 						</div>
 						<div class="task-card" onclick="location.href='/brand/reviewList'">
-							<i class="bi bi-emoji-frown"></i>
-							<p class="task-label">
-								부정 리뷰 <br>(평점 2 이하)
-							</p>
+							<div class = "task-card-container">
+								<i class="bi bi-emoji-frown"></i>
+								<p class="task-label">
+									부정 리뷰 <br>(평점 2 이하)
+								</p>
+							</div>
 							<p class="task-count">${summary.badReviewCount}</p>
 						</div>
 					</div>
@@ -81,16 +89,16 @@
 					<h3 class="section-title">오늘 할 일</h3>
 					<div class="status-list">
 						<a href="/brand/orderList?status=PAID" class="status-item"><span
-							class="status-title">결제 완료 주문</span> <span>${todo.paidOrderCount} 건</span>
-						</a> <a href="/brand/orderList?status=PREPARING" class="status-item"><span
-							class="status-title">배송 대기</span> <span>${todo.preparingOrderCount} 건</span>
-						</a> <a href="/brand/returnList?status=REQUESTED" class="status-item"><span
-							class="status-title">반품 요청</span><span>${todo.returnRequestedCount} 건</span>
-						</a> <a href="/brand/exchangeList?status=REQUESTED"
-							class="status-item"><span class="status-title">교환 요청</span><span>${todo.exchangeRequestedCount} 건</span>
-						</a> <a href="/brand/qnaList?answerStatus=PENDING" class="status-item"><span
-							class="status-title">미답변 문의</span><span>${todo.unansweredInquiryCount} 건</span>
-						</a>
+							class="status-title">결제 완료 주문</span> <span>${todo.paidOrderCount}
+								건</span> </a> <a href="/brand/orderList?status=PREPARING"
+							class="status-item"><span class="status-title">배송 대기</span> <span>${todo.preparingOrderCount}
+								건</span> </a> <a href="/brand/returnList?status=REQUESTED"
+							class="status-item"><span class="status-title">반품 요청</span><span>${todo.returnRequestedCount}
+								건</span> </a> <a href="/brand/exchangeList?status=REQUESTED"
+							class="status-item"><span class="status-title">교환 요청</span><span>${todo.exchangeRequestedCount}
+								건</span> </a> <a href="/brand/qnaList?answerStatus=PENDING"
+							class="status-item"><span class="status-title">미답변 문의</span><span>${todo.unansweredInquiryCount}
+								건</span> </a>
 					</div>
 				</section>
 
@@ -98,7 +106,7 @@
 
 				<div class="dashboard-container-wrapper-inner">
 					<!-- 이벤트 일정 -->
-					<section class="dashboard-section">
+					<%-- <section class="dashboard-section">
 						<h3 class="section-title">이벤트 일정</h3>
 						<div class="alerts">
 
@@ -130,7 +138,7 @@
 							</c:choose>
 
 						</div>
-					</section>
+					</section> --%>
 
 					<!-- 이번 주 인기 상품 -->
 					<section class="dashboard-section">
@@ -163,7 +171,7 @@
 
 											<img
 												src="${pageContext.request.contextPath}/image?fileId=${product.thumbnailFileId}"
-												alt="대표 이미지" width="100px" height="100px" />
+												alt="대표 이미지" width="140px" height="140px" />
 
 											<div class="name">${product.productName}</div>
 											<div class="sold">
