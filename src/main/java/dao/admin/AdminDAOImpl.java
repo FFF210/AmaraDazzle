@@ -8,13 +8,13 @@ import dto.AdminInfo;
 import util.MybatisSqlSessionFactory;
 
 public class AdminDAOImpl implements AdminDAO {
-	SqlSession ss = MybatisSqlSessionFactory.getSqlSessionFactory().openSession();
 
-
-	//관리자 로그인 
+	// 관리자 로그인
 	@Override
 	public AdminInfo adminLoginConfirm(Map<String, String> map) throws Exception {
-		return ss.selectOne("mapper.adminInfo.adminLoginConfirm", map);
+		try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+			return sqlSession.selectOne("mapper.adminInfo.adminLoginConfirm", map);
+		}
 	}
 
 }

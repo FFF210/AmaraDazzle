@@ -2,7 +2,7 @@
 (function() {
 'use strict';
 
-let isProcessing = false; // 중복 클릭 방지!
+let isProcessing = false;
 
 function showToast(isFollowing) {
     const toast = document.createElement('div');
@@ -19,10 +19,8 @@ function showToast(isFollowing) {
     }, 1500);
 }
 
-function toggleBrandFollow(brandId, icon, countElement) {
-    // 중복 클릭 방지!
+function toggleBrandFollow(brandId, icon) {
     if (isProcessing) {
-        console.log('이미 처리 중입니다.');
         return;
     }
     
@@ -44,35 +42,21 @@ function toggleBrandFollow(brandId, icon, countElement) {
         }
 
         if (data.success) {
-            // 하트 아이콘 상태 변경
-            if (data.isFollowing) {
-                icon.classList.remove('bi-heart');
-                icon.classList.add('bi-heart-fill', 'active');
-            } else {
-                icon.classList.remove('bi-heart-fill', 'active');
-                icon.classList.add('bi-heart');
-                
-                // 좋아요 페이지에서는 카드 제거
-                if (window.location.pathname.includes('/like')) {
-                    const card = icon.closest('.brand-card, .brand-nav-card');
-                    if (card) {
-                        card.style.opacity = '0';
-                        card.style.transition = 'opacity 0.3s';
-                        setTimeout(function() { 
-                            card.remove();
-                            
-                            const grid = document.querySelector('.brand-grid');
-                            if (grid && grid.querySelectorAll('.brand-card, .brand-nav-card').length === 0) {
-                                grid.innerHTML = '<p class="empty-message">좋아요 브랜드가 없습니다.</p>';
-                            }
-                        }, 300);
-                    }
+            // 좋아요 페이지에서는 카드 제거
+            if (!data.isFollowing && window.location.pathname.includes('/like')) {
+                const card = icon.closest('.brand-card, .brand-nav-card');
+                if (card) {
+                    card.style.opacity = '0';
+                    card.style.transition = 'opacity 0.3s';
+                    setTimeout(function() { 
+                        card.remove();
+                        
+                        const grid = document.querySelector('.brand-grid');
+                        if (grid && grid.querySelectorAll('.brand-card, .brand-nav-card').length === 0) {
+                            grid.innerHTML = '<p class="empty-message">좋아요 브랜드가 없습니다.</p>';
+                        }
+                    }, 300);
                 }
-            }
-            
-            // ✅ 서버에서 반환한 정확한 팔로워 수 사용!
-            if (countElement && data.followerCount !== undefined) {
-                countElement.textContent = data.followerCount;
             }
             
             showToast(data.isFollowing);
@@ -85,10 +69,9 @@ function toggleBrandFollow(brandId, icon, countElement) {
         alert('서버 오류가 발생했습니다.');
     })
     .finally(function() {
-        // 처리 완료 후 0.5초 뒤에 플래그 해제 (안전하게)
         setTimeout(function() {
             isProcessing = false;
-        }, 500);
+        }, 300);
     });
 }
 
@@ -104,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const brandId = brandCard ? brandCard.dataset.brandid : null;
 
             if (brandId) {
-                toggleBrandFollow(brandId, icon, null);
+                toggleBrandFollow(brandId, icon);
             }
         });
     });
@@ -113,20 +96,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const brandFavorite = document.querySelector('.brand-favorite');
     if (brandFavorite) {
         const heartBtn = brandFavorite.querySelector('.heart-btn');
-        const countElement = brandFavorite.querySelector('.count');
         const brandId = brandFavorite.dataset.brandid;
 
         if (heartBtn && brandId) {
-            // 기존 이벤트 리스너 제거 후 새로 등록 (중복 방지)
-            heartBtn.replaceWith(heartBtn.cloneNode(true));
-            const newHeartBtn = brandFavorite.querySelector('.heart-btn');
-            
-            newHeartBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-
-                const icon = newHeartBtn.querySelector('i');
-                toggleBrandFollow(brandId, icon, countElement);
+            heartBtn.addEventListener('click', function(e) {
+                // heartBtn.tag의 기본 동작은 그대로 둠 (숫자 자동 증가/감소)
+                // 우리는 API 호출만 추가
+                const icon = heartBtn.querySelector('i');
+                toggleBrandFollow(brandId, icon);
             });
         }
     }

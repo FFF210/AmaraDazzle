@@ -10,6 +10,9 @@ import dto.consumer.MembershipBrand;
 public interface BrandService {
 	// 브랜드id로 브랜드 조회
 	Brand selectBrandByBrandId(Long brandId) throws Exception;
+	
+	// 브랜드의 진행 중인 이벤트 조회
+	List<Map<String, Object>> getEventsByBrandId(Long brandId) throws Exception;
 
 	// 브랜드 팔로워 수 세기
 	int countBrandFollowers(Long brandId) throws Exception;

@@ -24,42 +24,50 @@ public class SettlementDAOImpl implements SettlementDAO {
 			ss.close();
 		}
 	}
-
 	
 
-	// 정산 처리 (정산 완료 상태로 업데이트)
-	public int settleAllCompleted(Map<String, String> map) {
-		SqlSession ss = factory.openSession(false); // 수동 커밋
-		int result = 0;
-		try {
-			result = ss.update("mapper.settlement.settleAllCompleted",map);
+	// 환불/교환 반영 처리 (세부 계산만 수행) - 단일세션으로 처리 
+	public int settleAdjustment(SqlSession ss, Map<String, String> map) {
+	    int r1 = ss.update("mapper.settlement.updateRefundAdjustment", map);
+	    int r2 = ss.update("mapper.settlement.updatePureAdjustment", map);
+	    int r3 = ss.update("mapper.settlement.updateFeeAdjustment", map);
+	    
+	    System.out.printf("[정산 반영] refund=%d, pure=%d, fee=%d%n", r1, r2, r3);
+	    
+	    return r1 + r2 + r3;
+	}
+	// 전체 정산 완료 처리
+	public int settleAllComplete(Map<String, String> map) {
+	    SqlSession ss = factory.openSession(false); // 수동 커밋
+	    int totalUpdated = 0;
+	    int statusUpdate = 0;
 
-			if (result > 0) {
-				ss.commit();
+	    try {
+	        
+	    	 totalUpdated = settleAdjustment(ss, map);
+	         statusUpdate = ss.update("mapper.settlement.settleCompleted", map);
+	         
+	         ss.commit();
+	         System.out.printf("[🔥정산 완료🔥] 데이터 반영 %d건, 상태 갱신 %d건%n", totalUpdated, statusUpdate);
 
-			} else {
-				ss.rollback();
-			}
+	    } catch (Exception e) {
+	    	 ss.rollback();
+	         System.err.println("[❌정산 오류❌] rollback됨: " + e.getMessage());
+	         throw new RuntimeException("정산 처리 실패", e);
+	         
+	    } finally {
+	        ss.close();
+	    }
 
-		} catch (Exception e) {
-			ss.rollback(); // SQL 실행 중 예외 발생 시 롤백
-			System.err.println("[정산 배치 오류] updateSettleAll 실패: " + e.getMessage());
-			throw new RuntimeException("정산 처리 중 오류 발생", e);
-
-		} finally {
-			ss.close(); // 세션 닫기
-		}
-
-		return result;
+	    return totalUpdated + statusUpdate;
 	}
 
 	// 자동정산 (로그 출력용)
 	public int autoSettle(Map<String, String> map) {
-		int result = settleAllCompleted(map);
-		System.out.println("[정산 배치] 실행됨 - 처리된 건수: " + result);
-		return result;
+	    int result = settleAllComplete(map);
+	    System.out.println("[🔥🔥🔥정산 배치] 실행됨 - 처리된 총 건수: " + result);
+	    return result;
 	}
-
 
 	// 미정산 판매자 리스트 조회
 	public List<Settlement> getPendingSettlements() {

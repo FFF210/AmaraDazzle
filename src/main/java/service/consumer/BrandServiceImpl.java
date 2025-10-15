@@ -31,6 +31,12 @@ public class BrandServiceImpl implements BrandService {
 
 		return brand;
 	}
+	
+	// 브랜드의 진행 중인 이벤트 조회
+	@Override
+	public List<Map<String, Object>> getEventsByBrandId(Long brandId) throws Exception {
+	    return brandDAO.selectEventsByBrandId(brandId);
+	}
 
 	// 브랜드 팔로워수 세기 (mapper는 brandFollow에서)
 	@Override

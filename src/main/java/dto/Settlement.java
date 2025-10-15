@@ -20,8 +20,10 @@ public class Settlement {
     private Timestamp depositedDate; // 정산완료일자
     private String writer;         // 정산책임자 (FK → admin_info.aid)
 
-    public Settlement() {
-    }
+    //조인용 컬럼 
+    private String brandName;  //brand.brand_name
+    
+    public Settlement() {}
 
     public Long getSettlementId() {
         return settlementId;
@@ -134,8 +136,15 @@ public class Settlement {
     public void setWriter(String writer) {
         this.writer = writer;
     }
+    public String getBrandName() {
+		return brandName;
+	}
 
-    @Override
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
+	}
+
+	@Override
     public String toString() {
         return "Settlement [settlementId=" + settlementId + ", brandId=" + brandId +
                 ", startDate=" + startDate + ", endDate=" + endDate +

@@ -26,7 +26,9 @@ public class FileAttach {
 	public Map<String, Object> file_save(List<Part> parts, HttpServletRequest req) throws Exception {
 		UploadFileService file_svc = new UploadFileServiceImpl();
 
+//		String savePath = req.getServletContext().getInitParameter("UPLOAD_DIR");
 		String savePath = req.getServletContext().getRealPath("/upload_file/");
+		
 		File uploadDir = new File(savePath);
 		if (!uploadDir.exists()) { //해당 경로가 없을경우
 			uploadDir.mkdirs(); // 폴더 생성
@@ -57,7 +59,7 @@ public class FileAttach {
 				UploadFile file_dto = new UploadFile();
 				file_dto.setFileName(originalName);
 				file_dto.setFileRename(renamed);
-				file_dto.setStoragePath("/upload_file/");
+				file_dto.setStoragePath("/upload_file");
 
 				int result = file_svc.save_file(file_dto);
 				if (result > 0) {
@@ -79,11 +81,13 @@ public class FileAttach {
 	
 	//단일 파일첨부 저장 메소드
 	public Long file_saveOne(Part parts, HttpServletRequest req) throws Exception {
-		System.out.println("parts : " + parts);
 		UploadFile file_dto = null;
 		UploadFileService file_svc = new UploadFileServiceImpl();
 
+//		String savePath = req.getServletContext().getInitParameter("UPLOAD_DIR");
+//		System.out.println("UPLOAD_DIR PATH = " + new File(savePath).getAbsolutePath());
 		String savePath = req.getServletContext().getRealPath("/upload_file/");
+		
 		File uploadDir = new File(savePath);
 		if (!uploadDir.exists()) { //해당 경로가 없을경우
 			uploadDir.mkdirs(); // 폴더 생성
@@ -93,14 +97,12 @@ public class FileAttach {
 		}
 
 		String originalName = parts.getSubmittedFileName();
-//		if (originalName == null || parts.getSize() <= 0)
-//			continue;
 
 		// 새 이름 생성 
 		String renamed = file_rename(originalName); //원래파일명 리네임메소드에 전달 
 		long size = parts.getSize();
 		Long fileId = null;
-
+		
 		// 10MB 제한
 		if (renamed != null && size <= 10 * 1024 * 1024) {
 			//파일경로에 첨부파일 저장 
@@ -110,7 +112,7 @@ public class FileAttach {
 			file_dto = new UploadFile();
 			file_dto.setFileName(originalName);
 			file_dto.setFileRename(renamed);
-			file_dto.setStoragePath("/upload_file/");
+			file_dto.setStoragePath("/upload_file");
 
 			int result = file_svc.save_file(file_dto);
 			if (result > 0) {
@@ -132,7 +134,7 @@ public class FileAttach {
 		String today = sf.format(date);
 
 		int no = (int) Math.ceil(Math.random() * 1000);
-		String makeFileRenm = today + no + ext;
+		String makeFileRenm = today + "_" + no + ext;
 
 		return makeFileRenm;
 	}
@@ -142,7 +144,9 @@ public class FileAttach {
 	public boolean file_delete(String fRename, HttpServletRequest req) {
 		UploadFileService file_svc = new UploadFileServiceImpl();
 		
+//		String url = req.getServletContext().getInitParameter("UPLOAD_DIR");
 		String url = req.getServletContext().getRealPath("/upload_file/");
+		
 		File file = new File(url + fRename);
 		boolean result = false;
 		
