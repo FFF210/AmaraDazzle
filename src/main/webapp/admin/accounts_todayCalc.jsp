@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 
 <!DOCTYPE html>
@@ -33,7 +34,7 @@
 						<td>
 							<i class="bi bi-dot"></i>
 							<span>정산 기간 : </span> 
-							<span> 2025-08-01 </span> ~ <span> 2025-08-31</span>
+							<span> ${fn:substring(settleStartDate,0,10)} </span> ~ <span> ${fn:substring(settleEndDate,0,10)} </span>
 						</td>
 						<td colspan="2">
 							<i class="bi bi-dot"></i>
@@ -65,7 +66,7 @@
 				<!-- 필터 -->
 				<form id="" class="search_form">
 					<my:adminTableFilter>
-						<my:adminFilterMiddle filters="게시 상태:ALL=전체|WAITING=미정산|InProgress=진행중|Completed=정산완료|ERROR=오류발생" name="middleFilter" />
+						<my:adminFilterMiddle filters="게시 상태:ALL=전체|Waiting=미정산|InProgress=진행중|Completed=정산완료|Error=오류발생" name="middleFilter" />
 						<my:adminFilterTotal searchItems="브랜드명" initial="브랜드명"/>
 					</my:adminTableFilter>
 				</form>
@@ -108,8 +109,6 @@
 								<!-- 체크박스 -->
 								<col style="width: 5%" />
 								<!-- 번호 -->
-								<col style="width: 5%" />
-								<!-- IMG -->
 								<col style="width: 13%" />
 								<!-- 브랜드명 -->
 								<col style="width: 12%" />
@@ -129,7 +128,6 @@
 								<tr>
 									<th><input type="checkbox" id="all_ck" onclick="ck_all(this.checked);" /></th>
 									<th>#</th>
-									<th>IMG</th>
 									<th class="sortable">브랜드명 <i class="bi bi-dash-lg sort-icon"></i></th>
 									<th class="sortable">당월 총 매출액 <i class="bi bi-dash-lg sort-icon"></i></th>
 									<th class="sortable">순 이익 <i class="bi bi-dash-lg sort-icon"></i></th>
@@ -152,12 +150,11 @@
 								<tr>
 									<td><input type="checkbox" class="ch_box" value="${settlementList.settlementId}" onclick="choice_ck();" /></td>
 									<td>${no-idx.index}</td>
-									<td></td>
-									<td>${settlementList.brandId}</td>
-									<td class="price_cell">${settlementList.totalSales}</td>
-									<td class="price_cell">${settlementList.pureProfit}</td>
-									<td class="price_cell">${settlementList.fee}</td>
-									<td class="price_cell">${settlementList.finalAmount}</td>
+									<td>${settlementList.brandName}</td>
+									<td class="price_cell"><fmt:formatNumber value="${settlementList.totalSales}" pattern="#,###,###" /> 원</td>
+									<td class="price_cell"><fmt:formatNumber value="${settlementList.pureProfit}" pattern="#,###,###" /> 원</td>
+									<td class="price_cell"><fmt:formatNumber value="${settlementList.fee}" pattern="#,###,###" /> 원</td>
+									<td class="price_cell"><fmt:formatNumber value="${settlementList.finalAmount}" pattern="#,###,###" /> 원</td>
 									<td>
 										<c:choose>
 											<c:when test="${settlementList.calcedYN == 'Waiting'}">
@@ -169,7 +166,7 @@
 											<c:when test="${settlementList.calcedYN == 'Completed'}">
 												<my:tag color="blue" size="md" text="정산완료" />
 											</c:when>
-											<c:when test="${settlementList.calcedYN == 'error'}">
+											<c:when test="${settlementList.calcedYN == 'Error'}">
 												<my:tag color="blue" size="md" text="오류발생" />
 											</c:when>
 										</c:choose>

@@ -55,8 +55,8 @@ public class SettlementServiceImpl implements SettlementService{
 	@Override
 	public int monthlyInsertSettle(LocalDate startDate, LocalDate endDate) {
 		Map<String, String> map = new HashMap<>();
-		map.put("startDate", startDate + "00:00:00");
-		map.put("endDate", endDate + "23:59:59");
+		map.put("startDate", startDate + " 00:00:00");
+		map.put("endDate", endDate + " 23:59:59");
 		
 		int result = settle_dao.monthlyInsertSettle(map);
 		return result;
@@ -67,8 +67,8 @@ public class SettlementServiceImpl implements SettlementService{
 	// 자동정산 (로그 출력용)
 	public int autoSettle(LocalDate startDate, LocalDate endDate) {
 		Map<String, String> map = new HashMap<>();
-		map.put("startDate", startDate + "00:00:00");
-		map.put("endDate", endDate + "23:59:59");
+		map.put("startDate", startDate + " 00:00:00");
+		map.put("endDate", endDate + " 23:59:59");
 		
 		int result = settle_dao.autoSettle(map);
 		return result;

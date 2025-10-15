@@ -26,12 +26,12 @@ public class MonthlySettlementListener implements ServletContextListener {
 				LocalDate firstDayPrevMonth = today.minusMonths(1).withDayOfMonth(1);
 				LocalDate lastDayPrevMonth = today.minusMonths(1).withDayOfMonth(today.minusMonths(1).lengthOfMonth());
 
-				System.out.println("[월별 정산 배치] " + firstDayPrevMonth + " ~ " + lastDayPrevMonth + " 정산 실행 시작");
+				System.out.println("[🔥월별 정산 배치🔥] " + firstDayPrevMonth + " ~ " + lastDayPrevMonth + " 정산 실행 시작");
 
 				SettlementService settle_svc = new SettlementServiceImpl();
 				int result = settle_svc.monthlyInsertSettle(firstDayPrevMonth, lastDayPrevMonth);
 				if(result > 0) {
-					System.out.println("[월별 정산 배치 인서트 성공]");
+					System.out.println("[🔥월별 정산 배치 인서트 성공🔥]");
 				}
 			}
 		};
