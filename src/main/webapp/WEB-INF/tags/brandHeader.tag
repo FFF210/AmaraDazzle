@@ -35,8 +35,8 @@
 	<c:choose>
 		<c:when test="${not empty sessionScope.brandId}">
 			<button class="btn btn-outline btn-sm"
-				onclick="location.href='/store/brandDetail?brandId=${sessionScope.brandId}'">
-				내 브랜드 스토어 보기</button>
+				onclick="location.href='/store/brandDetail?brandId=${sessionScope.brandId}'"
+				style="padding: 0 14px !important;">내 브랜드 스토어 보기</button>
 		</c:when>
 		<c:otherwise>
 			<button class="btn btn-outline btn-sm"
