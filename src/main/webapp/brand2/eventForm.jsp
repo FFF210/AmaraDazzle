@@ -354,7 +354,7 @@ ETC(기타) : (?)
 									<li class="select-item">상품 선택</li>
 									<c:forEach var="p" items="${products}">
 										<li class="select-item" data-value="${p.productId}">
-											${p.productName}</li>
+											${p.name}</li>
 									</c:forEach>
 								</ul>
 								<input type="hidden" name="productId[]" value="" />
@@ -373,7 +373,7 @@ ETC(기타) : (?)
 									<li class="select-item">상품 선택</li>
 									<c:forEach var="p" items="${products}">
 										<li class="select-item" data-value="${p.productId}">
-											${p.productName}</li>
+											${p.name}</li>
 									</c:forEach>
 								</ul>
 								<input type="hidden" name="productId[]" value="" />

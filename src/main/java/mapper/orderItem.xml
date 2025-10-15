@@ -306,10 +306,9 @@
 		COALESCE(SUM(oi.quantity), 0) AS productCountToday
 		FROM
 		order_item oi
-		JOIN orders o ON oi.order_id = o.orders_id
 		WHERE
 		oi.brand_id = #{brandId}
-		AND DATE(o.created_at) = CURDATE()
+		AND DATE(oi.created_at) = CURDATE()
 		AND
 		oi.status = 'CONFIRMED'
 	</select>
@@ -322,10 +321,9 @@
 		salesYesterday,
 		COALESCE(SUM(oi.quantity), 0) AS productCountYesterday
 		FROM order_item oi
-		JOIN orders o ON oi.order_id = o.orders_id
 		WHERE
 		oi.brand_id = #{brandId}
-		AND DATE(o.created_at) = CURDATE() - INTERVAL
+		AND DATE(oi.created_at) = CURDATE() - INTERVAL
 		1 DAY
 		AND oi.status = 'CONFIRMED'
 	</select>
@@ -339,10 +337,9 @@
 		COALESCE(SUM(oi.quantity), 0) AS productCountWeek
 		FROM
 		order_item oi
-		JOIN orders o ON oi.order_id = o.orders_id
 		WHERE
 		oi.brand_id = #{brandId}
-		AND YEARWEEK(o.created_at, 1) =
+		AND YEARWEEK(oi.created_at, 1) =
 		YEARWEEK(CURDATE(), 1)
 		AND oi.status = 'CONFIRMED'
 	</select>
@@ -351,17 +348,16 @@
 	<select id="selectSalesLast30Days"
 		resultType="dto.brand2.OrdersDashboard">
 		SELECT
-		DATE(o.created_at) AS orderDate,
+		DATE(oi.created_at) AS orderDate,
 		COALESCE(SUM(oi.line_subtotal - oi.discount), 0) AS dailySales
 		FROM
 		order_item oi
-		JOIN orders o ON oi.order_id = o.orders_id
 		WHERE
 		oi.brand_id = #{brandId}
-		AND o.created_at >= CURDATE() - INTERVAL 30
+		AND oi.created_at >= CURDATE() - INTERVAL 30
 		DAY
 		AND oi.status = 'CONFIRMED'
-		GROUP BY DATE(o.created_at)
+		GROUP BY DATE(oi.created_at)
 		ORDER BY
 		orderDate ASC
 	</select>
@@ -370,23 +366,21 @@
 	<select id="selectMonthlySalesCompare"
 		resultType="dto.brand2.OrdersDashboard">
 		SELECT
-		MONTH(o.created_at) AS month,
+		MONTH(oi.created_at) AS month,
 		SUM(CASE WHEN
-		YEAR(o.created_at) = YEAR(CURDATE())
+		YEAR(oi.created_at) = YEAR(CURDATE())
 		THEN (oi.line_subtotal -
 		oi.discount) ELSE 0 END) AS thisYear,
-		SUM(CASE WHEN YEAR(o.created_at)
+		SUM(CASE WHEN YEAR(oi.created_at)
 		= YEAR(CURDATE()) - 1
 		THEN (oi.line_subtotal - oi.discount) ELSE 0 END)
 		AS lastYear
 		FROM order_item oi
-		JOIN orders o ON oi.order_id =
-		o.orders_id
 		WHERE oi.brand_id = #{brandId}
-		AND YEAR(o.created_at) IN
+		AND YEAR(oi.created_at) IN
 		(YEAR(CURDATE()), YEAR(CURDATE()) - 1)
 		AND oi.status = 'CONFIRMED'
-		GROUP BY MONTH(o.created_at)
+		GROUP BY MONTH(oi.created_at)
 		ORDER BY month
 	</select>
 
@@ -395,11 +389,9 @@
 		SELECT
 		COALESCE(SUM(oi.line_subtotal - oi.discount),0)
 		FROM order_item oi
-		JOIN
-		orders o ON o.orders_id = oi.order_id
 		WHERE oi.brand_id = #{brandId}
-		AND YEAR(o.created_at) = YEAR(CURDATE())
-		AND MONTH(o.created_at) =
+		AND YEAR(oi.created_at) = YEAR(CURDATE())
+		AND MONTH(oi.created_at) =
 		MONTH(CURDATE())
 		AND oi.status = 'CONFIRMED'
 	</select>
@@ -409,12 +401,10 @@
 		SELECT
 		COALESCE(SUM(oi.line_subtotal - oi.discount),0)
 		FROM order_item oi
-		JOIN
-		orders o ON o.orders_id = oi.order_id
 		WHERE oi.brand_id = #{brandId}
-		AND YEAR(o.created_at) = YEAR(CURDATE() - INTERVAL 1 MONTH)
+		AND YEAR(oi.created_at) = YEAR(CURDATE() - INTERVAL 1 MONTH)
 		AND
-		MONTH(o.created_at) = MONTH(CURDATE() - INTERVAL 1 MONTH)
+		MONTH(oi.created_at) = MONTH(CURDATE() - INTERVAL 1 MONTH)
 		AND oi.status
 		= 'CONFIRMED'
 	</select>
@@ -423,7 +413,7 @@
 	<select id="selectCategorySalesTrend" parameterType="map"
 		resultType="dto.brand2.SalesOverview">
 		SELECT
-		DATE(o.created_at) AS date,
+		DATE(oi.created_at) AS date,
 
 		CASE
 		WHEN c.depth = 1 THEN c.category_id

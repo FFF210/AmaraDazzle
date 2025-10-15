@@ -112,9 +112,6 @@
     padding: 16px;        /* 기존 24px → 16px */
 }
 
-
-
-
 </style>
 
 </head>
@@ -137,7 +134,7 @@ status        = CONFIRMED
  --%>
 	<my:layout>
 		<my:breadcrumb
-			items="대시보드:/brand2/dashboard, 매출지표:/brand2/salesStatus.jsp, 성과지표:/brand2/pefOverview.jsp, 메인이벤트지표:/brand2/eventOverview.jsp" />
+			items="대시보드:/brand2/dashboard, 매출지표:/brand2/salesOverview" />
 
 		<div class=dachcontainer>
 			<!-- KPI 지표 -->

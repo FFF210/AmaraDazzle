@@ -63,9 +63,15 @@
 	margin: 16px 0 8px 0;
 }
 
+.chart-box canvas {
+    max-height: 350px;    /* 캔버스 높이 제한 */
+}
+
 .table-filter {
 	margin-bottom: 8px;
 }
+
+
 </style>
 
 </head>

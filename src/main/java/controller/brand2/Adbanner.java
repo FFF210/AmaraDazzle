@@ -62,19 +62,19 @@ public class Adbanner extends HttpServlet {
 
 		try {
 			// 업로드 설정
-			String path = request.getServletContext().getRealPath("upload_file");
+			String path = request.getServletContext().getRealPath("/upload_file");
 			int size = 10 * 1024 * 1024;
 			MultipartRequest multi = new MultipartRequest(request, path, size, "UTF-8", new DefaultFileRenamePolicy());
 
 			// =================== 업로드 파일 저장 ===================
 			String fileName = multi.getFilesystemName("uploadFileName"); // 실제 저장된 파일명
 			String fileRename = multi.getFilesystemName("uploadFileName"); // 서버에 저장된 이름
-			String storagePath = "/upload_file/" + fileRename; // 저장 경로
+//			String storagePath = "/upload_file/" + fileRename; // 저장 경로
 
 			UploadFile uploadFile = new UploadFile();
 			uploadFile.setFileName(fileName);
 			uploadFile.setFileRename(fileRename);
-			uploadFile.setStoragePath(storagePath);
+			uploadFile.setStoragePath("/upload_file");
 
 			UploadFileService uploadFileService = new UploadFileServiceImpl();
 			uploadFileService.registerUploadFile(uploadFile); // insertUploadFileWithAuto 사용
