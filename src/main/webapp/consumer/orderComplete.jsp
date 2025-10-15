@@ -45,10 +45,10 @@
 
 			<!-- 주문 정보 요약 -->
 			<div class="order-summary"
-				style="margin-top: 30px; padding: 20px; background-color: white; border-radius: 8px;">
+				style="margin-top: 30px; background-color: white; border-radius: 8px; padding: 30px;">
 				<h3 style="margin-bottom: 15px;">주문 상품</h3>
 				<c:forEach var="item" items="${orderInfo.orderItems}">
-					<div style="margin-bottom: 10px;">
+					<div style="margin: 0 100px 10px; text-align: left">
 						<strong>${item.brandName}</strong> ${item.productName}
 						<c:if test="${not empty item.optionValue}">
                         (옵션: ${item.optionValue})
@@ -84,7 +84,7 @@
 
 		<!-- 안내사항 섹션 -->
 		<div class="info-section">
-			<ul class="info-list">
+			<ul class="info-list" style="    font-size: 13px;">
 				<li>본 브랜드 배송상품은 [결제완료] 상태까지 주문 취소가 가능하며, [배송준비중]일 때는 고객센터를 통해
 					취소 요청할 수 있습니다.</li>
 				<li>이미 발송이 시작된 경우에는 취소가 불가할 수 있으며, 상품 수령 후 반품 요청 부탁드립니다.</li>

@@ -42,7 +42,7 @@
 		<my:pageHeader hasButton="false" title="주문/결제" />
 	</div>
 
-	디버깅: checkoutData 확인
+	<%-- 디버깅: checkoutData 확인
 	<div
 		style="background: #f0f0f0; padding: 10px; margin: 10px; border: 2px solid red;">
 		<h3>🔍 디버깅 정보</h3>
@@ -75,7 +75,7 @@
 		<c:forEach var="item" items="${checkoutData.items}" varStatus="status">
 			<p>Item ${status.index}: ${item.brandName} - ${item.productName}</p>
 		</c:forEach>
-	</div>
+	</div> --%>
 
 	<div class="main-content">
 
