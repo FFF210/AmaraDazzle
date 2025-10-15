@@ -3,6 +3,8 @@
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 
 <!DOCTYPE html>
 <html>
@@ -200,7 +202,6 @@
 				<div class="upload">
 					<div id="imgPreviewWrapper" class="preview-wrapper">
 						<div id="imgPreviewArea" class="preview-area" aria-live="polite">
-							<%-- <img src="/upload/${event.detailFileId}" /> --%>
 							<img
 								src="${pageContext.request.contextPath}/image?fileId=${event.thumbnailFileId}"
 								alt="대표 이미지" />
@@ -212,7 +213,6 @@
 				<div class="upload">
 					<div id="imgPreviewWrapper" class="preview-wrapper">
 						<div id="imgPreviewArea" class="preview-area" aria-live="polite">
-							<%-- <img src="/upload/${event.detailFileId}" /> --%>
 							<img
 								src="${pageContext.request.contextPath}/image?fileId=${event.detailFileId}"
 								alt="대표 이미지" width="588px" />
@@ -270,77 +270,34 @@ ETC(기타) : (?)
 						</div>
 					</c:when>
 
+
+					<%-- ============================================== 상품별 할인 등록 ============================================== --%>
 					<c:when test="${event.eventType eq 'DISCOUNT'}">
 						<div class="label req">상품별 할인 등록</div>
-						<div class="part_content" id="productList"
-							style="display: flex; flex-direction: column; gap: 10px;">
-							<div class="product-row discount-row"
-								style="gap: 4px; flex-direction: column;">
 
-								<!-- 상품 선택 -->
-								<div class="field">
-									<div class="custom-select md" style="width: 100%;">
-										<div class="select-header">
-											<span>상품 선택</span> <i class="bi bi-chevron-down"></i>
-										</div>
-										<ul class="select-list">
-											<li class="select-item" data-value="">상품 선택</li>
-											<c:forEach var="p" items="${products}">
-												<li class="select-item" data-value="${p.productId}"
-													style="display: flex; gap: 10px; padding: 5px 20px;"
-													<c:if test="${not empty p.eventId and p.eventId eq event.eventId}">
-													class="selected"
-														</c:if>>
-													<img
-													src="${pageContext.request.contextPath}/image?fileId=${p.thumbnailFileId}"
-													alt="대표 이미지" width="60px" /> ${p.name}
-												</li>
-											</c:forEach>
-										</ul>
-										<!-- 선택된 상품 ID 저장 -->
-										<input type="hidden" name="productId[]" value="" />
-									</div>
-								</div>
-
-
-								<div style="display: flex; gap: 4px;">
-									<!-- 할인 값 -->
-									<div class="field">
-										<div class="text-input-wrapper size--sm state--default">
-											<div class="text-input-inner default">
-												<input type="number" name="discountValue[]"
-													class="text-input default" min="0" placeholder="할인율/금액 입력"
-													value="" />
-											</div>
-										</div>
-									</div>
-
-									<!-- 할인 타입 -->
-									<div class="field">
-										<div class="text-input-wrapper size--sm state--default">
-											<div class="text-input-inner default">
-												<select name="discountType[]" class="text-input default">
-													<option value="RATE">율 (%)</option>
-													<option value="AMOUNT">금액 (원)</option>
-												</select>
-											</div>
-										</div>
-									</div>
-
-									<button type="button" class="btn icon removeProduct"
-										aria-label="상품 삭제" style="height: 40px; width: 40px;">×</button>
-								</div>
+						<div>
+							<div class="field product-checkbox-list"
+								style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px;">
+								<c:forEach var="p" items="${products}">
+									<label class="product-item"
+										style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--line, #ddd); border-radius: 8px; cursor: pointer;">
+										<input type="checkbox" class="product-check"
+										data-id="${p.productId}" data-name="${fn:escapeXml(p.name)}"
+										data-img="${pageContext.request.contextPath}/image?fileId=${p.thumbnailFileId}"
+										value="${p.productId}" /> <img
+										src="${pageContext.request.contextPath}/image?fileId=${p.thumbnailFileId}"
+										alt="대표 이미지" width="50px" height="50px"
+										style="object-fit: cover; border-radius: 4px;" /> <span
+										style="flex: 1; font-size: 0.9rem;">${p.name}</span>
+									</label>
+								</c:forEach>
 							</div>
-						</div>
-						<div></div>
-						<div class="product-actions">
-							<button type="button" class="btn icon" id="addProductRow"
-								aria-label="상품 추가">＋</button>
-							<p class="help">여러 개 상품을 추가하고 각각 할인유형/값을 설정하세요.</p>
+
+							<div id="selectedProducts"
+								style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;"></div>
 						</div>
 					</c:when>
-
-
+					<%-- ============================================== 상품별 할인 등록 ============================================== --%>
 
 
 					<c:when test="${event.eventType eq 'EXPERIENCE'}">
@@ -385,7 +342,6 @@ ETC(기타) : (?)
 				</c:choose>
 
 				<!-- ==================================================================================  -->
-
 				<div class="label">관리자 전달사항</div>
 				<div>
 					<my:textArea id="note" name="note" placeholder="관리자에게 문의&참고할 사항 전달" />
@@ -397,99 +353,101 @@ ETC(기타) : (?)
 					onclick="location.href='/brand2/eventList'">닫기</button>
 				<button type="submit" class="btn btn-outline btn-sm" id="btnSubmit">신청하기</button>
 			</div>
+			
 		</my:brand2formLayout>
-	</my:layout>
+		
+		
+					<script>
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DEBUG - DOMContentLoaded 실행됨");
 
-	<script>
-document.addEventListener("DOMContentLoaded", function () {
+  const productChecks = document.querySelectorAll(".product-check");
+  const selectedContainer = document.getElementById("selectedProducts");
 
-	// ===== 커스텀 셀렉트 (이벤트 위임 기반) =====
-    document.addEventListener("click", function (e) {
-        const header = e.target.closest(".select-header");
-        const selectBox = e.target.closest(".custom-select");
+  console.log("DEBUG - 체크박스 개수:", productChecks.length);
 
-        // 1️⃣ 헤더 클릭 → 열기/닫기
-        if (header && selectBox) {
-            e.stopPropagation();
+  productChecks.forEach(chk => {
+    chk.addEventListener("change", (e) => {
+      const pid = e.target.dataset.id;
+      const pname = e.target.dataset.name;
+      const img = e.target.dataset.img;
 
-            // 다른 셀렉트 닫기
-            document.querySelectorAll(".custom-select.open").forEach(s => {
-                if (s !== selectBox) s.classList.remove("open");
-            });
+      console.log("DEBUG - 클릭됨:", { pid, pname, img, checked: e.target.checked });
 
-            selectBox.classList.toggle("open");
-            return;
+      if (e.target.checked) {
+        // 선택된 상품 행 추가
+        const row = document.createElement("div");
+        row.classList.add("selected-row");
+        row.setAttribute("data-id", pid);
+        row.style.display = "flex";
+        row.style.alignItems = "center";
+        row.style.gap = "10px";
+        row.style.border = "1px solid #ddd";
+        row.style.padding = "8px 12px";
+        row.style.borderRadius = "8px";
+
+        row.innerHTML = `
+          <input type="hidden" name="productId[]" value="${pid}">
+
+          <!-- 상품 썸네일 -->
+          <img src="${img}" width="50" height="50" 
+               style="object-fit:cover; border-radius:4px;"/>
+
+          <!-- 상품명 -->
+          <span style="flex:1; min-width:150px;">${pname}</span>
+
+          <!-- 할인 값 -->
+          <div class="field" style="flex:0 0 120px;">
+            <div class="text-input-wrapper size--sm state--default">
+              <div class="text-input-inner default">
+                <input type="number" name="discountValue[]" 
+                       class="text-input default" min="0"
+                       placeholder="할인율/금액 입력" value="" />
+              </div>
+            </div>
+          </div>
+
+          <!-- 할인 타입 -->
+          <div class="field" style="flex:0 0 110px;">
+            <div class="text-input-wrapper size--sm state--default">
+              <div class="text-input-inner default">
+                <select name="discountType[]" class="text-input default">
+                  <option value="RATE">율 (%)</option>
+                  <option value="AMOUNT">금액 (원)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- 삭제 버튼 -->
+          <button type="button" class="removeRow" 
+                  style="margin-left:8px; height:32px; width:32px;">×</button>
+        `;
+
+        selectedContainer.appendChild(row);
+
+        // 삭제 버튼
+        row.querySelector(".removeRow").addEventListener("click", () => {
+          console.log("DEBUG - 삭제:", pid, pname);
+          e.target.checked = false;
+          row.remove();
+        });
+      } else {
+        // 체크 해제 시 삭제
+        const row = selectedContainer.querySelector(`[data-id="${pid}"]`);
+        if (row) {
+          console.log("DEBUG - 체크 해제 → 삭제:", pid, pname);
+          row.remove();
         }
-
-        // 2️⃣ 옵션 클릭 → 선택 처리
-        const item = e.target.closest(".select-item");
-        if (item && selectBox) {
-            const headerText = selectBox.querySelector(".select-header span");
-            const hiddenInput = selectBox.querySelector("input[type=hidden]");
-            const items = selectBox.querySelectorAll(".select-item");
-
-            const value = item.dataset.value;
-            const text = item.textContent.trim();
-
-            if (hiddenInput) hiddenInput.value = value;
-            if (headerText) headerText.textContent = text;
-
-            items.forEach(li => li.classList.remove("active", "selected"));
-            item.classList.add("active");
-
-            selectBox.classList.remove("open");
-            return;
-        }
-
-        // 3️⃣ 외부 클릭 시 모든 드롭다운 닫기
-        document.querySelectorAll(".custom-select.open").forEach(s => s.classList.remove("open"));
+      }
     });
-
-    // ===== 상품 행 추가 =====
-    const addBtn = document.getElementById("addProductRow");
-    const productList = document.getElementById("productList");
-
-    if (addBtn && productList) {
-        addBtn.addEventListener("click", function () {
-            const firstRow = productList.querySelector(".product-row");
-            if (!firstRow) return;
-
-            const newRow = firstRow.cloneNode(true);
-
-            // 초기화
-            newRow.querySelectorAll("input, select").forEach(el => {
-                if (el.type === "hidden" || el.type === "number") el.value = "";
-                if (el.tagName === "SELECT") el.value = "RATE";
-            });
-
-            const headerText = newRow.querySelector(".select-header span");
-            if (headerText) headerText.textContent = "상품 선택";
-
-            newRow.querySelectorAll(".select-item").forEach(li => li.classList.remove("active", "selected"));
-
-            productList.appendChild(newRow);
-        });
-    }
-
-    // ===== 상품 행 삭제 =====
-    if (productList) {
-        productList.addEventListener("click", function (e) {
-            if (e.target.classList.contains("removeProduct")) {
-                const rows = productList.querySelectorAll(".product-row");
-                if (rows.length > 1) {
-                    e.target.closest(".product-row").remove();
-                } else {
-                    alert("최소 1개의 상품은 유지해야 합니다.");
-                }
-            }
-        });
-    }
+  });
 });
 </script>
-
-
-
-
+		
+		
+	</my:layout>
 
 </body>
+
 </html>

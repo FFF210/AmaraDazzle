@@ -23,4 +23,7 @@ public interface SalesOverviewDAO {
 	
 	// 테이블용
 	List<SalesStatusRow> selectSalesStatusRows(Map<String, Object> params);
+	
+	// 테이블 페이징 개수 조회
+	Integer selectSalesOverviewCount(Map<String, Object> params) throws Exception;
 }
