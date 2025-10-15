@@ -99,11 +99,13 @@
 	position : relative;
 	display: flex;
 	align-items: center;
+	overflow: hidden; 
 }
 
 /* 미리보기 이미지 */
 .preview-thumb {
 	width: 100%;
+	height: 100%;
 	object-fit: cover; /* 박스에 꽉 차게 */
 	border-radius: 5px;
 }
