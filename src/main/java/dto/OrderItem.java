@@ -18,8 +18,14 @@ public class OrderItem {
     private String status;        // 주문 상태 (PAID, PREPARING, SHIPPING, ...)
     private Long memberCouponId;
 
-    public OrderItem() {
-    }
+    //조인용 컬럼 
+    private String product_id;	//상품id
+    private String product_name;	//상품명
+    private String product_price;	//상품가격
+    private String brand_name;	//브랜드명
+    private String total_sold;	//총 판매량
+    
+    public OrderItem() {}
 
     public Long getOrderItemId() {
         return orderItemId;
@@ -119,6 +125,46 @@ public class OrderItem {
 
 	public void setMemberCouponId(Long memberCouponId) {
 		this.memberCouponId = memberCouponId;
+	}
+	
+	public String getProduct_id() {
+		return product_id;
+	}
+
+	public void setProduct_id(String product_id) {
+		this.product_id = product_id;
+	}
+
+	public String getProduct_name() {
+		return product_name;
+	}
+
+	public void setProduct_name(String product_name) {
+		this.product_name = product_name;
+	}
+
+	public String getProduct_price() {
+		return product_price;
+	}
+
+	public void setProduct_price(String product_price) {
+		this.product_price = product_price;
+	}
+
+	public String getBrand_name() {
+		return brand_name;
+	}
+
+	public void setBrand_name(String brand_name) {
+		this.brand_name = brand_name;
+	}
+
+	public String getTotal_sold() {
+		return total_sold;
+	}
+
+	public void setTotal_sold(String total_sold) {
+		this.total_sold = total_sold;
 	}
 
 	@Override

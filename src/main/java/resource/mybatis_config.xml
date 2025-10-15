@@ -153,6 +153,7 @@
 		<mapper resource="mapper/ticket.xml" />
 		<mapper resource="mapper/uploadFile.xml" />
 		<mapper resource="mapper/wishlist.xml" />
+		<mapper resource="mapper/adminMain.xml" />
 	</mappers>
 
 </configuration>
