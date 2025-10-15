@@ -23,7 +23,6 @@
 <link rel="stylesheet" href="<c:url value='/consumer/css/toast.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/button.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/sortList.css'/>">
-<link rel="stylesheet" href="<c:url value='/tagcss/coupon.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/eventCard.css'/>">
 <link rel="stylesheet" href="<c:url value='/tagcss/pagination.css'/>">
 <link rel="stylesheet"
@@ -62,24 +61,25 @@
 					<span>${brand.intro}</span>
 				</div> --%>
 
-					<img
-						src="${pageContext.request.contextPath}/image?fileId=${brand.heroFileId}"
-						alt="브랜드 히어로 이미지" height= "550px"/>
+				<img
+					src="${pageContext.request.contextPath}/image?fileId=${brand.heroFileId}"
+					alt="브랜드 히어로 이미지" height="550px" />
 
 			</div>
 
 
-			<!-- 이벤트 & 브랜드 쿠폰 -->
-			<div class="brand-promotion">
-				<%-- 이벤트 카드 --%>
+			<c:if test="${not empty couponList}">
+				<h3
+					style="font-size: 30px; font-weight: 500; color: #111; width: 100%; padding-top: 80px;">오늘의
+					브랜드 혜택</h3>
 
-    <my:eventCard thumbnailFileId="${e.thumbnailFileId}"
-        title="${e.eventName}" startDate="${startFmt}" endDate="${endFmt}"
-        href="${detailUrl}" status="${e.status}" /> 
+				<!-- 이벤트 & 브랜드 쿠폰 -->
+				<div class="brand-promotion">
+					<%-- 이벤트 카드 --%>
+					<%-- <my:eventCard thumbnailFileId="${e.thumbnailFileId}"
+					title="${e.eventName}" startDate="${startFmt}" endDate="${endFmt}"
+					href="${detailUrl}" status="${e.status}" /> --%>
 
-
-				<%-- 쿠폰 목록이 존재할 때만 렌더링 --%>
-				<c:if test="${not empty couponList}">
 					<c:forEach var="coupon" items="${couponList}">
 						<!-- 금액 포맷 -->
 						<fmt:formatNumber value="${coupon.amount}" pattern="#,###"
@@ -88,19 +88,21 @@
 							pattern="#,###" var="amountConditionFmt" />
 
 						<my:consumerCoupon couponId="${coupon.couponId}"
-							cname="${coupon.cname}" couponLimit="${coupon.couponLimit}"
-							categoryName="${coupon.categoryName}"
+							cname="${coupon.cname}" categoryName="${coupon.categoryName}"
 							amountCondition="${amountConditionFmt}"
 							downloaded="${coupon.downloaded}" amount="${amountFmt}" />
 					</c:forEach>
-				</c:if>
-			</div>
 
+				</div>
+			</c:if>
 		</div>
 
 
 		<!-- 브랜드 상품존 -->
 		<div class="product-section">
+			<h3
+				style="font-size: 30px; font-weight: 500; color: #111; width: 100%; padding-top: 20px; padding-bottom: 30px;">${brand.brandName}의 베스트
+				아이템</h3>
 			<div class="category-filter">
 				<button
 					class="category-item ${empty param.category1Id ? 'selected' : ''}"
@@ -208,12 +210,12 @@
 			</div>
 
 
-<c:set var="queryString">
-			<c:if test="${not empty param.brandId}">brandId=${param.brandId}&</c:if>
-			<c:if test="${not empty param.category1Id}">category1Id=${param.category1Id}&</c:if>
+			<c:set var="queryString">
+				<c:if test="${not empty param.brandId}">brandId=${param.brandId}&</c:if>
+				<c:if test="${not empty param.category1Id}">category1Id=${param.category1Id}&</c:if>
 				page=
 			</c:set>
-			
+
 
 			<!-- 페이징 -->
 			<div class="page-pagination">
@@ -258,5 +260,47 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 	<script src="<c:url value='/consumer/js/addToWishlist.js'/>"></script>
 	<script src="<c:url value='/consumer/js/addToBrandFollow.js'/>"></script>
+	
+	<script>
+/*********************************************************************************************************
+ * 쿠폰 다운 이벤트
+ *********************************************************************************************************/
+ window.addEventListener('DOMContentLoaded', function() {
+	  const buttons = document.querySelectorAll('.coupon-download-btn');
+
+	  buttons.forEach(btn => {
+	    btn.addEventListener('click', async () => {
+	      const couponId = btn.dataset.id;
+
+	      if (!couponId) {
+	        alert("쿠폰 ID가 없습니다.");
+	        return;
+	      }
+
+	      try {
+	        const response = await fetch('<c:url value="/store/couponDownload"/>', {
+	          method: 'POST',
+	          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+	          body: 'couponId=' + encodeURIComponent(couponId)
+	        });
+
+	        const data = await response.json();
+
+	        if (!data.success && data.requireLogin) {
+	          window.location.href = "/store/login";
+	        } else if (data.success) {
+	          btn.innerHTML = '<i class="bi bi-check2"></i>';
+	          btn.disabled = true;
+	          location.reload();
+	        } else {
+	          alert("쿠폰 발급 실패: " + JSON.stringify(data));
+	        }
+	      } catch (err) {
+	        alert("쿠폰 발급 중 오류가 발생했습니다.");
+	      }
+	    });
+	  });
+	});
+</script>
 </body>
 </html>

@@ -306,8 +306,6 @@
 		('ONGOING')
 		AND NOW()
 		BETWEEN b.start_date AND b.end_date
-		ORDER BY
-		b.created_at DESC
 	</select>
 
 </mapper>

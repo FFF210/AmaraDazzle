@@ -68,8 +68,8 @@
 								<th style="width: 60px; padding: 0;">판매가</th>
 								<th style="width: 30px; padding: 0;">수량</th>
 								<th style="width: 60px; padding: 0;">결제금액</th>
-								<th style="width: 80px; padding: 0;">진행현황</th>
-								<th style="width: 80px; padding: 0;">선택</th>
+								<th style="width: 60px; padding: 0;">진행현황</th>
+								<th style="width: 70px; padding: 0;">선택</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -245,8 +245,7 @@
 								</c:when>
 								<c:otherwise>
 									<p style="font-size: 20px; color: #ff4444; font-weight: 700;">-${orderDetailInfo.paymentInfo.couponDisplayText}</p>
-									<p
-										style="background: rgb(255, 68, 68, 0.1); padding: 4px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; color: #333;">${orderDetailInfo.paymentInfo.couponName}</p>
+									<p style="font-size: 12px; font-weight: 400; color: #666;">ㄴ ${orderDetailInfo.paymentInfo.couponName}</p>
 								</c:otherwise>
 							</c:choose>
 						</div>
@@ -272,9 +271,9 @@
 				<div
 					style="display: flex; flex-direction: column; align-items: end; padding: 20px 30px; background: #f9f9f9;">
 					<h3 style="font-size: 20px;">
-						총 결제금액   <span style="color: #7421C4">${orderDetailInfo.paymentInfo.totalAmountText}</span>
+						총 결제금액 <span style="color: #7421C4">${orderDetailInfo.paymentInfo.totalAmountText}</span>
 					</h3>
-					<p style="font-size: 13px; color: #999;">토스페이</p>
+					<p style="font-size: 12px; color: #999;">토스페이</p>
 				</div>
 			</section>
 

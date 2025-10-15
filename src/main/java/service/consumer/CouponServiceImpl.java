@@ -30,8 +30,6 @@ public class CouponServiceImpl implements CouponService {
 	// ======================= [소비자] 쿠폰 다운로드 =======================
 	@Override
 	public void downloadCoupon(Long couponId, Long memberId) throws Exception {
-		// coupon_limit 감소
-		couponDAO.decreaseCouponLimit(couponId);
 
 		Map<String, Object> params = new HashMap<>();
 		params.put("couponId", couponId);

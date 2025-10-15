@@ -77,7 +77,6 @@ body {
 	width: 294px;
 	height: 56px;
 	padding: 8px 16px 8px 50px;
-	border-radius: 8px;
 	background-color: transparent;
 	color: #B2BAC6;
 }
@@ -88,6 +87,10 @@ body {
 	box-shadow: none;
 	border-color: #F2B3C4;
 	color: #F2EBF1;
+}
+
+.search-input:focus {
+	border-bottom: 1px solid #f9f9f9;
 }
 
 .search-input::placeholder {
