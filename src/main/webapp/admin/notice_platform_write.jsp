@@ -7,7 +7,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>공지 작성</title>
+<title>ADMIN - 공지 작성</title>
 <link rel="stylesheet" href="./css/myApplications.css" />
 <link rel="stylesheet" href="./css/boards_write.css?v=1" />
 <!-- 헤드부분 -->

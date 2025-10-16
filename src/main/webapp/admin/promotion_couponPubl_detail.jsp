@@ -10,7 +10,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>발행쿠폰 상세보기 - ${coupon.cname}</title>
+<title>ADMIN - 발행쿠폰 상세보기 : ${coupon.cname}</title>
 <link rel="stylesheet" href="./css/coupon.css" />
 <!-- 헤드부분 -->
 

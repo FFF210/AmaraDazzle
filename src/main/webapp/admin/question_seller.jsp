@@ -7,7 +7,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp" %>
 
-<title>일대일문의 사업자회원</title>
+<title>ADMIN - 일대일문의 사업자회원</title>
 <!-- 헤드부분 -->
 
 <body>

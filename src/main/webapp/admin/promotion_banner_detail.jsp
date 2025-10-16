@@ -11,7 +11,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>메인배너 신청건 상세보기</title>
+<title>ADMIN - 메인배너 신청건 상세보기</title>
 <link rel="stylesheet" href="./css/boards_detailview.css" />
 <link rel="stylesheet" href="./css/banner.css" />
 <!-- 헤드부분 -->

@@ -10,7 +10,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>메인배너 리스트</title>
+<title>ADMIN - 메인배너 리스트</title>
 <link rel="stylesheet" href="./css/banner.css" />
 <!-- 헤드부분 -->
 

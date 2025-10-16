@@ -10,7 +10,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>홈</title>
+<title>ADMIN - 홈</title>
 <link rel="stylesheet" href="./css/dashboard.css" />
 
 <!-- Chartjs cdn -->

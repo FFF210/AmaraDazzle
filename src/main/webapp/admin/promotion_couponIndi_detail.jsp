@@ -7,7 +7,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>개별발행쿠폰 상세보기</title>
+<title>ADMIN - 개별발행쿠폰 상세보기</title>
 <link rel="stylesheet" href="./css/myApplications.css" />
 <link rel="stylesheet" href="./css/coupon.css" />
 <!-- 헤드부분 -->

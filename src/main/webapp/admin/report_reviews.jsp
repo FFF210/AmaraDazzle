@@ -7,7 +7,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>정산내역 상세보기</title>
+<title>ADMIN - 정산내역 상세보기</title>
 
 <link rel="stylesheet" href="./css/myApplications.css" />
 <link rel="stylesheet" href="./css/accounts.css" />

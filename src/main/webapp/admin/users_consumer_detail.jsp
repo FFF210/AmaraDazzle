@@ -9,7 +9,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>Users 일반회원 상세보기</title>
+<title>ADMIN - Users 일반회원 상세보기</title>
 <link rel="stylesheet" href="./css/componant/detail_tab.css" />
 <link rel="stylesheet" href="./css/user_consumer.css" />
 <!-- 헤드부분 -->

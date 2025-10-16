@@ -12,7 +12,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>공지 내용보기</title>
+<title>ADMIN - 공지 내용보기</title>
 <link rel="stylesheet" href="./css/boards_detailview.css" />
 
 <!-- 헤드부분 -->

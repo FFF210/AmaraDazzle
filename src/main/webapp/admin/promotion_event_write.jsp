@@ -9,7 +9,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>이벤트 페이지 생성</title>
+<title>ADMIN - 이벤트 페이지 생성</title>
 <link rel="stylesheet" href="../tagcss/imageBtn.css" />
 <link rel="stylesheet" href="../tagcss/uploader.css" />
 <link rel="stylesheet" href="./css/boards_write.css" />

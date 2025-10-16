@@ -9,7 +9,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>Users 사업자회원 상세보기</title>
+<title>ADMIN - Users 사업자회원 상세보기</title>
 <link rel="stylesheet" href="./css/componant/detail_tab.css" />
 <link rel="stylesheet" href="./css/user_seller.css" />
 <!-- 헤드부분 -->
