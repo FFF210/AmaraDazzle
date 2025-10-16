@@ -504,6 +504,7 @@
 		UPDATE event 
 		SET 
 		expose_YN = NOT expose_YN, 
+		status = 'ONGOING',
 		start_date = CASE 
                         WHEN expose_YN = 1 THEN NOW() 
                         ELSE start_date 

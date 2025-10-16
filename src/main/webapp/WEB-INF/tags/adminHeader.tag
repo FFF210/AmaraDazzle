@@ -40,7 +40,7 @@
 			<!-- myInfo modal end -->
 		</div>
 
-		<button type="button" class="link-btn" onclick="goMainSite()">사이트 바로가기</button>
+		<button type="button" class="link-btn" onclick="goMainSite()" >사이트 바로가기</button>
 	</div>
 </header>
 <!-- 헤더부분 end -->
@@ -103,7 +103,7 @@
 	}
 	
 	function goMainSite(){
-		location.href="/store/main"
+		window.open("/store/main", "_blank", "noopener");
 	}
 </script>
 
