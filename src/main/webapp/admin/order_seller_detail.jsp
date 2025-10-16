@@ -7,7 +7,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>주문내역 판매자별_상세</title>
+<title>ADMIN - 주문내역 판매자별_상세</title>
 <link rel="stylesheet" href="./css/myApplications.css" />
 <link rel="stylesheet" href="./css/order_seller.css" />
 <!-- 헤드부분 -->

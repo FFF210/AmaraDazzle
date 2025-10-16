@@ -7,7 +7,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>포인트 지급</title>
+<title>ADMIN - 포인트 지급</title>
 <link rel="stylesheet" href="./css/boards_write.css?v=1" />
 <link rel="stylesheet" href="./css/point.css" />
 <!-- 헤드부분 -->

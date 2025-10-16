@@ -143,6 +143,9 @@
 		ELSE NULL
 		END AS
 		smallCategoryName,
+		
+		f1.file_rename AS thumbFileName,
+		f2.file_rename AS detailFileName,
 
 		e.thumbnail_file_id AS thumbnailFileId,
 		e.detail_file_id AS detailFileId,
@@ -160,12 +163,12 @@
 		discountValue
 
 		FROM event e
-		LEFT JOIN category c ON e.category_id =
-		c.category_id
+		LEFT JOIN category c ON e.category_id = c.category_id
 		LEFT JOIN category p1 ON c.parent_id = p1.category_id
 		LEFT JOIN category p2 ON p1.parent_id = p2.category_id
-		LEFT JOIN
-		product p ON (p.event_id = e.event_id OR p.event_id IS NULL)
+		LEFT JOIN product p ON (p.event_id = e.event_id OR p.event_id IS NULL)
+		JOIN upload_file f1 ON f1.upload_file_id = e.thumbnail_file_id
+		JOIN upload_file f2 ON f2.upload_file_id = e.detail_file_id
 		WHERE
 		e.event_id = #{eventId}
 	</select>
@@ -263,25 +266,23 @@
 		SELECT
 		e.event_id AS eventId,
 		e.event_type AS eventType,
-		e.start_date AS
-		startDate,
+		e.start_date AS startDate,
 		e.end_date AS endDate,
-		e.event_name AS
-		eventName,
-		e.status AS
-		status,
+		e.event_name AS eventName,
+		e.status AS status,
 		e.thumbnail_file_id AS thumbnailFileId,
-		e.detail_file_id AS
-		detailFileId,
+		e.detail_file_id AS detailFileId,
 		e.category_id AS categoryId,
-		e.content
-		AS content,
+		e.content AS content,
 		e.writer AS writer,
 		e.expose_YN AS exposeYn,
-		e.created_at AS
-		createdAt,
-		e.updated_at AS updatedAt
+		e.created_at AS createdAt,
+		e.updated_at AS updatedAt,
+		f1.file_rename AS thumbFileName,
+		f2.file_rename AS detailFileName
 		FROM event e
+		JOIN upload_file f1 ON f1.upload_file_id = e.thumbnail_file_id
+		JOIN upload_file f2 ON f2.upload_file_id = e.detail_file_id
 		WHERE e.expose_YN = 1
 		AND e.status IN ('ONGOING', 'FINISHED')
 		ORDER BY
@@ -315,8 +316,7 @@
 		e.event_type AS eventType,
 		e.start_date AS startDate,
 		e.end_date AS endDate,
-		e.event_name AS
-		eventName,
+		e.event_name AS eventName,
 		e.status AS status,
 		e.thumbnail_file_id AS thumbnailFileId,
 		e.detail_file_id AS detailFileId,
@@ -325,8 +325,12 @@
 		e.writer AS writer,
 		e.expose_YN AS exposeYn,
 		e.created_at AS createdAt,
-		e.updated_at AS updatedAt
+		e.updated_at AS updatedAt,
+		f1.file_rename AS thumbFileName,
+		f2.file_rename AS detailFileName
 		FROM event e
+		JOIN upload_file f1 ON f1.upload_file_id = e.thumbnail_file_id
+		JOIN upload_file f2 ON f2.upload_file_id = e.detail_file_id
 		WHERE
 		e.event_id = #{value}
 	</select>
@@ -339,8 +343,7 @@
 		p.brand_id AS brandId,
 		b.brand_name AS brandName,
 		p.name AS name,
-		p.is_exclusive AS
-		isExclusive,
+		p.is_exclusive AS isExclusive,
 		p.is_visible AS isVisible,
 		p.is_planned AS isPlanned,
 		p.category1_id AS category1Id,
@@ -353,8 +356,7 @@
 		p.image4_file_id AS image4FileId,
 		p.image5_file_id AS image5FileId,
 		p.ingredients AS ingredients,
-		p.price
-		AS price,
+		p.price AS price,
 		p.order_limit AS orderLimit,
 		p.has_option AS hasOption,
 		p.stock_qty AS stockQty,
@@ -384,15 +386,10 @@
 		END AS isWished
 
 		FROM product p
-		JOIN brand b ON p.brand_id =
-		b.brand_id
-
-		LEFT JOIN (
-		SELECT wishlist_id, product_id
-		FROM wishlist
-		WHERE
-		member_id = #{memberId}
-		) uw ON p.product_id = uw.product_id
+		JOIN brand b ON p.brand_id = b.brand_id
+		LEFT JOIN (SELECT wishlist_id, product_id
+					FROM wishlist
+					WHERE member_id = #{memberId}) uw ON p.product_id = uw.product_id
 
 		WHERE
 		p.event_id = #{eventId}

@@ -9,7 +9,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>Promotions 이벤트 리스트</title>
+<title>ADMIN - 이벤트 리스트</title>
 <!-- <link rel="stylesheet" href="./css/event.css" /> -->
 <!-- 헤드부분 -->
 

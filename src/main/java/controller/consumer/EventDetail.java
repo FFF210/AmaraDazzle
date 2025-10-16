@@ -38,7 +38,7 @@ public class EventDetail extends HttpServlet {
 		try {
 			dto.consumer.EventDetail eventDetail = service.getEventDetail(eventId);
 			List<EventDetailProduct> eventProducts = service.getEventProducts(eventId);
-
+			
 			// JSP에 전달
 			request.setAttribute("eventDetail", eventDetail);
 

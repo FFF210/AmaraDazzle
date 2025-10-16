@@ -39,7 +39,7 @@
 
 	<div class="event-image">
 		<img
-			src="${pageContext.request.contextPath}/image?fileId=${thumbnailFileId}"
+			src="${pageContext.request.contextPath}/upload_file/${thumbnailFileId}"
 			alt="대표 이미지" width="324px"
 			class="<c:if test='${status eq "FINISHED"}'>finished</c:if>"
 			style="width: 324px; height: 170px; object-fit: cover;" />

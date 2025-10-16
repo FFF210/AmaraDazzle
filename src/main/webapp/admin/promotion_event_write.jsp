@@ -9,7 +9,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>이벤트 페이지 생성</title>
+<title>ADMIN - 이벤트 페이지 생성</title>
 <link rel="stylesheet" href="../tagcss/imageBtn.css" />
 <link rel="stylesheet" href="../tagcss/uploader.css" />
 <link rel="stylesheet" href="./css/boards_write.css" />
@@ -17,12 +17,6 @@
 	.uploader {padding: 5px;}
 	.uploader-sm { width: 98%; }
 </style>
-
-<!-- toast editor CDN -->
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
-<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-
 <!-- 헤드부분 -->
 
 <body>
@@ -52,17 +46,17 @@
 				</div>
 			</div>
 
-			<div class="part_section pCate_part">
-				<div class="part_title">상품 카테고리</div>
-				<div class="part_content select_cate">
-					<my:selectbox size="md" items="대분류" initial="대분류" id="largeSelect"/>
-					<my:selectbox size="md" items="중분류" initial="중분류" id="middleSelect"/>
-					<my:selectbox size="md" items="소분류" initial="소분류" id="smallSelect" />
-					<input type="hidden" name="category1Id" id="category1Id" />
-					<input type="hidden" name="category2Id" id="category2Id" />
-					<input type="hidden" name="category3Id" id="category3Id" />
-				</div>
-			</div>
+<!-- 			<div class="part_section pCate_part"> -->
+<!-- 				<div class="part_title">상품 카테고리</div> -->
+<!-- 				<div class="part_content select_cate"> -->
+<%-- 					<my:selectbox size="md" items="대분류" initial="대분류" id="largeSelect"/> --%>
+<%-- 					<my:selectbox size="md" items="중분류" initial="중분류" id="middleSelect"/> --%>
+<%-- 					<my:selectbox size="md" items="소분류" initial="소분류" id="smallSelect" /> --%>
+<!-- 					<input type="hidden" name="category1Id" id="category1Id" /> -->
+<!-- 					<input type="hidden" name="category2Id" id="category2Id" /> -->
+<!-- 					<input type="hidden" name="category3Id" id="category3Id" /> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
 
 			<div class="part_section mainhead_part">
 				<div class="part_title">이벤트명 <span class="reqired_write">*</span></div>
@@ -82,14 +76,6 @@
 				<div class="part_title">메인 이미지<span class="reqired_write">*</span></div>
 				<div class="part_content">
 					<my:uploader size="sm" name="eventDetailImg"/>
-				</div>
-			</div>
-
-			<div class="part_section content_part">
-				<div class="part_title">내용</div>
-				<div class="part_content">
-					<!-- toast editor 삽입 -->
-					<div id="editContent"></div>
 				</div>
 			</div>
 
@@ -120,7 +106,7 @@
 	<script src="../tagjs/dateInput.js"></script>
 	<script src="../tagjs/imageBtn.js"></script>
 	<script src="./js/common/modal.js"></script>
-	<script src="./js/common/category.js"></script>
+<!-- 	<script src="./js/common/category.js"></script> -->
 	<script src="./js/event.js"></script>
 	<script>
 	// --- 프리셋 버튼 이벤트 ---

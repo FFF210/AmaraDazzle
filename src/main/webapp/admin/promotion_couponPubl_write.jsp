@@ -9,7 +9,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>쿠폰 발행</title>
+<title>ADMIN - 쿠폰 발행</title>
 <link rel="stylesheet" href="./css/boards_write.css" />
 <link rel="stylesheet" href="./css/coupon.css" />
 <!-- 헤드부분 -->

@@ -10,7 +10,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>Users 사업자회원</title>
+<title>ADMIN - Users 사업자회원</title>
 <link rel="stylesheet" href="./css/user_seller.css" />
 <!-- 헤드부분 -->
 

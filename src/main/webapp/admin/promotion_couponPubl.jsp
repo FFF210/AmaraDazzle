@@ -10,7 +10,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>발행쿠폰 리스트</title>
+<title>ADMIN - 발행쿠폰 리스트</title>
 <style>
 .part_content {
 	display: flex;

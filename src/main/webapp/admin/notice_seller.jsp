@@ -9,7 +9,7 @@
 <!-- 헤드부분 -->
 <%@ include file="./common/config.jsp"%>
 
-<title>공지게시판</title>
+<title>ADMIN - 공지게시판</title>
 
 <!-- 헤드부분 end -->
 
