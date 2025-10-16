@@ -305,7 +305,7 @@
 				<fmt:formatDate value="${e.endDate}" pattern="yyyy-MM-dd"
 					var="endFmt" />
 
-				<my:eventCard thumbnailFileId="${e.thumbnailFileId}"
+				<my:eventCard thumbnailFileId="${e.thumbFileName}"
 					title="${e.eventName}" startDate="${startFmt}" endDate="${endFmt}"
 					href="${detailUrl}" status="${e.status}" />
 			</c:forEach>

@@ -90,6 +90,73 @@
 	</select>
 	
 	<!-- 판매율 높은 브랜드 TOP5 -->
+	<select id="bestBrandTop5" resultType="Map">
+	    SELECT
+		    b.brand_id,
+		    b.brand_name,
+		    COALESCE(SUM(CASE 
+		        WHEN oi.created_at &gt;= DATE_FORMAT(CURDATE(), '%Y-%m-01')
+		             AND oi.created_at &lt; CURDATE()
+		        THEN oi.quantity * p.price END), 0) AS this_month_sales,
+		    COALESCE(SUM(CASE 
+		        WHEN oi.created_at &gt;= DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01')
+		             AND oi.created_at &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01')
+		        THEN oi.quantity * p.price END), 0) AS last_month_sales,
+		    CASE 
+		        WHEN COALESCE(SUM(CASE 
+		                WHEN oi.created_at &gt;= DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01')
+		                     AND oi.created_at &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01')
+		                THEN oi.quantity * p.price END), 0) = 0 
+		            THEN 0
+		        ELSE ROUND((
+		            (COALESCE(SUM(CASE 
+		                WHEN oi.created_at &gt;= DATE_FORMAT(CURDATE(), '%Y-%m-01')
+		                     AND oi.created_at &lt; CURDATE()
+		                THEN oi.quantity * p.price END), 0)
+		             -
+		             COALESCE(SUM(CASE 
+		                WHEN oi.created_at &gt;= DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01')
+		                     AND oi.created_at &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01')
+		                THEN oi.quantity * p.price END), 0)
+		            )
+		            /
+		            COALESCE(SUM(CASE 
+		                WHEN oi.created_at &gt;= DATE_FORMAT(CURDATE() - INTERVAL 1 MONTH, '%Y-%m-01')
+		                     AND oi.created_at &lt; DATE_FORMAT(CURDATE(), '%Y-%m-01')
+		                THEN oi.quantity * p.price END), 1)
+		        ) * 100, 2)
+		    END AS diff_percent
+		FROM order_item oi
+		JOIN product p ON p.product_id = oi.product_id
+		JOIN brand b ON b.brand_id = oi.brand_id
+		WHERE oi.status IN ('CONFIRMED') AND oi.status NOT IN ('CANCELLED', 'RETURN_COMPLETED')
+		GROUP BY b.brand_id, b.brand_name
+		ORDER BY this_month_sales DESC
+		LIMIT 5;
+	</select>
 	
+	<!-- 판매상품 카테고리별 비율 -->
+	<select id="selectCategoryRatio" resultType="Map">
+		SELECT 
+		    c.name AS categoryName,
+		    COUNT(p.product_id) AS productCount,
+		    ROUND(COUNT(p.product_id) * 100.0 / (SELECT COUNT(*) FROM product WHERE is_visible = 1), 1) AS ratioPercent
+		FROM product p
+		JOIN category c ON p.category1_id = c.category_id
+		WHERE p.is_visible = 1
+		GROUP BY c.category_id, c.name
+		ORDER BY ratioPercent desc
+	</select>
 
+	<!-- 고객 피부타입별 비율 -->
+	<select id="selectSkinRatio" resultType="Map">
+		SELECT 
+		    COALESCE(cd.name, '미등록') AS skinType,
+		    COUNT(m.member_id) AS memberCount,
+		    ROUND(COUNT(m.member_id) * 100.0 / (SELECT COUNT(*) FROM member), 1) AS ratioPercent
+		FROM member m
+		LEFT JOIN code_detail cd ON m.skin_type_id = cd.code_detail_id
+		GROUP BY cd.code_detail_id, cd.name
+		ORDER BY ratioPercent DESC
+	</select>
 </mapper>

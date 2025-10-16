@@ -32,6 +32,23 @@ public class DashboardServiceImpl implements DashboardService{
 	public List<Map<String, Object>> bestSellerTop5() {
 		return dash_dao.bestSellerTop5();
 	}
+	
+	//베스트브랜드 TOP5
+	@Override
+	public List<Map<String, Object>> bestBrandTop5() {
+		return dash_dao.bestBrandTop5();
+	}
 
+	//판매상품 카테고리별 비율
+	@Override
+	public List<Map<String, Object>> selectCategoryRatio() {
+		return dash_dao.selectCategoryRatio();
+	}
+	
+	// 고객 피부타입별 비율
+	@Override
+	public List<Map<String, Object>> selectSkinRatio() {
+		return dash_dao.selectSkinRatio();
+	}
 
 }

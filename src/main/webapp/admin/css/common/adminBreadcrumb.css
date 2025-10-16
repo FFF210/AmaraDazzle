@@ -6,7 +6,7 @@
 .breadcrumb {
 	padding : 10px 15px;
 	position: sticky;
-	top:39px;
+	top:44px;
 	background-color: var(--base);
 	z-index : 9994;
 }

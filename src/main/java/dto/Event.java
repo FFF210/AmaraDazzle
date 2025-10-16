@@ -23,6 +23,8 @@ public class Event {
     private String brandName; // 브랜드명
     private String thumbFileName; //썸네일 파일리네임
     private String detailFileName;	//디테일 파일리네임
+    private Integer brandCount;	//이벤트 참여한 브랜드수
+    private String brandList;	//이벤트 참여한 브랜드명
 
     public Event() {}
     public Event(String eventType, Timestamp startDate, Timestamp endDate, String eventName,
@@ -162,6 +164,20 @@ public class Event {
 	}
 	public void setDetailFileName(String detailFileName) {
 		this.detailFileName = detailFileName;
+	}
+	public Integer getBrandCount() {
+		return brandCount;
+	}
+	public void setBrandCount(Integer brandCount) {
+		this.brandCount = brandCount;
+	}
+	
+	
+	public String getBrandList() {
+		return brandList;
+	}
+	public void setBrandList(String brandList) {
+		this.brandList = brandList;
 	}
 	@Override
     public String toString() {

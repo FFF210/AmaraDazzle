@@ -105,20 +105,20 @@
 								</tr>
 							</c:if>
 							
-							<c:set var="no" value="${pCouponCnt-postNo}" />
+							<c:set var="no" value="${iCouponCnt-postNo}" />
 							<c:forEach items="${iCouponList}" var="iCouponList" varStatus="idx">
 							<c:set var="createDate" value="${iCouponList.createdAt}" />
 							<c:set var="startDate" value="${iCouponList.startDate}" />
 							<c:set var="endDate" value="${iCouponList.endDate}" />
 								<tr>
 									<td>${no-idx.index}</td>
-									<td>abc123@naver.com</td>
-									<td>정이헌</td>
+									<td>${iCouponList.mEmail}</td>
+									<td>${iCouponList.mName}</td>
 									<td>${iCouponList.cname}</td>
 									<td class="price_cell"><fmt:formatNumber value="${iCouponList.amount}" pattern="#,###,###" /></td>
 									<td>${fn:substring(createDate,0,19)}</td>
 									<td>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</td>
-									<td class="detail_cell" onclick="goPcpDetail('${iCouponList.couponId}');"><i class="bi bi-three-dots-vertical"></i></td>
+									<td class="detail_cell" onclick="goPcpDetail('${iCouponList.memberCouponId}');"><i class="bi bi-three-dots-vertical"></i></td>
 								</tr>
 							</c:forEach>
 						</tbody>

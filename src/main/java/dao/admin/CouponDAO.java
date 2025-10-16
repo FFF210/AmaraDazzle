@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import dto.Coupon;
+import dto.MemberCoupon;
 import dto.admin.SearchConditionDTO;
 
 public interface CouponDAO {
@@ -14,8 +15,8 @@ public interface CouponDAO {
 	int insertPublCoupon(Coupon pCoupon); //쿠폰 발행
 	Coupon publCouponDetail(int num); //발행쿠폰 상세보기
 	Integer iCouponCnt(SearchConditionDTO sc_DTO);	//개별지급 쿠폰 전체 수 
-	List<Coupon> iCouponAllList(Map<String, Object> listMap);	//개별지급 쿠폰 전체 목록 
-	List<Coupon> iCouponSearchList(SearchConditionDTO sc_DTO);	//개별지급 쿠폰 검색 목록
+	List<MemberCoupon> iCouponAllList(Map<String, Object> listMap);	//개별지급 쿠폰 전체 목록 
+	List<MemberCoupon> iCouponSearchList(SearchConditionDTO sc_DTO);	//개별지급 쿠폰 검색 목록
 	int provisionCoupon(Map<String, Object> map); //쿠폰 지급 
 
 }

@@ -242,44 +242,34 @@
 		when cp.writer_type = 'ADMIN' then a.aname
 		end as writerName
 		from coupon cp
-		left join code_detail cd ON cp.p_code =
-		cd.code_detail_id
-		left join category_path_view cat ON cat.category_id =
-		cp.category_id
+		left join code_detail cd ON cp.p_code = cd.code_detail_id
+		left join category_path_view cat ON cat.category_id = cp.category_id
 		left join brand b ON cp.writer_id = b.brand_id
-		left join
-		admin_info a ON cp.writer_id = a.admin_info_id
-		where cp.coupon_id =
-		#{num}
+		left join admin_info a ON cp.writer_id = a.admin_info_id
+		where cp.coupon_id = #{num}
 	</select>
 
 
 	<!-- 개별 쿠폰 발행 수 -->
-	<select id="iCouponCnt" resultType="Integer"
-		parameterType="searchCondition">
+	<select id="iCouponCnt" resultType="Integer" parameterType="searchCondition">
 		select count(*) from member_coupon mc
-		join coupon cp on mc.coupon_id =
-		cp.coupon_id
+		join coupon cp on mc.coupon_id = cp.coupon_id
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
 				and (mc.created_at &gt;= #{startDateTime}
-				and
-				mc.created_at &lt; #{endDateTime})
+						and mc.created_at &lt; #{endDateTime})
 			</if>
 			<if test="startDateTime2 != null and endDateTime2 != null">
 				and (mc.start_date &gt;= #{startDateTime2}
-				and mc.end_date
-				&lt; #{endDateTime2})
+						and mc.end_date &lt; #{endDateTime2})
 			</if>
-			<if
-				test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
+			<if test="totalSearch != null and totalSearch != '' and keyword != null and keyword != ''">
 				<choose>
 					<when test="totalSearch == '쿠폰명'">
 						and cp.cname like concat('%',#{keyword},'%')
 					</when>
 					<when test="totalSearch == '사용조건'">
-						and cp.amount_condition like
-						concat('%',#{keyword},'%')
+						and cp.amount_condition like concat('%',#{keyword},'%')
 
 					</when>
 				</choose>
@@ -288,23 +278,73 @@
 	</select>
 
 	<!-- 개별 쿠폰 발행 리스트 보기 -->
-	<select id="iCouponAllList" resultType="coupon"
-		parameterType="Map">
-		select mc.* from member_coupon mc
-		join coupon cp on
-		mc.coupon_id = cp.coupon_id
-		order by mc.coupon_id desc limit
-		#{start_p},#{post_ea}
+	<select id="iCouponAllList" resultType="memberCoupon" parameterType="Map">
+		select 
+			mc.*, 
+			cp.coupon_id, 
+			cp.cname, 
+			cp.start_date, 
+			cp.end_date, 
+			cp.amount, 
+			cp.p_code, 
+			cp.category_id, 
+			cp.amount_condition, 
+			cp.reason, 
+			cp.provision, 
+			cp.writer_type, 
+			cp.writer_id, 
+			cp.created_at AS couponCreatedAt, 
+			cd.name as codeName,
+			cat.path as fullCategoryPath,
+			case
+				when cp.writer_type = 'BRAND_ADMIN' then b.brand_name
+				when cp.writer_type = 'ADMIN' then a.aname
+			end as writerName,
+			m.email AS mEmail, 
+			m.name AS mName
+		from member_coupon mc
+		join coupon cp on mc.coupon_id = cp.coupon_id
+		left join member m on m.member_id = mc.member_id
+		left join code_detail cd ON cp.p_code = cd.code_detail_id
+		left join category_path_view cat ON cat.category_id = cp.category_id
+		left join brand b ON cp.writer_id = b.brand_id
+		left join admin_info a ON cp.writer_id = a.admin_info_id
+		order by mc.coupon_id desc 
+		limit #{start_p},#{post_ea}
 	</select>
 
 	<!-- 검색된 개별 발행 쿠폰 리스트 -->
-	<select id="iCouponSearchList" resultType="coupon"
-		parameterType="searchCondition">
-		select mc.*
-		<!-- , m.name as mName, m.email as mEmail -->
+	<select id="iCouponSearchList" resultType="memberCoupon" parameterType="searchCondition">
+		select
+			mc.*, 
+			cp.coupon_id, 
+			cp.cname, 
+			cp.start_date, 
+			cp.end_date, 
+			cp.amount, 
+			cp.p_code, 
+			cp.category_id, 
+			cp.amount_condition, 
+			cp.reason, 
+			cp.provision, 
+			cp.writer_type, 
+			cp.writer_id, 
+			cp.created_at AS couponCreatedAt, 
+			cd.name as codeName,
+			cat.path as fullCategoryPath,
+			case
+				when cp.writer_type = 'BRAND_ADMIN' then b.brand_name
+				when cp.writer_type = 'ADMIN' then a.aname
+			end as writerName,
+			m.email AS mEmail, 
+			m.name AS mName
 		from member_coupon mc
 		join coupon cp on mc.coupon_id = cp.coupon_id
-		<!-- left join member m on (cp.member_id = m.member_id) -->
+		left join member m on m.member_id = mc.member_id
+		left join code_detail cd ON cp.p_code = cd.code_detail_id
+		left join category_path_view cat ON cat.category_id = cp.category_id
+		left join brand b ON cp.writer_id = b.brand_id
+		left join admin_info a ON cp.writer_id = a.admin_info_id
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
 				and (mc.created_at &gt;= #{startDateTime}

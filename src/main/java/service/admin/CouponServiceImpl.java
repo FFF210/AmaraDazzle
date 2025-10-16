@@ -8,6 +8,7 @@ import java.util.Map;
 import dao.admin.CouponDAO;
 import dao.admin.CouponDAOImpl;
 import dto.Coupon;
+import dto.MemberCoupon;
 import dto.admin.SearchConditionDTO;
 import util.Paging;
 import util.SearchUtil;
@@ -74,14 +75,14 @@ public class CouponServiceImpl implements CouponService{
 
 	//개별지급 쿠폰 전체 목록 
 	@Override
-	public List<Coupon> iCouponAllList(Integer p_no) {
+	public List<MemberCoupon> iCouponAllList(Integer p_no) {
 		Map<String, Object> listMap = m_pg.paging(p_no);
 		return cp_dao.iCouponAllList(listMap);
 	}
 
 	//개별지급 쿠폰 검색 목록
 	@Override
-	public List<Coupon> iCouponSearchList(Map<String, String> searchContent, Integer p_no) {
+	public List<MemberCoupon> iCouponSearchList(Map<String, String> searchContent, Integer p_no) {
 		Map<String, Object> searchlistMap = m_pg.paging(p_no);
 	    SearchConditionDTO sc_DTO = search.buildSearchDTO(searchContent);
 

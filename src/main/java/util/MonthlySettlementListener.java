@@ -22,30 +22,46 @@ public class MonthlySettlementListener implements ServletContextListener {
 			LocalDate today = LocalDate.now();
 
 			// 매달 1일에만 실행
-			if (today.getDayOfMonth() == 1) {
-				LocalDate firstDayPrevMonth = today.minusMonths(1).withDayOfMonth(1);
-				LocalDate lastDayPrevMonth = today.minusMonths(1).withDayOfMonth(today.minusMonths(1).lengthOfMonth());
+//			if (today.getDayOfMonth() == 1) {
+//				LocalDate firstDayPrevMonth = today.minusMonths(1).withDayOfMonth(1);
+//				LocalDate lastDayPrevMonth = today.minusMonths(1).withDayOfMonth(today.minusMonths(1).lengthOfMonth());
+//
+//				System.out.println("[🔥월별 정산 배치🔥] " + firstDayPrevMonth + " ~ " + lastDayPrevMonth + " 정산 실행 시작");
+//
+//				SettlementService settle_svc = new SettlementServiceImpl();
+//				int result = settle_svc.monthlyInsertSettle(firstDayPrevMonth, lastDayPrevMonth);
+//				if(result > 0) {
+//					System.out.println("[🔥월별 정산 배치 인서트 성공🔥]");
+//				}
+//			}
+			
+			// 원래는 매달 1일만 실행이었지만, 테스트용으로 즉시 실행하도록 변경
+			LocalDate firstDayPrevMonth = today.minusMonths(1).withDayOfMonth(1);
+			LocalDate lastDayPrevMonth = today.minusMonths(1).withDayOfMonth(today.minusMonths(1).lengthOfMonth());
 
-				System.out.println("[🔥월별 정산 배치🔥] " + firstDayPrevMonth + " ~ " + lastDayPrevMonth + " 정산 실행 시작");
+			System.out.println("[🔥월별 정산 배치🔥] " + firstDayPrevMonth + " ~ " + lastDayPrevMonth + " 정산 실행 시작");
 
-				SettlementService settle_svc = new SettlementServiceImpl();
-				int result = settle_svc.monthlyInsertSettle(firstDayPrevMonth, lastDayPrevMonth);
-				if(result > 0) {
-					System.out.println("[🔥월별 정산 배치 인서트 성공🔥]");
-				}
+			SettlementService settle_svc = new SettlementServiceImpl();
+			int result = settle_svc.monthlyInsertSettle(firstDayPrevMonth, lastDayPrevMonth);
+			if (result > 0) {
+				System.out.println("[🔥월별 정산 배치 인서트 성공🔥]");
+			} else {
+				System.out.println("[❌월별 정산 배치 인서트 실패❌]");
 			}
 		};
 
 		// 자정 기준으로 매일 한 번 실행
-		long initialDelay = getInitialDelayUntilMidnight();
-		scheduler.scheduleAtFixedRate(task, initialDelay, 24 * 60 * 60, TimeUnit.SECONDS);
+//		long initialDelay = getInitialDelayUntilMidnight();
+//		scheduler.scheduleAtFixedRate(task, initialDelay, 24 * 60 * 60, TimeUnit.SECONDS);
+		scheduler.schedule(task, 60, TimeUnit.SECONDS);  //서버올리고 60초 후 인서트 실행
+		
 	}
 
-	private long getInitialDelayUntilMidnight() {
-		LocalDateTime now = LocalDateTime.now();
-		LocalDateTime midnight = now.toLocalDate().plusDays(1).atStartOfDay();
-		return Duration.between(now, midnight).getSeconds();
-	}
+//	private long getInitialDelayUntilMidnight() {
+//		LocalDateTime now = LocalDateTime.now();
+//		LocalDateTime midnight = now.toLocalDate().plusDays(1).atStartOfDay();
+//		return Duration.between(now, midnight).getSeconds();
+//	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {

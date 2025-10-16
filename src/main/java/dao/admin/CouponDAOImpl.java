@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.session.SqlSession;
 
 import dto.Coupon;
+import dto.MemberCoupon;
 import dto.admin.SearchConditionDTO;
 import util.MybatisSqlSessionFactory;
 
@@ -67,7 +68,7 @@ public class CouponDAOImpl implements CouponDAO {
 
 	// 개별지급 쿠폰 전체 목록
 	@Override
-	public List<Coupon> iCouponAllList(Map<String, Object> listMap) {
+	public List<MemberCoupon> iCouponAllList(Map<String, Object> listMap) {
 		try (SqlSession ss = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
 			return ss.selectList("mapper.coupon.iCouponAllList", listMap);
 		}
@@ -75,7 +76,7 @@ public class CouponDAOImpl implements CouponDAO {
 
 	// 개별지급 쿠폰 검색 목록
 	@Override
-	public List<Coupon> iCouponSearchList(SearchConditionDTO sc_DTO) {
+	public List<MemberCoupon> iCouponSearchList(SearchConditionDTO sc_DTO) {
 		try (SqlSession ss = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
 			return ss.selectList("mapper.coupon.iCouponSearchList", sc_DTO);
 		}
@@ -84,7 +85,6 @@ public class CouponDAOImpl implements CouponDAO {
 	// 쿠폰 지급
 	@Override
 	public int provisionCoupon(Map<String, Object> map) {
-		System.out.println("map : " + map);
 
 		try (SqlSession ss = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
 			int result = ss.insert("mapper.coupon.provisionCoupon", map);

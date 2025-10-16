@@ -24,7 +24,7 @@ public class SettlementBatch {
 		};
 		
 //	    scheduler.scheduleAtFixedRate(task, 0, 24, TimeUnit.HOURS);	// 매 24시간마다 실행
-		scheduler.scheduleAtFixedRate(task, 5, 60, TimeUnit.MINUTES); //프로그램 실행 후 5초후에 시작 -> 60분마다 반복
+		scheduler.scheduleAtFixedRate(task, 5, 5, TimeUnit.MINUTES); //프로그램 실행 후 5초후에 시작 -> 10분마다 반복
 		}
 	
 	public static void stop() {

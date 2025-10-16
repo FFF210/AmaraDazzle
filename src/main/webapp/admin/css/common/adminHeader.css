@@ -15,7 +15,7 @@
 	background-color: var(--base);
 	gap: 5px;
 	z-index: 9995;
-	align-self: stretch;
+	box-sizing: border-box;
 }
 
 .header-right {

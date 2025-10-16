@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dto.Coupon;
+import dto.MemberCoupon;
 import service.admin.CouponService;
 import service.admin.CouponServiceImpl;
 import util.Paging;
@@ -50,7 +51,7 @@ public class IndiCouponList extends HttpServlet {
 		        (totalSearch != null && !totalSearch.trim().isEmpty()) ||
 		        (keyword != null && !keyword.trim().isEmpty());
 		    
-		    List<Coupon> iCouponAllList;
+		    List<MemberCoupon> iCouponAllList;
 		    Integer iCouponCnt;
 		    Map<String, Object> paging;
 		    

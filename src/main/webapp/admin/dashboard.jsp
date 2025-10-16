@@ -138,7 +138,7 @@
 
 				<!-- 판매율 높은 브랜드 TOP5 -->
 				<div class="bestBrand">
-					<div class="table_title">BestBrand TOP 5</div>
+					<div class="table_title">BEST BRAND TOP 5</div>
 					<div class="table_wrap">
 						<table>
 							<colgroup>
@@ -151,21 +151,13 @@
 							<thead>
 								<tr>
 									<th>#</th>
-									<th title="">브랜드명</th>
-									<th>셀러코드</th>
-									<th>구독여부</th>
-									<th>전월 순이익</th>
+									<th>브랜드명</th>
+									<th>이번달 매출액</th>
+									<th>지난달 매출액</th>
+									<th>변화율</th>
 								</tr>
 							</thead>
-							<tbody>
-								<tr>
-									<td>1</td>
-									<td class="title_cell"></td>
-									<td></td>
-									<td></td>
-									<td></td>
-								</tr>
-							</tbody>
+							<tbody id="bestBrandTable"></tbody>
 						</table>
 					</div>
 				</div>

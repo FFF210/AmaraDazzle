@@ -124,7 +124,12 @@
 									<td><input type="checkbox" class="ch_box" value="${eventList.eventId}" onclick="choice_ck();" /></td>
 									<td>${no-idx.index}</td>
 									<td class="title_cell" onclick="goEventDetail()">${eventList.eventName}</td>
-									<td>${eventList.brandName}</td>
+									<td title="${eventList.brandList}"><b>${eventList.brandName}</b>
+										<c:if test="${eventList.brandCount > 1}">
+											 외 ${eventList.brandCount - 1} 스토어
+										</c:if>
+									
+									</td>
 									<td>
 										<c:choose>
 											<c:when test="${eventList.eventType == 'COUPON'}">

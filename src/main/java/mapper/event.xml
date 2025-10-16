@@ -398,13 +398,10 @@
 
 	<!-- ================ ADMIN =================== -->
 	<!-- event 게시글 총 개수 -->
-	<select id="eventCount" resultType="Integer"
-		parameterType="searchCondition">
-		select count(*) from event e
-		left join event_application ea on
-		(e.event_id = ea.event_id)
-		left join brand b on (ea.brand_id =
-		b.brand_id)
+	<select id="eventCount" resultType="Integer" parameterType="searchCondition">
+		SELECT COUNT(DISTINCT e.event_id)
+		FROM event e
+		LEFT JOIN event_application ea ON e.event_id = ea.event_id
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
 				and (e.created_at &gt;= #{startDateTime}
@@ -432,22 +429,63 @@
 
 	<!-- event 리스트 보기 -->
 	<select id="allEventList" resultType="event" parameterType="Map">
-		select e.*, b.brand_name from event e
-		left join event_application ea on
-		(e.event_id = ea.event_id)
-		left join brand b on (ea.brand_id =
-		b.brand_id)
-		order by e.event_id desc limit #{start_p},#{post_ea}
+		SELECT 
+		    e.event_id,
+		    e.event_type,
+		    e.event_name,
+		    e.start_date,
+		    e.end_date,
+		    e.status,
+		    e.thumbnail_file_id,
+		    e.expose_YN,
+		    e.created_at,
+		    COUNT(DISTINCT ea.brand_id) AS brand_count,
+		    (
+		        SELECT b2.brand_name
+		        FROM event_application ea2
+		        JOIN brand b2 ON ea2.brand_id = b2.brand_id
+		        WHERE ea2.event_id = e.event_id
+		        ORDER BY ea2.event_application_id ASC
+		        LIMIT 1
+		    ) AS brand_name,
+		    GROUP_CONCAT(DISTINCT b.brand_name ORDER BY b.brand_name SEPARATOR ', ') AS brand_list
+		FROM event e
+		LEFT JOIN event_application ea ON e.event_id = ea.event_id
+		LEFT JOIN brand b ON ea.brand_id = b.brand_id
+		GROUP BY 
+		    e.event_id,
+		    e.event_name,
+		    e.start_date,
+		    e.end_date,
+		    e.expose_YN
+		ORDER BY e.event_id desc LIMIT #{start_p},#{post_ea}
 	</select>
 
 	<!-- 검색된 event 리스트 -->
-	<select id="searchEventList" resultType="event"
-		parameterType="searchCondition">
-		select e.*, b.brand_name from event e
-		left join event_application ea on
-		(e.event_id = ea.event_id)
-		left join brand b on (ea.brand_id =
-		b.brand_id)
+	<select id="searchEventList" resultType="event" parameterType="searchCondition">
+		SELECT 
+		    e.event_id,
+		    e.event_type,
+		    e.event_name,
+		    e.start_date,
+		    e.end_date,
+		    e.status,
+		    e.thumbnail_file_id,
+		    e.expose_YN,
+		    e.created_at,
+		    COUNT(DISTINCT ea.brand_id) AS brand_count,
+		    (
+		        SELECT b2.brand_name
+		        FROM event_application ea2
+		        JOIN brand b2 ON ea2.brand_id = b2.brand_id
+		        WHERE ea2.event_id = e.event_id
+		        ORDER BY ea2.event_application_id ASC
+		        LIMIT 1
+		    ) AS brand_name,
+		     GROUP_CONCAT(DISTINCT b.brand_name ORDER BY b.brand_name SEPARATOR ', ') AS brand_list
+		FROM event e
+		LEFT JOIN event_application ea ON e.event_id = ea.event_id
+		LEFT JOIN brand b ON ea.brand_id = b.brand_id
 		<where>
 			<if test="startDateTime != null and endDateTime != null">
 				and (e.created_at &gt;= #{startDateTime}
@@ -471,10 +509,15 @@
 				</choose>
 			</if>
 		</where>
-		order by e.event_id desc limit #{start_p},#{post_ea}
+		GROUP BY 
+		    e.event_id,
+		    e.event_title,
+		    e.start_date,
+		    e.end_date,
+		    e.expose_YN
+		ORDER BY e.event_id DESC LIMIT #{start_p},#{post_ea}
 	</select>
-
-
+	
 	<!-- event 게시글 조회수 -->
 	<update id="eventViewCnt" parameterType="Integer">
 		update event set
@@ -487,12 +530,12 @@
 		(event_id, event_type, start_date, end_date,
 		event_name,
 		thumbnail_file_id, detail_file_id, category_id,
-		content, writer,
+		 writer,
 		created_at)
 		values
 		(0, #{eventType}, #{startDate}, #{endDate},
 		#{eventName},#{thumbnailFileId}, #{detailFileId}, #{categoryId},
-		#{content}, #{writer}, now())
+		#{writer}, now())
 	</insert>
 	
 	
@@ -501,7 +544,10 @@
 		UPDATE event 
 		SET 
 		expose_YN = NOT expose_YN, 
-		status = 'ONGOING',
+		status = CASE 
+                    WHEN expose_YN = 1 THEN 'ONGOING' 
+                    ELSE 'FINISHED' 
+                 END,
 		start_date = CASE 
                         WHEN expose_YN = 1 THEN NOW() 
                         ELSE start_date 

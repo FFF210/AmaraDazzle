@@ -33,18 +33,18 @@ public class DashboardAPI extends HttpServlet {
 			 
 			Map<String, Object> orderCnt = dash_svc.orderCntByPeriod();	//기간별 총 주문건수
 			Map<String, Object> memberCnt = dash_svc.memberCntByPeriod();//기간별 가입자수
-			List<Map<String, Object>> bestProductTop5 = dash_svc.bestSellerTop5();	//이번달 베스트셀러 top5
-			for (Map<String, Object> item : bestProductTop5) {
-			    System.out.println("상품명: " + item.get("product_name"));
-			    System.out.println("증감률: " + item.get("diff_percent"));
-			}
-			System.out.println(bestProductTop5);
+			List<Map<String, Object>> bestProductTop5 = dash_svc.bestSellerTop5();	//이번달 베스트셀러 top5(판매량기준)
+			List<Map<String, Object>> bestBrandTop5 = dash_svc.bestBrandTop5();	//이번달 베스트브랜드 TOP5 (매출기준)
+			List<Map<String, Object>> categoryRatio = dash_svc.selectCategoryRatio(); //판매상품 카테고리별 비율	
+			List<Map<String, Object>> skinRatio = dash_svc.selectSkinRatio(); // 고객 피부타입별 비율	
 			
 			Map<String, Object> dataMap = new HashMap<>();
 			dataMap.put("orderStats", orderCnt);
 			dataMap.put("memberStats", memberCnt);
 			dataMap.put("productStats", bestProductTop5);
-			 
+			dataMap.put("brandStats", bestBrandTop5); 
+			dataMap.put("categoryRatio", categoryRatio);
+			dataMap.put("skinRatio", skinRatio);
 			 
 			Gson gson = new Gson();
 			String data = gson.toJson(dataMap);

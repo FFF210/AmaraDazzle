@@ -17,8 +17,8 @@ function cardChange(part){
 			const isMonth = orderViewType === "month";
 			const totalOrderCnt = isMonth ? order.this_month_order_count : order.today_order_count;
 			const orderDiffPercent = isMonth ? order.month_order_diff_percent : order.day_order_diff_percent;
-			const orderCardTitle = isMonth ? "당월 총 주문건수 | Month" : "당일 총 주문건수 | toDay";
-			const orderFrom = isMonth ? "from LastMonth" : "from yesterday";
+			const orderCardTitle = isMonth ? "당월 총 주문건수 | Month" : "당일 총 주문건수 | Today";
+			const orderFrom = isMonth ? "from lastMonth" : "from yesterday";
 			
 			document.getElementById("orderCardTitle").textContent = orderCardTitle;
 			document.getElementById("totalOrderCnt").textContent = totalOrderCnt + "건";
@@ -46,7 +46,7 @@ function cardChange(part){
 			const totalMemberCnt = isMonth ? member.this_month_member_count : member.today_member_count;
 			const memberDiffPercent = isMonth ? member.month_member_diff_percent : member.day_member_diff_percent;
 			const memberCardTitle = isMonth ? "당월 신규가입자 수 | Month" : "당일 신규가입자 수 | Today";
-			const memberFrom = isMonth ? "from LastMonth" : "from yesterday";
+			const memberFrom = isMonth ? "from lastMonth" : "from yesterday";
 			
 			document.getElementById("memberCardTitle").textContent = memberCardTitle;
 			document.getElementById("totalMemberCnt").textContent = totalMemberCnt + "건";
@@ -97,6 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		 
 		
 		// ****** 테이블 섹션 *******
+		//BEST SELLER TOP5
 		const pdTable = data.productStats;
 		const container = document.querySelector("#bestPdTable");
 	    container.innerHTML = "";
@@ -108,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	      	const tr = document.createElement("tr");
 	      	tr.innerHTML = `
 				<td>${idx + 1}</td>
-				<td class="title_cell">${item.product_name}</td>
+				<td class="title_cell" title="${item.product_name}">${item.product_name}</td>
 				<td>${item.brand_name}</td>
 				<td>${Number(item.product_price).toLocaleString()}</td>
 				<td>${item.this_month_qty.toLocaleString()}</td>
@@ -119,6 +120,109 @@ document.addEventListener("DOMContentLoaded", () => {
 		      `;
 	      	container.appendChild(tr);
 	    });
+		
+		//BEST BRAND TOP5
+		const brandTable = data.brandStats;
+		const container2 = document.querySelector("#bestBrandTable");
+	    container2.innerHTML = "";
+
+	    brandTable.forEach((item, idx) => {
+      		const diffSign = item.diff_percent > 0 ? "▲" : (item.diff_percent < 0 ? "▼" : "-");
+	      	const diffColor = item.diff_percent > 0 ? "green" : (item.diff_percent < 0 ? "red" : "gray");
+
+	      	const tr = document.createElement("tr");
+	      	tr.innerHTML = `
+				<td>${idx + 1}</td>
+				<td title="${item.brand_name}">${item.brand_name}</td>
+				<td>${Number(item.this_month_sales).toLocaleString()}</td>
+				<td>${Number(item.last_month_sales).toLocaleString()}</td>
+				<td style="color:${diffColor}; font-weight:600;">
+				    ${diffSign}${item.diff_percent}%
+				</td>
+		      `;
+	      	container2.appendChild(tr);
+	    });
+		
+		
+		//판매상품 카테고리별 비율 (doughnutChart)
+		const doughnutChart = document.getElementById("doughnutChart");
+		const doughnut = data.categoryRatio;
+		const cateLabels = doughnut.map(item => item.categoryName);
+		const cateValues = doughnut.map(item => item.ratioPercent);
+
+		const data1 = {
+			labels: cateLabels,
+			datasets: [
+				{
+					label: "카테고리 상품 분포 비율",
+					data: cateValues,
+					backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+					hoverOffset: 4,
+				},
+			],
+		};
+		const doughnutConfig = {
+			type: "doughnut",
+			data: data1,
+			options: {
+				responsive: false,
+				plugins: {
+					legend: {
+						position: "top",
+					},
+					title: {
+						display: true,
+						text: '카테고리별 상품 비율'
+					},
+				},
+			},
+		};
+		const profitDoughnutChart = new Chart(doughnutChart, doughnutConfig);
+	
+		
+		//판매상품 카테고리별 비율 (pieChart)
+		const pieChart = document.getElementById("pieChart");
+		const pie = data.skinRatio;
+		const skinLabels = pie.map(item => item.skinType);
+		const skinValues = pie.map(item => item.ratioPercent);
+		const data2 = {
+			labels: skinLabels,
+			datasets: [
+				{
+					label: "My First Dataset",
+					data: skinValues,
+					backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'],
+					hoverOffset: 4,
+				},
+			],
+		};
+
+		const pieConfig = {
+			type: "pie",
+			data: data2,
+			options: {
+				responsive: true,
+				plugins: {
+					title: {
+						display: true,
+						text: "피부타입 비율 (전체 회원 기준)",
+					},
+					legend: {
+						position: 'top'
+					},
+					tooltip: {
+						callbacks: {
+							title: function(context) {
+								return `${context.label}: ${context.formattedValue}%`;
+							},
+						},
+					},
+				},
+			},
+		};
+		const profitPieChart = new Chart(pieChart, pieConfig);
+	
+	
 	})
 	.catch(err => console.error("통계 로드 실패:", err));
 
@@ -129,10 +233,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	const barConfig = new Chart(barChart, {
 		type: 'bar',
 		data: {
-			labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+			labels: ["2025-1", "2025-2", "2025-3", "2025-4", "2025-5", "2025-6", "2025-7", "2025-8", "2025-9", "2025-10", "2025-11", "2025-12"],
 			datasets: [{
 				label: "메인 배너 수익",
-				data: [12, 19, 3, 5, 2, 3, 5, 8, 4, 17, 2, 12],
+				data: [12, 19, 13, 25, 12, 33, 15, 38, 24, 17, 22, 12],
 				backgroundColor: [
 					'rgba(255, 99, 132, 0.5)'
 
@@ -145,7 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			},
 			{
 				label: "프리미엄 구독 수익",
-				data: [12, 19, 3, 5, 2, 3, 5, 8, 4, 17, 2, 12],
+				data: [32, 13, 23, 65, 52, 23, 15, 34, 42, 27, 25, 31],
 				backgroundColor: [
 					'rgba(54, 162, 235, 0.5)'
 				],
@@ -156,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			},
 			{
 				label: "플랫폼 순이익",
-				data: [12, 19, 3, 5, 2, 3, 5, 8, 4, 17, 2, 12],
+				data: [12, 19, 30, 50, 20, 30, 50, 41, 40, 17, 20, 48],
 				backgroundColor: [
 					'rgba(255, 206, 86, 0.5)'
 				],
@@ -181,114 +285,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-	//doughnutChart
-	const doughnutChart = document.getElementById("doughnutChart");
+	
 
-	const data1 = {
-		labels: ["Red", "Blue", "Yellow"],
-		datasets: [
-			{
-				label: "My First Dataset",
-				data: [300, 50, 100],
-				backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)", "rgb(255, 205, 86)"],
-				hoverOffset: 4,
-			},
-		],
-	};
-
-	const doughnutConfig = {
-		type: "doughnut",
-		data: data1,
-		options: {
-			responsive: false,
-			plugins: {
-				legend: {
-					position: "top",
-				},
-				title: {
-					display: true,
-					text: "Chart.js Doughnut Chart",
-				},
-			},
-		},
-	};
-
-	const profitDoughnutChart = new Chart(doughnutChart, doughnutConfig);
-
-	//pieChart
-	const pieChart = document.getElementById("pieChart");
-
-	const data2 = {
-		labels: ["Red", "Blue", "Yellow"],
-		datasets: [
-			{
-				label: "My First Dataset",
-				data: [300, 50, 100],
-				backgroundColor: ["rgb(255, 99, 132)", "rgb(54, 162, 235)", "rgb(255, 205, 86)"],
-				hoverOffset: 4,
-			},
-		],
-	};
-
-	const pieConfig = {
-		type: "pie",
-		data: data2,
-		options: {
-			responsive: false,
-			plugins: {
-				title: {
-					display: true,
-					text: "Chart.js Pie Chart",
-				},
-				legend: {
-					labels: {
-						generateLabels: function(chart) {
-							// Get the default label list
-							const original = Chart.overrides.pie.plugins.legend.labels.generateLabels;
-							const labelsOriginal = original.call(this, chart);
-
-							// Build an array of colors used in the datasets of the chart
-							let datasetColors = chart.data.datasets.map(function(e) {
-								return e.backgroundColor;
-							});
-							datasetColors = datasetColors.flat();
-
-							// Modify the color and hide state of each label
-							labelsOriginal.forEach((label) => {
-								// There are twice as many labels as there are datasets. This converts the label index into the corresponding dataset index
-								label.datasetIndex = (label.index - (label.index % 2)) / 2;
-
-								// The hidden state must match the dataset's hidden state
-								label.hidden = !chart.isDatasetVisible(label.datasetIndex);
-
-								// Change the color to match the dataset
-								label.fillStyle = datasetColors[label.index];
-							});
-
-							return labelsOriginal;
-						},
-					},
-					onClick: function(mouseEvent, legendItem, legend) {
-						// toggle the visibility of the dataset from what it currently is
-						legend.chart.getDatasetMeta(legendItem.datasetIndex).hidden = legend.chart.isDatasetVisible(
-							//                        legendItem.datasetIndex,
-						);
-						legend.chart.update();
-					},
-				},
-				tooltip: {
-					callbacks: {
-						title: function(context) {
-							const labelIndex = context[0].datasetIndex * 2 + context[0].dataIndex;
-							return context[0].chart.data.labels[labelIndex] + ": " + context[0].formattedValue;
-						},
-					},
-				},
-			},
-		},
-	};
-
-	const profitPieChart = new Chart(pieChart, pieConfig);
+	
 
 
 
