@@ -122,6 +122,17 @@
 	font-size: 13px;
 	color: #60656E;
 }
+
+.preview-area img {
+	max-width: 100%; /* 가로는 부모 박스보다 커지지 않게 */
+	height: auto; /* 세로는 비율에 맞춰 자동 조정 */
+	display: block; /* 불필요한 여백 제거 */
+}
+
+.field {
+	margin-top: 18px;
+}
+
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -163,10 +174,12 @@
 
 								<!-- 이벤트기간 -->
 								<div class="label">이벤트기간</div>
-								<div>
-									<my:textInput id="eventPeriod" name="eventPeriod"
-										type="readOnly" size="sm" state="default"
-										value="${event.startDate} ~ ${event.endDate}" />
+								<div class="text-input-wrapper size--sm state--default">
+									<div class="text-input-inner readOnly">
+										<input type="text" id="eventPeriod" name="eventPeriod"
+											class="text-input readOnly" readonly
+											value="<fmt:formatDate value='${event.startDate}' pattern='yyyy-MM-dd'/>  ~  <fmt:formatDate value='${event.endDate}' pattern='yyyy-MM-dd'/>" />
+									</div>
 								</div>
 
 								<!-- ====== 상품 카테고리 (readonly input) ====== -->
@@ -226,13 +239,6 @@
 												alt="대표 이미지" width="588px" />
 										</div>
 									</div>
-								</div>
-
-								<div class="label">브랜드 전달내용</div>
-								<div>
-									<my:textArea id="bannerMessage" name="bannerMessage"
-										readonly="true" placeholder="개최합니다."
-										value="${banner.bannerMessage}" />
 								</div>
 
 								<div class="label req">이벤트 담당자</div>
@@ -310,9 +316,9 @@
 								<button type="submit" class="btn btn-outline btn-sm"
 									id="btnSubmit">신청하기</button>
 							</div>
-							
+
 							<!-- 신청하기 버튼 직후 -->
-<script>
+							<script>
 document.addEventListener("DOMContentLoaded", function () {
   const form = document.getElementById("eventForm");
   const checkboxes = document.querySelectorAll(".product-check");

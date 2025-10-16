@@ -43,6 +43,7 @@ public class EventServiceImpl implements EventService {
 	/* ===== eventForm ===== */
 	@Override
 	public void applyEvent(EventDetail form) throws Exception {
+		  System.out.println("🚀 Service 진입: applyEvent 호출됨");   // ✅ 이거 넣었어?
 		// 1. 이벤트 신청 저장
 		EventApplication application = new EventApplication();
 		application.setEventId(form.getEventId());
@@ -53,24 +54,32 @@ public class EventServiceImpl implements EventService {
 
 		// insert 후 eventApplicationId가 DTO에 세팅돼야 함 (eventApplication.xml에
 		// useGeneratedKeys)
+		System.out.println("eventDAO 객체: " + eventDAO);
 		eventDAO.insertEventApplication(application);
+		System.out.println("🧾 EventServiceImpl 신청 insert 완료");
 
 		// 2. 이벤트 상품 등록
-		if (form.getProductIds() != null && !form.getProductIds().isEmpty()) {
+		if (form.getProductIdList() != null && !form.getProductIdList().isEmpty()) {
 			Map<String, Object> map = new HashMap<>();
 			map.put("eventId", form.getEventId());
 			map.put("brandId", form.getBrandId());
-			map.put("productIds", form.getProductIds()); // List<Long>
+			map.put("productIdList", form.getProductIdList()); // List<Long>
 			map.put("discountType", form.getDiscountType()); // 단일 값
 			map.put("discountValue", form.getDiscountValue()); // 단일 값
 
-			// 상품 여러 개 한 번에 update (event_application.xml의 updateProductsEvent 사용)
-			eventDAO.updateProductsEvent(map);
+			// ✅ 디버깅 로그
+		    System.out.println("🚀 applyEvent 호출됨");
+		    System.out.println("eventId: " + form.getEventId());
+		    System.out.println("brandId: " + form.getBrandId());
+		    System.out.println("productIdList: " + form.getProductIdList());  // 여기서 리스트 확인
+		    System.out.println("discountType: " + form.getDiscountType());
+		    System.out.println("discountValue: " + form.getDiscountValue());
 			
-			System.out.println(">>> applyEvent productIds = " + form.getProductIds());
-			System.out.println(">>> applyEvent discountType = " + form.getDiscountType());
-			System.out.println(">>> applyEvent discountValue = " + form.getDiscountValue());
-
+			
+		    eventDAO.updateProductsEvent(map);
+		    
+	    } else {
+	        System.out.println("⚠️ 선택된 상품 없음 → update skip");
 		}
 	}
 

@@ -77,7 +77,6 @@
 				<table class="table">
 					<thead>
 						<tr>
-							<th class="sortable">번호 <i class="bi bi-dash-lg sort-icon"></i></th>
 							<th>신청일</th>
 							<th>이벤트 기간</th>
 							<th>이벤트명</th>
@@ -93,7 +92,6 @@
 						<c:forEach var="event" items="${eventList}">
 							<tr>
 								<!-- 번호 -->
-								<td>${event.eventId}</td>
 								<!-- 신청일 -->
 								<td><fmt:formatDate value="${event.applyDate}"
 										pattern="yyyy-MM-dd" /></td>
@@ -140,6 +138,7 @@
 									</c:choose></td>
 
 								<!-- 상세보기 -->
+								<!-- 
 								<td><c:choose>
 										<c:when test="${event.participateYn eq '참여'}">
 											<button type="button" class="btn btn-outline btn-sm"
@@ -149,13 +148,13 @@
 											<button type="button" class="btn btn-outline btn-sm" disabled>상세보기</button>
 										</c:otherwise>
 									</c:choose></td>
-
+ -->
 								<!-- 취소하기 -->
 								<td><c:choose>
 										<c:when
 											test="${event.status eq 'RECRUIT' and event.participateYn eq '참여'}">
 											<button type="button" class="btn btn-danger btn-sm"
-												onclick="if(confirm('정말 취소하시겠습니까?')) location.href='/brand2/eventDetail?action=cancel&eventApplicationId=${event.eventApplicationId}&eventId=${event.eventId}'">취소</button>
+												onclick="if(confirm('정말 취소하시겠습니까?')) location.href='/brand2/eventFormDetail?action=cancel&eventApplicationId=${event.eventApplicationId}&eventId=${event.eventId}'">취소</button>
 										</c:when>
 										<c:otherwise>
 											<button type="button" class="btn btn-outline btn-sm" disabled>취소</button>
