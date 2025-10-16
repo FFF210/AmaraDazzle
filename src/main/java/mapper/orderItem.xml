@@ -287,7 +287,7 @@
 	<update id="updateStatusToDelivered" parameterType="long">
 		UPDATE
 		order_item
-		SET status = 'DELIVERED',
+		SET status = 'CONFIRMED',
 		updated_at = NOW()
 		WHERE order_id =
 		#{orderId}
