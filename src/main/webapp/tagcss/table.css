@@ -157,7 +157,7 @@
 /* 테이블 상품명 */
 .product-name {
 	width: 100%;
-	min-width: 150px;
+	min-width: 240px;
 	white-space: normal;
 	line-height: 22px;
 	display: -webkit-box;
@@ -165,6 +165,7 @@
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	padding: 8px 0;
 }
 
 .product-name p {

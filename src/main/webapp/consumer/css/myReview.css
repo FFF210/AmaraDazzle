@@ -292,4 +292,5 @@ textarea:hover {
 	color: #000;
 	font-size: 14px;
 	height: fit-content;
+	padding: 0 !important;
 }
