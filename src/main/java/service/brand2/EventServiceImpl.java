@@ -8,7 +8,6 @@ import dao.brand2.EventDAO;
 import dao.brand2.EventDAOImpl;
 import dto.Coupon;
 import dto.EventApplication;
-import dto.brand2.EventApplicationForm;
 import dto.brand2.EventDetail;
 import dto.brand2.EventList;
 
@@ -43,7 +42,7 @@ public class EventServiceImpl implements EventService {
 
 	/* ===== eventForm ===== */
 	@Override
-	public void applyEvent(EventApplicationForm form) throws Exception {
+	public void applyEvent(EventDetail form) throws Exception {
 		// 1. 이벤트 신청 저장
 		EventApplication application = new EventApplication();
 		application.setEventId(form.getEventId());
@@ -55,27 +54,23 @@ public class EventServiceImpl implements EventService {
 		// insert 후 eventApplicationId가 DTO에 세팅돼야 함 (eventApplication.xml에
 		// useGeneratedKeys)
 		eventDAO.insertEventApplication(application);
-		Long applicationId = application.getEventApplicationId();
 
 		// 2. 이벤트 상품 등록
 		if (form.getProductIds() != null && !form.getProductIds().isEmpty()) {
-			for (int i = 0; i < form.getProductIds().size(); i++) {
-				Map<String, Object> map = new HashMap<>();
-				map.put("eventId", form.getEventId());
-				map.put("productId", form.getProductIds().get(i));
+			Map<String, Object> map = new HashMap<>();
+			map.put("eventId", form.getEventId());
+			map.put("brandId", form.getBrandId());
+			map.put("productIds", form.getProductIds()); // List<Long>
+			map.put("discountType", form.getDiscountType()); // 단일 값
+			map.put("discountValue", form.getDiscountValue()); // 단일 값
 
-				// 할인 이벤트라면 discount 정보도 추가
-				if ("DISCOUNT".equals(form.getEventType())) {
-					map.put("discountType", form.getDiscountTypes().get(i));
-					map.put("discountValue", form.getDiscountValues().get(i));
-				} else {
-					map.put("discountType", null);
-					map.put("discountValue", null);
-				}
+			// 상품 여러 개 한 번에 update (event_application.xml의 updateProductsEvent 사용)
+			eventDAO.updateProductsEvent(map);
+			
+			System.out.println(">>> applyEvent productIds = " + form.getProductIds());
+			System.out.println(">>> applyEvent discountType = " + form.getDiscountType());
+			System.out.println(">>> applyEvent discountValue = " + form.getDiscountValue());
 
-				// 상품별 업데이트
-				eventDAO.updateProductForEvent(map); // product.event_id = eventId
-			}
 		}
 	}
 

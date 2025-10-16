@@ -1826,18 +1826,32 @@
 		resultType="dto.Product">
 		SELECT
 		p.product_id AS productId,
+		p.brand_id,
 		p.name,
+		p.is_exclusive,
+		p.is_visible,
+		p.is_planned,
+		p.category1_id,
+		p.category2_id,
+		p.category3_id,
 		p.thumbnail_file_id,
+		p.image1_file_id,
+		p.image2_file_id,
+		p.image3_file_id,
+		p.image4_file_id,
+		p.image5_file_id,
+		p.ingredients,
+		p.price,
+		p.order_limit,
+		p.has_option,
+		p.stock_qty,
 		p.discount_type AS discountType,
 		p.discount_value AS discountValue,
-		p.event_id AS eventId,
-		p.price,
-		p.stock_qty,
-		p.is_visible
+		p.event_id AS eventId
 		FROM product p
 		WHERE p.brand_id = #{brandId}
 		AND p.is_visible = 1
-		AND (p.event_id IS NULL OR p.event_id = #{eventId})
+		AND p.event_id IS NULL
 		ORDER BY p.product_id DESC
 	</select>
 

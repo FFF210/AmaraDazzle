@@ -1,13 +1,16 @@
 package dto.brand2;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
 import dto.Coupon;
 
 public class EventDetail {
-	/* ======= 상세보기버튼 조회 결과 전용 DTO ======= */
+	/* ======= 신청하기, 상세보기버튼 조회 결과 전용 DTO ======= */
 
+	private Long brandId;
+	
 	// event
 	private Long eventId;
 	private String eventType;
@@ -53,7 +56,15 @@ public class EventDetail {
 	private List<Long> productIdList; // 다중 상품 ID를 List로 변환해서 담을 수 있음
 
 	private String discountType; // RATE / AMOUNT
-	private Integer discountValue; // 할인 값 (null 가능)
+	private BigDecimal discountValue; // 할인 값 (null 가능)
+	
+	public Long getBrandId() {
+		return brandId;
+	}
+
+	public void setBrandId(Long brandId) {
+		this.brandId = brandId;
+	}
 
 	public Long getEventId() {
 		return eventId;
@@ -327,28 +338,29 @@ public class EventDetail {
 		this.discountType = discountType;
 	}
 
-	public Integer getDiscountValue() {
+	public BigDecimal getDiscountValue() {
 		return discountValue;
 	}
 
-	public void setDiscountValue(Integer discountValue) {
+	public void setDiscountValue(BigDecimal discountValue) {
 		this.discountValue = discountValue;
 	}
 
 	@Override
 	public String toString() {
-		return "EventDetail [eventId=" + eventId + ", eventType=" + eventType + ", eventName=" + eventName + ", status="
-				+ status + ", startDate=" + startDate + ", endDate=" + endDate + ", thumbnailFileId=" + thumbnailFileId
-				+ ", detailFileId=" + detailFileId + ", content=" + content + ", writer=" + writer + ", exposeYn="
-				+ exposeYn + ", createdAt=" + createdAt + ", updatedAt=" + updatedAt + ", category1Id=" + category1Id
-				+ ", largeCategoryName=" + largeCategoryName + ", category2Id=" + category2Id + ", middleCategoryName="
-				+ middleCategoryName + ", category3Id=" + category3Id + ", smallCategoryName=" + smallCategoryName
-				+ ", eventApplicationId=" + eventApplicationId + ", managerName=" + managerName + ", managerTel="
-				+ managerTel + ", note=" + note + ", applyDate=" + applyDate + ", coupons=" + coupons + ", couponId="
-				+ couponId + ", cname=" + cname + ", couponStartDate=" + couponStartDate + ", couponEndDate="
-				+ couponEndDate + ", amount=" + amount + ", amountCondition=" + amountCondition + ", productIds="
-				+ productIds + ", productIdList=" + productIdList + ", discountType=" + discountType
-				+ ", discountValue=" + discountValue + "]";
+		return "EventDetail [brandId=" + brandId + ", eventId=" + eventId + ", eventType=" + eventType + ", eventName="
+				+ eventName + ", status=" + status + ", startDate=" + startDate + ", endDate=" + endDate
+				+ ", thumbnailFileId=" + thumbnailFileId + ", detailFileId=" + detailFileId + ", content=" + content
+				+ ", writer=" + writer + ", exposeYn=" + exposeYn + ", createdAt=" + createdAt + ", updatedAt="
+				+ updatedAt + ", category1Id=" + category1Id + ", largeCategoryName=" + largeCategoryName
+				+ ", category2Id=" + category2Id + ", middleCategoryName=" + middleCategoryName + ", category3Id="
+				+ category3Id + ", smallCategoryName=" + smallCategoryName + ", eventApplicationId="
+				+ eventApplicationId + ", managerName=" + managerName + ", managerTel=" + managerTel + ", note=" + note
+				+ ", applyDate=" + applyDate + ", coupons=" + coupons + ", couponId=" + couponId + ", cname=" + cname
+				+ ", couponStartDate=" + couponStartDate + ", couponEndDate=" + couponEndDate + ", amount=" + amount
+				+ ", amountCondition=" + amountCondition + ", productIds=" + productIds + ", productIdList="
+				+ productIdList + ", discountType=" + discountType + ", discountValue=" + discountValue + "]";
 	}
+
 	
 }

@@ -22,12 +22,11 @@
 
 	<!-- 2. 신청 시 product.event_id 세팅 -->
 	<update id="updateProductsEvent" parameterType="map">
-		<foreach collection="productIds" item="pid" index="idx"
-			separator=";">
+		<foreach collection="productIds" item="pid" separator=";">
 			UPDATE product
 			SET event_id = #{eventId},
-			discount_type = #{discountTypes[${idx}]},
-			discount_value = #{discountValues[${idx}]}
+			discount_type = #{discountType},
+			discount_value = #{discountValue}
 			WHERE product_id = #{pid}
 			AND brand_id = #{brandId}
 		</foreach>

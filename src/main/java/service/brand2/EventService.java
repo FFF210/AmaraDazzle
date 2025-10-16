@@ -15,7 +15,7 @@ public interface EventService {
 
 	/* eventForm */
 	// 이벤트 신청
-	void applyEvent(EventApplicationForm form) throws Exception;
+	void applyEvent(EventDetail form) throws Exception;
 
 	// 신청하기 버튼 (단일 이벤트 조회)
 	EventDetail getEventById(Long eventId) throws Exception;

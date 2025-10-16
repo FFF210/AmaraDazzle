@@ -1,6 +1,8 @@
 package controller.brand2;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +20,6 @@ import dao.brand2.ProductDAOImpl;
 import dto.Brand;
 import dto.Coupon;
 import dto.Product;
-import dto.brand2.EventApplicationForm;
 import dto.brand2.EventDetail;
 import service.brand2.EventService;
 import service.brand2.EventServiceImpl;
@@ -128,47 +129,52 @@ public class EventForm extends HttpServlet {
 			Long brandId = brand.getBrandId();
 
 			// 1. 폼 데이터 수집
-			EventApplicationForm form = new EventApplicationForm();
+			EventDetail form = new EventDetail();
 
+			form.setBrandId(brandId);
 			form.setEventId(Long.parseLong(request.getParameter("eventId")));
 			form.setEventType(request.getParameter("eventType"));
-			form.setBrandId(brandId);
 			form.setManagerName(request.getParameter("managerName"));
 			form.setManagerTel(request.getParameter("managerTel"));
 			form.setNote(request.getParameter("note"));
 
 			// 상품코드 여러개
-			String[] productArr = request.getParameterValues("productId[]");
+			String[] productArr = request.getParameterValues("productId");
 			if (productArr != null) {
-				List<Long> productIds = new java.util.ArrayList<>();
+				List<Long> productIdList = new java.util.ArrayList<>();
 				for (String pid : productArr) {
 					if (pid != null && !pid.isBlank()) {
-						productIds.add(Long.parseLong(pid));
+						productIdList.add(Long.parseLong(pid));
 					}
 				}
-				form.setProductIds(productIds);
+				form.setProductIdList(productIdList);
 			}
 
-			// 할인 이벤트인 경우 discountType[], discountValue[] 처리
-			String[] discountTypeArr = request.getParameterValues("discountType[]");
-			String[] discountValueArr = request.getParameterValues("discountValue[]");
+			// 할인 이벤트인 경우 discountType[], discountValue[] 처리가 아니라 일괄처리 ㅎㅎ
+			String discountType = request.getParameter("discountType");
+			
+			// BigDecimal으로 변환하기
+			String discountValueParam = request.getParameter("discountValue");
+			BigDecimal discountValue = BigDecimal.ZERO; // 기본값 0
 
-			if (discountTypeArr != null && discountValueArr != null) {
-				List<String> discountTypes = new java.util.ArrayList<>();
-				List<java.math.BigDecimal> discountValues = new java.util.ArrayList<>();
-
-				for (int i = 0; i < discountTypeArr.length; i++) {
-					discountTypes.add(discountTypeArr[i]);
-					if (discountValueArr[i] != null && !discountValueArr[i].isBlank()) {
-						discountValues.add(new java.math.BigDecimal(discountValueArr[i]));
-					} else {
-						discountValues.add(java.math.BigDecimal.ZERO);
-					}
-				}
-				form.setDiscountTypes(discountTypes);
-				form.setDiscountValues(discountValues);
+			if (discountValueParam != null && !discountValueParam.isBlank()) {
+			    try {
+			        discountValue = new BigDecimal(discountValueParam);
+			    } catch (NumberFormatException e) {
+			        // 변환 실패 시 예외 처리 (로그 남기기 등)
+			        e.printStackTrace();
+			    }
 			}
+			
+			form.setDiscountType(discountType);
+			form.setDiscountValue(discountValue);
+			
+			
+			System.out.println("productArr: " + Arrays.toString(request.getParameterValues("productId")));
+			System.out.println("discountType: " + request.getParameter("discountType"));
+			System.out.println("discountValue: " + request.getParameter("discountValue"));
 
+			
 			// 2. 서비스 호출
 			EventService eventService = new EventServiceImpl();
 			eventService.applyEvent(form);

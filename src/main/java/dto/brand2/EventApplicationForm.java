@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class EventApplicationForm {	
-/* ======= insert/update 용 ======= */
+/* ======= 사용하지 않는 dto ======= */
 	
     // event_application
 	private Long eventApplicationId;  // 신청 PK (insert 후 세팅)
@@ -22,8 +22,8 @@ public class EventApplicationForm {
     
     // DISCOUNT 이벤트 전용
     // 또는 할인 이벤트 지원 시
-    private List<String> discountTypes; // RATE/AMOUNT
-    private List<BigDecimal> discountValues; // 할인 값
+    private String discountType; // RATE/AMOUNT
+    private BigDecimal discountValue; // 할인 값
 
     // coupon
     private Long couponId; // 이미 발급된 쿠폰을 선택하는 경우 (nullable)
@@ -90,17 +90,24 @@ public class EventApplicationForm {
 	public void setProductIds(List<Long> productIds) {
 		this.productIds = productIds;
 	}
-	public List<String> getDiscountTypes() {
-		return discountTypes;
+
+	public String getDiscountType() {
+		return discountType;
 	}
-	public void setDiscountTypes(List<String> discountTypes) {
-		this.discountTypes = discountTypes;
+	public void setDiscountType(String discountType) {
+		this.discountType = discountType;
 	}
-	public List<BigDecimal> getDiscountValues() {
-		return discountValues;
+	public BigDecimal getDiscountValue() {
+		return discountValue;
 	}
-	public void setDiscountValues(List<BigDecimal> discountValues) {
-		this.discountValues = discountValues;
+	public void setDiscountValue(BigDecimal discountValue) {
+		this.discountValue = discountValue;
+	}
+	public List<Long> getCouponIds() {
+		return couponIds;
+	}
+	public void setCouponIds(List<Long> couponIds) {
+		this.couponIds = couponIds;
 	}
 	public Long getCouponId() {
 		return couponId;
@@ -108,14 +115,14 @@ public class EventApplicationForm {
 	public void setCouponId(Long couponId) {
 		this.couponId = couponId;
 	}
-	
 	@Override
 	public String toString() {
 		return "EventApplicationForm [eventApplicationId=" + eventApplicationId + ", brandId=" + brandId + ", eventId="
 				+ eventId + ", managerName=" + managerName + ", managerTel=" + managerTel + ", note=" + note
-				+ ", eventType=" + eventType + ", productIds=" + productIds + ", discountTypes=" + discountTypes
-				+ ", discountValues=" + discountValues + ", couponId=" + couponId + ", couponIds=" + couponIds + "]";
+				+ ", eventType=" + eventType + ", productIds=" + productIds + ", discountType=" + discountType
+				+ ", discountValue=" + discountValue + ", couponId=" + couponId + ", couponIds=" + couponIds + "]";
 	}
+	
 	
 	/*
 	public String getCname() {

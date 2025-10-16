@@ -26,7 +26,7 @@ public interface EventDAO {
     
     // product.xml
     void resetProductsForEvent(Long eventId) throws Exception; // 이벤트 종료 시 상품 해제 미구현
-    void updateProductForEvent(Map<String, Object> params) throws Exception; // 이벤트 신청 시 상품 연결
+    //void updateProductForEvent(Map<String, Object> params) throws Exception; // 이벤트 신청 시 상품 연결
     
 
     // ========== event_application ==========

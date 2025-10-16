@@ -32,7 +32,7 @@ public class EventDAOImpl implements EventDAO {
 	}
 
 	/* eventForm */
-
+	/* < selectEventById, selectAvailableProducts(->ProductDAO) >, insertEventApplication, updateProductsEvent */
 	// ========== event ==========
 	
 	// 신청하기 버튼
@@ -62,6 +62,7 @@ public class EventDAOImpl implements EventDAO {
     
     
     // 이벤트 신청 시 상품 연결
+    /* Product.xml의 updateProductForEvent = event_application.xml의 updateProductsEvent
     @Override
 	public void updateProductForEvent(Map<String, Object> params) throws Exception {
     	try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
@@ -69,6 +70,7 @@ public class EventDAOImpl implements EventDAO {
             sqlSession.commit();
         }
 	}
+	*/
 
 	// ========== event_application ==========
     // 이벤트 신청 저장
