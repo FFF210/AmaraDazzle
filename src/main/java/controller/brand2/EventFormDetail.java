@@ -29,39 +29,37 @@ public class EventFormDetail extends HttpServlet {
 			throws ServletException, IOException {
 		String action = request.getParameter("action"); // 상세 or 취소 버튼
 		String eventIdParam = request.getParameter("eventId"); // 이벤트 id 받기
+		
+		System.out.println("action 파라미터=" + action);
 
 		try {
-
+			
 			if ("cancel".equals(action)) {
 
+				Long applicationId = Long.parseLong(request.getParameter("eventApplicationId"));
+
+				try {
+					service.deleteEventApplication(applicationId); // DB에서 신청 내역 삭제
+				} catch (Exception e) {
+					throw new ServletException("이벤트 취소 처리 중 오류 발생", e);
+				}
+
 				// 취소 후 목록으로 이동 (page 유지)
-	            String page = request.getParameter("page");
-	            if (page == null || page.isEmpty()) {
-	                page = "1";
-	            }
+				String page = request.getParameter("page");
+				if (page == null || page.isEmpty()) {
+					page = "1";
+				}
 
-	            // 쿼리스트링에서 불필요한 cancel 파라미터 제거
-	            String queryString = request.getQueryString();
-	            if (queryString != null) {
-	                queryString = queryString.replaceAll("(&)?action=cancel", "")
-	                                         .replaceAll("(&)?eventApplicationId=\\d+", "")
-	                                         .replaceAll("(&)?eventId=\\d+", "");
-	                if (queryString.startsWith("&")) {
-	                    queryString = queryString.substring(1);
-	                }
-	            }
-
-	            response.sendRedirect(request.getContextPath() + "/brand2/eventList"
-	                    + (queryString != null && !queryString.isEmpty() ? "?" + queryString : "?page=" + page));
-	            return;
+				response.sendRedirect(request.getContextPath() + "/brand2/eventList?page=" + page);
+				return;
 			}
 
 			// ============= 상세보기 버튼 =============
 			if (eventIdParam != null && !eventIdParam.isEmpty()) {
-			    Long eventId = Long.parseLong(eventIdParam);
-			    
-			    HttpSession session = request.getSession(false);
-				
+				Long eventId = Long.parseLong(eventIdParam);
+
+				HttpSession session = request.getSession(false);
+
 				// 세션 없거나 브랜드 정보 없음 → 로그인 페이지로 리다이렉트
 				if (session == null || session.getAttribute("brand") == null) {
 					response.sendRedirect(request.getContextPath() + "/brand/login");
@@ -70,25 +68,27 @@ public class EventFormDetail extends HttpServlet {
 
 				Brand brand = (Brand) session.getAttribute("brand");
 				Long brandId = brand.getBrandId();
-				
+
 				// 파라미터 맵 구성
 				Map<String, Object> params = new HashMap<>();
 				params.put("eventId", eventId);
 				params.put("brandId", brandId);
-				
+
 				// 이벤트 상세 조회
 				EventDetail detail = service.getEventDetailById(params);
-				
+
 				// 쿠폰 리스트 조회 후 DTO에 주입
 				detail.setCoupons(service.getCouponsForEvent(eventId, brandId));
-				
+
 				// JSP로 전달
 				request.setAttribute("event", detail);
 				request.getRequestDispatcher("/brand2/eventFormDetail.jsp").forward(request, response);
-	        } else {
-	            response.sendRedirect(request.getContextPath() + "/brand2/eventList");
-	        }
-		} catch (Exception e) {
+			} else {
+				response.sendRedirect(request.getContextPath() + "/brand2/eventList");
+			}
+		} catch (
+
+		Exception e) {
 			e.printStackTrace();
 			response.sendRedirect(request.getContextPath() + "/error.jsp");
 		}

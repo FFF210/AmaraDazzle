@@ -76,16 +76,23 @@ public class EventDAOImpl implements EventDAO {
     // 이벤트 신청 저장
     @Override
     public void insertEventApplication(EventApplication application) throws Exception {
-        try(SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-        	sqlSession.insert("mapper.eventApplication.insertEventApplication", application);
-        	sqlSession.commit();
+        System.out.println("🔥 insertEventApplication DAO 메서드 진입");
+        try (SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
+            int rows = sqlSession.insert("mapper.eventApplication.insertEventApplication", application);
+            System.out.println("🧾 insert rows=" + rows);
+            sqlSession.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
     // product update
     @Override
     public void updateProductsEvent(Map<String, Object> params) throws Exception {
         try(SqlSession sqlSession = MybatisSqlSessionFactory.getSqlSessionFactory().openSession()) {
-    	sqlSession.update("mapper.eventApplication.updateProductsEvent", params);
+        	 System.out.println("🔥 DAO updateProductsEvent 호출됨");
+        	    System.out.println("params: " + params);   // 전체 Map 출력
+        	int rows = sqlSession.update("mapper.eventApplication.updateProductsEvent", params);
+        	System.out.println("EventDAOImpl : " + rows);
         sqlSession.commit();
         }
     }

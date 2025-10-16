@@ -116,9 +116,12 @@ public class EventForm extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		 System.out.println("🔥 Controller 진입됨");
 		request.setCharacterEncoding("utf-8");
 		try {
+			
+			System.out.println("폼 요청 들어옴");
+			
 			// 세션에서 브랜드 정보 가져오기
 			HttpSession session = request.getSession(false);
 			if (session == null || session.getAttribute("brand") == null) {
@@ -147,7 +150,7 @@ public class EventForm extends HttpServlet {
 						productIdList.add(Long.parseLong(pid));
 					}
 				}
-				form.setProductIdList(productIdList);
+				form.setProductIdList(productIdList);   // ✅ DTO와 이름 일치
 			}
 
 			// 할인 이벤트인 경우 discountType[], discountValue[] 처리가 아니라 일괄처리 ㅎㅎ
@@ -178,6 +181,8 @@ public class EventForm extends HttpServlet {
 			// 2. 서비스 호출
 			EventService eventService = new EventServiceImpl();
 			eventService.applyEvent(form);
+			System.out.println("service 객체 클래스: " + eventService.getClass());
+			System.out.println("✅ Service 호출 완료");
 
 			// 3. 완료 페이지
 			request.getRequestDispatcher("/brand2/eventComplete.jsp").forward(request, response);

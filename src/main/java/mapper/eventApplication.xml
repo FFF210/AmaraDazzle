@@ -22,15 +22,18 @@
 
 	<!-- 2. 신청 시 product.event_id 세팅 -->
 	<update id="updateProductsEvent" parameterType="map">
-		<foreach collection="productIds" item="pid" separator=";">
-			UPDATE product
-			SET event_id = #{eventId},
-			discount_type = #{discountType},
-			discount_value = #{discountValue}
-			WHERE product_id = #{pid}
-			AND brand_id = #{brandId}
+		UPDATE product
+		SET event_id = #{eventId},
+		discount_type = #{discountType},
+		discount_value = #{discountValue}
+		WHERE brand_id = #{brandId}
+		AND product_id IN
+		<foreach collection="productIdList" item="pid" open="("
+			separator="," close=")">
+			#{pid}
 		</foreach>
 	</update>
+
 
 	<!-- 3. 쿠폰 발급 (reason에 event_application 연동) -->
 	<!-- reason 컬럼에 event_application:{id}를 기록해서 신청과 쿠폰 연결 -->
@@ -51,7 +54,7 @@
 	</insert>
 
 	<!-- ========= [brand2] 이벤트 신청 삭제하기 버튼 ========= -->
-	<delete id="deleteEventApplication" parameterType="long">
+	<delete id="deleteEventApplication" parameterType="java.lang.Long">
 		DELETE FROM
 		event_application
 		WHERE event_application_id = #{eventApplicationId}
