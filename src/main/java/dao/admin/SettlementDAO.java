@@ -15,4 +15,5 @@ public interface SettlementDAO {
 	List<Settlement> settlementAllList(Map<String, Object> listMap);	//정산 리스트 
 	List<Settlement> settlementSearchList(SearchConditionDTO sc_DTO);	//정산리스트(검색)
 	int monthlyInsertSettle(Map<String, String> map);	//매월 1일 전월 정산리스트 자동 인서트 
+	Integer waitingSettleCnt();
 }

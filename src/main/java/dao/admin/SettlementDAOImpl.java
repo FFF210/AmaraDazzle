@@ -16,7 +16,7 @@ public class SettlementDAOImpl implements SettlementDAO {
 	//매달 1일에 전월 정산자료 인서트 
 	@Override
 	public int monthlyInsertSettle(Map<String, String> map) {
-		SqlSession ss = factory.openSession();
+		SqlSession ss = factory.openSession(true); //autoCommit = true
 		try {
 			return ss.insert("mapper.settlement.monthlyInsertSettle", map);
 			
@@ -110,6 +110,18 @@ public class SettlementDAOImpl implements SettlementDAO {
 		SqlSession ss = factory.openSession();
 		try {
 			return ss.selectList("mapper.settlement.settlementSearchList", sc_DTO);
+			
+		} finally {
+			ss.close();
+		}
+	}
+
+
+	@Override
+	public Integer waitingSettleCnt() {
+		SqlSession ss = factory.openSession();
+		try {
+			return ss.selectOne("mapper.settlement.waitingSettleCnt");
 			
 		} finally {
 			ss.close();

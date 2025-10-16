@@ -73,6 +73,11 @@ public class SettlementServiceImpl implements SettlementService{
 		int result = settle_dao.autoSettle(map);
 		return result;
 	}
+
+	@Override
+	public Integer waitingSettleCnt() {
+		return settle_dao.waitingSettleCnt();
+	}
 	
 
 }

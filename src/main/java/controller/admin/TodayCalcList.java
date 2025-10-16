@@ -39,9 +39,9 @@ public class TodayCalcList extends HttpServlet {
 			String totalSearch = request.getParameter("totalSearch");
 			String keyword = request.getParameter("keyword");
 			
-			System.out.println("middleFilter : " + middleFilter);
-			System.out.println("totalSearch : " + totalSearch);
-			System.out.println("keyword : " + keyword);
+//			System.out.println("middleFilter : " + middleFilter);
+//			System.out.println("totalSearch : " + totalSearch);
+//			System.out.println("keyword : " + keyword);
 			
 			// 검색 조건이 하나라도 있는지 확인
 		    boolean hasCondition =
@@ -76,12 +76,17 @@ public class TodayCalcList extends HttpServlet {
 		        request.setAttribute("searchContent", searchContent); // 검색어 map
 		    }
 			
+			Integer waitingSettleCnt = settle_svc.waitingSettleCnt();
+			request.setAttribute("waitingSettleCnt", waitingSettleCnt); //미정산 건수
+			
 			LocalDate today = LocalDate.now();
 			LocalDate firstDayPrevMonth = today.minusMonths(1).withDayOfMonth(1);
 			LocalDate lastDayPrevMonth = today.minusMonths(1).withDayOfMonth(today.minusMonths(1).lengthOfMonth());
 			
 			request.setAttribute("settleStartDate", firstDayPrevMonth); //  정산월 시작일
 			request.setAttribute("settleEndDate", lastDayPrevMonth); // 정산월 마지막일 
+			
+			
 			
 			request.setAttribute("postNo", postNo); // 페이지번호 클릭시 나오는 게시글 일련번호
 			request.setAttribute("paging", paging); // 페이징Map

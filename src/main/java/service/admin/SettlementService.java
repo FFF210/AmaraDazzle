@@ -13,5 +13,6 @@ public interface SettlementService {
 	List<Settlement> settlementSearchList(Map<String, String> searchContent, Integer p_no);	//정산리스트(검색)
 	int monthlyInsertSettle(LocalDate startDate, LocalDate endDate);	//매월 1일 전월 정산리스트 자동 인서트 
 	int autoSettle(LocalDate startDate, LocalDate endDate);
+	Integer waitingSettleCnt(); 
 
 }

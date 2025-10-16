@@ -160,8 +160,8 @@
 		    t.b_coupon,
 		    t.point,
 		    t.pure_profit,
-		    FLOOR(t.pure_profit * 0.07) AS fee,  
-		    FLOOR(t.pure_profit - (t.pure_profit * 0.07)) AS final_amount,	 
+		    FLOOR(t.pure_profit * 0.07) AS fee,  -- 수수료 7%
+		    FLOOR(t.pure_profit - (t.pure_profit * 0.07)) AS final_amount,	  -- 최종 정산금액
 		    'Waiting' AS calced_YN,
 		    '-' AS writer
 		FROM (
@@ -169,14 +169,14 @@
 		        b.brand_id,
 		        #{startDate} AS start_date,
 		        #{endDate} AS end_date,
-		        COALESCE(SUM(oi.line_subtotal + o.shipping_amount), 0) AS total_sales,
-		        COALESCE(SUM(o.shipping_amount), 0) AS shipping_charge,
-		        COALESCE(SUM(CASE WHEN c.writer_type = 'ADMIN' THEN o.discount_amount ELSE 0 END), 0) AS p_coupon,
-		        COALESCE(SUM(CASE WHEN c.writer_type = 'BRAND_ADMIN' THEN o.discount_amount ELSE 0 END), 0) AS b_coupon,
-		        COALESCE(SUM(o.using_point), 0) AS point,
-		        FLOOR((SUM(oi.line_subtotal)
-		        	+ SUM(o.shipping_amount)
-   					- SUM(CASE WHEN c.writer_type = 'BRAND_ADMIN' THEN o.discount_amount ELSE 0 END)) AS pure_profit
+		         COALESCE(SUM(oi.line_subtotal + o.shipping_amount), 0) AS total_sales,
+				        COALESCE(SUM(o.shipping_amount), 0) AS shipping_charge,
+				        COALESCE(SUM(CASE WHEN c.writer_type = 'ADMIN' THEN o.discount_amount ELSE 0 END), 0) AS p_coupon,
+				        COALESCE(SUM(CASE WHEN c.writer_type = 'BRAND_ADMIN' THEN o.discount_amount ELSE 0 END), 0) AS b_coupon,
+				        COALESCE(SUM(o.using_point), 0) AS point,
+				        FLOOR((SUM(oi.line_subtotal)
+		        				+ SUM(o.shipping_amount))
+		   						- SUM(CASE WHEN c.writer_type = 'BRAND_ADMIN' THEN o.discount_amount ELSE 0 END)) AS pure_profit
 		    FROM order_item oi 
 		    JOIN orders o ON o.orders_id = oi.order_id
 		    JOIN brand b ON oi.brand_id = b.brand_id
@@ -190,7 +190,7 @@
 		    WHERE s.brand_id = t.brand_id
 		      AND s.start_date = t.start_date
 		      AND s.end_date = t.end_date
-		)
+		);
 	</insert>
 
 	<!-- 일괄 정산 처리 -->
@@ -261,8 +261,8 @@
 	</update>
 	
 	<!-- 미정산 리스트 조회 -->
-	<select id="selectWaitingSettle" resultType="settlement">
-		SELECT * FROM settlement
+	<select id="waitingSettleCnt" resultType="Integer">
+		SELECT count(*) FROM settlement
 		WHERE calced_YN = 'Waiting'
 	</select>
 	

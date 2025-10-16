@@ -39,26 +39,26 @@
 						<td colspan="2">
 							<i class="bi bi-dot"></i>
 							<span>미정산 건수 : </span> 
-							<span> 1,000</span> 건
+							<span> ${waitingSettleCnt}</span> 건
 						</td>
 					</tr>
-					<tr>
-						<td>
-							<i class="bi bi-dot"></i>
-							<span>8월 총 매출 : </span> 
-							<span> 1,000,000,000</span> 원
-						</td>
-						<td>
-							<i class="bi bi-dot"></i>
-							<span>총 수수료 : </span>
-							<span>70,000,000</span> 원
-						</td>
-						<td>&nbsp;&nbsp;
-							<i class="bi bi-dot"></i>
-							<span>총 정산 금액 : </span>
-							<span> 930,000,000</span> 원
-						</td>
-					</tr>
+<!-- 					<tr> -->
+<!-- 						<td> -->
+<!-- 							<i class="bi bi-dot"></i> -->
+<!-- 							<span>8월 총 매출 : </span>  -->
+<!-- 							<span> 1,000,000,000</span> 원 -->
+<!-- 						</td> -->
+<!-- 						<td> -->
+<!-- 							<i class="bi bi-dot"></i> -->
+<!-- 							<span>총 수수료 : </span> -->
+<!-- 							<span>70,000,000</span> 원 -->
+<!-- 						</td> -->
+<!-- 						<td>&nbsp;&nbsp; -->
+<!-- 							<i class="bi bi-dot"></i> -->
+<!-- 							<span>총 정산 금액 : </span> -->
+<!-- 							<span> 930,000,000</span> 원 -->
+<!-- 						</td> -->
+<!-- 					</tr> -->
 				</table>
 			</div>
 
@@ -98,7 +98,8 @@
 						</span>
 						<!-- 버튼 -->
 						<div>
-							<button type="button" class="btn first_btn action_btn">일괄정산</button>
+							<button type="button" class="btn second_btn action_btn" onclick="insertSettleList()">불러오기</button>
+<!-- 							<button type="button" class="btn first_btn action_btn" onclick="">일괄정산</button> -->
 						</div>
 						<!-- 버튼 end -->
 					</div>
@@ -208,6 +209,7 @@
 	<!-- JS부분 -->
 	<script src="../tagjs/selectbox.js"></script>
 	<script src="./js/common/table.js"></script>
+	<script src="./js/settlement.js"></script>
 	<!-- JS부분 end -->
 
 </body>

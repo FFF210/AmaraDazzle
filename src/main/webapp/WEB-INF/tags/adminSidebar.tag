@@ -27,11 +27,11 @@
 			</div>
 
 			<!-- 단일 메뉴 -->
-			<div class="menu-item" data-menu="menu2">
-				<a href="/admin/todoList" class="menu-link"> 
-					<i class="bi bi-journal-check"></i><span class="menu-text">오늘의 할 일</span>
-				</a>
-			</div>
+<!-- 			<div class="menu-item" data-menu="menu2"> -->
+<!-- 				<a href="/admin/todoList" class="menu-link">  -->
+<!-- 					<i class="bi bi-journal-check"></i><span class="menu-text">오늘의 할 일</span> -->
+<!-- 				</a> -->
+<!-- 			</div> -->
 
 			<!-- 단일 메뉴 -->
 			<div class="menu-item" data-menu="menu3">
