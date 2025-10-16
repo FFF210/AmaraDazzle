@@ -1511,11 +1511,16 @@
 			</if>
 		</where>
 
-		<if test="sortField != null and sortField != ''">
+		<choose>
+		<when test="sortField != null and sortField != ''">
 			ORDER BY ${sortField}
 			<if test="sortOrder == 'desc'">DESC</if>
 			<if test="sortOrder == 'asc'">ASC</if>
-		</if>
+		</when>
+		<otherwise>
+			ORDER BY o.created_at DESC
+		</otherwise>
+	</choose>
 
 		LIMIT #{limit} OFFSET #{offset}
 	</select>
