@@ -4,14 +4,16 @@ const local = new Date(p_today.getTime() - offset);
 
 //endDate 오늘날짜로 자동 세팅 
 function settingToday() {
+	let start = document.querySelectorAll(".start_date");
 	let end = document.querySelectorAll(".end_date");
 	for (let i = 0; i < end.length; i++) {
+		start[i].value = local.toISOString().split("T")[0];
 		end[i].value = local.toISOString().split("T")[0]; //첫 접속시 기간설정 endtdate 오늘로 세팅
 	}
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-//	settingToday();
+	settingToday();
 
 	document.querySelectorAll(".date-input .input-wrapper").forEach(wrapper => {
 		const input = wrapper.querySelector(".date-text");

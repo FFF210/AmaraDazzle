@@ -100,7 +100,7 @@
 									<div id="imgPreviewWrapper" class="preview-wrapper">
 										<div id="imgPreviewArea" class="preview-area"
 											aria-live="polite">
-											<img src="${pageContext.request.contextPath}/image?fileId=${event.thumbnailFileId}" />
+											<img src="${pageContext.request.contextPath}/upload_file/${event.thumbFileName}" />
 										</div>
 									</div>
 								</div>
@@ -110,7 +110,7 @@
 									<div id="imgPreviewWrapper" class="preview-wrapper">
 										<div id="imgPreviewArea" class="preview-area"
 											aria-live="polite">
-											<img src="${pageContext.request.contextPath}/image?fileId=${event.detailFileId}" />
+											<img src="${pageContext.request.contextPath}/upload_file/${event.detailFileName}" />
 										</div>
 									</div>
 								</div>

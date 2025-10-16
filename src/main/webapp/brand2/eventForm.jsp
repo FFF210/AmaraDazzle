@@ -210,7 +210,7 @@
 										<div id="imgPreviewArea" class="preview-area"
 											aria-live="polite">
 											<img
-												src="${pageContext.request.contextPath}/image?fileId=${event.thumbnailFileId}"
+												src="${pageContext.request.contextPath}/upload_file/${event.thumbFileName}"
 												alt="대표 이미지" />
 										</div>
 									</div>
@@ -222,7 +222,7 @@
 										<div id="imgPreviewArea" class="preview-area"
 											aria-live="polite">
 											<img
-												src="${pageContext.request.contextPath}/image?fileId=${event.detailFileId}"
+												src="${pageContext.request.contextPath}/upload_file/${event.detailFileName}"
 												alt="대표 이미지" width="588px" />
 										</div>
 									</div>

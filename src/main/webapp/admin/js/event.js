@@ -54,13 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		const titleInput = document.getElementById("eventName").value.trim();
 		const startInput = document.querySelector(".input-wrapper .start_date").value.trim();
 		const endInput = document.querySelector(".input-wrapper .end_date").value.trim();
-		const cateInput1 = document.querySelector("#largeSelect .select-item.active").dataset.value.trim();
-		const cateInput2 = document.querySelector("#middleSelect .select-item.active").dataset.value.trim();
-		const cateInput3 = document.querySelector("#smallSelect .select-item.active").dataset.value.trim();
 		const eventTypeValue = eventTypeInput?.dataset.value?.trim() || "";
-		const cate1Value = cateInput1?.dataset.value?.trim() || "";
-		const cate2Value = cateInput2?.dataset.value?.trim() || "";
-		const cate3Value = cateInput3?.dataset.value?.trim() || "";
 		
 		if (!thumbFile && !mainFile) {
 			showAlert("error", " ", "미리보기시 이미지는 필수로 첨부해야 합니다.");
@@ -113,13 +107,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	const frm = document.getElementById("eventWriteForm");
 	const submitBtn = document.getElementById("eventWriteBtn");
 	const evtType = document.querySelector("#eventType");
-	
-	//toast editor 설정 
-	const editor = new toastui.Editor({
-		el: document.querySelector('#editContent'),
-		height: '500px',
-		initialEditType: 'wysiwyg',
-	});
 
 	//공란 채울 경우 빨강테두리 지움
 	document.querySelectorAll("#eventWriteForm input").forEach(input => {
@@ -145,7 +132,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		if (id === "submitCkDialog" && action === "전송") {
 			const formData = new FormData(frm);
-			formData.append("evtContent", editor.getHTML());
 
 			fetch("/admin/promoEventWrite", {
 				method: "POST",
@@ -223,17 +209,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			return;
 		}
 
-		//내용
-//		if (editor.getMarkdown() == "") {
-//			showAlert("error", " ", "내용을 입력해주세요.");
-//			editor.focus();
-//			return;
-//		}
-//		if (editor.getMarkdown().length < 10) {
-//			showAlert("error", " ", "내용은 10자 이상 입력해야 합니다.");
-//			editor.focus();
-//			return;
-//		}
+
 
 		// 유효성 통과 -> 모달 열기
 		openDialog("submitCkDialog");

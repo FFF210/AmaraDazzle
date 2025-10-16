@@ -46,7 +46,7 @@
 	<!-- 이벤트 상세 본문 (이미지) -->
 	<div class="event-detail">
 		<img
-			src="${pageContext.request.contextPath}/image?fileId=${eventDetail.detailFileId}"
+			src="${pageContext.request.contextPath}/upload_file/${eventDetail.detailFileName}"
 			alt="이벤트 대표 이미지" width="630px" />
 	</div>
 

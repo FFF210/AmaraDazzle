@@ -18,6 +18,10 @@ public class EventDetail {
 	private Date createdAt; // 생성일
 	private Date updatedAt; // 수정일
 
+	//조인용 컬럼 
+	private String thumbFileName; //썸네일 파일리네임
+	private String detailFileName;	//디테일 파일리네임
+
 	public Long getEventId() {
 		return eventId;
 	}
@@ -129,4 +133,21 @@ public class EventDetail {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
+	public String getThumbFileName() {
+		return thumbFileName;
+	}
+
+	public void setThumbFileName(String thumbFileName) {
+		this.thumbFileName = thumbFileName;
+	}
+
+	public String getDetailFileName() {
+		return detailFileName;
+	}
+
+	public void setDetailFileName(String detailFileName) {
+		this.detailFileName = detailFileName;
+	}
+	
 }

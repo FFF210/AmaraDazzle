@@ -58,6 +58,10 @@ public class EventDetail {
 	private String discountType; // RATE / AMOUNT
 	private BigDecimal discountValue; // 할인 값 (null 가능)
 	
+	//이미지 파일 불러오기 조인용 
+	private String thumbFileName; //썸네일 파일리네임
+    private String detailFileName;	//디테일 파일리네임
+	
 	public Long getBrandId() {
 		return brandId;
 	}
@@ -344,6 +348,22 @@ public class EventDetail {
 
 	public void setDiscountValue(BigDecimal discountValue) {
 		this.discountValue = discountValue;
+	}
+
+	public String getThumbFileName() {
+		return thumbFileName;
+	}
+
+	public void setThumbFileName(String thumbFileName) {
+		this.thumbFileName = thumbFileName;
+	}
+
+	public String getDetailFileName() {
+		return detailFileName;
+	}
+
+	public void setDetailFileName(String detailFileName) {
+		this.detailFileName = detailFileName;
 	}
 
 	@Override
