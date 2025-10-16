@@ -21,6 +21,8 @@ public class Event {
     
     //조인용 컬럼
     private String brandName; // 브랜드명
+    private String thumbFileName; //썸네일 파일리네임
+    private String detailFileName;	//디테일 파일리네임
 
     public Event() {}
     public Event(String eventType, Timestamp startDate, Timestamp endDate, String eventName,
@@ -147,6 +149,19 @@ public class Event {
 	}
 	public void setViewCnt(Long viewCnt) {
 		this.viewCnt = viewCnt;
+	}
+	
+	public String getThumbFileName() {
+		return thumbFileName;
+	}
+	public void setThumbFileName(String thumbFileName) {
+		this.thumbFileName = thumbFileName;
+	}
+	public String getDetailFileName() {
+		return detailFileName;
+	}
+	public void setDetailFileName(String detailFileName) {
+		this.detailFileName = detailFileName;
 	}
 	@Override
     public String toString() {

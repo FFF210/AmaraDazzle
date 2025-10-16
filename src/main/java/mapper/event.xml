@@ -271,17 +271,18 @@
 		e.status AS
 		status,
 		e.thumbnail_file_id AS thumbnailFileId,
-		e.detail_file_id AS
-		detailFileId,
+		e.detail_file_id AS detailFileId,
 		e.category_id AS categoryId,
-		e.content
-		AS content,
+		e.content AS content,
 		e.writer AS writer,
 		e.expose_YN AS exposeYn,
-		e.created_at AS
-		createdAt,
-		e.updated_at AS updatedAt
+		e.created_at AS createdAt,
+		e.updated_at AS updatedAt,
+		f1.file_rename AS thumbFileName,
+		f2.file_rename AS detailFileName,
 		FROM event e
+		join upload_file f1 on (e.thumbnail_file_id = 1f.upload_file_id)
+		join upload_file f2 on (e.detail_file_id = f2.upload_file_id)
 		WHERE e.expose_YN = 1
 		AND e.status IN ('ONGOING', 'FINISHED')
 		ORDER BY
