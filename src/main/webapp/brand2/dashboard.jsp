@@ -134,7 +134,7 @@ status        = CONFIRMED
  --%>
 	<my:layout>
 		<my:breadcrumb
-			items="대시보드:/brand2/dashboard, 매출지표:/brand2/salesOverview" />
+			items="대시보드:/brand2/dashboard" />
 
 		<div class=dachcontainer>
 			<!-- KPI 지표 -->
