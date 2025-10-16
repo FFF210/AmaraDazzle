@@ -48,28 +48,28 @@
 						<i class="bi bi-wallet2"></i>
 						<div>
 							<p class="card-label">이번 달 정산 예정 금액</p>
-							<p class="card-value">${currentFinalAmountFmt}원</p>
+							<p class="card-value">${currentFinalAmountFmt} 원</p>
 						</div>
 					</div>
 					<div class="card-item">
 						<i class="bi bi-receipt-cutoff"></i>
 						<div>
 							<p class="card-label">이번 달 수수료</p>
-							<p class="card-value">${currentFeeFmt}원</p>
+							<p class="card-value">${currentFeeFmt} 원</p>
 						</div>
 					</div>
 					<div class="card-item">
 						<i class="bi bi-bag-check"></i>
 						<div>
 							<p class="card-label">이번 달 총 주문 금액</p>
-							<p class="card-value">${currentTotalSalesFmt}원</p>
+							<p class="card-value">${currentTotalSalesFmt} 원</p>
 						</div>
 					</div>
 					<div class="card-item">
 						<i class="bi bi-piggy-bank"></i>
 						<div>
 							<p class="card-label">이번 달 순수 매출액</p>
-							<p class="card-value">${currentPureProfitFmt}원</p>
+							<p class="card-value">${currentPureProfitFmt} 원</p>
 						</div>
 					</div>
 				</div>
