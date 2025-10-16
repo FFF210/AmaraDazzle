@@ -54,10 +54,13 @@ document.addEventListener("DOMContentLoaded", function() {
 		const titleInput = document.getElementById("eventName").value.trim();
 		const startInput = document.querySelector(".input-wrapper .start_date").value.trim();
 		const endInput = document.querySelector(".input-wrapper .end_date").value.trim();
+		const cateInput1 = document.querySelector("#largeSelect .select-item.active").dataset.value.trim();
+		const cateInput2 = document.querySelector("#middleSelect .select-item.active").dataset.value.trim();
+		const cateInput3 = document.querySelector("#smallSelect .select-item.active").dataset.value.trim();
 		const eventTypeValue = eventTypeInput?.dataset.value?.trim() || "";
-//		const cateInput1 = document.querySelector("#largeSelect .select-item.active").dataset.value.trim();
-//		const cateInput2 = document.querySelector("#middleSelect .select-item.active").dataset.value.trim();
-//		const cateInput3 = document.querySelector("#smallSelect .select-item.active").dataset.value.trim();
+		const cate1Value = cateInput1?.dataset.value?.trim() || "";
+		const cate2Value = cateInput2?.dataset.value?.trim() || "";
+		const cate3Value = cateInput3?.dataset.value?.trim() || "";
 		
 		if (!thumbFile && !mainFile) {
 			showAlert("error", " ", "미리보기시 이미지는 필수로 첨부해야 합니다.");
@@ -90,7 +93,6 @@ document.addEventListener("DOMContentLoaded", function() {
 						<h1 class="preview-title">${titleInput}</h1>
 						<p><i class="bi bi-dot"></i>카테고리 : ${eventTypeValue}</p>
 						<p><i class="bi bi-dot"></i>진행기간 : ${startInput} ~ ${endInput}</p>
-						<p><i class="bi bi-dot"></i> ${startInput} ~ ${endInput}</p>
 					</div>
 				</div>
 				<hr />

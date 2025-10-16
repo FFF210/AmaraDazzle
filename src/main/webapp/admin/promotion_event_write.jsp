@@ -17,12 +17,6 @@
 	.uploader {padding: 5px;}
 	.uploader-sm { width: 98%; }
 </style>
-
-<!-- toast editor CDN -->
-<link rel="stylesheet"
-	href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
-<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
-
 <!-- 헤드부분 -->
 
 <body>
@@ -82,14 +76,6 @@
 				<div class="part_title">메인 이미지<span class="reqired_write">*</span></div>
 				<div class="part_content">
 					<my:uploader size="sm" name="eventDetailImg"/>
-				</div>
-			</div>
-
-			<div class="part_section content_part">
-				<div class="part_title">내용</div>
-				<div class="part_content">
-					<!-- toast editor 삽입 -->
-					<div id="editContent"></div>
 				</div>
 			</div>
 
