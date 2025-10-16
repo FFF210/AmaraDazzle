@@ -369,8 +369,7 @@
 		MONTH(oi.created_at) AS month,
 		SUM(CASE WHEN
 		YEAR(oi.created_at) = YEAR(CURDATE())
-		THEN (oi.line_subtotal -
-		oi.discount) ELSE 0 END) AS thisYear,
+		THEN (oi.total) ELSE 0 END) AS thisYear,
 		SUM(CASE WHEN YEAR(oi.created_at)
 		= YEAR(CURDATE()) - 1
 		THEN (oi.total) ELSE 0 END)
