@@ -59,7 +59,7 @@ public class SettlementDAOImpl implements SettlementDAO {
 	        ss.close();
 	    }
 
-	    return totalUpdated + statusUpdate;
+	    return statusUpdate;
 	}
 
 	// 자동정산 (로그 출력용)

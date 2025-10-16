@@ -37,7 +37,7 @@
 	font-weight: 700;
 	color: #222;
 	width: 1020px;
-	margin: 10px 210px;
+	margin: 10px 0;
 	padding: 20px;
 	font-family: 'Noto Sans KR', sans-serif;
 	background: linear-gradient(90deg, #fef6f8 0%, #ffffff 100%);
@@ -55,5 +55,5 @@
 	grid-template-columns: repeat(3, 1fr);
 	column-gap: 60px;
 	row-gap: 60px;
-	padding: 30px 210px;
+	padding: 10px 0 50px 0;
 }

@@ -146,17 +146,10 @@
 	</delete>
 	
 	<!-- 공지 게사상태 변경  -->
-	<update id="noticeExposeChange" parameterType="Map">
-		update notice set 
-		<choose>
-			<when test="isExposed == 1">
-				is_exposed = 0 
-			</when>
-			<when test="isExposed == 0">
-				is_exposed = 1 
-			</when>
-		</choose>
-		where notice_id=#{noticeId}
+	<update id="noticeExposeChange" parameterType="Long">
+		update notice 
+		set is_exposed = NOT is_exposed 
+		where notice_id = #{noticeId}
 	</update>
 
 

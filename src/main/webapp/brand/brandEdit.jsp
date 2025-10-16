@@ -55,31 +55,25 @@
 					</div>
 
 					<div class="form-group image">
-						<label>로고 이미지</label>
-						<c:choose>
-							<c:when test="${not empty brandDetail.logoFileId}">
-								<img src="/upload_file/${brandDetail.logoFileId}" alt="로고 이미지"
-									style="width: 120px; height: 120px; object-fit: contain;">
-							</c:when>
-							<c:otherwise>
-								<p style="color: #999;">등록된 로고 이미지가 없습니다.</p>
-							</c:otherwise>
-						</c:choose>
-						<input type="file" name="upload1" accept="image/*">
+						<label>로고 이미지</label> <img
+							src="${not empty brandDetail.logoFileId
+              ? pageContext.request.contextPath.concat('/image?fileId=').concat(brandDetail.logoFileId)
+              : pageContext.request.contextPath.concat('/image/plus.png')}"
+							id="preview-logo" alt="로고 이미지" width="120px"
+							onclick="document.getElementById('logo').click();" /> <input
+							type="file" id="logo" name="upload1" accept="image/*"
+							style="display: none" onchange="readURL(this,'preview-logo');" />
 					</div>
 
 					<div class="form-group image">
-						<label>배너 이미지</label>
-						<c:choose>
-							<c:when test="${not empty brandDetail.heroFileId}">
-								<img src="/upload_file/${brandDetail.heroFileId}" alt="배너 이미지"
-									style="width: 100%; object-fit: cover;">
-							</c:when>
-							<c:otherwise>
-								<p style="color: #999;">등록된 배너 이미지가 없습니다.</p>
-							</c:otherwise>
-						</c:choose>
-						<input type="file" name="upload2" accept="image/*">
+						<label>배너 이미지</label> <img
+							src="${not empty brandDetail.heroFileId
+              ? pageContext.request.contextPath.concat('/image?fileId=').concat(brandDetail.heroFileId)
+              : pageContext.request.contextPath.concat('/image/plus.png')}"
+							id="preview-hero" alt="상세 이미지" width="100%"
+							onclick="document.getElementById('hero').click();" /> <input
+							type="file" id="hero" name="upload2" accept="image/*"
+							style="display: none" onchange="readURL(this,'preview-logo');" />
 					</div>
 
 					<div class="form-group">
@@ -138,8 +132,8 @@
 			</form>
 		</div>
 	</my:layout>
-	
-<script>
+
+	<script>
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.querySelector("form.product-form");
 
@@ -153,6 +147,19 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   });
 });
+
+/*********************************************************************************************************
+ * 이미지 버튼
+ *********************************************************************************************************/
+ function readURL(input, previewId) {
+	    if (input.files && input.files[0]) {
+	      const reader = new FileReader();
+	      reader.onload = function(e) {
+	        document.getElementById(previewId).src = e.target.result;
+	      }
+	      reader.readAsDataURL(input.files[0]);
+	    }
+	  }
 </script>
 
 </body>

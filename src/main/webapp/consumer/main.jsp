@@ -74,9 +74,11 @@
 				</c:url>
 
 				<!-- 나에게 딱 맞는 상품 -->
-				<my:recommendationSectionTitle
-					title="오늘 ${empty sessionScope.memberName ? '' : sessionScope.memberName}님께 어울리는 뷰티 Pick"
-					linkUrl="${filterUrl}" />
+				<div class="recommendation-section-title">
+					<h2 class="title">오늘 ${empty sessionScope.memberName ? '' : sessionScope.memberName}님께
+						어울리는 뷰티 Pick</h2>
+				</div>
+
 			</c:if>
 			<div class="product-grid">
 				<c:forEach var="p" items="${productMyFitList}">

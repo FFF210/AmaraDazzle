@@ -146,7 +146,9 @@
 									</td>
 									<td>${fn:substring(startDate,0,10)} ~ ${fn:substring(endDate,0,10)}</td>
 									<td>${fn:substring(createDate,0,19)}</td>
-									<td><c:choose>
+									<td>
+										<span onclick="exposeState('${eventList.eventId}', 'event')">
+										<c:choose>
 											<c:when test="${eventList.exposeYn == '1'}">
 												<!-- 게시중 -->
 												<my:tag color="pink" size="md" text="게시중" />
@@ -156,6 +158,7 @@
 												<my:tag color="gray" size="md" text="비공개" />
 											</c:otherwise>
 										</c:choose>
+										</span>
 									</td>
 									<td class="detail_cell" onclick="goEventDetail()">
 										<i class="bi bi-three-dots-vertical"></i>

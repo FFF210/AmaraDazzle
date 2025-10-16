@@ -109,13 +109,8 @@ public class NoticeServiceImpl implements NoticeService {
 
 	//게시상태 변경 
 	@Override
-	public int noticeExposeChange(Long num, Integer exposeYN ) {
-		Map<String, Object> map = new HashMap<>();
-		map.put("noticeId", num);
-		map.put("isExposed", exposeYN);
-		
-		int result = n_dao.noticeExposeChange(map);
-		return result;
+	public int noticeExposeChange(Long num) {
+		return n_dao.noticeExposeChange(num);
 	}
 
 	

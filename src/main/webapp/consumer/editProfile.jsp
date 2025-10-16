@@ -186,9 +186,9 @@
 					</div>
 
 					<!-- 피부고민 (체크박스) -->
-					<div class="form-row skin-issue">
+					<div class="form-row skin-issue" style="height: 120px;">
 						<div class="label">피부고민</div>
-						<div class="skin-issue-tags">
+						<div class="skin-issue-tags" style="margin-bottom: 16px;">
 							<input type="checkbox" id="issue-atopy" name="skinIssues"
 								value="1" class="tag-checkbox"
 								${skinIssues.contains(1) ? 'checked' : ''}> <label

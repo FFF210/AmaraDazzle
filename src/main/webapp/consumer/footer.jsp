@@ -6,7 +6,7 @@
 	<div class="footer-inner">
 		<!-- 왼쪽: 로고 -->
 		<div class="footer-col footer-brand">
-			<a href="<c:url value='/'/>" class="footer-logo" aria-label="홈">
+			<a href="<c:url value='#'/>" class="footer-logo" aria-label="홈">
 				<img src="<c:url value='/image/logo_black_sidelower.svg'/>"
 				alt="AD ADARA DAZZLE">
 			</a>
@@ -18,16 +18,16 @@
 				<div class="footer-col footer-company">
 					<h2 class="ft-title">AmaraDazzle</h2>
 					<ul class="company-list">
-						<li>대표이사: 홍길동 | 사업자등록번호: 809-81-01574</li>
+						<li>대표이사: 이수진 | 사업자등록번호: 809-81-01574</li>
 						<li>주소: (04323) 서울특별시 용산구 한강대로 372, 24층 (동자동, KDB타워)</li>
-						<li>이메일: oliveweb@cj.net</li>
+						<li>이메일: amaradazzle@cj.net</li>
 					</ul>
 				</div>
 
 				<!-- 오른쪽: 링크 -->
 				<div class="footer-col footer-links">
 					<h2 class="ft-title links">
-						<a href="<c:url value='/brand/login'/>">입점문의</a>
+						<a href="<c:url value='/brand/login'/>">브랜드 파트너센터</a>
 					</h2>
 					<ul class="link-list">
 						<li>이용약관법적고지</li>

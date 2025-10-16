@@ -169,16 +169,13 @@
 		        b.brand_id,
 		        #{startDate} AS start_date,
 		        #{endDate} AS end_date,
-		        COALESCE(SUM(oi.line_subtotal), 0) AS total_sales,
+		        COALESCE(SUM(oi.line_subtotal + o.shipping_amount), 0) AS total_sales,
 		        COALESCE(SUM(o.shipping_amount), 0) AS shipping_charge,
 		        COALESCE(SUM(CASE WHEN c.writer_type = 'ADMIN' THEN o.discount_amount ELSE 0 END), 0) AS p_coupon,
 		        COALESCE(SUM(CASE WHEN c.writer_type = 'BRAND_ADMIN' THEN o.discount_amount ELSE 0 END), 0) AS b_coupon,
 		        COALESCE(SUM(o.using_point), 0) AS point,
-		        FLOOR((SUM(oi.line_subtotal)
-       					+ SUM(CASE WHEN c.writer_type = 'ADMIN' THEN o.discount_amount ELSE 0 END)
-       					+ SUM(o.using_point)
-        				+ SUM(o.shipping_amount))
-   						- SUM(CASE WHEN c.writer_type = 'BRAND_ADMIN' THEN o.discount_amount ELSE 0 END)) AS pure_profit
+		        FLOOR((SUM(oi.line_subtotal + o.shipping_amount)
+   					- SUM(CASE WHEN c.writer_type = 'BRAND_ADMIN' THEN o.discount_amount ELSE 0 END)) AS pure_profit
 		    FROM order_item oi 
 		    JOIN orders o ON o.orders_id = oi.order_id
 		    JOIN brand b ON oi.brand_id = b.brand_id
@@ -194,12 +191,6 @@
 		      AND s.end_date = t.end_date
 		)
 	</insert>
-
-	<!-- 미정산 리스트 조회 -->
-	<select id="selectWaitingSettle" resultType="settlement">
-		SELECT * FROM settlement
-		WHERE calced_YN = 'Waiting'
-	</select>
 
 	<!-- 일괄 정산 처리 -->
 	<update id="updateRefundAdjustment" parameterType="Map">
@@ -249,7 +240,7 @@
 					WHERE e.updated_at BETWEEN #{startDate} AND #{endDate} 
 					GROUP BY oi.brand_id) ex ON s.brand_id = ex.brand_id 
 		SET 
-		s.pure_profit = (s.total_sales + s.shipping_charge) - COALESCE(refund.r_brand_shipping_cost, 0) - COALESCE(ex.e_brand_shipping_cost, 0)
+		s.pure_profit =(s.total_sales) + COALESCE(ex.e_member_shipping_cost, 0) - COALESCE(refund.r_brand_shipping_cost, 0) - COALESCE(ex.e_brand_shipping_cost, 0)
 		WHERE s.start_date = #{startDate} AND s.end_date = #{endDate} AND s.calced_YN = 'InProgress';
 	</update>
 	<update id="updateFeeAdjustment" parameterType="Map">
@@ -267,6 +258,13 @@
 	        deposited_date = NOW()
 	    WHERE start_date = #{startDate} AND end_date = #{endDate} AND calced_YN = 'InProgress';
 	</update>
+	
+	<!-- 미정산 리스트 조회 -->
+	<select id="selectWaitingSettle" resultType="settlement">
+		SELECT * FROM settlement
+		WHERE calced_YN = 'Waiting'
+	</select>
+	
 	
 	<!-- 정산할 건 수 -->
 	<select id="settlementCnt" resultType="Integer" parameterType="searchCondition">

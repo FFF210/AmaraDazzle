@@ -36,7 +36,7 @@
 		<my:pageHeader title="쿠폰" description="지금 다운로드하고 바로 혜택 받기" />
 	</div>
 
-	<div class="coupon-wrapper">
+	<div class="coupon-wrapper" style="width: 1020px; margin: 0 auto;">
 		<c:set var="prevBrand" value="" />
 		<c:forEach var="coupon" items="${couponList}" varStatus="status">
 
@@ -64,7 +64,7 @@
 
 			<!-- 쿠폰 출력 -->
 			<my:consumerCoupon couponId="${coupon.couponId}"
-				cname="${coupon.cname}" couponLimit="${coupon.couponLimit}"
+				cname="${coupon.cname}"
 				categoryName="${coupon.categoryName}"
 				amountCondition="${amountConditionFmt}"
 				downloaded="${coupon.downloaded}" amount="${amountFmt}" />
@@ -90,37 +90,42 @@
 /*********************************************************************************************************
  * 쿠폰 다운 이벤트
  *********************************************************************************************************/
-document.querySelectorAll('.coupon-download-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const couponId = btn.dataset.id;
+ window.addEventListener('DOMContentLoaded', function() {
+	  const buttons = document.querySelectorAll('.coupon-download-btn');
 
-        if (!couponId) {
-            alert("쿠폰 ID가 없습니다.");
-            return;
-        }
+	  buttons.forEach(btn => {
+	    btn.addEventListener('click', async () => {
+	      const couponId = btn.dataset.id;
 
-        fetch('<c:url value="/store/couponDownload"/>', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: 'couponId=' + encodeURIComponent(couponId)
-        })
-        .then(r => r.json())
-        .then(data => {
-        	 if (!data.success && data.requireLogin) {
-	    		    window.location.href = "/store/login"; // 로그인 페이지로 이동
-	    	}
-            else if (data.success) {
-                btn.innerHTML = '<i class="bi bi-check2"></i>';
-                btn.disabled = true; // 클릭된 버튼만 비활성화
-                location.reload();
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            alert("쿠폰 발급 중 오류가 발생했습니다.");
-        });
-    });
-});
+	      if (!couponId) {
+	        alert("쿠폰 ID가 없습니다.");
+	        return;
+	      }
+
+	      try {
+	        const response = await fetch('<c:url value="/store/couponDownload"/>', {
+	          method: 'POST',
+	          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+	          body: 'couponId=' + encodeURIComponent(couponId)
+	        });
+
+	        const data = await response.json();
+
+	        if (!data.success && data.requireLogin) {
+	          window.location.href = "/store/login";
+	        } else if (data.success) {
+	          btn.innerHTML = '<i class="bi bi-check2"></i>';
+	          btn.disabled = true;
+	          location.reload();
+	        } else {
+	          alert("쿠폰 발급 실패: " + JSON.stringify(data));
+	        }
+	      } catch (err) {
+	        alert("쿠폰 발급 중 오류가 발생했습니다.");
+	      }
+	    });
+	  });
+	});
 </script>
 
 </html>

@@ -104,7 +104,7 @@
 					</div>
 					<div class="btn_part">
 						<button type="button" class="btn first_btn action_btn" onclick="editNoticeSeller('${notice.noticeId}')">수정</button>
-						<button type="button" class="btn second_btn action_btn" onclick="exposeState('${notice.noticeId}')">
+						<button type="button" class="btn second_btn action_btn" onclick="exposeState('${notice.noticeId}', 'noticeSeller')">
 							<c:choose>
 								<c:when test="${notice.isExposed == 0}">공개</c:when>
 								<c:when test="${notice.isExposed == 1}">비공개</c:when>

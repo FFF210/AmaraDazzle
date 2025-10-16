@@ -3,8 +3,6 @@
 
 <%@ attribute name="couponId" required="false" type="java.lang.String"%>
 <%@ attribute name="cname" required="false" type="java.lang.String"%>
-<%@ attribute name="couponLimit" required="false"
-	type="java.lang.String"%>
 <%@ attribute name="categoryName" required="false"
 	type="java.lang.String"%>
 <%@ attribute name="amountCondition" required="false"
@@ -15,11 +13,6 @@
 <%@ attribute name="downloaded" required="false" type="java.lang.String"%>
 
 <div class="consumer-coupon">
-	<!-- 남은 쿠폰 장수 -->
-	<c:if test="${not empty couponLimit}">
-		<div class="coupon-limit">${couponLimit}장</div>
-	</c:if>
-
 	<div class="consumer-coupon-info">
 		<!-- 쿠폰명 -->
 		<p class="cname">${cname}</p>

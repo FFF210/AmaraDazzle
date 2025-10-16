@@ -77,14 +77,16 @@
 
 /* hover 상태 */
 .filter-option:hover {
-	background: #EEF2F7;
-	border-color: #EEF2F7;
+	background: #111;
+	border-color: #111;
+	color: white;
 }
 
 /* active(선택됨) 상태 */
 .filter-option.active {
-	background: #D6E0EB;
-	border-color: #D6E0EB;
+	background: #111;
+	border-color: #111;
+	color: white;
 }
 
 /* 혜택 그룹 - 텍스트만 보이게 (테두리/배경 제거) */

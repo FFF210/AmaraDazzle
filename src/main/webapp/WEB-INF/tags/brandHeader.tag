@@ -17,17 +17,17 @@
 		<div class="profile-dropdown" id="profileDropdown">
 			<div class="profile-box">
 				<div class="profile-info">
-					<img src="/upload_file/${sessionScope.logoFileId}"
+					<img src="${pageContext.request.contextPath}/image?fileId=${sessionScope.logoFileId}"
 						class="profile-icon-img" width="40px" height="40px">
 					<p class="brand-name">${sessionScope.brandName != null ? sessionScope.brandName : '브랜드명'}</p>
 				</div>
 
 				<button class="btn btn-outline btn-sm profile-action-btn"
-					onclick="location.href='/brand/brandEdit'">브랜드 정보 수정</button>
+					onclick="location.href='/brand/brandEdit'" style="padding: 0 14px;">브랜드 정보 수정</button>
 
-				<form action="/logout" method="post">
+				<!-- <form action="/logout" method="post">
 					<button type="submit" class="btn btn-danger btn-sm logout-btn">로그아웃</button>
-				</form>
+				</form> -->
 			</div>
 		</div>
 	</div>
