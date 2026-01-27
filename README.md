@@ -44,11 +44,15 @@
 
 ---
 
-👥 팀 구성 및 역할
+## 👥 팀 구성 및 역할
+<img width="1426" height="800" alt="image" src="https://github.com/user-attachments/assets/565e6302-595e-4199-ad03-046ba98e4129" />
 
 
-🛠 개발환경
+## 🛠 개발환경
 <img width="1473" height="840" alt="amaraDazzle개발환경" src="https://github.com/user-attachments/assets/f611fc90-82f5-4820-a89f-ec7f74ebc113" />
+
+## 주요 서비스
+<img width="1434" height="801" alt="주요서비스" src="https://github.com/user-attachments/assets/8f75bf5e-03ca-43f9-b739-31764358edb0" />
 
 ---
 
