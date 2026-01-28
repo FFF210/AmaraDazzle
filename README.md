@@ -35,7 +35,7 @@
 - **개발 기간**: 2025.08 ~ 2025.10  
 
 ### 개발 진행 방식
-- 유스케이스 다이어그램, 기능 명세서, ERD를 기반으로 전체 구조 설계
+- 유스케이스 다이어그램, 기능 명세서, 데이터베이스 설계,
 - Figma로 화면 설계 후 JSP 기반으로 프론트엔드 구현
 - 초기부터 JSP 파일 단위로 작업하여 화면과 서버 로직을 함께 고려
 - 9월 말부터 약 한 달간 백엔드 개발에 집중하며 미완성 화면 기능 보완
@@ -64,8 +64,13 @@
 ### 기능명세서
 <img width="1485" height="845" alt="amaraDazzle기능명세서" src="https://github.com/user-attachments/assets/10993110-70bb-4971-ba10-c74698d57b0b" />
 
+📄[기능명세서 구글 시트](https://docs.google.com/spreadsheets/d/1zlVKp8ipnQCgeI3auMAei9_CJGiQP5nf0uQ9gm_wX2E/edit?usp=sharing)
+
 ### 화면 설계(피그마)
 <img width="1472" height="845" alt="amaraDazzle피그마" src="https://github.com/user-attachments/assets/e393baa2-e3b2-4951-9d42-a7510e27248f" />
 
 ### 🗄 데이터베이스 설계
 <img width="1482" height="850" alt="amaraDazzleERD" src="https://github.com/user-attachments/assets/d17f17ee-28d2-42dd-96cf-9c4b67813e64" />
+
+간략화된 버전으로 자세한 설계는 📄[링크](https://docs.google.com/spreadsheets/d/1eVNMCjjhuFgOzPH3ld_9_j-eJpPaymRrV22WTRgm_Sw/edit?usp=sharing)를 통해 확인하실 수 있습니다: 
+
