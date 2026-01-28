@@ -45,7 +45,7 @@
 ---
 
 ## 👥 팀 구성 및 역할
-<img width="1426" height="800" alt="image" src="https://github.com/user-attachments/assets/565e6302-595e-4199-ad03-046ba98e4129" />
+<img width="1432" height="794" alt="image" src="https://github.com/user-attachments/assets/30a23359-3989-4cf0-a579-65010c9d8d70" />
 
 
 ## 🛠 개발환경
@@ -64,7 +64,7 @@
 ### 기능명세서
 <img width="1485" height="845" alt="amaraDazzle기능명세서" src="https://github.com/user-attachments/assets/10993110-70bb-4971-ba10-c74698d57b0b" />
 
-📄[기능명세서 구글 시트](https://docs.google.com/spreadsheets/d/1zlVKp8ipnQCgeI3auMAei9_CJGiQP5nf0uQ9gm_wX2E/edit?usp=sharing)
+※ 더 자세한 사항은 📄[링크](https://docs.google.com/spreadsheets/d/1zlVKp8ipnQCgeI3auMAei9_CJGiQP5nf0uQ9gm_wX2E/edit?usp=sharing)에서 보실 수 있습니다.
 
 ### 화면 설계(피그마)
 <img width="1472" height="845" alt="amaraDazzle피그마" src="https://github.com/user-attachments/assets/e393baa2-e3b2-4951-9d42-a7510e27248f" />
@@ -72,5 +72,5 @@
 ### 🗄 데이터베이스 설계
 <img width="1482" height="850" alt="amaraDazzleERD" src="https://github.com/user-attachments/assets/d17f17ee-28d2-42dd-96cf-9c4b67813e64" />
 
-간략화된 버전으로 자세한 설계는 📄[링크](https://docs.google.com/spreadsheets/d/1eVNMCjjhuFgOzPH3ld_9_j-eJpPaymRrV22WTRgm_Sw/edit?usp=sharing)를 통해 확인하실 수 있습니다: 
+※ 간략화된 버전으로 자세한 설계는 📄[링크](https://docs.google.com/spreadsheets/d/1eVNMCjjhuFgOzPH3ld_9_j-eJpPaymRrV22WTRgm_Sw/edit?usp=sharing)를 통해 확인하실 수 있습니다: 
 
